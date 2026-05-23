@@ -22,6 +22,10 @@ organize the missing artifacts for a future explicitly approved attempt. It
 does not authorize app mirror sync, Frappe Cloud deploy/update, staging
 bootstrap/import, migrate, cache clear, live release, DNS, Stripe, Search
 Console, indexing, checkout, users, secrets, or provider mutation.
+Because source-bound artifacts are tied to the repo `HEAD` at generation time,
+committing a packet makes it archive evidence for the pre-commit source. For a
+real attempt, freeze source first, generate artifacts in the working tree, run
+the controller, and archive results afterward.
 
 Staging route map on 2026-05-23:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md` records the

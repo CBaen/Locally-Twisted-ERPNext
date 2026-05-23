@@ -127,6 +127,12 @@ input state they measured. Generate a fresh packet when release input state
 changed, explicit freeze-reopen approval exists, or a mutation-capable packet is
 being prepared.
 
+Source-bound release artifacts are use-now evidence. If a packet is committed,
+the commit moves `HEAD`; that packet is then archive evidence for the
+pre-commit source, not mutation authority for the new commit. For an actual
+staging attempt, finish source changes first, freeze source, generate the fresh
+packet, run the controller, then archive results afterward.
+
 Prep-only packet folders may be created by
 `scripts/release/staging_reopen_packet_prepare.py`. They are not release
 packets. A prep folder must not contain final artifact names such as

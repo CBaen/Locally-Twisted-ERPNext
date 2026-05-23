@@ -53,28 +53,35 @@ These are the paths future agents must treat as stop signs:
 
 The next mutation-capable attempt must use this order:
 
-1. GL gives fresh explicit approval for the exact staging-only action.
-2. Create a new dated release packet.
-3. Generate `release-identity-proof.json` with
+1. Finish and push local guard/source/doc changes first.
+2. Freeze source changes for the release attempt.
+3. GL gives fresh explicit approval for the exact staging-only action.
+4. Create a new dated release packet in the working tree.
+5. Generate `release-identity-proof.json` with
    `scripts/release/release_identity_artifact.py`.
-4. Generate `freeze-reopen-approval.json` with
+6. Generate `freeze-reopen-approval.json` with
    `scripts/release/freeze_reopen_approval_artifact.py`.
-5. Generate a current `read-receipt.json` covering the release lock's required
+7. Generate a current `read-receipt.json` covering the release lock's required
    documents.
-6. Generate or validate `failure-ledger.json`, app mirror sync plan, and
+8. Generate or validate `failure-ledger.json`, app mirror sync plan, and
    artifact-owned triad files.
-7. Run `python scripts\release\release_status_report.py` and stop unless it is
+9. Run `python scripts\release\release_status_report.py` and stop unless it is
    at least `READY_FOR_CONTROLLER`.
-8. Let `scripts/release/frappe_cloud_release_controller.py` evaluate the next
+10. Let `scripts/release/frappe_cloud_release_controller.py` evaluate the next
    requested staging action.
-9. For app mirror sync, create post-sync app mirror freshness proof before
+11. For app mirror sync, create post-sync app mirror freshness proof before
    deploy/update.
-10. For deploy/update, capture post-deploy completion proof before hosted
+12. For deploy/update, capture post-deploy completion proof before hosted
     preflight.
-11. For bootstrap/import, run hosted preflight first, then the staging
+13. For bootstrap/import, run hosted preflight first, then the staging
     owner-review gate after mutation.
-12. Stop immediately on any `NO-GO`, `BLOCKED`, HTTP 417, stale hash, missing
+14. Stop immediately on any `NO-GO`, `BLOCKED`, HTTP 417, stale hash, missing
     route, zero catalog/user/gallery count, or repeated failure class.
+
+Source-bound artifacts are use-now evidence. If an agent commits the packet,
+repo `HEAD` moves and the committed packet becomes archive evidence for the
+pre-commit source. Do not use a committed packet for mutation after `HEAD`
+changes; regenerate artifacts for the current source freeze.
 
 ## Literal Staging Route Evidence
 
