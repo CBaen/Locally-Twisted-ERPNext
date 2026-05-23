@@ -83,6 +83,30 @@ repo `HEAD` moves and the committed packet becomes archive evidence for the
 pre-commit source. Do not use a committed packet for mutation after `HEAD`
 changes; regenerate artifacts for the current source freeze.
 
+## Account Model
+
+Guiding Light's ERPNext/Frappe/Frappe Cloud work uses a known dual-account
+operating model:
+
+- `cameronbpaul@gmail.com`
+- `locallytwisted@gmail.com`
+
+This is normal, not an error. A release identity proof must not require the
+Codex account, GitHub account, Frappe Cloud account, and owner/reviewer email
+to all be the same. It must clearly state the active or intended account
+context, and if the active Codex account cannot be proven from a safe surface,
+it should state the dual-account model rather than invent a single-account
+claim.
+
+Safe identity wording for future LT release packets:
+
+- Codex account label: `Guiding Light dual Codex account model:
+  cameronbpaul@gmail.com / locallytwisted@gmail.com`
+- Release operator: `Codex under Guiding Light direction`
+- Evidence: `GL confirmed on 2026-05-23 that she always switches between
+  cameronbpaul@gmail.com and locallytwisted@gmail.com for NextERP/Frappe/Frappe
+  Cloud work; this is expected account context, not a blocker by itself.`
+
 ## Literal Staging Route Evidence
 
 From

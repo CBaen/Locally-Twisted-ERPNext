@@ -27,6 +27,14 @@ committing a packet makes it archive evidence for the pre-commit source. For a
 real attempt, freeze source first, generate artifacts in the working tree, run
 the controller, and archive results afterward.
 
+GL account model for release identity:
+GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work will always
+move between `cameronbpaul@gmail.com` and `locallytwisted@gmail.com`. Treat
+this as the expected dual-account operating model, not a mistake or personal
+failure. Future `release-identity-proof.json` artifacts should name the dual
+Codex account context instead of forcing all GitHub/Frappe Cloud/owner emails
+to match.
+
 Staging route map on 2026-05-23:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md` records the
 known-bad process routes, the only allowed good route for a future

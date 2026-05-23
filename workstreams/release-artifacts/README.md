@@ -173,6 +173,16 @@ The helper is local/offline. It does not read Codex auth files, contact Frappe
 Cloud, read secrets, push the app mirror, deploy, bootstrap, migrate, clear
 cache, index staging, touch live/DNS/Stripe/Search Console, or unpause checkout.
 
+Guiding Light's normal ERPNext/Frappe/Frappe Cloud work crosses two expected
+account contexts: `cameronbpaul@gmail.com` and `locallytwisted@gmail.com`.
+These do not need to match the GitHub CLI account or the Frappe Cloud team id.
+For LT, a safe Codex account label is:
+
+`Guiding Light dual Codex account model: cameronbpaul@gmail.com / locallytwisted@gmail.com`
+
+Do not call this uncertain by default. It is expected. The identity proof's job
+is to make that visible before mutation, not to force a single account.
+
 ## How To Provide Freeze-Reopen Approval
 
 Do not hand-author `freeze-reopen-approval.json` from chat, a commit message,
