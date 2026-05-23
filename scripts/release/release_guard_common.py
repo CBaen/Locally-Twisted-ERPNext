@@ -18,6 +18,7 @@ DEFAULT_LOCK_PATH = PROJECT_ROOT / "release_locks" / "locally-twisted-staging-fo
 
 REQUIRED_BLOCKED_ACTIONS = {
     "frappe_cloud_deploy",
+    "app_mirror_sync",
     "provider_poll",
     "staging_bootstrap",
     "site_migrate",
@@ -58,6 +59,19 @@ REQUIRED_PROVIDER_SNAPSHOT_FIELDS = {
     "site_status",
     "rollback_hash",
     "staging_live_separation",
+}
+
+REQUIRED_APP_MIRROR_FRESHNESS_FIELDS = {
+    "ok",
+    "source_commit",
+    "mirror_hash",
+    "required_files",
+    "provider_mutation_executed",
+}
+
+REQUIRED_APP_MIRROR_SOURCE_FILES = {
+    "locally_twisted/staging_owner_review_preflight.py",
+    "locally_twisted/staging_owner_review_bootstrap.py",
 }
 
 EXPECTED_APP_ORDER = ["frappe", "erpnext", "payments", "webshop", "locally_twisted"]
@@ -197,6 +211,51 @@ def validate_provider_snapshot(path: Path) -> list[str]:
         value = str(snapshot.get(hash_field) or "")
         if len(value) != 40 or any(char not in "0123456789abcdef" for char in value.lower()):
             failures.append(f"provider snapshot {hash_field} must be a full 40-character hex hash")
+    return failures
+
+
+def validate_app_mirror_freshness(path: Path) -> list[str]:
+    artifact = read_json(path)
+    if not isinstance(artifact, dict):
+        return [f"app mirror freshness artifact must be a JSON object: {path}"]
+
+    missing = sorted(field for field in REQUIRED_APP_MIRROR_FRESHNESS_FIELDS if field not in artifact)
+    failures = [f"app mirror freshness artifact is missing required fields: {missing}"] if missing else []
+    if artifact.get("ok") is not True:
+        failures.append("app mirror freshness artifact must have ok=true before mutation")
+    if artifact.get("provider_mutation_executed") is not False:
+        failures.append("app mirror freshness artifact must prove provider_mutation_executed=false")
+    for hash_field in ("source_commit", "mirror_hash"):
+        value = str(artifact.get(hash_field) or "")
+        if len(value) != 40 or any(char not in "0123456789abcdef" for char in value.lower()):
+            failures.append(f"app mirror freshness {hash_field} must be a full 40-character hex hash")
+
+    rows = artifact.get("required_files")
+    if not isinstance(rows, list) or not rows:
+        failures.append("app mirror freshness required_files must be a non-empty list")
+        return failures
+    seen_paths: set[str] = set()
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            failures.append(f"app mirror freshness required_files[{index}] is not an object")
+            continue
+        path_value = row.get("path")
+        if not isinstance(path_value, str) or not path_value:
+            failures.append(f"app mirror freshness required_files[{index}] is missing path")
+        else:
+            normalized_path = path_value.replace("\\", "/")
+            if normalized_path in seen_paths:
+                failures.append(f"app mirror freshness has duplicate required file row: {normalized_path}")
+            seen_paths.add(normalized_path)
+        if row.get("source_exists") is not True:
+            failures.append(f"app mirror freshness source file is missing: {path_value}")
+        if row.get("mirror_exists") is not True:
+            failures.append(f"app mirror freshness mirror file is missing: {path_value}")
+        if row.get("matches") is not True:
+            failures.append(f"app mirror freshness file does not match source: {path_value}")
+    missing_source_files = sorted(REQUIRED_APP_MIRROR_SOURCE_FILES - seen_paths)
+    if missing_source_files:
+        failures.append(f"app mirror freshness is missing required source files: {missing_source_files}")
     return failures
 
 

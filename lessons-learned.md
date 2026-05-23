@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Mirror sync changes release input state
+
+The app-root mirror is not "just GitHub backup" in a Frappe Cloud custom-app
+release. It is the source Frappe Cloud consumes. A mirror can be behind the
+main source repo and still look like a harmless hash unless a verifier proves
+the required hosted methods are actually present.
+
+**Counter-move:** treat app mirror sync as a release-critical mutation during
+forensic freeze. Use `scripts/verify/frappe_cloud_app_mirror_freshness.py` to
+produce a read-only source-vs-mirror artifact before hosted preflight or
+bootstrap. Do not sync the mirror while the freeze is active.
+
+---
+
 ## 2026-05-23 - A no-go packet needs a post-commit docs parity pass
 
 The read-only staging packet was correct as a no-go artifact, but some docs

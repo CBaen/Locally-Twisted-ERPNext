@@ -23,6 +23,7 @@ Implemented local guard paths:
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
 - `scripts/verify/staging_owner_review_gate_contract.py`
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`
@@ -57,6 +58,7 @@ Source incident:
 
 - Do not touch live, DNS, Stripe, Search Console, production indexing, or live
   checkout from this action list.
+- Do not sync the app-root mirror while forensic-freeze is active.
 - Do not resume the interrupted deploy/bootstrap sequence.
 - Do not call staging owner-review ready from hashes, deploy IDs, job IDs, or
   local Docker proof.
@@ -191,6 +193,17 @@ execution can leave forensic-freeze.
     must sync the app-root mirror from reviewed source before deploy/update,
     hosted preflight, bootstrap/import, or cache action.
 
+19. **Add app-root mirror freshness verifier.** `implemented-local; open-before-provider-mutation`
+    `scripts/verify/frappe_cloud_app_mirror_freshness.py` now has an offline
+    self-test wired into `npm run test:release-prevention` and a real
+    read-only GitHub mode that writes `app-mirror-freshness.json`. The
+    2026-05-23 read-only packet at
+    `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`
+    proves mirror hash `181076c...` is missing
+    `locally_twisted/staging_owner_review_preflight.py` and has a stale
+    `locally_twisted/staging_owner_review_bootstrap.py` relative to source
+    `24c8465`. This is a no-go artifact, not sync approval.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
@@ -217,6 +230,7 @@ Implemented local/offline guards:
 
 - `scripts/release/frappe_cloud_release_controller.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
@@ -234,6 +248,8 @@ Still mandatory before any provider mutation is reopened:
 - real hosted bootstrap preflight execution and artifact from the actual
   staging target
 - current app-root mirror containing the reviewed source preflight module
+- fresh app mirror freshness artifact proving required hosted-preflight source
+  files match the app-root mirror
 - fresh artifact-backed release plan
 - staging bootstrap preflight for hosted constraints
 - staging database/account/product/gallery proof on the actual target site

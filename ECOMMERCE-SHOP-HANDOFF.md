@@ -45,6 +45,15 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`. This records
   `ceab908` as source archive proof only, not app mirror freshness, provider
   deploy proof, staging data proof, or owner-review readiness.
+- 2026-05-23 app mirror freshness guard:
+  `scripts/verify/frappe_cloud_app_mirror_freshness.py` is wired into
+  `npm run test:release-prevention` in offline self-test mode. Real read-only
+  proof is
+  `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`.
+  It proves app mirror hash `181076c...` is missing the hosted preflight module
+  and has a stale bootstrap module relative to source `24c8465`. The active
+  release lock now blocks `app_mirror_sync`; do not sync the mirror until GL
+  explicitly reopens forensic-freeze under an artifact-backed packet.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -152,6 +161,7 @@ Executable local prevention gates now in this repo:
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
 - `scripts/verify/staging_owner_review_gate_contract.py`
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`

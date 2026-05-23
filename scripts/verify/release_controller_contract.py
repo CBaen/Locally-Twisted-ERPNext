@@ -5,6 +5,7 @@ This proves the controller itself, not only helper functions:
 
 - active forensic-freeze lock blocks mutation actions;
 - missing read receipt blocks read-only release forensics;
+- the controller exposes the app mirror freshness artifact gate;
 - a valid read receipt allows a read-only forensic action without provider
   mutation.
 """
@@ -116,6 +117,12 @@ def run_contract() -> list[str]:
             failures.append("read_only_forensics with valid read receipt did not pass")
         if "provider_mutation_executed" not in allowed.stdout:
             failures.append("allowed read-only output did not report provider_mutation_executed=false")
+
+        help_result = run_controller("--help")
+        if help_result.returncode != 0:
+            failures.append("release controller --help failed")
+        if "--app-mirror-freshness" not in help_result.stdout:
+            failures.append("release controller help does not expose --app-mirror-freshness")
 
     return failures
 

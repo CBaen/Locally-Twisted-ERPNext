@@ -27,6 +27,7 @@ from release_guard_common import (
     load_release_lock,
     raise_if_failures,
     validate_failure_ledger,
+    validate_app_mirror_freshness,
     validate_provider_snapshot,
     validate_read_receipt,
     validate_release_lock,
@@ -43,6 +44,7 @@ from scripts.verify.frappe_cloud_payload_contract import (  # noqa: E402
 READ_RECEIPT_ACTIONS = {
     "read_only_forensics",
     "frappe_cloud_deploy",
+    "app_mirror_sync",
     "provider_poll",
     "staging_bootstrap",
     "site_migrate",
@@ -66,6 +68,7 @@ def main() -> int:
     parser.add_argument("--lock-file", type=Path, default=DEFAULT_LOCK_PATH)
     parser.add_argument("--read-receipt", type=Path, help="JSON proof that required release docs were read.")
     parser.add_argument("--payload-file", type=Path, help="Sanitized Frappe Cloud JSON payload artifact to validate.")
+    parser.add_argument("--app-mirror-freshness", type=Path, help="Read-only app mirror freshness artifact JSON.")
     parser.add_argument("--provider-snapshot", type=Path, help="Read-only provider-state snapshot JSON.")
     parser.add_argument("--triad-artifact-dir", type=Path, help="Directory containing controller/provider-witness/gate-fixer/recorder artifacts.")
     parser.add_argument("--failure-ledger", type=Path, help="JSON failure-class ledger for circuit-breaker checks.")
@@ -175,6 +178,10 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
         raise_if_failures("invalid read receipt", validate_read_receipt(args.read_receipt, lock.get("required_read_docs")))
 
     if action_is_mutating(args.action):
+        if not args.app_mirror_freshness:
+            raise ReleaseGuardError("app mirror freshness artifact is required before mutation")
+        raise_if_failures("invalid app mirror freshness artifact", validate_app_mirror_freshness(args.app_mirror_freshness))
+
         if not args.provider_snapshot:
             raise ReleaseGuardError("provider snapshot is required before mutation")
         raise_if_failures("invalid provider snapshot", validate_provider_snapshot(args.provider_snapshot))

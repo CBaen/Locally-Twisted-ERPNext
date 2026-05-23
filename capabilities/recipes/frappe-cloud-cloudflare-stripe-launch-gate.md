@@ -101,6 +101,14 @@ Default public launch posture:
   `npm run test:release-prevention` before any future attempt to reopen
   release execution. Passing this command is local prevention proof only, not
   staging owner-review readiness.
+- Also as of 2026-05-23, app mirror sync is explicitly blocked while
+  forensic-freeze is active. `scripts/verify/frappe_cloud_app_mirror_freshness.py`
+  is the read-only source-vs-app-root-mirror verifier. The current no-go packet
+  is `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`:
+  mirror hash `181076c239b2d1d3d508a41ac471c71f9d2b5158` is missing
+  `locally_twisted/staging_owner_review_preflight.py` and has a stale
+  `locally_twisted/staging_owner_review_bootstrap.py` relative to source
+  `24c8465`.
 
 ## Human Access Boundary
 
@@ -151,33 +159,37 @@ Concise staging-safe list:
    provider/live/search/payment mutation remains blocked.
 2. Identify the source commit, app-mirror commit, staging host, rollback path,
    and whether the push is archive-only or deploy-triggering.
-3. Prove current Frappe Cloud site mapping before mutation. Current API
+3. If forensic-freeze is active, get explicit reopen approval before
+   `app_mirror_sync`, sync reviewed source only through the release controller,
+   rerun `scripts/verify/frappe_cloud_app_mirror_freshness.py` in real
+   read-only mode, and store a fresh passing `app-mirror-freshness.json`.
+4. Prove current Frappe Cloud site mapping before mutation. Current API
    inventory beats stale runbook bench IDs; do not reuse old bench IDs from
    docs without API/dashboard proof. For 2026-05-22 staging, the current target
    is group `bench-40102` / bench `bench-40102-000003-f4v`, not the old
    `bench-39776-000013-f94-virginia` source-bench reference.
-4. Produce a real read-only provider snapshot for the release packet. Prefer
+5. Produce a real read-only provider snapshot for the release packet. Prefer
    `scripts/verify/frappe_cloud_provider_snapshot.py` in real provider mode,
    with current target and rollback hashes supplied, and validate the resulting
    `provider-snapshot.json` before mutation.
-5. For Frappe Cloud API mutations, send `Content-Type: application/json`
+6. For Frappe Cloud API mutations, send `Content-Type: application/json`
    typed JSON payloads only. For `press.api.bench.deploy_and_update`, `apps`
    and `sites` must be real JSON arrays/objects accepted by the endpoint, not
    nested JSON strings. A payload that stringifies nested `apps` or `sites` can
    fail with `'str' object has no attribute 'get'`. Validate the sanitized
    payload artifact with `scripts/verify/frappe_cloud_payload_contract.py`
    before provider mutation.
-6. Run the hosted staging owner-review bootstrap preflight before import. The
+7. Run the hosted staging owner-review bootstrap preflight before import. The
    source contract is `scripts/verify/staging_owner_review_bootstrap_contract.py`,
    but real staging still needs the whitelisted preflight output from the
    actual target.
-7. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
+8. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
    `lt_ecommerce_paused=1` on staging.
-8. Run local hard gates for the changed slice before staging.
-9. Run staging HTTP/browser gates against the staging URL.
-10. Run database-side contracts in the staging environment, or leave them
+9. Run local hard gates for the changed slice before staging.
+10. Run staging HTTP/browser gates against the staging URL.
+11. Run database-side contracts in the staging environment, or leave them
    explicitly unverified for staging.
-11. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+12. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    blocked until their separate gates pass.
 
 ```powershell
@@ -230,6 +242,8 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
   artifacts owned by Provider Witness, Gate/Fixer, and Recorder.
 - Treating the final source commit as the full Frappe Cloud release scope
   instead of comparing previous live app hash to target app mirror commit.
+- Treating app mirror sync as harmless backup during release freeze. The app
+  mirror is release input state and must be gated.
 - Sending Frappe Cloud API payloads without `Content-Type: application/json`,
   or with nested `apps` or `sites` encoded as strings instead of typed JSON
   arrays/objects, then treating the API exception as a provider mystery instead

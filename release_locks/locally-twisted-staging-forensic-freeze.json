@@ -13,6 +13,7 @@
   ],
   "blocked_actions": [
     "frappe_cloud_deploy",
+    "app_mirror_sync",
     "provider_poll",
     "staging_bootstrap",
     "site_migrate",
@@ -45,6 +46,7 @@
   ],
   "requires_to_reopen": [
     "Fresh explicit approval to leave forensic-freeze",
+    "Fresh app mirror freshness artifact after reviewed app-root mirror sync",
     "Current read-only Frappe Cloud provider snapshot",
     "Valid local read receipt for required release docs",
     "Validated typed JSON payload artifact before provider API mutation",

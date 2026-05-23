@@ -31,7 +31,9 @@ safe release packet, after explicit freeze reopen only, must sync the app-root
 mirror from reviewed source, then take a fresh read-only provider snapshot, run
 hosted preflight, and decide on bootstrap/import only if those gates pass. Do
 not deploy, bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search
-Console, or claim owner-review readiness from the interrupted session.
+Console, or claim owner-review readiness from the interrupted session. The
+active lock now also blocks `app_mirror_sync`, because mirror sync is a
+release-critical mutation for this Frappe Cloud path.
 
 2026-05-23 read-only packet update:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` now records
@@ -47,6 +49,9 @@ packet, after explicit freeze reopen only, must sync the app-root mirror from
 reviewed source before any provider deploy, hosted preflight,
 bootstrap/import, or cache action. Docs-only parity handoff:
 `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
+Read-only app mirror freshness packet:
+`workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`
+proves the mirror is still stale against source `24c8465`.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is

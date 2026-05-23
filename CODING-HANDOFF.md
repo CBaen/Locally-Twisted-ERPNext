@@ -77,6 +77,18 @@ source and staging remains blocked for owner review until the active
 forensic-freeze lock is explicitly reopened under a fresh artifact-backed
 release packet.
 
+App mirror freshness guard follow-up on 2026-05-23:
+`scripts/verify/frappe_cloud_app_mirror_freshness.py` is now the read-only
+source-vs-app-root-mirror verifier, with an offline self-test wired into
+`npm run test:release-prevention`. Real read-only output is stored at
+`workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/app-mirror-freshness.json`
+and is a no-go: app mirror hash `181076c...` is missing
+`locally_twisted/staging_owner_review_preflight.py`, and its
+`staging_owner_review_bootstrap.py` differs from source `24c8465`. The active
+release lock now blocks `app_mirror_sync` while forensic-freeze is active.
+This moved the next proof boundary forward without syncing the mirror or
+touching provider/staging/live/DNS/Stripe/Search Console.
+
 Historical Frappe Cloud staging recovery on 2026-05-22: save state tag
 `savepoint/lt-staging-recovery-20260522-173929` exists. Source `main` is
 pushed at `2ca1b85 Ensure LT access roles before permission sync`; the private

@@ -8,6 +8,29 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - App mirror sync is a release-critical mutation during forensic freeze
+
+**Decision:** `app_mirror_sync` is now an explicit blocked action while the LT
+staging forensic-freeze lock is active. Mirror sync may be necessary before
+hosted preflight, but it must reopen through the release controller like other
+release-critical mutations.
+
+**Reasoning:** The app-root mirror controls what Frappe Cloud can deploy and
+what hosted preflight methods exist. A read-only freshness check proved mirror
+hash `181076c239b2d1d3d508a41ac471c71f9d2b5158` is missing
+`locally_twisted/staging_owner_review_preflight.py` and has a different
+`locally_twisted/staging_owner_review_bootstrap.py` than source `24c8465`.
+Syncing the mirror would change release input state even if it does not
+directly mutate the Frappe Cloud site.
+
+**Implementation boundary:** `scripts/verify/frappe_cloud_app_mirror_freshness.py`
+is the required read-only mirror freshness proof before hosted preflight. Its
+offline self-test is included in `npm run test:release-prevention`. The
+current no-go packet is
+`workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`.
+
+---
+
 ## 2026-05-23 - GitHub archive proof is not app mirror freshness
 
 **Decision:** The `ceab908` read-only no-go packet archive proves a source

@@ -26,6 +26,7 @@ from release_guard_common import (  # noqa: E402
     ensure_action_allowed,
     load_release_lock,
     validate_failure_ledger,
+    validate_app_mirror_freshness,
     validate_read_receipt,
     validate_release_lock,
     validate_triad_artifacts,
@@ -92,6 +93,80 @@ def run_checks(lock_file: Path) -> list[str]:
             encoding="utf-8",
         )
         failures.extend(validate_read_receipt(valid_receipt))
+
+        valid_mirror = tmp_path / "app-mirror-freshness.json"
+        valid_mirror.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "source_commit": "a" * 40,
+                    "mirror_hash": "b" * 40,
+                    "provider_mutation_executed": False,
+                    "required_files": [
+                        {
+                            "path": "locally_twisted/staging_owner_review_preflight.py",
+                            "source_exists": True,
+                            "mirror_exists": True,
+                            "matches": True,
+                        },
+                        {
+                            "path": "locally_twisted/staging_owner_review_bootstrap.py",
+                            "source_exists": True,
+                            "mirror_exists": True,
+                            "matches": True,
+                        },
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        failures.extend(validate_app_mirror_freshness(valid_mirror))
+
+        partial_mirror = tmp_path / "partial-app-mirror-freshness.json"
+        partial_mirror.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "source_commit": "a" * 40,
+                    "mirror_hash": "b" * 40,
+                    "provider_mutation_executed": False,
+                    "required_files": [
+                        {
+                            "path": "locally_twisted/staging_owner_review_preflight.py",
+                            "source_exists": True,
+                            "mirror_exists": True,
+                            "matches": True,
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_app_mirror_freshness(partial_mirror):
+            failures.append("partial app mirror freshness artifact missing bootstrap did not fail")
+
+        stale_mirror = tmp_path / "stale-app-mirror-freshness.json"
+        stale_mirror.write_text(
+            json.dumps(
+                {
+                    "ok": False,
+                    "source_commit": "a" * 40,
+                    "mirror_hash": "b" * 40,
+                    "provider_mutation_executed": False,
+                    "required_files": [
+                        {
+                            "path": "locally_twisted/staging_owner_review_preflight.py",
+                            "source_exists": True,
+                            "mirror_exists": False,
+                            "matches": False,
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_app_mirror_freshness(stale_mirror):
+            failures.append("stale app mirror freshness artifact did not fail")
 
         triad_dir = tmp_path / "triad"
         triad_dir.mkdir()
