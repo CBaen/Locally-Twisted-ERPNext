@@ -26,6 +26,11 @@ step is a read-only current-state provider snapshot plus a fresh
 artifact-backed release plan if GL explicitly reopens release execution. Do
 not deploy, bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search
 Console, or claim owner-review readiness from the interrupted session.
+Gate/Fixer witness follow-up: before reopening staging bootstrap/import, add
+an offline `staging_owner_review_gate` contract, add a non-mutating hosted
+bootstrap preflight/contract, require real current backup evidence or explicit
+zero-data proof before destructive catalog seed paths, and make future
+provider deploy/update actions require a payload artifact.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is

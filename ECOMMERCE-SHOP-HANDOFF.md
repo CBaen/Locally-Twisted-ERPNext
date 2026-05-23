@@ -135,6 +135,11 @@ Executable local prevention gates now in this repo:
 - `npm run test:release-prevention`
 
 Provider mutation remains blocked while the forensic-freeze lock is active.
+Gate/Fixer witness follow-up on 2026-05-23: reopening staging bootstrap/import
+also needs an offline staging owner-review gate contract, a non-mutating
+hosted bootstrap preflight/contract, stricter backup-or-zero-data proof before
+destructive catalog seed paths, and mandatory payload artifacts for future
+provider deploy/update controller actions.
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do

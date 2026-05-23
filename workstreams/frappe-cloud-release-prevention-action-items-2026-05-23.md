@@ -130,6 +130,27 @@ execution can leave forensic-freeze.
     controller for the same release. It may only write forensics, handoff, or
     prevention docs unless GL explicitly reopens execution under a new plan.
 
+13. **Add an offline staging owner-review gate contract.** `open-before-provider-mutation`
+    Add `scripts/verify/staging_owner_review_gate_contract.py` with fake
+    provider/staging fixtures that prove zero catalog rows, missing
+    owner/marketing users, wrong app order, wrong installed hash, stale
+    bootstrap hash, and paused/exposure mismatches all fail before any
+    owner-review-ready claim is possible. Wire it into package scripts and the
+    release-prevention suite.
+
+14. **Add hosted bootstrap preflight and destructive-seed proof.** `open-before-provider-mutation`
+    Bootstrap must expose a non-mutating preflight before import that checks
+    standard Report save behavior, required roles, Portal/Website Settings,
+    app order, target hash, expected baseline counts, and either a real current
+    staging backup artifact or explicit zero-data proof. Do not pass a
+    descriptive string as backup evidence into destructive catalog seed paths.
+
+15. **Require payload artifacts for future provider deploy/update actions.** `open-before-provider-mutation`
+    The current local controller validates `--payload-file` when supplied. A
+    future provider-executing controller must require the sanitized payload
+    artifact for Frappe Cloud deploy/update actions before it can reach any
+    provider API call.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
@@ -169,6 +190,10 @@ Still mandatory before any provider mutation is reopened:
 - a dedicated provider-snapshot producer, or an artifact-owned Provider
   Witness command packet, that writes `provider-snapshot.json` without
   bootstrap/deploy/migrate/cache mutation
+- offline `scripts/verify/staging_owner_review_gate_contract.py`
+- non-mutating hosted bootstrap preflight/contract
+- stricter destructive-seed backup evidence or explicit zero-data proof
+- mandatory `--payload-file` for future provider deploy/update actions
 - fresh artifact-backed release plan
 - staging bootstrap preflight for hosted constraints
 - staging database/account/product/gallery proof on the actual target site

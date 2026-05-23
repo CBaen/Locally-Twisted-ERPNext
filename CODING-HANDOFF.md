@@ -34,6 +34,15 @@ scratch; it must run the prevention gates, take a fresh read-only provider
 snapshot, produce the artifact-backed release packet, and keep
 `scripts/verify/staging_owner_review_gate.py` as the hard owner-review stop
 gate before any new provider mutation is reopened.
+Gate/Fixer witness follow-up on 2026-05-23: before controlled staging
+bootstrap/import can be reopened, add an offline
+`scripts/verify/staging_owner_review_gate_contract.py`, add a non-mutating
+hosted bootstrap preflight/contract, require real current staging backup
+evidence or explicit zero-data proof before destructive catalog seed paths, and
+tighten future provider deploy/update controller actions so `--payload-file`
+is mandatory rather than optional. These are release-reopen blockers; no
+provider, bootstrap, live, DNS, Stripe, Search Console, or checkout mutation
+was performed in this docs pass.
 
 Codex Frappe Cloud staging recovery on 2026-05-22: save state tag
 `savepoint/lt-staging-recovery-20260522-173929` exists. Source `main` is
