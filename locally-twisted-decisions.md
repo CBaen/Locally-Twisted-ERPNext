@@ -8,6 +8,32 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release read receipts must include packet-authoring docs
+
+**Decision:** Mutation-capable LT release packets must prove the agent read
+the current packet-authoring and front-door release docs, not only the original
+forensic-freeze files.
+
+**Reasoning:** Recorder/Security review found the read-receipt gate was still
+narrower than the docs a future release agent would actually use while
+building a packet. That creates a failure path where the controller can require
+correct artifact shapes, but the agent starts from stale handoffs, stale
+template assumptions, or misses the release-artifact README/script contract.
+
+**Implementation boundary:** The active release lock, shared guard helper,
+staging-freeze template, and current-head read-only packet now require the
+front-door handoffs, launch runbook, release-artifact README, artifact-chain
+handoff, scripts README, action list, forensic report, staging-owner-review
+history, launch capability, and queue. This is local/offline guard tightening
+only; it does not reopen forensic-freeze or mutate staging.
+
+**Receipts:** `release_locks/locally-twisted-staging-forensic-freeze.json`;
+`scripts/release/release_guard_common.py`;
+`workstreams/release-artifacts/README.md`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
+
+---
+
 ## 2026-05-23 - Release packets must be chain-bound across artifacts
 
 **Decision:** Mutation-capable release packets must prove their artifacts

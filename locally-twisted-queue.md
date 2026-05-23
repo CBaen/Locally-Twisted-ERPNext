@@ -57,6 +57,14 @@ packet cannot mix stale approval, app mirror, provider, payload, deploy, or
 hosted-preflight artifacts. Handoff:
 `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
 
+Current-head read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`
+is bound to source `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. It proves
+staging remains no-go and performed no provider mutation. The packet includes a
+valid pre-sync `app-mirror-sync-plan.json`, but `app_mirror_sync` is still
+blocked by the missing `freeze-reopen-approval.json`; the current goal context
+must not be converted into that approval.
+
 2026-05-23 read-only packet update:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` now records
 the current provider/staging state. Staging is Active on app hash

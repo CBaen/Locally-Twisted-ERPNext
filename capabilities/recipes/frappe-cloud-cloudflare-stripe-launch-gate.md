@@ -153,6 +153,19 @@ Default public launch posture:
   artifacts must bind to repo `HEAD`, rollback hash, mirror hash, provider
   target hash, payload site, and deployed/preflight hashes before any local
   mutation gate can pass.
+- The current-head read-only packet is
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
+  It updates no-go evidence at source
+  `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`: the app-root mirror remains
+  stale at `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight
+  still returns HTTP `417`, staging owner-review data/users/routes are still
+  missing, and `app_mirror_sync` is still blocked by the missing
+  `freeze-reopen-approval.json`.
+- Read receipts are now intentionally wider than the first forensic docs. A
+  mutation-capable packet must prove the agent read the front-door handoffs,
+  launch runbook, release-artifact README, artifact-chain handoff, scripts
+  README, action list, forensic report, staging-owner-review history, launch
+  capability, and queue.
 
 ## Human Access Boundary
 

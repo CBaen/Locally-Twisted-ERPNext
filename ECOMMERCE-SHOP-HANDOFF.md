@@ -13,6 +13,16 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   source/hash chain. This is local/offline prevention only; it did not mutate
   provider, staging, live, DNS, Stripe, Search Console, app mirror, bootstrap,
   migrate, cache, checkout, or secrets.
+- 2026-05-23 current-head read-only staging packet:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
+  This packet is bound to source
+  `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c` and performed no provider or
+  staging mutation. It proves staging remains **NO-GO** for owner review:
+  app-root mirror/deployed app hash is still `181076c...`, mirror freshness is
+  `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
+  Setup/gallery rows are zero, owner/marketing users are missing,
+  representative routes return `404`, and the release controller blocks
+  `app_mirror_sync` because `freeze-reopen-approval.json` is missing.
 - Source archive labels for this lane: run `git status -sb` and `git log
   --oneline -5` for current HEAD. Do not treat this handoff as a live HEAD
   oracle. The artifact-chain implementation archive is `3054396 Bind staging

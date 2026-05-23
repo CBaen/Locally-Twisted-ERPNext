@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Read receipts can be too narrow to prevent stale release work
+
+The release controller had a required-doc read receipt, but the required list
+did not include every doc a future agent would naturally use to author the next
+release packet. That left room for an agent to satisfy the gate while missing
+the current handoff, release-artifact README, script contract, or chain-binding
+handoff.
+
+**Counter-move:** treat read receipts as release infrastructure. When a new
+handoff, packet README, script README, or guard handoff becomes necessary for
+safe release execution, add it to the lock and controller read-receipt list in
+the same closeout.
+
+---
+
 ## 2026-05-23 - Valid release files can still form an invalid release packet
 
 The local release controller had validators for individual artifacts, but

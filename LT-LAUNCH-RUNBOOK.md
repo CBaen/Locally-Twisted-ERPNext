@@ -77,7 +77,11 @@ hosted preflight artifacts do not agree on source commit, app hash, rollback
 hash, and site. Handoff:
 `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
 
-## Current Confirmed State
+## Current State And Superseded Staging History
+
+Read this section as layered evidence, not a single current release path. The
+2026-05-22 staging recovery records are retained for rollback/history, while
+the 2026-05-23 read-only packets supersede them for any new staging action.
 
 1. Frappe Cloud
    - Staging recovery save state:

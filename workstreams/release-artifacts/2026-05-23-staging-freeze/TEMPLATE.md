@@ -37,9 +37,15 @@ rollback hashes, target app hashes, or staging sites. See
   "agent": "name-or-session-id",
   "created_at": "YYYY-MM-DDTHH:MM:SS-06:00",
   "read_documents": [
+    "CODING-HANDOFF.md",
+    "ECOMMERCE-SHOP-HANDOFF.md",
+    "LT-LAUNCH-RUNBOOK.md",
     "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
     "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
+    "workstreams/release-artifacts/README.md",
+    "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
+    "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md"
   ]

@@ -54,6 +54,12 @@ release controller can move past forensic-freeze:
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 
+The required read receipt is intentionally wider than the lock's earliest
+forensic docs. It must include the front-door handoffs, launch runbook,
+release-artifact README, artifact-chain binding handoff, scripts README,
+action list, forensic report, staging-owner-review history, launch capability,
+and queue before mutation can pass.
+
 The release controller's artifact-chain validation is local/offline. It proves
 packet coherence only; it is not app mirror sync, provider deploy/update,
 hosted preflight, bootstrap/import, owner-review, live, DNS, Stripe, Search
@@ -70,6 +76,14 @@ Current template:
 template only. Do not treat the template file as a release artifact, approval,
 provider proof, or staging proof. Feature handoff:
 `../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
+
+Current-head read-only packet:
+`2026-05-23-staging-reopen-current-head-readonly/` is the latest read-only
+current-state packet for source
+`69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. It includes a valid pre-sync
+`app-mirror-sync-plan.json`, but it deliberately does not include
+`freeze-reopen-approval.json`. The release controller still blocks
+`app_mirror_sync`, and staging remains no-go for owner review.
 
 Run:
 

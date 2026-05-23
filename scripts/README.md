@@ -85,6 +85,12 @@ only unless a release packet says otherwise.
 | `frappe_cloud_release_controller.py` | Local Frappe Cloud release controller gate. It checks the active forensic-freeze release lock, explicit reopen approval artifact, required-doc read receipt, typed payload artifact, app-mirror pre-sync/post-sync proof, provider snapshot, deploy-completion artifact, hosted preflight artifact, failure ledger, artifact-owned triad inputs, and cross-artifact chain consistency. Future deploy/update actions cannot pass without `--payload-file`; future staging bootstrap cannot pass without `--deploy-completion` and `--hosted-bootstrap-preflight`. It can write an emergency handoff artifact on failure. It does not deploy or mutate provider state. | Before any future LT Frappe Cloud staging/live command is allowed to leave forensic-freeze |
 | `release_guard_common.py` | Shared offline guard helpers for release lock, reopen approval, app mirror sync plan, read receipt, provider snapshot, triad artifact, hosted preflight, deploy-completion binding, release artifact chain binding, and failure-circuit checks. | Used by release controller and verifier contracts |
 
+The release read receipt is intentionally wide. It requires the current
+front-door handoffs, launch runbook, release-artifact README, artifact-chain
+handoff, this scripts README, action list, forensic report,
+staging-owner-review history, launch capability, and queue before any
+mutation-capable release gate can pass.
+
 ## translate/
 
 | Script | Purpose | Status |

@@ -1,0 +1,25 @@
+{
+  "fresh_release_plan_approved": false,
+  "failures": [
+    {
+      "class": "payload_shape",
+      "guard_written": true,
+      "evidence": "capabilities/failures/frappe-cloud-api-payload-shape-drift.md"
+    },
+    {
+      "class": "release_controller_churn_after_stop",
+      "guard_written": true,
+      "evidence": "capabilities/failures/release-controller-churn-after-stop.md"
+    },
+    {
+      "class": "app_mirror_stale_against_source",
+      "guard_written": true,
+      "evidence": "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md"
+    },
+    {
+      "class": "hosted_preflight_unavailable",
+      "guard_written": true,
+      "evidence": "workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md"
+    }
+  ]
+}

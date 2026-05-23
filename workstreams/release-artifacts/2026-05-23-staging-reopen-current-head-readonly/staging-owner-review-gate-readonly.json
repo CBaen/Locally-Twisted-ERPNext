@@ -1,0 +1,243 @@
+{
+  "accounts": {
+    "locallytwisted@gmail.com": {
+      "enabled": 0,
+      "exists": false,
+      "roles": []
+    },
+    "marketing@exploringnotboring.com": {
+      "enabled": 0,
+      "exists": false,
+      "roles": []
+    }
+  },
+  "app_order": [
+    "frappe",
+    "erpnext",
+    "payments",
+    "webshop",
+    "locally_twisted"
+  ],
+  "bootstrap_status": {
+    "accounts": {
+      "cameron@builtbycameron.com": {
+        "enabled": 0,
+        "exists": false,
+        "roles": [],
+        "user_type": null
+      },
+      "locallytwisted@gmail.com": {
+        "enabled": 0,
+        "exists": false,
+        "roles": [],
+        "user_type": null
+      },
+      "marketing@exploringnotboring.com": {
+        "enabled": 0,
+        "exists": false,
+        "roles": [],
+        "user_type": null
+      }
+    },
+    "counts": {
+      "Item": 0,
+      "Item Price": 0,
+      "LT Product Blueprint": 0,
+      "User": 2,
+      "Website Item": 0,
+      "Website Slideshow": 0,
+      "Website Slideshow Item": 0
+    },
+    "ok": true,
+    "raw_diagnostic_detail_count": 1,
+    "raw_diagnostic_details_omitted": true,
+    "status": {
+      "counts": {
+        "Item": 0,
+        "Item Price": 0,
+        "LT Product Blueprint": 0,
+        "User": 2,
+        "Website Item": 0,
+        "Website Slideshow": 0,
+        "Website Slideshow Item": 0
+      },
+      "error": "ValidationError: Standard reports can only be created in developer mode.",
+      "expected_app_hash": "3fd5a87eca6a6d2e23c95592f07d41196e4cd68f",
+      "post_counts": {
+        "Item": 0,
+        "Item Price": 0,
+        "LT Product Blueprint": 0,
+        "User": 2,
+        "Website Item": 0,
+        "Website Slideshow": 0,
+        "Website Slideshow Item": 0
+      },
+      "pre_counts": {
+        "Item": 0,
+        "Item Price": 0,
+        "LT Product Blueprint": 0,
+        "User": 2,
+        "Website Item": 0,
+        "Website Slideshow": 0,
+        "Website Slideshow Item": 0
+      },
+      "site": "locallytwisted-staging.frappe.cloud",
+      "state": "failure",
+      "steps": [
+        {
+          "name": "sync_contact_intake_backend",
+          "result": {}
+        },
+        {
+          "name": "sync_crm_pipeline",
+          "result": {}
+        },
+        {
+          "name": "sync_stage_cascade",
+          "result": {}
+        },
+        {
+          "name": "sync_backend_workspaces",
+          "result": {}
+        },
+        {
+          "name": "sync_marketing_workspace",
+          "result": {}
+        },
+        {
+          "name": "sync_customer_portal",
+          "result": {
+            "committed": true
+          }
+        }
+      ],
+      "target_site": "locallytwisted-staging.frappe.cloud",
+      "updated_at": "2026-05-23T08:36:26.488974"
+    }
+  },
+  "config": {
+    "lt_ecommerce_paused": "1",
+    "lt_public_indexing_enabled": "0"
+  },
+  "counts": {
+    "Item": 0,
+    "Item Price": 0,
+    "LT Product Blueprint": 0,
+    "Website Item": 0,
+    "Website Slideshow": 0,
+    "Website Slideshow Item": 0
+  },
+  "failures": [
+    "bootstrap status is not success: {\"counts\": {\"Item\": 0, \"Item Price\": 0, \"LT Product Blueprint\": 0, \"User\": 2, \"Website Item\": 0, \"Website Slideshow\": 0, \"Website Slideshow Item\": 0}, \"error\": \"ValidationError: Standard reports can only be created in developer mode.\", \"expected_app_hash\": \"3fd5a87eca6a6d2e23c95592f07d41196e4cd68f\", \"post_counts\": {\"Item\": 0, \"Item Price\": 0, \"LT Product Blueprint\": 0, \"User\": 2, \"Website Item\": 0, \"Website Slideshow\": 0, \"Website Slideshow Item\": 0}, \"pre_counts\": {\"Item\": 0, \"Item Price\": 0, \"LT Product Blueprint\": 0, \"User\": 2, \"Website Item\": 0, \"Website Slideshow\": 0, \"Website Slideshow Item\": 0}, \"site\": \"locallytwisted-staging.frappe.cloud\", \"state\": \"failure\", \"target_site\": \"locallytwisted-staging.frappe.cloud\", \"updated_at\": \"2026-05-23T08:36:26.488974\"}",
+    "bootstrap status is not bound to the deployed app hash: 3fd5a87eca6a6d2e23c95592f07d41196e4cd68f != 181076c239b2d1d3d508a41ac471c71f9d2b5158",
+    "Website Item count 0 is below required minimum 51",
+    "Item count 0 is below required minimum 10685",
+    "Item Price count 0 is below required minimum 10666",
+    "LT Product Blueprint count 0 is below required minimum 51",
+    "Website Slideshow count 0 is below required minimum 47",
+    "Website Slideshow Item count 0 is below required minimum 68",
+    "required staging user missing: locallytwisted@gmail.com",
+    "required staging user missing: marketing@exploringnotboring.com",
+    "/shop-items/bouquets/mickey-mouse-bouquet returned 404",
+    "/shop-items/arches/classic-arch returned 404",
+    "/shop-items/garlands/large-garland returned 404",
+    "/shop-items/columns returned 404"
+  ],
+  "locally_twisted_app": {
+    "branch": "main",
+    "commit_message": "Reload staging seed modules during bootstrap",
+    "hash": "181076c239b2d1d3d508a41ac471c71f9d2b5158",
+    "repository": "Locally-Twisted-Frappe-App"
+  },
+  "ok": false,
+  "owner_visible_routes": [
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/app",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": false,
+      "path": "/app",
+      "status": 200,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Locally Twisted"
+    },
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/shop",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": true,
+      "path": "/shop",
+      "status": 200,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Ready-to-Order Balloon Decor"
+    },
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/shop-items",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": true,
+      "path": "/shop-items",
+      "status": 200,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Ready-to-Order Balloon Decor"
+    },
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/shop-items/bouquets/mickey-mouse-bouquet",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": true,
+      "path": "/shop-items/bouquets/mickey-mouse-bouquet",
+      "status": 404,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Not Found"
+    },
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/shop-items/arches/classic-arch",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": true,
+      "path": "/shop-items/arches/classic-arch",
+      "status": 404,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Not Found"
+    },
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/shop-items/garlands/large-garland",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": true,
+      "path": "/shop-items/garlands/large-garland",
+      "status": 404,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Not Found"
+    },
+    {
+      "final_url": "https://locallytwisted-staging.frappe.cloud/shop-items/columns",
+      "has_gallery_shell": false,
+      "login_page": false,
+      "looks_like_category": true,
+      "path": "/shop-items/columns",
+      "status": 404,
+      "thumbnail_count": 0,
+      "thumbnail_paths": [],
+      "title": "Not Found"
+    }
+  ],
+  "release_artifact": {
+    "kind": "staging_owner_review_gate",
+    "raw_diagnostic_detail_count": 1,
+    "raw_diagnostic_details_omitted": true,
+    "sanitized": true
+  },
+  "site": {
+    "group": "bench-40102",
+    "name": "locallytwisted-staging.frappe.cloud",
+    "status": "Active"
+  }
+}

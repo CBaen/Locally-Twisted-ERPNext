@@ -44,6 +44,14 @@ npm run test:release-prevention
 This command is not staging proof. It proves the local prevention architecture
 exists before future release execution is reopened.
 
+2026-05-23 read-receipt widening:
+Recorder/Security review found the required read receipt was narrower than the
+packet-authoring docs agents now need. The lock and controller now require
+front-door handoffs, launch runbook, release-artifact README, artifact-chain
+binding handoff, scripts README, action list, forensic report,
+staging-owner-review history, launch capability, and queue before mutation can
+pass.
+
 2026-05-23 read-only current-state packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`.
 This packet produced a real read-only provider snapshot and a strict JSON
@@ -78,6 +86,16 @@ commits, rollback hashes, target hashes, or staging sites. This closes a local
 offline guard gap only. It did not reopen forensic-freeze and did not mutate
 provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/migrate/
 cache/checkout/secrets.
+
+2026-05-23 current-head read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
+This packet updates the no-go evidence at source
+`69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. It includes a valid current
+read receipt, provider snapshot, app mirror sync plan, failure ledger, and
+triad artifacts, plus fresh no-go app mirror freshness, hosted preflight, and
+owner-review gate artifacts. The controller still blocks `app_mirror_sync`
+because `freeze-reopen-approval.json` is missing. This is not provider
+mutation or owner-review readiness.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
