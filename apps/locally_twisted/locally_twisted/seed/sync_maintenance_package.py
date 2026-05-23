@@ -10,6 +10,7 @@ import json
 import frappe
 
 from locally_twisted.maintenance import heartbeat
+from locally_twisted.seed.standard_report_import import standard_report_import_context
 
 
 MAINTENANCE_ROLE = heartbeat.MAINTENANCE_ROLE
@@ -234,10 +235,12 @@ def _ensure_report(summary: dict) -> None:
         changed = True
 
     if is_new:
-        doc.insert(ignore_permissions=True)
+        with standard_report_import_context():
+            doc.insert(ignore_permissions=True)
         summary["updated_reports"].append(REPORT_NAME)
     elif changed:
-        doc.save(ignore_permissions=True)
+        with standard_report_import_context():
+            doc.save(ignore_permissions=True)
         summary["updated_reports"].append(REPORT_NAME)
 
 
