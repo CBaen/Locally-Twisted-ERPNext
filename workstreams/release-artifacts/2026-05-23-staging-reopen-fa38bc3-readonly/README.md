@@ -40,20 +40,23 @@ mutation.
   `marketing@exploringnotboring.com`, and representative shop/product routes
   still fail.
 
-## Current Legal Next Step
+## Legal Next Step Boundary
 
-Do not mutate from this packet. The next non-read-only step requires a fresh,
-bounded `freeze-reopen-approval.json` bound to:
+Do not mutate from this packet. It is archived evidence for `fa38bc3` only.
+A future non-read-only step requires a new dated packet and a fresh, bounded
+`freeze-reopen-approval.json` generated for the then-current repo `HEAD`, bound
+to:
 
 - lock `lt-staging-forensic-freeze-2026-05-23`,
 - target `locallytwisted-staging.frappe.cloud`,
-- source commit `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`,
+- the current source commit for that future packet,
 - staging-only approved actions,
 - live/DNS/Stripe/Search Console still blocked,
 - ISO-8601 timezone-bearing approval timestamps no longer than 24 hours.
 
-After that, the controller can evaluate `app_mirror_sync` with the source-bound
-`app-mirror-sync-plan.json`. It is not legal now.
+After that, the controller can evaluate `app_mirror_sync` with a source-bound
+`app-mirror-sync-plan.json` in that new packet. It is not legal from this
+archived packet.
 
 ## Boundary
 

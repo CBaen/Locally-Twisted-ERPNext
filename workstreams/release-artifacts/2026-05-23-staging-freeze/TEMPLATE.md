@@ -45,6 +45,8 @@ rollback hashes, target app hashes, or staging sites. See
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
     "workstreams/release-artifacts/README.md",
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
+    "workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md",
+    "workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md",
     "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md"
@@ -68,6 +70,7 @@ unexpired, and the approval window must be no longer than 24 hours.
   "approval_type": "forensic_freeze_reopen",
   "lock_id": "lt-staging-forensic-freeze-2026-05-23",
   "approved_by": "Guiding Light",
+  "approval_evidence": "fresh explicit approval source for this packet",
   "approved_at": "YYYY-MM-DDTHH:MM:SS-06:00",
   "expires_at": "YYYY-MM-DDTHH:MM:SS-06:00",
   "target_site": "locallytwisted-staging.frappe.cloud",
@@ -86,7 +89,17 @@ unexpired, and the approval window must be no longer than 24 hours.
 ```
 
 Run through the controller with `--reopen-approval`; do not treat chat approval
-or a commit message as this artifact.
+or a commit message as this artifact. Prefer generating and validating it with
+the local helper:
+
+```powershell
+python scripts\release\freeze_reopen_approval_artifact.py `
+  --write `
+  --output workstreams\release-artifacts\<fresh-packet>\freeze-reopen-approval.json `
+  --approved-by "Guiding Light" `
+  --approval-evidence "<exact fresh approval source>" `
+  --json
+```
 
 ## App Mirror Sync Plan Shape
 

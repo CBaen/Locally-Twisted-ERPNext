@@ -40,6 +40,8 @@
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
     "workstreams/release-artifacts/README.md",
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
+    "workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md",
+    "workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md",
     "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md"

@@ -49,6 +49,8 @@ REQUIRED_READ_DOCS = [
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
     "workstreams/release-artifacts/README.md",
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
+    "workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md",
+    "workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md",
     "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md",
@@ -135,6 +137,7 @@ REQUIRED_REOPEN_APPROVAL_FIELDS = {
     "approval_type",
     "lock_id",
     "approved_by",
+    "approval_evidence",
     "approved_at",
     "expires_at",
     "target_site",
@@ -414,6 +417,10 @@ def validate_reopen_approval(path: Path, lock: dict[str, Any], action: str | Non
     approved_by = str(approval.get("approved_by") or "").strip()
     if not approved_by:
         failures.append("freeze reopen approval approved_by must be non-empty")
+
+    approval_evidence = str(approval.get("approval_evidence") or "").strip()
+    if not approval_evidence:
+        failures.append("freeze reopen approval approval_evidence must be non-empty")
 
     approved_actions_raw = approval.get("approved_actions")
     if not isinstance(approved_actions_raw, list) or not approved_actions_raw:

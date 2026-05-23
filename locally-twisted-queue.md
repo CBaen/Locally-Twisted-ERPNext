@@ -28,7 +28,10 @@ mutation remains blocked while the forensic-freeze lock is active. The local
 guard hardening now includes provider snapshot self-test/producer,
 owner-review gate contract, hosted bootstrap preflight/source contract,
 mandatory deploy payload artifacts, and destructive-seed backup-or-zero-data
-proof. The staging-freeze packet template now names the current required
+proof. The freeze-reopen approval helper now exists at
+`scripts/release/freeze_reopen_approval_artifact.py`; preview mode is not
+approval, and mutation-capable output requires fresh explicit approval evidence
+plus `--write`. The staging-freeze packet template now names the current required
 artifact shapes, but those are template examples only; no real reopen approval,
 app mirror sync plan, deploy completion, or hosted preflight proof exists for a
 new attempt yet. The read-only current-state packet already ran and is a no-go. Next
@@ -79,8 +82,9 @@ still blocked by the missing `freeze-reopen-approval.json`; the current goal
 context must not be converted into that approval.
 
 2026-05-23 read-only packet update:
-`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` now records
-the current provider/staging state. Staging is Active on app hash
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` records
+archived ceab908-era provider/staging state. At that packet time, staging was
+Active on app hash
 `181076c239b2d1d3d508a41ac471c71f9d2b5158` with correct app order, no running
 jobs, ecommerce paused, and public indexing disabled. Owner review remains
 blocked: catalog/Product Setup/gallery rows are zero, required owner/marketing

@@ -13,6 +13,15 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   locally. This is local/offline prevention only and did not mutate provider,
   staging, live, DNS, Stripe, Search Console, app mirror, bootstrap, migrate,
   cache, checkout, or secrets.
+- 2026-05-23 freeze reopen approval helper:
+  `workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`.
+  Future mutation-capable packets must use
+  `scripts/release/freeze_reopen_approval_artifact.py` to preview, write, or
+  validate `freeze-reopen-approval.json`. Preview mode is not approval
+  (`ok=false`); writing requires explicit `--write`, `--output`,
+  `--approved-by`, and `--approval-evidence`. This is local/offline prevention
+  only and did not mutate provider, staging, live, DNS, Stripe, Search Console,
+  app mirror, bootstrap, migrate, cache, checkout, or secrets.
 - 2026-05-23 latest read-only staging packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`.
   This packet is bound to source
@@ -83,7 +92,8 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   Setup/gallery projection, live checkout, DNS, Stripe, Search Console, or
   owner-review readiness.
 - 2026-05-23 read-only staging reopen packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`.
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`
+  is archived ceab908-era evidence.
   Controller `read_only_forensics` passed with no provider mutation. Frappe
   Cloud staging is Active, has no running jobs, correct app order,
   `lt_ecommerce_paused=1`, and `lt_public_indexing_enabled=0`, but it remains
@@ -114,8 +124,8 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   release controller requires a passing hosted-preflight artifact for future
   `staging_bootstrap`. That artifact must match the provider snapshot site,
   provider target/installed app hash, app-mirror hash, and the hosted
-  preflight `required_checks` payload. The current packet remains no-go because
-  staging returns HTTP `417` for the preflight method.
+  preflight `required_checks` payload. The archived refresh packet remains
+  no-go because staging returned HTTP `417` for the preflight method.
 - 2026-05-23 post-`ebb7151` read-only proof:
   `workstreams/frappe-cloud-post-ebb7151-staging-readonly-2026-05-23.md` and
   `workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`.
@@ -242,8 +252,10 @@ Executable local prevention gates now in this repo:
 
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
 - `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/release/freeze_reopen_approval_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
+- `scripts/verify/freeze_reopen_approval_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`

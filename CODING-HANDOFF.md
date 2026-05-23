@@ -1,5 +1,18 @@
 # Locally Twisted - Coding Handoff
 
+Freeze reopen approval helper on 2026-05-23:
+`workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`.
+Future agents must not hand-copy `freeze-reopen-approval.json` from chat,
+packet examples, or older attempts. Use
+`scripts/release/freeze_reopen_approval_artifact.py` to preview, write, or
+validate that artifact. Preview mode returns `ok=false`; mutation-capable
+output requires `--write`, `--output`, `--approved-by`, and
+`--approval-evidence`. The helper binds approval to the active lock, current
+repo `HEAD`, staging target, staging-only approved actions, timezone-bearing
+timestamps no longer than 24 hours, and the live/DNS/Stripe/Search Console
+block. It does not contact Frappe Cloud or mutate provider/staging/app mirror/
+live/DNS/Stripe/Search Console/bootstrap/migrate/cache/checkout/secrets.
+
 Freeze reopen approval timestamp guard on 2026-05-23:
 `workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
 The release controller now rejects stale, expired, malformed, timezone-less,
@@ -98,7 +111,7 @@ approval, DNS/Search Console/Stripe approval, or checkout exposure.
 Hosted preflight guard refresh on 2026-05-23:
 `workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md` and
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
-are the current follow-up packet. `scripts/verify/staging_owner_review_hosted_preflight.py`
+are an archived guard-refresh follow-up packet. `scripts/verify/staging_owner_review_hosted_preflight.py`
 now writes a sanitized hosted-preflight artifact without traceback body text.
 `scripts/release/frappe_cloud_release_controller.py` now requires a passing
 `hosted-bootstrap-preflight.json` before any future `staging_bootstrap` action,
@@ -131,8 +144,8 @@ bootstrap diagnostics. These are local prevention gates only; staging remains
 no-go until a fresh artifact-backed release packet proves the real target.
 
 Codex read-only staging reopen packet on 2026-05-23:
-`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is the
-current no-go proof packet. The packet and strict-JSON gate fix were archived
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is an
+archived ceab908-era no-go proof packet. The packet and strict-JSON gate fix were archived
 to GitHub in commit `ceab908`. It used the release controller in
 `read_only_forensics` mode and performed no provider/staging/live/DNS/Stripe/
 Search Console mutation.

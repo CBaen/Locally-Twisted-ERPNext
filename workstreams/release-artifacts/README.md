@@ -15,9 +15,9 @@ must include:
 - `sanitized-payload.json` - typed Frappe Cloud payload shape with
   `content_type: application/json`, no secrets.
 - `freeze-reopen-approval.json` - explicit approval artifact bound to the
-  active lock, staging target, source commit, approved staging-only actions,
-  bounded ISO-8601 approval timestamps, and live/DNS/Stripe/Search Console
-  block.
+  active lock, staging target, source commit, explicit approval evidence,
+  approved staging-only actions, bounded ISO-8601 approval timestamps, and
+  live/DNS/Stripe/Search Console block.
 - `app-mirror-sync-plan.json` - pre-sync source/mirror plan for
   `app_mirror_sync`; post-sync freshness remains a separate required artifact.
 - `provider-snapshot.json` - read-only team/site/bench/app/job/rollback state.
@@ -40,14 +40,18 @@ Gate/Fixer handoff:
 `../frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
 Timestamp guard handoff:
 `../frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
+Approval helper handoff:
+`../frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`.
 
 The local lock and scripts currently require these artifacts before any future
 release controller can move past forensic-freeze:
 
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
 - `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/release/freeze_reopen_approval_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
+- `scripts/verify/freeze_reopen_approval_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
@@ -59,9 +63,10 @@ release controller can move past forensic-freeze:
 
 The required read receipt is intentionally wider than the lock's earliest
 forensic docs. It must include the front-door handoffs, launch runbook,
-release-artifact README, artifact-chain binding handoff, scripts README,
-action list, forensic report, staging-owner-review history, launch capability,
-and queue before mutation can pass.
+release-artifact README, artifact-chain binding handoff, freeze-approval
+timestamp guard, freeze-reopen approval helper handoff, scripts README, action
+list, forensic report, staging-owner-review history, launch capability, and
+queue before mutation can pass.
 
 The release controller's artifact-chain validation is local/offline. It proves
 packet coherence only; it is not app mirror sync, provider deploy/update,
@@ -70,6 +75,42 @@ Console, or checkout proof.
 
 The expanded current action list is
 `../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+
+## How To Provide Freeze-Reopen Approval
+
+Do not hand-author `freeze-reopen-approval.json` from chat, a commit message,
+or an archived packet. After fresh explicit approval exists for a new dated
+release packet, generate the artifact with the helper:
+
+```powershell
+python scripts\release\freeze_reopen_approval_artifact.py `
+  --write `
+  --output workstreams\release-artifacts\<fresh-packet>\freeze-reopen-approval.json `
+  --approved-by "Guiding Light" `
+  --approval-evidence "<exact fresh approval source>" `
+  --json
+```
+
+Before approval exists, preview only:
+
+```powershell
+python scripts\release\freeze_reopen_approval_artifact.py --json
+```
+
+Validate an existing packet artifact:
+
+```powershell
+python scripts\release\freeze_reopen_approval_artifact.py `
+  --validate-only workstreams\release-artifacts\<fresh-packet>\freeze-reopen-approval.json `
+  --json
+```
+
+The helper binds approval to the active forensic-freeze lock, current repo
+`HEAD`, `locallytwisted-staging.frappe.cloud`, staging-only approved actions,
+timezone-bearing approval timestamps, a maximum 24-hour approval window, and
+the live/DNS/Stripe/Search Console block. It does not contact Frappe Cloud or
+mutate app mirror, provider, staging, live, DNS, Stripe, Search Console,
+indexing, checkout, cache, migrate, or bootstrap state.
 
 Current template:
 `2026-05-23-staging-freeze/TEMPLATE.md` was updated in source commit

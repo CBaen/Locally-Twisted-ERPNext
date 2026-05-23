@@ -453,6 +453,7 @@ def write_reopen_approval(path: Path, source_commit: str) -> None:
                 "approval_type": "forensic_freeze_reopen",
                 "lock_id": "lt-staging-forensic-freeze-2026-05-23",
                 "approved_by": "Guiding Light",
+                "approval_evidence": "release-controller-contract explicit approval placeholder",
                 "approved_at": approved_at.isoformat(),
                 "expires_at": expires_at.isoformat(),
                 "target_site": "locallytwisted-staging.frappe.cloud",

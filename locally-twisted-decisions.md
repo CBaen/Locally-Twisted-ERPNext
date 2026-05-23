@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Freeze reopen approval artifacts must be helper-generated or helper-validated
+
+**Decision:** Future mutation-capable LT staging packets must not rely on a
+hand-copied `freeze-reopen-approval.json`. Agents must use
+`scripts/release/freeze_reopen_approval_artifact.py` to preview, write, or
+validate the approval artifact before passing it to the release controller.
+
+**Reasoning:** The approval artifact is the local transition out of
+forensic-freeze. Copying JSON from a template or archived packet creates a
+real risk of stale source commits, unsupported actions, ambiguous approval
+evidence, or overlong approval windows. A helper keeps the transition bound to
+the active lock, current repo `HEAD`, staging target, staging-only actions,
+timezone-bearing timestamps, and the live/DNS/Stripe/Search Console block.
+
+**Implementation boundary:** This is local/offline guard tightening only. The
+helper's preview mode returns `ok=false`, and writing a mutation-capable
+artifact requires `--write`, `--output`, `--approved-by`, and
+`--approval-evidence`. It does not create approval by itself, reopen
+forensic-freeze, sync the app mirror, or mutate Frappe Cloud/staging/live/DNS/
+Stripe/Search Console/bootstrap/migrate/cache/checkout state.
+
+**Receipts:** `scripts/release/freeze_reopen_approval_artifact.py`;
+`scripts/verify/freeze_reopen_approval_artifact_contract.py`;
+`workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`;
+`workstreams/release-artifacts/README.md`.
+
+---
+
 ## 2026-05-23 - Freeze reopen approvals must be current and time-bounded
 
 **Decision:** A `freeze-reopen-approval.json` can only reopen staging mutation

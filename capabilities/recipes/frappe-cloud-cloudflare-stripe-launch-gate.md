@@ -103,12 +103,15 @@ Default public launch posture:
   staging owner-review readiness.
 - Also as of 2026-05-23, app mirror sync is explicitly blocked while
   forensic-freeze is active. `scripts/verify/frappe_cloud_app_mirror_freshness.py`
-  is the read-only source-vs-app-root-mirror verifier. The current no-go packet
-  is `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`:
+  is the read-only source-vs-app-root-mirror verifier. The archived app-mirror
+  no-go packet for source `24c8465` is
+  `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`:
   mirror hash `181076c239b2d1d3d508a41ac471c71f9d2b5158` is missing
   `locally_twisted/staging_owner_review_preflight.py` and has a stale
   `locally_twisted/staging_owner_review_bootstrap.py` relative to source
-  `24c8465`.
+  `24c8465`. Later read-only packets, including
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`,
+  carry their own source-bound mirror freshness artifacts.
 - Also as of 2026-05-23, hosted bootstrap preflight is a separate chain-bound
   artifact, not a stale bootstrap-status read. The current packet
   `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
@@ -137,14 +140,23 @@ Default public launch posture:
 - The freeze reopen approval itself is now time-bounded. Approval timestamps
   must be ISO-8601 values with timezone offsets, unexpired, not future-dated
   beyond clock skew, ordered correctly, and no longer than a 24-hour window.
+- The freeze reopen approval artifact now has a local helper:
+  `scripts/release/freeze_reopen_approval_artifact.py`. Preview mode returns
+  `ok=false`; writing a mutation-capable `freeze-reopen-approval.json` requires
+  `--write`, `--output`, `--approved-by`, and `--approval-evidence`. The helper
+  is local-only and does not contact Frappe Cloud or mutate app mirror,
+  provider, staging, live, DNS, Stripe, Search Console, indexing, checkout,
+  cache, migrate, or bootstrap state.
 - Also as of `f5e2e91`, the staging-freeze release packet template is aligned
   with those controller contracts. It includes starter shapes for reopen
   approval, app mirror sync plan, deploy completion, and hosted preflight
   `checks`. This is template parity only; a future release attempt must still
   create real current artifacts in a fresh dated packet before mutation.
-- As of `5e11003`, documentation parity records `5e11003` as the current
-  GitHub archive and `f5e2e91` as the underlying template-fix commit. Provider
-  Witness rechecked after `5e11003` and confirmed the app-root mirror is still
+- As of `5e11003`, documentation parity recorded `5e11003` as that moment's
+  GitHub archive and `f5e2e91` as the underlying template-fix commit. Later
+  commits supersede it as the latest source archive; run `git log` instead of
+  treating this paragraph as current HEAD. Provider Witness rechecked after
+  `5e11003` and confirmed the app-root mirror was still
   `181076c239b2d1d3d508a41ac471c71f9d2b5158`, mirror freshness is still no-go,
   and `app_mirror_sync` remains blocked by the missing freeze-reopen approval
   artifact.
@@ -174,9 +186,10 @@ Default public launch posture:
   `app_mirror_sync` is still blocked by the missing `freeze-reopen-approval.json`.
 - Read receipts are now intentionally wider than the first forensic docs. A
   mutation-capable packet must prove the agent read the front-door handoffs,
-  launch runbook, release-artifact README, artifact-chain handoff, scripts
-  README, action list, forensic report, staging-owner-review history, launch
-  capability, and queue.
+  launch runbook, release-artifact README, artifact-chain handoff,
+  freeze-approval timestamp guard, freeze-reopen approval helper handoff,
+  scripts README, action list, forensic report, staging-owner-review history,
+  launch capability, and queue.
 
 ## Human Access Boundary
 
@@ -230,7 +243,9 @@ Concise staging-safe list:
 3. If forensic-freeze is active, do not mutate until a current
    `freeze-reopen-approval.json` passes the controller's `--reopen-approval`
    validator for the exact action. Chat approval alone is not a release
-   artifact.
+   artifact. Prefer generating the artifact with
+   `python scripts\release\freeze_reopen_approval_artifact.py --write ...`
+   after fresh explicit approval exists.
 4. For app mirror sync, require a pre-sync gate first, then a post-sync
    freshness artifact. Do not require `ok=true` freshness before sync; that is
    a logical deadlock. Do require `ok=true` after sync and before deploy,

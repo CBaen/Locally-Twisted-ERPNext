@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Approval artifacts need a generator, not a template copy
+
+The release controller required `freeze-reopen-approval.json`, but a future
+agent could still hand-copy the artifact from a template or old packet. That
+would satisfy the file-name expectation while risking stale source binding,
+unsupported action scope, missing approval evidence, or unsafe approval timing.
+
+**Counter-move:** give the approval transition a local helper and contract.
+`scripts/release/freeze_reopen_approval_artifact.py` previews with `ok=false`,
+writes only with explicit `--write`, approver, and approval evidence, binds to
+current `HEAD` and the active lock, refuses non-staging actions, and validates
+through `npm run test:freeze-reopen-approval`.
+
+---
+
 ## 2026-05-23 - Reopen approval must expire mechanically
 
 A release-freeze approval can look valid as JSON while still being unsafe:

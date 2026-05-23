@@ -17,14 +17,18 @@ layer now exists. It blocks release mutation while forensic-freeze is active,
 validates `application/json` typed Frappe Cloud payload shape before provider
 calls, checks required-doc read receipts, requires artifact-owned triad
 evidence, can write an emergency handoff artifact on controller failure, and
-fails docs that collapse provider success into owner-review readiness.
+fails docs that collapse provider success into owner-review readiness. The
+approval artifact now has a local helper so future agents do not hand-copy the
+freeze-reopen transition from a template or archived packet.
 
 Implemented local guard paths:
 
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
 - `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/release/freeze_reopen_approval_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
+- `scripts/verify/freeze_reopen_approval_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
@@ -94,6 +98,18 @@ The local controller now rejects `freeze-reopen-approval.json` files whose
 approval timestamps are missing, malformed, timezone-less, expired,
 future-dated beyond clock skew, reversed, or longer than 24 hours. This closes
 another local offline guard gap only. It did not create a valid approval,
+reopen forensic-freeze, or mutate provider/staging/live/DNS/Stripe/Search
+Console/app mirror/bootstrap/migrate/cache/checkout/secrets.
+
+2026-05-23 freeze-reopen approval helper:
+`workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`.
+The local helper now previews, writes, or validates
+`freeze-reopen-approval.json`. Preview mode returns `ok=false`; writing a
+mutation-capable approval artifact requires `--write`, `--output`,
+`--approved-by`, and `--approval-evidence`. It binds to the active lock,
+current repo `HEAD`, staging target, staging-only actions, bounded
+timezone-bearing timestamps, and the live/DNS/Stripe/Search Console block.
+This closes a local authoring gap only. It does not create approval by itself,
 reopen forensic-freeze, or mutate provider/staging/live/DNS/Stripe/Search
 Console/app mirror/bootstrap/migrate/cache/checkout/secrets.
 
