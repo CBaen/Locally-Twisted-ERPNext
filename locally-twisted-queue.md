@@ -72,6 +72,12 @@ The result is still no-go: app-root mirror/deployed hash remains
 hosted preflight returns HTTP `417`, staging catalog/Product Setup/gallery
 counts are zero, owner/marketing users are missing, and product/category routes
 return `404`. This packet does not reopen the freeze or authorize mirror sync.
+Follow-up local guard work now covers the four Gate/Fixer gaps: explicit
+freeze-reopen approval artifact, app mirror pre-sync plan plus post-sync
+freshness split, post-deploy/update completion artifact, and sanitized
+owner-review release artifact mode. These are implemented local gates only.
+The next release step still requires a real approval artifact and fresh packet
+before app mirror sync or provider mutation.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is

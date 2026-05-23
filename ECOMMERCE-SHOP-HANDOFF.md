@@ -73,6 +73,12 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   HTTP `417`, staging owner-review data is still zero/missing, and required
   owner/marketing accounts are still absent. Treat `ebb7151` as source archive
   proof only, not staging readiness.
+- 2026-05-23 local release-guard gap closure: `npm run
+  test:release-prevention` now covers explicit freeze-reopen approval,
+  app-mirror pre-sync/post-sync separation, post-deploy/update completion
+  artifact validation, and sanitized owner-review release artifacts. This
+  removes the local controller deadlock but does not reopen forensic-freeze or
+  mutate staging.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,

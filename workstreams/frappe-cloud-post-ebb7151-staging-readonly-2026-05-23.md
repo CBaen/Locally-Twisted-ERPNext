@@ -45,12 +45,21 @@ Console/indexing work, and checkout unpause. Witness confirmed source HEAD
 `ebb7151`, the only dirty LT path was this new read-only packet, and current
 app-mirror proof remains `ok=false`.
 
-Gate/Fixer result: do not attempt to leave forensic-freeze yet. Local
-contracts for `release-controller` and `release-lock` pass, but four local
-capabilities are still missing before mutation: an explicit freeze-reopen
+Gate/Fixer result at packet time: do not attempt to leave forensic-freeze yet.
+Local contracts for `release-controller` and `release-lock` passed, but four
+local capabilities were missing before mutation: an explicit freeze-reopen
 transition, a pre-sync/post-sync split for app mirror sync, a post-deploy/update
 completion artifact contract, and a sanitized owner-review release artifact
 mode so raw previous traceback history does not become release evidence.
+
+Follow-up local guard closure: those four gaps are now represented as local
+contracts. `frappe_cloud_release_controller.py` requires `--reopen-approval`
+for mutation under forensic-freeze, `app_mirror_sync` requires a pre-sync
+`--app-mirror-sync-plan` instead of post-sync freshness, `staging_bootstrap`
+requires `--deploy-completion`, and `staging_owner_review_gate.py --json
+--release-artifact` sanitizes previous bootstrap diagnostics. These contracts
+are local prevention only; they do not prove staging readiness or authorize
+provider mutation.
 
 Recorder result: this handoff and the front-door docs must state that
 `ebb7151` is source archive proof only. It does not prove app mirror freshness,

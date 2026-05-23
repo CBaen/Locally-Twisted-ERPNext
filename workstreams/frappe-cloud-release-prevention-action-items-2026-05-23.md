@@ -26,6 +26,7 @@ Implemented local guard paths:
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
+- `scripts/verify/frappe_cloud_deploy_completion_contract.py`
 - `scripts/verify/staging_owner_review_gate_contract.py`
 - `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`
@@ -225,34 +226,36 @@ execution can leave forensic-freeze.
     snapshot and app-mirror freshness artifacts with the full hosted
     `required_checks` payload.
 
-21. **Add an explicit freeze-reopen transition.** `open-before-provider-mutation`
-    The lock lists reopen requirements, but there is not yet a local
-    `reopen`, `unfreeze`, approval-artifact validator, or lock-transition
-    command. A future controller must implement a deliberate transition before
-    any provider mutation. Do not treat chat approval, a passing local gate, or
-    this action list as the transition.
+21. **Add an explicit freeze-reopen transition.** `implemented-local; open-before-provider-mutation`
+    The controller now requires `--reopen-approval` for mutating actions while
+    forensic-freeze is active. The artifact must be bound to the active lock,
+    staging target, source commit, approved staging-only actions, and must keep
+    live/DNS/Stripe/Search Console blocked. It is covered by
+    `release_lock_contract.py` and `release_controller_contract.py`. A future
+    release packet still needs a real current approval artifact; chat approval
+    alone is not the transition.
 
-22. **Split app mirror sync into pre-sync and post-sync gates.** `open-before-provider-mutation`
-    The controller currently treats `app_mirror_sync` like other mutation and
-    requires passing app-mirror freshness before sync. That is logically
-    deadlocked because freshness can only pass after sync. Add a pre-sync gate
-    that proves reviewed source, explicit freeze reopen, rollback context, and
-    intended mirror target; then require post-sync
-    `app-mirror-freshness.json` with `ok=true` before deploy/update,
-    hosted preflight, bootstrap/import, or cache work.
+22. **Split app mirror sync into pre-sync and post-sync gates.** `implemented-local; open-before-provider-mutation`
+    The controller now treats `app_mirror_sync` as a special mutating action:
+    it requires `--app-mirror-sync-plan` before sync instead of requiring
+    passing app-mirror freshness before sync. All downstream mutation still
+    requires post-sync `app-mirror-freshness.json` with `ok=true` before
+    deploy/update, hosted preflight, bootstrap/import, or cache work.
 
-23. **Add post-deploy/update completion artifact contract.** `open-before-provider-mutation`
-    The payload contract validates the request before provider mutation, but a
-    future release still needs a distinct post-deploy/update artifact proving
-    the provider job completed, installed app hash changed as expected, app
-    order is correct, and no running jobs remain before hosted preflight.
+23. **Add post-deploy/update completion artifact contract.** `implemented-local; open-before-provider-mutation`
+    `scripts/verify/frappe_cloud_deploy_completion_contract.py` now validates a
+    sanitized post-deploy/update artifact for provider job success, installed
+    hash, app order, empty running jobs, staging flags, provider snapshot
+    binding, app mirror hash binding, and no raw traceback/body/secret fields.
+    The release controller now requires `--deploy-completion` before
+    `staging_bootstrap`.
 
-24. **Sanitize owner-review gate release artifacts.** `open-before-provider-mutation`
-    `staging_owner_review_gate.py --json` now emits parseable JSON, but the
-    owner-review artifact can still include raw previous bootstrap traceback
-    data when reading durable failure history. Add a release-packet-safe
-    sanitizer or redacted artifact mode before using owner-review gate output
-    as provider-release evidence.
+24. **Sanitize owner-review gate release artifacts.** `implemented-local; open-before-provider-mutation`
+    `staging_owner_review_gate.py --json --release-artifact` now omits raw
+    previous bootstrap traceback/body diagnostics while preserving counts,
+    hashes, users, route evidence, bootstrap state, and actionable failure
+    summaries. The sanitizer is covered by
+    `staging_owner_review_gate_contract.py`.
 
 ## P1 Actions
 
@@ -270,9 +273,8 @@ execution can leave forensic-freeze.
    `local`, `GitHub archive`, `app mirror`, `deploy candidate`,
    `site migrate`, `cache/config`, `staging owner-review`, and `live release`
    cannot be used interchangeably.
-6. Add contract tests for the future freeze-reopen transition, app-mirror
-   pre-sync/post-sync split, post-deploy completion artifact, and sanitized
-   owner-review release artifact mode.
+6. Add release-packet producers for real freeze-reopen approval and app mirror
+   sync plan artifacts once GL explicitly reopens staging execution.
 
 ## Suggested File Targets
 
@@ -284,6 +286,7 @@ Implemented local/offline guards:
 - `scripts/release/frappe_cloud_release_controller.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
+- `scripts/verify/frappe_cloud_deploy_completion_contract.py`
 - `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
@@ -302,6 +305,10 @@ Still mandatory before any provider mutation is reopened:
 - real hosted bootstrap preflight execution and artifact from the actual
   staging target
 - current app-root mirror containing the reviewed source preflight module
+- real freeze-reopen approval artifact bound to the active lock and staging
+  target
+- real app mirror pre-sync plan before app_mirror_sync
+- real post-deploy/update completion artifact before hosted preflight
 - fresh app mirror freshness artifact proving required hosted-preflight source
   files match the app-root mirror
 - fresh artifact-backed release plan
@@ -324,8 +331,10 @@ This prevention work is complete only when a fresh run proves:
   mutation is reachable from the staging owner-review path.
 
 Current state after the local guard pass: the release lock, payload validator,
-controller CLI contract, emergency-handoff writer, docs-language gate,
-circuit-breaker helper, provider snapshot producer/self-test, offline staging
-owner-review gate contract, hosted bootstrap preflight/source contract, and
+controller CLI contract, explicit freeze-reopen approval validator, app mirror
+pre-sync/post-sync split, emergency-handoff writer, docs-language gate,
+circuit-breaker helper, provider snapshot producer/self-test, post-deploy
+completion contract, offline staging owner-review gate contract, owner-review
+release-artifact sanitizer, hosted bootstrap preflight/source contract, and
 artifact directory contract are implemented locally. The owner-review target is
 still not proved, and provider mutation is still blocked.

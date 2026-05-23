@@ -95,6 +95,9 @@ def run_contract() -> dict[str, Any]:
         case_result = run_case(case)
         case_results.append(case_result)
         failures.extend(case_result["contract_failures"])
+    release_artifact_case = run_release_artifact_sanitizer_case()
+    case_results.append(release_artifact_case)
+    failures.extend(release_artifact_case["contract_failures"])
 
     return {
         "ok": not failures,
@@ -158,7 +161,77 @@ def run_case(case: ContractCase) -> dict[str, Any]:
     }
 
 
-def fake_args() -> argparse.Namespace:
+def run_release_artifact_sanitizer_case() -> dict[str, Any]:
+    fixture = valid_fixture()
+    bootstrap_failure_with_raw_diagnostics(fixture)
+    contract_failures: list[str] = []
+
+    try:
+        with patched_gate(fixture):
+            release_result = gate.run_gate(fake_args(release_artifact=True))
+    except Exception as exc:
+        return {
+            "name": "release_artifact_sanitizes_bootstrap_diagnostics",
+            "status": "FAIL",
+            "gate_ok": False,
+            "gate_failures": [],
+            "contract_failures": [
+                "release_artifact_sanitizes_bootstrap_diagnostics: "
+                f"gate crashed with {type(exc).__name__}: {exc}"
+            ],
+        }
+
+    rendered = json.dumps(release_result, sort_keys=True)
+    raw_markers = [
+        "Traceback (most recent call last)",
+        "/home/frappe/frappe-bench/apps/frappe",
+        "secret-session-value",
+        "raw provider body",
+        "traceback_tail",
+        "body_excerpt",
+    ]
+    for marker in raw_markers:
+        if marker in rendered:
+            contract_failures.append(
+                "release_artifact_sanitizes_bootstrap_diagnostics: "
+                f"sanitized artifact leaked {marker!r}"
+            )
+
+    bootstrap_status = release_result.get("bootstrap_status") or {}
+    status_payload = bootstrap_status.get("status") or {}
+    if status_payload.get("state") != "failure":
+        contract_failures.append("release artifact did not preserve bootstrap failure state")
+    if status_payload.get("expected_app_hash") != EXPECTED_HASH:
+        contract_failures.append("release artifact did not preserve expected app hash")
+    if status_payload.get("error") != "ValidationError: fake setup failed":
+        contract_failures.append("release artifact did not preserve actionable bootstrap error")
+    if status_payload.get("counts", {}).get("Website Item") != gate.MIN_COUNTS["Website Item"]:
+        contract_failures.append("release artifact did not preserve bootstrap count evidence")
+    if release_result.get("counts", {}).get("Website Item") != gate.MIN_COUNTS["Website Item"]:
+        contract_failures.append("release artifact did not preserve owner-review count evidence")
+    if not release_result.get("accounts", {}).get("locallytwisted@gmail.com", {}).get("exists"):
+        contract_failures.append("release artifact did not preserve owner account evidence")
+    if not any(
+        route.get("path") == "/shop-items/bouquets/mickey-mouse-bouquet"
+        for route in release_result.get("owner_visible_routes", [])
+    ):
+        contract_failures.append("release artifact did not preserve route evidence")
+    release_meta = release_result.get("release_artifact") or {}
+    if release_meta.get("sanitized") is not True:
+        contract_failures.append("release artifact metadata does not mark sanitized=true")
+    if release_meta.get("raw_diagnostic_detail_count", 0) < 2:
+        contract_failures.append("release artifact did not count omitted raw diagnostics")
+
+    return {
+        "name": "release_artifact_sanitizes_bootstrap_diagnostics",
+        "status": "PASS" if not contract_failures else "FAIL",
+        "gate_ok": bool(release_result["ok"]),
+        "gate_failures": list(release_result["failures"]),
+        "contract_failures": contract_failures,
+    }
+
+
+def fake_args(*, release_artifact: bool = False) -> argparse.Namespace:
     return argparse.Namespace(
         site="fake-staging.local",
         team="fake-team",
@@ -167,6 +240,7 @@ def fake_args() -> argparse.Namespace:
         expected_hash_from_mirror=False,
         mirror_url="https://example.invalid/fake.git",
         json=False,
+        release_artifact=release_artifact,
     )
 
 
@@ -382,6 +456,24 @@ def wrong_installed_app_hash(fixture: dict[str, Any]) -> None:
 
 def stale_bootstrap_hash(fixture: dict[str, Any]) -> None:
     fixture["bootstrap_status"]["status"]["expected_app_hash"] = STALE_BOOTSTRAP_HASH
+
+
+def bootstrap_failure_with_raw_diagnostics(fixture: dict[str, Any]) -> None:
+    fixture["bootstrap_status"]["status"].update(
+        {
+            "state": "failure",
+            "error": "ValidationError: fake setup failed",
+            "counts": dict(fixture["counts"]),
+            "pre_counts": dict(fixture["counts"]),
+            "post_counts": dict(fixture["counts"]),
+            "traceback_tail": [
+                "Traceback (most recent call last):",
+                '  File "/home/frappe/frappe-bench/apps/frappe/frappe/app.py", line 120, in application',
+                "secret-session-value",
+            ],
+            "body_excerpt": "raw provider body token=secret-session-value",
+        }
+    )
 
 
 def ecommerce_indexing_exposure_mismatch(fixture: dict[str, Any]) -> None:

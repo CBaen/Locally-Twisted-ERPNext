@@ -40,18 +40,34 @@ exists so the next release agent starts from verified post-`ebb7151` reality
 instead of assuming the source guard commit reached the Frappe Cloud app mirror
 or deployed staging app.
 
+Follow-up local guard closure after this packet:
+
+- Mutating release actions now require `freeze-reopen-approval.json` through
+  the controller's `--reopen-approval` flag.
+- `app_mirror_sync` now requires `app-mirror-sync-plan.json` before sync and
+  post-sync `app-mirror-freshness.json` before downstream mutation.
+- `staging_bootstrap` now requires `deploy-completion.json` before hosted
+  preflight.
+- Owner-review release evidence should use
+  `staging_owner_review_gate.py --json --release-artifact`.
+
+Those local gates do not change this packet's no-go result.
+
 ## Next Controlled Sequence
 
-Only after explicit forensic-freeze reopen approval:
+Only after explicit forensic-freeze reopen approval artifact:
 
-1. Sync the app-root mirror from reviewed source through the release path.
-2. Produce fresh `app-mirror-freshness.json` with `ok=true`.
-3. Produce a fresh provider snapshot for
+1. Produce `freeze-reopen-approval.json` for the exact staging-only actions.
+2. Produce `app-mirror-sync-plan.json` and sync the app-root mirror from
+   reviewed source through the release path.
+3. Produce fresh `app-mirror-freshness.json` with `ok=true`.
+4. Produce a fresh provider snapshot for
    `locallytwisted-staging.frappe.cloud`.
-4. Run fresh hosted bootstrap preflight against the actual staging target.
-5. Bootstrap/import staging data only if the controller gates pass.
-6. Run `scripts/verify/staging_owner_review_gate.py` against staging and do
-   not call the site owner-review ready until it passes.
+5. After deploy/update, produce `deploy-completion.json`.
+6. Run fresh hosted bootstrap preflight against the actual staging target.
+7. Bootstrap/import staging data only if the controller gates pass.
+8. Run `scripts/verify/staging_owner_review_gate.py --json --release-artifact`
+   against staging and do not call the site owner-review ready until it passes.
 
 ## Cleanup
 

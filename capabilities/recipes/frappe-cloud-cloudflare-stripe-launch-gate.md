@@ -129,6 +129,12 @@ Default public launch posture:
   mutation: explicit freeze-reopen transition, app-mirror pre-sync/post-sync
   gate split, post-deploy/update completion artifact, and sanitized
   owner-review gate release artifact mode.
+- Follow-up local guard work now implements those gaps in the controller and
+  verifier suite. Mutating actions require `--reopen-approval`, app mirror sync
+  requires `--app-mirror-sync-plan` before sync and `app-mirror-freshness.json`
+  after sync, staging bootstrap requires `--deploy-completion` before hosted
+  preflight, and owner-review release packets should use
+  `staging_owner_review_gate.py --json --release-artifact`.
 
 ## Human Access Boundary
 
@@ -179,9 +185,10 @@ Concise staging-safe list:
    provider/live/search/payment mutation remains blocked.
 2. Identify the source commit, app-mirror commit, staging host, rollback path,
    and whether the push is archive-only or deploy-triggering.
-3. If forensic-freeze is active, do not mutate until an explicit local
-   freeze-reopen transition exists and passes its approval-artifact validator.
-   Current docs list reopen requirements but no safe transition command exists.
+3. If forensic-freeze is active, do not mutate until a current
+   `freeze-reopen-approval.json` passes the controller's `--reopen-approval`
+   validator for the exact action. Chat approval alone is not a release
+   artifact.
 4. For app mirror sync, require a pre-sync gate first, then a post-sync
    freshness artifact. Do not require `ok=true` freshness before sync; that is
    a logical deadlock. Do require `ok=true` after sync and before deploy,
@@ -217,7 +224,10 @@ Concise staging-safe list:
 12. Run staging HTTP/browser gates against the staging URL.
 13. Run database-side contracts in the staging environment, or leave them
    explicitly unverified for staging.
-14. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+14. For final owner-review evidence, run
+   `staging_owner_review_gate.py --json --release-artifact` so prior
+   bootstrap traceback/body details do not enter release packets.
+15. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    blocked until their separate gates pass.
 
 ```powershell

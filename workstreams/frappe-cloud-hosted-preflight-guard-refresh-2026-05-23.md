@@ -21,9 +21,11 @@ The new hard boundary is:
 3. App-root mirror is synced from reviewed source through the release path.
 4. `app-mirror-freshness.json` proves the mirror contains the hosted preflight
    files.
-5. `hosted-bootstrap-preflight.json` proves the actual staging app exposes and
+5. `deploy-completion.json` proves deploy/update completed with expected app
+   hash, app order, safe flags, and no running jobs.
+6. `hosted-bootstrap-preflight.json` proves the actual staging app exposes and
    passes `preflight_staging_owner_review_bootstrap`.
-6. Only then can a future controller consider staging bootstrap/import.
+7. Only then can a future controller consider staging bootstrap/import.
 
 ## Source Changes
 
@@ -36,6 +38,9 @@ The new hard boundary is:
   permit a future `staging_bootstrap` action.
 - Expanded `release_locks/locally-twisted-staging-forensic-freeze.json` reopen
   requirements with a fresh hosted bootstrap preflight artifact.
+- Follow-up local guard closure added `--reopen-approval`,
+  `--app-mirror-sync-plan`, `--deploy-completion`, and owner-review
+  `--release-artifact` sanitization before any future bootstrap/import claim.
 
 ## Evidence Packet
 

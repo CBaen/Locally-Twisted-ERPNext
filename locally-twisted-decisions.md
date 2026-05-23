@@ -8,6 +8,32 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release reopen gaps must be controller contracts, not notes
+
+**Decision:** The four post-`ebb7151` reopen gaps are now local controller
+contracts: explicit freeze-reopen approval, app mirror pre-sync/post-sync
+separation, post-deploy/update completion proof, and sanitized owner-review
+release artifacts.
+
+**Reasoning:** The post-guard read-only review identified that prose
+requirements were not enough. The controller could still deadlock on app mirror
+freshness before sync, and a release packet could still lack deploy-completion
+proof or carry raw prior traceback diagnostics.
+
+**Implementation boundary:** `frappe_cloud_release_controller.py` now requires
+`--reopen-approval` for mutation under forensic-freeze, requires
+`--app-mirror-sync-plan` for `app_mirror_sync`, requires
+`--deploy-completion` before `staging_bootstrap`, and accepts sanitized
+owner-review output from `staging_owner_review_gate.py --json
+--release-artifact`. These are local gates only; staging remains no-go until a
+fresh packet supplies real artifacts.
+
+**Receipts:** `scripts/verify/release_controller_contract.py`;
+`scripts/verify/frappe_cloud_deploy_completion_contract.py`;
+`scripts/verify/staging_owner_review_gate_contract.py`.
+
+---
+
 ## 2026-05-23 - A post-guard source commit still needs post-guard staging proof
 
 **Decision:** Commit `ebb7151` is source archive proof for the hosted

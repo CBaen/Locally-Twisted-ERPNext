@@ -99,6 +99,7 @@ Current local guard implementation:
 - `../../scripts/verify/release_controller_contract.py`
 - `../../scripts/verify/frappe_cloud_payload_contract.py`
 - `../../scripts/verify/frappe_cloud_provider_snapshot.py`
+- `../../scripts/verify/frappe_cloud_deploy_completion_contract.py`
 - `../../scripts/verify/staging_owner_review_gate_contract.py`
 - `../../scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `../../scripts/verify/release_claim_language_contract.py`
@@ -106,6 +107,13 @@ Current local guard implementation:
 
 This is still not provider proof. It is the local stop layer future release
 work must satisfy before a fresh release plan can reopen mutation.
+
+As of the follow-up guard closure, the local stop layer also prevents the
+specific reopen failure modes discovered after `ebb7151`: mutation requires a
+freeze-reopen approval artifact, app mirror sync has separate pre-sync and
+post-sync gates, staging bootstrap requires a post-deploy/update completion
+artifact, and owner-review release artifacts can be sanitized with
+`--release-artifact`.
 
 ## Recovery Recipe
 

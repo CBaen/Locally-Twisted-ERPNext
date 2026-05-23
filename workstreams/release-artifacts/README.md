@@ -14,9 +14,17 @@ must include:
 - `read-receipt.json` - required docs read for the current attempt.
 - `sanitized-payload.json` - typed Frappe Cloud payload shape with
   `content_type: application/json`, no secrets.
+- `freeze-reopen-approval.json` - explicit approval artifact bound to the
+  active lock, staging target, source commit, approved staging-only actions,
+  and live/DNS/Stripe/Search Console block.
+- `app-mirror-sync-plan.json` - pre-sync source/mirror plan for
+  `app_mirror_sync`; post-sync freshness remains a separate required artifact.
 - `provider-snapshot.json` - read-only team/site/bench/app/job/rollback state.
 - `app-mirror-freshness.json` - read-only source-vs-app-root-mirror file proof
   before hosted preflight/bootstrap.
+- `deploy-completion.json` - sanitized post-deploy/update completion artifact
+  proving provider job success, installed hash, app order, no running jobs,
+  paused ecommerce, disabled public indexing, and provider/mirror binding.
 - `hosted-bootstrap-preflight.json` - read-only hosted preflight output from
   the actual staging target after the app mirror is fresh.
 - `failure-ledger.json` - provider/bootstrap failure classes and guards.
@@ -33,6 +41,7 @@ release controller can move past forensic-freeze:
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
+- `scripts/verify/frappe_cloud_deploy_completion_contract.py`
 - `scripts/verify/staging_owner_review_gate_contract.py`
 - `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`

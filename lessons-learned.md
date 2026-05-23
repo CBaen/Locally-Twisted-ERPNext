@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Reopen gaps need to become controller inputs
+
+After the post-`ebb7151` packet, the remaining release risks were precise:
+approval had no artifact shape, app mirror sync was deadlocked by requiring
+post-sync proof before sync, deploy completion was not a first-class artifact,
+and owner-review packets could still carry raw prior traceback text.
+
+**Counter-move:** make each risk a controller input and an offline contract:
+`--reopen-approval`, `--app-mirror-sync-plan`, `--deploy-completion`, and
+`--json --release-artifact` for owner-review output. The next provider run
+still needs real artifacts, but the local path no longer depends on prose.
+
+---
+
 ## 2026-05-23 - Post-guard commits still need post-guard reality checks
 
 A guard commit can make the source safer while staging remains unchanged. After

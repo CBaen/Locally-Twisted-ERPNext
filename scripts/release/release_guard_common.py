@@ -101,6 +101,52 @@ REQUIRED_HOSTED_PREFLIGHT_CHECKS = {
 
 EXPECTED_APP_ORDER = ["frappe", "erpnext", "payments", "webshop", "locally_twisted"]
 
+REOPENABLE_STAGING_ACTIONS = {
+    "app_mirror_sync",
+    "frappe_cloud_deploy",
+    "provider_poll",
+    "staging_bootstrap",
+    "site_migrate",
+    "cache_clear",
+}
+
+NEVER_REOPEN_WITH_STAGING_APPROVAL = {
+    "dns",
+    "stripe",
+    "search_console",
+    "live_release",
+    "production_indexing",
+    "checkout_unpause",
+}
+
+REQUIRED_REOPEN_APPROVAL_FIELDS = {
+    "ok",
+    "approval_type",
+    "lock_id",
+    "approved_by",
+    "approved_at",
+    "expires_at",
+    "target_site",
+    "source_commit",
+    "approved_actions",
+    "live_dns_stripe_search_console_blocked",
+    "provider_mutation_executed",
+}
+
+REQUIRED_APP_MIRROR_SYNC_PLAN_FIELDS = {
+    "ok",
+    "source_commit",
+    "mirror_url",
+    "mirror_ref",
+    "target_site",
+    "rollback_hash",
+    "required_files",
+    "post_sync_required",
+    "no_provider_deploy_until_post_sync_freshness",
+    "reviewed_source",
+    "provider_mutation_executed",
+}
+
 REQUIRED_TRIAD_ARTIFACTS = {
     "controller": "controller.md",
     "provider_witness": "provider-witness.md",
@@ -175,12 +221,19 @@ def validate_release_lock(lock: dict[str, Any]) -> list[str]:
     return failures
 
 
-def ensure_action_allowed(action: str, lock: dict[str, Any]) -> None:
+def ensure_action_allowed(
+    action: str,
+    lock: dict[str, Any],
+    *,
+    reopen_approved_actions: set[str] | None = None,
+) -> None:
     if lock.get("status") != "active":
         return
 
     blocked = set(lock.get("blocked_actions") or [])
     allowed = set(lock.get("allowed_actions") or [])
+    if reopen_approved_actions and action in reopen_approved_actions:
+        return
     if action in blocked:
         raise ReleaseGuardError(
             f"release lock {lock.get('id')} is active; action {action!r} is blocked during forensic-freeze"
@@ -281,6 +334,108 @@ def validate_app_mirror_freshness(path: Path) -> list[str]:
     missing_source_files = sorted(REQUIRED_APP_MIRROR_SOURCE_FILES - seen_paths)
     if missing_source_files:
         failures.append(f"app mirror freshness is missing required source files: {missing_source_files}")
+    return failures
+
+
+def validate_reopen_approval(path: Path, lock: dict[str, Any], action: str | None = None) -> list[str]:
+    approval = read_json(path)
+    if not isinstance(approval, dict):
+        return [f"freeze reopen approval must be a JSON object: {path}"]
+
+    missing = sorted(field for field in REQUIRED_REOPEN_APPROVAL_FIELDS if field not in approval)
+    failures = [f"freeze reopen approval is missing required fields: {missing}"] if missing else []
+    if approval.get("ok") is not True:
+        failures.append("freeze reopen approval must have ok=true")
+    if approval.get("approval_type") != "forensic_freeze_reopen":
+        failures.append("freeze reopen approval approval_type must be forensic_freeze_reopen")
+    if approval.get("lock_id") != lock.get("id"):
+        failures.append("freeze reopen approval lock_id must match active release lock")
+    if approval.get("target_site") != REQUIRED_HOSTED_PREFLIGHT_SITE:
+        failures.append(f"freeze reopen approval target_site must be {REQUIRED_HOSTED_PREFLIGHT_SITE}")
+    if approval.get("provider_mutation_executed") is not False:
+        failures.append("freeze reopen approval must prove provider_mutation_executed=false")
+    if approval.get("live_dns_stripe_search_console_blocked") is not True:
+        failures.append("freeze reopen approval must keep live/DNS/Stripe/Search Console blocked")
+
+    source_commit = str(approval.get("source_commit") or "")
+    if len(source_commit) != 40 or any(char not in "0123456789abcdef" for char in source_commit.lower()):
+        failures.append("freeze reopen approval source_commit must be a full 40-character hex hash")
+
+    for date_field in ("approved_at", "expires_at"):
+        if not isinstance(approval.get(date_field), str) or not approval.get(date_field):
+            failures.append(f"freeze reopen approval {date_field} must be a non-empty string")
+
+    approved_by = str(approval.get("approved_by") or "").strip()
+    if not approved_by:
+        failures.append("freeze reopen approval approved_by must be non-empty")
+
+    approved_actions_raw = approval.get("approved_actions")
+    if not isinstance(approved_actions_raw, list) or not approved_actions_raw:
+        failures.append("freeze reopen approval approved_actions must be a non-empty list")
+        approved_actions: set[str] = set()
+    else:
+        approved_actions = {str(item) for item in approved_actions_raw}
+        forbidden = sorted(approved_actions & NEVER_REOPEN_WITH_STAGING_APPROVAL)
+        if forbidden:
+            failures.append(f"freeze reopen approval may not include live/search/payment actions: {forbidden}")
+        unknown = sorted(approved_actions - REOPENABLE_STAGING_ACTIONS)
+        if unknown:
+            failures.append(f"freeze reopen approval contains unsupported actions: {unknown}")
+    if action and action not in approved_actions:
+        failures.append(f"freeze reopen approval does not approve requested action: {action}")
+    return failures
+
+
+def approved_actions_from_reopen_approval(path: Path) -> set[str]:
+    approval = read_json(path)
+    if not isinstance(approval, dict):
+        return set()
+    return {str(item) for item in approval.get("approved_actions") or []}
+
+
+def validate_app_mirror_sync_plan(path: Path) -> list[str]:
+    plan = read_json(path)
+    if not isinstance(plan, dict):
+        return [f"app mirror sync plan must be a JSON object: {path}"]
+
+    missing = sorted(field for field in REQUIRED_APP_MIRROR_SYNC_PLAN_FIELDS if field not in plan)
+    failures = [f"app mirror sync plan is missing required fields: {missing}"] if missing else []
+    if plan.get("ok") is not True:
+        failures.append("app mirror sync plan must have ok=true")
+    if plan.get("provider_mutation_executed") is not False:
+        failures.append("app mirror sync plan must prove provider_mutation_executed=false")
+    if plan.get("reviewed_source") is not True:
+        failures.append("app mirror sync plan must prove reviewed_source=true")
+    if plan.get("target_site") != REQUIRED_HOSTED_PREFLIGHT_SITE:
+        failures.append(f"app mirror sync plan target_site must be {REQUIRED_HOSTED_PREFLIGHT_SITE}")
+
+    for hash_field in ("source_commit", "rollback_hash"):
+        value = str(plan.get(hash_field) or "")
+        if len(value) != 40 or any(char not in "0123456789abcdef" for char in value.lower()):
+            failures.append(f"app mirror sync plan {hash_field} must be a full 40-character hex hash")
+
+    if not isinstance(plan.get("mirror_url"), str) or "Locally-Twisted-Frappe-App" not in plan.get("mirror_url", ""):
+        failures.append("app mirror sync plan mirror_url must point at the LT Frappe app mirror")
+    if not isinstance(plan.get("mirror_ref"), str) or not plan.get("mirror_ref"):
+        failures.append("app mirror sync plan mirror_ref must be non-empty")
+
+    required_files_raw = plan.get("required_files")
+    if not isinstance(required_files_raw, list) or not required_files_raw:
+        failures.append("app mirror sync plan required_files must be a non-empty list")
+        required_files: set[str] = set()
+    else:
+        required_files = {str(item).replace("\\", "/") for item in required_files_raw}
+        missing_source_files = sorted(REQUIRED_APP_MIRROR_SOURCE_FILES - required_files)
+        if missing_source_files:
+            failures.append(f"app mirror sync plan is missing required source files: {missing_source_files}")
+
+    post_sync_required = plan.get("post_sync_required")
+    if not isinstance(post_sync_required, list):
+        failures.append("app mirror sync plan post_sync_required must be a list")
+    elif "app-mirror-freshness.json" not in {str(item) for item in post_sync_required}:
+        failures.append("app mirror sync plan must require post-sync app-mirror-freshness.json")
+    if plan.get("no_provider_deploy_until_post_sync_freshness") is not True:
+        failures.append("app mirror sync plan must block provider deploy until post-sync freshness passes")
     return failures
 
 

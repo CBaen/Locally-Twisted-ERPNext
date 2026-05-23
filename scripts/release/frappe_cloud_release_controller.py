@@ -25,20 +25,27 @@ from release_guard_common import (
     action_is_mutating,
     ensure_action_allowed,
     load_release_lock,
+    read_json,
     raise_if_failures,
     validate_failure_ledger,
+    validate_app_mirror_sync_plan,
     validate_app_mirror_freshness,
     validate_hosted_bootstrap_preflight,
     validate_provider_snapshot,
     validate_read_receipt,
+    validate_reopen_approval,
     validate_release_lock,
     validate_triad_artifacts,
+    approved_actions_from_reopen_approval,
 )
 
 sys.path.insert(0, str(PROJECT_ROOT))
 from scripts.verify.frappe_cloud_payload_contract import (  # noqa: E402
     load_payload_file,
     validate_frappe_cloud_payload,
+)
+from scripts.verify.frappe_cloud_deploy_completion_contract import (  # noqa: E402
+    validate_deploy_completion_artifact,
 )
 
 
@@ -66,6 +73,10 @@ HOSTED_PREFLIGHT_REQUIRED_ACTIONS = {
     "staging_bootstrap",
 }
 
+DEPLOY_COMPLETION_REQUIRED_ACTIONS = {
+    "staging_bootstrap",
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -73,7 +84,10 @@ def main() -> int:
     parser.add_argument("--lock-file", type=Path, default=DEFAULT_LOCK_PATH)
     parser.add_argument("--read-receipt", type=Path, help="JSON proof that required release docs were read.")
     parser.add_argument("--payload-file", type=Path, help="Sanitized Frappe Cloud JSON payload artifact to validate.")
+    parser.add_argument("--reopen-approval", type=Path, help="Explicit forensic-freeze reopen approval artifact JSON.")
+    parser.add_argument("--app-mirror-sync-plan", type=Path, help="Pre-sync app mirror plan artifact JSON.")
     parser.add_argument("--app-mirror-freshness", type=Path, help="Read-only app mirror freshness artifact JSON.")
+    parser.add_argument("--deploy-completion", type=Path, help="Sanitized post-deploy/update completion artifact JSON.")
     parser.add_argument("--hosted-bootstrap-preflight", type=Path, help="Read-only hosted staging bootstrap preflight artifact JSON.")
     parser.add_argument("--provider-snapshot", type=Path, help="Read-only provider-state snapshot JSON.")
     parser.add_argument("--triad-artifact-dir", type=Path, help="Directory containing controller/provider-witness/gate-fixer/recorder artifacts.")
@@ -181,14 +195,51 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
             raise ReleaseGuardError("required-doc read receipt is missing")
         raise_if_failures("invalid read receipt", validate_read_receipt(args.read_receipt, lock.get("required_read_docs")))
 
+    reopen_approved_actions: set[str] | None = None
+
     if action_is_mutating(args.action):
-        if not args.app_mirror_freshness:
-            raise ReleaseGuardError("app mirror freshness artifact is required before mutation")
-        raise_if_failures("invalid app mirror freshness artifact", validate_app_mirror_freshness(args.app_mirror_freshness))
+        if lock.get("status") == "active":
+            if not args.reopen_approval:
+                raise ReleaseGuardError("freeze reopen approval artifact is required before mutation")
+            raise_if_failures(
+                "invalid freeze reopen approval",
+                validate_reopen_approval(args.reopen_approval, lock, action=args.action),
+            )
+            reopen_approved_actions = approved_actions_from_reopen_approval(args.reopen_approval)
+
+        if args.action == "app_mirror_sync":
+            if not args.app_mirror_sync_plan:
+                raise ReleaseGuardError("app mirror sync plan artifact is required before app_mirror_sync")
+            raise_if_failures(
+                "invalid app mirror sync plan",
+                validate_app_mirror_sync_plan(args.app_mirror_sync_plan),
+            )
+        else:
+            if not args.app_mirror_freshness:
+                raise ReleaseGuardError("app mirror freshness artifact is required before mutation")
+            raise_if_failures(
+                "invalid app mirror freshness artifact",
+                validate_app_mirror_freshness(args.app_mirror_freshness),
+            )
 
         if not args.provider_snapshot:
             raise ReleaseGuardError("provider snapshot is required before mutation")
         raise_if_failures("invalid provider snapshot", validate_provider_snapshot(args.provider_snapshot))
+
+        if args.action in DEPLOY_COMPLETION_REQUIRED_ACTIONS:
+            if not args.deploy_completion:
+                raise ReleaseGuardError("post-deploy/update completion artifact is required before staging bootstrap")
+            deploy_completion = read_json(args.deploy_completion)
+            provider_snapshot = read_json(args.provider_snapshot)
+            app_mirror_freshness = read_json(args.app_mirror_freshness) if args.app_mirror_freshness else None
+            raise_if_failures(
+                "invalid deploy completion artifact",
+                validate_deploy_completion_artifact(
+                    deploy_completion,
+                    provider_snapshot=provider_snapshot,
+                    app_mirror_freshness=app_mirror_freshness,
+                ),
+            )
 
         if args.action in HOSTED_PREFLIGHT_REQUIRED_ACTIONS:
             if not args.hosted_bootstrap_preflight:
@@ -210,7 +261,7 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
             raise ReleaseGuardError("failure-class ledger is required before mutation")
         raise_if_failures("failure circuit breaker blocked mutation", validate_failure_ledger(args.failure_ledger))
 
-    ensure_action_allowed(args.action, lock)
+    ensure_action_allowed(args.action, lock, reopen_approved_actions=reopen_approved_actions)
 
     return {
         "ok": True,

@@ -26,9 +26,11 @@ from release_guard_common import (  # noqa: E402
     ensure_action_allowed,
     load_release_lock,
     validate_failure_ledger,
+    validate_app_mirror_sync_plan,
     validate_app_mirror_freshness,
     validate_hosted_bootstrap_preflight,
     validate_read_receipt,
+    validate_reopen_approval,
     validate_release_lock,
     validate_triad_artifacts,
 )
@@ -94,6 +96,95 @@ def run_checks(lock_file: Path) -> list[str]:
             encoding="utf-8",
         )
         failures.extend(validate_read_receipt(valid_receipt))
+
+        valid_reopen = tmp_path / "freeze-reopen-approval.json"
+        valid_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": "2026-05-23T00:00:00-06:00",
+                    "expires_at": "2026-05-24T00:00:00-06:00",
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync", "frappe_cloud_deploy", "staging_bootstrap"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        failures.extend(validate_reopen_approval(valid_reopen, lock, action="app_mirror_sync"))
+
+        live_reopen = tmp_path / "bad-live-reopen-approval.json"
+        live_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": "2026-05-23T00:00:00-06:00",
+                    "expires_at": "2026-05-24T00:00:00-06:00",
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync", "live_release"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_reopen_approval(live_reopen, lock, action="live_release"):
+            failures.append("freeze reopen approval that included live_release did not fail")
+
+        valid_sync_plan = tmp_path / "app-mirror-sync-plan.json"
+        valid_sync_plan.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "source_commit": "a" * 40,
+                    "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+                    "mirror_ref": "main",
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "rollback_hash": "c" * 40,
+                    "reviewed_source": True,
+                    "required_files": [
+                        "locally_twisted/staging_owner_review_preflight.py",
+                        "locally_twisted/staging_owner_review_bootstrap.py",
+                    ],
+                    "post_sync_required": ["app-mirror-freshness.json"],
+                    "no_provider_deploy_until_post_sync_freshness": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        failures.extend(validate_app_mirror_sync_plan(valid_sync_plan))
+
+        bad_sync_plan = tmp_path / "bad-app-mirror-sync-plan.json"
+        bad_sync_plan.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "source_commit": "a" * 40,
+                    "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+                    "mirror_ref": "main",
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "rollback_hash": "c" * 40,
+                    "reviewed_source": True,
+                    "required_files": ["locally_twisted/staging_owner_review_preflight.py"],
+                    "post_sync_required": [],
+                    "no_provider_deploy_until_post_sync_freshness": False,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_app_mirror_sync_plan(bad_sync_plan):
+            failures.append("incomplete app mirror sync plan did not fail")
 
         valid_mirror = tmp_path / "app-mirror-freshness.json"
         valid_mirror.write_text(

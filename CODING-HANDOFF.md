@@ -40,6 +40,14 @@ staging catalog/Product Setup/gallery rows are zero, required owner/marketing
 users are missing, and representative product/category routes return `404`.
 Treat `ebb7151` as GitHub/source proof only. It is not app mirror freshness,
 deployed staging proof, staging data proof, or owner-review readiness.
+Follow-up local guard hardening closed the four Gate/Fixer gaps without
+provider mutation: the controller now requires `--reopen-approval` for
+mutation under forensic-freeze, `app_mirror_sync` uses a pre-sync
+`--app-mirror-sync-plan` instead of deadlocking on post-sync freshness,
+`staging_bootstrap` requires `--deploy-completion` before hosted preflight, and
+`staging_owner_review_gate.py --json --release-artifact` sanitizes historical
+bootstrap diagnostics. These are local prevention gates only; staging remains
+no-go until a fresh artifact-backed release packet proves the real target.
 
 Codex read-only staging reopen packet on 2026-05-23:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is the

@@ -8,6 +8,7 @@ the owner-review site must contain the catalog and review accounts.
 from __future__ import annotations
 
 import argparse
+import copy
 import http.cookiejar
 import json
 import os
@@ -81,7 +82,14 @@ def main() -> int:
     parser.add_argument("--expected-hash-from-mirror", action="store_true")
     parser.add_argument("--mirror-url", default=DEFAULT_APP_MIRROR)
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--release-artifact",
+        action="store_true",
+        help="Sanitize JSON output for release-packet evidence; requires --json.",
+    )
     args = parser.parse_args()
+    if args.release_artifact and not args.json:
+        parser.error("--release-artifact requires --json")
 
     try:
         if args.expected_hash_from_mirror:
@@ -160,7 +168,10 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
     else:
         status_payload = (bootstrap_status or {}).get("status", {})
         if status_payload.get("state") != "success":
-            failures.append(f"bootstrap status is not success: {bootstrap_status}")
+            failures.append(
+                "bootstrap status is not success: "
+                f"{summarize_bootstrap_status_for_failure(bootstrap_status)}"
+            )
         if status_payload.get("expected_app_hash") != args.expected_hash:
             failures.append(
                 "bootstrap status is not bound to the deployed app hash: "
@@ -213,7 +224,7 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
     if category_route.get("status") == 200 and not category_route.get("looks_like_category"):
         failures.append("/shop-items/columns did not render like a shop category page")
 
-    return {
+    result = {
         "ok": not failures,
         "failures": failures,
         "site": {"name": site.get("name"), "status": site.get("status"), "group": site.get("group")},
@@ -233,6 +244,124 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
         "owner_visible_routes": routes,
         "bootstrap_status": bootstrap_status,
     }
+    if getattr(args, "release_artifact", False):
+        return build_release_artifact_result(result)
+    return result
+
+
+RAW_BOOTSTRAP_DETAIL_KEYS = {
+    "_server_messages",
+    "body",
+    "body_excerpt",
+    "exc",
+    "exc_info",
+    "raw_body",
+    "response_body",
+    "server_messages",
+    "traceback",
+    "traceback_tail",
+    "traceback_text",
+}
+
+
+def build_release_artifact_result(result: dict[str, Any]) -> dict[str, Any]:
+    """Return release-packet-safe owner-review gate evidence.
+
+    The normal gate result can contain historical bootstrap diagnostics from
+    the target site. Release packets need the state/count/hash/user/route
+    evidence without raw traceback or HTTP body text.
+    """
+    safe = copy.deepcopy(result)
+    bootstrap_status, omitted_count = sanitize_bootstrap_status(
+        safe.get("bootstrap_status")
+    )
+    safe["bootstrap_status"] = bootstrap_status
+    safe["release_artifact"] = {
+        "kind": "staging_owner_review_gate",
+        "sanitized": True,
+        "raw_diagnostic_details_omitted": bool(omitted_count),
+        "raw_diagnostic_detail_count": omitted_count,
+    }
+    safe["failures"] = [
+        compact_release_text(failure, limit=900)
+        for failure in safe.get("failures", [])
+    ]
+    return safe
+
+
+def sanitize_bootstrap_status(value: Any) -> tuple[Any, int]:
+    omitted_count = 0
+
+    def walk(node: Any) -> Any:
+        nonlocal omitted_count
+        if isinstance(node, dict):
+            safe_node: dict[str, Any] = {}
+            for key, child in node.items():
+                if is_raw_bootstrap_detail_key(str(key)):
+                    omitted_count += 1
+                    continue
+                safe_node[key] = walk(child)
+            return safe_node
+        if isinstance(node, list):
+            return [walk(child) for child in node]
+        if isinstance(node, str):
+            return compact_release_text(node)
+        return node
+
+    safe_value = walk(value)
+    if omitted_count and isinstance(safe_value, dict):
+        safe_value["raw_diagnostic_details_omitted"] = True
+        safe_value["raw_diagnostic_detail_count"] = omitted_count
+    return safe_value, omitted_count
+
+
+def is_raw_bootstrap_detail_key(key: str) -> bool:
+    lower = key.strip().lower()
+    return (
+        lower in RAW_BOOTSTRAP_DETAIL_KEYS
+        or "traceback" in lower
+        or lower.endswith("_body")
+    )
+
+
+def summarize_bootstrap_status_for_failure(bootstrap_status: Any) -> str:
+    if not isinstance(bootstrap_status, dict):
+        return "missing bootstrap status payload"
+    status_payload = bootstrap_status.get("status")
+    if not isinstance(status_payload, dict):
+        return "missing bootstrap status.status payload"
+    summary: dict[str, Any] = {}
+    for key in ("state", "error", "expected_app_hash", "target_site", "site", "updated_at"):
+        if key in status_payload:
+            value = status_payload.get(key)
+            summary[key] = compact_release_text(value) if isinstance(value, str) else value
+    for key in ("counts", "pre_counts", "post_counts"):
+        value = status_payload.get(key)
+        if isinstance(value, dict):
+            summary[key] = value
+    if not summary:
+        return "bootstrap status.status did not include state or summary fields"
+    return json.dumps(summary, sort_keys=True)
+
+
+def compact_release_text(value: Any, *, limit: int = 700) -> str:
+    text = " ".join(str(value).replace("\r", "\n").split())
+    lower = text.lower()
+    if (
+        "traceback (most recent call last)" in lower
+        or "/home/frappe/frappe-bench/apps/" in lower
+        or "\\apps\\frappe\\" in lower
+    ):
+        return "raw diagnostic text omitted from release artifact"
+    redacted = re.sub(
+        r"(?i)\b(api[_-]?key|api[_-]?secret|authorization|cookie|password|secret|session[_-]?id|sid|token)\b"
+        r"\s*[:=]\s*['\"]?[^'\"\s,;}]+",
+        lambda match: f"{match.group(1)}=[REDACTED]",
+        text,
+    )
+    if len(redacted) > limit:
+        return redacted[: limit - 3].rstrip() + "..."
+    return redacted
 
 
 class PressClient:

@@ -90,7 +90,7 @@ def run_contract() -> list[str]:
             encoding="utf-8",
         )
 
-        deploy_missing_mirror = run_controller(
+        deploy_missing_reopen = run_controller(
             "--action",
             "frappe_cloud_deploy",
             "--payload-file",
@@ -101,10 +101,10 @@ def run_contract() -> list[str]:
             str(emergency_dir),
             "--json",
         )
-        if deploy_missing_mirror.returncode == 0:
-            failures.append("frappe_cloud_deploy passed without app mirror freshness proof")
-        if "app mirror freshness" not in f"{deploy_missing_mirror.stdout}\n{deploy_missing_mirror.stderr}".lower():
-            failures.append("deploy missing-mirror output did not mention app mirror freshness")
+        if deploy_missing_reopen.returncode == 0:
+            failures.append("frappe_cloud_deploy passed without freeze reopen approval")
+        if "freeze reopen approval" not in f"{deploy_missing_reopen.stdout}\n{deploy_missing_reopen.stderr}".lower():
+            failures.append("deploy missing-reopen output did not mention freeze reopen approval")
         handoffs = list(emergency_dir.glob("emergency-handoff-*.md"))
         if not handoffs:
             failures.append("blocked deploy did not write an emergency handoff artifact")
@@ -123,22 +123,22 @@ def run_contract() -> list[str]:
         if "provider_mutation_executed" not in allowed.stdout:
             failures.append("allowed read-only output did not report provider_mutation_executed=false")
 
-        missing_mirror = run_controller("--action", "staging_bootstrap", "--read-receipt", str(receipt), "--json")
-        if missing_mirror.returncode == 0:
-            failures.append("staging_bootstrap passed without app mirror freshness artifact")
-        if "app mirror freshness" not in f"{missing_mirror.stdout}\n{missing_mirror.stderr}".lower():
-            failures.append("missing staging_bootstrap mirror output did not mention app mirror freshness")
-
+        approval = tmp_path / "freeze-reopen-approval.json"
         mirror = tmp_path / "app-mirror-freshness.json"
+        sync_plan = tmp_path / "app-mirror-sync-plan.json"
         provider = tmp_path / "provider-snapshot.json"
         hosted_valid = tmp_path / "hosted-bootstrap-preflight-valid.json"
         hosted_no_go = tmp_path / "hosted-bootstrap-preflight-no-go.json"
         hosted_wrong_site = tmp_path / "hosted-bootstrap-preflight-wrong-site.json"
         hosted_wrong_hash = tmp_path / "hosted-bootstrap-preflight-wrong-hash.json"
+        deploy_completion = tmp_path / "deploy-completion.json"
         triad_dir = tmp_path / "triad"
         ledger = tmp_path / "failure-ledger.json"
+        write_reopen_approval(approval)
         write_valid_mirror(mirror, "b" * 40)
+        write_valid_sync_plan(sync_plan)
         write_valid_provider(provider, "locallytwisted-staging.frappe.cloud", "b" * 40)
+        write_valid_deploy_completion(deploy_completion, "locallytwisted-staging.frappe.cloud", "b" * 40)
         write_hosted_preflight(hosted_valid, "locallytwisted-staging.frappe.cloud", "b" * 40, ok=True)
         write_hosted_preflight(hosted_no_go, "locallytwisted-staging.frappe.cloud", "b" * 40, ok=False)
         write_hosted_preflight(hosted_wrong_site, "wrong-staging.frappe.cloud", "b" * 40, ok=True)
@@ -146,15 +146,113 @@ def run_contract() -> list[str]:
         write_valid_triad(triad_dir)
         ledger.write_text(json.dumps({"fresh_release_plan_approved": True, "failures": []}), encoding="utf-8")
 
+        deploy_missing_mirror = run_controller(
+            "--action",
+            "frappe_cloud_deploy",
+            "--payload-file",
+            str(payload),
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--json",
+        )
+        if deploy_missing_mirror.returncode == 0:
+            failures.append("frappe_cloud_deploy passed without app mirror freshness proof")
+        if "app mirror freshness" not in f"{deploy_missing_mirror.stdout}\n{deploy_missing_mirror.stderr}".lower():
+            failures.append("deploy missing-mirror output did not mention app mirror freshness")
+
+        missing_bootstrap_reopen = run_controller(
+            "--action",
+            "staging_bootstrap",
+            "--read-receipt",
+            str(receipt),
+            "--json",
+        )
+        if missing_bootstrap_reopen.returncode == 0:
+            failures.append("staging_bootstrap passed without freeze reopen approval")
+        if "freeze reopen approval" not in f"{missing_bootstrap_reopen.stdout}\n{missing_bootstrap_reopen.stderr}".lower():
+            failures.append("missing staging_bootstrap reopen output did not mention freeze reopen approval")
+
+        missing_mirror = run_controller(
+            "--action",
+            "staging_bootstrap",
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--json",
+        )
+        if missing_mirror.returncode == 0:
+            failures.append("staging_bootstrap passed without app mirror freshness artifact")
+        if "app mirror freshness" not in f"{missing_mirror.stdout}\n{missing_mirror.stderr}".lower():
+            failures.append("missing staging_bootstrap mirror output did not mention app mirror freshness")
+
+        sync_missing_plan = run_controller(
+            "--action",
+            "app_mirror_sync",
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--json",
+        )
+        if sync_missing_plan.returncode == 0:
+            failures.append("app_mirror_sync passed without app mirror sync plan")
+        if "sync plan" not in f"{sync_missing_plan.stdout}\n{sync_missing_plan.stderr}".lower():
+            failures.append("app_mirror_sync missing-plan output did not mention sync plan")
+
+        sync_with_plan_without_freshness = run_controller(
+            "--action",
+            "app_mirror_sync",
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--app-mirror-sync-plan",
+            str(sync_plan),
+            "--provider-snapshot",
+            str(provider),
+            "--triad-artifact-dir",
+            str(triad_dir),
+            "--failure-ledger",
+            str(ledger),
+            "--json",
+        )
+        if sync_with_plan_without_freshness.returncode != 0:
+            failures.append("app_mirror_sync with valid pre-sync plan was still deadlocked on freshness")
+
+        missing_deploy_completion = run_controller(
+            "--action",
+            "staging_bootstrap",
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--app-mirror-freshness",
+            str(mirror),
+            "--provider-snapshot",
+            str(provider),
+            "--json",
+        )
+        if missing_deploy_completion.returncode == 0:
+            failures.append("staging_bootstrap passed without deploy completion artifact")
+        if "deploy" not in f"{missing_deploy_completion.stdout}\n{missing_deploy_completion.stderr}".lower():
+            failures.append("missing deploy completion output did not mention deploy completion")
+
         missing_hosted = run_controller(
             "--action",
             "staging_bootstrap",
             "--read-receipt",
             str(receipt),
+            "--reopen-approval",
+            str(approval),
             "--app-mirror-freshness",
             str(mirror),
             "--provider-snapshot",
             str(provider),
+            "--deploy-completion",
+            str(deploy_completion),
             "--json",
         )
         if missing_hosted.returncode == 0:
@@ -172,10 +270,14 @@ def run_contract() -> list[str]:
                 "staging_bootstrap",
                 "--read-receipt",
                 str(receipt),
+                "--reopen-approval",
+                str(approval),
                 "--app-mirror-freshness",
                 str(mirror),
                 "--provider-snapshot",
                 str(provider),
+                "--deploy-completion",
+                str(deploy_completion),
                 "--hosted-bootstrap-preflight",
                 str(artifact),
                 "--json",
@@ -186,7 +288,7 @@ def run_contract() -> list[str]:
             if "hosted bootstrap preflight" not in combined:
                 failures.append(f"{label} hosted preflight failure did not mention hosted bootstrap preflight")
 
-        freeze_after_valid_artifacts = run_controller(
+        valid_artifacts_without_reopen = run_controller(
             "--action",
             "staging_bootstrap",
             "--read-receipt",
@@ -195,6 +297,8 @@ def run_contract() -> list[str]:
             str(mirror),
             "--provider-snapshot",
             str(provider),
+            "--deploy-completion",
+            str(deploy_completion),
             "--hosted-bootstrap-preflight",
             str(hosted_valid),
             "--triad-artifact-dir",
@@ -203,10 +307,34 @@ def run_contract() -> list[str]:
             str(ledger),
             "--json",
         )
-        if freeze_after_valid_artifacts.returncode == 0:
-            failures.append("staging_bootstrap passed even though forensic-freeze is active")
-        if "forensic-freeze" not in f"{freeze_after_valid_artifacts.stdout}\n{freeze_after_valid_artifacts.stderr}":
-            failures.append("valid staging_bootstrap artifacts did not reach the final forensic-freeze block")
+        if valid_artifacts_without_reopen.returncode == 0:
+            failures.append("staging_bootstrap passed without freeze reopen approval")
+        if "freeze reopen approval" not in f"{valid_artifacts_without_reopen.stdout}\n{valid_artifacts_without_reopen.stderr}".lower():
+            failures.append("valid staging_bootstrap artifacts without approval did not fail on freeze reopen approval")
+
+        valid_artifacts_with_reopen = run_controller(
+            "--action",
+            "staging_bootstrap",
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--app-mirror-freshness",
+            str(mirror),
+            "--provider-snapshot",
+            str(provider),
+            "--deploy-completion",
+            str(deploy_completion),
+            "--hosted-bootstrap-preflight",
+            str(hosted_valid),
+            "--triad-artifact-dir",
+            str(triad_dir),
+            "--failure-ledger",
+            str(ledger),
+            "--json",
+        )
+        if valid_artifacts_with_reopen.returncode != 0:
+            failures.append("staging_bootstrap with valid reopen approval and artifacts did not pass the local controller gate")
 
         help_result = run_controller("--help")
         if help_result.returncode != 0:
@@ -215,8 +343,42 @@ def run_contract() -> list[str]:
             failures.append("release controller help does not expose --app-mirror-freshness")
         if "--hosted-bootstrap-preflight" not in help_result.stdout:
             failures.append("release controller help does not expose --hosted-bootstrap-preflight")
+        if "--deploy-completion" not in help_result.stdout:
+            failures.append("release controller help does not expose --deploy-completion")
+        if "--reopen-approval" not in help_result.stdout:
+            failures.append("release controller help does not expose --reopen-approval")
+        if "--app-mirror-sync-plan" not in help_result.stdout:
+            failures.append("release controller help does not expose --app-mirror-sync-plan")
 
     return failures
+
+
+def write_reopen_approval(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "approval_type": "forensic_freeze_reopen",
+                "lock_id": "lt-staging-forensic-freeze-2026-05-23",
+                "approved_by": "Guiding Light",
+                "approved_at": "2026-05-23T00:00:00-06:00",
+                "expires_at": "2026-05-24T00:00:00-06:00",
+                "target_site": "locallytwisted-staging.frappe.cloud",
+                "source_commit": "a" * 40,
+                "approved_actions": [
+                    "app_mirror_sync",
+                    "frappe_cloud_deploy",
+                    "provider_poll",
+                    "staging_bootstrap",
+                    "site_migrate",
+                    "cache_clear",
+                ],
+                "live_dns_stripe_search_console_blocked": True,
+                "provider_mutation_executed": False,
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 def write_valid_mirror(path: Path, app_hash: str) -> None:
@@ -247,6 +409,30 @@ def write_valid_mirror(path: Path, app_hash: str) -> None:
     )
 
 
+def write_valid_sync_plan(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "source_commit": "a" * 40,
+                "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+                "mirror_ref": "main",
+                "target_site": "locallytwisted-staging.frappe.cloud",
+                "rollback_hash": "c" * 40,
+                "reviewed_source": True,
+                "required_files": [
+                    "locally_twisted/staging_owner_review_preflight.py",
+                    "locally_twisted/staging_owner_review_bootstrap.py",
+                ],
+                "post_sync_required": ["app-mirror-freshness.json"],
+                "no_provider_deploy_until_post_sync_freshness": True,
+                "provider_mutation_executed": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
 def write_valid_provider(path: Path, site: str, app_hash: str) -> None:
     path.write_text(
         json.dumps(
@@ -263,6 +449,31 @@ def write_valid_provider(path: Path, site: str, app_hash: str) -> None:
                 "site_status": "Active",
                 "rollback_hash": "c" * 40,
                 "staging_live_separation": True,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def write_valid_deploy_completion(path: Path, site: str, app_hash: str) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "site": site,
+                "action": "frappe_cloud_deploy",
+                "expected_app_hash": app_hash,
+                "target_app_hash": app_hash,
+                "installed_app_hash": app_hash,
+                "provider_job": {"name": "deploy-job-1", "status": "Success"},
+                "running_jobs": [],
+                "app_order": ["frappe", "erpnext", "payments", "webshop", "locally_twisted"],
+                "site_status": "Active",
+                "site_config": {
+                    "lt_ecommerce_paused": "1",
+                    "lt_public_indexing_enabled": "0",
+                },
+                "provider_mutation_executed": True,
             }
         ),
         encoding="utf-8",
