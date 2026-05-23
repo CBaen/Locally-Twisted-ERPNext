@@ -63,6 +63,16 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   provider target/installed app hash, app-mirror hash, and the hosted
   preflight `required_checks` payload. The current packet remains no-go because
   staging returns HTTP `417` for the preflight method.
+- 2026-05-23 post-`ebb7151` read-only proof:
+  `workstreams/frappe-cloud-post-ebb7151-staging-readonly-2026-05-23.md` and
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`.
+  This pass rechecked staging after source commit `ebb7151` and performed no
+  provider/staging mutation. It confirms the app-root mirror/deployed hash is
+  still `181076c239b2d1d3d508a41ac471c71f9d2b5158`, the mirror is still
+  missing `staging_owner_review_preflight.py`, hosted preflight still returns
+  HTTP `417`, staging owner-review data is still zero/missing, and required
+  owner/marketing accounts are still absent. Treat `ebb7151` as source archive
+  proof only, not staging readiness.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,

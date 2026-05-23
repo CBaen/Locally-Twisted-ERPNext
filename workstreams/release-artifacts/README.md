@@ -112,3 +112,12 @@ Current packet:
 proves staging still returns HTTP `417` for
 `preflight_staging_owner_review_bootstrap`, so staging bootstrap/import remains
 blocked.
+
+Current post-guard packet:
+`2026-05-23-staging-reopen-post-ebb7151-readonly/` is a read-only no-go packet
+after source commit `ebb7151`. It proves the source guard commit did not make
+the app-root mirror or deployed staging app fresh: mirror hash remains
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
+HTTP `417`, owner-review data is still zero/missing, and representative
+product/category routes still return `404`. It does not authorize app mirror
+sync or staging mutation.

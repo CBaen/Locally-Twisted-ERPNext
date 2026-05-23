@@ -63,6 +63,16 @@ no-go because staging returns HTTP `417` for the preflight method. Treat the
 prior durable bootstrap status as forensic evidence, not as fresh preflight
 proof.
 
+Post-`ebb7151` read-only proof:
+`workstreams/frappe-cloud-post-ebb7151-staging-readonly-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`
+rechecked the target after source commit `ebb7151` without provider mutation.
+The result is still no-go: app-root mirror/deployed hash remains
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, mirror freshness is `ok=false`,
+hosted preflight returns HTTP `417`, staging catalog/Product Setup/gallery
+counts are zero, owner/marketing users are missing, and product/category routes
+return `404`. This packet does not reopen the freeze or authorize mirror sync.
+
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.

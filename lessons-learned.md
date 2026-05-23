@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Post-guard commits still need post-guard reality checks
+
+A guard commit can make the source safer while staging remains unchanged. After
+`ebb7151`, the source had the hosted preflight guard, but the app-root mirror
+and deployed staging app were still on hash
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, so hosted preflight still failed
+and owner-review data was still absent.
+
+**Counter-move:** after a release-guard commit, run a read-only packet against
+the actual provider/staging target before changing the next-step claim. Source
+archive proof, app mirror proof, deployed app proof, staging data proof, and
+owner-review readiness remain separate layers.
+
+---
+
 ## 2026-05-23 - A hosted preflight file must prove target and checks, not just exist
 
 The first hosted-preflight guard closed the "artifact required" gap but still

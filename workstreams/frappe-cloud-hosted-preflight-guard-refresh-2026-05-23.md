@@ -43,6 +43,15 @@ Current read-only packet:
 
 - `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
 
+Post-guard current-state packet:
+
+- `workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`
+  rechecked staging after source commit `ebb7151` and is still no-go. The
+  app-root mirror/deployed hash remains `181076c239b2d1d3d508a41ac471c71f9d2b5158`,
+  mirror freshness is `ok=false`, hosted preflight returns HTTP `417`,
+  owner-review data is still zero/missing, and required owner/marketing users
+  are absent.
+
 Important artifacts:
 
 - `app-mirror-freshness.json` is no-go because the app-root mirror is still

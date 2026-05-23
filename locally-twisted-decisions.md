@@ -8,6 +8,30 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - A post-guard source commit still needs post-guard staging proof
+
+**Decision:** Commit `ebb7151` is source archive proof for the hosted
+preflight guard, not proof that the Frappe Cloud app-root mirror or staging
+site now contains that guard. Future agents must use the post-`ebb7151`
+read-only packet as current no-go evidence until a fresh release packet proves
+otherwise.
+
+**Reasoning:** The post-`ebb7151` read-only pass proved the app-root
+mirror/deployed hash is still `181076c239b2d1d3d508a41ac471c71f9d2b5158`,
+mirror freshness remains `ok=false`, hosted preflight still returns HTTP `417`,
+catalog/Product Setup/gallery rows are zero, owner/marketing users are
+missing, and representative product/category routes return `404`.
+
+**Implementation boundary:** Do not leave forensic-freeze from this packet.
+The next mutation-capable release path still needs explicit reopen approval,
+app mirror sync from reviewed source, fresh mirror freshness proof, provider
+snapshot, hosted preflight, and owner-review gate proof.
+
+**Receipts:** `workstreams/frappe-cloud-post-ebb7151-staging-readonly-2026-05-23.md`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`.
+
+---
+
 ## 2026-05-23 - Hosted bootstrap preflight must be chain-bound, not just present
 
 **Decision:** Future `staging_bootstrap` actions require a passing

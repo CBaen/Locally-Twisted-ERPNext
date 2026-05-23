@@ -67,6 +67,13 @@ artifacts before proceeding.
 - A triad is named, but no witness artifact exists.
 - GL says stop and the next action is polling, deploying, bootstrapping, or
   asking for another provider detail.
+- A release lock lists reopen requirements but has no executable reopen
+  transition or approval-artifact validator.
+- A precondition requires proof that can only exist after the blocked action
+  runs, such as requiring passing app mirror freshness before app mirror sync.
+- Request payload validation is treated as provider job completion proof.
+- Release packet artifacts include raw previous traceback text instead of a
+  sanitized current-state summary.
 
 ## Required Guard
 
@@ -77,6 +84,12 @@ artifacts before proceeding.
 - Require artifact-owning triad outputs before mutation.
 - Require owner-review readiness to come only from the staging owner-review
   gate, not from app hashes, deploy IDs, or local proof.
+- Provide an explicit freeze-reopen transition and contract test before
+  provider mutation can resume.
+- Split app mirror sync into pre-sync approval/source proof and post-sync
+  freshness proof.
+- Require a post-deploy/update completion artifact before hosted preflight.
+- Sanitize owner-review gate artifacts used in release packets.
 
 Current local guard implementation:
 
@@ -107,6 +120,8 @@ work must satisfy before a fresh release plan can reopen mutation.
    deploy.
 8. Reopen release only under a new release controller and fresh read-only
    current-state snapshot.
+9. Before reopening, prove the controller is not deadlocked by impossible
+   preconditions and that every release-packet artifact is sanitized.
 
 ## Cross-links
 

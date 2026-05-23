@@ -28,6 +28,19 @@ is forensic evidence only; it is not a fresh hosted preflight artifact. The
 readiness refresh remains **NO-GO**: the current staging app returns HTTP `417`
 because it does not expose `preflight_staging_owner_review_bootstrap`.
 
+Post-`ebb7151` read-only staging proof on 2026-05-23:
+`workstreams/frappe-cloud-post-ebb7151-staging-readonly-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`
+verify current reality after source commit
+`ebb715132d2ac249c23163c5909c8e0f43228f13`. This pass performed no provider
+or staging mutation. The no-go state still holds: the app-root mirror/deployed
+hash is `181076c239b2d1d3d508a41ac471c71f9d2b5158`, the mirror is missing
+`staging_owner_review_preflight.py`, hosted preflight still returns HTTP `417`,
+staging catalog/Product Setup/gallery rows are zero, required owner/marketing
+users are missing, and representative product/category routes return `404`.
+Treat `ebb7151` as GitHub/source proof only. It is not app mirror freshness,
+deployed staging proof, staging data proof, or owner-review readiness.
+
 Codex read-only staging reopen packet on 2026-05-23:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is the
 current no-go proof packet. The packet and strict-JSON gate fix were archived

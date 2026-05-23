@@ -2,7 +2,8 @@
 
 Status: **forensic-freeze action list with the first local/offline prevention
 guard layer implemented at commit `58258fd`, expanded through the current
-read-only no-go archive `ceab908`. Do not use this as permission to deploy.**
+read-only no-go archive `ceab908` and the post-`ebb7151` read-only packet.
+Do not use this as permission to deploy.**
 
 This document exists because notes were present, but the release process still
 continued. The first executable local gates now exist; the next agent must keep
@@ -51,6 +52,12 @@ mirror `181076c239b2d1d3d508a41ac471c71f9d2b5158` does not include the current
 source preflight module from `ceab908` (first introduced in `e44ecc2`).
 Docs parity handoff:
 `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
+Post-`ebb7151` read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`.
+That packet confirms the current source guard commit did not change provider
+reality: app mirror freshness is still `ok=false`, hosted preflight still
+returns HTTP `417`, staging owner-review rows/users are still missing, and
+provider mutation remains blocked.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
@@ -218,6 +225,35 @@ execution can leave forensic-freeze.
     snapshot and app-mirror freshness artifacts with the full hosted
     `required_checks` payload.
 
+21. **Add an explicit freeze-reopen transition.** `open-before-provider-mutation`
+    The lock lists reopen requirements, but there is not yet a local
+    `reopen`, `unfreeze`, approval-artifact validator, or lock-transition
+    command. A future controller must implement a deliberate transition before
+    any provider mutation. Do not treat chat approval, a passing local gate, or
+    this action list as the transition.
+
+22. **Split app mirror sync into pre-sync and post-sync gates.** `open-before-provider-mutation`
+    The controller currently treats `app_mirror_sync` like other mutation and
+    requires passing app-mirror freshness before sync. That is logically
+    deadlocked because freshness can only pass after sync. Add a pre-sync gate
+    that proves reviewed source, explicit freeze reopen, rollback context, and
+    intended mirror target; then require post-sync
+    `app-mirror-freshness.json` with `ok=true` before deploy/update,
+    hosted preflight, bootstrap/import, or cache work.
+
+23. **Add post-deploy/update completion artifact contract.** `open-before-provider-mutation`
+    The payload contract validates the request before provider mutation, but a
+    future release still needs a distinct post-deploy/update artifact proving
+    the provider job completed, installed app hash changed as expected, app
+    order is correct, and no running jobs remain before hosted preflight.
+
+24. **Sanitize owner-review gate release artifacts.** `open-before-provider-mutation`
+    `staging_owner_review_gate.py --json` now emits parseable JSON, but the
+    owner-review artifact can still include raw previous bootstrap traceback
+    data when reading durable failure history. Add a release-packet-safe
+    sanitizer or redacted artifact mode before using owner-review gate output
+    as provider-release evidence.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
@@ -234,6 +270,9 @@ execution can leave forensic-freeze.
    `local`, `GitHub archive`, `app mirror`, `deploy candidate`,
    `site migrate`, `cache/config`, `staging owner-review`, and `live release`
    cannot be used interchangeably.
+6. Add contract tests for the future freeze-reopen transition, app-mirror
+   pre-sync/post-sync split, post-deploy completion artifact, and sanitized
+   owner-review release artifact mode.
 
 ## Suggested File Targets
 
