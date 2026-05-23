@@ -27,9 +27,13 @@ that momentum. Required reading before any future staging/live action:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
 and the action-item handoff
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-The next agent must implement release locks, payload validation, circuit
-breakers, artifact-owned triad proof, and owner-review gate enforcement before
-any new provider mutation.
+The release lock, typed-payload validator, circuit breaker helper, controller
+CLI contract, claim-language gate, and release-artifact directory contract now
+exist locally at commit `58258fd`. The next agent must not rebuild those from
+scratch; it must run the prevention gates, take a fresh read-only provider
+snapshot, produce the artifact-backed release packet, and keep
+`scripts/verify/staging_owner_review_gate.py` as the hard owner-review stop
+gate before any new provider mutation is reopened.
 
 Codex Frappe Cloud staging recovery on 2026-05-22: save state tag
 `savepoint/lt-staging-recovery-20260522-173929` exists. Source `main` is

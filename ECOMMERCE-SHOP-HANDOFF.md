@@ -5,7 +5,10 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
-- Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
+- Current GitHub archive for release-prevention guards: `58258fd Add release
+  prevention guards`; verify current `HEAD` / `origin/main` with
+  `git status -sb` before editing. Older closeout baseline
+  `1811cd6 Fix ecommerce closeout doc state` is historical only.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
 - 2026-05-23 release-process failure: the Frappe Cloud owner-review staging

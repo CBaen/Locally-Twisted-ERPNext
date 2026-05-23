@@ -37,3 +37,17 @@ npm run test:release-prevention
 This proves only the local prevention architecture. It does not prove Frappe
 Cloud staging, owner-review readiness, live readiness, DNS, Stripe, Search
 Console, or checkout exposure.
+
+## Provider Snapshot Boundary
+
+`provider-snapshot.json` is a separate read-only provider artifact. Do not
+substitute `scripts/verify/staging_owner_review_gate.py` output for it: that
+gate is the later owner-review stop gate and may create an authenticated
+staging session while checking staging records/routes.
+
+Until a dedicated snapshot producer exists, the Provider Witness must own the
+exact command packet that calls only read-only Frappe Cloud/Press methods,
+writes the sanitized `provider-snapshot.json`, and then validates it through
+the local release controller helpers. The artifact must not contain secrets,
+tokens, session IDs, raw provider logs, customer records, or credential-file
+contents.

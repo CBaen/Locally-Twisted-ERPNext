@@ -29,8 +29,10 @@ The failure was not only technical. It was a control failure: prose existed,
 but no release lock, payload validator, circuit breaker, or required-doc gate
 blocked more mutation.
 
-**Counter-move:** release warnings must become executable stop gates. The next
-agent must implement the action list in
+**Counter-move:** release warnings must become executable stop gates. The
+first local/offline guard layer now exists at commit `58258fd`; the next agent
+must run it, preserve it, and complete the still-open current-state provider
+snapshot plus artifact-backed release packet in
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` before
 reopening staging release execution. Use
 `capabilities/failures/release-controller-churn-after-stop.md` before any

@@ -41,11 +41,12 @@ Reindexing is blocked until the live sitemap/canonical fix is released because
 current live discovery URLs still advertise the Frappe Cloud vanity host.
 
 The 2026-05-22/23 owner-review staging push failed as a release process and is
-frozen. Do not resume deploy/bootstrap mutation from that session. Staging
-owner review is not ready until the release prevention action items are turned
-into executable guards, a new read-only provider snapshot is taken, and
-`scripts/verify/staging_owner_review_gate.py` passes on the actual staging
-site.
+frozen. Do not resume deploy/bootstrap mutation from that session. The first
+local/offline release-prevention guards now exist, but staging owner review is
+still not ready. Reopening provider mutation requires a fresh read-only
+provider snapshot, an artifact-backed release packet, explicit release-plan
+approval, and `scripts/verify/staging_owner_review_gate.py` passing on the
+actual staging site.
 
 2026-05-23 update: the first executable local/offline guard layer now exists:
 `scripts/release/frappe_cloud_release_controller.py`,

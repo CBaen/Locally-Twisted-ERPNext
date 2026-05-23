@@ -20,12 +20,12 @@ Next safe step is not a deploy. The first local/offline guard layer now exists
 at
 `release_locks/locally-twisted-staging-forensic-freeze.json`,
 `scripts/release/frappe_cloud_release_controller.py`, and
-`npm run test:release-prevention`. Provider mutation remains blocked while the
-forensic-freeze lock is active. Next safe step is local guard verification,
-then a read-only current-state provider snapshot and fresh release plan if GL
-explicitly reopens release execution. Do not deploy, bootstrap, mutate Frappe
-Cloud, touch live/DNS/Stripe/Search Console, or claim owner-review readiness
-from the interrupted session.
+`npm run test:release-prevention`, archived at commit `58258fd`. Provider
+mutation remains blocked while the forensic-freeze lock is active. Next safe
+step is a read-only current-state provider snapshot plus a fresh
+artifact-backed release plan if GL explicitly reopens release execution. Do
+not deploy, bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search
+Console, or claim owner-review readiness from the interrupted session.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
