@@ -48,6 +48,7 @@ def main() -> int:
 
 def run_contract() -> list[str]:
     failures: list[str] = []
+    source_commit = current_source_commit()
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
@@ -71,24 +72,7 @@ def run_contract() -> list[str]:
             failures.append("missing deploy payload output did not mention payload")
 
         payload = tmp_path / "sanitized-payload.json"
-        payload.write_text(
-            json.dumps(
-                {
-                    "content_type": "application/json",
-                    "body": {
-                        "apps": [
-                            {
-                                "app": "locally_twisted",
-                                "repository": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
-                                "hash": "a" * 40,
-                            }
-                        ],
-                        "sites": [{"name": "locallytwisted-staging.frappe.cloud"}],
-                    },
-                }
-            ),
-            encoding="utf-8",
-        )
+        write_payload(payload, "b" * 40)
 
         deploy_missing_reopen = run_controller(
             "--action",
@@ -134,9 +118,9 @@ def run_contract() -> list[str]:
         deploy_completion = tmp_path / "deploy-completion.json"
         triad_dir = tmp_path / "triad"
         ledger = tmp_path / "failure-ledger.json"
-        write_reopen_approval(approval)
-        write_valid_mirror(mirror, "b" * 40)
-        write_valid_sync_plan(sync_plan)
+        write_reopen_approval(approval, source_commit)
+        write_valid_mirror(mirror, source_commit, "b" * 40)
+        write_valid_sync_plan(sync_plan, source_commit)
         write_valid_provider(provider, "locallytwisted-staging.frappe.cloud", "b" * 40)
         write_valid_deploy_completion(deploy_completion, "locallytwisted-staging.frappe.cloud", "b" * 40)
         write_hosted_preflight(hosted_valid, "locallytwisted-staging.frappe.cloud", "b" * 40, ok=True)
@@ -221,6 +205,78 @@ def run_contract() -> list[str]:
         )
         if sync_with_plan_without_freshness.returncode != 0:
             failures.append("app_mirror_sync with valid pre-sync plan was still deadlocked on freshness")
+
+        stale_sync_plan = tmp_path / "stale-app-mirror-sync-plan.json"
+        write_valid_sync_plan(stale_sync_plan, "d" * 40)
+        sync_with_stale_plan = run_controller(
+            "--action",
+            "app_mirror_sync",
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--app-mirror-sync-plan",
+            str(stale_sync_plan),
+            "--provider-snapshot",
+            str(provider),
+            "--triad-artifact-dir",
+            str(triad_dir),
+            "--failure-ledger",
+            str(ledger),
+            "--json",
+        )
+        if sync_with_stale_plan.returncode == 0:
+            failures.append("app_mirror_sync passed with a stale source_commit in the sync plan")
+        if "artifact chain" not in f"{sync_with_stale_plan.stdout}\n{sync_with_stale_plan.stderr}".lower():
+            failures.append("stale sync-plan failure did not mention artifact chain consistency")
+
+        mismatched_payload = tmp_path / "mismatched-sanitized-payload.json"
+        write_payload(mismatched_payload, "d" * 40)
+        deploy_with_mismatched_payload = run_controller(
+            "--action",
+            "frappe_cloud_deploy",
+            "--payload-file",
+            str(mismatched_payload),
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--app-mirror-freshness",
+            str(mirror),
+            "--provider-snapshot",
+            str(provider),
+            "--triad-artifact-dir",
+            str(triad_dir),
+            "--failure-ledger",
+            str(ledger),
+            "--json",
+        )
+        if deploy_with_mismatched_payload.returncode == 0:
+            failures.append("frappe_cloud_deploy passed with a payload hash that did not match mirror/provider artifacts")
+        if "payload locally_twisted app hash" not in f"{deploy_with_mismatched_payload.stdout}\n{deploy_with_mismatched_payload.stderr}".lower():
+            failures.append("mismatched deploy payload failure did not mention payload hash binding")
+
+        deploy_with_valid_chain = run_controller(
+            "--action",
+            "frappe_cloud_deploy",
+            "--payload-file",
+            str(payload),
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--app-mirror-freshness",
+            str(mirror),
+            "--provider-snapshot",
+            str(provider),
+            "--triad-artifact-dir",
+            str(triad_dir),
+            "--failure-ledger",
+            str(ledger),
+            "--json",
+        )
+        if deploy_with_valid_chain.returncode != 0:
+            failures.append("frappe_cloud_deploy with a valid payload/provider/mirror chain did not pass the local controller gate")
 
         missing_deploy_completion = run_controller(
             "--action",
@@ -353,7 +409,40 @@ def run_contract() -> list[str]:
     return failures
 
 
-def write_reopen_approval(path: Path) -> None:
+def current_source_commit() -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        timeout=10,
+        check=True,
+    )
+    return result.stdout.strip().lower()
+
+
+def write_payload(path: Path, app_hash: str) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "content_type": "application/json",
+                "body": {
+                    "apps": [
+                        {
+                            "app": "locally_twisted",
+                            "repository": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+                            "hash": app_hash,
+                        }
+                    ],
+                    "sites": [{"name": "locallytwisted-staging.frappe.cloud"}],
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def write_reopen_approval(path: Path, source_commit: str) -> None:
     path.write_text(
         json.dumps(
             {
@@ -364,7 +453,7 @@ def write_reopen_approval(path: Path) -> None:
                 "approved_at": "2026-05-23T00:00:00-06:00",
                 "expires_at": "2026-05-24T00:00:00-06:00",
                 "target_site": "locallytwisted-staging.frappe.cloud",
-                "source_commit": "a" * 40,
+                "source_commit": source_commit,
                 "approved_actions": [
                     "app_mirror_sync",
                     "frappe_cloud_deploy",
@@ -381,12 +470,12 @@ def write_reopen_approval(path: Path) -> None:
     )
 
 
-def write_valid_mirror(path: Path, app_hash: str) -> None:
+def write_valid_mirror(path: Path, source_commit: str, app_hash: str) -> None:
     path.write_text(
         json.dumps(
             {
                 "ok": True,
-                "source_commit": "a" * 40,
+                "source_commit": source_commit,
                 "mirror_hash": app_hash,
                 "provider_mutation_executed": False,
                 "required_files": [
@@ -409,12 +498,12 @@ def write_valid_mirror(path: Path, app_hash: str) -> None:
     )
 
 
-def write_valid_sync_plan(path: Path) -> None:
+def write_valid_sync_plan(path: Path, source_commit: str) -> None:
     path.write_text(
         json.dumps(
             {
                 "ok": True,
-                "source_commit": "a" * 40,
+                "source_commit": source_commit,
                 "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
                 "mirror_ref": "main",
                 "target_site": "locallytwisted-staging.frappe.cloud",

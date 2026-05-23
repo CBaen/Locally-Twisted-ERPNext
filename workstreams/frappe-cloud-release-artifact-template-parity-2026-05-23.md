@@ -3,6 +3,8 @@
 Status: **complete as documentation/template parity only**.
 
 Source commit: `f5e2e91 Update staging release artifact template`.
+Documentation parity archive: `5e11003 Document release artifact template
+parity`.
 
 This work did not perform provider, staging, live, DNS, Stripe, Search
 Console, app mirror, bootstrap, migrate, cache, checkout, or secret-reading
@@ -49,6 +51,9 @@ Gate/Fixer verification after the template patch:
 - `git diff --check` passed.
 - `main` matched `origin/main` at
   `f5e2e91e576f5aec11beb2c11f8b71df83a603e6`.
+
+Follow-up documentation parity was archived at
+`5e11003d5cf8cd0d81e3d8e5acd4087a7d104c24`.
 
 ## Current No-Go State
 

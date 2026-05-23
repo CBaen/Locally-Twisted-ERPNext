@@ -33,6 +33,7 @@ from release_guard_common import (
     validate_hosted_bootstrap_preflight,
     validate_provider_snapshot,
     validate_read_receipt,
+    validate_release_artifact_chain,
     validate_reopen_approval,
     validate_release_lock,
     validate_triad_artifacts,
@@ -260,6 +261,19 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
         if not args.failure_ledger:
             raise ReleaseGuardError("failure-class ledger is required before mutation")
         raise_if_failures("failure circuit breaker blocked mutation", validate_failure_ledger(args.failure_ledger))
+        raise_if_failures(
+            "release artifact chain is inconsistent",
+            validate_release_artifact_chain(
+                action=args.action,
+                payload_file=args.payload_file,
+                reopen_approval_path=args.reopen_approval,
+                app_mirror_sync_plan_path=args.app_mirror_sync_plan,
+                app_mirror_freshness_path=args.app_mirror_freshness,
+                provider_snapshot_path=args.provider_snapshot,
+                deploy_completion_path=args.deploy_completion,
+                hosted_bootstrap_preflight_path=args.hosted_bootstrap_preflight,
+            ),
+        )
 
     ensure_action_allowed(args.action, lock, reopen_approved_actions=reopen_approved_actions)
 

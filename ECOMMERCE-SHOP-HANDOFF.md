@@ -5,13 +5,24 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
-- Latest GitHub archive: `f5e2e91 Update staging release artifact template`.
-  This is docs/template parity only. It fixes the staging-freeze release packet
-  template so future packets include `freeze-reopen-approval.json`,
+- 2026-05-23 Gate/Fixer chain-binding guard:
+  `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+  The release controller now rejects mutation-capable packets whose approval,
+  app mirror plan/freshness, provider snapshot, deploy payload, deploy
+  completion, or hosted preflight artifacts do not describe the same
+  source/hash chain. This is local/offline prevention only; it did not mutate
+  provider, staging, live, DNS, Stripe, Search Console, app mirror, bootstrap,
+  migrate, cache, checkout, or secrets.
+- Latest GitHub archive: `5e11003 Document release artifact template parity`.
+  This is documentation parity for the release packet template fix. The
+  underlying template change is `f5e2e91 Update staging release artifact
+  template`, which updates the staging-freeze release packet template so future
+  packets include `freeze-reopen-approval.json`,
   `app-mirror-sync-plan.json`, `deploy-completion.json`, and the hosted
-  preflight `checks` payload shape. It does not create those real artifacts,
-  does not reopen forensic-freeze, and does not mutate provider/staging/live/
-  DNS/Stripe/Search Console/app mirror/bootstrap/migrate/cache state. Handoff:
+  preflight `checks` payload shape. These commits do not create those real
+  artifacts, do not reopen forensic-freeze, and do not mutate provider/
+  staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/migrate/cache
+  state. Handoff:
   `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 - Read-only no-go packet archive: `ceab908 Record staging read-only no-go
   packet`; verify current `HEAD` / `origin/main` with `git status -sb` before
@@ -87,6 +98,12 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   artifact validation, and sanitized owner-review release artifacts. This
   removes the local controller deadlock but does not reopen forensic-freeze or
   mutate staging.
+- 2026-05-23 Provider Witness recheck after `5e11003`: repo source was clean on
+  `main` / `origin/main`; the app-root mirror was still
+  `181076c239b2d1d3d508a41ac471c71f9d2b5158`; mirror freshness against
+  `5e11003` was still `ok=false`; and the controller blocked `app_mirror_sync`
+  with `freeze reopen approval artifact is required before mutation`. The
+  current goal/chat context is not enough to create `freeze-reopen-approval.json`.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,

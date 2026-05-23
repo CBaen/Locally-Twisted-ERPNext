@@ -22,6 +22,14 @@ Template parity handoff:
 - `provider-snapshot.json`
 - `failure-ledger.json`
 
+All source/hash-bearing files in a real packet must be chain-bound. The
+controller rejects a packet when `freeze-reopen-approval.json`,
+`app-mirror-sync-plan.json`, `app-mirror-freshness.json`,
+`provider-snapshot.json`, `sanitized-payload.json`, `deploy-completion.json`,
+or `hosted-bootstrap-preflight.json` describe different source commits,
+rollback hashes, target app hashes, or staging sites. See
+`../../frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+
 ## Read Receipt Shape
 
 ```json

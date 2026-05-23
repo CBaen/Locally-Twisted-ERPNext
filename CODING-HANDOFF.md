@@ -1,8 +1,24 @@
 # Locally Twisted - Coding Handoff
 
-Release artifact template parity on 2026-05-23:
-`f5e2e91 Update staging release artifact template` is now the latest GitHub
-archive. Gate/Fixer found that
+Release artifact chain binding on 2026-05-23:
+Gate/Fixer found one remaining local guard gap after `5e11003`: the release
+controller validated required artifact shapes, but did not prove those
+artifacts belonged to the same source/hash chain. The offline controller now
+binds reopen approval, app mirror sync plan, mirror freshness, provider
+snapshot, sanitized payload, deploy completion, and hosted preflight artifacts
+when present. Reopen/sync/freshness source commits must match current repo
+`HEAD`; app mirror sync rollback must match the provider snapshot rollback
+hash; deploy payload app hash/site must match provider and mirror artifacts.
+Feature handoff:
+`workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+This is local prevention only. It does not reopen forensic-freeze and did not
+mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
+migrate/cache/checkout/secrets.
+
+Release artifact and documentation parity on 2026-05-23:
+`5e11003 Document release artifact template parity` is the current GitHub
+archive on `main` / `origin/main`. The underlying template fix is
+`f5e2e91 Update staging release artifact template`. Gate/Fixer found that
 `workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md` still
 named the old artifact set and did not include the current required shapes for
 `freeze-reopen-approval.json`, `app-mirror-sync-plan.json`, or
@@ -15,6 +31,11 @@ proof, and not owner-review readiness. Feature handoff:
 The active forensic-freeze lock still blocks provider/staging/live/DNS/Stripe/
 Search Console/app mirror/bootstrap/migrate/cache mutation until a fresh
 artifact-backed packet passes the controller.
+Provider Witness recheck after `5e11003` confirmed the repo was clean on
+`main`, the app-root mirror was still
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, and the controller still blocks
+`app_mirror_sync` because `freeze-reopen-approval.json` is missing. The current
+goal/chat context is not enough to create that approval artifact.
 
 Codex release-prevention guard pass on 2026-05-23: the forensic-freeze state
 now has executable local/offline guards. The active lock is

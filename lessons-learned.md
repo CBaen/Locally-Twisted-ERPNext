@@ -6,6 +6,36 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Valid release files can still form an invalid release packet
+
+The local release controller had validators for individual artifacts, but
+separate files can still be stale or borrowed from different moments. That is
+dangerous for Frappe Cloud release work because source commit, app mirror hash,
+payload app hash, provider target hash, deploy completion, hosted preflight,
+rollback hash, and site all need to describe one release attempt.
+
+**Counter-move:** validate the artifact chain before mutation. The controller
+now rejects mismatched source commits, payload app hashes, provider snapshot
+hashes, deploy-completion hashes, hosted-preflight hashes, rollback hashes, and
+sites even when each individual artifact has the right shape.
+
+---
+
+## 2026-05-23 - Latest archive and underlying fix are different facts
+
+A top-level handoff can become stale even when the underlying feature handoff
+is correct. After `5e11003` documented the template parity work, some front-door
+handoffs still named `f5e2e91` as the latest archive because that was the
+commit that changed the template itself.
+
+**Counter-move:** name both facts when they differ: current GitHub archive and
+underlying feature/source commit. For LT staging freeze work, `5e11003` is the
+current docs archive, while `f5e2e91` is the template fix. Do not let either
+commit imply app mirror freshness, freeze reopen approval, provider deploy
+completion, hosted preflight proof, or owner-review readiness.
+
+---
+
 ## 2026-05-23 - Templates can become stale even when guards are correct
 
 The release controller and verifier suite required new artifacts, but the

@@ -120,6 +120,12 @@ required artifacts and includes their validator-shaped examples. This prevents
 the next release packet from starting from stale prose, but it is not a real
 approval or provider/staging artifact.
 
+As of the follow-up chain-binding guard, the controller also rejects
+mutation-capable packets that mix individually valid but inconsistent artifacts.
+Approval, app mirror plan/freshness, provider snapshot, deploy payload, deploy
+completion, hosted preflight, rollback hash, and site must describe one release
+attempt.
+
 ## Recovery Recipe
 
 1. Stop mutation immediately.
@@ -137,6 +143,8 @@ approval or provider/staging artifact.
    preconditions and that every release-packet artifact is sanitized.
 10. Confirm the copied release packet template matches the current controller
     contracts before producing real artifacts.
+11. Confirm the artifact chain validator passes before any provider or staging
+    mutation; do not combine stale files from different packets.
 
 ## Cross-links
 

@@ -2,9 +2,9 @@
 
 Status: **forensic-freeze action list with the first local/offline prevention
 guard layer implemented at commit `58258fd`, expanded through the current
-read-only no-go archive `ceab908`, the post-`ebb7151` read-only packet, and
-the release packet template parity fix `f5e2e91`. Do not use this as
-permission to deploy.**
+read-only no-go archive `ceab908`, the post-`ebb7151` read-only packet, the
+release packet template parity fix `f5e2e91`, and the release artifact
+chain-binding guard. Do not use this as permission to deploy.**
 
 This document exists because notes were present, but the release process still
 continued. The first executable local gates now exist; the next agent must keep
@@ -68,6 +68,16 @@ includes the current required shapes for freeze reopen approval, app mirror
 sync planning, deploy completion, and hosted preflight `checks`. This closes a
 local template gap only. A future release attempt still needs real current
 artifacts generated for its own dated packet.
+
+2026-05-23 artifact-chain binding:
+`workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+The local controller now rejects mutation-capable packets whose reopen
+approval, app mirror sync plan/freshness, provider snapshot, deploy payload,
+deploy completion, or hosted preflight artifacts describe different source
+commits, rollback hashes, target hashes, or staging sites. This closes a local
+offline guard gap only. It did not reopen forensic-freeze and did not mutate
+provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/migrate/
+cache/checkout/secrets.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
@@ -265,6 +275,16 @@ execution can leave forensic-freeze.
     hashes, users, route evidence, bootstrap state, and actionable failure
     summaries. The sanitizer is covered by
     `staging_owner_review_gate_contract.py`.
+
+25. **Bind release packet artifacts into one source/hash chain.** `implemented-local; open-before-provider-mutation`
+    The controller now validates cross-artifact consistency after individual
+    shape checks. Reopen approval, app mirror sync plan, and app mirror
+    freshness source commits must match the current repository `HEAD`; the app
+    mirror sync rollback hash must match the provider snapshot rollback hash;
+    deploy payload app hash/site must match provider and mirror artifacts; and
+    deploy completion/hosted preflight hashes must stay bound to the same
+    chain. This prevents stale approval, plan, mirror, provider, and payload
+    artifacts from being mixed into a release packet.
 
 ## P1 Actions
 

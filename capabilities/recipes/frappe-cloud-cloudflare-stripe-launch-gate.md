@@ -140,6 +140,19 @@ Default public launch posture:
   approval, app mirror sync plan, deploy completion, and hosted preflight
   `checks`. This is template parity only; a future release attempt must still
   create real current artifacts in a fresh dated packet before mutation.
+- As of `5e11003`, documentation parity records `5e11003` as the current
+  GitHub archive and `f5e2e91` as the underlying template-fix commit. Provider
+  Witness rechecked after `5e11003` and confirmed the app-root mirror is still
+  `181076c239b2d1d3d508a41ac471c71f9d2b5158`, mirror freshness is still no-go,
+  and `app_mirror_sync` remains blocked by the missing freeze-reopen approval
+  artifact.
+- Also as of the artifact-chain binding guard, the controller rejects
+  mutation-capable packets when approval, app mirror plan/freshness, provider
+  snapshot, deploy payload, deploy completion, or hosted preflight evidence do
+  not describe the same source/hash/site chain. Current source/hash-bearing
+  artifacts must bind to repo `HEAD`, rollback hash, mirror hash, provider
+  target hash, payload site, and deployed/preflight hashes before any local
+  mutation gate can pass.
 
 ## Human Access Boundary
 
@@ -214,25 +227,29 @@ Concise staging-safe list:
    fail with `'str' object has no attribute 'get'`. Validate the sanitized
    payload artifact with `scripts/verify/frappe_cloud_payload_contract.py`
    before provider mutation.
-8. After deploy/update, produce a post-deploy completion artifact before
+8. Prove the release packet is one coherent source/hash chain before mutation:
+   reopen approval, app mirror sync plan/freshness, provider snapshot, payload,
+   deploy completion, and hosted preflight artifacts cannot be mixed from
+   different commits or target hashes.
+9. After deploy/update, produce a post-deploy completion artifact before
    hosted preflight. It must prove job success, installed app hash, app order,
    no running jobs, and current site flags.
-9. Run the hosted staging owner-review bootstrap preflight before import. The
+10. Run the hosted staging owner-review bootstrap preflight before import. The
    source contract is `scripts/verify/staging_owner_review_bootstrap_contract.py`,
    but real staging still needs the sanitized whitelisted preflight output from
    the actual target. The artifact must be bound to the same staging site and
    app hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a
    minimal hand-shaped `ok=true` payload is not release proof.
-10. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
+11. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
    `lt_ecommerce_paused=1` on staging.
-11. Run local hard gates for the changed slice before staging.
-12. Run staging HTTP/browser gates against the staging URL.
-13. Run database-side contracts in the staging environment, or leave them
+12. Run local hard gates for the changed slice before staging.
+13. Run staging HTTP/browser gates against the staging URL.
+14. Run database-side contracts in the staging environment, or leave them
    explicitly unverified for staging.
-14. For final owner-review evidence, run
+15. For final owner-review evidence, run
    `staging_owner_review_gate.py --json --release-artifact` so prior
    bootstrap traceback/body details do not enter release packets.
-15. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+16. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    blocked until their separate gates pass.
 
 ```powershell

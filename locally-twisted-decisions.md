@@ -8,6 +8,55 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release packets must be chain-bound across artifacts
+
+**Decision:** Mutation-capable release packets must prove their artifacts
+belong to the same release attempt. Individual artifact shape validation is not
+enough.
+
+**Reasoning:** A packet could otherwise combine a fresh approval with a stale
+app mirror sync plan, a payload for a different app hash, a provider snapshot
+for a different rollback hash/site, or a hosted preflight from another deploy.
+Those failures are subtle because each file can look valid in isolation.
+
+**Implementation boundary:** The local release controller now validates
+cross-artifact source commit, mirror hash, payload app hash, provider target
+hash, rollback hash, deploy completion hash, hosted preflight hash, and site
+bindings. This is local prevention architecture only; it does not reopen
+forensic-freeze or mutate staging.
+
+**Receipts:** `scripts/release/release_guard_common.py`;
+`scripts/release/frappe_cloud_release_controller.py`;
+`scripts/verify/release_controller_contract.py`;
+`workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+
+---
+
+## 2026-05-23 - Current archive must name both docs parity and template fix
+
+**Decision:** Release handoffs must distinguish the current GitHub archive
+commit from the lower-level source commit that changed a specific guard or
+template. For the current LT staging freeze, `5e11003 Document release artifact
+template parity` is the current `origin/main` archive; `f5e2e91 Update staging
+release artifact template` is the underlying template patch.
+
+**Reasoning:** Calling `f5e2e91` the latest archive after `5e11003` landed was
+technically stale and could make the next release agent compare the wrong
+source state against the app-root mirror. The active release problem is already
+about source, app mirror, deployed app, provider snapshot, and staging data
+being separate proof layers, so the documentation must model that distinction.
+
+**Implementation boundary:** This is a docs/source-history correction only. It
+does not create `freeze-reopen-approval.json`, does not sync the app mirror,
+and does not mutate Frappe Cloud/staging/live/DNS/Stripe/Search Console state.
+Provider Witness rechecked after `5e11003` and confirmed `app_mirror_sync`
+still blocks on missing freeze-reopen approval.
+
+**Receipts:** `CODING-HANDOFF.md`; `ECOMMERCE-SHOP-HANDOFF.md`;
+`workstreams/frappe-cloud-doc-head-correction-2026-05-23.md`.
+
+---
+
 ## 2026-05-23 - Release packet templates must match controller contracts
 
 **Decision:** The staging-freeze packet template is now part of the release

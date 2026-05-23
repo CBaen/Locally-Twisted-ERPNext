@@ -8,6 +8,7 @@ any production service.
 from __future__ import annotations
 
 import json
+import subprocess
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -172,11 +173,37 @@ def read_json(path: Path) -> Any:
         raise ReleaseGuardError(f"{path} is not valid JSON: {exc}") from exc
 
 
+def current_git_head() -> str:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            timeout=10,
+            check=True,
+        )
+    except Exception as exc:
+        raise ReleaseGuardError(f"could not resolve current repository HEAD: {exc}") from exc
+    head = normalize_hash(result.stdout)
+    if not is_full_hash(head):
+        raise ReleaseGuardError(f"current repository HEAD is not a full commit hash: {head!r}")
+    return head
+
+
 def load_release_lock(path: Path = DEFAULT_LOCK_PATH) -> dict[str, Any]:
     data = read_json(path)
     if not isinstance(data, dict):
         raise ReleaseGuardError(f"release lock must be a JSON object: {path}")
     return data
+
+
+def normalize_hash(value: Any) -> str:
+    return str(value or "").strip().lower()
+
+
+def is_full_hash(value: str) -> bool:
+    return len(value) == 40 and all(char in "0123456789abcdef" for char in value)
 
 
 def validate_release_lock(lock: dict[str, Any]) -> list[str]:
@@ -384,6 +411,215 @@ def validate_reopen_approval(path: Path, lock: dict[str, Any], action: str | Non
     if action and action not in approved_actions:
         failures.append(f"freeze reopen approval does not approve requested action: {action}")
     return failures
+
+
+def validate_release_artifact_chain(
+    *,
+    action: str,
+    payload_file: Path | None = None,
+    reopen_approval_path: Path | None = None,
+    app_mirror_sync_plan_path: Path | None = None,
+    app_mirror_freshness_path: Path | None = None,
+    provider_snapshot_path: Path | None = None,
+    deploy_completion_path: Path | None = None,
+    hosted_bootstrap_preflight_path: Path | None = None,
+    source_commit: str | None = None,
+) -> list[str]:
+    """Validate cross-artifact binding for a mutation-capable release packet.
+
+    Shape validators prove each artifact can stand alone. This chain validator
+    proves the packet is one coherent release attempt, so stale approval,
+    payload, mirror, provider, and deploy/preflight evidence cannot be mixed.
+    """
+    failures: list[str] = []
+    current_source_commit = normalize_hash(source_commit) if source_commit else current_git_head()
+
+    approval = read_json(reopen_approval_path) if reopen_approval_path else None
+    sync_plan = read_json(app_mirror_sync_plan_path) if app_mirror_sync_plan_path else None
+    mirror = read_json(app_mirror_freshness_path) if app_mirror_freshness_path else None
+    provider = read_json(provider_snapshot_path) if provider_snapshot_path else None
+    deploy_completion = read_json(deploy_completion_path) if deploy_completion_path else None
+    hosted_preflight = read_json(hosted_bootstrap_preflight_path) if hosted_bootstrap_preflight_path else None
+    payload = read_json(payload_file) if payload_file else None
+
+    if approval:
+        failures.extend(
+            require_hash_match(
+                "freeze reopen approval source_commit",
+                approval.get("source_commit"),
+                "current repository HEAD",
+                current_source_commit,
+            )
+        )
+
+    if sync_plan:
+        failures.extend(
+            require_hash_match(
+                "app mirror sync plan source_commit",
+                sync_plan.get("source_commit"),
+                "current repository HEAD",
+                current_source_commit,
+            )
+        )
+        if approval:
+            failures.extend(
+                require_hash_match(
+                    "app mirror sync plan source_commit",
+                    sync_plan.get("source_commit"),
+                    "freeze reopen approval source_commit",
+                    approval.get("source_commit"),
+                )
+            )
+        if provider:
+            failures.extend(
+                require_hash_match(
+                    "app mirror sync plan rollback_hash",
+                    sync_plan.get("rollback_hash"),
+                    "provider snapshot rollback_hash",
+                    provider.get("rollback_hash"),
+                )
+            )
+
+    if mirror:
+        failures.extend(
+            require_hash_match(
+                "app mirror freshness source_commit",
+                mirror.get("source_commit"),
+                "current repository HEAD",
+                current_source_commit,
+            )
+        )
+        if approval:
+            failures.extend(
+                require_hash_match(
+                    "app mirror freshness source_commit",
+                    mirror.get("source_commit"),
+                    "freeze reopen approval source_commit",
+                    approval.get("source_commit"),
+                )
+            )
+        if sync_plan:
+            failures.extend(
+                require_hash_match(
+                    "app mirror freshness source_commit",
+                    mirror.get("source_commit"),
+                    "app mirror sync plan source_commit",
+                    sync_plan.get("source_commit"),
+                )
+            )
+        if provider and action != "app_mirror_sync":
+            failures.extend(
+                require_hash_match(
+                    "provider snapshot target_app_hash",
+                    provider.get("target_app_hash"),
+                    "app mirror freshness mirror_hash",
+                    mirror.get("mirror_hash"),
+                )
+            )
+
+    if payload:
+        body = release_payload_body(payload)
+        app_hash = release_payload_app_hash(body, "locally_twisted")
+        if not app_hash:
+            failures.append("sanitized payload must include locally_twisted app hash for release chain binding")
+        elif mirror:
+            failures.extend(
+                require_hash_match(
+                    "payload locally_twisted app hash",
+                    app_hash,
+                    "app mirror freshness mirror_hash",
+                    mirror.get("mirror_hash"),
+                )
+            )
+        if provider and app_hash:
+            failures.extend(
+                require_hash_match(
+                    "payload locally_twisted app hash",
+                    app_hash,
+                    "provider snapshot target_app_hash",
+                    provider.get("target_app_hash"),
+                )
+            )
+        payload_sites = release_payload_sites(body)
+        if provider and provider.get("site") not in payload_sites:
+            failures.append(
+                "sanitized payload sites must include provider snapshot site "
+                f"{provider.get('site')!r}; found {sorted(payload_sites)}"
+            )
+
+    if deploy_completion and provider:
+        failures.extend(
+            require_hash_match(
+                "deploy completion expected_app_hash",
+                deploy_completion.get("expected_app_hash"),
+                "provider snapshot target_app_hash",
+                provider.get("target_app_hash"),
+            )
+        )
+    if deploy_completion and mirror:
+        failures.extend(
+            require_hash_match(
+                "deploy completion expected_app_hash",
+                deploy_completion.get("expected_app_hash"),
+                "app mirror freshness mirror_hash",
+                mirror.get("mirror_hash"),
+            )
+        )
+    if hosted_preflight and deploy_completion:
+        failures.extend(
+            require_hash_match(
+                "hosted bootstrap preflight expected_app_hash",
+                hosted_preflight.get("expected_app_hash"),
+                "deploy completion expected_app_hash",
+                deploy_completion.get("expected_app_hash"),
+            )
+        )
+    return failures
+
+
+def require_hash_match(label: str, value: Any, expected_label: str, expected: Any) -> list[str]:
+    actual_hash = normalize_hash(value)
+    expected_hash = normalize_hash(expected)
+    if not is_full_hash(actual_hash) or not is_full_hash(expected_hash):
+        return []
+    if actual_hash != expected_hash:
+        return [f"{label} must match {expected_label}: {actual_hash} != {expected_hash}"]
+    return []
+
+
+def release_payload_body(payload: Any) -> Any:
+    if not isinstance(payload, dict):
+        return payload
+    for wrapper_key in ("payload", "body", "data"):
+        wrapped = payload.get(wrapper_key)
+        if isinstance(wrapped, dict) and ("apps" in wrapped or "sites" in wrapped):
+            return wrapped
+    return payload
+
+
+def release_payload_app_hash(body: Any, app_name: str) -> str:
+    if not isinstance(body, dict):
+        return ""
+    apps = body.get("apps")
+    if not isinstance(apps, list):
+        return ""
+    for row in apps:
+        if isinstance(row, dict) and row.get("app") == app_name:
+            return normalize_hash(row.get("hash"))
+    return ""
+
+
+def release_payload_sites(body: Any) -> set[str]:
+    if not isinstance(body, dict):
+        return set()
+    sites = body.get("sites")
+    if not isinstance(sites, list):
+        return set()
+    names: set[str] = set()
+    for row in sites:
+        if isinstance(row, dict) and row.get("name"):
+            names.add(str(row["name"]))
+    return names
 
 
 def approved_actions_from_reopen_approval(path: Path) -> set[str]:
