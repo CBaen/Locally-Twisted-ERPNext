@@ -1,5 +1,15 @@
 # Locally Twisted - Coding Handoff
 
+Freeze reopen approval timestamp guard on 2026-05-23:
+`workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
+The release controller now rejects stale, expired, malformed, timezone-less,
+future-dated, or longer-than-24-hour `freeze-reopen-approval.json` windows.
+The valid test fixtures now use dynamic current timestamps, so a verifier pass
+cannot come from an old hard-coded May 2026 approval. This is local prevention
+only. It does not reopen forensic-freeze, create a real approval artifact, or
+mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
+migrate/cache/checkout/secrets.
+
 Release artifact chain binding on 2026-05-23:
 Run `git status -sb` and `git log --oneline -5` for the current HEAD; do not
 trust a handoff sentence as the latest archive label. The artifact-chain
@@ -19,9 +29,9 @@ This is local prevention only. It does not reopen forensic-freeze and did not
 mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
 migrate/cache/checkout/secrets.
 
-Current-head read-only packet on 2026-05-23:
+Snapshot-source read-only packet on 2026-05-23:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`
-is the current evidence packet for source
+is archived evidence for packet source
 `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. It includes a fresh local route
 snapshot, provider snapshot, app mirror freshness, hosted preflight artifact,
 owner-review gate artifact, app mirror sync plan, failure ledger, read receipt,
@@ -32,7 +42,9 @@ hosted preflight returns HTTP `417`, catalog/Product Setup/gallery rows are
 zero, owner/marketing users are missing, representative product/category routes
 return `404`, and `app_mirror_sync` is blocked by missing
 `freeze-reopen-approval.json`. This packet does not mutate provider/staging or
-authorize mutation.
+authorize mutation. Because it was later committed, do not treat its
+source-bound artifacts as matching current repo `HEAD`; regenerate a fresh
+packet before any mutation-capable controller run.
 
 Release artifact and documentation parity on 2026-05-23:
 `5e11003 Document release artifact template parity` is the previous

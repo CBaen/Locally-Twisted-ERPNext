@@ -5,6 +5,14 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 freeze reopen approval timestamp guard:
+  `workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
+  Future mutation-capable packets now need a current, bounded, ISO-8601
+  timezone-bearing `freeze-reopen-approval.json`; expired, malformed,
+  future-dated, timezone-less, and longer-than-24-hour approval windows fail
+  locally. This is local/offline prevention only and did not mutate provider,
+  staging, live, DNS, Stripe, Search Console, app mirror, bootstrap, migrate,
+  cache, checkout, or secrets.
 - 2026-05-23 Gate/Fixer chain-binding guard:
   `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
   The release controller now rejects mutation-capable packets whose approval,
@@ -13,16 +21,18 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   source/hash chain. This is local/offline prevention only; it did not mutate
   provider, staging, live, DNS, Stripe, Search Console, app mirror, bootstrap,
   migrate, cache, checkout, or secrets.
-- 2026-05-23 current-head read-only staging packet:
+- 2026-05-23 archived snapshot-source read-only staging packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
   This packet is bound to source
   `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c` and performed no provider or
-  staging mutation. It proves staging remains **NO-GO** for owner review:
-  app-root mirror/deployed app hash is still `181076c...`, mirror freshness is
-  `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
-  Setup/gallery rows are zero, owner/marketing users are missing,
-  representative routes return `404`, and the release controller blocks
-  `app_mirror_sync` because `freeze-reopen-approval.json` is missing.
+  staging mutation. The folder name is historical: after this packet was
+  committed, repo `HEAD` moved, so it is not mutation-capable proof for a later
+  commit. It proves staging remains **NO-GO** for owner review at that packet
+  source: app-root mirror/deployed app hash is still `181076c...`, mirror
+  freshness is `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
+  Setup/gallery rows are zero, owner/marketing users are missing, representative
+  routes return `404`, and the release controller blocks `app_mirror_sync`
+  because `freeze-reopen-approval.json` is missing.
 - Source archive labels for this lane: run `git status -sb` and `git log
   --oneline -5` for current HEAD. Do not treat this handoff as a live HEAD
   oracle. The artifact-chain implementation archive is `3054396 Bind staging

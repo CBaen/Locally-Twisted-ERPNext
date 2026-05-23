@@ -12,6 +12,7 @@ import argparse
 import json
 import sys
 import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -77,6 +78,7 @@ def run_checks(lock_file: Path) -> list[str]:
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
+        approved_at, expires_at = approval_window()
         missing_receipt = tmp_path / "missing-read-receipt.json"
         try:
             validate_read_receipt(missing_receipt)
@@ -105,8 +107,8 @@ def run_checks(lock_file: Path) -> list[str]:
                     "approval_type": "forensic_freeze_reopen",
                     "lock_id": lock.get("id"),
                     "approved_by": "Guiding Light",
-                    "approved_at": "2026-05-23T00:00:00-06:00",
-                    "expires_at": "2026-05-24T00:00:00-06:00",
+                    "approved_at": approved_at,
+                    "expires_at": expires_at,
                     "target_site": "locallytwisted-staging.frappe.cloud",
                     "source_commit": "a" * 40,
                     "approved_actions": ["app_mirror_sync", "frappe_cloud_deploy", "staging_bootstrap"],
@@ -126,8 +128,8 @@ def run_checks(lock_file: Path) -> list[str]:
                     "approval_type": "forensic_freeze_reopen",
                     "lock_id": lock.get("id"),
                     "approved_by": "Guiding Light",
-                    "approved_at": "2026-05-23T00:00:00-06:00",
-                    "expires_at": "2026-05-24T00:00:00-06:00",
+                    "approved_at": approved_at,
+                    "expires_at": expires_at,
                     "target_site": "locallytwisted-staging.frappe.cloud",
                     "source_commit": "a" * 40,
                     "approved_actions": ["app_mirror_sync", "live_release"],
@@ -139,6 +141,116 @@ def run_checks(lock_file: Path) -> list[str]:
         )
         if not validate_reopen_approval(live_reopen, lock, action="live_release"):
             failures.append("freeze reopen approval that included live_release did not fail")
+
+        expired_reopen = tmp_path / "expired-freeze-reopen-approval.json"
+        expired_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": (datetime.now(timezone.utc) - timedelta(hours=3)).isoformat(),
+                    "expires_at": (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat(),
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_reopen_approval(expired_reopen, lock, action="app_mirror_sync"):
+            failures.append("expired freeze reopen approval did not fail")
+
+        malformed_reopen = tmp_path / "malformed-freeze-reopen-approval.json"
+        malformed_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": "not-a-date",
+                    "expires_at": expires_at,
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_reopen_approval(malformed_reopen, lock, action="app_mirror_sync"):
+            failures.append("malformed freeze reopen approval timestamp did not fail")
+
+        timezone_less_reopen = tmp_path / "timezone-less-freeze-reopen-approval.json"
+        timezone_less_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": "2026-05-23T12:00:00",
+                    "expires_at": "2026-05-23T13:00:00",
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_reopen_approval(timezone_less_reopen, lock, action="app_mirror_sync"):
+            failures.append("timezone-less freeze reopen approval timestamp did not fail")
+
+        future_reopen = tmp_path / "future-freeze-reopen-approval.json"
+        future_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": (datetime.now(timezone.utc) + timedelta(hours=2)).isoformat(),
+                    "expires_at": (datetime.now(timezone.utc) + timedelta(hours=3)).isoformat(),
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_reopen_approval(future_reopen, lock, action="app_mirror_sync"):
+            failures.append("future-dated freeze reopen approval did not fail")
+
+        long_reopen = tmp_path / "long-freeze-reopen-approval.json"
+        long_reopen.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "approval_type": "forensic_freeze_reopen",
+                    "lock_id": lock.get("id"),
+                    "approved_by": "Guiding Light",
+                    "approved_at": approved_at,
+                    "expires_at": (datetime.now(timezone.utc) + timedelta(days=3)).isoformat(),
+                    "target_site": "locallytwisted-staging.frappe.cloud",
+                    "source_commit": "a" * 40,
+                    "approved_actions": ["app_mirror_sync"],
+                    "live_dns_stripe_search_console_blocked": True,
+                    "provider_mutation_executed": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_reopen_approval(long_reopen, lock, action="app_mirror_sync"):
+            failures.append("overlong freeze reopen approval did not fail")
 
         valid_sync_plan = tmp_path / "app-mirror-sync-plan.json"
         valid_sync_plan.write_text(
@@ -427,6 +539,12 @@ def run_checks(lock_file: Path) -> list[str]:
         failures.extend(validate_failure_ledger(guarded_ledger))
 
     return failures
+
+
+def approval_window() -> tuple[str, str]:
+    approved_at = datetime.now(timezone.utc) - timedelta(minutes=1)
+    expires_at = approved_at + timedelta(hours=12)
+    return approved_at.isoformat(), expires_at.isoformat()
 
 
 def valid_hosted_preflight_payload(site: str, app_hash: str) -> dict[str, object]:

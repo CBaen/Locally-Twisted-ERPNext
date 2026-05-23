@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Reopen approval must expire mechanically
+
+A release-freeze approval can look valid as JSON while still being unsafe:
+it may be copied from a prior attempt, missing a timezone, already expired, or
+open for too long. Without timestamp validation, a future agent could satisfy
+the artifact requirement with stale approval and restart mutation from the
+wrong moment.
+
+**Counter-move:** validate approval time in the release controller. Require
+ISO-8601 timezone-bearing `approved_at` and `expires_at`, reject future-dated,
+expired, reversed, malformed, timezone-less, and longer-than-24-hour approval
+windows, and make verifier fixtures use dynamic current timestamps instead of
+fixed dates.
+
+---
+
 ## 2026-05-23 - Read receipts can be too narrow to prevent stale release work
 
 The release controller had a required-doc read receipt, but the required list

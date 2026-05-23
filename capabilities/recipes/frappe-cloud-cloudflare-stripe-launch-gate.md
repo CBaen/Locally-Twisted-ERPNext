@@ -125,16 +125,18 @@ Default public launch posture:
   users are still missing, and representative product/category routes still
   return `404`. See
   `workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`.
-- The next local guard gaps are known and must be closed before provider
-  mutation: explicit freeze-reopen transition, app-mirror pre-sync/post-sync
-  gate split, post-deploy/update completion artifact, and sanitized
-  owner-review gate release artifact mode.
-- Follow-up local guard work now implements those gaps in the controller and
+- The post-`ebb7151` local guard gaps were explicit freeze-reopen transition,
+  app-mirror pre-sync/post-sync gate split, post-deploy/update completion
+  artifact, and sanitized owner-review gate release artifact mode.
+- Follow-up local guard work implements those gaps in the controller and
   verifier suite. Mutating actions require `--reopen-approval`, app mirror sync
   requires `--app-mirror-sync-plan` before sync and `app-mirror-freshness.json`
   after sync, staging bootstrap requires `--deploy-completion` before hosted
   preflight, and owner-review release packets should use
   `staging_owner_review_gate.py --json --release-artifact`.
+- The freeze reopen approval itself is now time-bounded. Approval timestamps
+  must be ISO-8601 values with timezone offsets, unexpired, not future-dated
+  beyond clock skew, ordered correctly, and no longer than a 24-hour window.
 - Also as of `f5e2e91`, the staging-freeze release packet template is aligned
   with those controller contracts. It includes starter shapes for reopen
   approval, app mirror sync plan, deploy completion, and hosted preflight
@@ -153,14 +155,15 @@ Default public launch posture:
   artifacts must bind to repo `HEAD`, rollback hash, mirror hash, provider
   target hash, payload site, and deployed/preflight hashes before any local
   mutation gate can pass.
-- The current-head read-only packet is
+- The latest archived snapshot-source read-only packet is
   `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
-  It updates no-go evidence at source
-  `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`: the app-root mirror remains
-  stale at `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight
-  still returns HTTP `417`, staging owner-review data/users/routes are still
-  missing, and `app_mirror_sync` is still blocked by the missing
-  `freeze-reopen-approval.json`.
+  It updates no-go evidence for packet source
+  `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder name is historical:
+  once the packet was committed, repo `HEAD` moved. Do not use this archived
+  packet as mutation proof for a later commit. The app-root mirror remains stale
+  at `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
+  HTTP `417`, staging owner-review data/users/routes are still missing, and
+  `app_mirror_sync` is still blocked by the missing `freeze-reopen-approval.json`.
 - Read receipts are now intentionally wider than the first forensic docs. A
   mutation-capable packet must prove the agent read the front-door handoffs,
   launch runbook, release-artifact README, artifact-chain handoff, scripts

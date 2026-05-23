@@ -56,7 +56,11 @@ rollback hashes, target app hashes, or staging sites. See
 
 Template only. This file is the explicit local transition out of forensic
 freeze for staging-only actions. It must be current, bounded to the active lock,
-and must not include live/DNS/Stripe/Search Console/indexing/checkout exposure.
+time-limited, and must not include live/DNS/Stripe/Search Console/indexing/
+checkout exposure. `approved_at` and `expires_at` must be ISO-8601 timestamps
+with timezone offsets. `approved_at` must not be future-dated beyond controller
+clock skew, `expires_at` must be after `approved_at`, the approval must be
+unexpired, and the approval window must be no longer than 24 hours.
 
 ```json
 {

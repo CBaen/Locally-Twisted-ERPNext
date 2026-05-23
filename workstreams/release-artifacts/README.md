@@ -16,7 +16,8 @@ must include:
   `content_type: application/json`, no secrets.
 - `freeze-reopen-approval.json` - explicit approval artifact bound to the
   active lock, staging target, source commit, approved staging-only actions,
-  and live/DNS/Stripe/Search Console block.
+  bounded ISO-8601 approval timestamps, and live/DNS/Stripe/Search Console
+  block.
 - `app-mirror-sync-plan.json` - pre-sync source/mirror plan for
   `app_mirror_sync`; post-sync freshness remains a separate required artifact.
 - `provider-snapshot.json` - read-only team/site/bench/app/job/rollback state.
@@ -37,6 +38,8 @@ hashes, payload hash/site, provider snapshot, deploy completion, or hosted
 preflight evidence do not describe the same release attempt. Current
 Gate/Fixer handoff:
 `../frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+Timestamp guard handoff:
+`../frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
 
 The local lock and scripts currently require these artifacts before any future
 release controller can move past forensic-freeze:
@@ -77,13 +80,15 @@ template only. Do not treat the template file as a release artifact, approval,
 provider proof, or staging proof. Feature handoff:
 `../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
-Current-head read-only packet:
-`2026-05-23-staging-reopen-current-head-readonly/` is the latest read-only
-current-state packet for source
-`69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. It includes a valid pre-sync
-`app-mirror-sync-plan.json`, but it deliberately does not include
-`freeze-reopen-approval.json`. The release controller still blocks
-`app_mirror_sync`, and staging remains no-go for owner review.
+Latest archived read-only packet:
+`2026-05-23-staging-reopen-current-head-readonly/` is read-only evidence for
+packet source commit `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder
+name is historical; once the packet was committed, repo `HEAD` moved. It
+includes a valid pre-sync `app-mirror-sync-plan.json` for that packet source,
+but it deliberately does not include `freeze-reopen-approval.json`. The release
+controller still blocks `app_mirror_sync`, and staging remains no-go for owner
+review. For mutation, generate fresh source-bound artifacts for the then-current
+release source instead of reusing this archived packet.
 
 Run:
 

@@ -8,6 +8,31 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Freeze reopen approvals must be current and time-bounded
+
+**Decision:** A `freeze-reopen-approval.json` can only reopen staging mutation
+when its timestamps are parseable ISO-8601 values with timezone offsets, the
+approval is unexpired, `expires_at` is after `approved_at`, `approved_at` is
+not future-dated beyond controller skew, and the approval window is no longer
+than 24 hours.
+
+**Reasoning:** A syntactically valid approval artifact can still be unsafe if
+it is copied from an older release attempt, missing timezone context, or left
+open indefinitely. Release reopen approval is a human/business control, so the
+controller must reject stale or ambiguous approval automatically instead of
+relying on an agent to notice.
+
+**Implementation boundary:** This is local/offline guard tightening only. It
+does not create a valid reopen approval, reopen forensic-freeze, sync the app
+mirror, or mutate Frappe Cloud/staging/live/DNS/Stripe/Search Console state.
+
+**Receipts:** `scripts/release/release_guard_common.py`;
+`scripts/verify/release_lock_contract.py`;
+`scripts/verify/release_controller_contract.py`;
+`workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
+
+---
+
 ## 2026-05-23 - Release read receipts must include packet-authoring docs
 
 **Decision:** Mutation-capable LT release packets must prove the agent read

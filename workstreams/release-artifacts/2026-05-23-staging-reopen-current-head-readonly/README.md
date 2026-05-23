@@ -1,6 +1,6 @@
-# LT Staging Reopen Current-Head Read-Only Packet - 2026-05-23
+# LT Staging Reopen Snapshot-Source Read-Only Packet - 2026-05-23
 
-Status: **NO-GO; current-head read-only packet only**.
+Status: **NO-GO; archived read-only packet only**.
 
 This packet advances the staging owner-review goal without leaving the active
 forensic freeze. It does not approve or perform app mirror sync, Frappe Cloud
@@ -17,6 +17,10 @@ unpause, or secret reading.
   `181076c239b2d1d3d508a41ac471c71f9d2b5158`
 - Active lock:
   `release_locks/locally-twisted-staging-forensic-freeze.json`
+
+Important: this packet was captured against the source commit above, then
+archived in a later Git commit. It is historical read-only evidence, not a
+mutation-capable packet for whatever `git rev-parse HEAD` returns now.
 
 ## Files
 
@@ -37,9 +41,9 @@ unpause, or secret reading.
 - `recorder.md`
 - `freeze-reopen-approval.MISSING.md`
 
-## Current Evidence
+## Packet Evidence
 
-- Local source is clean and pushed at `69e4e9f`.
+- At packet capture time, local source was clean and pushed at `69e4e9f`.
 - Local route snapshot against `http://localhost:8081` passes for homepage,
   contact, login, shop, shop-items, Mickey Mouse Bouquet, Classic Arch, and
   Columns. This is local proof only.
@@ -70,10 +74,10 @@ unpause, or secret reading.
 This packet is not mutation-capable. It proves the next release-critical action
 is still blocked by the missing `freeze-reopen-approval.json`.
 
-If a future turn has explicit approval to leave forensic-freeze, the next local
-controller command is `app_mirror_sync` with this packet's read receipt,
-approval, app mirror sync plan, provider snapshot, triad directory, and failure
-ledger. If that passes, the actual app-root mirror sync must run, followed by a
-fresh post-sync `app-mirror-freshness.json`. Provider deploy/update, hosted
-preflight, bootstrap/import, cache clear, and owner-review gate proof remain
-separate later gates.
+If a future turn has explicit approval to leave forensic-freeze, generate a
+fresh packet for the then-current release source before running
+`app_mirror_sync`. Do not reuse this packet's source-bound `app-mirror-sync-plan`
+or approval inputs after `HEAD` has moved. The actual app-root mirror sync must
+then be followed by a fresh post-sync `app-mirror-freshness.json`. Provider
+deploy/update, hosted preflight, bootstrap/import, cache clear, and
+owner-review gate proof remain separate later gates.

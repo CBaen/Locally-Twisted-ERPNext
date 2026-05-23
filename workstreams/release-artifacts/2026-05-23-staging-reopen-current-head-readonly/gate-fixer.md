@@ -2,7 +2,7 @@
 
 target: locallytwisted-staging.frappe.cloud
 state: NO-GO LOCAL GUARDS ONLY
-evidence: `npm run test:release-prevention` passes at current HEAD, and `app-mirror-freshness.json` is `ok=false` because the app-root mirror is missing `locally_twisted/staging_owner_review_preflight.py` and has stale `locally_twisted/staging_owner_review_bootstrap.py`.
+evidence: `npm run test:release-prevention` passed at packet source commit `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`, and `app-mirror-freshness.json` is `ok=false` because the app-root mirror is missing `locally_twisted/staging_owner_review_preflight.py` and has stale `locally_twisted/staging_owner_review_bootstrap.py`. This archived packet is not mutation proof for later repo `HEAD` commits.
 
 ## Boundary
 

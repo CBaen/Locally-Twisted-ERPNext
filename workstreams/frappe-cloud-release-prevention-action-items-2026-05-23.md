@@ -4,7 +4,8 @@ Status: **forensic-freeze action list with the first local/offline prevention
 guard layer implemented at commit `58258fd`, expanded through the current
 read-only no-go archive `ceab908`, the post-`ebb7151` read-only packet, the
 release packet template parity fix `f5e2e91`, and the release artifact
-chain-binding guard. Do not use this as permission to deploy.**
+chain-binding guard plus freeze-reopen approval timestamp guard. Do not use
+this as permission to deploy.**
 
 This document exists because notes were present, but the release process still
 continued. The first executable local gates now exist; the next agent must keep
@@ -87,15 +88,25 @@ offline guard gap only. It did not reopen forensic-freeze and did not mutate
 provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/migrate/
 cache/checkout/secrets.
 
-2026-05-23 current-head read-only packet:
+2026-05-23 freeze-reopen approval timestamp guard:
+`workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
+The local controller now rejects `freeze-reopen-approval.json` files whose
+approval timestamps are missing, malformed, timezone-less, expired,
+future-dated beyond clock skew, reversed, or longer than 24 hours. This closes
+another local offline guard gap only. It did not create a valid approval,
+reopen forensic-freeze, or mutate provider/staging/live/DNS/Stripe/Search
+Console/app mirror/bootstrap/migrate/cache/checkout/secrets.
+
+2026-05-23 archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
 This packet updates the no-go evidence at source
-`69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. It includes a valid current
-read receipt, provider snapshot, app mirror sync plan, failure ledger, and
-triad artifacts, plus fresh no-go app mirror freshness, hosted preflight, and
-owner-review gate artifacts. The controller still blocks `app_mirror_sync`
-because `freeze-reopen-approval.json` is missing. This is not provider
-mutation or owner-review readiness.
+`69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder name is historical:
+after the packet was committed, repo `HEAD` moved. It includes a valid read
+receipt for that packet, provider snapshot, app mirror sync plan, failure
+ledger, and triad artifacts, plus fresh no-go app mirror freshness, hosted
+preflight, and owner-review gate artifacts. The controller still blocks
+`app_mirror_sync` because `freeze-reopen-approval.json` is missing. This is not
+provider mutation, owner-review readiness, or mutation proof for a later commit.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.

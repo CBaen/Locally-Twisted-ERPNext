@@ -1,8 +1,8 @@
 # Recorder Artifact
 
 target: locallytwisted-staging.frappe.cloud
-state: NO-GO DOCUMENTED CURRENT-HEAD PACKET
-evidence: This packet records current HEAD `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`, read-only provider state, no-go app mirror freshness, and the controller's current freeze boundary. It also records that `freeze-reopen-approval.json`, post-sync mirror freshness, deploy completion, hosted preflight pass, staging bootstrap/import proof, and owner-review gate pass remain missing.
+state: NO-GO DOCUMENTED SNAPSHOT-SOURCE PACKET
+evidence: This packet records source commit `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`, read-only provider state, no-go app mirror freshness, and the controller's freeze boundary at capture time. It also records that `freeze-reopen-approval.json`, post-sync mirror freshness, deploy completion, hosted preflight pass, staging bootstrap/import proof, and owner-review gate pass remain missing.
 
 ## Boundary
 

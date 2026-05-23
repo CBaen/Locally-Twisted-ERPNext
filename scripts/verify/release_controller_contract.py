@@ -19,6 +19,7 @@ import json
 import subprocess
 import sys
 import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -443,6 +444,8 @@ def write_payload(path: Path, app_hash: str) -> None:
 
 
 def write_reopen_approval(path: Path, source_commit: str) -> None:
+    approved_at = datetime.now(timezone.utc) - timedelta(minutes=1)
+    expires_at = approved_at + timedelta(hours=12)
     path.write_text(
         json.dumps(
             {
@@ -450,8 +453,8 @@ def write_reopen_approval(path: Path, source_commit: str) -> None:
                 "approval_type": "forensic_freeze_reopen",
                 "lock_id": "lt-staging-forensic-freeze-2026-05-23",
                 "approved_by": "Guiding Light",
-                "approved_at": "2026-05-23T00:00:00-06:00",
-                "expires_at": "2026-05-24T00:00:00-06:00",
+                "approved_at": approved_at.isoformat(),
+                "expires_at": expires_at.isoformat(),
                 "target_site": "locallytwisted-staging.frappe.cloud",
                 "source_commit": source_commit,
                 "approved_actions": [

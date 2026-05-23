@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import subprocess
 from collections import Counter
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -125,6 +126,9 @@ NEVER_REOPEN_WITH_STAGING_APPROVAL = {
     "production_indexing",
     "checkout_unpause",
 }
+
+MAX_REOPEN_APPROVAL_DURATION = timedelta(hours=24)
+MAX_REOPEN_APPROVAL_FUTURE_SKEW = timedelta(minutes=10)
 
 REQUIRED_REOPEN_APPROVAL_FIELDS = {
     "ok",
@@ -394,9 +398,18 @@ def validate_reopen_approval(path: Path, lock: dict[str, Any], action: str | Non
     if len(source_commit) != 40 or any(char not in "0123456789abcdef" for char in source_commit.lower()):
         failures.append("freeze reopen approval source_commit must be a full 40-character hex hash")
 
-    for date_field in ("approved_at", "expires_at"):
-        if not isinstance(approval.get(date_field), str) or not approval.get(date_field):
-            failures.append(f"freeze reopen approval {date_field} must be a non-empty string")
+    approved_at = parse_release_timestamp(approval.get("approved_at"), "approved_at", failures)
+    expires_at = parse_release_timestamp(approval.get("expires_at"), "expires_at", failures)
+    if approved_at and expires_at:
+        now = datetime.now(timezone.utc)
+        if approved_at > now + MAX_REOPEN_APPROVAL_FUTURE_SKEW:
+            failures.append("freeze reopen approval approved_at cannot be in the future")
+        if expires_at <= now:
+            failures.append("freeze reopen approval is expired")
+        if expires_at <= approved_at:
+            failures.append("freeze reopen approval expires_at must be after approved_at")
+        if expires_at - approved_at > MAX_REOPEN_APPROVAL_DURATION:
+            failures.append("freeze reopen approval duration must be 24 hours or less")
 
     approved_by = str(approval.get("approved_by") or "").strip()
     if not approved_by:
@@ -417,6 +430,22 @@ def validate_reopen_approval(path: Path, lock: dict[str, Any], action: str | Non
     if action and action not in approved_actions:
         failures.append(f"freeze reopen approval does not approve requested action: {action}")
     return failures
+
+
+def parse_release_timestamp(value: Any, field_name: str, failures: list[str]) -> datetime | None:
+    if not isinstance(value, str) or not value.strip():
+        failures.append(f"freeze reopen approval {field_name} must be a non-empty timestamp string")
+        return None
+    raw = value.strip()
+    try:
+        parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        failures.append(f"freeze reopen approval {field_name} must be ISO-8601 parseable")
+        return None
+    if parsed.tzinfo is None:
+        failures.append(f"freeze reopen approval {field_name} must include a timezone offset")
+        return None
+    return parsed.astimezone(timezone.utc)
 
 
 def validate_release_artifact_chain(
