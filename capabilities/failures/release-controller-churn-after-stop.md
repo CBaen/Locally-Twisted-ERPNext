@@ -48,7 +48,7 @@ produce useful fixes, but it is no longer a trustworthy release controller.
 
 | Date | Project | Surface | Bad outcome | Evidence | Guard state |
 |---|---|---|---|---|---|
-| 2026-05-22/23 | Locally Twisted | Frappe Cloud staging owner-review push | The release controller continued through repeated payload, migration, role, data, and hosted-bootstrap failures instead of freezing release execution and producing prevention gates first | `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`; `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` | docs guard added; executable release lock still required |
+| 2026-05-22/23 | Locally Twisted | Frappe Cloud staging owner-review push | The release controller continued through repeated payload, migration, role, data, and hosted-bootstrap failures instead of freezing release execution and producing prevention gates first | `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`; `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`; `../../release_locks/locally-twisted-staging-forensic-freeze.json` | local executable lock/controller/verifier layer added; provider mutation remains blocked |
 
 ## Root Pattern
 
@@ -78,6 +78,19 @@ artifacts before proceeding.
 - Require owner-review readiness to come only from the staging owner-review
   gate, not from app hashes, deploy IDs, or local proof.
 
+Current local guard implementation:
+
+- `../../release_locks/locally-twisted-staging-forensic-freeze.json`
+- `../../scripts/release/frappe_cloud_release_controller.py`
+- `../../scripts/verify/release_lock_contract.py`
+- `../../scripts/verify/release_controller_contract.py`
+- `../../scripts/verify/frappe_cloud_payload_contract.py`
+- `../../scripts/verify/release_claim_language_contract.py`
+- `npm run test:release-prevention`
+
+This is still not provider proof. It is the local stop layer future release
+work must satisfy before a fresh release plan can reopen mutation.
+
 ## Recovery Recipe
 
 1. Stop mutation immediately.
@@ -86,15 +99,17 @@ artifacts before proceeding.
 4. Write action items that become executable gates.
 5. Update queue, handoffs, decisions, lessons, capabilities, and coordination
    docs with backlinks.
-6. Commit and push the documentation/action-item state if repo workflows do not
+6. Implement and run the offline release-prevention gates.
+7. Commit and push the documentation/action-item state if repo workflows do not
    deploy.
-7. Reopen release only under a new release controller and fresh read-only
+8. Reopen release only under a new release controller and fresh read-only
    current-state snapshot.
 
 ## Cross-links
 
 - `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
 - `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
+- `../../release_locks/locally-twisted-staging-forensic-freeze.json`
 - `../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `artifactless-subagent-release-triad.md`
 - `staging-proof-surface-conflation.md`

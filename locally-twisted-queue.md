@@ -16,12 +16,16 @@ process and must not be used as launch authority. Required source:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
 Required fix-agent action list:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-Next safe step is not a deploy. It is implementing the release lock,
-controller, payload validator, circuit breaker, artifact-owned triad, and
-owner-review gate enforcement, then taking a new read-only current-state
-snapshot and writing a fresh artifact-backed release plan. Do not deploy,
-bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search Console, or claim
-owner-review readiness from the interrupted session.
+Next safe step is not a deploy. The first local/offline guard layer now exists
+at
+`release_locks/locally-twisted-staging-forensic-freeze.json`,
+`scripts/release/frappe_cloud_release_controller.py`, and
+`npm run test:release-prevention`. Provider mutation remains blocked while the
+forensic-freeze lock is active. Next safe step is local guard verification,
+then a read-only current-state provider snapshot and fresh release plan if GL
+explicitly reopens release execution. Do not deploy, bootstrap, mutate Frappe
+Cloud, touch live/DNS/Stripe/Search Console, or claim owner-review readiness
+from the interrupted session.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
@@ -39,12 +43,15 @@ now includes `locallytwisted@gmail.com` as owner/admin and
 `marketing@exploringnotboring.com` as website-only `LT Marketing Review
 Access`. Current hardening is in release-gate review: gallery, Product Setup,
 contact expanded-layout, marketing boundary, public access, human access,
-owner-product, and ecommerce gates have passed locally; the remaining safe
-step is triad-reviewed release scope plus the full launch/security suite, then
-Frappe Cloud staging/mirror work if green. Do not treat this as live checkout,
-Frappe Cloud, Stripe, DNS, Search Console, or production approval. Do not claim
-staging from local Docker verifiers by setting only `LT_BASE_URL`; database-side
-proof must run against staging or stay explicitly unverified.
+owner-product, and ecommerce gates have passed locally; that evidence is now
+subordinate to the forensic-freeze release lock. Do not move to Frappe Cloud
+staging/mirror work from this item until `npm run test:release-prevention`
+passes, the lock is explicitly reopened under a fresh artifact-backed release
+plan, and the staging owner-review gate runs against the actual target. Do not
+treat this as live checkout, Frappe Cloud, Stripe, DNS, Search Console, or
+production approval. Do not claim staging from local Docker verifiers by
+setting only `LT_BASE_URL`; database-side proof must run against staging or
+stay explicitly unverified.
 
 2026-05-22 staging-recovery update: source `main` is archived at `2ca1b85`,
 and the Frappe Cloud app-root mirror is archived at `3e86bc1`. Provider proof
@@ -56,13 +63,15 @@ ecommerce paused and public indexing disabled. Staging owner review is still
 blocked because the target site has app code but no business data:
 authenticated proof found `Item=0`, `Website Item=0`, `Website Slideshow=0`,
 `Website Slideshow Item=0`, and both `locallytwisted@gmail.com` and
-`marketing@exploringnotboring.com` missing as User records. Next safe step is
-staging bootstrap/import for catalog, Product Setup/gallery projection, and
-required accounts, then run the mandatory executable gate:
+`marketing@exploringnotboring.com` missing as User records. The historical
+next step in that 2026-05-22 staging-recovery lane was staging
+bootstrap/import for catalog, Product Setup/gallery projection, and required
+accounts, then run the mandatory executable gate:
 `python scripts\verify\staging_owner_review_gate.py --expected-hash 3e86bc149d6dcc04daa194b740c1733f5c796261`.
 That gate must fail on zero catalog/users even when app deploy succeeded. Do
-not use generic `press-deploy`; do not touch live, DNS, Stripe, or Search
-Console. Handoff:
+not use this as the current next safe step while the 2026-05-23 forensic-freeze
+lock is active. Do not use generic `press-deploy`; do not touch live, DNS,
+Stripe, or Search Console. Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is

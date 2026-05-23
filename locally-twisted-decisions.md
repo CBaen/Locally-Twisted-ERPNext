@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release warnings must have executable local gates before provider work
+
+**Decision:** LT release-prevention controls now start as local executable
+gates, not handoff prose. The active forensic-freeze lock is
+`release_locks/locally-twisted-staging-forensic-freeze.json`, and future
+release controllers must pass `npm run test:release-prevention` before any
+attempt to reopen Frappe Cloud staging/live/provider mutation.
+
+**Reasoning:** The failed staging release already had warnings in notes and
+handoffs, but prose did not stop repeated provider/bootstrap churn. A future
+agent must hit a nonzero local failure before it can repeat the same pattern:
+blocked release actions while frozen, missing read receipt, bad Frappe Cloud
+payload shape, missing triad artifacts, repeated unguarded failure class, or
+false owner-review readiness language.
+
+**Implementation boundary:** The local guard layer does not deploy, bootstrap,
+poll, mutate, or prove staging owner-review readiness. It only enforces the
+precondition that provider work cannot resume without a valid lock state,
+required-doc receipt, typed payload artifact, provider snapshot, failure
+ledger, artifact-owned triad packet, and later the actual
+`scripts/verify/staging_owner_review_gate.py` result.
+
+**Receipts:** `scripts/release/frappe_cloud_release_controller.py`;
+`scripts/verify/release_lock_contract.py`;
+`scripts/verify/frappe_cloud_payload_contract.py`;
+`scripts/verify/release_claim_language_contract.py`;
+`workstreams/release-artifacts/README.md`.
+
+---
+
 ## 2026-05-23 - Failed release sessions cannot become launch authority
 
 **Decision:** The 2026-05-22/23 Frappe Cloud owner-review staging attempt is a

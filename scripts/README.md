@@ -21,6 +21,7 @@ should not be used as launch proof.
 | `setup/` | One-time-or-occasional install/configuration scripts. Idempotent scripts are safe to re-run. |
 | `dev/` | Day-to-day development helpers. Run during a build session. |
 | `fix/` | Patches that work around upstream bugs or recreate transient state. |
+| `release/` | Local release controllers and shared release-guard helpers. These are gates before provider work, not provider clients. |
 | `translate/` | Historical translation scripts were removed; git history is the archive. |
 | `verify/` | Verification scripts. Run before declaring anything done. |
 
@@ -67,6 +68,13 @@ should not be used as launch proof.
 | `fix_crm_lead_*.py` | Removed. These one-off Lead-schema scripts used stale service labels and are preserved only in git history. | Use `setup/sync_contact_intake_backend.py` instead |
 | `fix_lead_photo_thumbnail.py` | Removed. The child table connection is now handled by `setup/sync_contact_intake_backend.py`; thumbnail UX remains a separate product choice. | Use git history only if researching the old experiment |
 
+## release/
+
+| Script | Purpose | Run when |
+|--------|---------|----------|
+| `frappe_cloud_release_controller.py` | Local Frappe Cloud release controller gate. It checks the active forensic-freeze release lock, required-doc read receipt, typed payload artifact, failure ledger, provider snapshot, and artifact-owned triad inputs. It can write an emergency handoff artifact on failure. It does not deploy or mutate provider state. | Before any future LT Frappe Cloud staging/live command is allowed to leave forensic-freeze |
+| `release_guard_common.py` | Shared offline guard helpers for release lock, read receipt, provider snapshot, triad artifact, and failure-circuit checks. | Used by release controller and verifier contracts |
+
 ## translate/
 
 | Script | Purpose | Status |
@@ -85,6 +93,10 @@ should not be used as launch proof.
 | `owner_catalog_guard_contract.py` | Live ERPNext guard for owner-like catalog mutation boundaries. Proves owner direct edits to protected public catalog records, product prices, product pages, product galleries, and Webshop Settings are blocked while guarded Product Blueprint apply context remains allowed. Run through `npm run test:owner-catalog-guard`. | After owner/product operation changes, Product Blueprint apply changes, `doc_events` guard wiring, catalog cleanup/import tools, gallery/media updates, or Webshop Settings access changes |
 | `ecommerce_expected_mode.py` | Local exposure-mode guard. Fails if `lt_ecommerce_paused` and `/shop`/`/cart`/`/checkout` do not match the explicit expected stage. Run through `npm run test:ecommerce-open-mode` for local/approved open proof or `npm run test:ecommerce-paused-mode` for paused release gates. | Before staging/live checks, before owner review, after any command that changes `lt_ecommerce_paused`, and after local break/proof scripts that temporarily open or pause ecommerce |
 | `staging_owner_review_gate.py` | Executable Frappe Cloud staging owner-review stop gate. Checks the actual staging site, not local Docker, for target app hash, app order, paused ecommerce, disabled public indexing, required owner/marketing users, nonzero catalog/Product Setup/gallery records, and authenticated owner-visible routes. It must fail when staging has app code but zero catalog rows or missing users. | Mandatory before saying staging is owner-review ready, after any Frappe Cloud deploy/migrate/cache/config/bootstrap/import, and after creating or repairing staging owner/marketing accounts |
+| `release_lock_contract.py` | Offline contract for `release_locks/locally-twisted-staging-forensic-freeze.json`. Proves the active lock blocks provider/live/search/payment mutation actions, missing read receipts fail, the failure circuit breaker blocks repeated failure classes, and triad artifacts are required. Run through `npm run test:release-lock`. | Before reopening any LT release execution after forensic-freeze, and after editing release locks/controller guards |
+| `release_controller_contract.py` | Offline CLI contract for `scripts/release/frappe_cloud_release_controller.py`. Proves the active lock blocks a mutation action, a missing read receipt blocks read-only forensics, and a valid read receipt permits read-only forensics without provider mutation. Run through `npm run test:release-controller`. | After editing the release controller, release lock, or read-receipt contract |
+| `frappe_cloud_payload_contract.py` | Offline Frappe Cloud payload-shape contract. Proves the sanitized artifact declares `application/json`, nested `apps` and `sites` are typed JSON arrays/objects, and stringified nested JSON fails before any provider request can be sent. Run through `npm run test:frappe-cloud-payload`. | Before any future Frappe Cloud API deploy/update payload is eligible for provider mutation |
+| `release_claim_language_contract.py` | Offline docs-language gate. Fails when staging/live/owner-review readiness language appears without nearby blocking/gate language, and requires docs to reference the executable lock/controller/payload/claim gates. Run through `npm run test:release-claim-language`. | After editing launch, staging, queue, handoff, forensic, or release capability docs |
 | `layout_fit.spec.js` | Playwright Test gate for public/shop/cart routes across mobile, tablet, and desktop widths. | Before visual claims, after customer-facing CSS/Jinja/template changes |
 | `search_contract.spec.js` | Playwright Test gate for header search overlay product suggestions and submitted `/shop?q=...` results. It distinguishes hidden filtered quick-link nodes from owner-excluded links that should be absent. | After changing header search, shop search, Website Item search context, Ready-to-Order quick links, or product-card discovery behavior |
 | `portfolio_reel.spec.js` | Playwright Test gate for `/portfolio` floating proof-reel behavior: natural-ratio images, no photo captions/frame wrappers, no route-specific portfolio contact/index footer, larger desktop entry/click-to-front behavior that settles without pointer-follow sway, mobile full-width slide-in reveal, filter relayout, and empty state. | After editing portfolio layout, image metadata, filters, or modal behavior |

@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-22
+last_verified: 2026-05-23
 currently_true: true
 ---
 
@@ -75,6 +75,16 @@ Default public launch posture:
   provider state and an artifact-backed plan before any mutation. The concrete
   action list is
   `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+- Also as of 2026-05-23, the first local/offline release-prevention layer is
+  executable: `release_locks/locally-twisted-staging-forensic-freeze.json`,
+  `scripts/release/frappe_cloud_release_controller.py`,
+  `scripts/verify/release_lock_contract.py`,
+  `scripts/verify/release_controller_contract.py`,
+  `scripts/verify/frappe_cloud_payload_contract.py`, and
+  `scripts/verify/release_claim_language_contract.py`. Run
+  `npm run test:release-prevention` before any future attempt to reopen
+  release execution. Passing this command is local prevention proof only, not
+  staging owner-review readiness.
 
 ## Human Access Boundary
 
@@ -120,28 +130,34 @@ Triad rule:
 
 Concise staging-safe list:
 
-1. Identify the source commit, app-mirror commit, staging host, rollback path,
+1. Run `npm run test:release-prevention`. While
+   `release_locks/locally-twisted-staging-forensic-freeze.json` is active,
+   provider/live/search/payment mutation remains blocked.
+2. Identify the source commit, app-mirror commit, staging host, rollback path,
    and whether the push is archive-only or deploy-triggering.
-2. Prove current Frappe Cloud site mapping before mutation. Current API
+3. Prove current Frappe Cloud site mapping before mutation. Current API
    inventory beats stale runbook bench IDs; do not reuse old bench IDs from
    docs without API/dashboard proof. For 2026-05-22 staging, the current target
    is group `bench-40102` / bench `bench-40102-000003-f4v`, not the old
    `bench-39776-000013-f94-virginia` source-bench reference.
-3. For Frappe Cloud API mutations, send `Content-Type: application/json`
+4. For Frappe Cloud API mutations, send `Content-Type: application/json`
    typed JSON payloads only. For `press.api.bench.deploy_and_update`, `apps`
    and `sites` must be real JSON arrays/objects accepted by the endpoint, not
    nested JSON strings. A payload that stringifies nested `apps` or `sites` can
-   fail with `'str' object has no attribute 'get'`.
-4. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
+   fail with `'str' object has no attribute 'get'`. Validate the sanitized
+   payload artifact with `scripts/verify/frappe_cloud_payload_contract.py`
+   before provider mutation.
+5. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
    `lt_ecommerce_paused=1` on staging.
-5. Run local hard gates for the changed slice before staging.
-6. Run staging HTTP/browser gates against the staging URL.
-7. Run database-side contracts in the staging environment, or leave them
+6. Run local hard gates for the changed slice before staging.
+7. Run staging HTTP/browser gates against the staging URL.
+8. Run database-side contracts in the staging environment, or leave them
    explicitly unverified for staging.
-8. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+9. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    blocked until their separate gates pass.
 
 ```powershell
+npm run test:release-prevention
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/website_launch_verify.py --base-url <staging-url> --with-a11y --with-contact-smoke
 python scripts/verify/ecommerce_pause_contract.py

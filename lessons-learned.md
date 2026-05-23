@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A release stop rule needs a command agents already run
+
+The release failure had correct-sounding process language, but the next agent
+could still ignore it because no ordinary local command failed. The repair is
+not another note. It is a package-level gate that fails locally before provider
+mutation becomes reachable.
+
+**Counter-move:** put release-prevention checks in `npm run` and make them
+offline, fast, and explicit. For LT, use `npm run test:release-prevention` to
+prove the active forensic-freeze lock, Frappe Cloud typed-payload contract, and
+release-claim language gate. This does not prove staging; it prevents agents
+from calling staging ready without the real gate.
+
+---
+
 ## 2026-05-23 - Notes do not stop release churn unless scripts enforce them
 
 The staging release failure already had warnings, handoffs, and triad language,

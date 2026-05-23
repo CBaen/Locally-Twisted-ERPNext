@@ -154,6 +154,17 @@ These are gates, not suggestions.
    must become an executable release lock and controller guard before staging
    release execution is reopened. Documentation by itself failed here.
 
+2026-05-23 local guard update: the first executable offline layer now exists:
+`release_locks/locally-twisted-staging-forensic-freeze.json`,
+`scripts/release/frappe_cloud_release_controller.py`,
+`scripts/verify/release_lock_contract.py`,
+`scripts/verify/release_controller_contract.py`,
+`scripts/verify/frappe_cloud_payload_contract.py`, and
+`scripts/verify/release_claim_language_contract.py`. Run
+`npm run test:release-prevention` to prove this local prevention architecture.
+This does not prove staging owner-review readiness and does not reopen
+provider mutation.
+
 ## Evidence Sources
 
 - `CODING-HANDOFF.md`
@@ -171,6 +182,8 @@ These are gates, not suggestions.
 
 ## Next Safe Step
 
-The next safe step is not another deploy. It is a new release controller
-performing a read-only current-state snapshot, then producing a fresh
-artifact-backed release plan that satisfies the prevention gates above.
+The next safe step is not another deploy. It is running the local prevention
+contracts, then having a new release controller perform a read-only
+current-state snapshot and produce a fresh artifact-backed release plan that
+satisfies the prevention gates above. Provider mutation remains blocked while
+`release_locks/locally-twisted-staging-forensic-freeze.json` is active.

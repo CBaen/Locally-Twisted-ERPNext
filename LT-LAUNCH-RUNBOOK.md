@@ -13,6 +13,13 @@ Project capability:
 Current release-freeze action list:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
 
+Current release-freeze lock and local guard command:
+`release_locks/locally-twisted-staging-forensic-freeze.json`
+
+```powershell
+npm run test:release-prevention
+```
+
 ## The Simple Version
 
 The public website and inquiry forms are now live on Frappe Cloud at
@@ -39,6 +46,15 @@ owner review is not ready until the release prevention action items are turned
 into executable guards, a new read-only provider snapshot is taken, and
 `scripts/verify/staging_owner_review_gate.py` passes on the actual staging
 site.
+
+2026-05-23 update: the first executable local/offline guard layer now exists:
+`scripts/release/frappe_cloud_release_controller.py`,
+`scripts/verify/release_lock_contract.py`,
+`scripts/verify/release_controller_contract.py`,
+`scripts/verify/frappe_cloud_payload_contract.py`, and
+`scripts/verify/release_claim_language_contract.py`. This is not permission to
+deploy. It is the local prevention gate future release work must pass before
+asking to reopen provider mutation.
 
 ## Current Confirmed State
 
@@ -182,30 +198,35 @@ Release/process rule:
   that read the local Docker `frontend` database still prove local records even
   if their browser fetch points at staging.
 
-Staging-safe gate list:
+Staging-safe gate list for a future approved release reopen. Steps after the
+active-lock check are not current permission to mutate provider state.
 
-1. Confirm the exact source commit and app-mirror commit intended for staging.
+1. Run `npm run test:release-prevention` and confirm the active lock state.
+   While `release_locks/locally-twisted-staging-forensic-freeze.json` is
+   active, release mutation remains blocked.
+2. Confirm the exact source commit and app-mirror commit intended for staging.
    Current staged recovery target is source `2ca1b85`, app mirror `3e86bc1`,
    installed hash `3e86bc149d6dcc04daa194b740c1733f5c796261`.
-2. Confirm current Frappe Cloud provider mapping. Current API inventory beats
+3. Confirm current Frappe Cloud provider mapping. Current API inventory beats
    stale runbook bench IDs. As of 2026-05-22, staging is group `bench-40102` /
    bench `bench-40102-000003-f4v`, and live/vanity is group `bench-39776` /
    bench `bench-39776-000015-f94v`.
-3. For Frappe Cloud API mutations, send `Content-Type: application/json` typed
+4. For Frappe Cloud API mutations, send `Content-Type: application/json` typed
    JSON payloads only. Do not send nested `apps` or `sites` values as strings;
-   that can fail with `'str' object has no attribute 'get'`.
-4. Confirm the staging host, site update/migration job, cache clear, installed
+   that can fail with `'str' object has no attribute 'get'`. Validate the
+   sanitized payload first with `scripts/verify/frappe_cloud_payload_contract.py`.
+5. Confirm the staging host, site update/migration job, cache clear, installed
    app order, `lt_ecommerce_paused=1`, and
    `lt_public_indexing_enabled=0`.
-5. Run local hard gates first, including the relevant product/owner/access
+6. Run local hard gates first, including the relevant product/owner/access
    gates for the changed slice.
-6. Run staging HTTP/browser gates against the staging URL, including logged-in
+7. Run staging HTTP/browser gates against the staging URL, including logged-in
    owner/backend product review and guest paused-shop behavior.
-7. Run staging account gates for `locallytwisted@gmail.com` and
+8. Run staging account gates for `locallytwisted@gmail.com` and
    `marketing@exploringnotboring.com`.
-8. Run any database-side proof in the staging environment, or mark that proof
+9. Run any database-side proof in the staging environment, or mark that proof
    unverified. Do not claim staging from a local Docker database read.
-9. Record remaining live-only blockers before any live/provider/Search Console
+10. Record remaining live-only blockers before any live/provider/Search Console
    action.
 
 2026-05-22 provider trigger rule: Frappe Cloud supports commit-message deploy

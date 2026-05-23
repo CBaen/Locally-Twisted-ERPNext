@@ -1,5 +1,21 @@
 # Locally Twisted - Coding Handoff
 
+Codex release-prevention guard pass on 2026-05-23: the forensic-freeze state
+now has executable local/offline guards. The active lock is
+`release_locks/locally-twisted-staging-forensic-freeze.json`. The controller
+gate is `scripts/release/frappe_cloud_release_controller.py`; it blocks
+Frappe Cloud deploy/provider poll/bootstrap/migrate/cache/live/DNS/Stripe/Search
+Console/checkout-unpause actions while the lock is active and requires a
+read-receipt, typed payload artifact, failure ledger, provider snapshot, and
+artifact-owned triad before future mutation can pass. Local verifier commands:
+`npm run test:release-prevention`, `python
+scripts\verify\release_lock_contract.py`, `python
+scripts\verify\release_controller_contract.py`, `python
+scripts\verify\frappe_cloud_payload_contract.py --self-test`, and `python
+scripts\verify\release_claim_language_contract.py`. This is prevention
+architecture only. It is not staging proof, owner-review readiness, live
+approval, DNS/Search Console/Stripe approval, or checkout exposure.
+
 Codex Frappe Cloud staging failure forensics on 2026-05-23: release execution
 was stopped by GL. Treat owner-review staging as **not ready** until a new
 release controller proves otherwise from current state. Source `origin/main`
@@ -33,10 +49,13 @@ found `Item=0`, `Website Item=0`, `Website Slideshow=0`,
 before saying "staging owner-review ready" is
 `python scripts\verify\staging_owner_review_gate.py --expected-hash 3e86bc149d6dcc04daa194b740c1733f5c796261`.
 It must fail on zero catalog rows or missing users even when Frappe Cloud app
-deploy/migrate succeeded. Next engineering step is staging bootstrap/import for
-catalog, Product Setup/gallery projection, and required accounts, then rerun
-that gate. Live, DNS, Stripe, Search Console, and production indexing remain
-untouched. Handoff:
+deploy/migrate succeeded. Historical next step at that moment was staging
+bootstrap/import for catalog, Product Setup/gallery projection, and required
+accounts, then rerun that gate. That path is now superseded by the 2026-05-23
+forensic-freeze lock: bootstrap/import may resume only after GL explicitly
+reopens release execution and the release controller/artifact plan allows it.
+Live, DNS, Stripe, Search Console, and production indexing remain untouched.
+Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 
 Codex release/docs gate integrity patch on 2026-05-22: release processes,

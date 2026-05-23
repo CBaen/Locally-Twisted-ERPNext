@@ -1,0 +1,63 @@
+{
+  "id": "lt-staging-forensic-freeze-2026-05-23",
+  "status": "active",
+  "stage": "forensic-freeze",
+  "created_at": "2026-05-23T00:00:00-06:00",
+  "owner_repo": "C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted",
+  "source_incident": "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+  "action_list": "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
+  "scope": [
+    "Locally Twisted Frappe Cloud staging owner-review release",
+    "Frappe Cloud provider deploy/update/bootstrap/migration paths",
+    "release claims for staging owner-review readiness"
+  ],
+  "blocked_actions": [
+    "frappe_cloud_deploy",
+    "provider_poll",
+    "staging_bootstrap",
+    "site_migrate",
+    "cache_clear",
+    "dns",
+    "stripe",
+    "search_console",
+    "live_release",
+    "production_indexing",
+    "checkout_unpause"
+  ],
+  "allowed_actions": [
+    "read_only_forensics",
+    "local_guard_implementation",
+    "docs_update",
+    "release_guard_contract_verification"
+  ],
+  "required_read_docs": [
+    "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
+    "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
+    "locally-twisted-queue.md"
+  ],
+  "required_artifact_roles": [
+    "controller",
+    "provider_witness",
+    "gate_fixer",
+    "recorder"
+  ],
+  "requires_to_reopen": [
+    "Fresh explicit approval to leave forensic-freeze",
+    "Current read-only Frappe Cloud provider snapshot",
+    "Valid local read receipt for required release docs",
+    "Validated typed JSON payload artifact before provider API mutation",
+    "Failure-class circuit breaker ledger with no unguarded repeated failure class",
+    "Artifact-owned release triad directory",
+    "Fresh release plan that separates provider success from owner-review readiness"
+  ],
+  "not_authority": [
+    "GitHub source commit",
+    "Frappe Cloud app mirror hash",
+    "Deploy ID",
+    "Release Pipeline ID",
+    "Local Docker verifier result",
+    "Interrupted provider poll"
+  ]
+}

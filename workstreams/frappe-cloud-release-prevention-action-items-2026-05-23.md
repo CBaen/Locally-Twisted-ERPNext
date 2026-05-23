@@ -1,11 +1,38 @@
 # Frappe Cloud Release Prevention Action Items - 2026-05-23
 
-Status: **action list for the next release-fix agent. Do not use this as
-permission to deploy.**
+Status: **forensic-freeze action list with local prevention guards now started.
+Do not use this as permission to deploy.**
 
 This document exists because notes were present, but the release process still
 continued. The next agent must convert these items into executable gates before
 reopening Locally Twisted Frappe Cloud staging release work.
+
+2026-05-23 guard implementation update: the first local/offline prevention
+layer now exists. It blocks release mutation while forensic-freeze is active,
+validates `application/json` typed Frappe Cloud payload shape before provider
+calls, checks required-doc read receipts, requires artifact-owned triad
+evidence, can write an emergency handoff artifact on controller failure, and
+fails docs that collapse provider success into owner-review readiness.
+
+Implemented local guard paths:
+
+- `release_locks/locally-twisted-staging-forensic-freeze.json`
+- `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/verify/release_lock_contract.py`
+- `scripts/verify/release_controller_contract.py`
+- `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/release_claim_language_contract.py`
+- `workstreams/release-artifacts/README.md`
+- `workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md`
+
+Local guard command:
+
+```powershell
+npm run test:release-prevention
+```
+
+This command is not staging proof. It proves the local prevention architecture
+exists before future release execution is reopened.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
@@ -94,7 +121,10 @@ Source incident:
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
-   agents discover them through normal package commands.
+   agents discover them through normal package commands. Local prevention is
+   now wired as `npm run test:release-prevention`; the real staging gate
+   remains `npm run test:staging-owner-review` and must be run only when a
+   provider-backed staging verification phase is explicitly reopened.
 2. Add a CI-safe docs lint that fails when launch/staging docs say
    owner-review ready without referencing the owner-review gate artifact.
 3. Create sanitized provider evidence packet templates under a named
@@ -107,16 +137,26 @@ Source incident:
 
 ## Suggested File Targets
 
-These are suggested implementation targets for the next agent. They are not
-implemented by this docs-only pass.
+These targets are now split between implemented local guards and still-open
+future release work.
+
+Implemented local/offline guards:
 
 - `scripts/release/frappe_cloud_release_controller.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/release_lock_contract.py`
-- `scripts/verify/staging_owner_review_gate.py`
+- `scripts/verify/release_controller_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 - `workstreams/release-artifacts/<date>-<target>/`
 - `capabilities/failures/release-controller-churn-after-stop.md`
+
+Still mandatory before any provider mutation is reopened:
+
+- `scripts/verify/staging_owner_review_gate.py`
+- fresh read-only provider snapshot for the actual staging target
+- fresh artifact-backed release plan
+- staging bootstrap preflight for hosted constraints
+- staging database/account/product/gallery proof on the actual target site
 
 ## Completion Criteria
 
@@ -127,8 +167,14 @@ This prevention work is complete only when a fresh run proves:
 - stringified nested Frappe Cloud payloads fail before API calls;
 - the one-failure and two-failure circuit breaker blocks retries;
 - artifact-owning triad outputs are required and present;
-- owner-review gate fails on zero catalog/users;
+- owner-review gate fails on zero catalog/users on the actual staging target;
 - provider success cannot be reported as owner-review readiness;
 - emergency handoff is produced automatically after a failed release attempt;
 - no live, DNS, Stripe, Search Console, production indexing, or live checkout
   mutation is reachable from the staging owner-review path.
+
+Current state after the local guard pass: the release lock, payload validator,
+controller CLI contract, emergency-handoff writer, docs-language gate,
+circuit-breaker helper, and artifact directory contract are implemented
+locally. The owner-review target is still not proved, and provider mutation is
+still blocked.

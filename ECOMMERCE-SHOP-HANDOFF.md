@@ -16,6 +16,14 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   Do not resume provider/bootstrap mutation from the interrupted session. The
   next fix-agent action list is
   `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+- 2026-05-23 release-prevention guard pass: the local/offline lock and
+  verifier layer now exists. Active lock:
+  `release_locks/locally-twisted-staging-forensic-freeze.json`. Controller:
+  `scripts/release/frappe_cloud_release_controller.py`. Local guard command:
+  `npm run test:release-prevention`. This command proves the prevention
+  architecture only; it does not prove staging data, owner accounts, Product
+  Setup/gallery projection, live checkout, DNS, Stripe, Search Console, or
+  owner-review readiness.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -112,6 +120,18 @@ After two related failures, all provider mutation stops until a new
 artifact-owning triad approves a fresh release plan. A helper opinion is not a
 gate; the triad must own concrete artifacts. This is now tracked as
 `capabilities/failures/release-controller-churn-after-stop.md`.
+
+Executable local prevention gates now in this repo:
+
+- `release_locks/locally-twisted-staging-forensic-freeze.json`
+- `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/verify/release_lock_contract.py`
+- `scripts/verify/release_controller_contract.py`
+- `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/release_claim_language_contract.py`
+- `npm run test:release-prevention`
+
+Provider mutation remains blocked while the forensic-freeze lock is active.
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do
