@@ -15,6 +15,14 @@ mutation. No provider, staging, app mirror, live, DNS, Stripe, Search Console,
 bootstrap, migrate, cache, checkout, user, indexing, or secret mutation was
 performed.
 
+Post-push prep-only packet after `a29efbc`:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a29efbc-prep/`.
+This is not controller-consumable and not mutation-capable. It exists only to
+organize the missing artifacts for a future explicitly approved attempt. It
+does not authorize app mirror sync, Frappe Cloud deploy/update, staging
+bootstrap/import, migrate, cache clear, live release, DNS, Stripe, Search
+Console, indexing, checkout, users, secrets, or provider mutation.
+
 Staging route map on 2026-05-23:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md` records the
 known-bad process routes, the only allowed good route for a future

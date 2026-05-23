@@ -24,6 +24,12 @@ Read it before any mutation-capable packet. It distinguishes process routes,
 literal URL routes, and owner-review readiness proof so HTTP 200 shells are not
 mistaken for a safe staging release.
 
+Current prep-only folder after the pushed guard commit:
+`2026-05-23-staging-reopen-a29efbc-prep/`.
+This folder is not controller-consumable, not approval, and not staging proof.
+It exists only to organize missing final artifacts for a future explicitly
+approved packet.
+
 This folder holds sanitized release evidence packets. Do not store secrets,
 tokens, session IDs, private customer records, raw provider logs, or credential
 files here.

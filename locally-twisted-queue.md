@@ -22,6 +22,8 @@ Current read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
 Staging route map:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md`.
+Current post-push prep-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a29efbc-prep/`.
 It is **NO-GO** and not mutation authority: active forensic-freeze still blocks
 provider/app mirror/staging mutation, the app-root mirror/deployed app remain
 at `181076c...`, hosted preflight still returns HTTP `417`, owner-review
