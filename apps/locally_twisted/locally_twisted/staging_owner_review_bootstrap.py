@@ -55,6 +55,7 @@ def enqueue_staging_owner_review_bootstrap(confirm: str) -> dict[str, Any]:
         queue="long",
         timeout=7200,
         job_name=JOB_NAME,
+        job_id=JOB_NAME,
         enqueue_after_commit=False,
         deduplicate=True,
     )
