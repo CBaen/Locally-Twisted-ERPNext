@@ -110,6 +110,8 @@ Workflows. Multi-step. Clear start and finish.
 - [launch-repo-cleanup-and-evidence-retention](recipes/launch-repo-cleanup-and-evidence-retention.md) - clean launch repo debris, raw drops, generated evidence, stale mirrors, and historical experiment output without deleting active source or other-agent work.
 - [frappe-cloud-cloudflare-stripe-launch-gate](recipes/frappe-cloud-cloudflare-stripe-launch-gate.md) - coordinate Frappe Cloud staging, Cloudflare DNS/security, Stripe live readiness, human account access, current API inventory, `application/json` typed provider payloads, artifact-owning triads, and ecommerce fallback without treating preflight, hashes, or app mirrors as cutover approval.
   2026-05-23: consult `../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md` before any LT staging/live execution; the failed owner-review staging session is not launch authority.
+  `f5e2e91` aligns the staging-freeze packet template with current controller
+  artifact contracts, but does not reopen staging execution.
 - [erpnext-record-level-failure-recorder](recipes/erpnext-record-level-failure-recorder.md) - give partial backend failures one durable blocker/report contract on affected ERPNext records.
 - [frappe-public-container-contract](recipes/frappe-public-container-contract.md) - keep Frappe/Webshop page lifecycle while making every LT public section choose contained workflow/reading mode or deliberate full-bleed band mode.
 - [homepage-launch-proof-contract](recipes/homepage-launch-proof-contract.md) - keep the launch homepage stable, real-photo-led, compact on mobile, full-stage proof-crawl driven, recoverable when blocks are hidden, and free of overlay/cycling/crop-container regressions.

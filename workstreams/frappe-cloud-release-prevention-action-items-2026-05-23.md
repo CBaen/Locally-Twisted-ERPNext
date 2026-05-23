@@ -2,8 +2,9 @@
 
 Status: **forensic-freeze action list with the first local/offline prevention
 guard layer implemented at commit `58258fd`, expanded through the current
-read-only no-go archive `ceab908` and the post-`ebb7151` read-only packet.
-Do not use this as permission to deploy.**
+read-only no-go archive `ceab908`, the post-`ebb7151` read-only packet, and
+the release packet template parity fix `f5e2e91`. Do not use this as
+permission to deploy.**
 
 This document exists because notes were present, but the release process still
 continued. The first executable local gates now exist; the next agent must keep
@@ -59,6 +60,14 @@ That packet confirms the current source guard commit did not change provider
 reality: app mirror freshness is still `ok=false`, hosted preflight still
 returns HTTP `417`, staging owner-review rows/users are still missing, and
 provider mutation remains blocked.
+
+2026-05-23 packet-template parity:
+`workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
+`workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md` now
+includes the current required shapes for freeze reopen approval, app mirror
+sync planning, deploy completion, and hosted preflight `checks`. This closes a
+local template gap only. A future release attempt still needs real current
+artifacts generated for its own dated packet.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
@@ -267,7 +276,9 @@ execution can leave forensic-freeze.
 2. Add a CI-safe docs lint that fails when launch/staging docs say
    owner-review ready without referencing the owner-review gate artifact.
 3. Create sanitized provider evidence packet templates under a named
-   release-artifacts folder.
+   release-artifacts folder. Implemented for the staging-freeze template in
+   `f5e2e91`; future release attempts must copy it into a fresh dated packet
+   and populate real artifacts, not edit the template as proof.
 4. Add rollback proof to the controller output before any provider mutation.
 5. Add a "proof vocabulary" checker for release docs:
    `local`, `GitHub archive`, `app mirror`, `deploy candidate`,

@@ -57,6 +57,14 @@ actual staging site.
 deploy. It is the local prevention gate future release work must pass before
 asking to reopen provider mutation.
 
+2026-05-23 template parity update: latest source archive is
+`f5e2e91 Update staging release artifact template`. It corrected the
+staging-freeze packet template so future packets include the current required
+shapes for reopen approval, app mirror sync plan, deploy completion, and
+hosted preflight checks. It does not create real release artifacts or reopen
+provider/staging execution. Handoff:
+`workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
+
 ## Current Confirmed State
 
 1. Frappe Cloud
@@ -206,8 +214,12 @@ active-lock check are not current permission to mutate provider state.
    While `release_locks/locally-twisted-staging-forensic-freeze.json` is
    active, release mutation remains blocked.
 2. Confirm the exact source commit and app-mirror commit intended for staging.
-   Current staged recovery target is source `2ca1b85`, app mirror `3e86bc1`,
-   installed hash `3e86bc149d6dcc04daa194b740c1733f5c796261`.
+   The old 2026-05-22 recovery target was source `2ca1b85`, app mirror
+   `3e86bc1`, installed hash `3e86bc149d6dcc04daa194b740c1733f5c796261`.
+   Current 2026-05-23 read-only evidence supersedes that lane: source is
+   archived through `f5e2e91`, while the app-root mirror/deployed staging hash
+   was still `181076c239b2d1d3d508a41ac471c71f9d2b5158` in the latest no-go
+   packets. Do not use the old `3e86bc1` path as current guidance.
 3. Confirm current Frappe Cloud provider mapping. Current API inventory beats
    stale runbook bench IDs. As of 2026-05-22, staging is group `bench-40102` /
    bench `bench-40102-000003-f4v`, and live/vanity is group `bench-39776` /

@@ -3,6 +3,9 @@
 Status: template only. Copy this structure into a new dated release packet when
 release execution is explicitly reopened. Do not put secrets in this folder.
 
+Template parity handoff:
+`../../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
+
 ## Required Files
 
 - `controller.md`

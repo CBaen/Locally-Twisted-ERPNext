@@ -123,6 +123,11 @@ acceptable as the whole helper contract. A read-only Witness can still write a
 sanitized proof artifact; a Recorder must write the docs; a Fixer must produce
 or review concrete source/verifier changes.
 
+Current partial recovery example: the `f5e2e91` release-template parity pass
+used a Provider Witness no-go report, a Gate/Fixer template patch, and a
+Recorder docs parity pass. This is the expected shape for release-process
+documentation work. It still does not reopen provider/staging execution.
+
 Before provider mutation, the Controller must have a sanitized pre-mutation
 receipt that proves:
 

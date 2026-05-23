@@ -61,6 +61,11 @@ requires `--deploy-completion`, and `staging_owner_review_gate.py --json
 are local prevention only; they do not prove staging readiness or authorize
 provider mutation.
 
+Follow-up template parity: `f5e2e91` updated the staging-freeze packet
+template so fresh release packets have starter shapes for those current
+controller inputs. This is still template/source proof only; real current
+artifacts must be produced in the next dated packet.
+
 Recorder result: this handoff and the front-door docs must state that
 `ebb7151` is source archive proof only. It does not prove app mirror freshness,
 deployed app state, staging records, owner/marketing accounts, product routes,

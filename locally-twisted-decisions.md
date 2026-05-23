@@ -8,6 +8,30 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release packet templates must match controller contracts
+
+**Decision:** The staging-freeze packet template is now part of the release
+guard surface. When the controller gains a required artifact, the packet
+template must name that artifact and show the validator-required shape in the
+same pass.
+
+**Reasoning:** After the explicit reopen/app-mirror/deploy-completion guards
+landed, the template still described the older packet set. That would let a
+future agent create a "complete" release packet that the controller correctly
+rejects, or worse, hand-shape an incomplete proof file.
+
+**Implementation boundary:** `f5e2e91` updated
+`workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md` with
+`freeze-reopen-approval.json`, `app-mirror-sync-plan.json`,
+`deploy-completion.json`, and hosted preflight `checks`. This is only template
+parity. It does not create real current artifacts and does not reopen
+forensic-freeze.
+
+**Receipts:** `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`;
+`workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md`.
+
+---
+
 ## 2026-05-23 - Release reopen gaps must be controller contracts, not notes
 
 **Decision:** The four post-`ebb7151` reopen gaps are now local controller

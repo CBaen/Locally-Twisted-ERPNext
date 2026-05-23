@@ -135,6 +135,11 @@ Default public launch posture:
   after sync, staging bootstrap requires `--deploy-completion` before hosted
   preflight, and owner-review release packets should use
   `staging_owner_review_gate.py --json --release-artifact`.
+- Also as of `f5e2e91`, the staging-freeze release packet template is aligned
+  with those controller contracts. It includes starter shapes for reopen
+  approval, app mirror sync plan, deploy completion, and hosted preflight
+  `checks`. This is template parity only; a future release attempt must still
+  create real current artifacts in a fresh dated packet before mutation.
 
 ## Human Access Boundary
 

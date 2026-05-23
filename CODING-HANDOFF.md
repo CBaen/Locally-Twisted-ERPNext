@@ -1,5 +1,21 @@
 # Locally Twisted - Coding Handoff
 
+Release artifact template parity on 2026-05-23:
+`f5e2e91 Update staging release artifact template` is now the latest GitHub
+archive. Gate/Fixer found that
+`workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md` still
+named the old artifact set and did not include the current required shapes for
+`freeze-reopen-approval.json`, `app-mirror-sync-plan.json`, or
+`deploy-completion.json`; its hosted-preflight sample also omitted the
+validator-required `checks` object. That template is now corrected. This is
+template/source proof only. It is not a real freeze-reopen approval, not app
+mirror freshness, not provider deploy/update completion, not hosted preflight
+proof, and not owner-review readiness. Feature handoff:
+`workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
+The active forensic-freeze lock still blocks provider/staging/live/DNS/Stripe/
+Search Console/app mirror/bootstrap/migrate/cache mutation until a fresh
+artifact-backed packet passes the controller.
+
 Codex release-prevention guard pass on 2026-05-23: the forensic-freeze state
 now has executable local/offline guards. The active lock is
 `release_locks/locally-twisted-staging-forensic-freeze.json`. The controller

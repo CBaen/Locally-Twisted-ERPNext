@@ -5,6 +5,14 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- Latest GitHub archive: `f5e2e91 Update staging release artifact template`.
+  This is docs/template parity only. It fixes the staging-freeze release packet
+  template so future packets include `freeze-reopen-approval.json`,
+  `app-mirror-sync-plan.json`, `deploy-completion.json`, and the hosted
+  preflight `checks` payload shape. It does not create those real artifacts,
+  does not reopen forensic-freeze, and does not mutate provider/staging/live/
+  DNS/Stripe/Search Console/app mirror/bootstrap/migrate/cache state. Handoff:
+  `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 - Read-only no-go packet archive: `ceab908 Record staging read-only no-go
   packet`; verify current `HEAD` / `origin/main` with `git status -sb` before
   editing. The initial local release-prevention guard commit

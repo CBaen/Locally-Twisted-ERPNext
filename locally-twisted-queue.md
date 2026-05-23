@@ -21,12 +21,16 @@ at
 `release_locks/locally-twisted-staging-forensic-freeze.json`,
 `scripts/release/frappe_cloud_release_controller.py`, and
 `npm run test:release-prevention`, first archived at commit `58258fd` and
-expanded through the `ceab908` read-only no-go packet. Provider
+expanded through the `ceab908` read-only no-go packet and `f5e2e91` release
+packet template parity fix. Provider
 mutation remains blocked while the forensic-freeze lock is active. The local
 guard hardening now includes provider snapshot self-test/producer,
 owner-review gate contract, hosted bootstrap preflight/source contract,
 mandatory deploy payload artifacts, and destructive-seed backup-or-zero-data
-proof. The read-only current-state packet already ran and is a no-go. Next
+proof. The staging-freeze packet template now names the current required
+artifact shapes, but those are template examples only; no real reopen approval,
+app mirror sync plan, deploy completion, or hosted preflight proof exists for a
+new attempt yet. The read-only current-state packet already ran and is a no-go. Next
 safe release packet, after explicit freeze reopen only, must sync the app-root
 mirror from reviewed source, then take a fresh read-only provider snapshot, run
 hosted preflight, and decide on bootstrap/import only if those gates pass. Do
@@ -34,6 +38,8 @@ not deploy, bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search
 Console, or claim owner-review readiness from the interrupted session. The
 active lock now also blocks `app_mirror_sync`, because mirror sync is a
 release-critical mutation for this Frappe Cloud path.
+Release-template parity handoff:
+`workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
 2026-05-23 read-only packet update:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` now records

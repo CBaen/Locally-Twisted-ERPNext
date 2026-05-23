@@ -165,6 +165,14 @@ These are gates, not suggestions.
 This does not prove staging owner-review readiness and does not reopen
 provider mutation.
 
+2026-05-23 template parity update: `f5e2e91` updated
+`workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md` so the
+starter packet now includes the current required artifact shapes for
+`freeze-reopen-approval.json`, `app-mirror-sync-plan.json`,
+`deploy-completion.json`, and hosted preflight `checks`. This closes a local
+documentation/template gap only. It does not create real release artifacts or
+reopen provider mutation.
+
 ## Evidence Sources
 
 - `CODING-HANDOFF.md`
@@ -179,6 +187,7 @@ provider mutation.
 - `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `capabilities/failures/release-controller-churn-after-stop.md`
 - `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
+- `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`
 
 ## Next Safe Step
 

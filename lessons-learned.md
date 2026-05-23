@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Templates can become stale even when guards are correct
+
+The release controller and verifier suite required new artifacts, but the
+staging-freeze packet template still showed the old packet shape. That leaves a
+future agent one copy/paste away from a packet that looks complete in docs but
+fails the controller.
+
+**Counter-move:** treat release packet templates as part of the guard surface.
+When adding or tightening a required artifact, update the starter template in
+the same closeout and verify it includes the same shape the validator expects.
+For LT, `f5e2e91` updated the staging-freeze template for reopen approval, app
+mirror sync plan, deploy completion, and hosted preflight `checks`.
+
+---
+
 ## 2026-05-23 - Reopen gaps need to become controller inputs
 
 After the post-`ebb7151` packet, the remaining release risks were precise:

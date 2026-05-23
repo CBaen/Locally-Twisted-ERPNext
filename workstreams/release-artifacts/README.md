@@ -50,6 +50,15 @@ release controller can move past forensic-freeze:
 The expanded current action list is
 `../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 
+Current template:
+`2026-05-23-staging-freeze/TEMPLATE.md` was updated in source commit
+`f5e2e91` to include the current required packet shapes for
+`freeze-reopen-approval.json`, `app-mirror-sync-plan.json`,
+`deploy-completion.json`, and hosted preflight `checks`. It is a starter
+template only. Do not treat the template file as a release artifact, approval,
+provider proof, or staging proof. Feature handoff:
+`../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
+
 Run:
 
 ```powershell

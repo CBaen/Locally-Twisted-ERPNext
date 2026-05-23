@@ -115,6 +115,11 @@ post-sync gates, staging bootstrap requires a post-deploy/update completion
 artifact, and owner-review release artifacts can be sanitized with
 `--release-artifact`.
 
+As of `f5e2e91`, the staging-freeze release packet template also names those
+required artifacts and includes their validator-shaped examples. This prevents
+the next release packet from starting from stale prose, but it is not a real
+approval or provider/staging artifact.
+
 ## Recovery Recipe
 
 1. Stop mutation immediately.
@@ -130,6 +135,8 @@ artifact, and owner-review release artifacts can be sanitized with
    current-state snapshot.
 9. Before reopening, prove the controller is not deadlocked by impossible
    preconditions and that every release-packet artifact is sanitized.
+10. Confirm the copied release packet template matches the current controller
+    contracts before producing real artifacts.
 
 ## Cross-links
 
