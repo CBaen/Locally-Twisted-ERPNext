@@ -88,8 +88,8 @@ def run_staging_owner_review_bootstrap() -> dict[str, Any]:
     _set_status("running", {"message": "starting staging owner-review bootstrap", "counts": _counts()})
     summary: dict[str, Any] = {"steps": [], "pre_counts": _counts()}
     try:
-        _ensure_owner_user(summary)
         _run_seed_syncs(summary, before_catalog=True)
+        _ensure_owner_user(summary)
         if _counts()["Website Item"] == 0 or _counts()["Item"] == 0:
             _seed_catalog(summary)
         else:
