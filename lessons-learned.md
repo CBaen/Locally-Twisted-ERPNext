@@ -6,6 +6,58 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-22 - Staging proof has separate layers that cannot borrow each other
+
+The staging recovery failed operationally because several true statements were
+allowed to sit too close together: local tests passed, GitHub had a commit, the
+app mirror had a hash, Frappe Cloud accepted an API request, the site was
+`Active`, and cache could be cleared. None of those facts proves the next
+layer by itself.
+
+**Counter-move:** every staging or release closeout must name the exact layer:
+local source/test, GitHub archive, app mirror, Frappe Cloud deploy candidate,
+site update/migrate, cache/config, staging routes, staging accounts/workflows,
+or live/DNS/Stripe/Search Console. Use
+`capabilities/failures/staging-proof-surface-conflation.md` before saying
+anything is staging-ready or owner-ready.
+
+---
+
+## 2026-05-22 - Frappe Cloud API calls are enqueue signals until jobs are polled
+
+The first Frappe Cloud staging deploy/update API request returned HTTP success
+but passed nested `apps` and `sites` as form-encoded strings. The real failure
+appeared later in the provider job as `'str' object has no attribute 'get'`.
+The corrected JSON object-array payload did the right thing: it got far enough
+to expose real migration failures instead of hiding behind a bad request
+shape.
+
+**Counter-move:** build Frappe Cloud nested payloads as typed JSON object
+graphs, send `Content-Type: application/json`, then poll terminal provider
+jobs. Treat `200`/`null` as enqueue-only. A deploy is not proved until deploy
+candidate, site update/migrate, cache/config, installed hash/app order, no
+running jobs, and staging route/account checks are all recorded.
+
+---
+
+## 2026-05-22 - Local role and settings state can hide Frappe Cloud migration bugs
+
+Local migration and permission tests passed because the local database already
+had the expected portal setting and custom LT roles. Staging did not. The site
+update failed first on `Portal Settings.default_portal_home`, then on missing
+`LT Owner Access` and `LT Manager Access` roles referenced by `Custom DocPerm`
+rows.
+
+**Counter-move:** source migration/sync code must own the target state it
+writes. Safe staged setting drift should be repaired and then asserted; unsafe
+or ambiguous drift should fail loudly with the exact field. Permission sync
+must ensure custom Roles before writing permissions that link to them. Use
+`capabilities/failures/frappe-cloud-release-site-migration-drift.md` and
+`capabilities/failures/frappe-cloud-permission-role-fixture-order-drift.md`
+before staging/backend access work.
+
+---
+
 ## 2026-05-22 - Helper agents must own artifacts during release failures
 
 The Frappe Cloud staging failure had helper agents, but the helpers were too

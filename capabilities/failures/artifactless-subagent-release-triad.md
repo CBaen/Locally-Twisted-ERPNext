@@ -42,6 +42,9 @@ success verifier.
 - The main agent spawns read-only helpers but gives them advisory prompts only.
 - Helper outputs say "pass", "block", or "recommend" without producing a
   required command, payload, verifier, checklist, patch, or handoff artifact.
+- A helper is forbidden from touching every useful artifact class, so the
+  Controller gets another opinion but no changed file, executable proof, or
+  accepted blocker.
 - The main agent treats a helper's opinion as equivalent to release-gate proof.
 - Provider APIs, staging, live release, DNS, Stripe, Search Console, or Frappe
   Cloud deployment is in scope.
@@ -51,13 +54,17 @@ success verifier.
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-05-22 | Locally Twisted | Frappe Cloud staging owner review | Helper agents reviewed Frappe Cloud staging/provider risk while main agent attempted staging update | Helpers did not prevent stale bench assumptions, an invalid API payload shape, or the gap between deploy hash and site update/migration proof because no helper owned a blocking artifact, payload-shape proof, or post-mutation verifier | Active thread facts; `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`; `capabilities/failures/provider-dashboard-work-bounced-to-gl.md`; `capabilities/failures/frappe-cloud-release-site-migration-drift.md` | missing | open |
+| 2026-05-22 | Locally Twisted | Frappe Cloud staging recovery documentation | Worker C was explicitly scoped to failure/capability documentation only | This is the correct narrowed shape for a Recorder, but it also proves the process rule: a release triad is only real when each helper has an action artifact. A read-only-only triad cannot satisfy release control. | This failure card, `frappe-cloud-api-payload-shape-drift.md`, `frappe-cloud-release-site-migration-drift.md`, `frappe-cloud-permission-role-fixture-order-drift.md`, `staging-proof-surface-conflation.md` | Recorder artifact added; enforcement still manual | open |
 
 ## Root pattern
 
 "Having helpers" was mistaken for "having a release control system." Read-only
 or advisory subagents can find risks, but they do not stop a provider failure
 unless their output is wired into the critical path as a required artifact or
-executable verification gate.
+executable verification gate. A helper can be read-only for the dangerous
+surface itself, but it still needs to produce an artifact the Controller must
+consume: a sanitized provider-state proof, a file patch, a command result, a
+blocker receipt, or an explicit no-go section.
 
 The coordination failure is separate from the technical failure. The technical
 failures were stale provider mapping, wrong Frappe Cloud API payload shape, and
@@ -83,6 +90,8 @@ artifact acceptance criterion that could block the main agent.
   a terminal site update/migration/cache/app/runtime verifier.
 - Subagent prompts are broad research prompts rather than narrow artifact
   prompts with a required output file, command, or validation result.
+- A triad is announced, but only the Controller changes files or runs the
+  decisive provider checks.
 
 ## Required guard
 
@@ -106,6 +115,11 @@ For release/build failures, subagents must have one of these output contracts:
 - a sanitized payload/response artifact;
 - a concrete patch plan with acceptance checks;
 - or a blocking handoff section that the Controller cannot bypass.
+
+Read-only is acceptable only for the dangerous surface itself. It is not
+acceptable as the whole helper contract. A read-only Witness can still write a
+sanitized proof artifact; a Recorder must write the docs; a Fixer must produce
+or review concrete source/verifier changes.
 
 Before provider mutation, the Controller must have a sanitized pre-mutation
 receipt that proves:
@@ -142,6 +156,8 @@ After provider mutation, the Controller must have executable proof that:
 ## What not to do
 
 - Do not count read-only research as release control.
+- Do not count "I asked helpers" as triad compliance unless their artifacts are
+  present in the repo, provider evidence packet, or release gate output.
 - Do not let a helper recommendation substitute for a required artifact.
 - Do not let the main agent proceed past a helper's blocker without recording
   the exact artifact that satisfied it.

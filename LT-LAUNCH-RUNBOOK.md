@@ -33,24 +33,43 @@ current live discovery URLs still advertise the Frappe Cloud vanity host.
 ## Current Confirmed State
 
 1. Frappe Cloud
-   - Staging-prep source commit exists and was prepared on 2026-05-22:
-     `2ee28da Harden product galleries and release gates`.
-   - Staging-prep Frappe app mirror commit exists and was prepared on
-     2026-05-22:
-     `f236d6d Sync app from LT source 2ee28da`.
-   - These commits are not staging or live proof until Frappe Cloud
-     deploy/update/migration/cache evidence exists for the target site.
-   - Current owner-review staging state as of 2026-05-22: blocked. Current
-     provider evidence puts `locallytwisted-staging.frappe.cloud` on Frappe
-     Cloud bench group `bench-40102` / bench `bench-40102-000003-f4v`.
-   - Current live/vanity state as of 2026-05-22: separate from staging on bench
-     group `bench-39776` / bench `bench-39776-000015-f94v`.
-   - Target app mirror commit for staging is `f236d6d`, but staging still
-     reports installed app hash `b4b3bf80108234c12051b572ac9b9cd4728f0efc`
-     after a failed site update/migrate. Hash is not site readiness. Owner
-     review remains blocked until the installed app hash is the target and
-     staging site update/migration/cache, app order, pause state, route,
-     browser, account, Product Setup, and gallery proof pass on staging.
+   - Staging recovery save state:
+     `savepoint/lt-staging-recovery-20260522-173929`.
+   - Current owner-review staging state as of 2026-05-22: deployed to staging
+     with ecommerce paused and public indexing disabled; owner-review
+     account/route/gallery/security proof is still required before approval.
+   - Current staging provider evidence puts
+     `locallytwisted-staging.frappe.cloud` on Frappe Cloud bench group
+     `bench-40102` / bench `bench-40102-000003-f4v`.
+   - Current live/vanity state is separate from staging on bench group
+     `bench-39776` / bench `bench-39776-000015-f94v`.
+   - Final staging source commit:
+     `2ca1b85 Ensure LT access roles before permission sync`.
+   - Final staging Frappe app mirror commit:
+     `3e86bc1 Ensure LT access roles before permission sync`.
+   - Final installed staging `locally_twisted` hash:
+     `3e86bc149d6dcc04daa194b740c1733f5c796261`.
+   - Final staging site update/migrate job: `crn5pskff4`, status `Success`.
+   - Final staging configuration job: `3u20303jfl`, status `Success`.
+   - Final staging cache clear job: `eu27r8q4to`, status `Success`.
+   - Final staging site state after deploy/config/cache: Active with `0`
+     running jobs.
+   - Staging safety settings: `lt_ecommerce_paused=true` and
+     `lt_public_indexing_enabled=false`.
+   - First staging recovery failure: the Frappe Cloud API was called with
+     stringified nested `apps` / `sites` values instead of typed JSON. Release
+     Pipeline `6podv9kvbn` failed with `'str' object has no attribute 'get'`.
+   - Second staging recovery failure: site update/migrate jobs `8vspcanje0`
+     and `63lqkkrppt` failed because the public-access guard blocked Frappe's
+     temporary Portal Settings migration value. Source fix:
+     `0f6fcad Fix staging portal migration guard`; app mirror fix:
+     `9ddcb45 Allow portal guard repair during migrate`.
+   - Third staging recovery failure: site update/migrate job `6itfpob0ra`
+     failed because `LT Owner Access` and `LT Manager Access` roles did not
+     exist before contact-intake permission sync. Source/app mirror fix:
+     `2ca1b85` / `3e86bc1 Ensure LT access roles before permission sync`.
+   - Live/DNS/Stripe/Search Console were not mutated during this staging
+     recovery pass.
    - Last proven live full repo source commit:
      `631f9a8 Run contact intake schema sync on install`.
    - Last proven live Frappe app mirror commit:
@@ -156,6 +175,8 @@ Release/process rule:
 Staging-safe gate list:
 
 1. Confirm the exact source commit and app-mirror commit intended for staging.
+   Current staged recovery target is source `2ca1b85`, app mirror `3e86bc1`,
+   installed hash `3e86bc149d6dcc04daa194b740c1733f5c796261`.
 2. Confirm current Frappe Cloud provider mapping. Current API inventory beats
    stale runbook bench IDs. As of 2026-05-22, staging is group `bench-40102` /
    bench `bench-40102-000003-f4v`, and live/vanity is group `bench-39776` /
@@ -164,13 +185,17 @@ Staging-safe gate list:
    JSON payloads only. Do not send nested `apps` or `sites` values as strings;
    that can fail with `'str' object has no attribute 'get'`.
 4. Confirm the staging host, site update/migration job, cache clear, installed
-   app order, and `lt_ecommerce_paused=1`.
+   app order, `lt_ecommerce_paused=1`, and
+   `lt_public_indexing_enabled=0`.
 5. Run local hard gates first, including the relevant product/owner/access
    gates for the changed slice.
-6. Run staging HTTP/browser gates against the staging URL.
-7. Run any database-side proof in the staging environment, or mark that proof
+6. Run staging HTTP/browser gates against the staging URL, including logged-in
+   owner/backend product review and guest paused-shop behavior.
+7. Run staging account gates for `locallytwisted@gmail.com` and
+   `marketing@exploringnotboring.com`.
+8. Run any database-side proof in the staging environment, or mark that proof
    unverified. Do not claim staging from a local Docker database read.
-8. Record remaining live-only blockers before any live/provider/Search Console
+9. Record remaining live-only blockers before any live/provider/Search Console
    action.
 
 2026-05-22 provider trigger rule: Frappe Cloud supports commit-message deploy
@@ -222,6 +247,9 @@ python scripts/verify/stripe_amount_parity_contract.py
    launch and must pass its own product/payment/customer-email proof.
 4. Reindexing/Search Console submission is blocked until live sitemap and
    canonical URLs use `https://locallytwisted.com`.
+5. Owner-review staging is deployed but still needs staging-specific account,
+   logged-in route, Product Setup/gallery, browser, and security-suite proof
+   before it is treated as ready for Jeff's review.
 
 ## Do Not Do
 
@@ -229,10 +257,12 @@ python scripts/verify/stripe_amount_parity_contract.py
 2. Do not expose live checkout because pages/forms are live.
 3. Do not paste Stripe, Cloudflare, or Frappe Cloud secrets into chat or docs.
 4. Do not call a Frappe Cloud deploy complete until both bench deploy and site
-   update/migration have succeeded and live route/API verifiers pass.
-5. Do not treat app mirror commit `f236d6d`, a Frappe Cloud app hash, or a
-   deploy candidate as staging proof while the target site still reports an old
-   installed app hash. Hash existence is not site readiness.
+   update/migration have succeeded. For staging, also prove staging route/API,
+   cache, pause, indexing, account, and product/gallery behavior before owner
+   review.
+5. Do not treat an app mirror commit, a Frappe Cloud release hash, or a deploy
+   candidate as staging proof by itself. Hash existence is not site readiness;
+   the site update/migration/cache and route/account gates must pass too.
 6. Do not call a future release narrow from the final commit alone. Compare the
    previous live app hash to the target app mirror commit before promotion.
 7. Do not treat a staging root login screen as live breakage without naming the

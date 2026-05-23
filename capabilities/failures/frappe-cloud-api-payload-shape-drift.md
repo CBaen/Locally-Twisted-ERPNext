@@ -12,6 +12,7 @@ related_capabilities:
   - ../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md
 related_failures:
   - frappe-cloud-release-site-migration-drift.md
+  - staging-proof-surface-conflation.md
   - provider-dashboard-work-bounced-to-gl.md
 tags:
   - locally-twisted
@@ -44,7 +45,7 @@ objects.
 
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
-| 2026-05-22 | Locally Twisted | Frappe Cloud staging deploy/update | Deploy app mirror commit `f236d6d86deca0066c98e3776189b32c8818cb6d` to staging bench group `bench-40102` / bench `bench-40102-000003-f4v` while live remained on group `bench-39776` / bench `bench-39776-000015-f94v` | First `deploy_and_update` request used form-encoded nested `apps`/`sites`; the async job failed with `'str' object has no attribute 'get'`; corrected JSON deploy was attempted, but later checks still showed staging installed old hash `b4b3bf80108234c12051b572ac9b9cd4728f0efc`, `update_available=true`, site `Active`, and `0` running jobs | Parent staging-recovery check and Frappe Cloud job evidence; site update/migrate jobs `8vspcanje0` and `63lqkkrppt` failed, with recoveries succeeding | typed JSON payload and async terminal-result guard added | guarded |
+| 2026-05-22 | Locally Twisted | Frappe Cloud staging deploy/update | Deploy app mirror commit `f236d6d86deca0066c98e3776189b32c8818cb6d` to staging bench group `bench-40102` / bench `bench-40102-000003-f4v` while live remained on group `bench-39776` / bench `bench-39776-000015-f94v` | First `deploy_and_update` request used form-encoded nested `apps`/`sites`; the async job failed with `'str' object has no attribute 'get'`; the corrected JSON shape then exposed real site-migration failures instead of pretending staging was ready | Parent staging-recovery check and Frappe Cloud job evidence; failed Release Pipeline `6podv9kvbn`; site update/migrate jobs `8vspcanje0` and `63lqkkrppt` failed with recoveries succeeding; final corrected JSON deploy later reached app mirror hash `3e86bc149d6dcc04daa194b740c1733f5c796261` with site migrate job `crn5pskff4` successful per Controller evidence | typed JSON payload and async terminal-result guard added | guarded |
 
 ## Root Pattern
 
@@ -76,6 +77,10 @@ update/migrate job to reach terminal success, followed by cache clear,
 installed hash/app order verification, site status, no running jobs, and
 route/browser proof.
 
+For PowerShell, this means building one object graph and serializing it once
+with sufficient JSON depth. Do not pre-stringify `apps` or `sites`; they must
+arrive as arrays of objects, not strings that look like JSON.
+
 ## Recovery Recipe
 
 1. Stop treating the provider API response as release proof.
@@ -102,10 +107,13 @@ route/browser proof.
 - `../../LT-LAUNCH-RUNBOOK.md`
 - `../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `frappe-cloud-release-site-migration-drift.md`
+- `staging-proof-surface-conflation.md`
 - `provider-dashboard-work-bounced-to-gl.md`
 
 ## Evidence Quality
 
-Documented from the 2026-05-22 staging-recovery chain and parent check. This
-docs slice did not mutate provider state or reverify staging directly; it
-records the guard future agents must apply before claiming staging recovery.
+Documented from the 2026-05-22 staging-recovery chain and parent Controller
+evidence. This docs slice did not mutate provider state or reverify staging
+directly; it records the guard future agents must apply before claiming
+staging recovery. The final success evidence belongs to the Controller packet,
+not this Worker C docs-only pass.

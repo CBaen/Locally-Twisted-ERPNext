@@ -20,7 +20,6 @@ from locally_twisted.product_blueprint_local_apply import sync_website_gallery_f
 
 
 PRICE_LIST = "Standard Selling"
-SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
 DEFAULT_DATA_DIRS = [
     Path("/tmp/lt-product-gallery-source"),
     Path("/workspace/_resources/odoo-live"),
@@ -442,15 +441,22 @@ def _find_data_dir(data_dir: str | None) -> Path | None:
         if (path / "catalog.json").exists() and (path / "images").exists():
             return path
         raise FileNotFoundError(f"product gallery data_dir is missing catalog.json/images: {path}")
-    for path in DEFAULT_DATA_DIRS:
+    for path in _default_data_dirs():
         if (path / "catalog.json").exists() and (path / "images").exists():
             return path
     return None
 
 
+def _default_data_dirs() -> list[Path]:
+    return [
+        Path(frappe.get_app_path("locally_twisted", "seed", "_data")),
+        *DEFAULT_DATA_DIRS,
+    ]
+
+
 def _ensure_gallery_file_attached(source: Path, item_code: str) -> str:
     file_url = f"/files/{source.name}"
-    target = SITE_FILES_DIR / source.name
+    target = _site_files_dir() / source.name
     target.parent.mkdir(parents=True, exist_ok=True)
     if not target.exists() or target.stat().st_size != source.stat().st_size:
         shutil.copy2(source, target)
@@ -475,6 +481,10 @@ def _ensure_gallery_file_attached(source: Path, item_code: str) -> str:
             }
         ).insert(ignore_permissions=True)
     return file_url
+
+
+def _site_files_dir() -> Path:
+    return Path(frappe.get_site_path("public", "files"))
 
 
 def _gallery_rows_need_update(doc, expected_rows: list[dict[str, Any]]) -> bool:

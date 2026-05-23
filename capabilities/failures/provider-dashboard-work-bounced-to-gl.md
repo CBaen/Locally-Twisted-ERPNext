@@ -16,6 +16,7 @@ related_failures:
   - ad-dashboard-research-vs-control-drift.md
   - frappe-cloud-api-payload-shape-drift.md
   - frappe-cloud-release-site-migration-drift.md
+  - staging-proof-surface-conflation.md
 tags:
   - launch
   - frappe-cloud
@@ -51,7 +52,7 @@ documented process.
 | 2026-05-12 | Locally Twisted | Frappe Cloud staging launch | Custom app install/site config after GL logged in | Agent handed GL manual install/config steps instead of taking over with automation/process | Conversation, staging probe showing `locally_twisted` not installed | added | guarded |
 | 2026-05-19 | Locally Twisted | Google Ads / Meta account takeover | GL supplied a Google Ads dashboard URL and wanted to see/manage the account | Agent initially substituted Gmail/Drive research inventory for dashboard control; GL corrected the goal | `workstreams/ad-account-takeover-2026-05-19.md` and `capabilities/failures/ad-dashboard-research-vs-control-drift.md` | added | guarded |
 | 2026-05-22 | Locally Twisted | Frappe Cloud ecommerce staging owner review | App mirror was pushed for staging prep and provider deploy was next | Agent stopped at the abstract statement "need Frappe Cloud provider proof" before searching for the concrete provider artifacts already in repo/history | Follow-up search found app mirror `f236d6d`, bench IDs, Press dashboard/API methods, dashboard URL `https://cloud.frappe.io/dashboard/groups/bench-39776/deploys/6g85b2nqj7`, no local API token, no SSH certificate, and unauthenticated dashboard/API state as `Guest` / `403` | added | guarded |
-| 2026-05-22 | Locally Twisted | Frappe Cloud staging provider API | Provider/API recovery was required for staging group `bench-40102` / bench `bench-40102-000003-f4v` while live stayed on group `bench-39776` / bench `bench-39776-000015-f94v` | API work risked being called successful from enqueue/status fragments instead of terminal deploy plus site-update proof; first form-encoded nested payload failed with `'str' object has no attribute 'get'` | Target hash `f236d6d86deca0066c98e3776189b32c8818cb6d`; old staging hash `b4b3bf80108234c12051b572ac9b9cd4728f0efc`; corrected JSON deploy attempted; site update/migrate jobs `8vspcanje0` and `63lqkkrppt` failed with recoveries succeeding; latest parent check `Active`, `0` running jobs, `update_available=true`, installed old hash | typed provider payload and terminal job proof guard added | guarded |
+| 2026-05-22 | Locally Twisted | Frappe Cloud staging provider API | Provider/API recovery was required for staging group `bench-40102` / bench `bench-40102-000003-f4v` while live stayed on group `bench-39776` / bench `bench-39776-000015-f94v` | API work risked being called successful from enqueue/status fragments instead of terminal deploy plus site-update proof; first form-encoded nested payload failed with `'str' object has no attribute 'get'`, then corrected JSON exposed real migration failures | Target hash `f236d6d86deca0066c98e3776189b32c8818cb6d`; portal setting failures on jobs `8vspcanje0` and `63lqkkrppt`; role-order failure on `6itfpob0ra`; final Controller evidence showed app mirror hash `3e86bc149d6dcc04daa194b740c1733f5c796261`, site migrate `crn5pskff4`, config `3u20303jfl`, and clear-cache `eu27r8q4to` successful | typed provider payload, terminal job proof, migration repair, and role-first permission guard added | guarded |
 
 ## Root pattern
 
@@ -85,6 +86,8 @@ capabilities for account-session workflows.
 - A nested provider payload is sent form-encoded instead of as JSON.
 - Site status is `Active`, but `update_available=true` or installed hash still
   points at the old app.
+- Provider state is mutated by the Controller while helpers have not produced
+  artifacts the Controller must consume.
 
 ## Required guard
 
@@ -128,6 +131,7 @@ For provider launch work, first attempt an agent-owned execution path:
 - Related failure: `capabilities/failures/ad-dashboard-research-vs-control-drift.md`
 - Related failure: `capabilities/failures/frappe-cloud-api-payload-shape-drift.md`
 - Related failure: `capabilities/failures/frappe-cloud-release-site-migration-drift.md`
+- Related failure: `capabilities/failures/staging-proof-surface-conflation.md`
 - Related workstream: `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
 
 ## Evidence quality

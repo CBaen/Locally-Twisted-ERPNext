@@ -6,6 +6,37 @@ Scope: staging repair research only. No live, DNS, Stripe, Cloudflare mutation, 
 
 ## Current Evidence Chain
 
+### Worker A Staging/Account Proof Update - 2026-05-23T00:23Z
+
+The prior installed-hash blocker is superseded. Frappe Cloud staging now runs the latest app mirror hash, and the latest migration/cache/config jobs are successful. The current blocker is staging data/provisioning: the site has no catalog records and lacks the required owner/marketing users.
+
+| Surface | Current Evidence |
+|---|---|
+| Staging status | `Active` |
+| Staging bench group | `bench-40102` |
+| Staging server | `f4-virginia.frappe.cloud` |
+| Installed app order | `frappe, erpnext, payments, webshop, locally_twisted` |
+| Installed `locally_twisted` hash | `3e86bc149d6dcc04daa194b740c1733f5c796261` |
+| Running jobs | `0` |
+| Latest successful migrate | `crn5pskff4` / `Update Site Migrate` / `Success` |
+| Latest config update | `3u20303jfl` / `Update Site Configuration` / `Success` |
+| Latest cache clear | `eu27r8q4to` / `Clear Cache` / `Success` |
+| `lt_ecommerce_paused` | `1` |
+| `lt_public_indexing_enabled` | `0` |
+| Staging auth bootstrap | Frappe Cloud `site.login` then `/app?sid=[redacted]`; confirmed `Administrator` |
+| Required owner user | `locallytwisted@gmail.com` missing: `404 Not Found` |
+| Required marketing user | `marketing@exploringnotboring.com` missing: `404 Not Found` |
+| `Item` count | `0` |
+| `Website Item` count | `0` |
+| `Website Slideshow` count | `0` |
+| `Website Slideshow Item` count | `0` |
+| Authenticated shop shell | `/shop-items` returns `200` |
+| Authenticated product/category routes | Mickey Mouse Bouquet and Columns return `404` because data/routes are missing |
+| Public ecommerce pause | Guest `/shop-items` and product route redirect to `/ready-to-order-paused` |
+| Indexing note | Pages checked emit `noindex`, but `/robots.txt` allows crawling and `/sitemap.xml` still lists staging URLs |
+
+Current decision: **code deployment recovered; owner ecommerce review still BLOCKED until staging data and required users are provisioned.**
+
 | Surface | Evidence |
 |---|---|
 | Source repo | `2ee28da Harden product galleries and release gates`, pushed to `origin/main` |
@@ -17,7 +48,8 @@ Scope: staging repair research only. No live, DNS, Stripe, Cloudflare mutation, 
 | Stale avoided target | `bench-39776-000013-f94-virginia`; do not use as current staging target |
 | Local hard gates | `frappe_cloud_preflight.py`, `human_access_silo_matrix.py`, `marketing_review_access_boundary.py`, `npm run test:owner-product-safety`, `npm run test:ecommerce-full` passed before staging mutation |
 | Failed provider jobs | Staging site update/migrate jobs `8vspcanje0` and `63lqkkrppt` failed; recovery jobs later succeeded |
-| Latest blocker | Staging is `Active`, has `0` running jobs, `update_available=true`, and installed `locally_twisted` hash is still old `b4b3bf8`, not target `f236d6d` |
+| Superseded blocker | Earlier staging was `Active` with old installed `locally_twisted` hash `b4b3bf8`; Worker A proof now shows app hash `3e86bc149d6dcc04daa194b740c1733f5c796261` |
+| Current blocker | Staging has latest app code but zero catalog records and missing required owner/marketing users |
 | First failed API assumption | Nested `apps` / `sites` JSON was stringified; this caused a payload-shape failure and was not deploy proof |
 | Auth/tooling evidence | Repo docs record no local API token, no generated SSH certificate, and unauthenticated dashboard/API state as `Guest` / `403` in the prior search |
 
@@ -46,7 +78,8 @@ Scope: staging repair research only. No live, DNS, Stripe, Cloudflare mutation, 
 3. Capture sanitized current provider state: installed app hash, update availability, bench/site mapping, failed job summaries, and app order if available.
 4. Choose the smallest staging-only update path: dashboard deploy/update, authenticated API, current-bench-specific marker, redeploy, or SSH-assisted commands.
 5. Before mutation, capture sanitized payload shape or dashboard action proof.
-6. After mutation, prove the installed `locally_twisted` hash is `f236d6d`.
-7. Prove site update/migration succeeded, cache cleared, app order is correct, `lt_ecommerce_paused=1`, and `lt_public_indexing_enabled=0`.
-8. Run staging-specific owner/access/Product Setup/gallery/browser checks.
-9. Record that live, DNS, Stripe, and Search Console remained untouched.
+6. Done: installed `locally_twisted` is now `3e86bc149d6dcc04daa194b740c1733f5c796261`.
+7. Done: site update/migration succeeded, cache cleared, app order is correct, `lt_ecommerce_paused=1`, and `lt_public_indexing_enabled=0`.
+8. Blocked: staging-specific owner/access/Product Setup/gallery/browser checks fail because users and product data are missing.
+9. Still required: provision staging site data/users through the approved staging-safe setup path, then rerun Worker A proof.
+10. Record that live, DNS, Stripe, and Search Console remained untouched.

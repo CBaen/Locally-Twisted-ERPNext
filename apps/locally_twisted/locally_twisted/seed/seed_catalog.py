@@ -74,7 +74,6 @@ WORKSPACE_PATHS = [
     Path("/home/frappe/frappe-bench/_resources/odoo-live"),
     Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
 ]
-SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
 PRICE_LIST = "Standard Selling"
 
 
@@ -153,7 +152,7 @@ def _ensure_file_attached(item_code: str, slug: str, images_dir: Path) -> str | 
         return None
 
     file_url = f"/files/{src.name}"
-    target = SITE_FILES_DIR / src.name
+    target = _site_files_dir() / src.name
     target.parent.mkdir(parents=True, exist_ok=True)
     if not target.exists() or target.stat().st_size != src.stat().st_size:
         shutil.copy2(src, target)
@@ -183,6 +182,10 @@ def _ensure_file_attached(item_code: str, slug: str, images_dir: Path) -> str | 
             })
             f.insert(ignore_permissions=True)
     return file_url
+
+
+def _site_files_dir() -> Path:
+    return Path(frappe.get_site_path("public", "files"))
 
 
 def _upsert_item_price(item_code: str, price: float):

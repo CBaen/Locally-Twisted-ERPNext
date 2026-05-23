@@ -35,3 +35,16 @@ Research may use the authenticated Frappe Cloud dashboard, current Frappe Cloud 
 8. What provider-auth blocker, if any, truly requires GL: MFA, missing API token, missing dashboard session, missing SSH certificate generation, business approval, or destructive go/no-go?
 
 Sources to verify again before mutation: `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`, `LT-LAUNCH-RUNBOOK.md`, `ECOMMERCE-SHOP-HANDOFF.md`, `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`, official Frappe Cloud API docs `https://docs.frappe.io/cloud/api`, updating-a-bench docs `https://docs.frappe.io/cloud/benches/updating_a_bench`, installing-an-app docs `https://docs.frappe.io/cloud/installing-an-app`, and SSH docs `https://docs.frappe.io/cloud/benches/ssh`.
+
+## Worker A Proof Addendum - 2026-05-23T00:23Z
+
+This brief's original installed-hash blocker is now superseded by fresh staging proof. Staging runs `locally_twisted` hash `3e86bc149d6dcc04daa194b740c1733f5c796261`, with app order `frappe, erpnext, payments, webshop, locally_twisted`. Frappe Cloud reports staging `Active`, running jobs `0`, successful migrate job `crn5pskff4`, successful config update `3u20303jfl`, and successful cache clear `eu27r8q4to`. Site config has `lt_ecommerce_paused=1` and `lt_public_indexing_enabled=0`.
+
+The current blocker is no longer code deployment. It is staging data/provisioning:
+
+- `locallytwisted@gmail.com` is missing as a staging `User`.
+- `marketing@exploringnotboring.com` is missing as a staging `User`.
+- `Item`, `Website Item`, `Website Slideshow`, and `Website Slideshow Item` all return count `0` on staging.
+- Authenticated `/shop-items` renders the shop shell, but representative product/category routes return `404`.
+
+Owner ecommerce review remains blocked until a staging-safe provisioning path creates the required human users and product/catalog/gallery records, followed by a rerun of the staging account/product proof.

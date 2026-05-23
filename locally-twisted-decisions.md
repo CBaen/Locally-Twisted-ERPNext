@@ -8,6 +8,61 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-22 - Staging proof is layered, not transferable between surfaces
+
+**Decision:** LT staging/launch work must name the exact proof surface before
+using "ready" language. The required layers are local source/test proof, GitHub
+archive proof, app mirror proof, Frappe Cloud deploy-candidate proof, site
+update/migrate proof, site cache/config proof, staging route/browser proof,
+staging account/business-workflow proof, and live/DNS/Stripe/Search Console
+proof only after explicit approval.
+
+**Reasoning:** The ecommerce staging recovery mixed several surfaces under one
+urgent goal. That made it too easy to treat a local verifier, pushed commit,
+target app hash, `Active` site state, or cache action as if it proved the next
+layer. Frappe Cloud then exposed the missing layers one by one: API enqueue was
+not deploy proof, deploy was not site-migration proof, migration was not cache
+proof, staging proof was not live proof.
+
+**Implementation boundary:** Feature handoffs and release closeouts must state
+which layer is proved and which layer remains unverified. `LT_BASE_URL` pointed
+at staging is not staging database proof if the verifier still shells into the
+local Docker `frontend` database. No live, DNS, Stripe, or Search Console
+language may borrow staging evidence.
+
+**Receipts:** `capabilities/failures/staging-proof-surface-conflation.md`;
+`capabilities/failures/frappe-cloud-api-payload-shape-drift.md`;
+`capabilities/failures/frappe-cloud-release-site-migration-drift.md`.
+
+---
+
+## 2026-05-22 - Frappe Cloud migrations must repair safe staged drift and own role order
+
+**Decision:** LT migration and sync code must tolerate staged drift when the
+safe repair is deterministic, and must fail loudly with a field-level blocker
+when it is not. Permission sync must ensure required LT custom Roles exist
+before creating or updating `Custom DocPerm` rows that reference them.
+
+**Reasoning:** The staging recovery failed after the typed JSON payload because
+the site update finally reached real migration code. First, the portal guard
+asserted `Portal Settings.default_portal_home` without repairing a safe staged
+drift value. After that repair, the permission sync failed because `LT Owner
+Access` and `LT Manager Access` were not guaranteed before `Custom DocPerm`
+creation. Local tests missed both because the local database already held the
+expected state.
+
+**Implementation boundary:** Do not manually patch staging and leave source
+broken. Source install/migration/sync paths must create the fields, settings,
+roles, and linked records they write, in order. The staging gate must require
+terminal site update/migrate success after these repairs before route, account,
+or owner-ready claims.
+
+**Receipts:** `capabilities/failures/frappe-cloud-release-site-migration-drift.md`;
+`capabilities/failures/frappe-cloud-permission-role-fixture-order-drift.md`;
+source commits `0f6fcad` and `2ca1b85` recorded by the Controller.
+
+---
+
 ## 2026-05-22 - Release helpers must own blocking artifacts
 
 **Decision:** For release processes, major builds, and release/build failure
