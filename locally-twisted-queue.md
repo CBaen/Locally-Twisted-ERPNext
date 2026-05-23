@@ -16,10 +16,12 @@ process and must not be used as launch authority. Required source:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
 Required fix-agent action list:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-Current-source read-only closeout:
+Latest staging-reality read-only closeout:
 `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`.
-Current read-only packet:
+Latest staging-reality read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+Good/bad/important learning ledger:
+`workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md`.
 Staging route map:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md`.
 Current post-push prep-only packet:

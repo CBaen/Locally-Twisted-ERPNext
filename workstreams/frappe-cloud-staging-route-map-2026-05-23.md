@@ -8,9 +8,12 @@ proved owner-review is still blocked.
 
 Official Frappe Cloud docs refreshed on 2026-05-23:
 
-- `https://docs.frappe.io/cloud/installing-an-app`
-- `https://docs.frappe.io/cloud/sites/how-to-update-an-app-site-on-a-private-bench`
+- `https://docs.frappe.io/cloud/benches`
+- `https://docs.frappe.io/cloud/what-are-benches-and-bench-groups`
 - `https://docs.frappe.io/cloud/benches/updating_a_bench`
+- `https://docs.frappe.io/cloud/sites/how-to-update-an-app-site-on-a-private-bench`
+- `https://docs.frappe.io/cloud/faq/custom_apps`
+- `https://docs.frappe.io/cloud/benches/debugging`
 
 Current Frappe Cloud rule that matters here: on private bench/custom-app work,
 source/app changes must flow through the bench/app deploy-update path and site
@@ -19,15 +22,18 @@ push, app mirror hash, or deploy ID is only one evidence piece.
 
 ## Current State
 
-Current save point before this local guard update:
-`447b2ae93f0c493c24ffcd6132edfcfb87e92a45`.
+Current local source after the dual-account documentation update:
+`d7b00453b327669607f9ae7944e9ede27ddaac42`.
 
-The current source-bound packet is:
+The latest staging-reality source-bound packet is:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
 
 It is **NO-GO** and read-only. It does not authorize provider, app mirror,
 staging, live, DNS, Stripe, Search Console, bootstrap, migrate, cache,
 checkout, indexing, user, or secret mutation.
+
+Good/bad/important learning ledger:
+`workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md`.
 
 ## Bad Routes
 

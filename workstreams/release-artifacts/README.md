@@ -1,6 +1,6 @@
 # Release Artifacts
 
-Latest current-source read-only no-go packet:
+Latest staging-reality read-only no-go packet:
 `2026-05-23-staging-reopen-a5ed680-readonly/`.
 It is bound to source
 `a5ed6804392f9c576a321e81b8fa0a477c200828` and confirms staging remains
@@ -9,8 +9,12 @@ preflight returns HTTP `417`, owner-review catalog/users/routes are missing,
 and `app_mirror_sync` is blocked by missing `freeze-reopen-approval.json`.
 This packet did not mutate provider, staging, app mirror, live, DNS, Stripe,
 Search Console, bootstrap, migrate, cache, checkout, users, indexing, or
-secrets. Handoff:
+secrets. It is archive evidence, not current-source mutation authority after
+later docs/guard commits. Handoff:
 `../frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`.
+
+Good/bad/important learning ledger:
+`../frappe-cloud-release-learning-ledger-2026-05-23.md`.
 
 Earlier docs-only closeout:
 `../frappe-cloud-doc-parity-849d8c2-2026-05-23.md`.
@@ -114,7 +118,11 @@ closeout. Feature handoff:
 
 As of the `a5ed680` read-only closeout, it must also include
 `../frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` so future
-mutation-capable packets cannot skip the current-source no-go evidence.
+mutation-capable packets cannot skip the latest staging-reality no-go evidence.
+
+As of the learning-ledger update, it must also include
+`../frappe-cloud-release-learning-ledger-2026-05-23.md` so future release
+agents read the good/bad/important lessons before mutation.
 
 The release controller's artifact-chain validation is local/offline. It proves
 packet coherence only; it is not app mirror sync, provider deploy/update,

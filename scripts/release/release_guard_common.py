@@ -45,6 +45,7 @@ REQUIRED_READ_DOCS = [
     "ECOMMERCE-SHOP-HANDOFF.md",
     "LT-LAUNCH-RUNBOOK.md",
     "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
+    "workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md",
     "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
     "workstreams/frappe-cloud-staging-route-map-2026-05-23.md",
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",

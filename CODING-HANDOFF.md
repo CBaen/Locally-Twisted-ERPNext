@@ -1,11 +1,13 @@
 # Locally Twisted - Coding Handoff
 
-Current-source read-only staging packet after `a5ed680` on 2026-05-23:
+Latest staging-reality read-only packet after `a5ed680` on 2026-05-23:
 `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` and
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
-This packet is **NO-GO** and read-only. It confirms the active
-forensic-freeze lock still blocks provider/app mirror/staging mutation because
-no current `freeze-reopen-approval.json` exists. Staging is Active with
+This packet is **NO-GO** and read-only. It is source-bound archive evidence,
+not current-source mutation authority after later docs/guard commits. It
+confirms the active forensic-freeze lock still blocks provider/app
+mirror/staging mutation because no current `freeze-reopen-approval.json`
+exists. Staging is Active with
 ecommerce paused and public indexing disabled, but the app-root mirror and
 deployed app remain at `181076c...`, mirror freshness is `ok=false`, hosted
 preflight returns HTTP `417`, catalog/Product Setup/gallery rows are zero,
@@ -34,6 +36,12 @@ this as the expected dual-account operating model, not a mistake or personal
 failure. Future `release-identity-proof.json` artifacts should name the dual
 Codex account context instead of forcing all GitHub/Frappe Cloud/owner emails
 to match.
+
+Good/bad/important learning ledger on 2026-05-23:
+`workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md` is now a
+required read before mutation-capable release packets. It records what is
+working, what is still unsafe, why account switching is normal, and what GL
+will or will not need to provide later.
 
 Staging route map on 2026-05-23:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md` records the

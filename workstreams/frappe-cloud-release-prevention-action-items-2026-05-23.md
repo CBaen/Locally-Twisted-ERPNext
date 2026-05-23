@@ -18,6 +18,13 @@ This is now part of the required read set before mutation. It records the bad
 routes that caused or hid failure, the good route for future staging work, and
 the literal staging route evidence from the current read-only packet.
 
+Good/bad/important learning ledger:
+`workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md`.
+This is now part of the required read set before mutation. It records the
+plain-English lessons from the failure review, including that GL's dual-account
+workflow is expected, docs-only commits must not cause packet churn, and
+official Frappe Cloud docs must be refreshed before release execution.
+
 2026-05-23 guard implementation update: the first local/offline prevention
 layer now exists. It blocks release mutation while forensic-freeze is active,
 validates `application/json` typed Frappe Cloud payload shape before provider
@@ -437,6 +444,14 @@ execution can leave forensic-freeze.
     This helper does not create approval, push the app mirror, call Frappe
     Cloud, reopen forensic-freeze, deploy, bootstrap, migrate, cache clear,
     index staging, unpause checkout, or touch live/DNS/Stripe/Search Console.
+
+31. **Make the good/bad/important learning ledger required-read.** `implemented-local`
+    `workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md` records
+    the durable lessons from this review and is now required by the release
+    lock plus shared guard constants before mutation-capable release packets.
+    It is local documentation and guard wiring only. It does not reopen
+    forensic-freeze or mutate provider/app mirror/staging/live/DNS/Stripe/
+    Search Console.
 
 ## P1 Actions
 
