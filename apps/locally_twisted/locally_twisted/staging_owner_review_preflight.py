@@ -64,9 +64,10 @@ REQUIRED_SINGLE_SETTINGS = {
         "hide_standard_menu": 0,
     },
     "Webshop Settings": {
+        "enabled": 1,
         "login_required_to_view_products": 0,
         "hide_price_for_guest": 0,
-        "enable_checkout": 1,
+        "show_price": 1,
     },
 }
 ZERO_DATA_DOCTYPES = (
