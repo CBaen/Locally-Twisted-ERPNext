@@ -1,0 +1,22 @@
+{
+  "agent": "Codex staging release controller",
+  "app_mirror_sync_executed": false,
+  "artifact_type": "app_mirror_sync_plan",
+  "created_at": "2026-05-23T20:41:52.558681+00:00",
+  "mirror_ref": "main",
+  "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+  "no_provider_deploy_until_post_sync_freshness": true,
+  "ok": true,
+  "post_sync_required": [
+    "app-mirror-freshness.json"
+  ],
+  "provider_mutation_executed": false,
+  "required_files": [
+    "locally_twisted/staging_owner_review_bootstrap.py",
+    "locally_twisted/staging_owner_review_preflight.py"
+  ],
+  "reviewed_source": true,
+  "rollback_hash": "181076c239b2d1d3d508a41ac471c71f9d2b5158",
+  "source_commit": "5edb641de4a3f09cc6c292904fb70551c87db3df",
+  "target_site": "locallytwisted-staging.frappe.cloud"
+}

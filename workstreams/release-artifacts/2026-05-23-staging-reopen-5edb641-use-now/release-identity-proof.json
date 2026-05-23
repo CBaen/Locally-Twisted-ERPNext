@@ -1,0 +1,67 @@
+{
+  "account_checks": [
+    {
+      "actual": "Guiding Light dual Codex account model: cameronbpaul@gmail.com / locallytwisted@gmail.com",
+      "checked_at": "2026-05-23T20:41:52.951741+00:00",
+      "evidence": "GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work always moves between cameronbpaul@gmail.com and locallytwisted@gmail.com; gh api user returned CBaen; known staging team/site from sanitized provider packet",
+      "expected": "Codex/ChatGPT account selected intentionally for LT release work",
+      "method": "manual confirmation; Codex auth files are not read",
+      "status": "manual_confirmed",
+      "surface": "codex_account"
+    },
+    {
+      "actual": "CBaen",
+      "checked_at": "2026-05-23T20:41:52.951747+00:00",
+      "evidence": "GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work always moves between cameronbpaul@gmail.com and locallytwisted@gmail.com; gh api user returned CBaen; known staging team/site from sanitized provider packet",
+      "expected": "GitHub CLI account allowed to read/write LT source and app mirror as needed",
+      "method": "gh api user --jq .login",
+      "status": "manual_confirmed",
+      "surface": "github_cli"
+    },
+    {
+      "actual": "5b8acl3gba",
+      "checked_at": "2026-05-23T20:41:52.951750+00:00",
+      "evidence": "GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work always moves between cameronbpaul@gmail.com and locallytwisted@gmail.com; gh api user returned CBaen; known staging team/site from sanitized provider packet",
+      "expected": "Frappe Cloud team/account owns the LT staging site",
+      "method": "manual confirmation or provider snapshot evidence",
+      "status": "manual_confirmed",
+      "surface": "frappe_cloud_team"
+    },
+    {
+      "actual": "locallytwisted-staging.frappe.cloud",
+      "checked_at": "2026-05-23T20:41:52.951753+00:00",
+      "evidence": "GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work always moves between cameronbpaul@gmail.com and locallytwisted@gmail.com; gh api user returned CBaen; known staging team/site from sanitized provider packet",
+      "expected": "locallytwisted-staging.frappe.cloud",
+      "method": "manual confirmation or provider snapshot evidence",
+      "status": "manual_confirmed",
+      "surface": "frappe_cloud_site"
+    },
+    {
+      "actual": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+      "checked_at": "2026-05-23T20:41:52.951755+00:00",
+      "evidence": "GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work always moves between cameronbpaul@gmail.com and locallytwisted@gmail.com; gh api user returned CBaen; known staging team/site from sanitized provider packet",
+      "expected": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+      "method": "manual confirmation plus app mirror freshness proof",
+      "status": "manual_confirmed",
+      "surface": "app_mirror_repo"
+    },
+    {
+      "actual": "Codex under Guiding Light direction",
+      "checked_at": "2026-05-23T20:41:52.951757+00:00",
+      "evidence": "GL confirmed on 2026-05-23 that NextERP/Frappe/Frappe Cloud work always moves between cameronbpaul@gmail.com and locallytwisted@gmail.com; gh api user returned CBaen; known staging team/site from sanitized provider packet",
+      "expected": "named operator responsible for this release packet",
+      "method": "manual confirmation",
+      "status": "manual_confirmed",
+      "surface": "release_operator"
+    }
+  ],
+  "artifact_type": "release_identity_proof",
+  "created_at": "2026-05-23T20:41:52.917661+00:00",
+  "expires_at": "2026-05-24T08:41:52.917661+00:00",
+  "lock_id": "lt-staging-forensic-freeze-2026-05-23",
+  "ok": true,
+  "provider_mutation_executed": false,
+  "secret_free": true,
+  "source_commit": "5edb641de4a3f09cc6c292904fb70551c87db3df",
+  "target_site": "locallytwisted-staging.frappe.cloud"
+}

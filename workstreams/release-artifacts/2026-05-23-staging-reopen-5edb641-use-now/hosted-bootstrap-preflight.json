@@ -1,0 +1,325 @@
+{
+  "expected_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+  "failures": [
+    "roles: missing Role 'LT Marketing Review Access'",
+    "settings: Webshop Settings.enable_checkout=0, expected 1",
+    "destructive_seed_evidence: destructive catalog seed requires a real backup_artifact or explicit zero_data_proof"
+  ],
+  "method": "locally_twisted.staging_owner_review_bootstrap.preflight_staging_owner_review_bootstrap",
+  "ok": false,
+  "preflight": {
+    "checks": {
+      "app_hooks": {
+        "failures": [],
+        "ok": true,
+        "present": {
+          "Portal Settings": true,
+          "Website Settings": true
+        },
+        "required_hooks": {
+          "Portal Settings": "locally_twisted.public_access_guard.validate_public_access_boundary",
+          "Website Settings": "locally_twisted.public_access_guard.validate_public_access_boundary"
+        }
+      },
+      "app_order": {
+        "expected_app_order": [
+          "frappe",
+          "erpnext",
+          "payments",
+          "webshop",
+          "locally_twisted"
+        ],
+        "failures": [],
+        "installed_apps": [
+          "frappe",
+          "erpnext",
+          "payments",
+          "webshop",
+          "locally_twisted"
+        ],
+        "ok": true
+      },
+      "baseline_counts": {
+        "catalog_gaps": {
+          "Item": {
+            "actual": 0,
+            "minimum": 10685
+          },
+          "Item Price": {
+            "actual": 0,
+            "minimum": 10666
+          },
+          "Website Item": {
+            "actual": 0,
+            "minimum": 51
+          }
+        },
+        "catalog_minimums": {
+          "Item": 10685,
+          "Item Price": 10666,
+          "Website Item": 51
+        },
+        "catalog_seed_required": true,
+        "counts": {
+          "Item": 0,
+          "Item Price": 0,
+          "LT Product Blueprint": 0,
+          "User": 2,
+          "Website Item": 0,
+          "Website Slideshow": 0,
+          "Website Slideshow Item": 0
+        },
+        "ok": true,
+        "owner_review_gaps": {
+          "Item": {
+            "actual": 0,
+            "minimum": 10685
+          },
+          "Item Price": {
+            "actual": 0,
+            "minimum": 10666
+          },
+          "LT Product Blueprint": {
+            "actual": 0,
+            "minimum": 51
+          },
+          "Website Item": {
+            "actual": 0,
+            "minimum": 51
+          },
+          "Website Slideshow": {
+            "actual": 0,
+            "minimum": 47
+          },
+          "Website Slideshow Item": {
+            "actual": 0,
+            "minimum": 68
+          }
+        },
+        "owner_review_minimums": {
+          "Item": 10685,
+          "Item Price": 10666,
+          "LT Product Blueprint": 51,
+          "Website Item": 51,
+          "Website Slideshow": 47,
+          "Website Slideshow Item": 68
+        }
+      },
+      "destructive_seed_evidence": {
+        "backup_artifact_failures": [
+          "backup_artifact is missing"
+        ],
+        "catalog_gaps": {
+          "Item": {
+            "actual": 0,
+            "minimum": 10685
+          },
+          "Item Price": {
+            "actual": 0,
+            "minimum": 10666
+          },
+          "Website Item": {
+            "actual": 0,
+            "minimum": 51
+          }
+        },
+        "failures": [
+          "destructive catalog seed requires a real backup_artifact or explicit zero_data_proof"
+        ],
+        "ok": false,
+        "required": true,
+        "zero_data_proof_failures": [
+          "zero_data_proof is missing"
+        ]
+      },
+      "roles": {
+        "failures": [
+          "missing Role 'LT Marketing Review Access'"
+        ],
+        "ok": false,
+        "roles": {
+          "Accounts Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Accounts User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Customer": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Desk User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Item Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "LT Marketing Review Access": {
+            "disabled": null,
+            "exists": false
+          },
+          "LT Owner Access": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Newsletter Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Prepared Report User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Projects Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Projects User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Sales Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Sales Master Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Sales User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "System Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Website Manager": {
+            "disabled": 0,
+            "exists": true
+          }
+        }
+      },
+      "settings": {
+        "failures": [
+          "Webshop Settings.enable_checkout=0, expected 1"
+        ],
+        "ok": false,
+        "settings": {
+          "Portal Settings": {
+            "exists": true,
+            "fields": {
+              "default_portal_home": {
+                "actual": "me",
+                "expected": "me",
+                "ok": true
+              },
+              "default_role": {
+                "actual": null,
+                "expected": null,
+                "ok": true
+              },
+              "hide_standard_menu": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              }
+            }
+          },
+          "Webshop Settings": {
+            "exists": true,
+            "fields": {
+              "enable_checkout": {
+                "actual": 0,
+                "expected": 1,
+                "ok": false
+              },
+              "hide_price_for_guest": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              },
+              "login_required_to_view_products": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              }
+            }
+          },
+          "Website Settings": {
+            "exists": true,
+            "fields": {
+              "disable_signup": {
+                "actual": 1,
+                "expected": 1,
+                "ok": true
+              },
+              "hide_login": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              },
+              "home_page": {
+                "actual": "home",
+                "expected": "home",
+                "ok": true
+              }
+            }
+          }
+        }
+      },
+      "standard_report": {
+        "context": "locally_twisted.seed.standard_report_import.standard_report_import_context",
+        "doctype": "Report",
+        "failures": [],
+        "mutates": false,
+        "ok": true,
+        "required_flags": [
+          "in_import",
+          "in_patch",
+          "in_install"
+        ]
+      },
+      "target_hash": {
+        "current_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+        "expected_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+        "failures": [],
+        "ok": true
+      }
+    },
+    "expected_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+    "failures": [
+      "roles: missing Role 'LT Marketing Review Access'",
+      "settings: Webshop Settings.enable_checkout=0, expected 1",
+      "destructive_seed_evidence: destructive catalog seed requires a real backup_artifact or explicit zero_data_proof"
+    ],
+    "ok": false,
+    "required_checks": [
+      "standard_report",
+      "roles",
+      "settings",
+      "app_hooks",
+      "app_order",
+      "target_hash",
+      "baseline_counts",
+      "destructive_seed_evidence"
+    ],
+    "target_site": "locallytwisted-staging.frappe.cloud",
+    "zero_data_counts": {
+      "Communication": 2,
+      "Email Queue": 4,
+      "Lead": 2,
+      "Opportunity": 0,
+      "Payment Entry": 0,
+      "Quotation": 0,
+      "Sales Invoice": 0,
+      "Sales Order": 0
+    }
+  },
+  "provider_mutation_executed": false,
+  "site": "locallytwisted-staging.frappe.cloud"
+}

@@ -1,0 +1,30 @@
+{
+  "action": "frappe_cloud_deploy",
+  "ok": true,
+  "app_order": [
+    "frappe",
+    "erpnext",
+    "payments",
+    "webshop",
+    "locally_twisted"
+  ],
+  "checked_at_utc": "2026-05-23T21:15:54.691567+00:00",
+  "expected_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+  "installed_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+  "provider_job": {
+    "name": "41ftn09ocp",
+    "status": "Success",
+    "method": "press.api.site.update",
+    "job_type": "Update Site Pull"
+  },
+  "provider_mutation_executed": true,
+  "release_id": "eu92fvbhpp",
+  "running_jobs": [],
+  "site": "locallytwisted-staging.frappe.cloud",
+  "site_config": {
+    "lt_ecommerce_paused": "1",
+    "lt_public_indexing_enabled": "0"
+  },
+  "site_status": "Active",
+  "target_app_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831"
+}

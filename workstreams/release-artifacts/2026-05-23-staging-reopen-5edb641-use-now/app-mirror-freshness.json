@@ -1,0 +1,29 @@
+{
+  "checked_at_utc": "2026-05-23T20:51:21.209745+00:00",
+  "failures": [],
+  "mirror_hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+  "mirror_ref": "main",
+  "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+  "ok": true,
+  "provider_mutation_executed": false,
+  "required_files": [
+    {
+      "matches": true,
+      "mirror_exists": true,
+      "mirror_sha256": "fa7f243137ccfb8213fec6cf7dba9b978cef9f07879cb27839bdd101fb55f381",
+      "path": "locally_twisted/staging_owner_review_preflight.py",
+      "source_exists": true,
+      "source_sha256": "fa7f243137ccfb8213fec6cf7dba9b978cef9f07879cb27839bdd101fb55f381"
+    },
+    {
+      "matches": true,
+      "mirror_exists": true,
+      "mirror_sha256": "3ee33a33a8f4358eab3d9cbcda1e4ba5549f13df685eaa6ab9d02af1b788925f",
+      "path": "locally_twisted/staging_owner_review_bootstrap.py",
+      "source_exists": true,
+      "source_sha256": "3ee33a33a8f4358eab3d9cbcda1e4ba5549f13df685eaa6ab9d02af1b788925f"
+    }
+  ],
+  "source_commit": "5edb641de4a3f09cc6c292904fb70551c87db3df",
+  "source_root": "C:\\Users\\baenb\\projects\\Built_by_Cameron\\_CLIENTS\\locally-twisted\\apps\\locally_twisted"
+}

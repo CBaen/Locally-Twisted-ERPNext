@@ -1,0 +1,25 @@
+{
+  "apps": [
+    {
+      "app": "locally_twisted",
+      "hash": "5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831",
+      "release": "2j0ukjv4pl",
+      "repository": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git"
+    }
+  ],
+  "artifact_type": "frappe_cloud_deploy_request",
+  "bench_group": "bench-40102",
+  "cache_clear_executed_by_agent": false,
+  "checkout_unpause_executed": false,
+  "http_enqueue_only": true,
+  "live_dns_stripe_search_console_blocked": true,
+  "method": "press.api.bench.deploy_and_update",
+  "payload_file": "sanitized-payload-attempt-1.json",
+  "provider_mutation_executed": true,
+  "requested_at_utc": "2026-05-23T20:59:51.140565+00:00",
+  "response_keys": [],
+  "response_message": null,
+  "site": "locallytwisted-staging.frappe.cloud",
+  "site_migrate_executed_by_agent": false,
+  "staging_bootstrap_executed": false
+}
