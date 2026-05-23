@@ -49,9 +49,37 @@ def run_contract() -> list[str]:
         tmp_path = Path(tmp)
         emergency_dir = tmp_path / "emergency"
 
+        missing_payload = run_controller("--action", "frappe_cloud_deploy", "--json")
+        if missing_payload.returncode == 0:
+            failures.append("frappe_cloud_deploy passed without a sanitized payload artifact")
+        if "payload" not in f"{missing_payload.stdout}\n{missing_payload.stderr}".lower():
+            failures.append("missing deploy payload output did not mention payload")
+
+        payload = tmp_path / "sanitized-payload.json"
+        payload.write_text(
+            json.dumps(
+                {
+                    "content_type": "application/json",
+                    "body": {
+                        "apps": [
+                            {
+                                "app": "locally_twisted",
+                                "repository": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+                                "hash": "a" * 40,
+                            }
+                        ],
+                        "sites": [{"name": "locallytwisted-staging.frappe.cloud"}],
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+
         blocked = run_controller(
             "--action",
             "frappe_cloud_deploy",
+            "--payload-file",
+            str(payload),
             "--emergency-handoff-dir",
             str(emergency_dir),
             "--json",

@@ -51,3 +51,9 @@ writes the sanitized `provider-snapshot.json`, and then validates it through
 the local release controller helpers. The artifact must not contain secrets,
 tokens, session IDs, raw provider logs, customer records, or credential-file
 contents.
+
+Current update: `scripts/verify/frappe_cloud_provider_snapshot.py` is now the
+preferred snapshot producer. Use `--self-test` for offline release-prevention
+proof. Use real provider mode only inside a current release packet/read-only
+forensics plan, with target and rollback hashes supplied, and write output to
+that packet's `provider-snapshot.json`.

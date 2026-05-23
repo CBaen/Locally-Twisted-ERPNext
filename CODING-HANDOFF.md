@@ -7,12 +7,10 @@ gate is `scripts/release/frappe_cloud_release_controller.py`; it blocks
 Frappe Cloud deploy/provider poll/bootstrap/migrate/cache/live/DNS/Stripe/Search
 Console/checkout-unpause actions while the lock is active and requires a
 read-receipt, typed payload artifact, failure ledger, provider snapshot, and
-artifact-owned triad before future mutation can pass. Local verifier commands:
-`npm run test:release-prevention`, `python
-scripts\verify\release_lock_contract.py`, `python
-scripts\verify\release_controller_contract.py`, `python
-scripts\verify\frappe_cloud_payload_contract.py --self-test`, and `python
-scripts\verify\release_claim_language_contract.py`. This is prevention
+artifact-owned triad before future mutation can pass. The guard suite now also
+includes a read-only provider snapshot producer self-test, offline staging
+owner-review gate contract, and hosted bootstrap preflight/source contract.
+Local verifier command: `npm run test:release-prevention`. This is prevention
 architecture only. It is not staging proof, owner-review readiness, live
 approval, DNS/Search Console/Stripe approval, or checkout exposure.
 
@@ -34,15 +32,18 @@ scratch; it must run the prevention gates, take a fresh read-only provider
 snapshot, produce the artifact-backed release packet, and keep
 `scripts/verify/staging_owner_review_gate.py` as the hard owner-review stop
 gate before any new provider mutation is reopened.
-Gate/Fixer witness follow-up on 2026-05-23: before controlled staging
-bootstrap/import can be reopened, add an offline
-`scripts/verify/staging_owner_review_gate_contract.py`, add a non-mutating
-hosted bootstrap preflight/contract, require real current staging backup
-evidence or explicit zero-data proof before destructive catalog seed paths, and
-tighten future provider deploy/update controller actions so `--payload-file`
-is mandatory rather than optional. These are release-reopen blockers; no
-provider, bootstrap, live, DNS, Stripe, Search Console, or checkout mutation
-was performed in this docs pass.
+Gate/Fixer witness follow-up on 2026-05-23 is now implemented locally:
+`scripts/verify/staging_owner_review_gate_contract.py`,
+`scripts/verify/staging_owner_review_bootstrap_contract.py`,
+`scripts/verify/frappe_cloud_provider_snapshot.py`,
+mandatory `--payload-file` for future deploy/update controller actions, and a
+hosted bootstrap preflight path that requires real backup evidence or explicit
+zero-data proof before destructive catalog seed paths. These are local gates
+only; before controlled staging bootstrap/import can reopen, a future release
+packet still needs real read-only provider snapshot output and real hosted
+bootstrap preflight output from the actual staging target. No provider,
+bootstrap, live, DNS, Stripe, Search Console, or checkout mutation was
+performed in this guard-hardening pass.
 
 Codex Frappe Cloud staging recovery on 2026-05-22: save state tag
 `savepoint/lt-staging-recovery-20260522-173929` exists. Source `main` is

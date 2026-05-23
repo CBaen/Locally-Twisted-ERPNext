@@ -81,7 +81,11 @@ Default public launch posture:
   `scripts/verify/release_lock_contract.py`,
   `scripts/verify/release_controller_contract.py`,
   `scripts/verify/frappe_cloud_payload_contract.py`, and
-  `scripts/verify/release_claim_language_contract.py`. Run
+  `scripts/verify/release_claim_language_contract.py`.
+- The local prevention layer now also includes
+  `scripts/verify/frappe_cloud_provider_snapshot.py`,
+  `scripts/verify/staging_owner_review_gate_contract.py`, and
+  `scripts/verify/staging_owner_review_bootstrap_contract.py`. Run
   `npm run test:release-prevention` before any future attempt to reopen
   release execution. Passing this command is local prevention proof only, not
   staging owner-review readiness.
@@ -140,20 +144,28 @@ Concise staging-safe list:
    docs without API/dashboard proof. For 2026-05-22 staging, the current target
    is group `bench-40102` / bench `bench-40102-000003-f4v`, not the old
    `bench-39776-000013-f94-virginia` source-bench reference.
-4. For Frappe Cloud API mutations, send `Content-Type: application/json`
+4. Produce a real read-only provider snapshot for the release packet. Prefer
+   `scripts/verify/frappe_cloud_provider_snapshot.py` in real provider mode,
+   with current target and rollback hashes supplied, and validate the resulting
+   `provider-snapshot.json` before mutation.
+5. For Frappe Cloud API mutations, send `Content-Type: application/json`
    typed JSON payloads only. For `press.api.bench.deploy_and_update`, `apps`
    and `sites` must be real JSON arrays/objects accepted by the endpoint, not
    nested JSON strings. A payload that stringifies nested `apps` or `sites` can
    fail with `'str' object has no attribute 'get'`. Validate the sanitized
    payload artifact with `scripts/verify/frappe_cloud_payload_contract.py`
    before provider mutation.
-5. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
+6. Run the hosted staging owner-review bootstrap preflight before import. The
+   source contract is `scripts/verify/staging_owner_review_bootstrap_contract.py`,
+   but real staging still needs the whitelisted preflight output from the
+   actual target.
+7. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
    `lt_ecommerce_paused=1` on staging.
-6. Run local hard gates for the changed slice before staging.
-7. Run staging HTTP/browser gates against the staging URL.
-8. Run database-side contracts in the staging environment, or leave them
+8. Run local hard gates for the changed slice before staging.
+9. Run staging HTTP/browser gates against the staging URL.
+10. Run database-side contracts in the staging environment, or leave them
    explicitly unverified for staging.
-9. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+11. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    blocked until their separate gates pass.
 
 ```powershell

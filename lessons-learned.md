@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A release packet needs artifact producers, not only validators
+
+The release-prevention layer originally validated required artifacts, but the
+provider snapshot itself still depended on ad hoc witness commands. That left
+too much room for the next controller to improvise.
+
+**Counter-move:** when a release gate requires an artifact, add either a
+producer or an explicit contract for the producer. For LT, the provider
+snapshot now has `scripts/verify/frappe_cloud_provider_snapshot.py`, and the
+staging owner-review/bootstrap paths have offline contracts in
+`scripts/verify/staging_owner_review_gate_contract.py` and
+`scripts/verify/staging_owner_review_bootstrap_contract.py`.
+
+---
+
 ## 2026-05-23 - A release stop rule needs a command agents already run
 
 The release failure had correct-sounding process language, but the next agent

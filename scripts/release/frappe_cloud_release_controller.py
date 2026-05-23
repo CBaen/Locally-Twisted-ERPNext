@@ -55,6 +55,10 @@ READ_RECEIPT_ACTIONS = {
     "checkout_unpause",
 }
 
+PAYLOAD_REQUIRED_ACTIONS = {
+    "frappe_cloud_deploy",
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -156,16 +160,19 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
     lock = load_release_lock(args.lock_file)
     raise_if_failures("invalid release lock", validate_release_lock(lock))
 
+    if args.action in PAYLOAD_REQUIRED_ACTIONS and not args.payload_file:
+        raise ReleaseGuardError("sanitized Frappe Cloud payload artifact is required before deploy/update actions")
+
+    if args.payload_file:
+        payload = load_payload_file(args.payload_file)
+        raise_if_failures("invalid Frappe Cloud payload", validate_frappe_cloud_payload(payload))
+
     ensure_action_allowed(args.action, lock)
 
     if args.action in READ_RECEIPT_ACTIONS:
         if not args.read_receipt:
             raise ReleaseGuardError("required-doc read receipt is missing")
         raise_if_failures("invalid read receipt", validate_read_receipt(args.read_receipt, lock.get("required_read_docs")))
-
-    if args.payload_file:
-        payload = load_payload_file(args.payload_file)
-        raise_if_failures("invalid Frappe Cloud payload", validate_frappe_cloud_payload(payload))
 
     if action_is_mutating(args.action):
         if not args.provider_snapshot:

@@ -131,15 +131,18 @@ Executable local prevention gates now in this repo:
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/frappe_cloud_provider_snapshot.py`
+- `scripts/verify/staging_owner_review_gate_contract.py`
+- `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 - `npm run test:release-prevention`
 
 Provider mutation remains blocked while the forensic-freeze lock is active.
-Gate/Fixer witness follow-up on 2026-05-23: reopening staging bootstrap/import
-also needs an offline staging owner-review gate contract, a non-mutating
-hosted bootstrap preflight/contract, stricter backup-or-zero-data proof before
-destructive catalog seed paths, and mandatory payload artifacts for future
-provider deploy/update controller actions.
+Gate/Fixer witness follow-up on 2026-05-23 is now local/offline code:
+reopening staging bootstrap/import requires the expanded prevention suite,
+real provider snapshot output, real hosted bootstrap preflight output,
+backup-or-zero-data proof before destructive catalog seed paths, and mandatory
+payload artifacts for future provider deploy/update controller actions.
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do

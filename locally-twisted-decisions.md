@@ -8,6 +8,37 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release reopen guards must cover provider, owner gate, and bootstrap locally first
+
+**Decision:** The release-prevention suite now includes local/offline contracts
+for provider snapshot artifact shape, staging owner-review gate failure modes,
+and hosted bootstrap preflight/destructive-seed evidence. Future release work
+must keep these in `npm run test:release-prevention` before attempting any
+Frappe Cloud staging mutation.
+
+**Reasoning:** The failed staging process had three repeatable gaps: provider
+state was not a durable artifact, owner-review readiness could be conflated
+with app/deploy proof, and bootstrap could reach hosted constraints or
+destructive catalog seed without a non-mutating preflight artifact. Making
+these local contracts forces the next controller to fail before repeating the
+same release pattern.
+
+**Implementation boundary:** The new scripts do not prove current staging.
+`scripts/verify/frappe_cloud_provider_snapshot.py --self-test` proves only the
+snapshot contract; real provider mode still needs a release packet and must be
+read-only. `scripts/verify/staging_owner_review_gate_contract.py` uses fake
+fixtures only. `scripts/verify/staging_owner_review_bootstrap_contract.py` is
+a source contract for the hosted preflight path. The actual owner-review
+release still needs real staging artifacts and `scripts/verify/staging_owner_review_gate.py`.
+
+**Receipts:** `scripts/verify/frappe_cloud_provider_snapshot.py`;
+`scripts/verify/staging_owner_review_gate_contract.py`;
+`scripts/verify/staging_owner_review_bootstrap_contract.py`;
+`apps/locally_twisted/locally_twisted/staging_owner_review_bootstrap.py`;
+`package.json`.
+
+---
+
 ## 2026-05-23 - Release warnings must have executable local gates before provider work
 
 **Decision:** LT release-prevention controls now start as local executable

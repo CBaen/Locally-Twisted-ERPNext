@@ -48,7 +48,7 @@ produce useful fixes, but it is no longer a trustworthy release controller.
 
 | Date | Project | Surface | Bad outcome | Evidence | Guard state |
 |---|---|---|---|---|---|
-| 2026-05-22/23 | Locally Twisted | Frappe Cloud staging owner-review push | The release controller continued through repeated payload, migration, role, data, and hosted-bootstrap failures instead of freezing release execution and producing prevention gates first | `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`; `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`; `../../release_locks/locally-twisted-staging-forensic-freeze.json` | local executable lock/controller/verifier layer added; provider mutation remains blocked |
+| 2026-05-22/23 | Locally Twisted | Frappe Cloud staging owner-review push | The release controller continued through repeated payload, migration, role, data, and hosted-bootstrap failures instead of freezing release execution and producing prevention gates first | `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`; `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`; `../../release_locks/locally-twisted-staging-forensic-freeze.json` | local executable lock/controller/provider-snapshot/owner-gate/bootstrap contracts added; provider mutation remains blocked |
 
 ## Root Pattern
 
@@ -85,6 +85,9 @@ Current local guard implementation:
 - `../../scripts/verify/release_lock_contract.py`
 - `../../scripts/verify/release_controller_contract.py`
 - `../../scripts/verify/frappe_cloud_payload_contract.py`
+- `../../scripts/verify/frappe_cloud_provider_snapshot.py`
+- `../../scripts/verify/staging_owner_review_gate_contract.py`
+- `../../scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `../../scripts/verify/release_claim_language_contract.py`
 - `npm run test:release-prevention`
 

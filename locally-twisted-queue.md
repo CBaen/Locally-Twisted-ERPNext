@@ -21,16 +21,15 @@ at
 `release_locks/locally-twisted-staging-forensic-freeze.json`,
 `scripts/release/frappe_cloud_release_controller.py`, and
 `npm run test:release-prevention`, archived at commit `58258fd`. Provider
-mutation remains blocked while the forensic-freeze lock is active. Next safe
-step is a read-only current-state provider snapshot plus a fresh
-artifact-backed release plan if GL explicitly reopens release execution. Do
-not deploy, bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search
-Console, or claim owner-review readiness from the interrupted session.
-Gate/Fixer witness follow-up: before reopening staging bootstrap/import, add
-an offline `staging_owner_review_gate` contract, add a non-mutating hosted
-bootstrap preflight/contract, require real current backup evidence or explicit
-zero-data proof before destructive catalog seed paths, and make future
-provider deploy/update actions require a payload artifact.
+mutation remains blocked while the forensic-freeze lock is active. The local
+guard hardening now includes provider snapshot self-test/producer,
+owner-review gate contract, hosted bootstrap preflight/source contract,
+mandatory deploy payload artifacts, and destructive-seed backup-or-zero-data
+proof. Next safe step is a read-only current-state provider snapshot and real
+hosted bootstrap preflight artifact plus a fresh artifact-backed release plan
+if GL explicitly reopens release execution. Do not deploy, bootstrap, mutate
+Frappe Cloud, touch live/DNS/Stripe/Search Console, or claim owner-review
+readiness from the interrupted session.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is

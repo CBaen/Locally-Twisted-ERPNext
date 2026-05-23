@@ -22,6 +22,9 @@ Implemented local guard paths:
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/frappe_cloud_provider_snapshot.py`
+- `scripts/verify/staging_owner_review_gate_contract.py`
+- `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 - `workstreams/release-artifacts/README.md`
 - `workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md`
@@ -130,26 +133,37 @@ execution can leave forensic-freeze.
     controller for the same release. It may only write forensics, handoff, or
     prevention docs unless GL explicitly reopens execution under a new plan.
 
-13. **Add an offline staging owner-review gate contract.** `open-before-provider-mutation`
-    Add `scripts/verify/staging_owner_review_gate_contract.py` with fake
-    provider/staging fixtures that prove zero catalog rows, missing
+13. **Add an offline staging owner-review gate contract.** `implemented-local`
+    `scripts/verify/staging_owner_review_gate_contract.py` now uses fake
+    provider/staging fixtures to prove zero catalog rows, missing
     owner/marketing users, wrong app order, wrong installed hash, stale
     bootstrap hash, and paused/exposure mismatches all fail before any
-    owner-review-ready claim is possible. Wire it into package scripts and the
-    release-prevention suite.
+    owner-review-ready claim is possible. It is wired into package scripts and
+    the release-prevention suite.
 
-14. **Add hosted bootstrap preflight and destructive-seed proof.** `open-before-provider-mutation`
-    Bootstrap must expose a non-mutating preflight before import that checks
-    standard Report save behavior, required roles, Portal/Website Settings,
-    app order, target hash, expected baseline counts, and either a real current
-    staging backup artifact or explicit zero-data proof. Do not pass a
-    descriptive string as backup evidence into destructive catalog seed paths.
+14. **Add hosted bootstrap preflight and destructive-seed proof.** `implemented-local; open-before-provider-mutation`
+    Bootstrap now exposes a whitelisted non-mutating preflight and records the
+    preflight before catalog seed. The source contract checks standard Report
+    save behavior, required roles, Portal/Website Settings, app hooks, app
+    order, target hash, expected baseline counts, and either a real current
+    staging backup artifact or explicit zero-data proof. The destructive seed
+    path no longer passes descriptive backup text. This still needs real
+    staging preflight execution in a future release packet before mutation.
 
-15. **Require payload artifacts for future provider deploy/update actions.** `open-before-provider-mutation`
-    The current local controller validates `--payload-file` when supplied. A
-    future provider-executing controller must require the sanitized payload
-    artifact for Frappe Cloud deploy/update actions before it can reach any
-    provider API call.
+15. **Require payload artifacts for future provider deploy/update actions.** `implemented-local`
+    The current local controller now requires `--payload-file` for
+    `frappe_cloud_deploy` actions and validates the sanitized payload before
+    the action can proceed to any later gate. A future provider-executing
+    controller must preserve this rule before it can reach any provider API
+    call.
+
+16. **Add a provider snapshot producer.** `implemented-local; open-before-provider-mutation`
+    `scripts/verify/frappe_cloud_provider_snapshot.py` now has an offline
+    self-test and a real read-only mode that can write the sanitized
+    `provider-snapshot.json` artifact. The script has not been run against
+    Frappe Cloud in this guard-hardening pass; the next release packet must run
+    real read-only mode with current target and rollback hashes before any
+    mutation.
 
 ## P1 Actions
 
@@ -187,13 +201,12 @@ Still mandatory before any provider mutation is reopened:
 
 - `scripts/verify/staging_owner_review_gate.py`
 - fresh read-only provider snapshot for the actual staging target
-- a dedicated provider-snapshot producer, or an artifact-owned Provider
-  Witness command packet, that writes `provider-snapshot.json` without
+- real read-only `provider-snapshot.json` from
+  `scripts/verify/frappe_cloud_provider_snapshot.py` or an equivalent
+  artifact-owned Provider Witness command packet, without
   bootstrap/deploy/migrate/cache mutation
-- offline `scripts/verify/staging_owner_review_gate_contract.py`
-- non-mutating hosted bootstrap preflight/contract
-- stricter destructive-seed backup evidence or explicit zero-data proof
-- mandatory `--payload-file` for future provider deploy/update actions
+- real hosted bootstrap preflight execution and artifact from the actual
+  staging target
 - fresh artifact-backed release plan
 - staging bootstrap preflight for hosted constraints
 - staging database/account/product/gallery proof on the actual target site
@@ -215,6 +228,7 @@ This prevention work is complete only when a fresh run proves:
 
 Current state after the local guard pass: the release lock, payload validator,
 controller CLI contract, emergency-handoff writer, docs-language gate,
-circuit-breaker helper, and artifact directory contract are implemented
-locally. The owner-review target is still not proved, and provider mutation is
-still blocked.
+circuit-breaker helper, provider snapshot producer/self-test, offline staging
+owner-review gate contract, hosted bootstrap preflight/source contract, and
+artifact directory contract are implemented locally. The owner-review target is
+still not proved, and provider mutation is still blocked.

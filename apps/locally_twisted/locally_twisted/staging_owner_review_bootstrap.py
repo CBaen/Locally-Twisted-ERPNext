@@ -6,57 +6,41 @@ site's catalog, owner accounts, Product Setup rows, or gallery projection.
 """
 from __future__ import annotations
 
-import json
 import importlib
+import json
 import traceback
 from pathlib import Path
 from typing import Any
 
 import frappe
 
+from locally_twisted.staging_owner_review_preflight import (
+    CATALOG_MIN_COUNTS,
+    OWNER_REVIEW_MIN_COUNTS,
+    OWNER_ROLES,
+    STAGING_SITE,
+    assert_preflight_allows_catalog_mutation,
+    build_bootstrap_preflight,
+    count_gaps,
+    seed_catalog_backup_path,
+)
+
 
 JOB_NAME = "lt-staging-owner-review-bootstrap"
 STATUS_KEY = "lt_staging_owner_review_bootstrap_status"
 STATUS_FILE = "lt-staging-owner-review-bootstrap-status.json"
 CONFIRMATION = "seed locally twisted staging owner review"
-STAGING_SITE = "locallytwisted-staging.frappe.cloud"
 OWNER_EMAIL = "locallytwisted@gmail.com"
 MARKETING_EMAIL = "marketing@exploringnotboring.com"
 DEVELOPER_EMAIL = "cameron@builtbycameron.com"
-CATALOG_MIN_COUNTS = {
-    "Item": 10685,
-    "Item Price": 10666,
-    "Website Item": 51,
-}
-OWNER_REVIEW_MIN_COUNTS = {
-    **CATALOG_MIN_COUNTS,
-    "LT Product Blueprint": 51,
-    "Website Slideshow": 47,
-    "Website Slideshow Item": 68,
-}
-OWNER_ROLES = (
-    "Desk User",
-    "LT Owner Access",
-    "Sales Manager",
-    "Sales User",
-    "Projects Manager",
-    "Projects User",
-    "Prepared Report User",
-    "Sales Master Manager",
-    "Item Manager",
-    "Accounts Manager",
-    "Accounts User",
-    "Newsletter Manager",
-    "System Manager",
-    "Website Manager",
-    "Customer",
-)
 
 
 @frappe.whitelist()
 def enqueue_staging_owner_review_bootstrap(
     confirm: str,
     expected_app_hash: str | None = None,
+    backup_artifact: Any = None,
+    zero_data_proof: Any = None,
 ) -> dict[str, Any]:
     """Queue the staging data bootstrap.
 
@@ -69,7 +53,11 @@ def enqueue_staging_owner_review_bootstrap(
     expected_app_hash = _normalize_expected_app_hash(expected_app_hash)
     _set_status(
         "queued",
-        {"message": "queued staging owner-review bootstrap"},
+        {
+            "message": "queued staging owner-review bootstrap",
+            "backup_artifact_supplied": bool(backup_artifact),
+            "zero_data_proof_supplied": bool(zero_data_proof),
+        },
         expected_app_hash=expected_app_hash,
     )
     job = frappe.enqueue(
@@ -77,12 +65,33 @@ def enqueue_staging_owner_review_bootstrap(
         queue="long",
         timeout=7200,
         expected_app_hash=expected_app_hash,
+        backup_artifact=backup_artifact,
+        zero_data_proof=zero_data_proof,
         job_name=JOB_NAME,
         job_id=JOB_NAME,
         enqueue_after_commit=False,
         deduplicate=True,
     )
     return {"ok": True, "job_name": JOB_NAME, "job_id": getattr(job, "id", None)}
+
+
+@frappe.whitelist()
+def preflight_staging_owner_review_bootstrap(
+    confirm: str,
+    expected_app_hash: str | None = None,
+    backup_artifact: Any = None,
+    zero_data_proof: Any = None,
+) -> dict[str, Any]:
+    """Return the hosted bootstrap preflight without mutating ERPNext records."""
+    _assert_staging(confirm)
+    frappe.only_for("System Manager")
+    expected_app_hash = _normalize_expected_app_hash(expected_app_hash)
+    preflight = build_bootstrap_preflight(
+        expected_app_hash=expected_app_hash,
+        backup_artifact=backup_artifact,
+        zero_data_proof=zero_data_proof,
+    )
+    return {"ok": not preflight["failures"], "preflight": preflight}
 
 
 @frappe.whitelist()
@@ -106,7 +115,11 @@ def get_staging_owner_review_bootstrap_status(confirm: str) -> dict[str, Any]:
     }
 
 
-def run_staging_owner_review_bootstrap(expected_app_hash: str | None = None) -> dict[str, Any]:
+def run_staging_owner_review_bootstrap(
+    expected_app_hash: str | None = None,
+    backup_artifact: Any = None,
+    zero_data_proof: Any = None,
+) -> dict[str, Any]:
     _assert_staging(CONFIRMATION)
     expected_app_hash = _normalize_expected_app_hash(expected_app_hash)
     _set_status(
@@ -122,9 +135,16 @@ def run_staging_owner_review_bootstrap(expected_app_hash: str | None = None) -> 
     try:
         _run_seed_syncs(summary, before_catalog=True)
         _ensure_owner_user(summary)
-        catalog_gaps = _count_gaps(_counts(), CATALOG_MIN_COUNTS)
+        catalog_gaps = count_gaps(_counts(), CATALOG_MIN_COUNTS)
+        preflight = build_bootstrap_preflight(
+            expected_app_hash=expected_app_hash,
+            backup_artifact=backup_artifact,
+            zero_data_proof=zero_data_proof,
+        )
+        summary["preflight"] = preflight
+        assert_preflight_allows_catalog_mutation(preflight)
         if catalog_gaps:
-            _seed_catalog(summary, catalog_gaps)
+            _seed_catalog(summary, catalog_gaps, preflight)
         else:
             summary["steps"].append({"name": "seed_catalog", "action": "skipped_existing_catalog"})
         _assert_count_baseline("catalog", CATALOG_MIN_COUNTS)
@@ -285,10 +305,10 @@ def _run_seed_syncs(summary: dict[str, Any], *, before_catalog: bool) -> None:
             "locally_twisted.seed.sync_finance_workspace",
             "locally_twisted.seed.sync_site_branding",
             "locally_twisted.seed.sync_permission_hardening",
+            "locally_twisted.seed.sync_marketing_review_access",
         )
         if before_catalog
         else (
-            "locally_twisted.seed.sync_marketing_review_access",
             "locally_twisted.seed.sync_maintenance_package",
         )
     )
@@ -303,14 +323,18 @@ def _run_seed_syncs(summary: dict[str, Any], *, before_catalog: bool) -> None:
         summary["steps"].append({"name": module_path.rsplit(".", 1)[-1], "result": _compact_result(result)})
 
 
-def _seed_catalog(summary: dict[str, Any], catalog_gaps: dict[str, dict[str, int]]) -> None:
+def _seed_catalog(
+    summary: dict[str, Any],
+    catalog_gaps: dict[str, dict[str, int]],
+    preflight: dict[str, Any],
+) -> None:
     from locally_twisted.seed.seed_catalog import execute
 
     guard_dir = Path(frappe.get_app_path("locally_twisted", "seed", "_guard"))
     result = execute(
         dry_run=False,
         destructive=True,
-        backup_path="Frappe Cloud staging empty-site owner-review bootstrap; no customer data existed.",
+        backup_path=seed_catalog_backup_path(preflight),
         snapshot_path=str(guard_dir / "current-state-snapshot-2026-05-19-2314"),
         purge_scope_report=str(guard_dir / "16-catalog-purge-scope-dry-run.json"),
     )
@@ -319,6 +343,9 @@ def _seed_catalog(summary: dict[str, Any], catalog_gaps: dict[str, dict[str, int
             "name": "seed_catalog",
             "reason": "missing_or_partial_catalog_baseline",
             "gaps": catalog_gaps,
+            "destructive_seed_evidence": (
+                (preflight.get("checks") or {}).get("destructive_seed_evidence") or {}
+            ),
             "result": _compact_result(result),
         }
     )
@@ -333,11 +360,7 @@ def _sync_product_setup_and_galleries(summary: dict[str, Any]) -> None:
 
 
 def _count_gaps(counts: dict[str, int], minimums: dict[str, int]) -> dict[str, dict[str, int]]:
-    return {
-        doctype: {"actual": int(counts.get(doctype) or 0), "minimum": minimum}
-        for doctype, minimum in minimums.items()
-        if int(counts.get(doctype) or 0) < minimum
-    }
+    return count_gaps(counts, minimums)
 
 
 def _assert_count_baseline(label: str, minimums: dict[str, int]) -> None:
