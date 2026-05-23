@@ -43,6 +43,7 @@ PREP_ALLOWLIST = {
     "freeze-reopen-approval-preview.json",
 }
 RESERVED_FINAL_ARTIFACT_NAMES = {
+    "release-identity-proof.json",
     "freeze-reopen-approval.json",
     "provider-snapshot.json",
     "app-mirror-freshness.json",

@@ -15,8 +15,8 @@ mutation. No provider, staging, app mirror, live, DNS, Stripe, Search Console,
 bootstrap, migrate, cache, checkout, user, indexing, or secret mutation was
 performed.
 
-Post-push prep-only packet after `a29efbc`:
-`workstreams/release-artifacts/2026-05-23-staging-reopen-a29efbc-prep/`.
+Current prep-only packet after `63d9c71`:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-63d9c71-prep/`.
 This is not controller-consumable and not mutation-capable. It exists only to
 organize the missing artifacts for a future explicitly approved attempt. It
 does not authorize app mirror sync, Frappe Cloud deploy/update, staging
