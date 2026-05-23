@@ -388,6 +388,30 @@ execution can leave forensic-freeze.
     migrate, cache clear, index staging, unpause checkout, or touch live/DNS/
     Stripe/Search Console.
 
+29. **Keep required read docs current with packet-authoring handoffs.** `implemented-local`
+    The release lock and shared guard constant now directly require the
+    next-agent closeout, staging reopen packet prep handoff, app-mirror
+    sync-plan helper handoff, failure-ledger helper handoff, and `849d8c2`
+    documentation parity closeout in any future mutation-capable
+    `read-receipt.json`. Handoff:
+    `workstreams/frappe-cloud-required-read-docs-refresh-2026-05-23.md`.
+    This is a local read-receipt gate only; it does not reopen forensic-freeze
+    or mutate provider/app mirror/staging/live/DNS/Stripe/Search Console.
+
+30. **Make `failure-ledger.json` a generated strict artifact.** `implemented-local; open-before-provider-mutation`
+    `scripts/release/failure_ledger_artifact.py` writes or validates the local
+    `failure-ledger.json` required before future mutation-capable release
+    gates. It is covered by
+    `scripts/verify/failure_ledger_artifact_contract.py` and
+    `npm run test:failure-ledger-artifact`. The shared validator now rejects
+    empty/thin ledgers, stale source commits, fake guard paths, raw/secret
+    diagnostic keys, and repeated failure classes without fresh plan evidence.
+    Handoff:
+    `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
+    This helper does not create approval, push the app mirror, call Frappe
+    Cloud, reopen forensic-freeze, deploy, bootstrap, migrate, cache clear,
+    index staging, unpause checkout, or touch live/DNS/Stripe/Search Console.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
@@ -406,11 +430,11 @@ execution can leave forensic-freeze.
    `local`, `GitHub archive`, `app mirror`, `deploy candidate`,
    `site migrate`, `cache/config`, `staging owner-review`, and `live release`
    cannot be used interchangeably.
-6. Use the existing release-packet producers for real freeze-reopen approval
-   and app mirror sync plan artifacts once GL explicitly reopens staging
-   execution. The still-open work is assembling a current mutation-capable
-   packet with real approval and fresh provider artifacts, not hand-copying
-   those two JSON files.
+6. Use the existing release-packet producers for real freeze-reopen approval,
+   app mirror sync plan, and failure ledger artifacts once GL explicitly
+   reopens staging execution. The still-open work is assembling a current
+   mutation-capable packet with real approval and fresh provider artifacts,
+   not hand-copying those JSON files.
 
 ## Suggested File Targets
 
@@ -424,6 +448,8 @@ Implemented local/offline guards:
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/release/app_mirror_sync_plan_artifact.py`
 - `scripts/verify/app_mirror_sync_plan_artifact_contract.py`
+- `scripts/release/failure_ledger_artifact.py`
+- `scripts/verify/failure_ledger_artifact_contract.py`
 - `scripts/verify/frappe_cloud_deploy_completion_contract.py`
 - `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/release_lock_contract.py`
@@ -446,6 +472,7 @@ Still mandatory before any provider mutation is reopened:
 - real freeze-reopen approval artifact bound to the active lock and staging
   target
 - real app mirror pre-sync plan before app_mirror_sync
+- real failure ledger generated or validated against current `HEAD`
 - real post-deploy/update completion artifact before hosted preflight
 - fresh app mirror freshness artifact proving required hosted-preflight source
   files match the app-root mirror
@@ -471,7 +498,7 @@ This prevention work is complete only when a fresh run proves:
 Current state after the local guard pass: the release lock, payload validator,
 controller CLI contract, explicit freeze-reopen approval validator, app mirror
 pre-sync/post-sync split, emergency-handoff writer, docs-language gate,
-circuit-breaker helper, provider snapshot producer/self-test, post-deploy
+failure-ledger artifact helper, provider snapshot producer/self-test, post-deploy
 completion contract, offline staging owner-review gate contract, owner-review
 release-artifact sanitizer, hosted bootstrap preflight/source contract, and
 artifact directory contract are implemented locally. The owner-review target is

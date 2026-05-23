@@ -5,6 +5,23 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 failure-ledger helper hardening:
+  `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
+  Future mutation-capable release packets must generate or validate
+  `failure-ledger.json` through `scripts/release/failure_ledger_artifact.py`.
+  Empty/thin ledgers, stale source commits, fake guard paths, raw/secret
+  diagnostic keys, and repeated failure classes without fresh plan evidence
+  now fail locally. This is release-prevention hardening only and did not
+  mutate provider, app mirror, staging, live, DNS, Stripe, Search Console,
+  bootstrap, migrate, cache, indexing, checkout, users, or secrets.
+- 2026-05-23 required read-docs refresh:
+  `workstreams/frappe-cloud-required-read-docs-refresh-2026-05-23.md`. The
+  forensic-freeze lock and release guard now require the newer next-agent
+  closeout, staging reopen packet prep, app-mirror sync-plan helper, and
+  failure-ledger helper, and `849d8c2` documentation parity closeout in future mutation-capable
+  `read-receipt.json` artifacts. This is local/offline gate hardening only and
+  does not mutate provider, app mirror, staging, live, DNS, Stripe, Search
+  Console, bootstrap, migrate, cache, indexing, checkout, users, or secrets.
 - 2026-05-23 documentation parity closeout after app mirror sync-plan guard:
   `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`. This records
   `849d8c2d88cc868990cab124af02648e493b49d1` as the pre-closeout guard

@@ -144,7 +144,7 @@ def run_contract() -> list[str]:
         write_hosted_preflight(hosted_wrong_site, "wrong-staging.frappe.cloud", "b" * 40, ok=True)
         write_hosted_preflight(hosted_wrong_hash, "locallytwisted-staging.frappe.cloud", "d" * 40, ok=True)
         write_valid_triad(triad_dir)
-        ledger.write_text(json.dumps({"fresh_release_plan_approved": True, "failures": []}), encoding="utf-8")
+        write_valid_failure_ledger(ledger, source_commit)
 
         deploy_missing_mirror = run_controller(
             "--action",
@@ -650,6 +650,32 @@ def write_valid_triad(path: Path) -> None:
             f"target: locallytwisted-staging.frappe.cloud\nstate: PASS\nevidence: {filename} proof\n",
             encoding="utf-8",
         )
+
+
+def write_valid_failure_ledger(path: Path, source_commit: str) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "artifact_type": "failure_ledger",
+                "lock_id": "lt-staging-forensic-freeze-2026-05-23",
+                "source_commit": source_commit,
+                "target_site": "locallytwisted-staging.frappe.cloud",
+                "provider_mutation_executed": False,
+                "fresh_release_plan_approved": False,
+                "failures": [
+                    {
+                        "failure_class": "payload_shape",
+                        "summary": "Synthetic guarded failure-class proof for the release controller contract.",
+                        "source_evidence": "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+                        "guard_written": True,
+                        "guard_path": "scripts/verify/frappe_cloud_payload_contract.py",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 def run_controller(*args: str) -> subprocess.CompletedProcess[str]:

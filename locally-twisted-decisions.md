@@ -8,6 +8,57 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Failure ledgers are generated release artifacts, not hand notes
+
+**Decision:** Future LT mutation-capable release packets must create or
+validate `failure-ledger.json` through
+`scripts/release/failure_ledger_artifact.py`. The shared validator rejects
+empty/thin ledgers, stale source commits, fake guard paths, raw/secret
+diagnostic keys, and repeated failure classes unless a fresh release plan is
+explicitly approved and evidenced.
+
+**Reasoning:** The controller already required a failure ledger, but a thin
+hand-authored JSON object could pass while omitting the actual failure classes,
+guard paths, and source binding that make the circuit breaker meaningful.
+Release prevention must fail before mutation if the ledger is stale, vague, or
+unsafe to archive.
+
+**Implementation boundary:** This is local/offline guard hardening only. It
+does not create approval, reopen forensic-freeze, sync the app mirror, deploy,
+bootstrap, migrate, clear cache, create users, index staging, unpause checkout,
+or mutate live/DNS/Stripe/Search Console.
+
+**Receipts:** `scripts/release/failure_ledger_artifact.py`;
+`scripts/verify/failure_ledger_artifact_contract.py`;
+`workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
+
+---
+
+## 2026-05-23 - Mutation-capable read receipts must include latest packet-authoring handoffs
+
+**Decision:** The active LT forensic-freeze lock and shared release guard must
+directly require the latest packet-authoring handoffs in future
+mutation-capable `read-receipt.json` artifacts, including the next-agent
+closeout, staging reopen packet prep, app-mirror sync-plan helper, and
+failure-ledger helper, and `849d8c2` documentation parity closeout.
+
+**Reasoning:** The first read-receipt widening was correct when written, but
+newer helper/closeout docs now control how a future approved staging reopen
+packet must be assembled. Leaving those docs only indirectly discoverable
+would let a future release agent satisfy the controller while missing the most
+current no-packet-churn and app-mirror-plan rules.
+
+**Implementation boundary:** This is local/offline gate hardening only. It
+does not create approval, reopen forensic-freeze, sync the app mirror, deploy,
+bootstrap, migrate, clear cache, create users, index staging, unpause checkout,
+or mutate live/DNS/Stripe/Search Console.
+
+**Receipts:** `release_locks/locally-twisted-staging-forensic-freeze.json`;
+`scripts/release/release_guard_common.py`;
+`workstreams/frappe-cloud-required-read-docs-refresh-2026-05-23.md`.
+
+---
+
 ## 2026-05-23 - Documentation parity closeouts are not release gates
 
 **Decision:** LT staging documentation closeouts may record the current source

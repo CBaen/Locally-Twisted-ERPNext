@@ -83,6 +83,17 @@ Documentation parity follow-up:
 keeps the rule that docs-only closeouts do not justify another read-only
 no-go packet. It does not mutate provider/app mirror/staging/live/DNS/Stripe/
 Search Console or make owner review ready.
+Required read-docs follow-up:
+`workstreams/frappe-cloud-required-read-docs-refresh-2026-05-23.md`. The active
+lock now requires the newer helper/closeout handoffs in mutation-capable read
+receipts so future release agents cannot skip current packet-authoring rules.
+This is local/offline gate hardening only.
+Failure-ledger helper follow-up:
+`workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`. Future
+mutation-capable packets must produce or validate `failure-ledger.json` through
+`scripts/release/failure_ledger_artifact.py`; empty ledgers, stale source
+commits, fake guard paths, raw/secret diagnostic keys, and repeated failure
+classes without fresh plan evidence now fail before mutation.
 
 Latest archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`

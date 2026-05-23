@@ -24,6 +24,7 @@ from release_guard_common import (  # noqa: E402
     REQUIRED_BLOCKED_ACTIONS,
     REQUIRED_READ_DOCS,
     ReleaseGuardError,
+    current_git_head,
     ensure_action_allowed,
     load_release_lock,
     validate_failure_ledger,
@@ -516,15 +517,7 @@ def run_checks(lock_file: Path) -> list[str]:
 
         repeated_ledger = tmp_path / "repeated-failures.json"
         repeated_ledger.write_text(
-            json.dumps(
-                {
-                    "fresh_release_plan_approved": False,
-                    "failures": [
-                        {"class": "payload_shape", "guard_written": True},
-                        {"class": "payload_shape", "guard_written": True},
-                    ],
-                }
-            ),
+            json.dumps(valid_failure_ledger_payload(lock, repeated=True, fresh_plan=False)),
             encoding="utf-8",
         )
         if not validate_failure_ledger(repeated_ledger):
@@ -532,15 +525,7 @@ def run_checks(lock_file: Path) -> list[str]:
 
         guarded_ledger = tmp_path / "guarded-failures.json"
         guarded_ledger.write_text(
-            json.dumps(
-                {
-                    "fresh_release_plan_approved": True,
-                    "failures": [
-                        {"class": "payload_shape", "guard_written": True},
-                        {"class": "payload_shape", "guard_written": True},
-                    ],
-                }
-            ),
+            json.dumps(valid_failure_ledger_payload(lock, repeated=True, fresh_plan=True)),
             encoding="utf-8",
         )
         failures.extend(validate_failure_ledger(guarded_ledger))
@@ -580,6 +565,35 @@ def valid_hosted_preflight_payload(site: str, app_hash: str) -> dict[str, object
         "checks": checks,
         "failures": [],
     }
+
+
+def valid_failure_ledger_payload(
+    lock: dict[str, object],
+    *,
+    repeated: bool,
+    fresh_plan: bool,
+) -> dict[str, object]:
+    entry = {
+        "failure_class": "payload_shape",
+        "summary": "Synthetic repeated failure-class proof for the release lock contract.",
+        "source_evidence": "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+        "guard_written": True,
+        "guard_path": "scripts/verify/frappe_cloud_payload_contract.py",
+    }
+    failures = [entry, dict(entry)] if repeated else [entry]
+    payload: dict[str, object] = {
+        "ok": True,
+        "artifact_type": "failure_ledger",
+        "lock_id": lock.get("id"),
+        "source_commit": current_git_head(),
+        "target_site": "locallytwisted-staging.frappe.cloud",
+        "provider_mutation_executed": False,
+        "fresh_release_plan_approved": fresh_plan,
+        "failures": failures,
+    }
+    if fresh_plan:
+        payload["fresh_release_plan_evidence"] = "release-lock-contract synthetic fresh plan evidence"
+    return payload
 
 
 if __name__ == "__main__":

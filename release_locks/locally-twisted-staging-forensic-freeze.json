@@ -42,6 +42,11 @@
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
     "workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md",
     "workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md",
+    "workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md",
+    "workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md",
+    "workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md",
     "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md"

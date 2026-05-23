@@ -51,6 +51,11 @@ REQUIRED_READ_DOCS = [
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
     "workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md",
     "workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md",
+    "workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md",
+    "workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md",
+    "workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md",
     "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md",
@@ -166,6 +171,31 @@ REQUIRED_TRIAD_ARTIFACTS = {
     "provider_witness": "provider-witness.md",
     "gate_fixer": "gate-fixer.md",
     "recorder": "recorder.md",
+}
+
+REQUIRED_FAILURE_LEDGER_FIELDS = {
+    "ok",
+    "artifact_type",
+    "lock_id",
+    "source_commit",
+    "target_site",
+    "provider_mutation_executed",
+    "fresh_release_plan_approved",
+    "failures",
+}
+
+DISALLOWED_FAILURE_LEDGER_KEYS = {
+    "secret",
+    "secrets",
+    "token",
+    "tokens",
+    "session",
+    "session_id",
+    "raw_provider_log",
+    "raw_log",
+    "body_excerpt",
+    "traceback",
+    "stack_trace",
 }
 
 
@@ -830,39 +860,92 @@ def validate_triad_artifacts(directory: Path) -> list[str]:
 
 def validate_failure_ledger(path: Path) -> list[str]:
     ledger = read_json(path)
-    if isinstance(ledger, list):
-        failures_data = ledger
-        fresh_plan_approved = False
-    elif isinstance(ledger, dict):
-        failures_data = ledger.get("failures") or []
-        fresh_plan_approved = bool(ledger.get("fresh_release_plan_approved"))
-    else:
-        return [f"failure ledger must be a JSON object or list: {path}"]
+    if not isinstance(ledger, dict):
+        return [f"failure ledger must be a JSON object: {path}"]
 
+    failures: list[str] = []
+    missing = sorted(field for field in REQUIRED_FAILURE_LEDGER_FIELDS if field not in ledger)
+    if missing:
+        failures.append(f"failure ledger is missing required fields: {missing}")
+    if ledger.get("ok") is not True:
+        failures.append("failure ledger must have ok=true")
+    if ledger.get("artifact_type") != "failure_ledger":
+        failures.append("failure ledger artifact_type must be failure_ledger")
+    if ledger.get("lock_id") != "lt-staging-forensic-freeze-2026-05-23":
+        failures.append("failure ledger lock_id must match the active staging forensic-freeze lock")
+    if ledger.get("target_site") != REQUIRED_HOSTED_PREFLIGHT_SITE:
+        failures.append(f"failure ledger target_site must be {REQUIRED_HOSTED_PREFLIGHT_SITE}")
+    if ledger.get("provider_mutation_executed") is not False:
+        failures.append("failure ledger must prove provider_mutation_executed=false")
+    source_commit = normalize_hash(ledger.get("source_commit"))
+    if not is_full_hash(source_commit):
+        failures.append("failure ledger source_commit must be a full 40-character hex hash")
+    else:
+        try:
+            current_head = current_git_head()
+        except ReleaseGuardError as exc:
+            failures.append(str(exc))
+        else:
+            if source_commit != current_head:
+                failures.append(f"failure ledger source_commit must match current repository HEAD: {source_commit} != {current_head}")
+
+    disallowed = sorted(key for key in collect_json_keys(ledger) if key.lower() in DISALLOWED_FAILURE_LEDGER_KEYS)
+    if disallowed:
+        failures.append(f"failure ledger contains disallowed raw/secret diagnostic keys: {disallowed}")
+
+    failures_data = ledger.get("failures") or []
     if not isinstance(failures_data, list):
-        return ["failure ledger failures must be a list"]
+        failures.append("failure ledger failures must be a list")
+        failures_data = []
+    if not failures_data:
+        failures.append("failure ledger failures must be non-empty")
 
     classes: list[str] = []
-    failures: list[str] = []
     for index, entry in enumerate(failures_data):
         if not isinstance(entry, dict):
             failures.append(f"failure ledger entry {index} is not an object")
             continue
-        failure_class = entry.get("class") or entry.get("failure_class")
+        failure_class = entry.get("failure_class") or entry.get("class")
         if not failure_class:
-            failures.append(f"failure ledger entry {index} is missing class")
+            failures.append(f"failure ledger entry {index} is missing failure_class")
             continue
         classes.append(str(failure_class))
         if not entry.get("guard_written"):
             failures.append(f"failure class {failure_class!r} has no guard_written=true")
+        if not str(entry.get("summary") or "").strip():
+            failures.append(f"failure class {failure_class!r} is missing summary")
+        if not str(entry.get("source_evidence") or "").strip():
+            failures.append(f"failure class {failure_class!r} is missing source_evidence")
+        guard_path = str(entry.get("guard_path") or "").strip()
+        if not guard_path:
+            failures.append(f"failure class {failure_class!r} is missing guard_path")
+        elif Path(guard_path).is_absolute() or ".." in Path(guard_path).parts:
+            failures.append(f"failure class {failure_class!r} guard_path must be repo-relative")
+        elif not repo_path(guard_path).exists():
+            failures.append(f"failure class {failure_class!r} guard_path does not exist: {guard_path}")
 
     repeated = sorted(name for name, count in Counter(classes).items() if count >= 2)
+    fresh_plan_approved = bool(ledger.get("fresh_release_plan_approved"))
     if repeated and not fresh_plan_approved:
         failures.append(
             "repeated provider/bootstrap failure classes require fresh_release_plan_approved=true: "
             + ", ".join(repeated)
         )
+    if fresh_plan_approved and not str(ledger.get("fresh_release_plan_evidence") or "").strip():
+        failures.append("fresh_release_plan_approved=true requires fresh_release_plan_evidence")
     return failures
+
+
+def collect_json_keys(value: Any) -> set[str]:
+    keys: set[str] = set()
+    if isinstance(value, dict):
+        for key, child in value.items():
+            keys.add(str(key))
+            keys.update(collect_json_keys(child))
+    elif isinstance(value, list):
+        for child in value:
+            keys.update(collect_json_keys(child))
+    return keys
 
 
 def raise_if_failures(prefix: str, failures: list[str]) -> None:

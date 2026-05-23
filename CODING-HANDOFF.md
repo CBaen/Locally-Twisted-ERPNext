@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Failure-ledger helper hardening on 2026-05-23:
+`workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
+Future mutation-capable packets must generate or validate `failure-ledger.json`
+through `scripts/release/failure_ledger_artifact.py`; the shared validator now
+rejects empty ledgers, stale source commits, fake guard paths, raw/secret
+diagnostic keys, and repeated failure classes without fresh plan evidence. This
+is local/offline guard hardening only; it does not create approval, sync the app
+mirror, call Frappe Cloud, or mutate staging/live/DNS/Stripe/Search Console.
+
+Required read-docs refresh on 2026-05-23:
+`workstreams/frappe-cloud-required-read-docs-refresh-2026-05-23.md`.
+The forensic-freeze lock and shared release guard now directly require the
+newer next-agent closeout, staging reopen packet prep, app-mirror sync-plan
+helper, failure-ledger helper, and `849d8c2` doc-parity handoffs in future mutation-capable
+`read-receipt.json` artifacts. This is local/offline gate hardening only; it
+does not create approval, sync the app mirror, call Frappe Cloud, or mutate
+staging/live/DNS/Stripe/Search Console.
+
 Doc parity closeout after `849d8c2` on 2026-05-23:
 `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`.
 This pass records the current local guard archive and removes ignored Python

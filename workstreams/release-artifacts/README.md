@@ -76,6 +76,12 @@ timestamp guard, freeze-reopen approval helper handoff, scripts README, action
 list, forensic report, staging-owner-review history, launch capability, and
 queue before mutation can pass.
 
+As of the required-read-docs refresh, it must also include the next-agent
+closeout, staging reopen packet prep handoff, app-mirror sync-plan helper
+handoff, failure-ledger helper handoff, and `849d8c2` documentation parity
+closeout. Feature handoff:
+`../frappe-cloud-required-read-docs-refresh-2026-05-23.md`.
+
 The release controller's artifact-chain validation is local/offline. It proves
 packet coherence only; it is not app mirror sync, provider deploy/update,
 hosted preflight, bootstrap/import, owner-review, live, DNS, Stripe, Search
@@ -164,6 +170,23 @@ without a valid `freeze-reopen-approval.json`, read receipt, provider snapshot,
 failure ledger, artifact-owned triad files, and coherent source/hash chain.
 The helper does not push the app mirror, call Frappe Cloud, deploy, bootstrap,
 migrate, cache clear, or touch live/DNS/Stripe/Search Console.
+
+## Failure Ledger Helper
+
+Generate or validate `failure-ledger.json` with:
+
+```powershell
+python scripts\release\failure_ledger_artifact.py --json
+python scripts\release\failure_ledger_artifact.py --write --output workstreams\release-artifacts\<dated-packet>\failure-ledger.json --reviewed-source --json
+python scripts\release\failure_ledger_artifact.py --validate-only workstreams\release-artifacts\<dated-packet>\failure-ledger.json --json
+```
+
+Preview mode is not controller-consumable. Written ledgers bind known failure
+classes to current `HEAD`, the active freeze lock, the staging target, concrete
+guard paths, and `provider_mutation_executed=false`. The helper does not create
+approval, sync the app mirror, call Frappe Cloud, deploy, bootstrap, migrate,
+cache clear, index staging, unpause checkout, or touch live/DNS/Stripe/Search
+Console.
 
 Current template:
 `2026-05-23-staging-freeze/TEMPLATE.md` was updated in source commit

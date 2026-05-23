@@ -197,6 +197,12 @@ Default public launch posture:
   `npm run test:app-mirror-sync-plan`. A valid `app-mirror-sync-plan.json` is
   not approval and not mirror freshness; it only permits the controller to
   evaluate a future approved `app_mirror_sync` packet.
+- Failure ledgers must be generated or validated with
+  `scripts/release/failure_ledger_artifact.py`, covered by
+  `npm run test:failure-ledger-artifact`. A valid `failure-ledger.json` is not
+  approval; it is the source-bound circuit breaker proving known
+  provider/bootstrap failure classes have concrete guards and no unsafe raw
+  diagnostics.
 - Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
   It updates no-go evidence for packet source
@@ -220,8 +226,11 @@ Default public launch posture:
   mutation-capable packet must prove the agent read the front-door handoffs,
   launch runbook, release-artifact README, artifact-chain handoff,
   freeze-approval timestamp guard, freeze-reopen approval helper handoff,
-  scripts README, action list, forensic report, staging-owner-review history,
-  launch capability, and queue.
+  next-agent closeout, staging reopen packet prep handoff, app-mirror sync-plan
+  helper handoff, failure-ledger helper handoff, `849d8c2` documentation
+  parity closeout, scripts README, action list, forensic report,
+  staging-owner-review history, launch
+  capability, and queue.
 
 ## Human Access Boundary
 

@@ -6,6 +6,36 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A required artifact is not real if the validator accepts a stub
+
+The release controller required `failure-ledger.json`, but the original
+validator still accepted a thin object or list. That made the gate look
+present while allowing a packet to omit source binding, concrete failure
+classes, guard paths, and evidence that repeated failure classes had been
+handled by a fresh plan.
+
+**Counter-move:** when a release artifact becomes required, give it both a
+producer and a strict validator. The validator should reject empty artifacts,
+stale source commits, fake paths, raw/secret diagnostic fields, and repeated
+failure classes without fresh plan evidence. The producer should be preview-only
+until explicitly written into a dated packet.
+
+---
+
+## 2026-05-23 - Read-receipt gates drift when helper docs are added later
+
+The release read-receipt gate was intentionally widened, then newer helper and
+closeout docs were added after it. That creates a quiet gap: a future release
+agent can satisfy the old required list while missing the newest packet
+authoring rules.
+
+**Counter-move:** when adding a release helper, next-agent closeout, or
+packet-authoring handoff that changes how a future mutation-capable packet is
+assembled, add it to both the active release lock and the shared
+`REQUIRED_READ_DOCS` list in the same closeout.
+
+---
+
 ## 2026-05-23 - A docs closeout should close the loop, not reopen the release
 
 After `849d8c2`, the repo already had a clean local guard archive for the app

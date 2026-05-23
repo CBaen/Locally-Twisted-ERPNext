@@ -13,8 +13,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HELPER = ROOT / "scripts" / "release" / "app_mirror_sync_plan_artifact.py"
 CONTROLLER = ROOT / "scripts" / "release" / "frappe_cloud_release_controller.py"
-READ_RECEIPT = ROOT / "workstreams" / "release-artifacts" / "2026-05-23-staging-reopen-9e63fef-readonly" / "read-receipt.json"
 ROLLBACK_HASH = "1" * 40
+
+sys.path.insert(0, str(ROOT / "scripts" / "release"))
+from release_guard_common import REQUIRED_READ_DOCS  # noqa: E402
 
 
 def main() -> int:
@@ -40,7 +42,9 @@ def run_contract() -> list[str]:
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             valid_path = tmp_path / "app-mirror-sync-plan.json"
+            read_receipt = tmp_path / "read-receipt.json"
             release_output = ROOT / "workstreams" / "release-artifacts" / "tmp-contract-app-mirror-sync-plan" / "app-mirror-sync-plan.json"
+            write_current_read_receipt(read_receipt)
 
             preview = run_helper("--rollback-hash", ROLLBACK_HASH, "--json")
             if preview.returncode == 0:
@@ -95,7 +99,7 @@ def run_contract() -> list[str]:
                 "--action",
                 "app_mirror_sync",
                 "--read-receipt",
-                str(READ_RECEIPT),
+                str(read_receipt),
                 "--app-mirror-sync-plan",
                 str(valid_path),
                 "--json",
@@ -291,6 +295,25 @@ def git_head() -> str:
         check=True,
     )
     return result.stdout.strip().lower()
+
+
+def write_current_read_receipt(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "agent": "app-mirror-sync-plan-artifact-contract",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "source_commit": git_head(),
+                "target": "locallytwisted-staging.frappe.cloud",
+                "read_documents": REQUIRED_READ_DOCS,
+                "provider_mutation_executed": False,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
 
 if __name__ == "__main__":
