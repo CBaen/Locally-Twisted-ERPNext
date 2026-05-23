@@ -192,6 +192,11 @@ Default public launch posture:
   packets and must not contain final artifact names or `ok=true` proof
   manifests. They only record current source context, missing proof, and
   non-authorizing approval preview.
+- App mirror pre-sync plans must be generated or validated with
+  `scripts/release/app_mirror_sync_plan_artifact.py`, covered by
+  `npm run test:app-mirror-sync-plan`. A valid `app-mirror-sync-plan.json` is
+  not approval and not mirror freshness; it only permits the controller to
+  evaluate a future approved `app_mirror_sync` packet.
 - Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
   It updates no-go evidence for packet source

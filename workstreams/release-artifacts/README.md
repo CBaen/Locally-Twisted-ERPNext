@@ -49,9 +49,11 @@ release controller can move past forensic-freeze:
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
 - `scripts/release/frappe_cloud_release_controller.py`
 - `scripts/release/freeze_reopen_approval_artifact.py`
+- `scripts/release/app_mirror_sync_plan_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/freeze_reopen_approval_artifact_contract.py`
+- `scripts/verify/app_mirror_sync_plan_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
@@ -127,6 +129,35 @@ timezone-bearing approval timestamps, a maximum 24-hour approval window, and
 the live/DNS/Stripe/Search Console block. It does not contact Frappe Cloud or
 mutate app mirror, provider, staging, live, DNS, Stripe, Search Console,
 indexing, checkout, cache, migrate, or bootstrap state.
+
+## How To Create App Mirror Sync Plan
+
+Do not hand-copy `app-mirror-sync-plan.json` from an archived packet. After
+source has been reviewed for a fresh release attempt and the current deployed
+staging rollback hash is known, generate the pre-sync plan with:
+
+```powershell
+python scripts\release\app_mirror_sync_plan_artifact.py `
+  --write `
+  --output workstreams\release-artifacts\<fresh-packet>\app-mirror-sync-plan.json `
+  --rollback-hash <current-installed-or-rollback-hash> `
+  --reviewed-source `
+  --json
+```
+
+Validate an existing packet artifact:
+
+```powershell
+python scripts\release\app_mirror_sync_plan_artifact.py `
+  --validate-only workstreams\release-artifacts\<fresh-packet>\app-mirror-sync-plan.json `
+  --json
+```
+
+The sync plan is not approval. The controller still blocks `app_mirror_sync`
+without a valid `freeze-reopen-approval.json`, read receipt, provider snapshot,
+failure ledger, artifact-owned triad files, and coherent source/hash chain.
+The helper does not push the app mirror, call Frappe Cloud, deploy, bootstrap,
+migrate, cache clear, or touch live/DNS/Stripe/Search Console.
 
 Current template:
 `2026-05-23-staging-freeze/TEMPLATE.md` was updated in source commit

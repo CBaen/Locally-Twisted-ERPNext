@@ -1,5 +1,17 @@
 # Locally Twisted - Coding Handoff
 
+App mirror sync plan helper on 2026-05-23:
+`workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`.
+`scripts/release/app_mirror_sync_plan_artifact.py` creates or validates the
+pre-sync `app-mirror-sync-plan.json` required before a future approved
+`app_mirror_sync`; `scripts/verify/app_mirror_sync_plan_artifact_contract.py`
+and `npm run test:app-mirror-sync-plan` cover it. This is local/offline only:
+it does not push the app mirror, call Frappe Cloud, deploy, bootstrap, migrate,
+cache clear, create users, index staging, unpause checkout, or touch live/DNS/
+Stripe/Search Console/secrets. Fresh read-only checks in that handoff confirm
+staging is still NO-GO and `app_mirror_sync` remains blocked by missing
+`freeze-reopen-approval.json`.
+
 Staging reopen packet prep helper on 2026-05-23:
 `workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
 `scripts/release/staging_reopen_packet_prepare.py` creates only prep-only

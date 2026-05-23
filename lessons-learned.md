@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Pre-sync plans are not mirror sync proof
+
+A valid `app-mirror-sync-plan.json` is only a local precondition for a future
+approved mirror sync. It proves source review, target, rollback hash, required
+files, and post-sync proof requirements. It does not prove the app mirror was
+updated, Frappe Cloud deployed, hosted preflight passed, catalog data exists,
+or owner-review users/routes are ready.
+
+**Counter-move:** generate sync plans through
+`scripts/release/app_mirror_sync_plan_artifact.py`, validate them through the
+controller, then require post-sync `app-mirror-freshness.json` before any
+downstream deploy/preflight/bootstrap claim.
+
+---
+
 ## 2026-05-23 - Prep helpers can accidentally look like release proof
 
 The next useful movement after the forensic freeze was not another no-go packet

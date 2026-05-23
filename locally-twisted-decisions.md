@@ -8,6 +8,30 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - App mirror sync plans must be generated, not hand-copied
+
+**Decision:** Future LT staging reopen packets must create
+`app-mirror-sync-plan.json` through
+`scripts/release/app_mirror_sync_plan_artifact.py` or validate an equivalent
+artifact through the same helper. Do not copy a sync plan from an older packet.
+
+**Reasoning:** The app-root mirror is currently the hard blocker before hosted
+preflight can run. A pre-sync plan is required before a controlled mirror sync,
+but an older plan is bound to an older source commit and rollback hash. The
+local producer makes the plan current and explicit while still leaving
+forensic-freeze and approval gates intact.
+
+**Implementation boundary:** This is local/offline only. A valid sync plan does
+not reopen forensic-freeze, sync the app mirror, deploy, bootstrap, migrate,
+cache clear, create users, index staging, unpause checkout, or mutate live/DNS/
+Stripe/Search Console.
+
+**Receipts:** `scripts/release/app_mirror_sync_plan_artifact.py`;
+`scripts/verify/app_mirror_sync_plan_artifact_contract.py`;
+`workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`.
+
+---
+
 ## 2026-05-23 - Staging reopen prep must not write final release artifact names
 
 **Decision:** The staging reopen prep helper may write only prep-only files and

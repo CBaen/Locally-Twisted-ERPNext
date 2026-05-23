@@ -71,6 +71,12 @@ Packet-prep follow-up:
 `npm run test:staging-reopen-packet-prepare` as a prep-only lane. It does not
 create controller-consumable final artifacts or mutate provider/staging/app
 mirror/live/DNS/Stripe/Search Console.
+App-mirror sync-plan follow-up:
+`workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`. This adds
+`scripts/release/app_mirror_sync_plan_artifact.py` and
+`npm run test:app-mirror-sync-plan` so a future approved reopen packet can
+generate the pre-sync `app-mirror-sync-plan.json` instead of hand-copying JSON.
+It does not sync the app mirror or reopen forensic-freeze.
 
 Latest archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`

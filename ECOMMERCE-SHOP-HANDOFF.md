@@ -5,6 +5,15 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 app mirror sync plan helper:
+  `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`.
+  `scripts/release/app_mirror_sync_plan_artifact.py` writes only the local
+  pre-sync `app-mirror-sync-plan.json` after `--write`,
+  `--rollback-hash`, and `--reviewed-source`. It is covered by
+  `npm run test:app-mirror-sync-plan` and included in
+  `npm run test:release-prevention`. It does not sync the mirror, mutate
+  provider/staging, or create owner-review readiness; current staging remains
+  no-go because approval is missing and the app mirror/deployed app are stale.
 - 2026-05-23 staging reopen packet prep helper:
   `workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
   `scripts/release/staging_reopen_packet_prepare.py` writes only prep-only

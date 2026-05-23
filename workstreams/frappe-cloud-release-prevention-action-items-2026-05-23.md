@@ -378,6 +378,16 @@ execution can leave forensic-freeze.
     `scripts/verify/staging_reopen_packet_prepare_contract.py` and
     `npm run test:staging-reopen-packet-prepare`.
 
+28. **Add an app mirror pre-sync plan artifact helper.** `implemented-local; open-before-provider-mutation`
+    `scripts/release/app_mirror_sync_plan_artifact.py` writes or validates the
+    local `app-mirror-sync-plan.json` required before a future approved
+    `app_mirror_sync`. It is covered by
+    `scripts/verify/app_mirror_sync_plan_artifact_contract.py` and
+    `npm run test:app-mirror-sync-plan`. This helper does not push the app
+    mirror, call Frappe Cloud, reopen forensic-freeze, deploy, bootstrap,
+    migrate, cache clear, index staging, unpause checkout, or touch live/DNS/
+    Stripe/Search Console.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
@@ -396,8 +406,11 @@ execution can leave forensic-freeze.
    `local`, `GitHub archive`, `app mirror`, `deploy candidate`,
    `site migrate`, `cache/config`, `staging owner-review`, and `live release`
    cannot be used interchangeably.
-6. Add release-packet producers for real freeze-reopen approval and app mirror
-   sync plan artifacts once GL explicitly reopens staging execution.
+6. Use the existing release-packet producers for real freeze-reopen approval
+   and app mirror sync plan artifacts once GL explicitly reopens staging
+   execution. The still-open work is assembling a current mutation-capable
+   packet with real approval and fresh provider artifacts, not hand-copying
+   those two JSON files.
 
 ## Suggested File Targets
 
@@ -409,6 +422,8 @@ Implemented local/offline guards:
 - `scripts/release/frappe_cloud_release_controller.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
+- `scripts/release/app_mirror_sync_plan_artifact.py`
+- `scripts/verify/app_mirror_sync_plan_artifact_contract.py`
 - `scripts/verify/frappe_cloud_deploy_completion_contract.py`
 - `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/release_lock_contract.py`
