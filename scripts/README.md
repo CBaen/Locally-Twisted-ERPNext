@@ -73,7 +73,7 @@ should not be used as launch proof.
 Release evidence and current no-go state live outside this scripts directory.
 Start with `workstreams/release-artifacts/README.md`, the latest archived
 read-only no-go packet
-`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`,
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`,
 and the current release-prevention action list before reopening any Frappe
 Cloud staging/live path. Archived packets are evidence for their packet source
 commit; generate fresh source-bound artifacts before mutation when `HEAD` has
@@ -100,9 +100,9 @@ front-door handoffs, launch runbook, release-artifact README, artifact-chain
 handoff, freeze-approval timestamp guard, freeze-reopen approval helper
 handoff, next-agent closeout, staging reopen packet prep handoff, app-mirror
 sync-plan helper handoff, failure-ledger helper handoff, the `849d8c2`
-doc-parity closeout, this scripts README, action list, forensic report,
-staging-owner-review history, launch capability, and queue before any
-mutation-capable release gate can pass.
+doc-parity closeout, the `a5ed680` read-only closeout, this scripts README,
+action list, forensic report, staging-owner-review history, launch capability,
+and queue before any mutation-capable release gate can pass.
 
 ## translate/
 

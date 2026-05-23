@@ -56,6 +56,7 @@ REQUIRED_READ_DOCS = [
     "workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md",
     "workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md",
     "workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md",
+    "workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md",
     "scripts/README.md",
     "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
     "locally-twisted-queue.md",

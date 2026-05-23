@@ -8,6 +8,30 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Current-source read-only packets are evidence, not mutation authority
+
+**Decision:** The `a5ed680` read-only staging packet is archived current-source
+evidence only. It may inform the next release attempt, but it must not be used
+as approval, app mirror sync authority, provider deploy authority, bootstrap
+authority, or owner-review readiness proof.
+
+**Reasoning:** Both witness lanes found the same blocker chain: the active
+forensic-freeze lock still blocks mutation, no current
+`freeze-reopen-approval.json` exists, the app-root mirror remains stale at
+`181076c...`, hosted preflight fails, and staging owner-review data/users/routes
+are absent. A packet can make that state visible without reopening execution.
+
+**Implementation boundary:** This is read-only release-state documentation and
+artifact archival. It does not reopen forensic-freeze, sync the app mirror,
+deploy, bootstrap, migrate, clear cache, create users, index staging, unpause
+checkout, or mutate live/DNS/Stripe/Search Console.
+
+**Receipts:**
+`workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+
+---
+
 ## 2026-05-23 - Failure ledgers are generated release artifacts, not hand notes
 
 **Decision:** Future LT mutation-capable release packets must create or

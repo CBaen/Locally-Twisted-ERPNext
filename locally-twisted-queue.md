@@ -16,6 +16,15 @@ process and must not be used as launch authority. Required source:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
 Required fix-agent action list:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+Current-source read-only closeout:
+`workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`.
+Current read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+It is **NO-GO** and not mutation authority: active forensic-freeze still blocks
+provider/app mirror/staging mutation, the app-root mirror/deployed app remain
+at `181076c...`, hosted preflight still returns HTTP `417`, owner-review
+catalog/users/routes are still missing, and `app_mirror_sync` is still blocked
+by missing `freeze-reopen-approval.json`.
 Next-agent closeout:
 `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
 Do not create a new read-only no-go packet only because a docs-only commit
@@ -95,7 +104,7 @@ mutation-capable packets must produce or validate `failure-ledger.json` through
 commits, fake guard paths, raw/secret diagnostic keys, and repeated failure
 classes without fresh plan evidence now fail before mutation.
 
-Latest archived snapshot-source read-only packet:
+Previous archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`
 is bound to packet source `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`. It
 reconfirms staging remains no-go after the b039667 archive:

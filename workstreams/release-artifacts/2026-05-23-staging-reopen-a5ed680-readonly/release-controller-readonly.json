@@ -1,0 +1,7 @@
+{
+  "action": "read_only_forensics",
+  "lock": "lt-staging-forensic-freeze-2026-05-23",
+  "ok": true,
+  "provider_mutation_executed": false,
+  "stage": "forensic-freeze"
+}

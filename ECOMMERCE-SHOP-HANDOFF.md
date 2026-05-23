@@ -5,6 +5,19 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 current-source read-only staging packet after `a5ed680`:
+  `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` and
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+  This is **NO-GO** read-only evidence, not owner-review readiness and not a
+  release packet for mutation. Staging is Active with ecommerce paused and
+  public indexing disabled, but the app-root mirror/deployed app hash remains
+  `181076c...`, mirror freshness is `ok=false`, hosted preflight returns HTTP
+  `417`, catalog/Product Setup/gallery rows are zero, required owner and
+  marketing users are missing, representative routes return `404`, and
+  `app_mirror_sync` is blocked before mutation because
+  `freeze-reopen-approval.json` is missing. This pass did not mutate provider,
+  app mirror, staging, live, DNS, Stripe, Search Console, bootstrap, migrate,
+  cache, checkout, users, indexing, or secrets.
 - 2026-05-23 failure-ledger helper hardening:
   `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
   Future mutation-capable release packets must generate or validate
@@ -72,7 +85,7 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   `--approved-by`, and `--approval-evidence`. This is local/offline prevention
   only and did not mutate provider, staging, live, DNS, Stripe, Search Console,
   app mirror, bootstrap, migrate, cache, checkout, or secrets.
-- 2026-05-23 latest read-only staging packet:
+- 2026-05-23 previous read-only staging packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
   This packet is bound to source
   `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7` and performed no provider or
@@ -339,7 +352,7 @@ The hosted preflight output must be bound to the same staging site and release
 hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a hand-shaped
 minimal `ok` artifact is not acceptable.
 The latest read-only packet
-`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`
 produced the provider snapshot and tried hosted preflight; hosted preflight is
 blocked because staging is still running app hash `181076c...`, which does not
 include the source preflight method.

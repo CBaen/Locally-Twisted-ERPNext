@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Current evidence still does not authorize current mutation
+
+The `a5ed680` packet was useful because it rebuilt read-only evidence against
+the current source after guard code changed. It still did not make staging
+ready: the app mirror is stale, hosted preflight fails, owner-review data and
+users are absent, and approval to leave forensic-freeze is still missing.
+
+**Counter-move:** treat current-source evidence as a source-bound snapshot, not
+as a release transition. The next mutation-capable attempt still needs fresh
+explicit approval, source-bound final artifacts, and controller gates in order.
+Do not let a clean packet folder or passing local guard tests become a staging
+readiness claim.
+
+---
+
 ## 2026-05-23 - A required artifact is not real if the validator accepts a stub
 
 The release controller required `failure-ledger.json`, but the original

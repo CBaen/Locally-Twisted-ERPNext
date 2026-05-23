@@ -172,7 +172,7 @@ Default public launch posture:
   `release_controller_contract.py`. Prefer UTF-8 without BOM when writing new
   packet files, but a PowerShell-written BOM must not become a false release
   blocker.
-- The latest archived snapshot-source read-only packet is
+- Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
   It updates no-go evidence for packet source
   `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`: the app-root mirror/deployed
@@ -203,6 +203,15 @@ Default public launch posture:
   approval; it is the source-bound circuit breaker proving known
   provider/bootstrap failure classes have concrete guards and no unsafe raw
   diagnostics.
+- Latest current-source read-only packet:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+  It is bound to source
+  `a5ed6804392f9c576a321e81b8fa0a477c200828` and remains NO-GO: app mirror
+  freshness is `ok=false`, hosted preflight returns HTTP `417`, owner-review
+  catalog/users/routes are missing, and `app_mirror_sync` is blocked by
+  missing `freeze-reopen-approval.json`. It did not mutate provider, staging,
+  app mirror, live, DNS, Stripe, Search Console, bootstrap, migrate, cache,
+  checkout, users, indexing, or secrets.
 - Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
   It updates no-go evidence for packet source
@@ -228,9 +237,8 @@ Default public launch posture:
   freeze-approval timestamp guard, freeze-reopen approval helper handoff,
   next-agent closeout, staging reopen packet prep handoff, app-mirror sync-plan
   helper handoff, failure-ledger helper handoff, `849d8c2` documentation
-  parity closeout, scripts README, action list, forensic report,
-  staging-owner-review history, launch
-  capability, and queue.
+  parity closeout, `a5ed680` read-only closeout, scripts README, action list,
+  forensic report, staging-owner-review history, launch capability, and queue.
 
 ## Human Access Boundary
 

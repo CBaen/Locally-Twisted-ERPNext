@@ -77,6 +77,17 @@ hosted preflight artifacts do not agree on source commit, app hash, rollback
 hash, and site. Handoff:
 `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
 
+2026-05-23 current-source read-only update after `a5ed680`: packet
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`
+and handoff
+`workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` confirm
+staging remains NO-GO. The app mirror/deployed hash is still `181076c...`,
+hosted preflight still returns HTTP `417`, owner-review catalog/users/routes
+are still missing, and `app_mirror_sync` is still blocked by missing
+`freeze-reopen-approval.json`. This is read-only evidence only and did not
+mutate provider, app mirror, staging, live, DNS, Stripe, Search Console,
+bootstrap, migrate, cache, checkout, users, indexing, or secrets.
+
 ## Current State And Superseded Staging History
 
 Read this section as layered evidence, not a single current release path. The

@@ -16,6 +16,7 @@ Newly direct-required docs:
 - `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`
 - `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`
 - `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`
+- `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`
 
 This closes a local gate gap: a future approved `app_mirror_sync` packet should
 not pass the controller after reading only the older forensic report, lock,
@@ -47,7 +48,9 @@ after the first read-receipt widening:
 - generate the app-mirror sync plan through the helper;
 - generate or validate the failure ledger through the helper;
 - treat the `849d8c2` docs closeout as documentation parity, not release
-  proof.
+  proof;
+- treat the `a5ed680` packet as current-source read-only no-go evidence, not
+  mutation authority.
 
 Those rules now need to be mechanically present in the required-doc receipt,
 not only discoverable through handoffs.

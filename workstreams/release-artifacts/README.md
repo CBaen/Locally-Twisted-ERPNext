@@ -1,6 +1,18 @@
 # Release Artifacts
 
-Latest docs-only closeout:
+Latest current-source read-only no-go packet:
+`2026-05-23-staging-reopen-a5ed680-readonly/`.
+It is bound to source
+`a5ed6804392f9c576a321e81b8fa0a477c200828` and confirms staging remains
+NO-GO: app mirror/deployed hash `181076c...` is stale against source, hosted
+preflight returns HTTP `417`, owner-review catalog/users/routes are missing,
+and `app_mirror_sync` is blocked by missing `freeze-reopen-approval.json`.
+This packet did not mutate provider, staging, app mirror, live, DNS, Stripe,
+Search Console, bootstrap, migrate, cache, checkout, users, indexing, or
+secrets. Handoff:
+`../frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`.
+
+Earlier docs-only closeout:
 `../frappe-cloud-doc-parity-849d8c2-2026-05-23.md`.
 It records the local app mirror sync-plan guard archive and cleanup after
 `849d8c2`; it is not a release packet and does not justify another read-only
@@ -81,6 +93,10 @@ closeout, staging reopen packet prep handoff, app-mirror sync-plan helper
 handoff, failure-ledger helper handoff, and `849d8c2` documentation parity
 closeout. Feature handoff:
 `../frappe-cloud-required-read-docs-refresh-2026-05-23.md`.
+
+As of the `a5ed680` read-only closeout, it must also include
+`../frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` so future
+mutation-capable packets cannot skip the current-source no-go evidence.
 
 The release controller's artifact-chain validation is local/offline. It proves
 packet coherence only; it is not app mirror sync, provider deploy/update,
@@ -197,7 +213,7 @@ template only. Do not treat the template file as a release artifact, approval,
 provider proof, or staging proof. Feature handoff:
 `../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
-Latest archived read-only packet:
+Previous archived read-only packet:
 `2026-05-23-staging-reopen-9e63fef-readonly/` is read-only evidence for packet
 source commit `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`. It proves the app
 mirror/deployed staging app still remain at

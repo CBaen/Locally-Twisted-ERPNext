@@ -1,5 +1,20 @@
 # Locally Twisted - Coding Handoff
 
+Current-source read-only staging packet after `a5ed680` on 2026-05-23:
+`workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+This packet is **NO-GO** and read-only. It confirms the active
+forensic-freeze lock still blocks provider/app mirror/staging mutation because
+no current `freeze-reopen-approval.json` exists. Staging is Active with
+ecommerce paused and public indexing disabled, but the app-root mirror and
+deployed app remain at `181076c...`, mirror freshness is `ok=false`, hosted
+preflight returns HTTP `417`, catalog/Product Setup/gallery rows are zero,
+`locallytwisted@gmail.com` and `marketing@exploringnotboring.com` are missing,
+representative routes return `404`, and `app_mirror_sync` is blocked before
+mutation. No provider, staging, app mirror, live, DNS, Stripe, Search Console,
+bootstrap, migrate, cache, checkout, user, indexing, or secret mutation was
+performed.
+
 Failure-ledger helper hardening on 2026-05-23:
 `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
 Future mutation-capable packets must generate or validate `failure-ledger.json`
@@ -88,7 +103,7 @@ only. It does not reopen forensic-freeze, create a real approval artifact, or
 mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
 migrate/cache/checkout/secrets.
 
-Latest read-only staging packet on 2026-05-23:
+Previous read-only staging packet on 2026-05-23:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`
 is archived evidence for packet source
 `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`. It performed no provider or
