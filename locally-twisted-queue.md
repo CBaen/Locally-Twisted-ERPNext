@@ -61,9 +61,9 @@ hosted-preflight artifacts. Handoff:
 `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
 
 Latest archived snapshot-source read-only packet:
-`workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`
-is bound to packet source `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It
-reconfirms staging remains no-go after the freeze approval timestamp guard:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`
+is bound to packet source `b0396675a8664a42e887b6ac141b63ac115eaaa7`. It
+reconfirms staging remains no-go after the freeze reopen approval helper:
 app mirror/deployed staging hash is still
 `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
 HTTP `417`, owner-review data/users/routes are still missing, and
@@ -72,6 +72,11 @@ This is archived read-only evidence, not mutation-capable proof for a later
 commit.
 
 Previous archived snapshot-source read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`
+is bound to packet source `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It is
+not mutation-capable proof for a later commit.
+
+Earlier archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`
 is bound to packet source `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The
 folder name is historical: after this packet was committed, repo `HEAD` moved,

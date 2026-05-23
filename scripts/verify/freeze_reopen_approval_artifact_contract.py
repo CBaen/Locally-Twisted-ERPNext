@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import argparse
 import subprocess
 import sys
 import tempfile
@@ -14,6 +15,9 @@ HELPER = ROOT / "scripts" / "release" / "freeze_reopen_approval_artifact.py"
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args()
+
     failures = run_checks()
     if failures:
         print("[FREEZE REOPEN APPROVAL ARTIFACT CONTRACT] FAIL")

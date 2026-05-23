@@ -122,8 +122,8 @@ provider proof, or staging proof. Feature handoff:
 `../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
 Latest archived read-only packet:
-`2026-05-23-staging-reopen-fa38bc3-readonly/` is read-only evidence for packet
-source commit `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It proves the app
+`2026-05-23-staging-reopen-b039667-readonly/` is read-only evidence for packet
+source commit `b0396675a8664a42e887b6ac141b63ac115eaaa7`. It proves the app
 mirror/deployed staging app still remain at
 `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
 HTTP `417`, staging owner-review rows/users/routes are still missing, and
@@ -134,6 +134,11 @@ committed, repo `HEAD` will move; generate fresh source-bound artifacts for the
 then-current release source before mutation.
 
 Previous archived read-only packet:
+`2026-05-23-staging-reopen-fa38bc3-readonly/` is read-only evidence for packet
+source commit `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It is not
+mutation-capable proof for a later commit.
+
+Earlier archived read-only packet:
 `2026-05-23-staging-reopen-current-head-readonly/` is read-only evidence for
 packet source commit `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder
 name is historical and must not be treated as current-head authority.
