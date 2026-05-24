@@ -69,10 +69,10 @@ html body[data-path="shop-items/arches"] .lt-shop__hero {
   --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-arch-category-hero-desktop.webp");
 }
 
-html body[data-path="shop-items/columns"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-desktop.webp");
+html body[data-path="shop-items/balloon-drops"] .lt-shop__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/bouquets"] .lt-shop__hero {
@@ -81,10 +81,10 @@ html body[data-path="shop-items/bouquets"] .lt-shop__hero {
   --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/mothers-day-bouquet-category-hero-desktop.webp");
 }
 
-html body[data-path="shop-items/get-well-bouquets"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/bandage-get-well-bouquet-latex-free-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/bandage-get-well-bouquet-latex-free-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/bandage-get-well-bouquet-latex-free-category-hero-desktop.webp");
+html body[data-path="shop-items/columns"] .lt-shop__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/garlands"] .lt-shop__hero {
@@ -93,16 +93,10 @@ html body[data-path="shop-items/garlands"] .lt-shop__hero {
   --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-organic-balloon-garland-category-hero-desktop.webp");
 }
 
-html body[data-path="shop-items/drops"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-desktop.webp");
-}
-
-html body[data-path="shop-items/grab-go"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/graduation-grab-n-go-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/graduation-grab-n-go-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/graduation-grab-n-go-category-hero-desktop.webp");
+html body[data-path="shop-items/photo-ops-backdrops"] .lt-shop__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/baby-shower-combination-photo-opt-category-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/baby-shower-combination-photo-opt-category-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/baby-shower-combination-photo-opt-category-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/table-decor"] .lt-shop__hero {
@@ -115,18 +109,6 @@ html body[data-path="shop-items/stands-easels"] .lt-shop__hero {
   --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/6-graduation-stands-category-hero-mobile.webp");
   --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/6-graduation-stands-category-hero-tablet.webp");
   --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/6-graduation-stands-category-hero-desktop.webp");
-}
-
-html body[data-path="shop-items/deliveries"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/birthday-deliveries-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/birthday-deliveries-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/birthday-deliveries-category-hero-desktop.webp");
-}
-
-html body[data-path="shop-items/seasonal-specialty"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/easter-balloon-cups-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/easter-balloon-cups-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/easter-balloon-cups-category-hero-desktop.webp");
 }
 
 html body :is(

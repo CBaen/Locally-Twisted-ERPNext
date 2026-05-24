@@ -92,14 +92,14 @@ def _check_pickup_windows(rules) -> list[str]:
 def _check_product_lanes(rules) -> list[str]:
     failures = []
     expected = {
-        "Bouquets": "retail_checkout",
-        "Get-Well Bouquets": "retail_checkout",
-        "Grab & Go": "retail_checkout",
-        "Deliveries": "retail_checkout",
         "Arches": "retail_checkout",
+        "Balloon Drops": "retail_checkout",
+        "Bouquets": "retail_checkout",
         "Columns": "retail_checkout",
         "Garlands": "retail_checkout",
-        "Drops": "retail_checkout",
+        "Photo Ops & Backdrops": "retail_checkout",
+        "Stands & Easels": "retail_checkout",
+        "Table Decor": "retail_checkout",
     }
     for item_group, lane in expected.items():
         actual = rules.checkout_lane_for_item_group(item_group)

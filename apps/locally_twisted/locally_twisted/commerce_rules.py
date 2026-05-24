@@ -23,11 +23,14 @@ NON_TAXABLE_ITEM_CODES = {DELIVERY_STANDARD_ITEM, DELIVERY_PARK_CITY_ITEM}
 NON_TAXABLE_ITEM_GROUPS = {"services"}
 
 RETAIL_CHECKOUT_GROUPS = {
+    "Arches",
+    "Balloon Drops",
     "Bouquets",
-    "Deliveries",
-    "Get-Well Bouquets",
-    "Grab & Go",
-    "Seasonal & Specialty",
+    "Columns",
+    "Garlands",
+    "Photo Ops & Backdrops",
+    "Stands & Easels",
+    "Table Decor",
 }
 # Product group alone must not make a cart item quote-only. A customer-facing
 # quote fallback is a fulfillment rule, currently driven by delivery zone.

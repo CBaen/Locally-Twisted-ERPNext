@@ -24,6 +24,7 @@ ALLOWED_CONTEXTS = {
     "catalog_import_rehearsal",
     "price_repair_contract",
     "ecommerce_break_lab_restore",
+    "shop_taxonomy_sync",
 }
 
 PROTECTED_DOCTYPES = {

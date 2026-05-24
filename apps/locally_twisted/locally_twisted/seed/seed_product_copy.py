@@ -1,4 +1,4 @@
-"""Seed Quiet Confidence brand copy + plain-language details for all 53 Website Items.
+"""Seed Quiet Confidence brand copy + plain-language details for approved Website Items.
 
 Two-field discipline (GL directive 2026-04-30):
 - lt_brand_description — Voice. Present-tense. What it is, the moment it's for.
@@ -29,7 +29,7 @@ COPY = {
         "brand": "<p>Two columns — one tied to the age, the other to the number that says it. The pair frames a doorway, a stage, or a photo wall and tells everyone exactly what they came to celebrate.</p>",
         "details": "<ul><li>Two freestanding columns, each anchored by a large foil number</li><li>Color palette in your hands — share what you have in mind</li><li>Indoor and outdoor friendly</li><li>Setup and teardown by our team</li></ul>",
     },
-    "WEB-ITM-0002": {  # Graduation Grab n Go — Grab & Go
+    "WEB-ITM-0002": {  # Graduation Grab n Go — Garlands
         "brand": "<p>Two columns in school colors with a graduation-cap topper that does the talking. Anchors the front door for the open house, the photo spot at the family dinner, or the side of the stage at the ceremony.</p>",
         "details": "<ul><li>Pickup-ready set: two columns plus a foil cap topper</li><li>School colors of your choice</li><li>Built ahead and ready to go on your day</li><li>Pickup requested through checkout</li></ul>",
     },
@@ -93,11 +93,11 @@ COPY = {
         "brand": "<p>A seven-foot column built to be the thing in the room. Large latex, structured spirals, and your colors — done at scale.</p>",
         "details": "<ul><li>One freestanding seven-foot column in the Epic build</li><li>Custom palette</li><li>Indoor and outdoor capable</li><li>Setup and teardown by our team</li></ul>",
     },
-    "WEB-ITM-0018": {  # Organic Grab n' Go — Grab & Go
+    "WEB-ITM-0018": {  # Organic Grab n' Go — Garlands
         "brand": "<p>A pickup-ready piece in the organic style — varied sizes, soft palette, no setup required on your end. The easy yes.</p>",
         "details": "<ul><li>Pickup-ready organic balloon piece</li><li>Choose your palette</li><li>Built ahead and ready to go on your day</li><li>Pickup requested through checkout</li></ul>",
     },
-    "WEB-ITM-0019": {  # Easter Balloon Cups — Seasonal & Specialty
+    "WEB-ITM-0019": {  # Easter Balloon Cups — Table Decor
         "brand": "<p>Pastel mini-clusters in cup arrangements — small enough for a brunch table, soft enough for a basket, exactly seasonal.</p>",
         "details": "<ul><li>Set of pastel balloon cups</li><li>Easter palette: pinks, lavenders, mints, soft yellows</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
@@ -129,15 +129,15 @@ COPY = {
         "brand": "<p>Black, white, and the kind of milestone-birthday humor that earns the laugh before the candles. For the round number nobody saw coming.</p>",
         "details": "<ul><li>Hand-tied bouquet with a milestone foil topper</li><li>Black and white palette with accent colors of your choice</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
-    "WEB-ITM-0027": {  # Butterfly GET WELL — Get-Well Bouquets
+    "WEB-ITM-0027": {  # Butterfly GET WELL — Bouquets
         "brand": "<p>A bouquet for the hospital room — butterflies, soft colors, no latex. The kind of small thing that lands in the day someone needs it most.</p>",
         "details": "<ul><li>Hand-tied get-well bouquet with butterfly foil topper</li><li>Foil only — fully latex-free, hospital-safe</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
-    "WEB-ITM-0028": {  # Bandage GET WELL — Get-Well Bouquets
+    "WEB-ITM-0028": {  # Bandage GET WELL — Bouquets
         "brand": "<p>A bandage foil with a smile drawn on, surrounded by foils that earn one back. Fully latex-free for hospital rooms.</p>",
         "details": "<ul><li>Hand-tied get-well bouquet with a bandage foil topper</li><li>Foil only — no latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
-    "WEB-ITM-0029": {  # Shooting Star GET WELL — Get-Well Bouquets
+    "WEB-ITM-0029": {  # Shooting Star GET WELL — Bouquets
         "brand": "<p>A shooting-star foil and the foils that travel with it — bright, hopeful, hospital-safe.</p>",
         "details": "<ul><li>Hand-tied get-well bouquet with a shooting star foil topper</li><li>Foil only — no latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
@@ -161,7 +161,7 @@ COPY = {
         "brand": "<p>A full-span arch in basketball colors — for the team dinner, the playoff watch party, the senior-night photo wall. Anchors the room exactly where the moment lives.</p>",
         "details": "<ul><li>One full-span balloon arch in your team's palette</li><li>Tell us the colors, we match</li><li>Indoor and outdoor capable</li><li>Setup and teardown by our team</li></ul>",
     },
-    "WEB-ITM-0035": {  # Baby Shower Combination Photo Op — Table Decor
+    "WEB-ITM-0035": {  # Baby Shower Combination Photo Op — Photo Ops & Backdrops
         "brand": "<p>A garland-and-arch combination built as a photo backdrop. The piece that turns a corner of the room into the corner everyone takes pictures in front of.</p>",
         "details": "<ul><li>Combination piece — garland and arch elements built together</li><li>Custom palette in shower-soft tones or your choice</li><li>Indoor use</li><li>Setup and teardown included</li></ul>",
     },
@@ -201,7 +201,7 @@ COPY = {
         "brand": "<p>A freestanding column in classic balloon style — structured, balanced, and built around your palette. The piece that frames the entrance without making it about itself.</p>",
         "details": "<ul><li>One freestanding column, balloons up to 11\"</li><li>Choose your palette</li><li>Indoor and outdoor friendly</li><li>Setup and teardown by our team</li></ul>",
     },
-    "WEB-ITM-0045": {  # Balloon Drop — Drops
+    "WEB-ITM-0045": {  # Balloon Drop — Balloon Drops
         "brand": "<p>Hundreds of balloons tucked into a net overhead. We build it, you pull the cord, and the room erupts. Made for midnight and the moments that earn the same kind of cheer.</p>",
         "details": "<ul><li>One overhead balloon-drop net, sized to the venue</li><li>Color palette in your hands</li><li>Indoor use</li><li>Includes installation and the release mechanism — your team or ours pulls the cord on cue</li></ul>",
     },
@@ -209,7 +209,7 @@ COPY = {
         "brand": "<p>An organic-style arch — balloons up to 11 inches, varied sizes, a palette that feels grown rather than placed. The arch that anchors a wedding aisle, a graduation photo wall, or a backyard party.</p>",
         "details": "<ul><li>One full-span organic arch, balloons up to 11\"</li><li>Custom palette</li><li>Indoor and outdoor friendly</li><li>Setup and teardown included</li></ul>",
     },
-    "WEB-ITM-0047": {  # Birthday Deliveries — Deliveries
+    "WEB-ITM-0047": {  # Birthday Deliveries — Bouquets
         "brand": "<p>A pickup-or-delivery birthday set — balloons, a topper, and a card if you want one — left on the doorstep, the desk, or the dinner table. The little thing that becomes the picture of the day.</p>",
         "details": "<ul><li>Birthday delivery set</li><li>Choose the theme and palette</li><li>Pickup request or local delivery available through checkout</li></ul>",
     },

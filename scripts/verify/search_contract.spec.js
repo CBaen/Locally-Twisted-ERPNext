@@ -41,13 +41,13 @@ test.describe("Locally Twisted search contract", () => {
 
 		await page.locator(".lt-mega-header__search").click();
 		const formAction = await page.locator("#lt-site-search-panel form").getAttribute("action");
-		await page.locator("#lt-site-search-input").fill("seasonal");
+		await page.locator("#lt-site-search-input").fill("drop");
 
 		const panel = page.locator("#lt-site-search-panel");
 		await expect(panel).toBeVisible();
 		if (formAction === "/shop") {
-			await expect(panel.locator("a[href='/shop-items/seasonal-specialty']")).toBeVisible();
-			await expect(panel.locator("a[href='/shop-items/seasonal-specialty/easter-balloon-cups']")).toHaveCount(0);
+			await expect(panel.locator("a[href='/shop-items/balloon-drops']")).toBeVisible();
+			await expect(panel.locator("a[href='/shop-items/balloon-drops/balloon-drop']")).toHaveCount(0);
 			await expect(panel.locator("a[href='/shop-items/arches/classic-arch']")).toHaveCount(0);
 			await expect(panel.locator("[data-lt-search-empty]")).toBeHidden();
 		} else {

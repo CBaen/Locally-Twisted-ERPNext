@@ -1,4 +1,4 @@
-"""Import subset rules for Odoo-to-ERPNext catalog migration.
+"""Import subset rules for the source catalog import into ERPNext.
 
 These rules are deliberately about backend/schema fit, not product taste or
 launch merchandising. A product with variants is allowed when the current
@@ -11,7 +11,10 @@ from collections import Counter
 from typing import Any
 
 
-OWNER_EXPLICIT_EXCLUDED_SLUGS: dict[str, str] = {}
+OWNER_EXPLICIT_EXCLUDED_SLUGS: dict[str, str] = {
+    "easter-arch": "Duplicate product page retired before the 2026-05-24 taxonomy sync.",
+    "pride-arch": "Duplicate product page retired before the 2026-05-24 taxonomy sync.",
+}
 
 OWNER_MUST_WORK_SLUGS = {
     "graduation-grab-n-go": "Graduation Deliveries",

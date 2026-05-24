@@ -55,16 +55,13 @@ ITEM_CONFIGURE_TEMPLATE = (
 )
 EXPECTED_CATEGORIES = [
     "Arches",
-    "Columns",
+    "Balloon Drops",
     "Bouquets",
-    "Get-Well Bouquets",
+    "Columns",
     "Garlands",
-    "Drops",
-    "Grab & Go",
-    "Table Decor",
+    "Photo Ops & Backdrops",
     "Stands & Easels",
-    "Deliveries",
-    "Seasonal & Specialty",
+    "Table Decor",
 ]
 QUOTE_FIRST_PRODUCT_URLS = [
     (f"{BASE}/shop-items/garlands/baby-shower-garland", "Baby Shower Garland", "baby-shower-garland"),
@@ -312,7 +309,7 @@ def check_homepage(page):
     search_button.click()
     assert_(page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not open")
     assert_(page.url.rstrip("/") == BASE, "Opening search overlay must not navigate away from the current page")
-    page.locator("#lt-site-search-input").fill("seasonal")
+    page.locator("#lt-site-search-input").fill("drop")
     if PUBLIC_ECOMMERCE_PAUSED:
         form_action = page.locator("#lt-site-search-panel form").first.get_attribute("action")
         assert_(form_action == "/contact", f"Paused search form should submit to /contact, got {form_action!r}")
@@ -322,11 +319,11 @@ def check_homepage(page):
         )
     else:
         assert_(
-            page.locator("#lt-site-search-panel a[href='/shop-items/seasonal-specialty']").is_visible(),
+            page.locator("#lt-site-search-panel a[href='/shop-items/balloon-drops']").is_visible(),
             "Search overlay should include ready-to-order category links",
         )
         assert_(
-            page.locator("#lt-site-search-panel a[href='/shop-items/seasonal-specialty/easter-balloon-cups']").count() == 0,
+            page.locator("#lt-site-search-panel a[href='/shop-items/balloon-drops/balloon-drop']").count() == 0,
             "Search overlay must not expose product page quick links",
         )
         assert_(
@@ -367,14 +364,14 @@ def check_homepage(page):
             "Ready-to-Order mega menu should link to the Bouquets category",
         )
         assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/seasonal-specialty']").count() >= 1,
-            "Ready-to-Order mega menu should link to the Seasonal & Specialty category",
+            page.locator("#lt-mega-products a[href='/shop-items/balloon-drops']").count() >= 1,
+            "Ready-to-Order mega menu should link to the Balloon Drops category",
         )
         for product_href in (
             "/shop-items/bouquets/unicorn-bouquet",
-            "/shop-items/seasonal-specialty/easter-balloon-cups",
+            "/shop-items/table-decor/easter-balloon-cups",
             "/shop-items/stands-easels/6-graduation-stands",
-            "/shop-items/grab-go/graduation-grab-n-go",
+            "/shop-items/garlands/graduation-grab-n-go",
         ):
             assert_(
                 page.locator(f"#lt-mega-products a[href='{product_href}']").count() == 0,
@@ -420,10 +417,10 @@ def check_shop_page(page):
     )
     rail_links = page.locator(".lt-shop__category-rail .lt-shop__category-link")
     rail_count = rail_links.count()
-    assert_(rail_count == 12, f"/shop expected 12 category rail links (All + 11 categories), got {rail_count}")
+    assert_(rail_count == 9, f"/shop expected 9 category rail links (All + 8 categories), got {rail_count}")
     category_select = page.locator(".lt-shop__category-select")
     assert_(category_select.count() == 1, "/shop should expose one mobile category select")
-    assert_(category_select.locator("option").count() == 12, "/shop mobile category select should include All + 11 categories")
+    assert_(category_select.locator("option").count() == 9, "/shop mobile category select should include All + 8 categories")
 
     card_count = page.locator(".lt-shop__card").count()
     assert_(card_count > 0, "/shop should render product cards")
@@ -545,7 +542,7 @@ def _visible_rect_rows(page, selector: str):
 
 def check_category_nav_rail_contract(page):
     print("-> shop category rail/dropdown navigation contract")
-    for url in (f"{BASE}/shop", f"{BASE}/shop-items/get-well-bouquets"):
+    for url in (f"{BASE}/shop", f"{BASE}/shop-items/balloon-drops"):
         page.set_viewport_size(DESKTOP_VIEWPORT)
         page.goto(url, wait_until="networkidle", timeout=15000)
         assert_(page.locator(".lt-shop__chip").count() == 0, f"{url} must not render category chips")
@@ -553,7 +550,7 @@ def check_category_nav_rail_contract(page):
         assert_(rail.count() == 1, f"{url} missing desktop category rail")
         assert_(rail.is_visible(), f"{url} category rail should be visible on desktop")
         links = page.locator(".lt-shop__category-rail .lt-shop__category-link")
-        assert_(links.count() == 12, f"{url} category rail must include All + 11 categories")
+        assert_(links.count() == 9, f"{url} category rail must include All + 8 categories")
         active = page.locator(".lt-shop__category-rail .lt-shop__category-link.is-active")
         assert_(active.count() == 1, f"{url} category rail should have exactly one active link")
         rail_rows = _visible_rect_rows(page, ".lt-shop__category-rail .lt-shop__category-link")
@@ -567,7 +564,7 @@ def check_category_nav_rail_contract(page):
         select = page.locator(".lt-shop__category-select")
         assert_(select.count() == 1, f"{url} missing mobile category select")
         assert_(select.is_visible(), f"{url} category select should be visible on mobile")
-        assert_(select.locator("option").count() == 12, f"{url} mobile select must include All + 11 categories")
+        assert_(select.locator("option").count() == 9, f"{url} mobile select must include All + 8 categories")
         target_value = "/shop-items/arches" if url.endswith("/shop") else "/shop"
         target_url = f"{BASE}{target_value}"
         with page.expect_navigation(url=target_url, wait_until="networkidle", timeout=15000):

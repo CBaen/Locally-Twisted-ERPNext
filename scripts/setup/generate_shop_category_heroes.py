@@ -5,8 +5,8 @@ It uses the agency Together AI image key from the parent Built_by_Cameron
 `.env`, writes dated source assets under `_resources/generated-hero-sources`,
 and writes public WebP derivatives under the LT app hero asset folder.
 
-The prompts intentionally use owner/Odoo balloon color names and swatch asset
-references. Hex values are not treated as image-generation authority.
+The prompts intentionally use owner-approved balloon color names and swatch
+asset references. Hex values are not treated as image-generation authority.
 """
 
 from __future__ import annotations
@@ -71,14 +71,14 @@ HERO_SPECS = (
         palette=("Blue Slate", "Reflex Champagne", "Blush", "Dusk Green Tea", "White"),
     ),
     HeroSpec(
-        route="/shop-items/columns",
-        title="Columns",
-        slug="classic-column-category-hero",
+        route="/shop-items/balloon-drops",
+        title="Balloon Drops",
+        slug="balloon-drop-category-hero",
         shape_prompt=(
-            "a pair of freestanding balloon columns for a school or civic entrance, each "
-            "with stacked round latex balloons and clean weighted bases"
+            "a ceiling balloon drop net filled with bright balloons above an event floor, "
+            "clearly ready to release, with safe venue rigging"
         ),
-        palette=("Royal Blue", "Reflex Gold", "White", "Blue Slate", "black"),
+        palette=("Red", "Orange", "yellow", "Royal Blue", "Shamrock", "Violet", "White"),
     ),
     HeroSpec(
         route="/shop-items/bouquets",
@@ -91,14 +91,14 @@ HERO_SPECS = (
         palette=("Pastel Pink", "Pastel Blue", "Pastel Yellow", "Pastel Purple", "Reflex Champagne"),
     ),
     HeroSpec(
-        route="/shop-items/get-well-bouquets",
-        title="Get-Well Bouquets",
-        slug="bandage-get-well-bouquet-latex-free-category-hero",
+        route="/shop-items/columns",
+        title="Columns",
+        slug="classic-column-category-hero",
         shape_prompt=(
-            "a cheerful get-well balloon bouquet staged near a bright delivery table, soft "
-            "and comforting, with no medical logos or readable text"
+            "a pair of freestanding balloon columns for a school or civic entrance, each "
+            "with stacked round latex balloons and clean weighted bases"
         ),
-        palette=("Dusk Green Tea", "Pastel Yellow", "Robin's Egg", "White", "Blush"),
+        palette=("Royal Blue", "Reflex Gold", "White", "Blue Slate", "black"),
     ),
     HeroSpec(
         route="/shop-items/garlands",
@@ -111,24 +111,14 @@ HERO_SPECS = (
         palette=("Reflex Champagne", "Dusk Rose", "eucalyptus", "White", "Blush"),
     ),
     HeroSpec(
-        route="/shop-items/drops",
-        title="Drops",
-        slug="balloon-drop-category-hero",
+        route="/shop-items/photo-ops-backdrops",
+        title="Photo Ops & Backdrops",
+        slug="baby-shower-combination-photo-opt-category-hero",
         shape_prompt=(
-            "a ceiling balloon drop net filled with bright balloons above an event floor, "
-            "clearly ready to release, with safe venue rigging"
+            "a freestanding balloon photo op frame and backdrop moment for a baby shower, "
+            "with visible display structure and room for people to stand in front"
         ),
-        palette=("Red", "Orange", "yellow", "Royal Blue", "Shamrock", "Violet", "White"),
-    ),
-    HeroSpec(
-        route="/shop-items/grab-go",
-        title="Grab & Go",
-        slug="graduation-grab-n-go-category-hero",
-        shape_prompt=(
-            "grab-and-go balloon arrangements lined up for quick customer pickup, "
-            "graduation-ready, compact, polished, and easy to carry"
-        ),
-        palette=("Reflex Gold", "black", "White", "Blue Slate", "Reflex Silver"),
+        palette=("Blush", "White", "Pastel Pink", "Pastel Blue", "Reflex Champagne"),
     ),
     HeroSpec(
         route="/shop-items/table-decor",
@@ -150,26 +140,6 @@ HERO_SPECS = (
             "and no printed sign surface"
         ),
         palette=("Reflex Gold", "Royal Blue", "White", "black", "Reflex Silver"),
-    ),
-    HeroSpec(
-        route="/shop-items/deliveries",
-        title="Deliveries",
-        slug="birthday-deliveries-category-hero",
-        shape_prompt=(
-            "finished balloon delivery arrangements staged near a clean studio loading "
-            "area, tied, weighted, ready for local delivery, no vehicle logos"
-        ),
-        palette=("Reflex Champagne", "raspberry", "bubble Gum", "Pastel Pink", "White"),
-    ),
-    HeroSpec(
-        route="/shop-items/seasonal-specialty",
-        title="Seasonal & Specialty",
-        slug="easter-balloon-cups-category-hero",
-        shape_prompt=(
-            "seasonal specialty balloon decor with playful spring party energy, polished "
-            "custom pieces rather than generic retail balloons"
-        ),
-        palette=("Pastel Yellow", "Pastel Melon", "Pastel Green", "Teal", "Blush"),
     ),
 )
 
@@ -215,7 +185,7 @@ def build_prompt(spec: HeroSpec, swatch_refs: list[str]) -> str:
         "Photorealistic premium commercial event photography for a Utah balloon decor website, "
         f"extra-wide 4.9:1 website hero banner composition at {SOURCE_SIZE[0]}x{SOURCE_SIZE[1]}. "
         f"Subject: {spec.shape_prompt}. "
-        f"Use only these owner/Odoo balloon color names as the palette: {colors}. "
+        f"Use only these owner-approved balloon color names as the palette: {colors}. "
         "Treat the named balloon colors and supplied swatch references as the authority, not hex values. "
         f"Swatch reference asset paths: {refs}. "
         "Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, "
@@ -376,7 +346,17 @@ def main() -> int:
     item_map = dict(existing_items)
     for item in generated_items:
         item_map[item["slug"]] = item
-    final_items = [item_map[spec.slug] for spec in HERO_SPECS if spec.slug in item_map]
+    final_items = []
+    for spec in HERO_SPECS:
+        if spec.slug not in item_map:
+            continue
+        item = dict(item_map[spec.slug])
+        item["route"] = spec.route
+        item["title"] = spec.title
+        item["palette"] = list(spec.palette)
+        if isinstance(item.get("prompt"), str):
+            item["prompt"] = item["prompt"].replace("owner/Odoo", "owner-approved")
+        final_items.append(item)
 
     manifest = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -384,7 +364,7 @@ def main() -> int:
         "model_default": args.model,
         "source": "project VITE_TOGETHER_API_KEY from Built_by_Cameron .env",
         "note": (
-            "Shop category representative generated heroes. Owner/Odoo swatches and "
+            "Shop category representative generated heroes. Owner-approved swatches and "
             "balloon color names are prompt authority; sampled hex values are not."
         ),
         "source_size": list(SOURCE_SIZE),

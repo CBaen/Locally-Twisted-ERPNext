@@ -16,6 +16,7 @@ import frappe
 from frappe.utils import flt, strip_html
 
 from locally_twisted.catalog_contract.gallery_media import canonical_gallery_sources
+from locally_twisted.catalog_variant_rules import BOUQUET_SIZE_LABELS
 from locally_twisted.product_blueprint_local_apply import sync_website_gallery_from_blueprint_doc
 
 
@@ -361,10 +362,10 @@ def _gallery_image_rows(
             rows.append(
                 {
                     "image": file_url,
-                    "heading": source.label or "Product photo",
+                    "heading": _customer_safe_label(source.label or "Product photo"),
                     "description": "",
                     "approved_for_customer": 1,
-                    "operator_note": "Backfilled from source-approved Odoo product gallery media.",
+                    "operator_note": "Backfilled from source-approved product gallery media.",
                 }
             )
         if rows:
@@ -382,7 +383,7 @@ def _gallery_image_rows(
     return [
         {
             "image": row.get("image"),
-            "heading": row.get("heading") or row.get("description") or "Product photo",
+            "heading": _customer_safe_label(row.get("heading") or row.get("description") or "Product photo"),
             "description": row.get("description") or "",
             "approved_for_customer": 1,
             "operator_note": "Backfilled from existing Website Slideshow.",
@@ -390,6 +391,13 @@ def _gallery_image_rows(
         for row in rows
         if row.get("image")
     ]
+
+
+def _customer_safe_label(value: str | None) -> str:
+    label = str(value or "Product photo")
+    for old_value, new_value in BOUQUET_SIZE_LABELS.items():
+        label = label.replace(old_value, new_value)
+    return label
 
 
 def _source_products(data_dir: str | None) -> tuple[dict[str, dict[str, Any]], Path | None]:

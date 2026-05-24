@@ -19,7 +19,7 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
-ODOO_IMAGE_DIR = ROOT / "_resources" / "odoo-live" / "images"
+SOURCE_IMAGE_DIR = ROOT / "_resources" / "odoo-live" / "images"
 SLUG_TO_GROUP = ROOT / "_resources" / "odoo-live" / "slug_to_group.json"
 CATALOG = ROOT / "_resources" / "odoo-live" / "catalog.json"
 PORTFOLIO_CONTROLLER = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "www" / "portfolio.py"
@@ -29,16 +29,13 @@ PORTFOLIO_OPTIMIZED_DIR = (
 
 CATEGORY_ORDER = [
     "Arches",
-    "Columns",
+    "Balloon Drops",
     "Bouquets",
-    "Get-Well Bouquets",
+    "Columns",
     "Garlands",
-    "Drops",
-    "Grab & Go",
-    "Table Decor",
+    "Photo Ops & Backdrops",
     "Stands & Easels",
-    "Deliveries",
-    "Seasonal & Specialty",
+    "Table Decor",
 ]
 
 CATEGORY_PORTFOLIO_MAP = {
@@ -46,27 +43,27 @@ CATEGORY_PORTFOLIO_MAP = {
     "Columns": {"columns"},
     "Bouquets": {"balloon-bouquets"},
     "Garlands": {"garlands"},
+    "Photo Ops & Backdrops": {"picture-perfect-backdrops"},
     "Table Decor": {"centerpieces"},
     "Stands & Easels": {"picture-perfect-backdrops"},
-    "Seasonal & Specialty": {"balloon-arches", "columns", "picture-perfect-backdrops"},
 }
 
 PREFERRED_PRODUCT_SLUGS = {
     "Arches": {"classic-arch", "premium-organic-arch", "6-color-rainbow-arch"},
+    "Balloon Drops": {"balloon-drop"},
     "Columns": {"classic-column", "classic-organic-columns"},
-    "Bouquets": {"mothers-day-bouquet", "birthday-deliveries", "unicorn-bouquet"},
-    "Get-Well Bouquets": {
+    "Bouquets": {
+        "birthday-deliveries",
+        "mothers-day-bouquet",
+        "unicorn-bouquet",
         "bandage-get-well-bouquet-latex-free",
         "butterfly-get-well-bouquet-latex-free",
         "shooting-star-get-well-bouquet-latex-free",
     },
     "Garlands": {"classic-organic-balloon-garland", "premium-organic-garland", "baby-shower-garland"},
-    "Drops": {"balloon-drop"},
-    "Grab & Go": {"organic-grab-n-go", "graduation-grab-n-go"},
-    "Table Decor": {"marble-table-decor", "baby-shower-combination-photo-opt", "baby-table-decor"},
+    "Photo Ops & Backdrops": {"baby-shower-combination-photo-opt"},
+    "Table Decor": {"marble-table-decor", "baby-table-decor", "easter-balloon-cups"},
     "Stands & Easels": {"classic-organic-for-easel", "6-graduation-stands"},
-    "Deliveries": {"birthday-deliveries"},
-    "Seasonal & Specialty": {"easter-balloon-cups"},
 }
 
 
@@ -150,7 +147,7 @@ def _build_report(
         "source_inputs": {
             "slug_to_group": _rel(SLUG_TO_GROUP),
             "catalog": _rel(CATALOG),
-            "odoo_images": _rel(ODOO_IMAGE_DIR),
+            "source_images": _rel(SOURCE_IMAGE_DIR),
             "portfolio_controller": _rel(PORTFOLIO_CONTROLLER),
             "portfolio_optimized_images": _rel(PORTFOLIO_OPTIMIZED_DIR),
         },
@@ -210,8 +207,6 @@ def _portfolio_candidates(category: str, portfolio_items: list[dict]) -> list[di
         score = 58 + _size_score(path.stat().st_size)
         if info.get("width") and info.get("height"):
             score += _shape_score(info["width"], info["height"])
-        if item["slug"].startswith("seasonal-") and category == "Seasonal & Specialty":
-            score += 16
         candidates.append(
             {
                 "kind": "portfolio_proof",
@@ -232,7 +227,7 @@ def _portfolio_candidates(category: str, portfolio_items: list[dict]) -> list[di
 def _images_for_slug(slug: str) -> list[Path]:
     paths = [
         path
-        for path in ODOO_IMAGE_DIR.iterdir()
+        for path in SOURCE_IMAGE_DIR.iterdir()
         if path.is_file() and (path.stem == slug or path.stem.startswith(f"{slug}--"))
     ]
     return sorted(paths, key=lambda path: (path.stem != slug, path.name))
@@ -292,7 +287,7 @@ def _review_notes(category: str, candidates: list[dict]) -> list[str]:
         notes.append("Thin candidate pool; review carefully before using this as a permanent category image.")
     if any(candidate["kind"] == "portfolio_proof" for candidate in candidates):
         notes.append("Portfolio proof candidates are polished but may not be exact product catalog photos.")
-    if category in {"Get-Well Bouquets", "Drops", "Deliveries", "Seasonal & Specialty"}:
+    if category in {"Balloon Drops", "Photo Ops & Backdrops"}:
         notes.append("Small catalog category; one strong image may be enough for launch if approved.")
     return notes
 
@@ -303,7 +298,7 @@ def _render_markdown(report: dict) -> str:
         "",
         f"Generated: `{report['generated_at']}`",
         "",
-        "No live ERPNext image fields were changed. This is an approval packet for the 11 empty customer-facing shop categories.",
+        "No live ERPNext image fields were changed. This is an approval packet for the 8 customer-facing shop categories.",
         "",
         "## Quick Picks For Review",
         "",

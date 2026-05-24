@@ -5,35 +5,7 @@ import frappe
 from frappe.utils import strip_html
 
 from locally_twisted.ecommerce_pause import is_ecommerce_paused
-
-PRODUCT_GROUP_ICONS = {
-    "Arches": "balloon-arch",
-    "Garlands": "organic-garland",
-    "Columns": "balloon-column",
-    "Drops": "event-stage",
-    "Balloon Drops": "event-stage",
-    "Bouquets": "balloon-bouquet",
-    "Get-Well Bouquets": "balloon-bouquet",
-    "Grab & Go": "balloon-cluster",
-    "Table Decor": "balloon-cluster",
-    "Stands & Easels": "event-stage",
-    "Deliveries": "delivery-install",
-    "Seasonal & Specialty": "balloon-pair",
-}
-
-READY_TO_ORDER_CATEGORY_SUMMARIES = {
-    "Arches": "Entry moments, photo frames, and room-defining balloon statements.",
-    "Columns": "Freestanding color and height for doors, stages, and focal points.",
-    "Bouquets": "Themed balloon bundles for birthdays, characters, teams, and quick gifts.",
-    "Get-Well Bouquets": "Cheerful balloon bundles for recovery, hospitals, and thoughtful deliveries.",
-    "Garlands": "Organic balloon runs for backdrops, mantels, entrances, and install moments.",
-    "Drops": "Ceiling drops and reveal moments for dances, parties, and big announcements.",
-    "Grab & Go": "Fast pickup pieces when you need party color without a custom install.",
-    "Table Decor": "Centerpieces and smaller pieces for tables, counters, and welcome areas.",
-    "Stands & Easels": "Freestanding display pieces for signs, graduations, entrances, and school moments.",
-    "Deliveries": "Delivery-ready balloon options and logistics support.",
-    "Seasonal & Specialty": "Holiday, school-year, and limited-season pieces.",
-}
+from locally_twisted.shop_taxonomy import CATEGORY_ICON_BY_NAME, CATEGORY_SUMMARY_BY_NAME
 
 EVENT_LINKS = [
     {
@@ -78,11 +50,11 @@ def _plain_text(value: str | None) -> str:
 
 
 def _group_icon(item_group: str | None) -> str:
-    return PRODUCT_GROUP_ICONS.get(_plain_text(item_group), "balloon-pair")
+    return CATEGORY_ICON_BY_NAME.get(_plain_text(item_group), "balloon-pair")
 
 
 def _category_summary(label: str) -> str:
-    return READY_TO_ORDER_CATEGORY_SUMMARIES.get(
+    return CATEGORY_SUMMARY_BY_NAME.get(
         label,
         "Browse ready-to-order balloon decor by category.",
     )

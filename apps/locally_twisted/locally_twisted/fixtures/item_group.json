@@ -6,8 +6,20 @@
   "parent_item_group": "All Item Groups",
   "is_group": 1,
   "show_in_website": 1,
+  "route": "shop-items",
   "weightage": 0,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Shop Occasions",
+  "item_group_name": "Shop Occasions",
+  "parent_item_group": "All Item Groups",
+  "is_group": 1,
+  "show_in_website": 0,
+  "route": "shop-occasions",
+  "weightage": 900,
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
@@ -16,18 +28,20 @@
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
+  "route": "shop-items/arches",
   "weightage": 10,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
-  "name": "Columns",
-  "item_group_name": "Columns",
+  "name": "Balloon Drops",
+  "item_group_name": "Balloon Drops",
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
+  "route": "shop-items/balloon-drops",
   "weightage": 20,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
@@ -36,18 +50,20 @@
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
+  "route": "shop-items/bouquets",
   "weightage": 30,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
-  "name": "Get-Well Bouquets",
-  "item_group_name": "Get-Well Bouquets",
+  "name": "Columns",
+  "item_group_name": "Columns",
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
-  "weightage": 35,
-  "modified": "2026-04-30 12:00:00.000000"
+  "route": "shop-items/columns",
+  "weightage": 40,
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
@@ -56,38 +72,20 @@
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
-  "weightage": 40,
-  "modified": "2026-04-30 12:00:00.000000"
- },
- {
-  "doctype": "Item Group",
-  "name": "Drops",
-  "item_group_name": "Drops",
-  "parent_item_group": "Shop Items",
-  "is_group": 0,
-  "show_in_website": 1,
+  "route": "shop-items/garlands",
   "weightage": 50,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
-  "name": "Grab & Go",
-  "item_group_name": "Grab & Go",
+  "name": "Photo Ops & Backdrops",
+  "item_group_name": "Photo Ops & Backdrops",
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
+  "route": "shop-items/photo-ops-backdrops",
   "weightage": 60,
-  "modified": "2026-04-30 12:00:00.000000"
- },
- {
-  "doctype": "Item Group",
-  "name": "Table Decor",
-  "item_group_name": "Table Decor",
-  "parent_item_group": "Shop Items",
-  "is_group": 0,
-  "show_in_website": 1,
-  "weightage": 70,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
@@ -96,8 +94,119 @@
   "parent_item_group": "Shop Items",
   "is_group": 0,
   "show_in_website": 1,
+  "route": "shop-items/stands-easels",
+  "weightage": 70,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Table Decor",
+  "item_group_name": "Table Decor",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "route": "shop-items/table-decor",
   "weightage": 80,
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Any Occasion",
+  "item_group_name": "Any Occasion",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/any-occasion",
+  "weightage": 10,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Birthday",
+  "item_group_name": "Birthday",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/birthday",
+  "weightage": 20,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Holiday",
+  "item_group_name": "Holiday",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/holiday",
+  "weightage": 30,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Graduation",
+  "item_group_name": "Graduation",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/graduation",
+  "weightage": 40,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Baby Shower",
+  "item_group_name": "Baby Shower",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/baby-shower",
+  "weightage": 50,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Sports",
+  "item_group_name": "Sports",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/sports",
+  "weightage": 60,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Get Well",
+  "item_group_name": "Get Well",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/get-well",
+  "weightage": 70,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Religious",
+  "item_group_name": "Religious",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/religious",
+  "weightage": 80,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Corporate",
+  "item_group_name": "Corporate",
+  "parent_item_group": "Shop Occasions",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-occasions/corporate",
+  "weightage": 90,
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
@@ -105,9 +214,43 @@
   "item_group_name": "Deliveries",
   "parent_item_group": "Shop Items",
   "is_group": 0,
-  "show_in_website": 1,
-  "weightage": 90,
-  "modified": "2026-04-30 12:00:00.000000"
+  "show_in_website": 0,
+  "route": "shop-items/deliveries",
+  "weightage": 901,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Drops",
+  "item_group_name": "Drops",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-items/drops",
+  "weightage": 902,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Get-Well Bouquets",
+  "item_group_name": "Get-Well Bouquets",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-items/get-well-bouquets",
+  "weightage": 903,
+  "modified": "2026-05-24 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Grab & Go",
+  "item_group_name": "Grab & Go",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 0,
+  "route": "shop-items/grab-go",
+  "weightage": 904,
+  "modified": "2026-05-24 12:00:00.000000"
  },
  {
   "doctype": "Item Group",
@@ -115,8 +258,9 @@
   "item_group_name": "Seasonal & Specialty",
   "parent_item_group": "Shop Items",
   "is_group": 0,
-  "show_in_website": 1,
-  "weightage": 100,
-  "modified": "2026-04-30 12:00:00.000000"
+  "show_in_website": 0,
+  "route": "shop-items/seasonal-specialty",
+  "weightage": 905,
+  "modified": "2026-05-24 12:00:00.000000"
  }
 ]
