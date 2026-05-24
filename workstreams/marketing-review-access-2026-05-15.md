@@ -150,19 +150,9 @@ Follow-up packet-access closeout from 2026-05-21:
 - `python scripts/verify/marketing_review_access_boundary.py` now proves
   packet context and download access are marketing-only and rollback-safe.
 
-## 2026-05-22 Standing Reviewer Account Update
-
-- `python scripts/setup/sync_marketing_review_access.py --reviewer-email
-  marketing@exploringnotboring.com` now creates or repairs the standing
-  website-only reviewer account when a local/staging site needs real ENB
-  access.
-- Local proof on 2026-05-22 created `marketing@exploringnotboring.com` as an
-  enabled `Website User` with only `LT Marketing Review Access`.
-- `python scripts/verify/human_access_silo_matrix.py` now fails if the standing
-  reviewer is missing, disabled, not a Website User, or has forbidden roles.
-
 ## Current Non-Work
 
+- No permanent Exploring Not Boring user has been created in the local DB.
 - No production/Frappe Cloud deploy was performed in this slice.
 - GitHub push to `origin/main` is source archive only; it is not a
   production/Frappe Cloud deploy and does not push code live.

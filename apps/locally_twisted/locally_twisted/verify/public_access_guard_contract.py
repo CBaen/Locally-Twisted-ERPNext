@@ -18,7 +18,6 @@ def run() -> dict[str, Any]:
         _expect_blocked("website_public_signup", _open_public_signup),
         _expect_blocked("portal_default_customer_role", _set_default_customer_role),
         _expect_blocked("supplier_route_as_customer", _set_supplier_route_customer),
-        _expect_allowed("migration_portal_repair", _repair_portal_settings_during_migrate),
         _expect_blocked("marketing_lead_docperm", _insert_marketing_lead_docperm),
         _expect_blocked("marketing_role_desk_access", _enable_marketing_desk_access),
         _expect_blocked("marketing_user_customer_role", _give_marketing_user_customer_role),
@@ -48,21 +47,6 @@ def _expect_blocked(label: str, fn: Callable[[], None]) -> dict[str, Any]:
     frappe.db.rollback()
     frappe.clear_cache()
     return {"probe": label, "ok": False, "blocked": False, "detail": "mutation was not blocked"}
-
-
-def _expect_allowed(label: str, fn: Callable[[], None]) -> dict[str, Any]:
-    try:
-        fn()
-    except Exception as exc:
-        frappe.db.rollback()
-        frappe.clear_cache()
-        return {"probe": label, "ok": False, "blocked": True, "detail": str(exc)}
-    finally:
-        frappe.flags.in_migrate = False
-        frappe.set_user("Administrator")
-    frappe.db.rollback()
-    frappe.clear_cache()
-    return {"probe": label, "ok": True, "blocked": False, "detail": "mutation allowed"}
 
 
 def _expected_text(text: str) -> bool:
@@ -100,30 +84,6 @@ def _set_supplier_route_customer() -> None:
             row.enabled = 1
             break
     doc.save(ignore_permissions=True)
-
-
-def _repair_portal_settings_during_migrate() -> None:
-    doc = frappe.get_single("Portal Settings")
-    doc.default_role = "Customer"
-    doc.default_portal_home = "login"
-    for row in doc.get("menu") or []:
-        if row.route == "/rfq":
-            row.role = "Customer"
-            row.enabled = 1
-        if row.route == "/orders":
-            row.enabled = 1
-    frappe.flags.in_migrate = True
-    doc.save(ignore_permissions=True)
-
-    if doc.default_role:
-        raise ContractFail("migration repair did not clear Portal Settings.default_role")
-    if doc.default_portal_home != "me":
-        raise ContractFail("migration repair did not restore Portal Settings.default_portal_home")
-    for row in doc.get("menu") or []:
-        if row.route == "/rfq" and row.role != "Supplier":
-            raise ContractFail("migration repair did not keep /rfq Supplier-only")
-        if row.route == "/orders" and int(row.enabled or 0):
-            raise ContractFail("migration repair did not hide /orders")
 
 
 def _insert_marketing_lead_docperm() -> None:

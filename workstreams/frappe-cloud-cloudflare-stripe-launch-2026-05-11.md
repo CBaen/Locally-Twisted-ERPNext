@@ -13,11 +13,6 @@ Project capability: `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-
 Current launch posture:
 
 - Public pages and inquiry forms are live on `https://locallytwisted.com`.
-- The 2026-05-22/23 owner-review staging push failed as a release process and
-  is frozen. Do not resume provider/bootstrap mutation from that session. Use
-  `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
-  and `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
-  before future staging/live execution.
 - The Frappe Cloud app release and site migration both succeeded.
 - `/contact` and `/balloon-twisting-and-face-painting` passed live backend
   smokes after cutover.

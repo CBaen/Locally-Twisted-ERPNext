@@ -84,11 +84,6 @@ SERVICE_TYPE_PERMISSIONS = [
     _permission_row("Sales User", read=1),
 ]
 
-REQUIRED_PERMISSION_ROLES = {
-    "LT Owner Access": 1,
-    "LT Manager Access": 1,
-}
-
 
 def _selected(values: list[str]) -> str:
     quoted = ",".join(f"'{value}'" for value in values)
@@ -843,7 +838,6 @@ ENSURED_LEAD_CUSTOM_FIELDS = {
 def execute(commit: bool = True) -> str:
     summary = {
         "ensured_doctypes": [],
-        "ensured_roles": [],
         "hardened_doctype_permissions": [],
         "renamed_services": [],
         "ensured_services": [],
@@ -852,7 +846,6 @@ def execute(commit: bool = True) -> str:
         "normalized_time_values": 0,
         "updated_leads": 0,
     }
-    _ensure_permission_roles(summary)
     _ensure_contact_child_doctypes(summary)
     _sync_service_types(summary)
     _ensure_lead_custom_fields(summary)
@@ -864,21 +857,6 @@ def execute(commit: bool = True) -> str:
         frappe.db.commit()
     print(json.dumps(summary, indent=2, sort_keys=True))
     return json.dumps(summary, sort_keys=True)
-
-
-def _ensure_permission_roles(summary: dict) -> None:
-    for role_name, desk_access in REQUIRED_PERMISSION_ROLES.items():
-        if frappe.db.exists("Role", role_name):
-            continue
-        frappe.get_doc(
-            {
-                "doctype": "Role",
-                "role_name": role_name,
-                "desk_access": desk_access,
-                "disabled": 0,
-            }
-        ).insert(ignore_permissions=True)
-        summary["ensured_roles"].append(role_name)
 
 
 def _sync_service_types(summary: dict) -> None:

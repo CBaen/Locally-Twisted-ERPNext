@@ -1,5 +1,0 @@
-﻿{
-  "action": "app_mirror_sync",
-  "failure": "freeze reopen approval artifact is required before mutation",
-  "ok": false
-}

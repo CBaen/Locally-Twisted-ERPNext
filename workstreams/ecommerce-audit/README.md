@@ -18,21 +18,6 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
-## Release Gate Integrity
-
-Release processes, major builds, and patch spirals require triad review before
-commit, push, staging, live, provider, or Search Console claims. Staging proof
-must be environment-specific: local Docker/database contracts are prerequisites,
-not staging proof, unless they run against the staging environment itself.
-
-2026-05-23 correction: the Frappe Cloud owner-review staging attempt failed as
-a release process and is frozen. Use
-`../frappe-cloud-staging-release-failure-forensics-2026-05-23.md` before any
-future staging/live execution. No ecommerce audit handoff may convert that
-session's commits, hashes, or provider attempts into owner-review readiness.
-The next fix-agent action list is
-`../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door
@@ -44,8 +29,8 @@ route protections, and the focused proof set.
 Current evidence: owner raw catalog mutations are blocked across `19/19`
 probes, existing public Website Items keep their published state during local
 Product Setup apply, local apply refuses public hide/route-change requests, and
-Product Setup sync promotes published checkout backfills to `Local Preview
-Ready` while non-checkout backfills stay Draft. Final pre-commit
+Product Setup sync dry run reports `51` Website Items with `0` creates and
+`21` truthful would-update rows. Final pre-commit
 `npm run test:owner-product-safety` passed. This is local-only.
 
 ## 2026-05-22 Product Gallery Restoration
@@ -58,13 +43,10 @@ the role split between `gallery`, `variant_image`, `reference`, and
 
 Current evidence: Product Setup owns `68` approved live gallery rows, `47`
 Website Items have native `Website Slideshow` links, `68` Website Slideshow
-Item rows exist, `30` published checkout Product Setups are `Local Preview
-Ready`, and rendered product routes prove the thumbnail rail. `Mickey Mouse
-Bouquet` is the regression route for approved simple checkout exact-variant
-media joining the standard thumbnail set through active Product Setup schema.
-Final local gates passed through `product_gallery_projection_contract.py`,
-`product_setup_catalog_coverage.py`, `test:product-gallery-experience`,
-`test:owner-product-safety`, and `test:ecommerce-full`. This is local-only.
+Item rows exist, and rendered product routes prove the thumbnail rail. Final
+local gates passed through `product_gallery_projection_contract.py`,
+`test:product-gallery-experience`, `test:owner-product-safety`, and
+`test:ecommerce-full`. This is local-only.
 
 ## 2026-05-22 Product Option Selection UX
 

@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Stage local catalog reference data into the LT-owned app seed path.
+"""Stage Odoo catalog seed data into the ignored app-local container path.
 
-This is a local-development/reference prep helper. It refreshes the ignored
-duplicate at `apps/locally_twisted/locally_twisted/seed/lt_catalog_seed/` so
-bench commands can use an LT/ERPNext-owned seed artifact path instead of
-depending on `_resources/odoo-live` inside the runtime container.
-
-Staging/bootstrap must receive a neutral LT-owned seed artifact. Do not use a
-provider bind mount of `_resources/odoo-live` as the deployment fix.
+The source of truth remains `_resources/odoo-live/`. This script refreshes the
+ignored duplicate at `apps/locally_twisted/locally_twisted/seed/_data/` for
+bench commands that run inside the locally_twisted app container.
 
 Run:
   python scripts/setup/stage_seed_data.py
@@ -20,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "_resources" / "odoo-live"
-TARGET = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "seed" / "lt_catalog_seed"
+TARGET = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "seed" / "_data"
 PRICE_ENRICHMENT = (
     ROOT
     / "audits"

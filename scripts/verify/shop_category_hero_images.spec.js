@@ -79,7 +79,7 @@ test("shop category hero assignments are unique across category routes", () => {
 test("shop category hero generation manifest preserves color-source authority", () => {
 	const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, "utf8"));
 	expect(manifest.items).toHaveLength(CATEGORY_HEROES.length);
-	expect(manifest.note).toContain("Owner/source swatches");
+	expect(manifest.note).toContain("Owner/Odoo swatches");
 	expect(manifest.note).toContain("sampled hex values are not");
 
 	for (const category of CATEGORY_HEROES) {
@@ -88,10 +88,10 @@ test("shop category hero generation manifest preserves color-source authority", 
 		expect(item.slug).toBe(category.file);
 		expect(item.palette.length).toBeGreaterThan(0);
 		expect(item.swatch_refs.length).toBe(item.palette.length);
-		expect(item.prompt).toContain("owner/source balloon color names");
+		expect(item.prompt).toContain("owner/Odoo balloon color names");
 		expect(item.prompt).toContain("not hex values");
 		for (const swatchRef of item.swatch_refs) {
-			expect(swatchRef).toMatch(/^\/assets\/locally_twisted\/images\/color-swatches\/lt-catalog\//);
+			expect(swatchRef).toMatch(/^\/assets\/locally_twisted\/images\/color-swatches\/odoo\//);
 		}
 		for (const derivative of item.derivatives) {
 			expect(derivative.path).toBe(`${category.file}-${derivative.key}.webp`);

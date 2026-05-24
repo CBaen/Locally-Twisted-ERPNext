@@ -1,252 +1,13 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
 - Branch: `main`
-- 2026-05-23 staging app deploy closeout:
-  `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
-  Source `5edb641de4a3f09cc6c292904fb70551c87db3df` was approved for
-  staging-only app mirror sync, then app mirror hash
-  `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831` was approved for staging-only
-  Frappe Cloud deploy/update. Frappe Cloud deploy `eu92fvbhpp` and site update
-  job `41ftn09ocp` succeeded; staging now has the expected installed app hash,
-  correct app order, ecommerce paused, and public indexing disabled.
-  Owner-review remains **NO-GO** because hosted preflight blocks on missing
-  `LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`, and no
-  backup/zero-data proof for destructive catalog seed. No bootstrap/import,
-  live, DNS, Stripe, Search Console, checkout unpause, manual migrate, or
-  manual cache clear was performed. This archive is not authority for the next
-  mutation after commit.
-- 2026-05-23 complete-site-object payload guard:
-  `scripts/verify/frappe_cloud_payload_contract.py` now rejects typed JSON
-  deploy/update payloads when `sites[]` rows only include `name`. Use the
-  current provider site object with `name`, `server`, `bench`, `skip_backups`,
-  and `skip_failing_patches`. Failure recipe:
-  `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
-- Previous 2026-05-23 current-source read-only staging packet after
-  `a5ed680`:
-  `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` and
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
-  This is **NO-GO** read-only evidence, not owner-review readiness and not a
-  release packet for mutation. Staging is Active with ecommerce paused and
-  public indexing disabled, but the app-root mirror/deployed app hash remains
-  `181076c...`, mirror freshness is `ok=false`, hosted preflight returns HTTP
-  `417`, catalog/Product Setup/gallery rows are zero, required owner and
-  marketing users are missing, representative routes return `404`, and
-  `app_mirror_sync` is blocked before mutation because
-  `freeze-reopen-approval.json` is missing. This pass did not mutate provider,
-  app mirror, staging, live, DNS, Stripe, Search Console, bootstrap, migrate,
-  cache, checkout, users, indexing, or secrets.
-- 2026-05-23 failure-ledger helper hardening:
-  `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
-  Future mutation-capable release packets must generate or validate
-  `failure-ledger.json` through `scripts/release/failure_ledger_artifact.py`.
-  Empty/thin ledgers, stale source commits, fake guard paths, raw/secret
-  diagnostic keys, and repeated failure classes without fresh plan evidence
-  now fail locally. This is release-prevention hardening only and did not
-  mutate provider, app mirror, staging, live, DNS, Stripe, Search Console,
-  bootstrap, migrate, cache, indexing, checkout, users, or secrets.
-- 2026-05-23 required read-docs refresh:
-  `workstreams/frappe-cloud-required-read-docs-refresh-2026-05-23.md`. The
-  forensic-freeze lock and release guard now require the newer next-agent
-  closeout, staging reopen packet prep, app-mirror sync-plan helper, and
-  failure-ledger helper, and `849d8c2` documentation parity closeout in future mutation-capable
-  `read-receipt.json` artifacts. This is local/offline gate hardening only and
-  does not mutate provider, app mirror, staging, live, DNS, Stripe, Search
-  Console, bootstrap, migrate, cache, indexing, checkout, users, or secrets.
-- 2026-05-23 documentation parity closeout after app mirror sync-plan guard:
-  `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`. This records
-  `849d8c2d88cc868990cab124af02648e493b49d1` as the pre-closeout guard
-  archive and confirms this closeout did not mutate provider, app mirror,
-  staging, live, DNS, Stripe, Search Console, bootstrap, migrate, cache,
-  indexing, checkout, users, or secrets. It is not a release packet and does
-  not make staging owner-review ready.
-- 2026-05-23 app mirror sync plan helper:
-  `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`.
-  `scripts/release/app_mirror_sync_plan_artifact.py` writes only the local
-  pre-sync `app-mirror-sync-plan.json` after `--write`,
-  `--rollback-hash`, and `--reviewed-source`. It is covered by
-  `npm run test:app-mirror-sync-plan` and included in
-  `npm run test:release-prevention`. It does not sync the mirror, mutate
-  provider/staging, or create owner-review readiness; current staging remains
-  no-go because approval is missing and the app mirror/deployed app are stale.
-- 2026-05-23 staging reopen packet prep helper:
-  `workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
-  `scripts/release/staging_reopen_packet_prepare.py` writes only prep-only
-  context files, refuses final release artifact names, and is covered by
-  `npm run test:staging-reopen-packet-prepare`. It does not generate approval,
-  provider, app mirror, deploy, hosted preflight, owner-review, or triad proof,
-  and it performs no provider/staging/app mirror/live/DNS/Stripe/Search Console
-  mutation.
-- 2026-05-23 next-agent staging closeout:
-  `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
-  This is docs closeout only. It does not reopen forensic-freeze, does not
-  mutate provider/staging/app mirror/live/DNS/Stripe/Search Console, and does
-  not prove owner-review readiness. It adds the standing rule that a docs-only
-  closeout commit should not cause another read-only packet solely to chase
-  `HEAD`; generate fresh source-bound artifacts only when release input state
-  changes, explicit reopen approval exists, or a mutation-capable packet is
-  being prepared.
-- 2026-05-23 freeze reopen approval timestamp guard:
-  `workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
-  Future mutation-capable packets now need a current, bounded, ISO-8601
-  timezone-bearing `freeze-reopen-approval.json`; expired, malformed,
-  future-dated, timezone-less, and longer-than-24-hour approval windows fail
-  locally. This is local/offline prevention only and did not mutate provider,
-  staging, live, DNS, Stripe, Search Console, app mirror, bootstrap, migrate,
-  cache, checkout, or secrets.
-- 2026-05-23 freeze reopen approval helper:
-  `workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`.
-  Future mutation-capable packets must use
-  `scripts/release/freeze_reopen_approval_artifact.py` to preview, write, or
-  validate `freeze-reopen-approval.json`. Preview mode is not approval
-  (`ok=false`); writing requires explicit `--write`, `--output`,
-  `--approved-by`, and `--approval-evidence`. This is local/offline prevention
-  only and did not mutate provider, staging, live, DNS, Stripe, Search Console,
-  app mirror, bootstrap, migrate, cache, checkout, or secrets.
-- 2026-05-23 previous read-only staging packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
-  This packet is bound to source
-  `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7` and performed no provider or
-  staging mutation. It proves staging remains **NO-GO** for owner review:
-  app-root mirror/deployed app hash is still `181076c...`, mirror freshness is
-  `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
-  Setup/gallery rows are zero, owner/marketing users are missing,
-  representative routes fail, and the release controller blocks
-  `app_mirror_sync` because `freeze-reopen-approval.json` is missing.
-- 2026-05-23 previous read-only staging packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`
-  is archived evidence for source
-  `b0396675a8664a42e887b6ac141b63ac115eaaa7`, not mutation proof for later
-  commits.
-- 2026-05-23 earlier read-only staging packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`
-  is archived evidence for source
-  `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`, not mutation proof for later
-  commits.
-- 2026-05-23 JSON artifact guard:
-  `release_guard_common.read_json()` now accepts UTF-8 BOM JSON artifacts, and
-  `release_controller_contract.py` proves a BOM read receipt passes. This is
-  local guard hardening only; it does not reopen forensic-freeze.
-- 2026-05-23 Gate/Fixer chain-binding guard:
-  `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
-  The release controller now rejects mutation-capable packets whose approval,
-  app mirror plan/freshness, provider snapshot, deploy payload, deploy
-  completion, or hosted preflight artifacts do not describe the same
-  source/hash chain. This is local/offline prevention only; it did not mutate
-  provider, staging, live, DNS, Stripe, Search Console, app mirror, bootstrap,
-  migrate, cache, checkout, or secrets.
-- 2026-05-23 archived snapshot-source read-only staging packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
-  This packet is bound to source
-  `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c` and performed no provider or
-  staging mutation. The folder name is historical: after this packet was
-  committed, repo `HEAD` moved, so it is not mutation-capable proof for a later
-  commit. It proves staging remains **NO-GO** for owner review at that packet
-  source: app-root mirror/deployed app hash is still `181076c...`, mirror
-  freshness is `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
-  Setup/gallery rows are zero, owner/marketing users are missing, representative
-  routes return `404`, and the release controller blocks `app_mirror_sync`
-  because `freeze-reopen-approval.json` is missing.
-- Source archive labels for this lane: run `git status -sb` and `git log
-  --oneline -5` for current HEAD. Do not treat this handoff as a live HEAD
-  oracle. The artifact-chain implementation archive is `3054396 Bind staging
-  release artifacts`, with follow-up docs clarification at `a838d8d Clarify
-  current release archive`. The previous documentation-parity archive is
-  `5e11003 Document release artifact template parity`, and the underlying
-  template change is `f5e2e91 Update staging release artifact template`, which
-  updates the staging-freeze release packet template so future packets include
-  `freeze-reopen-approval.json`,
-  `app-mirror-sync-plan.json`, `deploy-completion.json`, and the hosted
-  preflight `checks` payload shape. These commits do not create those real
-  artifacts, do not reopen forensic-freeze, and do not mutate provider/
-  staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/migrate/cache
-  state. Handoff:
-  `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
-- Read-only no-go packet archive: `ceab908 Record staging read-only no-go
-  packet`; verify current `HEAD` / `origin/main` with `git status -sb` before
-  editing. The initial local release-prevention guard commit
-  `58258fd Add release prevention guards` and older closeout baseline
-  `1811cd6 Fix ecommerce closeout doc state` are historical anchors, not the
-  current source state.
+- Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
-- 2026-05-23 release-process failure: the Frappe Cloud owner-review staging
-  attempt was stopped by GL and is not launch authority. Treat owner-review
-  staging as blocked until a new release controller starts from current
-  read-only provider state and satisfies the gates in
-  `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
-  Do not resume provider/bootstrap mutation from the interrupted session. The
-  next fix-agent action list is
-  `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-- 2026-05-23 release-prevention guard pass: the local/offline lock and
-  verifier layer now exists. Active lock:
-  `release_locks/locally-twisted-staging-forensic-freeze.json`. Controller:
-  `scripts/release/frappe_cloud_release_controller.py`. Local guard command:
-  `npm run test:release-prevention`. This command proves the prevention
-  architecture only; it does not prove staging data, owner accounts, Product
-  Setup/gallery projection, live checkout, DNS, Stripe, Search Console, or
-  owner-review readiness.
-- 2026-05-23 read-only staging reopen packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`
-  is archived ceab908-era evidence.
-  Controller `read_only_forensics` passed with no provider mutation. Frappe
-  Cloud staging is Active, has no running jobs, correct app order,
-  `lt_ecommerce_paused=1`, and `lt_public_indexing_enabled=0`, but it remains
-  blocked for owner review: all catalog/Product Setup/gallery counts are zero,
-  `locallytwisted@gmail.com` and `marketing@exploringnotboring.com` are
-  missing, and representative shop/product routes return `404`. The deployed
-  app hash/app mirror `181076c239b2d1d3d508a41ac471c71f9d2b5158` also lacks
-  the current source `staging_owner_review_preflight.py`, so hosted bootstrap
-  preflight is unavailable on staging. Do not bootstrap/import from this
-  deployed app.
-- 2026-05-23 post-packet docs parity handoff:
-  `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`. This records
-  `ceab908` as source archive proof only, not app mirror freshness, provider
-  deploy proof, staging data proof, or owner-review readiness.
-- 2026-05-23 app mirror freshness guard:
-  `scripts/verify/frappe_cloud_app_mirror_freshness.py` is wired into
-  `npm run test:release-prevention` in offline self-test mode. Real read-only
-  proof is
-  `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`.
-  It proves app mirror hash `181076c...` is missing the hosted preflight module
-  and has a stale bootstrap module relative to source `24c8465`. The active
-  release lock now blocks `app_mirror_sync`; do not sync the mirror until GL
-  explicitly reopens forensic-freeze under an artifact-backed packet.
-- 2026-05-23 hosted preflight guard refresh:
-  `workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md` and
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`.
-  The hosted preflight verifier now writes a sanitized artifact, and the
-  release controller requires a passing hosted-preflight artifact for future
-  `staging_bootstrap`. That artifact must match the provider snapshot site,
-  provider target/installed app hash, app-mirror hash, and the hosted
-  preflight `required_checks` payload. The archived refresh packet remains
-  no-go because staging returned HTTP `417` for the preflight method.
-- 2026-05-23 post-`ebb7151` read-only proof:
-  `workstreams/frappe-cloud-post-ebb7151-staging-readonly-2026-05-23.md` and
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-post-ebb7151-readonly/`.
-  This pass rechecked staging after source commit `ebb7151` and performed no
-  provider/staging mutation. It confirms the app-root mirror/deployed hash is
-  still `181076c239b2d1d3d508a41ac471c71f9d2b5158`, the mirror is still
-  missing `staging_owner_review_preflight.py`, hosted preflight still returns
-  HTTP `417`, staging owner-review data is still zero/missing, and required
-  owner/marketing accounts are still absent. Treat `ebb7151` as source archive
-  proof only, not staging readiness.
-- 2026-05-23 local release-guard gap closure: `npm run
-  test:release-prevention` now covers explicit freeze-reopen approval,
-  app-mirror pre-sync/post-sync separation, post-deploy/update completion
-  artifact validation, and sanitized owner-review release artifacts. This
-  removes the local controller deadlock but does not reopen forensic-freeze or
-  mutate staging.
-- 2026-05-23 Provider Witness recheck after `5e11003`: repo source was clean on
-  `main` / `origin/main`; the app-root mirror was still
-  `181076c239b2d1d3d508a41ac471c71f9d2b5158`; mirror freshness against
-  `5e11003` was still `ok=false`; and the controller blocked `app_mirror_sync`
-  with `freeze reopen approval artifact is required before mutation`. The
-  current goal/chat context is not enough to create `freeze-reopen-approval.json`.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -267,30 +28,9 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 - Product page galleries were restored locally on 2026-05-22 as native
   Product Setup -> Website Slideshow architecture. Approved source gallery
   media now creates Product Setup gallery rows, projects to
-  `Website Slideshow`, and renders in the product gallery rail. Approved
-  simple checkout exact-variant media can join the rail only through active
-  Product Setup schema; arbitrary selected-variant/reference/category media
+  `Website Slideshow`, and renders in the product gallery rail. Variant media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
-- Historical Frappe Cloud staging recovery ran on 2026-05-22. Source `main`
-  was pushed at `2ca1b85`; the private app-root mirror was pushed at `3e86bc1`; staging
-  installed `locally_twisted` app hash is
-  `3e86bc149d6dcc04daa194b740c1733f5c796261`. Provider proof shows current
-  staging on bench group `bench-40102` / bench `bench-40102-000003-f4v`; live
-  remains on bench group `bench-39776` / bench `bench-39776-000015-f94v`.
-  Frappe Cloud deploy, site migration, config update, and cache clear
-  succeeded with ecommerce paused and public indexing disabled. This is not
-  owner-review ready: staging currently has app code but no business data.
-  Worker A's target-site proof found `Item=0`, `Website Item=0`,
-  `Website Slideshow=0`, `Website Slideshow Item=0`, and missing
-  `locallytwisted@gmail.com` plus `marketing@exploringnotboring.com` users.
-  `scripts/verify/staging_owner_review_gate.py` is now the mandatory
-  executable gate before calling staging owner-review ready; it must fail on
-  zero catalog/users even when app deploy succeeded. Handoff:
-  `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`. This section
-  is retained as historical evidence only; the old `3e86bc1` staging gate
-  command is superseded by the 2026-05-23 forensic-freeze lock and the
-  `181076c...` read-only no-go packet.
 - Current local product import proof treats all 53 Odoo-imported products as
   real products. Direct checkout is now bounded for high-complexity color
   products: the two graduation products use college color preset checkout
@@ -318,85 +58,6 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   to stop local build/test work. Name the actual blocker when ecommerce work is
   incomplete.
 
-## Release And Staging Gate Integrity
-
-Release processes, major builds, and patch spirals now require triad review
-before any commit, push, staging, live, provider, or Search Console claim. For
-this ecommerce lane, the staging-safe list is:
-
-1. Confirm the intended source commit, app-mirror commit, staging host, rollback
-   path, and whether the push is archive-only or deploy-triggering.
-2. Run local hard gates for the changed slice before staging.
-3. Prove Frappe Cloud staging deploy/update/migration/cache clear, app order,
-   and `lt_ecommerce_paused=1`.
-4. Run `python scripts\verify\staging_owner_review_gate.py --expected-hash
-   <installed-locally_twisted-hash>` against staging. This gate is mandatory
-   before any "owner-review ready" language and must fail if catalog/Product
-   Setup/gallery rows or required users are missing, even when app deploy and
-   migrate succeeded.
-5. Run staging HTTP/browser checks against the staging URL.
-6. Run database-side Product Setup/gallery/checkout proof in staging, or mark
-   that proof unverified. Do not claim staging from local Docker database reads.
-7. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
-   behind their separate gates.
-
-2026-05-23 failure-prevention addition: after one provider/bootstrap failure,
-stop for forensic classification and write the prevention guard before retry.
-After two related failures, all provider mutation stops until a new
-artifact-owning triad approves a fresh release plan. A helper opinion is not a
-gate; the triad must own concrete artifacts. This is now tracked as
-`capabilities/failures/release-controller-churn-after-stop.md`.
-
-Executable local prevention gates now in this repo:
-
-- `release_locks/locally-twisted-staging-forensic-freeze.json`
-- `scripts/release/frappe_cloud_release_controller.py`
-- `scripts/release/freeze_reopen_approval_artifact.py`
-- `scripts/verify/release_lock_contract.py`
-- `scripts/verify/release_controller_contract.py`
-- `scripts/verify/freeze_reopen_approval_artifact_contract.py`
-- `scripts/verify/frappe_cloud_payload_contract.py`
-- `scripts/verify/frappe_cloud_app_mirror_freshness.py`
-- `scripts/verify/frappe_cloud_provider_snapshot.py`
-- `scripts/verify/staging_owner_review_gate_contract.py`
-- `scripts/verify/staging_owner_review_hosted_preflight.py`
-- `scripts/verify/staging_owner_review_bootstrap_contract.py`
-- `scripts/verify/release_claim_language_contract.py`
-- `npm run test:release-prevention`
-
-Provider mutation remains blocked while the forensic-freeze lock is active.
-Gate/Fixer witness follow-up on 2026-05-23 is now local/offline code:
-reopening staging bootstrap/import requires the expanded prevention suite,
-real provider snapshot output, real hosted bootstrap preflight output,
-backup-or-zero-data proof before destructive catalog seed paths, and mandatory
-payload artifacts for future provider deploy/update controller actions.
-The hosted preflight output must be bound to the same staging site and release
-hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a hand-shaped
-minimal `ok` artifact is not acceptable.
-The older pre-deploy read-only packet
-`workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`
-produced the provider snapshot and tried hosted preflight; hosted preflight is
-blocked in that archive because staging was still running app hash
-`181076c...`, which did not include the source preflight method. The later
-staging app deploy closeout at the top of this file supersedes that app-hash
-state but not the owner-review NO-GO boundary.
-Post-`ceab908` docs parity handoff:
-`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
-
-2026-05-22 staging-prep nuance: official Frappe Cloud docs support
-`press-deploy` commit markers, including bench-specific markers. For LT, do
-not use generic `press-deploy`. Current provider proof supersedes older repo
-history: staging is `bench-40102` / `bench-40102-000003-f4v`, and live remains
-`bench-39776` / `bench-39776-000015-f94v`. Owner review is blocked until
-staging bootstrap/import completes and the mandatory staging owner-review gate
-passes. Historical 2026-05-22 blocker language said the blocker was not app
-hash because staging had `3e86bc1` installed but no catalog/shop/gallery
-records or required users. The current 2026-05-23 blocker is broader: staging
-now reports app hash `181076c...`, the app-root mirror is still behind current
-source and lacks the hosted preflight method, and the actual staging target
-still has zero catalog/Product Setup/gallery rows plus missing owner/marketing
-users.
-
 ## Completed Lanes
 
 ### Product gallery restoration - 2026-05-22
@@ -416,12 +77,9 @@ Evidence summary: source/Odoo additional product photos are now role-based
 media, not a blanket held bucket. `gallery` media renders only after Product
 Setup owns it and the guarded apply path projects it into native ERPNext
 `Website Slideshow` rows. `variant_image`, `reference`, and
-`ignored_artifact` do not populate the gallery rail. Approved simple checkout
-exact-variant media can join the rail only from active Product Setup schema,
-which is why published checkout backfills now sit at `Local Preview Ready`
-instead of `Draft`. The product image template now reads LT projected gallery
-slides before Webshop fallback `slides`, so one-extra projected galleries
-render on real product pages.
+`ignored_artifact` do not populate the gallery rail. The product image
+template now reads LT projected gallery slides before Webshop fallback
+`slides`, so one-extra projected galleries render on real product pages.
 
 Green gates:
 
@@ -434,10 +92,9 @@ Green gates:
 - `npm run test:ecommerce-full`
 
 Current local counts: `68` approved live Product Setup gallery rows, `47`
-Website Items with slideshows, `68` Website Slideshow Item rows, and `30`
-published checkout Product Setups at `Local Preview Ready`. The source packet
-still records `70` deduped source gallery images because `easter-arch` and
-`pride-arch` are source products but not current live Website Items.
+Website Items with slideshows, and `68` Website Slideshow Item rows. The source
+packet still records `70` deduped source gallery images because `easter-arch`
+and `pride-arch` are source products but not current live Website Items.
 
 ### Product option selection UX - 2026-05-22
 
@@ -488,11 +145,10 @@ Evidence summary: Jeff needs owner control over products, but direct ERPNext
 catalog tables are too sharp for daily business editing. The kept path is
 Product Setup via `LT Product Blueprint`. Owner-like direct edits to raw Items,
 Website Items, Item Prices, option axes/values, Item Groups, Webshop Settings,
-and product gallery slideshow records are blocked. Published checkout
-backfills are `Local Preview Ready` for runtime media/price preview;
-non-checkout backfills stay Draft. Local apply preserves current published state
-for existing Website Items and refuses hidden->visible, public->hidden, and
-public-route changes outside the reviewed release path. Product Setup sync dry runs now
+and product gallery slideshow records are blocked. Backfilled Product Setup
+records stay Draft. Local apply preserves current published state for existing
+Website Items and refuses hidden->visible, public->hidden, and public-route
+changes outside the reviewed release path. Product Setup sync dry runs now
 truthfully report missing-field updates and fill missing rows without wiping
 existing options.
 

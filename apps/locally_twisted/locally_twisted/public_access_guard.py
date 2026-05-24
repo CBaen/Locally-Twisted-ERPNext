@@ -66,8 +66,12 @@ def _validate_website_settings(doc) -> None:
 
 
 def _validate_portal_settings(doc) -> None:
-    if getattr(frappe.flags, "in_migrate", False):
-        _normalize_portal_settings_for_migrate(doc)
+    if _is_controlled_portal_sync():
+        if doc.get("default_role"):
+            doc.set("default_role", None)
+        if doc.get("default_portal_home") != "me":
+            doc.set("default_portal_home", "me")
+        return
 
     if doc.get("default_role"):
         _block(
@@ -88,19 +92,6 @@ def _validate_portal_settings(doc) -> None:
             _block(f"{route} must remain Supplier-only.", doc)
         if route in STOCK_CUSTOMER_ROUTES_TO_HIDE:
             _block(f"{route} must stay hidden from the customer portal menu.", doc)
-
-
-def _normalize_portal_settings_for_migrate(doc) -> None:
-    """Let Frappe's migrate-time portal sync repair safe values before saving."""
-    doc.set("default_role", None)
-    doc.set("default_portal_home", "me")
-
-    for row in doc.get("menu") or []:
-        route = row.get("route")
-        if route in SUPPLIER_ROUTES:
-            row.set("role", "Supplier")
-        if route in STOCK_CUSTOMER_ROUTES_TO_HIDE:
-            row.set("enabled", 0)
 
 
 def _validate_docperm(doc) -> None:
@@ -174,6 +165,14 @@ def _user_has_any_role(user: str, roles: set[str]) -> bool:
             "Has Role",
             {"parenttype": "User", "parent": user, "role": ["in", sorted(roles)]},
         )
+    )
+
+
+def _is_controlled_portal_sync() -> bool:
+    return bool(
+        getattr(frappe.flags, "in_install", False)
+        or getattr(frappe.flags, "in_migrate", False)
+        or getattr(frappe.flags, "lt_syncing_customer_portal", False)
     )
 
 

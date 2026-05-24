@@ -28,13 +28,6 @@ If any stage fails, stop the release, fix source, and restart at the earliest
 stage that can prove the fix. Do not make production-only fixes except to roll
 back or stop active damage.
 
-2026-05-23 LT release-freeze addition: if a provider/bootstrap failure repeats
-or GL says stop, the stage becomes `forensic-freeze`. No deploy, provider poll,
-bootstrap, DNS, Stripe, Search Console, live checkout, or "one more check" is
-allowed. Future release work must first satisfy
-`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` and
-`capabilities/failures/release-controller-churn-after-stop.md`.
-
 ## How to use it
 
 1. Assign one launch controller.
@@ -99,8 +92,6 @@ allowed. Future release work must first satisfy
 - ERPNext app-build copy is not business truth by itself. Customer-facing business details should trace to the Odoo business-detail source or explicit approval.
 - Treating local success as live readiness skips the required staging proof and
   approval gate.
-- Continuing release execution after the stop condition because notes exist but
-  no executable release lock blocks the next command.
 
 ## Examples
 

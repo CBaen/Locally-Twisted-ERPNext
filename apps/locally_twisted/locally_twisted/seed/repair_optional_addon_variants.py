@@ -10,6 +10,9 @@ optional-add-on variants, and rebuilds the Webshop variant cache.
 from __future__ import annotations
 
 import json
+import shutil
+from pathlib import Path
+from urllib.request import Request, urlopen
 
 import frappe
 
@@ -20,6 +23,25 @@ from locally_twisted.catalog_variant_rules import (
     project_required_variant_combo,
 )
 from locally_twisted.commerce_rules import PRICE_LIST
+
+
+SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
+
+BOUQUET_SIZE_IMAGE_IDS = {
+    "unicorn-bouquet": {"Small": 250, "Medium": 251, "Large": 252},
+    "mickey-mouse-bouquet": {"Small": 253, "Medium": 254, "Large": 255},
+    "minion-bouquet": {"Small": 369, "Medium": 370, "Large": 371},
+    "encanto-bouquet": {"Small": 372, "Medium": 373, "Large": 374},
+    "stitch-bouquet": {"Small": 408, "Medium": 409, "Large": 410},
+    "flamingo-bouquet": {"Small": 414, "Medium": 415, "Large": 416},
+    "football-bouquet": {"Small": 417, "Medium": 418, "Large": 419},
+    "soccer-bouquet": {"Small": 420, "Medium": 421, "Large": 422},
+    "over-the-hill-bouquet": {"Small": 423, "Medium": 424, "Large": 425},
+    "space-bouquet": {"Small": 426, "Medium": 427, "Large": 428},
+    "paw-patrol-bouquet": {"Small": 1083, "Medium": 1084, "Large": 1085},
+    "elsa-bouquet": {"Small": 1086, "Medium": 1087, "Large": 1088},
+    "holy-cow-bouquet": {"Small": 1089, "Medium": 1090, "Large": 1091},
+}
 
 
 def _variant_attrs(item_code: str) -> dict[str, str]:
@@ -108,6 +130,51 @@ def _upsert_item_price(item_code: str, rate: float | None) -> None:
             "selling": 1,
         }
     ).insert(ignore_permissions=True)
+
+
+def _ensure_public_file(source_url: str, file_name: str, attached_to_name: str) -> str:
+    SITE_FILES_DIR.mkdir(parents=True, exist_ok=True)
+    target = SITE_FILES_DIR / file_name
+    if not target.exists() or target.stat().st_size == 0:
+        request = Request(source_url, headers={"User-Agent": "LT variant media repair"})
+        with urlopen(request, timeout=30) as response:
+            with target.open("wb") as handle:
+                shutil.copyfileobj(response, handle)
+
+    file_url = f"/files/{file_name}"
+    existing = frappe.db.exists(
+        "File",
+        {
+            "file_url": file_url,
+            "attached_to_doctype": "Item",
+            "attached_to_name": attached_to_name,
+        },
+    )
+    if not existing:
+        frappe.get_doc(
+            {
+                "doctype": "File",
+                "file_name": file_name,
+                "file_url": file_url,
+                "is_private": 0,
+                "attached_to_doctype": "Item",
+                "attached_to_name": attached_to_name,
+            }
+        ).insert(ignore_permissions=True)
+    return file_url
+
+
+def _explicit_variant_image(template_code: str, combo: dict[str, str], variant_code: str) -> str | None:
+    image_ids = BOUQUET_SIZE_IMAGE_IDS.get(template_code)
+    if not image_ids:
+        return None
+    size = combo.get("Bouquet Size") or ""
+    for key, image_id in image_ids.items():
+        if key.lower() in size.lower():
+            source_url = f"http://5.78.136.133/web/image/product.product/{image_id}/image_1024"
+            file_name = f"{template_code}-{key.lower()}.webp"
+            return _ensure_public_file(source_url, file_name, variant_code)
+    return None
 
 
 def _find_or_create_required_variant(template_code: str, combo: dict[str, str]) -> str:
@@ -208,7 +275,7 @@ def _repair_template(template_code: str) -> dict[str, object]:
         combo = data["combo"]
         variant_code = _find_or_create_required_variant(template_code, combo)
         _upsert_item_price(variant_code, data.get("price"))
-        image = data.get("image")
+        image = _explicit_variant_image(template_code, combo, variant_code) or data.get("image")
         if image:
             frappe.db.set_value("Item", variant_code, "image", image, update_modified=False)
         created_or_reused.append(variant_code)

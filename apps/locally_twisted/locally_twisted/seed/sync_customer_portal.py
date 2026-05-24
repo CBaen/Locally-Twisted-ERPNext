@@ -89,7 +89,6 @@ WEBSITE_SETTINGS = {
 }
 
 WEBSHOP_GUEST_SETTINGS = {
-    "show_price": 1,
     "login_required_to_view_products": 0,
     "hide_price_for_guest": 0,
     "enable_checkout": 1,
@@ -135,40 +134,43 @@ def _ensure_single_values(doctype: str, fields: dict[str, Any], changes: list[st
 
 
 def _sync_portal_settings(summary: dict[str, Any]) -> bool:
-    portal = frappe.get_single("Portal Settings")
-    portal.sync_menu()
-    portal.reload()
+    previous_flag = getattr(frappe.flags, "lt_syncing_customer_portal", False)
+    frappe.flags.lt_syncing_customer_portal = True
+    try:
+        portal = frappe.get_single("Portal Settings")
+        _set_value(portal, "default_portal_home", "me", summary["portal_settings"])
+        _set_value(portal, "default_role", None, summary["portal_settings"])
+        portal.sync_menu()
+        portal.reload()
 
-    changed = False
-    changed = _set_value(portal, "default_portal_home", "me", summary["portal_settings"]) or changed
-    changed = _set_value(portal, "default_role", None, summary["portal_settings"]) or changed
-    changed = _set_value(portal, "hide_standard_menu", 0, summary["portal_settings"]) or changed
+        changed = False
+        changed = _set_value(portal, "default_portal_home", "me", summary["portal_settings"]) or changed
+        changed = _set_value(portal, "default_role", None, summary["portal_settings"]) or changed
+        changed = _set_value(portal, "hide_standard_menu", 0, summary["portal_settings"]) or changed
 
-    for spec in CUSTOMER_MENU:
-        changed = _ensure_menu_row(portal, spec, enabled=1, change_log=summary["customer_menu"]) or changed
+        for spec in CUSTOMER_MENU:
+            changed = _ensure_menu_row(portal, spec, enabled=1, change_log=summary["customer_menu"]) or changed
 
-    route_rows = {
-        row.route: row
-        for row in portal.get("menu", [])
-        if row.get("route")
-    }
-    for route in sorted(HIDDEN_PORTAL_ROUTES):
-        row = route_rows.get(route)
-        if row and row.enabled:
-            row.enabled = 0
-            summary["hidden_routes"].append(route)
-            changed = True
+        route_rows = {row.route: row for row in portal.get("menu", []) if row.get("route")}
+        for route in sorted(HIDDEN_PORTAL_ROUTES):
+            row = route_rows.get(route)
+            if row and row.enabled:
+                row.enabled = 0
+                summary["hidden_routes"].append(route)
+                changed = True
 
-    for route in sorted(SUPPLIER_PORTAL_ROUTES):
-        row = route_rows.get(route)
-        if row and row.role != "Supplier":
-            row.role = "Supplier"
-            summary["supplier_routes"].append(route)
-            changed = True
+        for route in sorted(SUPPLIER_PORTAL_ROUTES):
+            row = route_rows.get(route)
+            if row and row.role != "Supplier":
+                row.role = "Supplier"
+                summary["supplier_routes"].append(route)
+                changed = True
 
-    if changed:
-        portal.save(ignore_permissions=True)
-    return changed
+        if changed:
+            portal.save(ignore_permissions=True)
+        return changed
+    finally:
+        frappe.flags.lt_syncing_customer_portal = previous_flag
 
 
 def _set_value(doc: Any, fieldname: str, value: Any, changes: list[str]) -> bool:

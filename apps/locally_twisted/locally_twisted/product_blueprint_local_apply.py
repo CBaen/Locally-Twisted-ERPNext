@@ -509,8 +509,6 @@ def _sync_website_gallery(frappe, website_item_name: str, template_item: str, da
             },
         )
 
-    # Guarded Product Setup apply path owns slideshow projection; callers pass
-    # the local-write token before this system-owned ERPNext record mutation.
     if existing:
         slideshow.save(ignore_permissions=True)
     else:

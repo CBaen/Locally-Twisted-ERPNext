@@ -1,5 +1,5 @@
 """
-seed_catalog.py — Idempotent loud-fail bulk import of LT's ERPNext catalog seed.
+seed_catalog.py — Idempotent loud-fail bulk import of LT's full live Odoo catalog.
 
 Runs IN-PROCESS via `bench --site frontend execute locally_twisted.seed.seed_catalog.execute`.
 In-process is required because:
@@ -8,10 +8,10 @@ In-process is required because:
   - We need ItemVariantsCacheManager.rebuild_cache() per template after variants land.
 
 Sources:
-  locally_twisted/seed/lt_catalog_seed/catalog.json
-  locally_twisted/seed/lt_catalog_seed/slug_to_group.json
-  locally_twisted/seed/lt_catalog_seed/value_normalize_map.json
-  locally_twisted/seed/lt_catalog_seed/images/<slug>.png
+  /workspace/_resources/odoo-live/catalog.json     — 53 products from live Odoo scrape
+  /workspace/_resources/odoo-live/slug_to_group.json — BBC taxonomy: slug → Item Group child
+  /workspace/_resources/odoo-live/value_normalize_map.json — case-fold attribute values
+  Container files dir: /workspace/_resources/odoo-live/images/<slug>.png
 
 Behavior — applies to EVERY product:
   1. Find-or-create parent Item with item_group = mapped child.
@@ -65,42 +65,28 @@ from locally_twisted.catalog_variant_rules import (
 )
 from locally_twisted.product_page_runtime import CONFIG_VERSION, LINE_FIELDNAMES
 
-LT_SEED_ARTIFACT_DIR = "lt_catalog_seed"
-REFERENCE_FALLBACK_DIRS_ENV = "LT_REFERENCE_SEED_DIRS"
-
-# Deployment/bootstrap must use the LT-owned artifact path. Historical
-# reference paths are local-dev-only and must be supplied explicitly.
+# Catalog and mapping paths — relative to bench-bench dir or /workspace mount
 WORKSPACE_PATHS = [
-    Path(f"/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/{LT_SEED_ARTIFACT_DIR}"),
+    # Primary path: bind-mounted via apps/locally_twisted/. Run `python scripts/setup/stage_seed_data.py`
+    # on the host before running this module to refresh the staged data.
+    Path("/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_data"),
+    Path("/workspace/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
 ]
+SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
 PRICE_LIST = "Standard Selling"
 
 
-def _local_reference_fallback_paths() -> list[Path]:
-    raw = os.environ.get(REFERENCE_FALLBACK_DIRS_ENV, "")
-    return [Path(part) for part in raw.split(os.pathsep) if part.strip()]
-
-
 def _find_resources() -> Path:
-    """Find the LT-owned catalog seed artifact inside the container."""
+    """Find the _resources/odoo-live directory inside the container."""
     for p in WORKSPACE_PATHS:
         if p.exists() and (p / "catalog.json").exists():
             return p
-    for p in _local_reference_fallback_paths():
-        if p.exists() and (p / "catalog.json").exists():
-            print(
-                "WARNING: using local-development reference catalog fallback. "
-                f"Do not use this path for staging/bootstrap: {p}"
-            )
-            return p
     raise SystemExit(
-        "FATAL: LT catalog seed artifact not found. Staging/bootstrap requires "
-        "an LT-owned seed directory at "
-        f"locally_twisted/seed/{LT_SEED_ARTIFACT_DIR}/ with catalog.json, "
-        "slug_to_group.json, value_normalize_map.json, and images/. "
-        "Do not fix deployment by bind-mounting historical reference scrape paths. "
-        "For local development only, run `python scripts/setup/stage_seed_data.py` "
-        f"or set {REFERENCE_FALLBACK_DIRS_ENV} to an explicit reference directory."
+        "FATAL: _resources/odoo-live not found inside container. "
+        "Bind-mount the project _resources/ dir into the container at "
+        "/workspace/_resources before running."
     )
 
 
@@ -167,7 +153,7 @@ def _ensure_file_attached(item_code: str, slug: str, images_dir: Path) -> str | 
         return None
 
     file_url = f"/files/{src.name}"
-    target = _site_files_dir() / src.name
+    target = SITE_FILES_DIR / src.name
     target.parent.mkdir(parents=True, exist_ok=True)
     if not target.exists() or target.stat().st_size != src.stat().st_size:
         shutil.copy2(src, target)
@@ -197,10 +183,6 @@ def _ensure_file_attached(item_code: str, slug: str, images_dir: Path) -> str | 
             })
             f.insert(ignore_permissions=True)
     return file_url
-
-
-def _site_files_dir() -> Path:
-    return Path(frappe.get_site_path("public", "files"))
 
 
 def _upsert_item_price(item_code: str, price: float):
@@ -480,11 +462,11 @@ def _seed_variants(
     price_enrichment: dict[str, dict[tuple[tuple[str, str], ...], float]],
     log,
 ) -> int:
-    """Generate Item Variants for every valid combination in the seed artifact.
+    """Generate Item Variants for every valid combination Odoo encoded.
 
-    Each variant gets its own Item Price on Standard Selling from the seed
-    variant row. The seed contract is already filtered down to valid dynamic
-    combinations and prices.
+    Each variant gets its own Item Price on Standard Selling from the scraped
+    variant row. Odoo's JSON-LD page price is only the base page price; dynamic
+    variant prices come from /website_sale/get_combination_info.
 
     Returns: number of variants created (excluding existing).
     """
@@ -579,7 +561,7 @@ def execute(
     purge_scope_report: str | None = None,
     v1_subset_only: bool = True,
 ) -> str:
-    """Plan or seed the LT-owned catalog artifact into ERPNext webshop.
+    """Plan or seed the Odoo catalog into ERPNext webshop.
 
     Args:
         max_products: optional cap for smoke testing. None = process all.

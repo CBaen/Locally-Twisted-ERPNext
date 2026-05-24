@@ -436,16 +436,10 @@ def sales_order_line_configuration_fields(
 
     variant_options = _variant_options_dict(resolved_item.get("variant_options") or [])
     client_configuration = normalize_client_configuration(client_configuration)
-    setup_configuration = client_configuration or _implicit_variant_checkout_configuration(
-        resolved_item=resolved_item,
-        variant_options=variant_options,
-    )
     setup_resolution = _product_setup_resolution_for_checkout(
         website_item_code=website_item_code,
-        client_configuration=setup_configuration,
+        client_configuration=client_configuration,
     )
-    if setup_resolution and not client_configuration:
-        client_configuration = setup_configuration
     selected_media = _selected_media_for_checkout(
         website_item_code=website_item_code,
         resolved_item=resolved_item,
@@ -1152,37 +1146,6 @@ def _variant_options_dict(rows: list[dict[str, Any]]) -> dict[str, str]:
         if attribute and value:
             options[str(attribute)] = str(value)
     return options
-
-
-def _implicit_variant_checkout_configuration(
-    *,
-    resolved_item: dict[str, Any],
-    variant_options: dict[str, str],
-) -> dict[str, Any] | None:
-    """Backfill a Product Setup payload for old simple cart lines.
-
-    Legacy browser carts may only carry the resolved variant Item. For direct
-    checkout products whose meaning is fully captured by non-color variant
-    options, the backend can reconstruct the Product Setup selection without
-    pretending color recipes or custom choices were saved.
-    """
-    selected_options = {
-        attribute: value
-        for attribute, value in sorted((variant_options or {}).items())
-        if attribute and value and not is_balloon_color_axis(attribute)
-    }
-    if not selected_options:
-        return None
-    return {
-        "schema_version": CONFIG_VERSION,
-        "item_code": resolved_item.get("item_code"),
-        "website_item_code": resolved_item.get("website_item_code") or resolved_item.get("item_code"),
-        "selected_options": selected_options,
-        "configuration_groups": [],
-        "add_ons": [],
-        "customizations": [],
-        "source": "implicit_variant_checkout_configuration",
-    }
 
 
 def _configuration_summary(payload: dict[str, Any]) -> str:

@@ -7,7 +7,6 @@ edit product business fields through the guarded Product Setup path.
 from __future__ import annotations
 
 import json
-import os
 import shutil
 from collections import defaultdict
 from pathlib import Path
@@ -21,11 +20,12 @@ from locally_twisted.product_blueprint_local_apply import sync_website_gallery_f
 
 
 PRICE_LIST = "Standard Selling"
-LT_SEED_ARTIFACT_DIR = "lt_catalog_seed"
-REFERENCE_FALLBACK_DIRS_ENV = "LT_REFERENCE_SEED_DIRS"
+SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
 DEFAULT_DATA_DIRS = [
     Path("/tmp/lt-product-gallery-source"),
-    Path(f"/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/{LT_SEED_ARTIFACT_DIR}"),
+    Path("/workspace/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
 ]
 
 
@@ -117,14 +117,13 @@ def _blueprint_spec(
     gallery_image_rows = _gallery_image_rows(row, source_products.get(item_code), images_dir, write=write)
     media_rule_rows = _media_rule_rows(item_code, variants, row)
     base_price = min([price["price"] for price in price_rows], default=0)
-    publish_status = _publish_status(row)
     return {
         "product_name": row.get("web_item_name") or item.item_name or item_code,
         "product_slug": item_code,
         "item_group": row.get("item_group") or item.item_group,
         "page_template": _page_template(row.get("lt_product_page_type")),
         "buying_path": _buying_path(row.get("lt_commerce_lane")),
-        "publish_status": publish_status,
+        "publish_status": "Draft",
         "shop_visibility": "Visible in shop" if int(row.get("published") or 0) else "Hidden from shop",
         "base_price": base_price,
         "product_summary": _summary(row),
@@ -133,7 +132,7 @@ def _blueprint_spec(
         "primary_image": row.get("website_image") or "",
         "target_item_code": item_code,
         "target_website_item": row.get("name"),
-        "operator_notes": _operator_notes(publish_status),
+        "operator_notes": "Created from the current storefront catalog for guarded owner editing. Draft until reviewed.",
         "option_rows": option_rows,
         "price_rows": price_rows,
         "gallery_image_rows": gallery_image_rows,
@@ -193,10 +192,6 @@ def _fill_missing_fields(doc, spec: dict[str, Any]) -> bool:
     if not getattr(doc, "media_rule_rows", None) and spec["media_rule_rows"]:
         _replace_media_rule_rows(doc, spec["media_rule_rows"])
         changed = True
-    if _can_promote_current_storefront_preview(doc, spec):
-        doc.publish_status = spec["publish_status"]
-        doc.operator_notes = spec["operator_notes"]
-        changed = True
     return changed
 
 
@@ -214,33 +209,7 @@ def _missing_update_fields(doc, spec: dict[str, Any]) -> list[str]:
         missing.append("gallery_image_rows")
     if not getattr(doc, "media_rule_rows", None) and spec["media_rule_rows"]:
         missing.append("media_rule_rows")
-    if _can_promote_current_storefront_preview(doc, spec):
-        missing.append("publish_status")
     return missing
-
-
-def _publish_status(row: dict[str, Any]) -> str:
-    if int(row.get("published") or 0) and row.get("lt_commerce_lane") == "checkout":
-        return "Local Preview Ready"
-    return "Draft"
-
-
-def _operator_notes(publish_status: str) -> str:
-    if publish_status == "Local Preview Ready":
-        return (
-            "Created from the current storefront catalog for guarded owner editing. "
-            "Published checkout baseline is active for local/staging preview until owner review."
-        )
-    return "Created from the current storefront catalog for guarded owner editing. Draft until reviewed."
-
-
-def _can_promote_current_storefront_preview(doc, spec: dict[str, Any]) -> bool:
-    if spec.get("publish_status") != "Local Preview Ready":
-        return False
-    if getattr(doc, "publish_status", None) != "Draft":
-        return False
-    notes = getattr(doc, "operator_notes", None) or ""
-    return "current storefront catalog for guarded owner editing" in notes
 
 
 def _base_fields(spec: dict[str, Any]) -> dict[str, Any]:
@@ -442,34 +411,15 @@ def _find_data_dir(data_dir: str | None) -> Path | None:
         if (path / "catalog.json").exists() and (path / "images").exists():
             return path
         raise FileNotFoundError(f"product gallery data_dir is missing catalog.json/images: {path}")
-    for path in _default_data_dirs():
+    for path in DEFAULT_DATA_DIRS:
         if (path / "catalog.json").exists() and (path / "images").exists():
-            return path
-    for path in _local_reference_fallback_dirs():
-        if (path / "catalog.json").exists() and (path / "images").exists():
-            print(
-                "WARNING: using local-development reference gallery fallback. "
-                f"Do not use this path for staging/bootstrap: {path}"
-            )
             return path
     return None
 
 
-def _local_reference_fallback_dirs() -> list[Path]:
-    raw = os.environ.get(REFERENCE_FALLBACK_DIRS_ENV, "")
-    return [Path(part) for part in raw.split(os.pathsep) if part.strip()]
-
-
-def _default_data_dirs() -> list[Path]:
-    return [
-        Path(frappe.get_app_path("locally_twisted", "seed", LT_SEED_ARTIFACT_DIR)),
-        *DEFAULT_DATA_DIRS,
-    ]
-
-
 def _ensure_gallery_file_attached(source: Path, item_code: str) -> str:
     file_url = f"/files/{source.name}"
-    target = _site_files_dir() / source.name
+    target = SITE_FILES_DIR / source.name
     target.parent.mkdir(parents=True, exist_ok=True)
     if not target.exists() or target.stat().st_size != source.stat().st_size:
         shutil.copy2(source, target)
@@ -494,10 +444,6 @@ def _ensure_gallery_file_attached(source: Path, item_code: str) -> str:
             }
         ).insert(ignore_permissions=True)
     return file_url
-
-
-def _site_files_dir() -> Path:
-    return Path(frappe.get_site_path("public", "files"))
 
 
 def _gallery_rows_need_update(doc, expected_rows: list[dict[str, Any]]) -> bool:

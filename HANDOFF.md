@@ -10,38 +10,6 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## State of the world (the load-bearing facts)
 
-**Current-session delta (2026-05-23 - staging app deploy closeout):**
-- GL approved staging-only app mirror sync from source `5edb641`, then
-  staging-only Frappe Cloud deploy/update from app mirror hash
-  `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`.
-- Frappe Cloud deploy `eu92fvbhpp` and site update job `41ftn09ocp` succeeded.
-  Staging installed `locally_twisted` hash now matches
-  `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, app order is correct, ecommerce
-  remains paused, and public indexing remains disabled.
-- Owner-review remains **NO-GO**. Hosted preflight blocks on missing
-  `LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`, and
-  missing backup/zero-data proof for destructive catalog seed.
-- Attempt 1 exposed a new guard: typed JSON is not enough if the Frappe Cloud
-  `sites[]` row only has `name`. Deploy/update payloads must use the complete
-  current provider site object. See
-  `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
-- Handoff:
-  `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
-
-**Current-session delta (2026-05-23 - staging release forensic freeze):**
-- The 2026-05-22/23 Frappe Cloud owner-review staging attempt failed as a
-  release process and is frozen. Do not use its commits, app mirror hashes,
-  deploy IDs, interrupted bootstrap attempts, or local proof as launch
-  authority.
-- Required forensic source:
-  `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
-- Required next-agent action list:
-  `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-- Required failure recipe:
-  `capabilities/failures/release-controller-churn-after-stop.md`.
-- No live, DNS, Stripe, Search Console, production indexing, or live checkout
-  mutation is approved from this lane.
-
 **Current-session delta (2026-05-17 - variant media restore):**
 - Active repair handoff:
   `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.

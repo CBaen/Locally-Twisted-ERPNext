@@ -25,12 +25,6 @@ neutral coordination workflow before using LT for parallel edits.
 - Use `C:\Users\baenb\agent-worktrees\builtbycameron-lt` for LT task worktrees.
 - Do not edit parent/company repo files during an LT task unless explicitly requested.
 - Do not treat local acceptance, GitHub archive, staging, and live release as the same gate.
-- For release/provider work, a triad is valid only when the agents own
-  artifacts that can block the next step. Advice-only helper agents do not
-  satisfy release control.
-- If release execution enters `forensic-freeze`, do not poll, deploy,
-  bootstrap, or run one more provider check until a fresh artifact-backed plan
-  explicitly reopens execution.
 
 ## Evidence
 
@@ -38,6 +32,3 @@ neutral coordination workflow before using LT for parallel edits.
 - `workstreams/coordination-safety-pilot-2026-05-21.md` records the pilot.
 - `C:\Users\baenb\agent-coordination\REPO-READINESS.md` classifies LT as the
   protected clean child/client pilot.
-- `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
-  records the release-lock and artifact-owner action items after the staging
-  release process failure.

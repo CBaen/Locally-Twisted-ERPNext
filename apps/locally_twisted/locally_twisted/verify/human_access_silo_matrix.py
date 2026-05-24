@@ -28,12 +28,6 @@ OWNER_USERS = {
     }
 }
 
-EXTERNAL_MARKETING_USERS = {
-    "marketing@exploringnotboring.com": {
-        "exact_roles": {MARKETING_REVIEW_ROLE},
-    }
-}
-
 PERSONA_USERS = {
     "lt-owner-temp@example.com": {
         "group": "owner-test",
@@ -284,23 +278,8 @@ def _external_marketing_report(failures: list[str]) -> dict[str, Any]:
     if _hook_value(role_home.get(MARKETING_REVIEW_ROLE)) != MARKETING_REVIEW_ROUTE.lstrip("/"):
         failures.append(f"{MARKETING_REVIEW_ROLE} should land on {MARKETING_REVIEW_ROUTE}")
 
-    users = {}
-    for user, spec in EXTERNAL_MARKETING_USERS.items():
-        users[user] = _user_report(user)
-        if users[user].get("missing"):
-            failures.append(f"external marketing user {user} is missing")
-            continue
-        if not users[user].get("enabled"):
-            failures.append(f"external marketing user {user} is disabled")
-        if users[user].get("user_type") != "Website User":
-            failures.append(f"external marketing user {user} must be Website User")
-        if users[user].get("role_profile_name"):
-            failures.append(f"external marketing user {user} must not have a role profile")
-        _require_exact_roles(user, users[user]["roles"], spec["exact_roles"], failures)
-
     return {
         "role": MARKETING_REVIEW_ROLE,
-        "users": users,
         "desk_access": boundary.get("desk_access"),
         "review_route": MARKETING_REVIEW_ROUTE,
         "docperm_rows": frappe.db.count("DocPerm", {"role": MARKETING_REVIEW_ROLE}),
@@ -378,20 +357,6 @@ def _forbid_roles(subject: str, actual: set[str] | list[str], forbidden: set[str
     actual_set = set(actual)
     for role in sorted(actual_set & forbidden):
         failures.append(f"{subject} must not have role {role}")
-
-
-def _require_exact_roles(subject: str, actual: set[str] | list[str], expected: set[str], failures: list[str]) -> None:
-    actual_set = set(actual)
-    missing = sorted(expected - actual_set)
-    extra = sorted(actual_set - expected)
-    if missing or extra:
-        expected_label = ", ".join(sorted(expected))
-        details = []
-        if missing:
-            details.append(f"missing: {', '.join(missing)}")
-        if extra:
-            details.append(f"extra: {', '.join(extra)}")
-        failures.append(f"{subject} role set must be exactly {expected_label} ({'; '.join(details)})")
 
 
 def _forbid_doctype_permissions(

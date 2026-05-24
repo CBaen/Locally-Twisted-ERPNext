@@ -79,11 +79,10 @@ OpenClaw cockpit witness:
   `LT Product Blueprint` / Product Setup, not raw ERPNext catalog tables.
   Owner-like direct edits to Items, Website Items, Item Prices, option
   attributes/values, Item Groups, Webshop Settings, and product gallery
-  slideshow records are blocked. Published checkout Product Setups can be
-  `Local Preview Ready` for active runtime media/price preview; non-checkout
-  backfills stay Draft until reviewed. Existing public Website Items keep their
-  published state during local apply, and local apply cannot publish, hide, or
-  reroute existing Website Items. Handoff:
+  slideshow records are blocked. Backfilled Product Setup records stay Draft
+  until reviewed. Existing public Website Items keep their published state
+  during local apply, and local apply cannot publish, hide, or reroute existing
+  Website Items. Handoff:
   `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
 - 2026-05-17 browser proof route authority: use the import manifest for
   included-product authority and the clean Website Item snapshot for public
@@ -275,9 +274,6 @@ As of 2026-05-10, the first backend preservation slice exists:
 - Product gallery guards are `python scripts/verify/product_gallery_projection_contract.py`
   and `npm run test:product-gallery-experience`. They must prove source ->
   Product Setup -> Website Slideshow -> rendered route, not only database rows.
-  `product_gallery_projection_contract.py` reads the local Docker `frontend`
-  database; setting `LT_BASE_URL` to staging only retargets rendered HTML fetches
-  and must not be called staging database proof.
 - Variant media overgating was repaired on 2026-05-17 after Encanto Bouquet
   exposed a regression: the API held simple size-variant images even though
   ERPNext had the mapped Item images. The current guard,

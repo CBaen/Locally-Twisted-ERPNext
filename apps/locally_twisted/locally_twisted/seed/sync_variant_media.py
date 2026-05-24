@@ -1,4 +1,4 @@
-"""Map LT catalog seed extra product photos onto ERPNext variant Items.
+"""Map scraped Odoo extra product photos onto ERPNext variant Items.
 
 Run in-process:
     bench --site frontend execute locally_twisted.seed.sync_variant_media.execute \
@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import re
 import shutil
 from pathlib import Path
@@ -21,11 +20,11 @@ import frappe
 
 
 SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
-LT_SEED_ARTIFACT_DIR = "lt_catalog_seed"
-REFERENCE_FALLBACK_DIRS_ENV = "LT_REFERENCE_SEED_DIRS"
 DEFAULT_DATA_DIRS = [
     Path("/tmp/lt-variant-media"),
-    Path(f"/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/{LT_SEED_ARTIFACT_DIR}"),
+    Path("/workspace/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
 ]
 IGNORED_ATTRIBUTES = {
     "baby color",
@@ -35,11 +34,6 @@ IGNORED_ATTRIBUTES = {
     "number colors",
     "skin color",
 }
-
-
-def _local_reference_fallback_dirs() -> list[Path]:
-    raw = os.environ.get(REFERENCE_FALLBACK_DIRS_ENV, "")
-    return [Path(part) for part in raw.split(os.pathsep) if part.strip()]
 
 
 def _find_data_dir(data_dir: str | None) -> Path:
@@ -52,20 +46,7 @@ def _find_data_dir(data_dir: str | None) -> Path:
     for p in DEFAULT_DATA_DIRS:
         if (p / "catalog.json").exists() and (p / "images").exists():
             return p
-    for p in _local_reference_fallback_dirs():
-        if (p / "catalog.json").exists() and (p / "images").exists():
-            print(
-                "WARNING: using local-development reference media fallback. "
-                f"Do not use this path for staging/bootstrap: {p}"
-            )
-            return p
-    raise FileNotFoundError(
-        "Could not find LT catalog seed artifact for variant media sync. "
-        f"Staging/bootstrap requires locally_twisted/seed/{LT_SEED_ARTIFACT_DIR}/ "
-        "with catalog.json and images/. Do not fix deployment by bind-mounting "
-        "historical reference scrape paths. For local development only, set "
-        f"{REFERENCE_FALLBACK_DIRS_ENV} to an explicit reference directory."
-    )
+    raise FileNotFoundError("Could not find staged _resources/odoo-live data for variant media sync.")
 
 
 def _normalize(text: str) -> str:

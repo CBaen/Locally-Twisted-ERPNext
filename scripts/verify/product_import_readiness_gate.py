@@ -621,7 +621,7 @@ def _verifier_commands() -> list[str]:
         "bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': True}\"",
         "python scripts/verify/product_page_architecture_readiness.py --json",
         "python scripts/verify/catalog_variant_contract.py",
-        "python scripts/verify/product_price_modifier_contract.py  # parked diagnostic until LT seed price gate is rebuilt",
+        "python scripts/verify/product_price_modifier_contract.py",
         "npm run test:product-prices",
         "npm run test:product-price-display",
         "python scripts/verify/cart_checkout_contract.py",

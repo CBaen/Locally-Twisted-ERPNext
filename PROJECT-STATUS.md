@@ -15,24 +15,6 @@
 > `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md` and
 > `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`.
 
-> **Staging release failure forensic correction, 2026-05-23:** The Frappe
-> Cloud owner-review staging attempt failed as a release process. Do not treat
-> any commits, app mirror hashes, deploy IDs, or interrupted bootstrap attempts
-> from that session as owner-review readiness or launch authority. Use
-> `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
-> and `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
-> before any future staging/live execution.
-
-> **Staging app deploy correction, 2026-05-23:** The later approved
-> staging-only app mirror sync and Frappe Cloud deploy/update succeeded for
-> source `5edb641` / app mirror
-> `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. Staging now has that installed
-> `locally_twisted` hash, correct app order, ecommerce paused, and public
-> indexing disabled. Owner-review is still NO-GO because hosted preflight
-> blocks on missing `LT Marketing Review Access`,
-> `Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof.
-> Use `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
-
 **Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15.106.0 verified locally on 2026-05-08, MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
 **Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed Odoo attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.

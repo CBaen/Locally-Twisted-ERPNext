@@ -83,31 +83,6 @@ fallback content that looks successful, hidden horizontal scrollbars, native
 scrollbars on crawls, stale docs treated as proof, customer emails that silently
 do not queue, and agent replies that imply success without verification.
 
-## Triadic Release Rule
-
-Release processes, major builds, and patch spirals require a triad before any
-commit, push, staging, live, provider, or Search Console claim. Name the roles
-used for the pass, such as Witness, Recorder, and Fixer, or name the equivalent
-three independent lenses. The triad must check scope, release/staging gates, and
-documentation truth separately from the person who made the source change.
-
-Local proof, a source commit, or an environment variable such as `LT_BASE_URL`
-is not staging proof by itself. If a verifier reads the local Docker `frontend`
-database, setting a staging URL only changes the HTTP fetch target; it does not
-prove staging records, Frappe Cloud app-mirror state, site update/migration, or
-cache state.
-
-2026-05-23 forensic rule: the staging release attempt documented in
-`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
-failed as a release process and must not be used as launch authority. Future
-release controllers must stop after repeated provider/bootstrap failure, create
-the prevention artifact first, and use artifact-owning triad roles before any
-new Frappe Cloud, live, DNS, Stripe, or Search Console mutation. If GL says
-stop, execution stops immediately; the only allowed continuation is read-only
-forensics until GL explicitly reopens release execution. The next-agent action
-list is
-`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-
 ## Project Reality
 
 - Client: Locally Twisted, owned by Jeff Kimber.

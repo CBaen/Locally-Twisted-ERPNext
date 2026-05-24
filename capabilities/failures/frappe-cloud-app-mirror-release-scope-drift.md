@@ -4,7 +4,7 @@ type: failure
 failure_kind: process_failure
 schema_version: 0.1
 date_discovered: 2026-05-16
-last_updated: 2026-05-23
+last_updated: 2026-05-16
 status: guarded
 scope: project
 owner_context: Locally Twisted Frappe Cloud custom app releases
@@ -46,7 +46,6 @@ review.
 | Date | Project | Surface | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|
 | 2026-05-16 | Locally Twisted | Frappe Cloud inquiry release | No current dirty workspace files were deployed, but the mirror target included broader already-committed app changes than the final two-file source commit | Previous live app hash `04de8212aa7dbf4895716717865fc6e1029c757b`; target app mirror `b4b3bf8`; final full repo commit `631f9a8`; local dirty overlaps in `hooks.py` and `patches.txt` were not in the target | release-scope guard documented | guarded |
-| 2026-05-23 | Locally Twisted | Frappe Cloud staging owner-review | Source commits and local guard archives were newer than the app-root mirror/deployed staging app, so hosted preflight could not exist on staging even though local source contained it | App-root mirror/deployed hash `181076c239b2d1d3d508a41ac471c71f9d2b5158`; `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`; `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md` | app-mirror freshness verifier plus pre-sync plan helper guarded locally; actual mirror sync still blocked by freeze-reopen approval | open-before-provider-mutation |
 
 ## Root Pattern
 
@@ -98,16 +97,12 @@ Before live promotion, capture:
 
 - `../../workstreams/inquiry-form-live-release-2026-05-16.md`
 - `../../workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
-- `../../workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`
-- `../../workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`
 - `../../LT-LAUNCH-RUNBOOK.md`
 - `../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `frappe-cloud-release-site-migration-drift.md`
 
 ## Evidence Quality
 
-Verified during the 2026-05-16 live inquiry release and re-seen during the
-2026-05-23 staging owner-review freeze. The 2026-05-23 instance is not just
-"scope too broad"; it is "source ahead of app-root mirror," which blocks
-hosted preflight until the app mirror is explicitly synced under the release
-controller.
+Verified during the 2026-05-16 live inquiry release. The deployed release did
+not include current uncommitted dirty files, but the old-live-to-target app
+mirror scope was broader than the final source commit.

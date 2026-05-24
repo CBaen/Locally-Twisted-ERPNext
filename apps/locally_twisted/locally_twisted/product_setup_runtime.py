@@ -13,8 +13,6 @@ import re
 from itertools import product
 from typing import Any
 
-from locally_twisted.catalog_variant_rules import BOUQUET_SIZE_LABELS, normalize_variant_value
-
 
 SCHEMA_VERSION = "lt-product-setup-runtime-v1"
 CONFIG_VERSION = "lt-product-config-v1"
@@ -352,8 +350,8 @@ def get_product_setup_schema_json(item_code: str | None) -> str:
 
 
 def _selection_group(row: dict[str, Any], index: int) -> dict[str, Any]:
-    label = _customer_safe_setup_text(_text(row.get("axis_name")) or f"Selection Group {index}")
-    values = _selection_values(label, row.get("values"))
+    label = _text(row.get("axis_name")) or f"Selection Group {index}"
+    values = _split_values(row.get("values"))
     behavior = _behavior(row)
     control_type = _control_type(row, behavior)
     required = _as_bool(row.get("required"))
@@ -363,7 +361,7 @@ def _selection_group(row: dict[str, Any], index: int) -> dict[str, Any]:
     max_selections = _int(row.get("max_selections"))
     if max_selections <= 0:
         max_selections = 1 if control_type in {CONTROL_SINGLE, CONTROL_TEXT, CONTROL_NUMBER, CONTROL_FILE, CONTROL_CHECKBOX} else len(values)
-    default_values = _selection_values(label, row.get("default_values"))
+    default_values = _split_values(row.get("default_values"))
     payload_target = BEHAVIOR_TO_PAYLOAD_TARGET.get(behavior, "configuration_groups")
 
     return {
@@ -386,7 +384,7 @@ def _selection_group(row: dict[str, Any], index: int) -> dict[str, Any]:
 
 
 def _add_on_group(row: dict[str, Any], index: int) -> dict[str, Any]:
-    label = _customer_safe_setup_text(_text(row.get("add_on_name")) or f"Add-on {index}")
+    label = _text(row.get("add_on_name")) or f"Add-on {index}"
     return {
         "key": _slug(label),
         "label": label,
@@ -401,7 +399,7 @@ def _add_on_group(row: dict[str, Any], index: int) -> dict[str, Any]:
 
 
 def _pricing_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
-    label = _customer_safe_setup_text(_text(row.get("condition_label")) or f"Pricing Rule {index}")
+    label = _text(row.get("condition_label")) or f"Pricing Rule {index}"
     return {
         "key": _slug(label),
         "label": label,
@@ -413,15 +411,15 @@ def _pricing_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
 
 
 def _media_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
-    label = _customer_safe_setup_text(_text(row.get("rule_name")) or f"Media Rule {index}")
+    label = _text(row.get("rule_name")) or f"Media Rule {index}"
     conditions = _media_rule_conditions(row)
     return {
         "key": _slug(label),
         "label": label,
         "rule_type": _text(row.get("rule_type")) or "Selection group",
-        "selection_group": _customer_safe_setup_text(row.get("selection_group")),
-        "selection_value": _customer_safe_setup_text(row.get("selection_value")),
-        "selection_conditions": _customer_safe_setup_text(row.get("selection_conditions")),
+        "selection_group": _text(row.get("selection_group")),
+        "selection_value": _text(row.get("selection_value")),
+        "selection_conditions": _text(row.get("selection_conditions")),
         "conditions": conditions,
         "variant_item": _text(row.get("variant_item")),
         "image": _text(row.get("image")),
@@ -432,28 +430,28 @@ def _media_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
 
 
 def _gallery_image(row: dict[str, Any], index: int) -> dict[str, Any]:
-    label = _customer_safe_setup_text(_text(row.get("heading")) or f"Gallery Photo {index}")
+    label = _text(row.get("heading")) or f"Gallery Photo {index}"
     return {
         "key": _slug(label),
         "label": label,
         "image": _text(row.get("image")),
         "heading": label,
-        "description": _customer_safe_setup_text(row.get("description")),
+        "description": _text(row.get("description")),
         "approved_for_customer": _as_bool(row.get("approved_for_customer")),
         "operator_note": _text(row.get("operator_note")),
     }
 
 
 def _content_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
-    label = _customer_safe_setup_text(_text(row.get("rule_name")) or f"Copy Rule {index}")
+    label = _text(row.get("rule_name")) or f"Copy Rule {index}"
     conditions = _media_rule_conditions(row)
     return {
         "key": _slug(label),
         "label": label,
         "rule_type": _text(row.get("rule_type")) or "Selection group",
-        "selection_group": _customer_safe_setup_text(row.get("selection_group")),
-        "selection_value": _customer_safe_setup_text(row.get("selection_value")),
-        "selection_conditions": _customer_safe_setup_text(row.get("selection_conditions")),
+        "selection_group": _text(row.get("selection_group")),
+        "selection_value": _text(row.get("selection_value")),
+        "selection_conditions": _text(row.get("selection_conditions")),
         "conditions": conditions,
         "variant_item": _text(row.get("variant_item")),
         "display_title": _text(row.get("display_title")),
@@ -621,7 +619,7 @@ def _media_rule_conditions(row: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def _parse_condition_text(value: Any) -> list[dict[str, str]]:
-    text = _customer_safe_setup_text(value)
+    text = _text(value)
     if not text:
         return []
     if text.startswith("["):
@@ -641,7 +639,7 @@ def _parse_condition_text(value: Any) -> list[dict[str, str]]:
             continue
         group, selected_value = clean.split(separator, 1)
         group = group.strip()
-        selected_value = _customer_safe_setup_text(selected_value.strip())
+        selected_value = selected_value.strip()
         if group and selected_value:
             conditions.append({"group": group, "value": selected_value})
     return conditions
@@ -653,7 +651,7 @@ def _condition_list_from_mappings(rows: list[Any]) -> list[dict[str, str]]:
         if not isinstance(row, dict):
             continue
         group = _text(row.get("group") or row.get("selection_group"))
-        value = _customer_safe_setup_text(row.get("value") or row.get("selection_value"))
+        value = _text(row.get("value") or row.get("selection_value"))
         if group and value:
             conditions.append({"group": group, "value": value})
     return conditions
@@ -722,27 +720,7 @@ def _split_values(value: Any) -> list[str]:
     text = _text(value)
     if not text:
         return []
-    if "\n" in text:
-        return [part.strip() for part in re.split(r"[\r\n]+", text) if part.strip()]
-    return [part.strip() for part in text.split(",") if part.strip()]
-
-
-def _selection_values(label: str, value: Any) -> list[str]:
-    return [
-        _customer_safe_setup_text(normalize_variant_value(label, item) or item)
-        for item in _split_values(value)
-    ]
-
-
-def _customer_safe_setup_text(value: Any) -> str:
-    text = _text(value)
-    if not text:
-        return ""
-    for source, safe in BOUQUET_SIZE_LABELS.items():
-        text = text.replace(source, safe)
-    text = re.sub(r"\bsuper shapes\b", "featured foil balloons", text, flags=re.IGNORECASE)
-    text = re.sub(r"\bsuper shape\b", "featured foil balloon", text, flags=re.IGNORECASE)
-    return text
+    return [part.strip() for part in re.split(r"[\n,]+", text) if part.strip()]
 
 
 def _safe_json(value: dict[str, Any]) -> str:

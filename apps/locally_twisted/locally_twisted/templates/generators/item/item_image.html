@@ -1,8 +1,8 @@
 {# Locally Twisted override of webshop's item_image.html.
    Visual-first pass 2026-05-08: keep Webshop slideshow behavior, but give the
-   media area customer-facing structure for a thumbnail rail. Product Setup /
-   Website Slideshow is the LT gallery authority; Webshop `slides` is only a
-   fallback for older/non-LT gallery contexts. #}
+   media area customer-facing structure for GL's requested “other product photos”
+   rail. Product Setup / Website Slideshow is the LT gallery authority; Webshop
+   `slides` is only a fallback for older/non-LT gallery contexts. #}
 {% set lt_projected_slides = get_product_gallery_slides(doc.item_code, doc.website_image) %}
 {% set lt_gallery_slides = lt_projected_slides if lt_projected_slides and (lt_projected_slides | length > 1) else (slides or lt_projected_slides) %}
 {% set has_gallery = lt_gallery_slides and (lt_gallery_slides | length > 1) %}
@@ -12,7 +12,8 @@
         {% if has_gallery %}
             <div class="item-slideshow lt-product__thumbnail-rail d-flex flex-column mr-3"
                  data-lt-gallery-role="standard-product-thumbnails"
-                 aria-label="{{ _('Product photo thumbnails') }}">
+                 aria-label="{{ _('Other product photos') }}">
+                <div class="lt-product__thumbnail-heading">{{ _('Other product photos') }}</div>
                 {% for item in lt_gallery_slides %}
                 <button type="button"
                         class="lt-product__thumbnail-button"
@@ -30,7 +31,7 @@
                 <span aria-hidden="true">/</span>
                 <span class="lt-product__gallery-status-total">{{ lt_gallery_slides | length }}</span>
             </div>
-            {{ product_image(lt_gallery_slides[0].image, alt=doc.website_image_alt or doc.item_name) }}
+            {{ product_image(lt_gallery_slides[0].image, 'product-image') }}
             <!-- Simple image slideshow -->
             <script>
                 frappe.ready(() => {

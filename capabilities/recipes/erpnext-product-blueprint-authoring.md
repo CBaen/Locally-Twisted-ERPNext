@@ -90,10 +90,8 @@ verifier work. For local build work, name the actual blocker.
   rendering short selected labels and intentional included-copy detail.
 - Product Setup exact checkout price rows must belong to the Product Setup's
   target Item or variants. Cross-product Item Price targets are save blockers.
-- Published checkout backfills can be `Local Preview Ready` when active Product
-  Setup runtime price/media rules are needed for local or staging preview.
-  Non-checkout backfills stay Draft until reviewed so they do not silently take
-  over runtime checkout behavior.
+- Backfilled Product Setup records stay Draft until reviewed so they do not
+  silently take over runtime checkout behavior.
 
 ## Workflow
 
@@ -141,8 +139,7 @@ The 2026-05-22 owner-guard closeout adds focused proof that owner-like raw
 catalog mutation is blocked across `19/19` probes, existing public Website
 Items keep their visibility during local apply, public hide/route changes fail
 loudly, and Product Setup catalog sync reports `51` Website Items with `0`
-creates and the current Draft versus `Local Preview Ready` split. Final
-pre-commit
+creates and `21` would-update rows. Final pre-commit
 `npm run test:owner-product-safety` and
 `npm run test:product-options-experience` passed. Handoff:
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.

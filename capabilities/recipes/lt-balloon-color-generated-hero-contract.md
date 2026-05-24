@@ -47,8 +47,8 @@ it before route proof.
 
 - `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`
 - `_resources/generated-hero-sources/2026-05-22/shop-category-generated-hero-manifest.json`
-- `apps/locally_twisted/locally_twisted/catalog_contract/lt_color_swatch_map.json`
-- `apps/locally_twisted/locally_twisted/public/images/color-swatches/lt-catalog/`
+- `apps/locally_twisted/locally_twisted/catalog_contract/odoo_color_swatch_map.json`
+- `apps/locally_twisted/locally_twisted/public/images/color-swatches/odoo/`
 - `scripts/setup/generate_shop_category_heroes.py`
 - `scripts/verify/shop_category_hero_images.spec.js`
 
@@ -56,7 +56,7 @@ it before route proof.
 
 1. Write or refresh a research brief before generation.
 2. Pick category shape and palette names from the color addendum.
-3. Include owner/source swatch refs in the generation manifest/prompt. Do not
+3. Include owner/Odoo swatch refs in the generation manifest/prompt. Do not
    print or commit API keys.
 4. Generate wide source art and breakpoint crops with
    `scripts/setup/generate_shop_category_heroes.py`.
@@ -70,7 +70,7 @@ it before route proof.
 ## Commands
 
 ```powershell
-python scripts\verify\lt_color_swatch_contract.py
+python scripts\verify\odoo_color_swatch_contract.py
 python -m py_compile scripts\setup\generate_shop_category_heroes.py
 python scripts\dev\clear_website_cache.py
 scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1

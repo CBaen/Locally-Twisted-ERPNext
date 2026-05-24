@@ -9,8 +9,6 @@ import json
 
 import frappe
 
-from locally_twisted.seed.standard_report_import import standard_report_import_context
-
 
 ACCOUNTANT_HOME = "LT Accountant Home"
 ACCOUNTANT_HOME_TITLE = "Accounting Home"
@@ -167,12 +165,10 @@ def _ensure_customer_reminder_report(summary: dict) -> None:
         changed = True
 
     if is_new:
-        with standard_report_import_context():
-            doc.insert(ignore_permissions=True)
+        doc.insert(ignore_permissions=True)
         summary["ensured_reports"].append(CUSTOMER_REMINDER_REPORT_NAME)
     elif changed:
-        with standard_report_import_context():
-            doc.save(ignore_permissions=True)
+        doc.save(ignore_permissions=True)
         summary["ensured_reports"].append(CUSTOMER_REMINDER_REPORT_NAME)
 
 
