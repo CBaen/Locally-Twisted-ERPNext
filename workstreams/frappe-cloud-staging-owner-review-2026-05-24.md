@@ -107,6 +107,10 @@ completed one Stripe test-mode payment:
   as `Paid` with grand total `$37.61` and outstanding amount `$0.00`.
 - Staging Email Account password was re-entered; receipt Email Queue
   `cchsjbegpi` and operator Email Queue `cchtiiieuk` reached `Sent`.
+- The staging owner user `locallytwisted@gmail.com` was reset to the documented
+  staging temporary password through Administrator/System Console and verified
+  in a clean browser session. It landed at `/app/Workspaces/Owner%20Home` with
+  title `Owner Home`.
 
 Earlier failure evidence still matters as the guard: final submit first reached
 the payment setup layer and failed because `Stripe Settings.Test.secret_key`
@@ -144,6 +148,10 @@ verify inbox-visible delivery for `locallytwisted@gmail.com`. Email Queue
 `Sent` proves Frappe/Gmail SMTP acceptance only. Ask the owner/reviewer to check
 the recipient inbox during their staging review if inbox-visible receipt
 delivery is part of the approval.
+
+The owner can now review both the public storefront and the Desk owner surface
+on staging. Keep any further credential changes staged/provider-local unless GL
+explicitly approves live account work.
 
 ## Boundaries
 

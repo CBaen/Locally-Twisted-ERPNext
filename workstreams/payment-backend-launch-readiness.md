@@ -57,6 +57,9 @@ These are verified local/backend facts, not live-production claims:
   Payment Request `ACC-PRQ-2026-00021` `Paid`, Sales Invoice
   `ACC-SINV-2026-00004` `Paid`, tax `$2.61`, grand total `$37.61`, and Email
   Queue rows `cchsjbegpi` / `cchtiiieuk` `Sent`.
+- Staging owner login for `locallytwisted@gmail.com` was reset and verified in
+  a clean browser session ending on `Owner Home`; owner Desk payment review can
+  use that account during staging review.
 
 Latest payment commits on `main`:
 

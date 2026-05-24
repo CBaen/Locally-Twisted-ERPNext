@@ -27,6 +27,9 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   failure recipes:
   `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md` and
   `capabilities/failures/frappe-cloud-staging-email-secret-drift.md`.
+- Staging owner Desk login was repaired and verified for
+  `locallytwisted@gmail.com`; a clean browser session landed on
+  `/app/Workspaces/Owner%20Home`.
 - Staging recovery umbrella:
   `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`.
 - Staging recovery decision packet:
