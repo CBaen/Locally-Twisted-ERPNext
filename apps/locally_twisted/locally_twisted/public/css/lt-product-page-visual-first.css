@@ -45,16 +45,6 @@
   display: none;
 }
 
-.lt-product__thumbnail-heading {
-  color: var(--lt-polish-navy, #0e2240);
-  font-family: var(--lt-polish-body, Lato, system-ui, sans-serif);
-  font-size: 0.68rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
 .lt-product__thumbnail-button {
   display: block;
   width: 100%;
@@ -311,10 +301,6 @@
 
   .lt-product__thumbnail-button {
     scroll-snap-align: center;
-  }
-
-  .lt-product__thumbnail-heading {
-    grid-column: 1 / -1;
   }
 
   .lt-product__gallery-status {

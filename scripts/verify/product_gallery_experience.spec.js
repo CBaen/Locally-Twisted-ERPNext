@@ -4,6 +4,10 @@ const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const CLASSIC_ARCH_URL = new URL("/shop-items/arches/classic-arch", BASE_URL).toString();
 const LARGE_GARLAND_URL = new URL("/shop-items/garlands/large-garland", BASE_URL).toString();
 
+function imagePath(src) {
+	return new URL(src || "", BASE_URL).pathname;
+}
+
 test("Classic Arch renders permanent product gallery thumbnails on desktop", async ({ page }) => {
 	await page.setViewportSize({ width: 1366, height: 900 });
 	await page.goto(CLASSIC_ARCH_URL, { waitUntil: "domcontentloaded" });
@@ -20,11 +24,15 @@ test("Classic Arch renders permanent product gallery thumbnails on desktop", asy
 	const thumbs = page.locator(".lt-product__thumbnail-button");
 	const thumbCount = await thumbs.count();
 	expect(thumbCount, "Classic Arch should render more than two gallery thumbnails").toBeGreaterThan(2);
+	await expect(page.getByText("Other product photos")).toHaveCount(0);
 
+	const firstSrc = await page.locator(".product-image img.website-image").getAttribute("src");
 	const sources = await page.locator(".lt-product__thumbnail-button img").evaluateAll((imgs) =>
 		imgs.map((img) => img.getAttribute("src")).filter(Boolean),
 	);
 	expect(new Set(sources).size, "gallery thumbnails should not duplicate source images").toBe(sources.length);
+	const firstPath = imagePath(firstSrc);
+	expect(imagePath(sources[0]), "the initial product photo should stay available as the first thumbnail").toBe(firstPath);
 
 	const boxes = await page.evaluate(() => {
 		const rail = document.querySelector('[data-lt-gallery-role="standard-product-thumbnails"]');
@@ -47,10 +55,11 @@ test("Classic Arch renders permanent product gallery thumbnails on desktop", asy
 		expect(["auto", "scroll"].includes(boxes.overflowY), "overflow stays inside the thumbnail rail").toBeTruthy();
 	}
 
-	const firstSrc = await page.locator(".product-image img.website-image").getAttribute("src");
 	await thumbs.nth(1).click();
 	await expect(page.locator(".lt-product__thumbnail-button[aria-pressed='true']")).toHaveCount(1);
-	await expect.poll(async () => page.locator(".product-image img.website-image").getAttribute("src")).not.toBe(firstSrc);
+	await expect.poll(async () => imagePath(await page.locator(".product-image img.website-image").getAttribute("src"))).not.toBe(firstPath);
+	await thumbs.first().click();
+	await expect.poll(async () => imagePath(await page.locator(".product-image img.website-image").getAttribute("src"))).toBe(firstPath);
 });
 
 test("single-extra projected galleries still render the permanent thumbnail rail", async ({ page }) => {
