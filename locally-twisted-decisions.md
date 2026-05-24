@@ -8,6 +8,45 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-24 - Shop taxonomy uses physical primary categories and broad secondary occasions
+
+**Decision:** Product names remain unchanged. Shop taxonomy will use physical
+product type as the primary category and one consistent broad occasion/use-case
+layer as the secondary category. Fulfillment, product options, specific holiday
+names, character/theme names, and menu labels are not categories.
+
+**Approved primary examples:** Arches, Balloon Drops, Bouquets, Columns,
+Garlands, Photo Ops & Backdrops, Stands & Easels, and Table Decor.
+
+**Approved secondary set:** Any Occasion, Birthday, Holiday, Graduation, Baby
+Shower, Sports, Get Well, Religious, and Corporate.
+
+**Reasoning:** The Ready-to-Order menu was technically corrected to category
+links, but the category data still mixed product types with fulfillment and
+occasion labels. GL clarified the category model: `Birthday Deliveries` is a
+bouquet, not a delivery category; get-well products are bouquets with a Get
+Well secondary category; `Grab & Go` is a menu/marketing concept, not a product
+category; and specific terms like Easter, Halloween, Mother's Day, and Pride
+belong in product names/search/copy under the broad `Holiday` secondary
+category when no tertiary category layer exists.
+
+**Implementation boundary:** This decision records the approved taxonomy map
+only. It does not change ERPNext records, Website Items, Item Groups, secondary
+Website Item Group rows, product names, routes, slugs, prices, images,
+checkout behavior, staging, live, DNS, Stripe, or Search Console. Future
+implementation must use a source-owned mapping/projection path with verifier
+guards and route/redirect planning before any primary category mutation.
+
+**Receipts:**
+`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`;
+local ERPNext published Website Item review on 2026-05-24 found 51 published
+Website Items and 0 existing `Website Item Group` secondary rows.
+
+**Decided by:** Guiding Light taxonomy correction and approval on 2026-05-24;
+Codex read-only local ERPNext review and documentation packet.
+
+---
+
 ## 2026-05-22 - Product galleries use Product Setup and native Website Slideshow
 
 **Decision:** Product-page additional photos are approved `gallery` media when

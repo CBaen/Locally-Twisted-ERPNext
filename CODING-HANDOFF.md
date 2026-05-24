@@ -23,6 +23,19 @@ call this live checkout approval, DNS approval, Search Console approval, or
 production payment proof. Decision packet:
 `decisions/2026-05-24-staging-owner-review-recovery.md`.
 
+Codex shop taxonomy direction on 2026-05-24: GL approved the category model in
+`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
+Product names stay unchanged. Primary category is physical product type.
+Secondary category is one broad occasion/use-case from the approved set: Any
+Occasion, Birthday, Holiday, Graduation, Baby Shower, Sports, Get Well,
+Religious, and Corporate. Do not treat delivery, pickup, latex-free, colors,
+sizes, add-ons, foil numbers, `Grab & Go`, specific holiday names, character
+or theme names, or product options as categories. Pride Progress Rainbow
+Balloon Arch is approved as primary `Arches`, secondary `Holiday`. This packet
+is docs-only; no ERPNext Item Group, Website Item, secondary Website Item
+Group, product name, route, checkout, staging, live, provider, DNS, Stripe, or
+Search Console mutation has been performed.
+
 Codex product gallery architecture restoration on 2026-05-22: product-page
 additional photos are restored as permanent architecture, not staging polish.
 The kept chain is source-approved gallery media -> `LT Product Blueprint

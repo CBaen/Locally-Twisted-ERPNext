@@ -34,6 +34,14 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`.
 - Staging recovery decision packet:
   `decisions/2026-05-24-staging-owner-review-recovery.md`.
+- Approved shop taxonomy direction as of 2026-05-24:
+  `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
+  Product names stay unchanged. Primary category is physical product type;
+  secondary category is one broad occasion/use-case. Delivery, pickup,
+  latex-free, colors, sizes, add-ons, foil numbers, `Grab & Go`, specific
+  holiday names, character/theme names, and product options are not categories.
+  This is documentation only; no ERPNext product/category records have been
+  changed yet.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
 - 2026-05-24 staging feature handoffs:

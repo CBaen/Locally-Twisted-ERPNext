@@ -10,6 +10,20 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P1 shop taxonomy implementation packet (2026-05-24):** Approved direction is
+documented in
+`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`
+and the decision log. Product names stay unchanged. Primary category must be
+physical product type; secondary category must be one broad occasion/use-case
+from the approved set. Do not use delivery, pickup, latex-free, colors, sizes,
+add-ons, foil numbers, `Grab & Go`, specific holiday names, character/theme
+names, or product options as categories. Next safe step is a source-owned
+mapping/projection implementation plan with verifier guards and route/redirect
+review. Do not mutate ERPNext Item Groups, Website Items, secondary Website
+Item Group rows, product names, checkout, staging, live, DNS, Stripe, Search
+Console, or production data from this queue item without a separate approved
+implementation packet.
+
 **P0 staging payment config before owner checkout review (2026-05-24):** Active
 handoff is `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with
 checkout detail in
