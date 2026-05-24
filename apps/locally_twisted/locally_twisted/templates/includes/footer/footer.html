@@ -24,11 +24,10 @@
      - Server endpoint logs via frappe.log_error (Builder JS + backend own this)
      - Smoke test entry required (Builder JS domain)
 
-   Column layout decision (2026-04-30):
-     Hetzner uses col-12 col-md-4 (stacks on mobile). Prior footer.html used
-     col-4 (always 3-across). This rebuild defaults to Hetzner-faithful
-     stacking — col-12 col-md-4. GL may override to col-4 if always-3-across
-     is preferred after visual review.
+   Column layout decision (2026-05-24):
+      Footer links stay 3-across at every breakpoint. The markup keeps
+      col-12 col-md-4 for compatibility, and lt-theme.css owns the
+      narrow-screen 3-column override and text fit.
 
    Social icon links:
      Facebook:  https://facebook.com/locallytwisted
@@ -36,7 +35,7 @@
      X:         https://x.com/locallytwisted
 
    CSS classes: all BEM-namespaced lt-footer__* and lt-footer-newsletter__*.
-   Odoo s_lt_* classes are renamed to lt-footer__* throughout.
+   Legacy s_lt_* classes are renamed to lt-footer__* throughout.
    NO inline <style> blocks. NO Bootstrap 5 utilities.
 #}
 
@@ -151,7 +150,8 @@
 
     {# ================================================================
        Section 3: Three-column link grid
-       col-12 col-md-4 — stacks on mobile, 3-across at md+ (Hetzner-faithful)
+       col-12 col-md-4 is kept for desktop compatibility; CSS keeps mobile
+       3-across too.
        ================================================================ #}
     <nav class="lt-footer__links" aria-label="Footer navigation">
         <div class="container">
