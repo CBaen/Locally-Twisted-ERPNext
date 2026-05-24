@@ -10,21 +10,23 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P0 owner Product Setup local review before staging (2026-05-22):** Active
-handoff is
-`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
-Related gallery restoration handoff:
-`workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
-The owner-product guard is locally implemented and focused proof passed:
-owner raw catalog mutations are blocked, Product Setup apply preserves existing
-public Website Item visibility, public route/hide/publish changes require the
-reviewed release path, and approved product-page gallery media projects through
-Product Setup into native Website Slideshow rows. Final pre-commit
-`npm run test:owner-product-safety` passed. Next safe step is GL/Jeff local
-owner-workflow and shop-gallery testing, then a separate staging packet if
-approved. Do not treat
-this as live checkout, Frappe Cloud, Stripe, DNS, Search Console, or production
-approval.
+**P0 staging payment config before owner checkout review (2026-05-24):** Active
+handoff is `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with
+checkout detail in
+`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md` and
+failure recipe
+`capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`. Decision
+packet: `decisions/2026-05-24-staging-owner-review-recovery.md`. The
+trusted-recovery source is now on staging far enough for route proof:
+`npm run test:checkout-experience` passed `3/3` and
+`npm run test:product-gallery-experience` passed `4/4` against
+`https://locallytwisted-staging.frappe.cloud`. The remaining blocker before
+owner card-path testing is staging payment-secret/config drift:
+`Stripe Settings.Test.secret_key` could not be decrypted in staging. Next safe
+step is to repair staging test payment settings, clear cache, rerun the route
+and payment gates, then run one authorized Stripe test-mode checkout with
+ERPNext record/receipt/operator-email proof. Do not touch live payment settings,
+DNS, Search Console, or production data from this queue item.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

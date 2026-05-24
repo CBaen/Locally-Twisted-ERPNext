@@ -52,6 +52,25 @@ the final go/no-go evidence for payments and ecommerce exposure.
 | Production domain | `https://locallytwisted.com` |
 | Frappe Cloud host used for authenticated checks | `https://locallytwisted.v.frappe.cloud` |
 
+## 2026-05-24 Staging Owner-Review Recovery
+
+Staging owner-review code was recovered from trusted source commit
+`c668543 Restore trusted staging source` and advanced through the narrow
+follow-up commits `273cb25`, `4d5c287`, `70b8869`, and `203127a`. The app
+mirror advanced from `8d69683` to `9ce07f2`.
+
+Hosted staging proof on `https://locallytwisted-staging.frappe.cloud`:
+
+- `npm run test:checkout-experience` passed `3/3`.
+- `npm run test:product-gallery-experience` passed `4/4`.
+
+Current staging blocker: final payment handoff is blocked because
+`Stripe Settings.Test.secret_key` cannot be decrypted in the staging site
+context. Treat this as staging payment-secret/config drift, not product setup
+failure and not live checkout approval. Handoff:
+`workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`; failure recipe:
+`capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
+
 ## Tracks
 
 | Track | Current state | Gate |

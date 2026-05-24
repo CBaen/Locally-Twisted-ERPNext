@@ -3,6 +3,13 @@
 Status: local architecture restored and guarded. This is not staging/live
 release approval.
 
+2026-05-24 staging follow-up: hosted staging now has the customer-facing
+follow-up for removed gallery label copy and base-photo availability after
+configured product selection. See
+`workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`.
+Fresh hosted staging proof passed `npm run test:product-gallery-experience`
+`4/4` against `https://locallytwisted-staging.frappe.cloud`.
+
 ## Scope
 
 Guiding Light reported that product pages no longer showed additional product

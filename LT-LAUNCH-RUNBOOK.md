@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-19 by Codex.
+Last updated: 2026-05-24 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -29,6 +29,14 @@ The 2026-05-19 domain/provider audit confirms the public web path is GoDaddy
 registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe.
 Reindexing is blocked until the live sitemap/canonical fix is released because
 current live discovery URLs still advertise the Frappe Cloud vanity host.
+
+The 2026-05-24 staging owner-review recovery put the current product/cart
+experience back on hosted staging far enough for route proof:
+`npm run test:checkout-experience` passed `3/3` and
+`npm run test:product-gallery-experience` passed `4/4` against
+`https://locallytwisted-staging.frappe.cloud`. Owner card-path testing is still
+blocked because staging cannot decrypt `Stripe Settings.Test.secret_key`.
+Staging payment settings must be repaired before test-card review.
 
 ## Current Confirmed State
 
@@ -101,6 +109,11 @@ current live discovery URLs still advertise the Frappe Cloud vanity host.
      and payment/customer-message cascade; six multi-color products passed
      backend checkout/SO/SI rehearsal plus desktop/mobile browser product,
      cart, and checkout preview. Neither tranche is live-approved.
+   - 2026-05-24 staging route proof now passes for checkout and product
+     gallery, but staging final payment handoff is blocked by encrypted
+     payment-secret configuration. See
+     `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md` and
+     `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
 
 ## Codex Owns
 
@@ -154,11 +167,14 @@ python scripts/verify/stripe_amount_parity_contract.py
 ## Current Blockers
 
 1. Live Stripe checkout is not approved.
-2. The correct LT merchant account/payment ownership still needs explicit
+2. Staging owner card-path testing is blocked until staging test payment
+   settings decrypt and one authorized test-mode checkout proves ERPNext
+   records, receipt, operator email, tax, and payment state.
+3. The correct LT merchant account/payment ownership still needs explicit
    business approval before live payments.
-3. Public ecommerce/product checkout remains separate from the pages/forms
+4. Public ecommerce/product checkout remains separate from the pages/forms
    launch and must pass its own product/payment/customer-email proof.
-4. Reindexing/Search Console submission is blocked until live sitemap and
+5. Reindexing/Search Console submission is blocked until live sitemap and
    canonical URLs use `https://locallytwisted.com`.
 
 ## Do Not Do

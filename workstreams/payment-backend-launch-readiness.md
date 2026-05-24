@@ -1,8 +1,17 @@
 # Payment Backend Launch Readiness
 
-Last updated: 2026-05-11
+Last updated: 2026-05-24
 
 This workstream is the payment-specific handoff lane for launch readiness. It is intentionally separate from `PROJECT-STATUS.md`, because that file mixes current receipts with stale historical state.
+
+2026-05-24 staging owner-review update: product/cart checkout route proof now
+passes on `https://locallytwisted-staging.frappe.cloud`, but final payment
+handoff is blocked because staging cannot decrypt
+`Stripe Settings.Test.secret_key`. This is staging payment-secret/config drift,
+not product setup failure and not live payment approval. Current handoff:
+`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`;
+failure recipe:
+`capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
 
 2026-05-11 cutover update: live mode now requires an explicit HTTPS
 `host_name` in site config, in addition to explicit live Stripe settings,
@@ -38,6 +47,10 @@ These are verified local/backend facts, not live-production claims:
 - `scripts/verify/cart_checkout_contract.py` passes for purchasable variants, single-SKU items, and shop card behavior.
 - `scripts/verify/payment_launch_readiness.py` passes in local mode.
 - `scripts/verify/payment_launch_readiness.py --mode live` fails, as expected, because the site is still configured for local Stripe test mode and localhost.
+- Hosted staging route proof passed on 2026-05-24, but staging final payment
+  proof is blocked until the test secret decrypts and one authorized test-mode
+  checkout verifies ERPNext records, receipt, operator email, tax, and payment
+  state.
 
 Latest payment commits on `main`:
 
@@ -90,6 +103,8 @@ Next without GL:
 
 Needs GL or client account access:
 
+- Repair the staging test Stripe secret/payment settings before owner card-path
+  testing.
 - Confirm live Stripe account setup and live key names.
 - Create or identify the live Stripe Payment Method Configuration that keeps Link disabled, if the no-Link decision still stands.
 - Configure the production Stripe webhook endpoint and store its `whsec_...` in site config.

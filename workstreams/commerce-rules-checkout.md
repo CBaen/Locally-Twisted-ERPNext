@@ -1,6 +1,6 @@
 # Commerce Rules And Checkout
 
-Last updated: 2026-05-06 by Codex.
+Last updated: 2026-05-24 by Codex.
 
 ## Outcome
 
@@ -13,6 +13,12 @@ Make checkout reflect Locally Twisted's mixed business model:
 - local delivery and Park City delivery can be charged in checkout
 - service inquiries carry deposit/payment guidance on Leads without creating money records
 - Utah tax rate is selected by fulfillment ZIP/city, but tax applies only to taxable goods
+
+2026-05-24 staging follow-up: hosted staging configured product checkout now
+passes the product/cart route proof, including configured bouquet cart and
+checkout state, product links, and pickup-hour display. Final payment handoff
+is still blocked by staging payment-secret configuration. Current handoff:
+`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`.
 
 ## Current Verified Local State
 

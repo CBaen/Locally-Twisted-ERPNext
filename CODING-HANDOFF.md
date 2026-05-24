@@ -1,5 +1,28 @@
 # Locally Twisted - Coding Handoff
 
+Current staging owner-review recovery as of 2026-05-24: work restarted from
+trusted source commit `c668543 Restore trusted staging source` and is now at
+full-repo commit `203127a Hide unsafe checkout provider errors` before this
+documentation pass. The matching Frappe app mirror is at `9ce07f2` after the
+mobile footer, product gallery, checkout product-flow, and checkout error-safety
+fixes were pushed for staging. Umbrella handoff:
+`workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`; feature
+handoffs:
+`workstreams/mobile-footer-columns-staging-2026-05-24.md`,
+`workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`,
+and
+`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`.
+Fresh hosted staging proof on `https://locallytwisted-staging.frappe.cloud`
+passed `npm run test:checkout-experience` `3/3` and
+`npm run test:product-gallery-experience` `4/4`. Final payment/card-path
+testing is still blocked by staging payment-secret configuration:
+`Stripe Settings.Test.secret_key` could not be decrypted in the staging site
+context. Failure recipe:
+`capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`. Do not
+call this live checkout approval, DNS approval, Search Console approval, or
+production payment proof. Decision packet:
+`decisions/2026-05-24-staging-owner-review-recovery.md`.
+
 Codex product gallery architecture restoration on 2026-05-22: product-page
 additional photos are restored as permanent architecture, not staging polish.
 The kept chain is source-approved gallery media -> `LT Product Blueprint

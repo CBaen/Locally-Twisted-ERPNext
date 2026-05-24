@@ -1,13 +1,41 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
 - Branch: `main`
-- Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
+- Trusted staging recovery restarted from:
+  `c668543 Restore trusted staging source`.
+- Current source point before this documentation pass:
+  `203127a Hide unsafe checkout provider errors`.
+- Current Frappe app mirror point:
+  `9ce07f2 Trigger staging checkout safety deploy press-deploy-bench-40102`.
+- Hosted staging owner-review proof on
+  `https://locallytwisted-staging.frappe.cloud` passes
+  `npm run test:checkout-experience` `3/3` and
+  `npm run test:product-gallery-experience` `4/4`.
+- Remaining staging blocker before owner card-path testing:
+  `Stripe Settings.Test.secret_key` cannot be decrypted in the staging site
+  context. This is a staging payment-secret/configuration blocker, not the old
+  configured-product setup blocker. Handoff:
+  `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`;
+  failure recipe:
+  `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
+- Staging recovery umbrella:
+  `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`.
+- Staging recovery decision packet:
+  `decisions/2026-05-24-staging-owner-review-recovery.md`.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
+- 2026-05-24 staging feature handoffs:
+  `workstreams/mobile-footer-columns-staging-2026-05-24.md`,
+  `workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`,
+  and
+  `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`.
+- Published closeout baseline before complex-scaffold work:
+  `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` /
+  `origin/main` with `git status -sb` before editing.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,

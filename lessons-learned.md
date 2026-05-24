@@ -3389,3 +3389,67 @@ when route heroes are involved.
 **Avoid:** hex-only prompts, treating model output as proof photography,
 leaving fake signage/text in generated banners, or confusing route hero art
 with ERPNext Item Group image approval.
+
+---
+
+## 2026-05-24 - Product route proof is not payment-secret proof
+
+**Lesson:** A staging checkout can be fixed enough for product/cart route tests
+to pass and still be blocked at the provider handoff by encrypted payment
+settings.
+
+**What happened:** Hosted staging checkout route proof passed after configured
+product resolution was repaired, but final submit reached payment setup and
+failed because `Stripe Settings.Test.secret_key` could not be decrypted in the
+staging site context.
+
+**Do this next time:** Name the layer that failed. Run product/cart route tests
+for product setup, then separately prove payment settings, webhook/amount
+contracts, and one authorized test-mode checkout before sending the owner
+through the card path.
+
+**Avoid:** calling a provider-secret failure a product setup issue, touching
+live payment settings while repairing staging, or showing raw provider
+decryption text to customers.
+
+---
+
+## 2026-05-24 - Frappe Cloud deploy markers need hosted route proof after cache/update behavior settles
+
+**Lesson:** Source commits and app-mirror deploy-marker commits are not the
+same as hosted staging proof. The public staging page must be checked after the
+deploy/update/cache path has settled.
+
+**What happened:** The staging recovery pushed source and mirror commits for
+footer, gallery, checkout, and error-safety work. Hosted proof had to be rerun
+against `https://locallytwisted-staging.frappe.cloud` before the docs could
+claim current staging route behavior.
+
+**Do this next time:** Record the full repo source commit, app mirror commit,
+hosted staging URL, and the exact route/verifier result. If a raw HTML probe
+and browser verifier disagree, trust the route verifier for rendered behavior
+and document what each proof surface actually saw.
+
+**Avoid:** treating mirror compare output, deploy marker commits, or local route
+proof as hosted staging approval by themselves.
+
+---
+
+## 2026-05-24 - Direct checkout probes must preserve real browser payload shape
+
+**Lesson:** Checkout endpoints that expect JSON arrays and browser-shaped
+configuration payloads can produce false failures when probed with simplified
+form data.
+
+**What happened:** During staging checkout repair, the reliable proof surface
+was the Playwright checkout experience test using the browser flow, not a
+shortcut request that risked changing array/configuration shape.
+
+**Do this next time:** Use the existing browser route tests for customer-facing
+checkout behavior, and use backend contract tests for server-side logic. If a
+direct API probe is needed, send the same JSON shape the browser sends and
+document the payload source.
+
+**Avoid:** creating false `417` conclusions from malformed test payloads or
+debugging the wrong layer because a shortcut request did not match browser
+behavior.

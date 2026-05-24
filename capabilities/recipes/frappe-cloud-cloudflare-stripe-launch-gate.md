@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-16
+last_verified: 2026-05-24
 currently_true: true
 ---
 
@@ -50,6 +50,10 @@ Default public launch posture:
 - Staging root/login behavior depends on Website Settings parity. Check
   staging `/`, `/#login`, `/home`, `/contact`, `home_page`, branding, favicon,
   and theme before calling source broken or live broken.
+- Staging payment proof is separate from staging product/cart route proof. As
+  of 2026-05-24, hosted staging product/cart tests pass, but owner card-path
+  testing is blocked because `Stripe Settings.Test.secret_key` cannot be
+  decrypted in the staging site context.
 - Public route health is not Search Console readiness. After custom-domain
   cutover, sitemap, canonical, Open Graph URL, and structured-data URLs must
   advertise the public domain, not the Frappe Cloud vanity host. As of
@@ -121,6 +125,8 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
   instead of comparing previous live app hash to target app mirror commit.
 - Treating staging `/#login` rendering Sign In as live breakage before checking
   environment and Website Settings parity.
+- Treating hosted product/cart checkout route proof as payment approval when
+  staging encrypted Stripe settings cannot decrypt.
 - Treating `Server: Frappe Cloud` or a passing dynamic-route gate as proof that
   sitemap/canonical URLs are ready for Search Console.
 - Letting custom fields or custom DocTypes exist only in the local database
@@ -200,3 +206,13 @@ On 2026-05-16:
 - Staging `/#login` rendered Sign In because staging Website Settings drifted,
   not because live was broken. Staging was repaired and cache clear job
   `fb85o6ncdh` succeeded.
+
+On 2026-05-24:
+
+- Full repo recovery from `c668543` reached `203127a`; app mirror recovery from
+  `8d69683` reached `9ce07f2`.
+- Hosted staging `npm run test:checkout-experience` passed `3/3`.
+- Hosted staging `npm run test:product-gallery-experience` passed `4/4`.
+- Final payment handoff remained blocked by staging payment-secret drift:
+  `Stripe Settings.Test.secret_key` could not be decrypted. Failure recipe:
+  `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
