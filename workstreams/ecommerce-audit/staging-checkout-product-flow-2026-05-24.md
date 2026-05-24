@@ -1,7 +1,7 @@
 # Staging Checkout Product Flow - 2026-05-24
 
-Status: product/cart/checkout route flow is repaired on hosted staging; final
-payment handoff is blocked by staging payment-secret configuration.
+Status: product/cart/checkout route flow is repaired on hosted staging; Stripe
+test-mode checkout and ERPNext payment cascade passed on hosted staging.
 
 ## Scope
 
@@ -71,16 +71,38 @@ Raw staging checkout HTML also contained:
 - `Preferred contact method`
 - `pickupWindowRules`
 
-## Current Blocker
+Additional hosted proof after the staging provider settings were repaired:
+
+- Re-entered the staging Stripe test secret key for `Stripe Settings / Test`.
+- Confirmed `Stripe-Test - USD - LT` still points at `Locally Twisted`, USD,
+  default payment account `Stripe-Test - LT`.
+- Ran a hosted configured-bouquet cart checkout from
+  `/shop-items/bouquets/encanto-bouquet` to Stripe Checkout.
+- Completed one Stripe test-mode payment with Stripe's documented success test
+  card.
+- Stripe returned to staging `/thank-you?order=SAL-ORD-2026-00024`.
+- Desk proof for `SAL-ORD-2026-00024`:
+  - Sales Order status: `To Deliver`.
+  - Item: `encanto-bouquet-SMA`, qty `1`, rate `$35.00`.
+  - Tax: `7.450%`, `$2.61`.
+  - Grand total: `$37.61`.
+  - Requested pickup: West Jordan, `2026-05-26`, `12:00-12:30`.
+- Payment Request `ACC-PRQ-2026-00021` is `Paid`.
+- Sales Invoice `ACC-SINV-2026-00004` is `Paid`, grand total `$37.61`,
+  outstanding amount `$0.00`.
+- Receipt Email Queue `cchsjbegpi` and operator Email Queue `cchtiiieuk`
+  reached `Sent` after re-entering the staging Email Account app password.
+
+## Resolved Staging Blockers
 
 The product setup blocker is resolved for the tested configured bouquet route.
-The remaining blocker is payment configuration on staging. During the recovery
-lane, final submit reached the payment setup layer and failed because staging
-could not decrypt `Stripe Settings.Test.secret_key`.
+The Stripe Settings blocker is resolved on staging as of 2026-05-24 after the
+test secret key was re-entered.
 
-Treat this as provider/site configuration drift. Do not send the owner through
-card testing until the staging secret key/payment settings are repaired and the
-payment proof gates pass.
+During the recovery lane, final submit first reached the payment setup layer
+and failed because staging could not decrypt `Stripe Settings.Test.secret_key`.
+Treat that pattern as provider/site configuration drift. It is not a Product
+Setup or checkout variant bug.
 
 Official Frappe Cloud migration documentation describes the site encryption
 key as required for decrypting password fields after site restores/migrations:
@@ -88,9 +110,16 @@ key as required for decrypting password fields after site restores/migrations:
 For staging, the practical repair is either restore the correct encryption key
 for the copied site context or re-enter the test secret key in staging.
 
+The same restored-site encrypted-password drift also hit `Email Account /
+Locally Twisted`. Re-entering the local `GMAIL_APP_PASSWORD` value in the
+staging Email Account repaired Frappe-side SMTP send acceptance for the test
+receipt/operator messages. Email Queue `Sent` proves SMTP acceptance, not
+inbox-visible delivery. A human with the `locallytwisted@gmail.com` inbox should
+still confirm inbox receipt if that experience matters for owner review.
+
 ## Required Follow-Up
 
-Before owner checkout review:
+Before live approval:
 
 ```powershell
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
@@ -100,8 +129,9 @@ python scripts\verify\payment_webhook_contract.py
 python scripts\verify\stripe_amount_parity_contract.py
 ```
 
-Then run one authorized Stripe test-mode checkout and verify ERPNext records,
-tax, customer receipt, operator email, and payment state.
+Then repeat an authorized Stripe test-mode checkout after any further staging
+provider changes. Do not promote this to live checkout authority without the
+live-mode payment launch gate and explicit live Stripe approval.
 
 ## Boundaries
 
@@ -109,12 +139,14 @@ tax, customer receipt, operator email, and payment state.
 - This does not authorize live payment keys.
 - This does not touch DNS or Search Console.
 - Do not hide the payment blocker by calling it a generic product setup issue.
+- Do not treat Email Queue `Sent` as inbox proof; it is SMTP acceptance only.
 
 ## Backlinks
 
 - `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`
 - `workstreams/payment-backend-launch-readiness.md`
 - `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`
+- `capabilities/failures/frappe-cloud-staging-email-secret-drift.md`
 - `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `decisions/2026-05-24-staging-owner-review-recovery.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`

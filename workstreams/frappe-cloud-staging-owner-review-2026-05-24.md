@@ -1,8 +1,8 @@
 # Frappe Cloud Staging Owner Review Recovery - 2026-05-24
 
 Status: source and app-mirror fixes are pushed, hosted staging product/cart
-proof passes, and final payment handoff is blocked by staging payment-secret
-configuration.
+proof passes, and hosted staging Stripe test-mode checkout now reaches paid
+ERPNext records.
 
 This is the umbrella handoff for the recovery that started from the trusted
 restore point and moved the owner-review staging site forward again. Keep this
@@ -15,7 +15,7 @@ monolith.
 |---|---|---|---|
 | Full repo | `c668543 Restore trusted staging source` | `203127a Hide unsafe checkout provider errors` | `main` and `origin/main` matched at this point before documentation work. |
 | Frappe app mirror | `8d69683` | `9ce07f2` | GitHub compare showed the mirror ahead by 7 commits and behind by 0. |
-| Hosted staging | `https://locallytwisted-staging.frappe.cloud` | owner-review candidate | Product/cart route tests pass; payment provider handoff is blocked. |
+| Hosted staging | `https://locallytwisted-staging.frappe.cloud` | owner-review candidate | Product/cart route tests pass; Stripe test-mode checkout and ERPNext paid-order records passed. |
 
 Full-repo commits after the trusted restore:
 
@@ -40,10 +40,12 @@ App-mirror commits after the staging restore point:
   `workstreams/mobile-footer-columns-staging-2026-05-24.md`
 - Product gallery staging follow-up:
   `workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`
-- Checkout product flow and payment blocker:
+- Checkout product flow and payment proof:
   `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`
 - Payment failure recipe:
   `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`
+- Email failure recipe:
+  `capabilities/failures/frappe-cloud-staging-email-secret-drift.md`
 - Launch/payment gate:
   `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - Decision packet:
@@ -92,11 +94,24 @@ Observed results:
 - Raw staging checkout HTML included `Preferred contact method` and
   `pickupWindowRules`.
 
-Earlier recovery proof in the same lane found the final submit reached the
-payment setup layer and failed on staging payment-secret configuration:
-`Stripe Settings.Test.secret_key` could not be decrypted in the current staging
-site context. Treat that as a staging provider/configuration blocker, not as a
-product setup blocker.
+Later hosted proof in the same lane repaired the staging provider config and
+completed one Stripe test-mode payment:
+
+- `Stripe Settings / Test` secret key was re-entered on staging.
+- `npm run test:checkout-experience` passed `3/3` against staging after repair.
+- Hosted checkout for `/shop-items/bouquets/encanto-bouquet` reached Stripe
+  Checkout, completed a test-mode payment, and returned to
+  `/thank-you?order=SAL-ORD-2026-00024`.
+- ERPNext Desk showed Sales Order `SAL-ORD-2026-00024`, Payment Request
+  `ACC-PRQ-2026-00021` as `Paid`, and Sales Invoice `ACC-SINV-2026-00004`
+  as `Paid` with grand total `$37.61` and outstanding amount `$0.00`.
+- Staging Email Account password was re-entered; receipt Email Queue
+  `cchsjbegpi` and operator Email Queue `cchtiiieuk` reached `Sent`.
+
+Earlier failure evidence still matters as the guard: final submit first reached
+the payment setup layer and failed because `Stripe Settings.Test.secret_key`
+could not be decrypted in the current staging site context. Treat future
+instances as staging provider/configuration drift, not Product Setup failure.
 
 ## Indexed Conversation And GitHub Review
 
@@ -111,15 +126,9 @@ and hosted staging URL.
 
 ## Next Safe Step
 
-Repair staging payment configuration before owner card-path testing:
-
-1. In staging Desk/provider context, re-enter the test secret key for
-   `Stripe Settings` or restore the correct site encryption key if this staging
-   database was restored/copied from another site.
-2. Confirm the staging Payment Gateway Account and payment method configuration
-   point at the intended test-mode settings.
-3. Clear staging website/cache after settings repair.
-4. Rerun:
+Before handing the owner a checkout review path, keep the boundaries explicit:
+staging test checkout is usable; live checkout is not approved by this proof.
+Rerun the route proof if more source or provider settings change:
 
 ```powershell
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
@@ -130,9 +139,11 @@ python scripts\verify\payment_webhook_contract.py
 python scripts\verify\stripe_amount_parity_contract.py
 ```
 
-5. Only after staging payment config passes, run one authorized test checkout
-   all the way through Stripe test mode and verify the ERPNext records, customer
-   receipt, operator email, tax, and payment status before owner review.
+The connected Gmail MCP account was `cameronbpaul@gmail.com`, so it could not
+verify inbox-visible delivery for `locallytwisted@gmail.com`. Email Queue
+`Sent` proves Frappe/Gmail SMTP acceptance only. Ask the owner/reviewer to check
+the recipient inbox during their staging review if inbox-visible receipt
+delivery is part of the approval.
 
 ## Boundaries
 

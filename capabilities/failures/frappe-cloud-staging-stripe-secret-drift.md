@@ -5,7 +5,7 @@ failure_kind: release_gate_gap
 schema_version: 0.1
 date_discovered: 2026-05-24
 last_updated: 2026-05-24
-status: open
+status: guarded
 scope: project
 owner_context: Locally Twisted Frappe Cloud staging checkout/payment proof
 related_capabilities:
@@ -48,7 +48,7 @@ handoff fails because the staging site cannot decrypt
 
 | Date | Project | Surface | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|
-| 2026-05-24 | Locally Twisted | Staging checkout | Configured bouquet checkout reached payment setup, then failed because `Stripe Settings.Test.secret_key` could not be decrypted in staging | `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`; `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md` | failure recipe added; config repair still pending | open |
+| 2026-05-24 | Locally Twisted | Staging checkout | Configured bouquet checkout reached payment setup, then failed because `Stripe Settings.Test.secret_key` could not be decrypted in staging | `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`; `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md` | staging test secret re-entered; hosted Stripe test-mode checkout passed to paid ERPNext records | guarded |
 
 ## Root Pattern
 
@@ -108,7 +108,8 @@ Before owner card-path testing on staging:
 
 ## Evidence Quality
 
-Current evidence is sufficient to classify the blocker as staging payment
-configuration drift after source checkout fixes, but not sufficient to say the
-payment path is repaired. The failure remains open until a staging payment
-configuration repair and one authorized test-mode checkout pass.
+Current evidence is sufficient to say the 2026-05-24 staging Stripe secret
+drift instance is repaired for test-mode owner review: the staging test secret
+was re-entered, hosted checkout reached Stripe, one test-mode payment completed,
+and ERPNext showed paid Payment Request and Sales Invoice records. Keep this
+failure recipe active as a guard for future restored-site encrypted secret drift.

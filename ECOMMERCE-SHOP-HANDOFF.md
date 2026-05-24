@@ -15,13 +15,18 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   `https://locallytwisted-staging.frappe.cloud` passes
   `npm run test:checkout-experience` `3/3` and
   `npm run test:product-gallery-experience` `4/4`.
-- Remaining staging blocker before owner card-path testing:
-  `Stripe Settings.Test.secret_key` cannot be decrypted in the staging site
-  context. This is a staging payment-secret/configuration blocker, not the old
-  configured-product setup blocker. Handoff:
+- Hosted Stripe test-mode checkout proof on 2026-05-24 created and paid
+  staging Sales Order `SAL-ORD-2026-00024`, Payment Request
+  `ACC-PRQ-2026-00021`, and Sales Invoice `ACC-SINV-2026-00004` with grand
+  total `$37.61` and tax `$2.61`.
+- Staging encrypted-secret drift was repaired for `Stripe Settings / Test` and
+  `Email Account / Locally Twisted`; receipt Email Queue `cchsjbegpi` and
+  operator Email Queue `cchtiiieuk` reached `Sent`. Treat `Sent` as SMTP
+  acceptance, not inbox-visible delivery proof. Handoff:
   `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`;
-  failure recipe:
-  `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
+  failure recipes:
+  `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md` and
+  `capabilities/failures/frappe-cloud-staging-email-secret-drift.md`.
 - Staging recovery umbrella:
   `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`.
 - Staging recovery decision packet:
