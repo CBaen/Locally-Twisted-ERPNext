@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
+import json
 import time
 
 import frappe
@@ -48,6 +49,7 @@ def _run_contract():
         "standard_delivery_utah_county": _submit_paid_delivery("84003", "American Fork", 15.0),
         "park_city_delivery": _submit_paid_delivery("84060", "Park City", 50.0),
         "pickup": _submit_paid_pickup(),
+        "configured_bouquet_pickup": _submit_configured_bouquet_pickup(),
         "out_of_area_quote": _submit_out_of_area_quote(),
         "past_date_rejected": _submit_past_date_rejected(),
     }
@@ -114,6 +116,13 @@ def _future_date() -> str:
     return (date.today() + timedelta(days=30)).isoformat()
 
 
+def _next_pickup_date() -> str:
+    target = date.today()
+    while target.weekday() != 1:
+        target += timedelta(days=1)
+    return target.isoformat()
+
+
 def _submit_paid_delivery(postal_code: str, city: str, expected_fee: float):
     result = _submit_checkout(
         email=f"lt-delivery-{postal_code}-{int(time.time())}@example.invalid",
@@ -153,9 +162,9 @@ def _submit_paid_pickup():
         email=f"lt-pickup-{int(time.time())}@example.invalid",
         fulfillment_method="pickup",
         pickup_location="Riverdale",
-        requested_fulfillment_date=_future_date(),
-        requested_window_start="18:00",
-        requested_window_end="18:30",
+        requested_fulfillment_date=_next_pickup_date(),
+        requested_window_start="12:00",
+        requested_window_end="12:30",
         address_line1="",
         city="Riverdale",
         state="UT",
@@ -167,9 +176,52 @@ def _submit_paid_pickup():
         raise ContractFail("pickup order should not include a delivery fee line")
     if so.get("custom_lt_pickup_location") != "Riverdale":
         raise ContractFail("pickup order should record the requested pickup location")
-    if so.get("custom_lt_requested_window_start") != "18:00":
+    if so.get("custom_lt_requested_window_start") != "12:00":
         raise ContractFail("pickup order should record requested pickup window")
     return {"sales_order": so.name, "grand_total": float(so.grand_total)}
+
+
+def _submit_configured_bouquet_pickup():
+    dash = chr(8212)
+    size = f"Small {dash} 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+    configuration = {
+        "schema_version": "lt-product-config-v1",
+        "item_code": "encanto-bouquet-SMA",
+        "website_item_code": "encanto-bouquet",
+        "selected_options": {"Bouquet Size": size},
+        "color_recipes": [],
+        "configuration_groups": [],
+        "add_ons": [],
+        "customizations": [],
+    }
+    result = _submit_checkout(
+        email=f"lt-encanto-pickup-{int(time.time())}@example.invalid",
+        item_code="",
+        items_json=json.dumps(
+            [
+                {
+                    "item_code": "encanto-bouquet-SMA",
+                    "qty": 1,
+                    "configuration": configuration,
+                }
+            ]
+        ),
+        fulfillment_method="pickup",
+        pickup_location="West Jordan",
+        requested_fulfillment_date=_next_pickup_date(),
+        requested_window_start="12:00",
+        requested_window_end="12:30",
+        address_line1="",
+        city="West Jordan",
+        state="UT",
+        postal_code="84088",
+    )
+    so = frappe.get_doc("Sales Order", result["sales_order"])
+    first_line = so.items[0]
+    payload = json.loads(first_line.get("custom_lt_configuration_json") or "{}")
+    if payload.get("selected_options", {}).get("Bouquet Size") != size:
+        raise ContractFail(f"configured bouquet size was not preserved: {payload}")
+    return {"sales_order": so.name, "item_code": first_line.item_code}
 
 
 def _submit_out_of_area_quote():
@@ -239,6 +291,7 @@ def _submit_checkout(allow_quote_required: bool = False, **kwargs):
         "qty": 1,
         "name": "LT Fulfillment Contract",
         "phone": "801-555-0199",
+        "preferred_contact_method": "email",
         "country": "United States",
         "order_notes": "Checkout fulfillment contract.",
         "marketing_opt_in": 0,

@@ -158,6 +158,7 @@ def _submit_checkout(email: str, name: str):
             name=name,
             email=email,
             phone="801-555-0199",
+            preferred_contact_method="email",
             address_line1="123 Checkout Lead Lane",
             city="West Jordan",
             state="UT",

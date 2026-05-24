@@ -111,6 +111,7 @@ def _submit_checkout(email: str, token: str, order_notes: str) -> dict:
         name=f"LT Note Contract {token}",
         email=email,
         phone="801-555-0199",
+        preferred_contact_method="email",
         fulfillment_method="delivery",
         address_line1=f"{token} Note Contract Lane",
         address_line2="",

@@ -62,6 +62,30 @@ def _check_pickup_windows(rules) -> list[str]:
     invalid = rules.validate_requested_window("13:00", "14:00")
     if invalid.ok:
         failures.append("13:00-14:00 pickup window should be rejected as not 30 minutes")
+    tuesday_pickup = rules.validate_pickup_window(
+        pickup_location="West Jordan",
+        requested_date="2026-05-26",
+        start="12:00",
+        end="12:30",
+    )
+    if not tuesday_pickup.ok:
+        failures.append(f"Tuesday 12:00-12:30 pickup window should be valid: {tuesday_pickup.message}")
+    monday_pickup = rules.validate_pickup_window(
+        pickup_location="West Jordan",
+        requested_date="2026-05-25",
+        start="12:00",
+        end="12:30",
+    )
+    if monday_pickup.ok:
+        failures.append("Monday pickup window should be rejected because pickup is closed")
+    early_pickup = rules.validate_pickup_window(
+        pickup_location="Riverdale",
+        requested_date="2026-05-26",
+        start="11:30",
+        end="12:00",
+    )
+    if early_pickup.ok:
+        failures.append("11:30 Tuesday pickup should be rejected before opening")
     return failures
 
 

@@ -35,9 +35,34 @@
             <script>
                 frappe.ready(() => {
                     const $shell = $('.lt-product__media-shell.has-thumbnails').first();
-                    const $galleryImages = $('.lt-product__thumbnail-button .item-slideshow-image');
-                    const $galleryButtons = $('.lt-product__thumbnail-button');
+                    const $galleryRail = $('[data-lt-gallery-role="standard-product-thumbnails"]').first();
                     const $statusCurrent = $('.lt-product__gallery-status-current').first();
+                    const $statusTotal = $('.lt-product__gallery-status-total').first();
+
+                    function galleryImages() {
+                        return $galleryRail.find('.lt-product__thumbnail-button .item-slideshow-image');
+                    }
+
+                    function galleryButtons() {
+                        return $galleryRail.find('.lt-product__thumbnail-button');
+                    }
+
+                    function absoluteSrc(src) {
+                        if (!src) return '';
+                        try {
+                            return new URL(src, window.location.href).href;
+                        } catch (err) {
+                            return src;
+                        }
+                    }
+
+                    function imageMatches(left, right) {
+                        return absoluteSrc(left) === absoluteSrc(right);
+                    }
+
+                    function syncGalleryTotal() {
+                        $statusTotal.text(String(galleryImages().length));
+                    }
 
                     function syncGalleryFrame() {
                         const productImage = $('.product-image').first().get(0);
@@ -50,18 +75,19 @@
                     }
 
                     function showGalleryImage(index) {
-                        if (!$galleryImages.length) return;
-                        const safeIndex = (index + $galleryImages.length) % $galleryImages.length;
-                        const $img = $galleryImages.eq(safeIndex);
+                        const $images = galleryImages();
+                        if (!$images.length) return;
+                        const safeIndex = (index + $images.length) % $images.length;
+                        const $img = $images.eq(safeIndex);
                         const link = $img.prop('src');
                         const alt = $img.attr('alt') || '';
                         const $product_image = $('.product-image');
                         $product_image.find('a').prop('href', link);
                         $product_image.find('img').prop('src', link).prop('alt', alt);
 
-                        $galleryImages.removeClass('active');
+                        $images.removeClass('active');
                         $img.addClass('active');
-                        $galleryButtons.attr('aria-pressed', 'false');
+                        galleryButtons().attr('aria-pressed', 'false');
                         $statusCurrent.text(String(safeIndex + 1));
                         const button = $img.closest('.lt-product__thumbnail-button').attr('aria-pressed', 'true').get(0);
                         if (button && button.scrollIntoView) {
@@ -75,20 +101,72 @@
                     }
 
                     function activeGalleryIndex() {
-                        const $active = $galleryImages.filter('.active').first();
-                        const index = $galleryImages.index($active);
+                        const $images = galleryImages();
+                        const $active = $images.filter('.active').first();
+                        const index = $images.index($active);
                         return index >= 0 ? index : 0;
+                    }
+
+                    function galleryIndexForSrc(src) {
+                        const $images = galleryImages();
+                        let found = -1;
+                        $images.each((index, image) => {
+                            if (found >= 0) return;
+                            if (imageMatches($(image).prop('src') || $(image).attr('src'), src)) {
+                                found = index;
+                            }
+                        });
+                        return found;
+                    }
+
+                    function ensureGalleryThumbnail(src, alt) {
+                        if (!src || !$galleryRail.length) return -1;
+                        const existing = galleryIndexForSrc(src);
+                        if (existing >= 0) return existing;
+                        const $button = $('<button>', {
+                            type: 'button',
+                            class: 'lt-product__thumbnail-button',
+                            'aria-label': 'View selected product photo',
+                            'aria-pressed': 'false',
+                        });
+                        $('<img>', {
+                            class: 'item-slideshow-image mb-2',
+                            src: src,
+                            alt: alt || '',
+                        }).appendTo($button);
+                        $galleryRail.append($button);
+                        syncGalleryTotal();
+                        syncGalleryFrame();
+                        return galleryImages().length - 1;
+                    }
+
+                    function setProductGalleryImage(src, alt, options) {
+                        if (!src) return false;
+                        const opts = options || {};
+                        let index = galleryIndexForSrc(src);
+                        if (index < 0 && opts.addIfMissing) {
+                            index = ensureGalleryThumbnail(src, alt);
+                        }
+                        if (index >= 0) {
+                            showGalleryImage(index);
+                            return true;
+                        }
+                        const $product_image = $('.product-image');
+                        $product_image.find('a').prop('href', src);
+                        $product_image.find('img').prop('src', src).prop('alt', alt || '');
+                        syncGalleryFrame();
+                        return true;
                     }
 
                     $('.page_content').on('click', '.lt-product__thumbnail-button, .item-slideshow-image', (e) => {
                         const $target = $(e.currentTarget);
                         const $img = $target.is('img') ? $target : $target.find('.item-slideshow-image').first();
-                        showGalleryImage($galleryImages.index($img));
+                        showGalleryImage(galleryImages().index($img));
                     });
 
                     let swipeStart = null;
                     $('.page_content').on('pointerdown', '.product-image', (e) => {
-                        if ($galleryImages.length < 2) return;
+                        if (galleryImages().length < 2) return;
                         const event = e.originalEvent || e;
                         swipeStart = {
                             x: event.clientX,
@@ -98,7 +176,7 @@
                     });
 
                     $('.page_content').on('pointerup pointercancel', '.product-image', (e) => {
-                        if (!swipeStart || $galleryImages.length < 2) {
+                        if (!swipeStart || galleryImages().length < 2) {
                             swipeStart = null;
                             return;
                         }
@@ -119,6 +197,8 @@
 
                     window.LT = window.LT || {};
                     window.LT.syncProductGalleryHeight = syncGalleryFrame;
+                    window.LT.setProductGalleryImage = setProductGalleryImage;
+                    window.LT.ensureProductGalleryThumbnail = ensureGalleryThumbnail;
                     $('.product-image img').on('load', syncGalleryFrame);
                     const mainImage = $('.product-image img').first().get(0);
                     if (mainImage && window.MutationObserver) {
@@ -128,6 +208,7 @@
                         });
                     }
                     window.addEventListener('resize', syncGalleryFrame);
+                    syncGalleryTotal();
                     syncGalleryFrame();
                 })
             </script>

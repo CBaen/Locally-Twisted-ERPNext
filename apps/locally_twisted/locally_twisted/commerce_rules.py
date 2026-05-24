@@ -52,6 +52,23 @@ PICKUP_LOCATIONS = {
     },
 }
 
+# Current published storefront hours: Tue-Fri 12-6, Sat 10-4.
+# Stored as Python weekdays: Monday=0, Sunday=6.
+_STANDARD_PICKUP_HOURS = {
+    0: None,
+    1: ("12:00", "18:00"),
+    2: ("12:00", "18:00"),
+    3: ("12:00", "18:00"),
+    4: ("12:00", "18:00"),
+    5: ("10:00", "16:00"),
+    6: None,
+}
+
+PICKUP_LOCATION_HOURS = {
+    location: dict(_STANDARD_PICKUP_HOURS)
+    for location in PICKUP_LOCATIONS
+}
+
 PARK_CITY_ZIPS = {"84060", "84068", "84098"}
 STANDARD_DELIVERY_ZIPS = {
     # Salt Lake County
@@ -373,6 +390,55 @@ def validate_requested_window(start: str | None, end: str | None) -> WindowValid
         return WindowValidation(False, "Requested window must use HH:MM time.")
     if end_time - start_time != timedelta(minutes=30):
         return WindowValidation(False, "Requested windows must be exactly 30 minutes.")
+    return WindowValidation(True)
+
+
+def pickup_location_window_rules() -> dict[str, dict[str, dict[str, str] | None]]:
+    """Return pickup hours in a JSON-friendly shape for checkout."""
+    rules: dict[str, dict[str, dict[str, str] | None]] = {}
+    for location, hours in PICKUP_LOCATION_HOURS.items():
+        rules[location] = {
+            str(day): {"start": window[0], "end": window[1]} if window else None
+            for day, window in hours.items()
+        }
+    return rules
+
+
+def validate_pickup_window(
+    *,
+    pickup_location: str | None,
+    requested_date,
+    start: str | None,
+    end: str | None,
+) -> WindowValidation:
+    base = validate_requested_window(start, end)
+    if not base.ok:
+        return base
+
+    location = str(pickup_location or "").strip()
+    hours = PICKUP_LOCATION_HOURS.get(location)
+    if not hours:
+        return WindowValidation(False, "Please choose a pickup location.")
+
+    try:
+        weekday = requested_date.weekday()
+    except AttributeError:
+        try:
+            weekday = datetime.strptime(str(requested_date), "%Y-%m-%d").weekday()
+        except ValueError:
+            return WindowValidation(False, "Requested date is not valid.")
+
+    window = hours.get(weekday)
+    if not window:
+        return WindowValidation(False, "This pickup location is closed on the selected date. Please choose another date.")
+
+    start_time = datetime.strptime(str(start or "").strip(), "%H:%M")
+    end_time = datetime.strptime(str(end or "").strip(), "%H:%M")
+    open_time = datetime.strptime(window[0], "%H:%M")
+    close_time = datetime.strptime(window[1], "%H:%M")
+    if start_time < open_time or end_time > close_time:
+        return WindowValidation(False, "Please choose a pickup window during the selected location's hours.")
+
     return WindowValidation(True)
 
 

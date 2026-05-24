@@ -40,6 +40,11 @@ NO_PURCHASE_CHECKOUT_MESSAGE = (
     "Ready-to-order is paused while we launch the new site. "
     "Please start a custom event quote from the contact page instead."
 )
+PREFERRED_CONTACT_METHODS = {
+    "email": "Email",
+    "call": "Call",
+    "text": "Text",
+}
 
 
 PAGE_CSS = """
@@ -111,6 +116,10 @@ PAGE_CSS = """
     background-position: center;
     flex-shrink: 0;
 }
+a.lt-checkout__line-img {
+    display: block;
+    text-decoration: none;
+}
 .lt-checkout__line-body { flex: 1 1 auto; min-width: 0; }
 .lt-checkout__line-name {
     font-family: 'Lato', sans-serif;
@@ -120,6 +129,11 @@ PAGE_CSS = """
     font-size: 0.95rem;
     line-height: 1.3;
     word-break: break-word;
+}
+.lt-checkout__line-name a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
 }
 .lt-checkout__line-meta { font-size: 0.8rem; color: var(--lt-soft-gray); margin: 0; }
 .lt-checkout__line-amount {
@@ -382,6 +396,7 @@ def get_context(context):
         "robots": "noindex, nofollow",
     }
     context.colocated_css = PAGE_CSS
+    context.pickup_window_rules_json = _json_for_script(commerce_rules.pickup_location_window_rules())
 
     if item_code:
         # Buy-now: server-render the single line.
@@ -606,6 +621,16 @@ def _validate_window(start, end):
     return (start or "").strip(), (end or "").strip()
 
 
+def _validate_preferred_contact_method(value):
+    key = (value or "").strip().lower()
+    if not key:
+        frappe.throw(_("Please choose how you would prefer us to contact you."), frappe.ValidationError)
+    label = PREFERRED_CONTACT_METHODS.get(key)
+    if not label:
+        frappe.throw(_("Please choose Email, Call, or Text for your preferred contact method."), frappe.ValidationError)
+    return label
+
+
 def _fulfillment_for_request(
     *,
     fulfillment_method,
@@ -749,6 +774,7 @@ def preview_checkout_totals(item_code="", qty=1, items_json="",
 @rate_limit(limit=600, seconds=60 * 60)
 def submit_guest_order(item_code="", qty=1, items_json="",
                        name="", email="", phone="",
+                       preferred_contact_method="",
                        address_line1="", address_line2="", city="", state="",
                        postal_code="", country="United States",
                        fulfillment_method="delivery", pickup_location="",
@@ -776,6 +802,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     name = (name or "").strip()
     email = (email or "").strip()
     phone = (phone or "").strip()
+    preferred_contact_method = _validate_preferred_contact_method(preferred_contact_method)
     address_line1 = (address_line1 or "").strip()
     address_line2 = (address_line2 or "").strip()
     city = (city or "").strip()
@@ -814,6 +841,15 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         city=city,
         postal_code=postal_code,
     )
+    if fulfillment.method == "pickup":
+        pickup_window = commerce_rules.validate_pickup_window(
+            pickup_location=pickup_location,
+            requested_date=requested_date,
+            start=requested_window_start,
+            end=requested_window_end,
+        )
+        if not pickup_window.ok:
+            frappe.throw(_(pickup_window.message), frappe.ValidationError)
     if fulfillment.method == "delivery" and (not address_line1 or not city or not state or not postal_code):
         frappe.throw(_("Please give us a complete delivery address."), frappe.ValidationError)
 
@@ -1001,6 +1037,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             so.name,
             _compose_checkout_notes(
                 order_notes=order_notes,
+                preferred_contact_method=preferred_contact_method,
                 fulfillment=fulfillment,
                 pickup_location=pickup_location,
                 requested_fulfillment_date=requested_fulfillment_date,
@@ -1110,6 +1147,7 @@ def _sales_order_custom_fields(
 def _compose_checkout_notes(
     *,
     order_notes,
+    preferred_contact_method,
     fulfillment,
     pickup_location,
     requested_fulfillment_date,
@@ -1119,6 +1157,7 @@ def _compose_checkout_notes(
 ):
     parts = [
         f"Fulfillment: {fulfillment.label}",
+        f"Preferred contact method: {preferred_contact_method}",
         f"Requested date: {requested_fulfillment_date}",
         f"Requested window: {requested_window_start}-{requested_window_end} (requested, not confirmed)",
     ]

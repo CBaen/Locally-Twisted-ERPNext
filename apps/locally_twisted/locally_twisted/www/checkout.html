@@ -32,14 +32,25 @@
                     <input type="text" id="co-name" name="name" class="lt-checkout__input" required autocomplete="name">
                 </div>
                 <div class="lt-checkout__field">
-                    <label for="co-phone">Phone <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <label for="co-phone">Phone - Used only for order updates <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
                     <input type="tel" id="co-phone" name="phone" class="lt-checkout__input" required autocomplete="tel">
                 </div>
             </div>
 
-            <div class="lt-checkout__field">
-                <label for="co-email">Email (for receipt, invoice, and order updates) <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                <input type="email" id="co-email" name="email" class="lt-checkout__input" required autocomplete="email">
+            <div class="lt-checkout__row">
+                <div class="lt-checkout__field">
+                    <label for="co-email">Email - Used only for order updates <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <input type="email" id="co-email" name="email" class="lt-checkout__input" required autocomplete="email">
+                </div>
+                <div class="lt-checkout__field">
+                    <label for="co-preferred-contact">Preferred contact method <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <select id="co-preferred-contact" name="preferred_contact_method" class="lt-checkout__input" required>
+                        <option value="">Choose one</option>
+                        <option value="email">Email</option>
+                        <option value="call">Call</option>
+                        <option value="text">Text</option>
+                    </select>
+                </div>
             </div>
 
             <fieldset class="lt-checkout__fieldset">
@@ -148,12 +159,22 @@
 
                 {% if mode == "buy_now" %}
                 {# Server-rendered single line for buy-now URLs. #}
+                {% set item_route = item.route or "" %}
                 <div class="lt-checkout__line">
+                    {% if item_route %}
+                    <a class="lt-checkout__line-img"
+                       href="/{{ item_route }}"
+                       aria-label="View {{ item.web_item_name }}"
+                       {% if item.website_image %}style="background-image: url('{{ item.website_image }}');"{% endif %}></a>
+                    {% else %}
                     <div class="lt-checkout__line-img"
                          {% if item.website_image %}style="background-image: url('{{ item.website_image }}');"{% endif %}
                          aria-hidden="true"></div>
+                    {% endif %}
                     <div class="lt-checkout__line-body">
-                        <p class="lt-checkout__line-name">{{ item.web_item_name }}</p>
+                        <p class="lt-checkout__line-name">
+                            {% if item_route %}<a href="/{{ item_route }}">{{ item.web_item_name }}</a>{% else %}{{ item.web_item_name }}{% endif %}
+                        </p>
                         <p class="lt-checkout__line-meta">Qty {{ qty }} &middot; ${{ "%.2f"|format(unit_price) }} each</p>
                     </div>
                     <p class="lt-checkout__line-amount">${{ "%.2f"|format(line_total) }}</p>
@@ -248,6 +269,7 @@
     var currentCheckoutItems = {{ (checkout_items_payload_json or "[]") | safe }};
     var totalsRequestSerial = 0;
     var CHECKOUT_FALLBACK_ERROR = 'Tiny snag: we could not start checkout just now. Please call (801) 285-0860 or email billing@locallytwisted.com and we will help.';
+    var pickupWindowRules = {{ (pickup_window_rules_json or "{}") | safe }};
 
     function setFeedback(state, msg) {
         feedback.classList.remove('is-success', 'is-error');
@@ -269,17 +291,85 @@
         return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
     }
 
+    function timeToMinutes(time) {
+        if (!time || time.indexOf(':') === -1) return null;
+        var parts = time.split(':');
+        var h = parseInt(parts[0], 10);
+        var m = parseInt(parts[1], 10);
+        if (!isFinite(h) || !isFinite(m)) return null;
+        return h * 60 + m;
+    }
+
+    function minutesToTime(minutes) {
+        var h = Math.floor(minutes / 60);
+        var m = minutes % 60;
+        return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+
+    function formatTimeLabel(time) {
+        var minutes = timeToMinutes(time);
+        if (minutes === null) return time || '';
+        var h24 = Math.floor(minutes / 60);
+        var mins = minutes % 60;
+        var suffix = h24 >= 12 ? 'PM' : 'AM';
+        var h12 = h24 % 12;
+        if (h12 === 0) h12 = 12;
+        return String(h12) + ':' + String(mins).padStart(2, '0') + ' ' + suffix;
+    }
+
+    function selectedDateWeekday() {
+        if (!dateInput || !dateInput.value) return null;
+        var date = new Date(dateInput.value + 'T12:00:00');
+        if (Number.isNaN(date.getTime())) return null;
+        return String((date.getDay() + 6) % 7);
+    }
+
+    function pickupWindowRule() {
+        if (selectedFulfillment() !== 'pickup') return null;
+        if (!pickupLocation || !pickupLocation.value || !dateInput || !dateInput.value) return undefined;
+        var locationRules = pickupWindowRules[pickupLocation.value] || {};
+        var weekday = selectedDateWeekday();
+        return weekday === null ? undefined : locationRules[weekday];
+    }
+
     function populateWindows() {
         if (!windowStart) return;
-        for (var h = 8; h <= 20; h++) {
-            for (var m = 0; m < 60; m += 30) {
-                if (h === 20 && m > 30) continue;
-                var value = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
-                var end = addMinutes(value, 30);
-                var label = value.replace(/^0/, '') + ' - ' + end.replace(/^0/, '');
-                windowStart.appendChild(el('option', { value: value, text: label }));
-            }
+        var previous = windowStart.value;
+        while (windowStart.firstChild) windowStart.removeChild(windowStart.firstChild);
+        windowStart.appendChild(el('option', { value: '', text: 'Choose a window' }));
+        if (windowEnd) windowEnd.value = '';
+
+        var start = '08:00';
+        var endLimit = '21:00';
+        var rule = pickupWindowRule();
+        if (rule === null) {
+            start = '08:00';
+            endLimit = '21:00';
+        } else if (rule === undefined) {
+            windowStart.options[0].textContent = 'Choose location and date first';
+            return;
+        } else if (!rule) {
+            windowStart.options[0].textContent = 'Closed for pickup that day';
+            return;
+        } else {
+            start = rule.start;
+            endLimit = rule.end;
         }
+
+        var startMinutes = timeToMinutes(start);
+        var endMinutes = timeToMinutes(endLimit);
+        if (startMinutes === null || endMinutes === null) return;
+        for (var minutes = startMinutes; minutes + 30 <= endMinutes; minutes += 30) {
+            var value = minutesToTime(minutes);
+            var end = addMinutes(value, 30);
+            var label = formatTimeLabel(value) + ' - ' + formatTimeLabel(end);
+            windowStart.appendChild(el('option', { value: value, text: label }));
+        }
+        if (previous) {
+            windowStart.value = previous;
+            if (windowStart.value !== previous) windowStart.value = '';
+        }
+        syncWindowEnd();
     }
 
     function syncDateMinimum() {
@@ -303,6 +393,7 @@
         if (sumDelivery) sumDelivery.textContent = isPickup ? '$0.00' : 'Calculated after ZIP';
         if (sumTax) sumTax.textContent = 'Calculated after location';
         if (sumGrand) sumGrand.textContent = fmtMoney(currentSubtotal || 0);
+        populateWindows();
         updateTotals();
     }
 
@@ -332,6 +423,12 @@
 
     /* Safe DOM-construction helper — same pattern as /cart page. Avoids
      * innerHTML so user-controlled strings can't escape the markup. */
+    function productHref(server) {
+        var route = (server && server.route ? String(server.route) : '').trim();
+        if (!route || /^https?:\/\//i.test(route)) return '';
+        return '/' + route.replace(/^\/+/, '');
+    }
+
     function el(tag, opts, children) {
         var node = document.createElement(tag);
         if (opts) {
@@ -501,14 +598,25 @@
                 display_lines: server.display_lines || []
             });
 
-            var img = el('div', { 'class': 'lt-checkout__line-img', 'aria-hidden': 'true' });
+            var href = productHref(server);
+            var img = el(
+                href ? 'a' : 'div',
+                href
+                    ? { 'class': 'lt-checkout__line-img', href: href, 'aria-label': 'View ' + (server.web_item_name || server.item_code) }
+                    : { 'class': 'lt-checkout__line-img', 'aria-hidden': 'true' }
+            );
             if (server.website_image) {
                 img.style.setProperty(
                     'background-image',
                     'url("' + server.website_image.replace(/"/g, '%22') + '")'
                 );
             }
-            var name = el('p', { 'class': 'lt-checkout__line-name', text: server.web_item_name || server.item_code });
+            var name = el('p', { 'class': 'lt-checkout__line-name' });
+            if (href) {
+                name.appendChild(el('a', { href: href, text: server.web_item_name || server.item_code }));
+            } else {
+                name.textContent = server.web_item_name || server.item_code;
+            }
             var meta = el('p', { 'class': 'lt-checkout__line-meta',
                                  text: 'Qty ' + line.qty + ' · ' + fmtMoney(server.price_list_rate) + ' each' });
             var metaParts = ['Qty ' + line.qty];
@@ -561,7 +669,8 @@
             customer: {
                 name: (fd.get('name') || '').toString().trim(),
                 phone: (fd.get('phone') || '').toString().trim(),
-                email: (fd.get('email') || '').toString().trim()
+                email: (fd.get('email') || '').toString().trim(),
+                preferred_contact_method: (fd.get('preferred_contact_method') || '').toString().trim()
             },
             fulfillment: {
                 method: selectedFulfillment(),
@@ -660,6 +769,7 @@
         var name = (fd.get('name') || '').toString().trim();
         var email = (fd.get('email') || '').toString().trim();
         var phone = (fd.get('phone') || '').toString().trim();
+        var preferredContact = (fd.get('preferred_contact_method') || '').toString().trim();
         var addr1 = (fd.get('address_line1') || '').toString().trim();
         var city = (fd.get('city') || '').toString().trim();
         var state = (fd.get('state') || '').toString().trim();
@@ -671,7 +781,7 @@
         syncWindowEnd();
         fd = new FormData(form);
 
-        if (!name || !email || !phone || !requestedDate || !requestedStart) {
+        if (!name || !email || !phone || !preferredContact || !requestedDate || !requestedStart) {
             setFeedback('error', 'Please fill in all required fields.');
             return;
         }
@@ -751,9 +861,13 @@
     form.querySelectorAll('input[name="fulfillment_method"]').forEach(function (radio) {
         radio.addEventListener('change', syncFulfillmentFields);
     });
-    [pickupLocation, windowStart, dateInput].forEach(function (node) {
-        if (node) node.addEventListener('change', updateTotals);
+    [pickupLocation, dateInput].forEach(function (node) {
+        if (node) node.addEventListener('change', function () {
+            populateWindows();
+            updateTotals();
+        });
     });
+    if (windowStart) windowStart.addEventListener('change', updateTotals);
     ['co-city', 'co-zip'].forEach(function (id) {
         var node = document.getElementById(id);
         if (node) {

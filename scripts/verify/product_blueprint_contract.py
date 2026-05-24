@@ -360,6 +360,41 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertFalse(unknown["ok"])
         self.assertTrue(any("is not an allowed choice" in row for row in unknown["blockers"]))
 
+    def test_checkout_resolver_trusts_priced_variant_labels_with_commas(self) -> None:
+        small = "Small - 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+        medium = "Medium - 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+        schema = build_product_setup_schema(
+            _blueprint(
+                page_template="Ready-to-order page",
+                buying_path="Direct checkout",
+                base_price=35,
+                option_rows=[
+                    {
+                        "axis_name": "Bouquet Size",
+                        "selection_behavior": "SKU-defining variant",
+                        "required": 1,
+                        "values": f"{small}\n{medium}",
+                    }
+                ],
+            )
+        )
+
+        resolved = resolve_product_setup_configuration(
+            schema,
+            {"selected_options": {"Bouquet Size": small}},
+            trusted_variant_attributes={"Bouquet Size": small},
+        )
+        self.assertTrue(resolved["ok"], resolved)
+        self.assertEqual(resolved["resolved_variant_attributes"], {"Bouquet Size": small})
+
+        mismatch = resolve_product_setup_configuration(
+            schema,
+            {"selected_options": {"Bouquet Size": medium}},
+            trusted_variant_attributes={"Bouquet Size": small},
+        )
+        self.assertFalse(mismatch["ok"])
+        self.assertTrue(any("does not match the priced item" in row for row in mismatch["blockers"]))
+
     def test_generic_resolver_preserves_checkout_payload_without_variant_explosion(self) -> None:
         schema = build_product_setup_schema(
             _blueprint(

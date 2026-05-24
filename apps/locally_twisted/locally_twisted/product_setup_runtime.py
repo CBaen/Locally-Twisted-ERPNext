@@ -170,10 +170,13 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
 def resolve_product_setup_configuration(
     schema: dict[str, Any],
     configuration: dict[str, Any] | None,
+    *,
+    trusted_variant_attributes: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Validate customer selections against a Product Setup schema."""
     configuration = configuration or {}
     selections = _selection_input(configuration)
+    trusted_selections = _trusted_selection_input(trusted_variant_attributes)
     blockers: list[str] = []
     resolved_variant_attributes: dict[str, str] = {}
     configuration_groups: list[dict[str, Any]] = []
@@ -182,6 +185,11 @@ def resolve_product_setup_configuration(
     for group in schema.get("selection_groups") or []:
         values = _selected_values(selections, group)
         label = group["label"]
+        trusted_value = _trusted_group_value(trusted_selections, group) if group.get("sku_defining") else ""
+        if trusted_value:
+            if values and values != [trusted_value]:
+                blockers.append(f"{label}: saved selection does not match the priced item.")
+            values = [trusted_value]
         min_count = int(group.get("min_selections") or 0)
         max_count = int(group.get("max_selections") or 0)
         allowed = {str(value) for value in group.get("values") or []}
@@ -191,7 +199,7 @@ def resolve_product_setup_configuration(
         if max_count and len(values) > max_count:
             blockers.append(f"{label}: choose at most {max_count}.")
         for value in values:
-            if allowed and value not in allowed:
+            if allowed and value not in allowed and value != trusted_value:
                 blockers.append(f"{label}: {value} is not an allowed choice.")
 
         if group.get("sku_defining"):
@@ -507,6 +515,26 @@ def _selection_input(configuration: dict[str, Any]) -> dict[str, Any]:
                 if row_key:
                     merged[_slug(row_key)] = row.get("values") or row.get("value")
     return merged
+
+
+def _trusted_selection_input(values: dict[str, str] | None) -> dict[str, str]:
+    trusted: dict[str, str] = {}
+    if not isinstance(values, dict):
+        return trusted
+    for key, value in values.items():
+        clean_key = _text(key)
+        clean_value = _text(value)
+        if not clean_key or not clean_value:
+            continue
+        trusted[clean_key] = clean_value
+        trusted[_slug(clean_key)] = clean_value
+    return trusted
+
+
+def _trusted_group_value(trusted: dict[str, str], group: dict[str, Any]) -> str:
+    label = _text(group.get("label"))
+    key = _text(group.get("key"))
+    return trusted.get(label) or trusted.get(_slug(label)) or trusted.get(key) or trusted.get(_slug(key)) or ""
 
 
 def _media_rule_matches(

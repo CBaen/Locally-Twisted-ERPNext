@@ -275,6 +275,11 @@
         var img = productImageEl();
         if (!img || !src) return;
 
+        if (window.LT && typeof window.LT.setProductGalleryImage === 'function') {
+            window.LT.setProductGalleryImage(src, alt || '', { addIfMissing: true });
+            return;
+        }
+
         img.setAttribute('src', src);
         if (alt) img.setAttribute('alt', alt);
 

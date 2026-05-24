@@ -3,6 +3,7 @@ const { test, expect } = require("@playwright/test");
 const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const CLASSIC_ARCH_URL = new URL("/shop-items/arches/classic-arch", BASE_URL).toString();
 const LARGE_GARLAND_URL = new URL("/shop-items/garlands/large-garland", BASE_URL).toString();
+const ENCANTO_BOUQUET_URL = new URL("/shop-items/bouquets/encanto-bouquet", BASE_URL).toString();
 
 function imagePath(src) {
 	return new URL(src || "", BASE_URL).pathname;
@@ -149,4 +150,30 @@ test("product gallery survives variant selection and supports mobile swipe", asy
 	);
 	expect(["auto", "scroll"].includes(mobileMetrics.overflowX), "mobile gallery should scroll horizontally").toBeTruthy();
 	expect(Math.abs(mobileMetrics.documentOverflow), "mobile gallery must not create horizontal overflow").toBeLessThanOrEqual(1);
+});
+
+test("configured bouquet keeps the base product photo available after selecting a size", async ({ page }) => {
+	await page.setViewportSize({ width: 1366, height: 900 });
+	await page.goto(ENCANTO_BOUQUET_URL, { waitUntil: "domcontentloaded" });
+	await page.waitForSelector(".product-image img.website-image");
+
+	const basePath = imagePath(await page.locator(".product-image img.website-image").getAttribute("src"));
+	await expect(page.locator(".lt-product__thumbnail-button").first().locator("img")).toHaveAttribute("src", /encanto-bouquet/);
+
+	await page.getByRole("radio", { name: "Small" }).evaluate((input) => {
+		input.checked = true;
+		input.dispatchEvent(new Event("change", { bubbles: true }));
+	});
+	await expect(page.locator('[data-lt-gallery-role="standard-product-thumbnails"]')).toBeVisible();
+	await expect
+		.poll(async () => {
+			const sources = await page.locator(".lt-product__thumbnail-button img").evaluateAll((imgs) =>
+				imgs.map((img) => img.getAttribute("src")).filter(Boolean),
+			);
+			return sources.some((src) => imagePath(src) === basePath);
+		})
+		.toBeTruthy();
+
+	await page.locator(".lt-product__thumbnail-button").first().click();
+	await expect.poll(async () => imagePath(await page.locator(".product-image img.website-image").getAttribute("src"))).toBe(basePath);
 });

@@ -140,6 +140,7 @@
                             <circle cx="19" cy="21" r="1"></circle>
                             <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
                         </svg>
+                        <span class="lt-cart-count" aria-live="polite" aria-label="Items in cart"></span>
                     </a>
                 {% endif %}
                 <button class="lt-mega-header__search"
@@ -168,6 +169,16 @@
             </a>
 
             <div class="lt-mega-header__mobile-actions">
+                {% if not ecommerce_paused %}
+                    <a class="lt-mega-header__mobile-action" href="/cart" aria-label="Shopping cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <circle cx="8" cy="21" r="1"></circle>
+                            <circle cx="19" cy="21" r="1"></circle>
+                            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                        </svg>
+                        <span class="lt-cart-count" aria-live="polite" aria-label="Items in cart"></span>
+                    </a>
+                {% endif %}
                 <button class="lt-mega-header__mobile-action"
                         type="button"
                         id="lt-mobile-toggle"
@@ -299,6 +310,12 @@
         <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
         <a class="lt-mega-drawer__single" href="/about">About Us</a>
         <a class="lt-mega-drawer__single" href="/faq">FAQ</a>
+        {% if not ecommerce_paused %}
+            <a class="lt-mega-drawer__single" href="/cart">
+                <span>Cart</span>
+                <span class="lt-cart-count lt-cart-count--mobile" aria-live="polite" aria-label="Items in cart"></span>
+            </a>
+        {% endif %}
         {% if frappe.session.user == "Guest" %}
             <a class="lt-mega-drawer__single" href="/login">Sign In</a>
         {% else %}

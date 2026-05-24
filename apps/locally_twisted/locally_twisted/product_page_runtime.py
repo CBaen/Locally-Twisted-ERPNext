@@ -439,6 +439,7 @@ def sales_order_line_configuration_fields(
     setup_resolution = _product_setup_resolution_for_checkout(
         website_item_code=website_item_code,
         client_configuration=client_configuration,
+        variant_options=variant_options,
     )
     selected_media = _selected_media_for_checkout(
         website_item_code=website_item_code,
@@ -672,11 +673,16 @@ def _product_setup_resolution_for_checkout(
     *,
     website_item_code: str | None,
     client_configuration: dict[str, Any] | None,
+    variant_options: dict[str, str] | None = None,
 ) -> dict[str, Any] | None:
     schema = product_setup_schema_for_website_item(website_item_code)
     if not schema:
         return None
-    resolution = resolve_product_setup_configuration(schema, client_configuration or {})
+    resolution = resolve_product_setup_configuration(
+        schema,
+        client_configuration or {},
+        trusted_variant_attributes=variant_options or {},
+    )
     if not resolution.get("ok") or resolution.get("commerce_outcome") != "checkout":
         frappe.throw(
             _(

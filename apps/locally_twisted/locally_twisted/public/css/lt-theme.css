@@ -1764,7 +1764,7 @@ body.product-page {
 .lt-cart-count--mobile {
     position: static;
     margin-left: 0.5rem;
-    background-color: var(--lt-teal);
+    background-color: #c0392b;
     vertical-align: middle;
 }
 
