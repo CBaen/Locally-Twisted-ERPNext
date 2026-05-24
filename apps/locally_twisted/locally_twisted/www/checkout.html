@@ -457,7 +457,7 @@
         if (typeof message !== 'string') return false;
         var value = message.trim();
         if (!value) return false;
-        return !/(Traceback|Exception|Error:|frappe\.|pymysql|DocType|doctype|SQL|stack|Missing Item|Missing .* fields|custom_lt_|ADDON-|Unknown add-on|Add-on:)/i.test(value);
+        return !/(Traceback|Exception|Error:|frappe\.|pymysql|DocType|doctype|SQL|stack|decrypt|encryption key|site_config|secret_key|Stripe Settings|frappecloud\.com\/docs|<br|Missing Item|Missing .* fields|custom_lt_|ADDON-|Unknown add-on|Add-on:)/i.test(value);
     }
 
     function extractCustomerError(body) {
