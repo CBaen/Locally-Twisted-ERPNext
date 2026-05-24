@@ -1,6 +1,13 @@
 # Frappe Cloud Staging Route Map - 2026-05-23
 
-Status: **local/offline release map, not deployment approval**.
+Status: **local/offline staging-leg map, not deployment approval**.
+
+2026-05-23 correction: this route map covers the staging leg only. The full
+business goal is a repeatable Frappe Cloud code/app-only update release:
+staging owner review, explicit approval, then live app promotion while
+protecting production data/settings/provider state. Use
+`workstreams/frappe-cloud-app-update-release-process-2026-05-23.md` for the
+full staging-to-live process.
 
 This document turns the May 23 staging failure into a route map: which paths
 are known-bad, which paths are allowed next, and which literal staging routes

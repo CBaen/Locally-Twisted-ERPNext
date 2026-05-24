@@ -354,7 +354,7 @@ def _seed_catalog(
 def _sync_product_setup_and_galleries(summary: dict[str, Any]) -> None:
     from locally_twisted.seed.sync_product_blueprints_from_catalog import execute
 
-    data_dir = frappe.get_app_path("locally_twisted", "seed", "_data")
+    data_dir = frappe.get_app_path("locally_twisted", "seed", "lt_catalog_seed")
     result = execute(write=True, apply_gallery=True, data_dir=data_dir)
     summary["steps"].append({"name": "sync_product_blueprints_from_catalog", "result": _compact_result(result)})
 

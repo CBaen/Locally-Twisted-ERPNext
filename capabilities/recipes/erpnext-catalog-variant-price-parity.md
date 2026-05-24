@@ -61,10 +61,10 @@ price, or scraped page base price as the price for every ERPNext variant.
   price parity.
 - `scripts/verify/product_variant_price_contract.py` proves the historical
   bouquet-size repair. It is not broad enough for the catalog by itself.
-- `scripts/verify/product_price_modifier_contract.py` is the broad local source
-  price guard for active variant products. It checks the Odoo option-price
-  modifiers against ERPNext `Item Price` rows and fails if any active variant
-  would change.
+- `scripts/verify/product_price_modifier_contract.py` is parked as a diagnostic
+  LT seed price-parity gate after the Odoo/reference boundary cleanup. It is
+  not launch proof until rebuilt around the LT-owned seed contract and restored
+  to the active product price gate.
 - `scripts/verify/product_price_display.spec.js` proves at least one real
   product page updates visible price and selected variant item code for a
   non-first priced option.
@@ -83,7 +83,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 2. Use the dynamic resolver path:
 
    ```powershell
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
+   python scripts/setup/repair_variant_prices_from_reference_site.py
    ```
 
 3. Review `old_rate`, `new_rate`, and `would_change`.
@@ -91,7 +91,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 4. Apply only bounded, reviewed slices:
 
    ```powershell
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'unicorn-bouquet'}"
+   python scripts/setup/repair_variant_prices_from_reference_site.py
    ```
 
 5. Add or extend a product-family verifier before calling that family complete.
@@ -142,12 +142,15 @@ Current focused guard:
 npm run test:product-prices
 ```
 
-This now runs both:
+This currently runs:
 
 - `scripts/verify/product_variant_price_contract.py` for the historical bouquet
   size repair.
-- `scripts/verify/product_price_modifier_contract.py` for broad Odoo modifier
-  parity across active variant products.
+
+The old broad Odoo modifier parity gate was removed from the default command
+when the Odoo/reference repair method was moved out of deployable app runtime.
+Do not claim broad all-variant source-price parity until a new LT-owned seed
+price gate is rebuilt and passing.
 
 Visible-page guard for the reported Easter Bunny Ear Arch failure:
 
@@ -161,8 +164,9 @@ Launch gate integration:
 python scripts/verify/website_launch_verify.py
 ```
 
-This now runs the broad source-price modifier contract and the visible
-price-display contract in addition to the older bouquet price contract.
+This currently runs the older bouquet price contract and visible price-display
+contract. Broad all-variant source-price proof is parked until the LT-owned
+seed price gate is rebuilt and passing.
 
 Current supporting checkout guard:
 
@@ -202,7 +206,7 @@ On 2026-05-19, GL caught `easter-balloon-arch-bunny-ear` not changing price on
 size selection. Local ERPNext had both active variants at `$375`, while Odoo's
 combination endpoint returned `$375` for `20ft` and `$440` for `25ft`. The
 local DB was corrected for that item first, then
-`repair_variant_price_modifiers_from_odoo` applied Odoo option modifiers across
+the archived reference-site modifier repair applied source option modifiers across
 49 variant products. The apply run corrected 8,405 `Item Price` rows; the
 post-apply modifier contract reported 49 products and 10,186 active variants
 checked with 0 remaining changes. Browser proof now confirms the reported page

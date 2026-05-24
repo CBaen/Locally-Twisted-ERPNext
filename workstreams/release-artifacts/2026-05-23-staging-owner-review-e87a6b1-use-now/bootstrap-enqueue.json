@@ -1,0 +1,16 @@
+{
+  "artifact_type": "staging_owner_review_bootstrap_enqueue",
+  "checkout_unpause_executed": false,
+  "expected_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+  "live_dns_stripe_search_console_blocked": true,
+  "ok": true,
+  "provider_mutation_executed": true,
+  "requested_at_utc": "2026-05-23T22:40:35.324655+00:00",
+  "response": {
+    "job_id": "locallytwisted-staging.frappe.cloud::lt-staging-owner-review-bootstrap",
+    "job_name": "lt-staging-owner-review-bootstrap",
+    "ok": true
+  },
+  "site": "locallytwisted-staging.frappe.cloud",
+  "staging_bootstrap_executed": true
+}

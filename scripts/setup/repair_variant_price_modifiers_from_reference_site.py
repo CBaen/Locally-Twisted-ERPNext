@@ -1,11 +1,10 @@
-"""Repair ERPNext variant Item Prices from Odoo option price modifiers.
+"""Archived local setup helper for variant price modifier repair.
 
-The older repair path calls Odoo for full projected combinations. That works
-for small families such as bouquets, but it stops on large color/customizer
-families when Odoo rejects partial source rows. Odoo variant prices are built
-from per-option price extras, so this repair resolves each non-color option's
-price modifier once and applies the summed modifiers to every active ERPNext
-variant.
+This historical helper uses the original reference site's option-price behavior
+to repair local ERPNext variants. It is intentionally outside deployable app
+runtime and must not be used as a staging or bootstrap dependency. Current
+imports use the LT-owned lt_catalog_seed artifact and approved price enrichment
+data.
 """
 
 from __future__ import annotations
@@ -21,9 +20,9 @@ import frappe
 from locally_twisted.catalog_contract.color_rules import is_balloon_color_axis
 from locally_twisted.catalog_variant_rules import normalize_variant_value
 from locally_twisted.commerce_rules import PRICE_LIST
-from locally_twisted.seed.repair_variant_prices_from_odoo import (
+from scripts.setup.repair_variant_prices_from_reference_site import (
     CSRF_RE,
-    ODOO_COMBINATION_ROUTE,
+    REFERENCE_COMBINATION_ROUTE,
     USER_AGENT,
     _fetch_product_page,
     _opener,
@@ -31,7 +30,7 @@ from locally_twisted.seed.repair_variant_prices_from_odoo import (
 from locally_twisted.seed.seed_catalog import _find_resources
 
 
-class OdooVariantModifierRepairError(RuntimeError):
+class ReferenceVariantModifierRepairError(RuntimeError):
     pass
 
 
@@ -84,7 +83,7 @@ def _is_price_modifier_axis(attribute: str) -> bool:
 def _csrf_token(html: str) -> str:
     match = CSRF_RE.search(html)
     if not match:
-        raise OdooVariantModifierRepairError("Odoo product page did not expose csrf_token")
+        raise ReferenceVariantModifierRepairError("Reference product page did not expose csrf_token")
     return match.group(1)
 
 
@@ -97,7 +96,7 @@ def _fetch_product_page_with_retry(opener: urllib.request.OpenerDirector, url: s
             last_error = exc
             if attempt < REQUEST_ATTEMPTS:
                 time.sleep(attempt)
-    raise OdooVariantModifierRepairError(f"Odoo product page request failed after retries: {last_error}")
+    raise ReferenceVariantModifierRepairError(f"Reference product page request failed after retries: {last_error}")
 
 
 def _post_price(
@@ -121,7 +120,7 @@ def _post_price(
         }
     ).encode("utf-8")
     request = urllib.request.Request(
-        ODOO_COMBINATION_ROUTE,
+        REFERENCE_COMBINATION_ROUTE,
         data=payload,
         headers={
             "Content-Type": "application/json",
@@ -140,13 +139,13 @@ def _post_price(
             if attempt < REQUEST_ATTEMPTS:
                 time.sleep(attempt)
     else:
-        raise OdooVariantModifierRepairError(f"Odoo option price request failed after retries: {last_error}")
+        raise ReferenceVariantModifierRepairError(f"Reference option price request failed after retries: {last_error}")
 
     if data.get("error"):
-        raise OdooVariantModifierRepairError(f"Odoo combination price error: {data['error']}")
+        raise ReferenceVariantModifierRepairError(f"Reference combination price error: {data['error']}")
     result = data.get("result") or {}
     if result.get("price") is None:
-        raise OdooVariantModifierRepairError(f"Odoo returned no price for option ids: {ptav_ids}")
+        raise ReferenceVariantModifierRepairError(f"Reference site returned no price for option ids: {ptav_ids}")
     return result
 
 
@@ -233,7 +232,7 @@ def _option_modifiers(
     odoo_id = prod.get("odoo_id")
     url = prod.get("url")
     if not slug or not odoo_id or not url:
-        raise OdooVariantModifierRepairError(f"Product is missing slug, odoo_id, or url: {prod}")
+        raise ReferenceVariantModifierRepairError(f"Product is missing slug, reference id, or url: {prod}")
 
     base_price = _money(prod.get("base_price") or 0)
     opener = _opener()
@@ -263,10 +262,10 @@ def _option_modifiers(
                     {
                         "attribute": attr_name,
                         "value": normalized_value,
-                        "odoo_option_price": str(option_price),
+                        "reference_option_price": str(option_price),
                         "delta": str(delta),
                         "is_combination_possible": bool(info.get("is_combination_possible")),
-                        "odoo_product_id": info.get("product_id"),
+                        "reference_product_id": info.get("product_id"),
                     }
                 )
 
@@ -353,7 +352,7 @@ def execute(
     if max_products is not None:
         products = products[: int(max_products)]
     if slug_filter and not products:
-        raise OdooVariantModifierRepairError(f"No variant product found for slug_filter={slug_filter!r}")
+        raise ReferenceVariantModifierRepairError(f"No variant product found for slug_filter={slug_filter!r}")
 
     results: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []

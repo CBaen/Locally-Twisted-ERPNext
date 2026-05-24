@@ -10,26 +10,55 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P0 staging owner-review NO-GO after clean app deploy (2026-05-23):** The
-approved staging-only app mirror sync and Frappe Cloud deploy/update completed
-from source `5edb641de4a3f09cc6c292904fb70551c87db3df`. Staging installed app
-hash now matches app mirror
-`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, Frappe Cloud deploy
-`eu92fvbhpp` and site update job `41ftn09ocp` succeeded, app order is correct,
-ecommerce remains paused, and public indexing remains disabled. Owner-review
-is still **NO-GO**: hosted preflight blocks on missing
-`LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`, and
-missing backup/zero-data proof for destructive catalog seed. Next safe action
-is a fresh approval-bound packet that addresses those blockers before any
-bootstrap/import, cache, migrate, checkout, live/DNS/Stripe/Search Console, or
-indexing action. Handoff:
-`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
-Evidence packet:
+**P0 corrected Frappe Cloud app-update release goal (2026-05-23):** The goal is
+not "get Jeff a staging shop link and stop." The goal is a repeatable
+code/app-only Frappe Cloud update path: source/app update to staging, owner
+review on live-like staging, explicit owner approval, then live app promotion
+without overwriting production products, customers, clients, private files,
+financial records, site settings, checkout/payment state, DNS, Stripe, Search
+Console, or indexing unless separately approved. Current process handoff:
+`workstreams/frappe-cloud-app-update-release-process-2026-05-23.md`. Canonical
+skill:
+`C:\Users\baenb\projects\codex-framework-backup\skills\frappe-cloud-app-update-release\SKILL.md`.
+Still-open P0 infrastructure: owner approval artifact for live promotion and a
+live code/app-only promotion protector. Current staging remains NO-GO until the
+seed-boundary item below is resolved and `test:staging-owner-review` passes
+against the actual Frappe Cloud staging host.
+
+**P0 staging owner-review NO-GO after clean app deploy and seed-boundary block
+(2026-05-23):** The later staging-only owner-review recovery reached app mirror
+and staging app hash `2ec290621e044dcaa9d2c322675ce074ae489f7a` from source
+`e87a6b1039e3c096a1e6c656a989a1d425633363`. Hosted preflight passed for that
+hash, app order was correct, checkout stayed paused, and public indexing stayed
+disabled. The shop is still **NO-GO** for Jeff: bootstrap/RQ failed because the
+catalog seed path still depends on local Odoo reference files at
+`_resources/odoo-live`, and staging catalog counts remain zero. Odoo is
+reference-only until transformed into Locally Twisted / ERPNext-owned seed
+data. Do not make Odoo reference folders deployable app data to rush a link.
+Next safe action is a fresh approval-bound packet that proves a neutral
+LT-owned seed source exists on staging, then runs hosted preflight,
+bootstrap/RQ completion, and the owner-review route/data gate. No Jeff link
+may be sent until `/shop` and representative product routes pass on the Frappe
+Cloud staging host with nonzero catalog/Product Setup/gallery data, required
+users, paused checkout, and disabled indexing. Blocker:
+`workstreams/release-artifacts/2026-05-23-staging-owner-review-e87a6b1-use-now/odoo-reference-boundary-blocker.md`.
+Previous clean-deploy handoff:
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`. Previous
+deploy evidence packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
-Do not reuse that packet for future mutation after commit. The exact deploy
-payload failure found in attempt 1 is now guarded by
+Do not reuse either packet for future mutation after commit. The exact deploy
+payload failure found in attempt 1 is guarded by
 `capabilities/failures/frappe-cloud-deploy-site-object-drift.md` and
 `scripts/verify/frappe_cloud_payload_contract.py`.
+
+**P1 rebuild broad LT seed price-parity gate (opened 2026-05-23):** The old
+broad price modifier verifier depended on the Odoo/reference repair method in
+deployable app runtime. That method has been moved out of the app runtime and
+`npm run test:product-prices` now covers the active bouquet price contract
+only. Before any claim of broad all-variant source-price parity, rebuild
+`scripts/verify/product_price_modifier_contract.py` around the LT-owned
+`lt_catalog_seed` price contract and prove it against the local/staging target
+database. Do not use the old reference-site repair helper as launch proof.
 
 **P0 staging release failure forensic freeze (2026-05-23):** Release execution
 is stopped. The Frappe Cloud owner-review staging attempt failed as a release

@@ -1,0 +1,95 @@
+{
+  "app_order": [
+    "frappe",
+    "erpnext",
+    "payments",
+    "webshop",
+    "locally_twisted"
+  ],
+  "bench": null,
+  "bench_group": "bench-40102",
+  "checked_at_utc": "2026-05-23T22:30:33.590600+00:00",
+  "deploy_status": {
+    "candidate": null
+  },
+  "deploy_summary": {
+    "last_deploy": {
+      "creation": "2026-05-24 04:48:17.939817",
+      "name": "76a3i0vfj7",
+      "status": "Success"
+    },
+    "update_available": true
+  },
+  "installed_app_hash": "23babf352810d335819e0ca0ac45b0eec6bfc026",
+  "recent_site_jobs": [
+    {
+      "creation": "2026-05-24 04:53:21.136796",
+      "job_type": "Update Site Pull",
+      "name": "e98r7s8b7r",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-24 04:20:06.703876",
+      "job_type": "Backup Site",
+      "name": "clpj0g9atg",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-24 03:45:27.714955",
+      "job_type": "Update Site Pull",
+      "name": "41ftn09ocp",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-23 08:46:09.166169",
+      "job_type": "Update Site Pull",
+      "name": "05trfbqu12",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-23 08:38:06.951953",
+      "job_type": "Update Site Pull",
+      "name": "817543cbgb",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-23 08:25:38.322091",
+      "job_type": "Update Site Pull",
+      "name": "3pt7f8d0n7",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-23 08:06:10.734241",
+      "job_type": "Update Site Pull",
+      "name": "cegbm9sa1l",
+      "status": "Success"
+    },
+    {
+      "creation": "2026-05-23 07:47:40.757322",
+      "job_type": "Update Site Pull",
+      "name": "03lfnu6bno",
+      "status": "Success"
+    }
+  ],
+  "release_id": "76a3i0vfj7",
+  "rollback_hash": "23babf352810d335819e0ca0ac45b0eec6bfc026",
+  "running_jobs": [],
+  "site": "locallytwisted-staging.frappe.cloud",
+  "site_config": {
+    "lt_ecommerce_paused": "1",
+    "lt_public_indexing_enabled": "0"
+  },
+  "site_status": "Active",
+  "source_methods": [
+    "press.api.site.get",
+    "press.api.site.installed_apps",
+    "press.api.site.site_config",
+    "press.api.site.running_jobs",
+    "press.api.site.jobs",
+    "press.api.bench.deploy_information",
+    "press.api.bench.deploy_status"
+  ],
+  "staging_live_separation": true,
+  "target_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+  "team": "5b8acl3gba"
+}

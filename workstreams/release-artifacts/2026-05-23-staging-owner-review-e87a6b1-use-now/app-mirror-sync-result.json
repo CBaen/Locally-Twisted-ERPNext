@@ -1,0 +1,22 @@
+{
+  "artifact_type": "app_mirror_sync_result",
+  "ok": true,
+  "recorded_at_utc": "2026-05-23T22:29:24.5916743Z",
+  "source_commit": "e87a6b1039e3c096a1e6c656a989a1d425633363",
+  "target_site": "locallytwisted-staging.frappe.cloud",
+  "mirror_url": "https://github.com/CBaen/Locally-Twisted-Frappe-App.git",
+  "mirror_ref": "main",
+  "old_mirror_hash": "23babf352810d335819e0ca0ac45b0eec6bfc026",
+  "new_mirror_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+  "sync_source": "git archive of apps/locally_twisted at source commit e87a6b1039e3c096a1e6c656a989a1d425633363",
+  "pushed_to_mirror": true,
+  "post_sync_freshness_artifact": "app-mirror-freshness.json",
+  "post_sync_provider_snapshot_artifact": "provider-snapshot-post-mirror-sync.json",
+  "frappe_cloud_deploy_executed": false,
+  "staging_bootstrap_executed": false,
+  "site_migrate_executed": false,
+  "cache_clear_executed": false,
+  "live_dns_stripe_search_console_blocked": true,
+  "checkout_unpause_executed": false,
+  "provider_mutation_executed": true
+}

@@ -6,6 +6,35 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-24 - A staging handoff stop is a release boundary, not a pause
+
+GL stopped the session after the release goal drifted and moved the work into
+handoff-only cleanup. At that point, continuing provider/staging execution would
+be a process failure even if the next command looked technically plausible.
+
+**Counter-move:** when GL stops a release attempt, write the handoff, clean
+local debris, commit/push the bounded source/docs, and require a fresh source
+freeze plus explicit approval before any mutation-capable provider action.
+Do not carry old approval, old artifacts, or the prior agent's momentum into a
+new release attempt.
+
+---
+
+## 2026-05-24 - Reference data cannot be a deployable app dependency
+
+The e87a6b1 staging owner-review recovery reached the reviewed app hash on
+Frappe Cloud, but bootstrap/RQ failed because catalog seeding still depended on
+the local reference path `_resources/odoo-live`. That made an Odoo-named
+reference folder part of the staging-critical path, which violates the ERPNext
+fresh-install boundary.
+
+**Counter-move:** anything Odoo/reference-named stays evidence-only. Convert
+approved business/catalog details into Locally Twisted / ERPNext-owned seed
+artifacts before deploy. Verifiers should fail when staging-critical code reads
+reference paths directly.
+
+---
+
 ## 2026-05-23 - Typed JSON is not enough when the provider object is incomplete
 
 The first approved Frappe Cloud deploy/update attempt after app mirror sync

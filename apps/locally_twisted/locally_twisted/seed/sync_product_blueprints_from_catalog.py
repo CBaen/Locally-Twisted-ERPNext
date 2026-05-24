@@ -7,6 +7,7 @@ edit product business fields through the guarded Product Setup path.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 from collections import defaultdict
 from pathlib import Path
@@ -20,11 +21,11 @@ from locally_twisted.product_blueprint_local_apply import sync_website_gallery_f
 
 
 PRICE_LIST = "Standard Selling"
+LT_SEED_ARTIFACT_DIR = "lt_catalog_seed"
+REFERENCE_FALLBACK_DIRS_ENV = "LT_REFERENCE_SEED_DIRS"
 DEFAULT_DATA_DIRS = [
     Path("/tmp/lt-product-gallery-source"),
-    Path("/workspace/_resources/odoo-live"),
-    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
-    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
+    Path(f"/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/{LT_SEED_ARTIFACT_DIR}"),
 ]
 
 
@@ -444,12 +445,24 @@ def _find_data_dir(data_dir: str | None) -> Path | None:
     for path in _default_data_dirs():
         if (path / "catalog.json").exists() and (path / "images").exists():
             return path
+    for path in _local_reference_fallback_dirs():
+        if (path / "catalog.json").exists() and (path / "images").exists():
+            print(
+                "WARNING: using local-development reference gallery fallback. "
+                f"Do not use this path for staging/bootstrap: {path}"
+            )
+            return path
     return None
+
+
+def _local_reference_fallback_dirs() -> list[Path]:
+    raw = os.environ.get(REFERENCE_FALLBACK_DIRS_ENV, "")
+    return [Path(part) for part in raw.split(os.pathsep) if part.strip()]
 
 
 def _default_data_dirs() -> list[Path]:
     return [
-        Path(frappe.get_app_path("locally_twisted", "seed", "_data")),
+        Path(frappe.get_app_path("locally_twisted", "seed", LT_SEED_ARTIFACT_DIR)),
         *DEFAULT_DATA_DIRS,
     ]
 

@@ -1,4 +1,4 @@
-"""Verify Odoo color swatches are localized and wired into product drawers."""
+"""Verify source color swatches are localized and wired into product drawers."""
 
 from __future__ import annotations
 
@@ -13,8 +13,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 APP_ROOT = REPO_ROOT / "apps" / "locally_twisted"
 LOCAL_APP = APP_ROOT / "locally_twisted"
 CATALOG_PATH = REPO_ROOT / "_resources" / "odoo-live" / "catalog.json"
-MAP_PATH = LOCAL_APP / "catalog_contract" / "odoo_color_swatch_map.json"
-ASSET_PREFIX = "/assets/locally_twisted/images/color-swatches/odoo/"
+MAP_PATH = LOCAL_APP / "catalog_contract" / "lt_color_swatch_map.json"
+ASSET_PREFIX = "/assets/locally_twisted/images/color-swatches/lt-catalog/"
+FORBIDDEN_DEPLOYED_MAP_KEYS = {"source_url", "source_url_examples", "source_url_template", "source_catalog"}
+FORBIDDEN_DEPLOYED_MAP_NEEDLES = ("5.78.136.133", "_resources/odoo-live", "color-swatches/odoo")
 
 sys.path.insert(0, str(APP_ROOT))
 
@@ -100,6 +102,17 @@ def assert_map_coverage(sources: list[dict], swatch_map: dict) -> None:
         fail(f"{len(bad_assets)} swatch assets are invalid; first={bad_assets[:5]}")
 
 
+def assert_deployed_map_is_source_free(swatch_map: dict) -> None:
+    raw = json.dumps(swatch_map, sort_keys=True)
+    key_hits = sorted(key for key in FORBIDDEN_DEPLOYED_MAP_KEYS if f'"{key}"' in raw)
+    needle_hits = sorted(needle for needle in FORBIDDEN_DEPLOYED_MAP_NEEDLES if needle in raw)
+    if key_hits or needle_hits:
+        fail(
+            "Deployable swatch map still carries reference-source data: "
+            f"keys={key_hits}, needles={needle_hits}"
+        )
+
+
 def assert_runtime_drawer(product: str, axis_name: str, sources: list[dict], swatch_map: dict) -> dict:
     rows = [
         row
@@ -159,6 +172,7 @@ def main() -> int:
     sources = color_sources(catalog)
     if not sources:
         fail("No color sources found")
+    assert_deployed_map_is_source_free(swatch_map)
     assert_map_coverage(sources, swatch_map)
     runtime = assert_runtime_drawer(args.product, args.axis, sources, swatch_map)
 

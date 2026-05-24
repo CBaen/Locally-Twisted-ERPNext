@@ -1,0 +1,53 @@
+{
+  "accounts": {
+    "cameron@builtbycameron.com": {
+      "enabled": 0,
+      "exists": false,
+      "roles": [],
+      "user_type": null
+    },
+    "locallytwisted@gmail.com": {
+      "enabled": 0,
+      "exists": false,
+      "roles": [],
+      "user_type": null
+    },
+    "marketing@exploringnotboring.com": {
+      "enabled": 1,
+      "exists": true,
+      "roles": [
+        "LT Marketing Review Access",
+        "All",
+        "Guest"
+      ],
+      "user_type": "Website User"
+    }
+  },
+  "counts": {
+    "Item": 0,
+    "Item Price": 0,
+    "LT Product Blueprint": 0,
+    "User": 3,
+    "Website Item": 0,
+    "Website Slideshow": 0,
+    "Website Slideshow Item": 0
+  },
+  "ok": true,
+  "status": {
+    "counts": {
+      "Item": 0,
+      "Item Price": 0,
+      "LT Product Blueprint": 0,
+      "User": 3,
+      "Website Item": 0,
+      "Website Slideshow": 0,
+      "Website Slideshow Item": 0
+    },
+    "expected_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+    "message": "starting staging owner-review bootstrap",
+    "site": "locallytwisted-staging.frappe.cloud",
+    "state": "running",
+    "target_site": "locallytwisted-staging.frappe.cloud",
+    "updated_at": "2026-05-23T17:41:02.835698"
+  }
+}

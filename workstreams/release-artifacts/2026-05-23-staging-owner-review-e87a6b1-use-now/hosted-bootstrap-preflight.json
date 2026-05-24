@@ -1,0 +1,317 @@
+{
+  "expected_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+  "failures": [],
+  "method": "locally_twisted.staging_owner_review_bootstrap.preflight_staging_owner_review_bootstrap",
+  "ok": true,
+  "preflight": {
+    "checks": {
+      "app_hooks": {
+        "failures": [],
+        "ok": true,
+        "present": {
+          "Portal Settings": true,
+          "Website Settings": true
+        },
+        "required_hooks": {
+          "Portal Settings": "locally_twisted.public_access_guard.validate_public_access_boundary",
+          "Website Settings": "locally_twisted.public_access_guard.validate_public_access_boundary"
+        }
+      },
+      "app_order": {
+        "expected_app_order": [
+          "frappe",
+          "erpnext",
+          "payments",
+          "webshop",
+          "locally_twisted"
+        ],
+        "failures": [],
+        "installed_apps": [
+          "frappe",
+          "erpnext",
+          "payments",
+          "webshop",
+          "locally_twisted"
+        ],
+        "ok": true
+      },
+      "baseline_counts": {
+        "catalog_gaps": {
+          "Item": {
+            "actual": 0,
+            "minimum": 10685
+          },
+          "Item Price": {
+            "actual": 0,
+            "minimum": 10666
+          },
+          "Website Item": {
+            "actual": 0,
+            "minimum": 51
+          }
+        },
+        "catalog_minimums": {
+          "Item": 10685,
+          "Item Price": 10666,
+          "Website Item": 51
+        },
+        "catalog_seed_required": true,
+        "counts": {
+          "Item": 0,
+          "Item Price": 0,
+          "LT Product Blueprint": 0,
+          "User": 3,
+          "Website Item": 0,
+          "Website Slideshow": 0,
+          "Website Slideshow Item": 0
+        },
+        "ok": true,
+        "owner_review_gaps": {
+          "Item": {
+            "actual": 0,
+            "minimum": 10685
+          },
+          "Item Price": {
+            "actual": 0,
+            "minimum": 10666
+          },
+          "LT Product Blueprint": {
+            "actual": 0,
+            "minimum": 51
+          },
+          "Website Item": {
+            "actual": 0,
+            "minimum": 51
+          },
+          "Website Slideshow": {
+            "actual": 0,
+            "minimum": 47
+          },
+          "Website Slideshow Item": {
+            "actual": 0,
+            "minimum": 68
+          }
+        },
+        "owner_review_minimums": {
+          "Item": 10685,
+          "Item Price": 10666,
+          "LT Product Blueprint": 51,
+          "Website Item": 51,
+          "Website Slideshow": 47,
+          "Website Slideshow Item": 68
+        }
+      },
+      "destructive_seed_evidence": {
+        "backup_artifact": {
+          "backup_id": "20260523_054613-locallytwisted-staging_frappe_cloud-database.sql.gz",
+          "created_at": "2026-05-23 05:45:40.218525",
+          "fresh_database_backup": {
+            "backup_id": "20260524_042033-locallytwisted-staging_frappe_cloud-database.sql.gz",
+            "created_at": "2026-05-24 04:20:06.656901",
+            "job_type": "Backup Site",
+            "offsite": false,
+            "with_files": false
+          },
+          "offsite": true,
+          "ok": true,
+          "provider_mutation_executed": true,
+          "refreshed_at_utc": "2026-05-23T22:02:06.520411+00:00",
+          "scheduled_backup_requested": true,
+          "site": "locallytwisted-staging.frappe.cloud",
+          "source_method": "press.api.site.backups",
+          "with_files": true
+        },
+        "backup_path": "20260523_054613-locallytwisted-staging_frappe_cloud-database.sql.gz",
+        "failures": [],
+        "mode": "backup_artifact",
+        "ok": true,
+        "required": true
+      },
+      "roles": {
+        "failures": [],
+        "ok": true,
+        "roles": {
+          "Accounts Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Accounts User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Customer": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Desk User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Item Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "LT Marketing Review Access": {
+            "disabled": 0,
+            "exists": true
+          },
+          "LT Owner Access": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Newsletter Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Prepared Report User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Projects Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Projects User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Sales Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Sales Master Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Sales User": {
+            "disabled": 0,
+            "exists": true
+          },
+          "System Manager": {
+            "disabled": 0,
+            "exists": true
+          },
+          "Website Manager": {
+            "disabled": 0,
+            "exists": true
+          }
+        }
+      },
+      "settings": {
+        "failures": [],
+        "ok": true,
+        "settings": {
+          "Portal Settings": {
+            "exists": true,
+            "fields": {
+              "default_portal_home": {
+                "actual": "me",
+                "expected": "me",
+                "ok": true
+              },
+              "default_role": {
+                "actual": null,
+                "expected": null,
+                "ok": true
+              },
+              "hide_standard_menu": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              }
+            }
+          },
+          "Webshop Settings": {
+            "exists": true,
+            "fields": {
+              "enabled": {
+                "actual": 1,
+                "expected": 1,
+                "ok": true
+              },
+              "hide_price_for_guest": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              },
+              "login_required_to_view_products": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              },
+              "show_price": {
+                "actual": 1,
+                "expected": 1,
+                "ok": true
+              }
+            }
+          },
+          "Website Settings": {
+            "exists": true,
+            "fields": {
+              "disable_signup": {
+                "actual": 1,
+                "expected": 1,
+                "ok": true
+              },
+              "hide_login": {
+                "actual": 0,
+                "expected": 0,
+                "ok": true
+              },
+              "home_page": {
+                "actual": "home",
+                "expected": "home",
+                "ok": true
+              }
+            }
+          }
+        }
+      },
+      "standard_report": {
+        "context": "locally_twisted.seed.standard_report_import.standard_report_import_context",
+        "doctype": "Report",
+        "failures": [],
+        "mutates": false,
+        "ok": true,
+        "required_flags": [
+          "in_import",
+          "in_patch",
+          "in_install"
+        ]
+      },
+      "target_hash": {
+        "current_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+        "expected_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+        "failures": [],
+        "ok": true
+      }
+    },
+    "expected_app_hash": "2ec290621e044dcaa9d2c322675ce074ae489f7a",
+    "failures": [],
+    "ok": true,
+    "required_checks": [
+      "standard_report",
+      "roles",
+      "settings",
+      "app_hooks",
+      "app_order",
+      "target_hash",
+      "baseline_counts",
+      "destructive_seed_evidence"
+    ],
+    "target_site": "locallytwisted-staging.frappe.cloud",
+    "zero_data_counts": {
+      "Communication": 2,
+      "Email Queue": 4,
+      "Lead": 2,
+      "Opportunity": 0,
+      "Payment Entry": 0,
+      "Quotation": 0,
+      "Sales Invoice": 0,
+      "Sales Order": 0
+    }
+  },
+  "provider_mutation_executed": false,
+  "site": "locallytwisted-staging.frappe.cloud"
+}

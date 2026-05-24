@@ -10,6 +10,26 @@ Current local source at creation: `d7b00453b327669607f9ae7944e9ede27ddaac42`.
 Current mode: forensic-freeze, local/offline only. Provider mutation is not
 allowed without a fresh approval artifact.
 
+## 2026-05-24 Handoff Stop
+
+GL stopped release execution and moved the session into handoff-only cleanup.
+Future agents must not continue provider/staging/live actions from this thread.
+This stop is not a pause inside the same attempt; it is a boundary requiring a
+fresh goal check, fresh source freeze, and fresh explicit approval before any
+mutation-capable release work resumes.
+
+The e87a6b1 owner-review recovery proved the app hash can reach staging, but it
+did not produce a Jeff-ready shop. The active blocker is not "staging link
+missing"; it is that the staging bootstrap path still depended on local
+reference material under `_resources/odoo-live`. Odoo/reference material is
+evidence, not deployable ERPNext app data. The next release attempt must first
+create and verify a Locally Twisted / ERPNext-owned seed artifact.
+
+Plain correction for future agents: "data mutation" was raised as a risk class
+around bootstrap/live protection, not as evidence that production data was
+changed in this handoff phase. After GL stopped the attempt, the only allowed
+work was local docs/code cleanup and git publish.
+
 ## Current Update After Approved Staging App Deploy
 
 Later on 2026-05-23, GL approved staging-only app mirror sync from source

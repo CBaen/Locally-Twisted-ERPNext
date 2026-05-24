@@ -112,6 +112,7 @@ Workflows. Multi-step. Clear start and finish.
   2026-05-23: consult `../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md` before any LT staging/live execution; the failed owner-review staging session is not launch authority.
   `f5e2e91` aligns the staging-freeze packet template with current controller
   artifact contracts, but does not reopen staging execution.
+- [frappe-cloud-app-update-release-contract](recipes/frappe-cloud-app-update-release-contract.md) - run routine LT Frappe Cloud app updates as source/app to staging, owner review, explicit approval, and live code/app-only promotion while protecting production data, settings, checkout/payment, DNS, Stripe, Search Console, and indexing.
 - [erpnext-record-level-failure-recorder](recipes/erpnext-record-level-failure-recorder.md) - give partial backend failures one durable blocker/report contract on affected ERPNext records.
 - [frappe-public-container-contract](recipes/frappe-public-container-contract.md) - keep Frappe/Webshop page lifecycle while making every LT public section choose contained workflow/reading mode or deliberate full-bleed band mode.
 - [homepage-launch-proof-contract](recipes/homepage-launch-proof-contract.md) - keep the launch homepage stable, real-photo-led, compact on mobile, full-stage proof-crawl driven, recoverable when blocks are hidden, and free of overlay/cycling/crop-container regressions.

@@ -2,7 +2,9 @@
 
 The old Odoo shop stores color tile images on product.template.attribute.value
 records. ERPNext/Webshop does not have a native image field for Item Attribute
-Value rows, so LT keeps a source-owned map that the product drawer can consume.
+Value rows, so this setup-only tool converts the reference images into LT-owned
+assets plus a deployable map. The deployable map must not carry Odoo/reference
+URLs; source provenance stays in reference/audit artifacts outside app runtime.
 """
 
 from __future__ import annotations
@@ -20,9 +22,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = REPO_ROOT / "_resources" / "odoo-live" / "catalog.json"
 APP_ROOT = REPO_ROOT / "apps" / "locally_twisted" / "locally_twisted"
-ASSET_DIR = APP_ROOT / "public" / "images" / "color-swatches" / "odoo"
-MAP_PATH = APP_ROOT / "catalog_contract" / "odoo_color_swatch_map.json"
-ASSET_BASE_URL = "/assets/locally_twisted/images/color-swatches/odoo/"
+ASSET_DIR = APP_ROOT / "public" / "images" / "color-swatches" / "lt-catalog"
+MAP_PATH = APP_ROOT / "catalog_contract" / "lt_color_swatch_map.json"
+ASSET_BASE_URL = "/assets/locally_twisted/images/color-swatches/lt-catalog/"
 SOURCE_URL_TEMPLATE = "http://5.78.136.133/web/image/product.template.attribute.value/{ptav_id}/image"
 COLOR_AXES = frozenset({"latex colors", "color palette", "number colors", "baby color"})
 ODOO_PLACEHOLDER_SHA256S = frozenset(
@@ -147,7 +149,6 @@ def build_map(sources: list[SwatchSource], timeout: int, dry_run: bool) -> dict:
         asset_url = f"{ASSET_BASE_URL}{filename}"
         asset_path = ASSET_DIR / filename
 
-        source_url = SOURCE_URL_TEMPLATE.format(ptav_id=source.ptav_id)
         key = map_key(source.product_slug, source.axis_name, source.value_name)
         if digest in ODOO_PLACEHOLDER_SHA256S:
             placeholder_product_axis_value[key] = {
@@ -157,8 +158,7 @@ def build_map(sources: list[SwatchSource], timeout: int, dry_run: bool) -> dict:
                 "product_slug": source.product_slug,
                 "ptav_id": source.ptav_id,
                 "sha256": digest,
-                "source_url": source_url,
-                "status": "odoo_placeholder_image",
+                "status": "source_placeholder_image",
                 "value_name": source.value_name,
             }
             continue
@@ -175,7 +175,6 @@ def build_map(sources: list[SwatchSource], timeout: int, dry_run: bool) -> dict:
             "product_slug": source.product_slug,
             "ptav_id": source.ptav_id,
             "sha256": digest,
-            "source_url": source_url,
             "value_name": source.value_name,
         }
         by_product_axis_value[key] = entry
@@ -190,20 +189,16 @@ def build_map(sources: list[SwatchSource], timeout: int, dry_run: bool) -> dict:
                 "content_type": content_type,
                 "filename": filename,
                 "sha256": digest,
-                "source_url_examples": [],
             },
         )
-        if len(assets[digest]["source_url_examples"]) < 3:
-            assets[digest]["source_url_examples"].append(source_url)
 
         if index % 100 == 0:
             print(f"downloaded {index}/{len(sources)} swatch rows", file=sys.stderr)
 
     return {
-        "schema_version": "lt-odoo-color-swatches-v1",
-        "source_catalog": str(CATALOG_PATH.relative_to(REPO_ROOT)).replace("\\", "/"),
-        "source_url_template": SOURCE_URL_TEMPLATE,
+        "schema_version": "lt-color-swatches-v1",
         "asset_base_url": ASSET_BASE_URL,
+        "source_lineage": "reference-derived-local-assets",
         "color_axes": sorted(COLOR_AXES),
         "product_axis_value_count": len(sources),
         "mapped_product_axis_value_count": len(by_product_axis_value),

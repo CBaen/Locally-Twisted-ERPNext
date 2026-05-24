@@ -102,10 +102,10 @@ _resources/odoo-live-mirror/manifest.json
 _resources/webshop-spec-2026-04-30/
 _resources/webshop-state-vs-spec-2026-04-30/screenshots/
 
-# Bind-mount staging copy of the seed data — duplicate of _resources/odoo-live/
-# kept here so it's accessible inside the locally_twisted container at the same
-# path. Re-staged from _resources/odoo-live/ when the seed needs to run.
+# Local/reference seed staging copies. Deployment/bootstrap must use the
+# neutral LT-owned seed artifact contract, not a runtime reference bind mount.
 apps/locally_twisted/locally_twisted/seed/_data/
+apps/locally_twisted/locally_twisted/seed/lt_catalog_seed/
 apps/locally_twisted/locally_twisted/seed/_guard/
 
 # Image optimization manifests and rejected generated candidates are local QA

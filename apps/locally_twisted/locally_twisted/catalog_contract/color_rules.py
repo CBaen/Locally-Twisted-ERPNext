@@ -21,7 +21,7 @@ COLOR_STYLE_ORDER = (
 )
 
 COLOR_SWATCH_AXIS_NAMES = frozenset({"latex colors", "color palette", "number colors", "baby color"})
-SWATCH_MAP_FILE = Path(__file__).with_name("odoo_color_swatch_map.json")
+SWATCH_MAP_FILE = Path(__file__).with_name("lt_color_swatch_map.json")
 
 
 @dataclass(frozen=True)
@@ -192,7 +192,7 @@ def _swatch_map() -> dict:
 
 
 def swatch_url_for_color(name: str, axis_name: str | None = None, item_code: str | None = None) -> str:
-    """Return the localized owner-approved Odoo swatch image for a color, if mapped."""
+    """Return the localized owner-approved LT swatch image for a color, if mapped."""
     data = _swatch_map()
     if not data:
         return ""
@@ -228,7 +228,7 @@ def _classified_color(clean: str, group: str, axis_name: str | None, item_code: 
         clean,
         approximate_hex_for_color(clean),
         swatch_url=swatch_url,
-        status="owner_odoo_swatch" if swatch_url else "approximate_review",
+        status="owner_lt_swatch" if swatch_url else "approximate_review",
     )
 
 

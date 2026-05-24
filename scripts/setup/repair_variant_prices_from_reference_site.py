@@ -1,12 +1,9 @@
-"""Repair ERPNext variant Item Prices from Odoo's dynamic combination prices.
+"""Archived local setup helper for ERPNext variant price repair.
 
-Run in-process:
-    python scripts/setup/stage_seed_data.py
-    bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs '{"slug_filter":"unicorn-bouquet"}'
-    bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs '{"dry_run": true}'
-
-This exists because Odoo's product page base price is not enough. Price-affecting
-attributes live behind /website_sale/get_combination_info.
+This is historical repair tooling from the original catalog migration. It is
+kept outside the deployable app runtime and must not be used as a staging or
+bootstrap dependency. Current imports use the LT-owned lt_catalog_seed artifact
+and its approved price enrichment data.
 """
 from __future__ import annotations
 
@@ -27,12 +24,12 @@ from locally_twisted.commerce_rules import PRICE_LIST
 from locally_twisted.seed.seed_catalog import _find_resources
 
 
-ODOO_COMBINATION_ROUTE = "http://5.78.136.133/website_sale/get_combination_info"
-USER_AGENT = "LT Odoo variant price repair"
+REFERENCE_COMBINATION_ROUTE = "http://5.78.136.133/website_sale/get_combination_info"
+USER_AGENT = "LT reference-site variant price repair"
 CSRF_RE = re.compile(r'csrf_token:\s*"([^"]+)"')
 
 
-class OdooVariantPriceRepairError(RuntimeError):
+class ReferenceVariantPriceRepairError(RuntimeError):
     pass
 
 
@@ -65,7 +62,7 @@ def _fetch_product_page(opener: urllib.request.OpenerDirector, url: str) -> str:
 def _csrf_token(html: str) -> str:
     match = CSRF_RE.search(html)
     if not match:
-        raise OdooVariantPriceRepairError("Odoo product page did not expose csrf_token")
+        raise ReferenceVariantPriceRepairError("Reference product page did not expose csrf_token")
     return match.group(1)
 
 
@@ -90,7 +87,7 @@ def _post_combination_info(
         }
     ).encode("utf-8")
     request = urllib.request.Request(
-        ODOO_COMBINATION_ROUTE,
+        REFERENCE_COMBINATION_ROUTE,
         data=payload,
         headers={
             "Content-Type": "application/json",
@@ -102,12 +99,12 @@ def _post_combination_info(
         body = response.read().decode("utf-8", errors="replace")
     data = json.loads(body)
     if data.get("error"):
-        raise OdooVariantPriceRepairError(f"Odoo combination price error: {data['error']}")
+        raise ReferenceVariantPriceRepairError(f"Reference combination price error: {data['error']}")
     result = data.get("result") or {}
     if not result.get("is_combination_possible"):
-        raise OdooVariantPriceRepairError(f"Odoo says combination is not possible: {ptav_ids}")
+        raise ReferenceVariantPriceRepairError(f"Reference site says combination is not possible: {ptav_ids}")
     if result.get("price") is None:
-        raise OdooVariantPriceRepairError(f"Odoo returned no price for combination: {ptav_ids}")
+        raise ReferenceVariantPriceRepairError(f"Reference site returned no price for combination: {ptav_ids}")
     return result
 
 
@@ -134,7 +131,7 @@ def _required_ptav_ids(row: dict[str, Any], prod: dict[str, Any]) -> list[int]:
         if lookup.get(ptav_id) in required_names and is_required_variant_attribute(lookup.get(ptav_id))
     ]
     if not required_ids:
-        raise OdooVariantPriceRepairError(
+        raise ReferenceVariantPriceRepairError(
             f"Could not project required ptav ids for {prod.get('slug')} row {row.get('combo')}"
         )
     return required_ids
@@ -203,7 +200,7 @@ def _repair_product(
     odoo_id = prod.get("odoo_id")
     url = prod.get("url")
     if not slug or not odoo_id or not url:
-        raise OdooVariantPriceRepairError(f"Product is missing slug, odoo_id, or url: {prod}")
+        raise ReferenceVariantPriceRepairError(f"Product is missing slug, reference id, or url: {prod}")
 
     rows = prod.get("valid_variants") or []
     if not rows:
@@ -224,7 +221,7 @@ def _repair_product(
     for row in projected_rows.values():
         variant_code = _find_erpnext_variant(slug, row.get("combo") or {}, normalize_map)
         if not variant_code:
-            raise OdooVariantPriceRepairError(f"ERPNext variant not found for {slug}: {row.get('combo')}")
+            raise ReferenceVariantPriceRepairError(f"ERPNext variant not found for {slug}: {row.get('combo')}")
         ptav_ids = _required_ptav_ids(row, prod)
         info = _post_combination_info(
             opener,
@@ -240,7 +237,7 @@ def _repair_product(
                 "old_rate": str(old_rate) if old_rate is not None else None,
                 "new_rate": str(new_rate),
                 "would_change": old_rate != new_rate,
-                "odoo_product_id": info.get("product_id"),
+                "reference_product_id": info.get("product_id"),
                 "ptav_ids": ptav_ids,
             }
         )
@@ -263,7 +260,7 @@ def execute(
     if max_products is not None:
         products = products[: int(max_products)]
     if slug_filter and not products:
-        raise OdooVariantPriceRepairError(f"No variant product found for slug_filter={slug_filter!r}")
+        raise ReferenceVariantPriceRepairError(f"No variant product found for slug_filter={slug_filter!r}")
 
     results = [_repair_product(prod, normalize_map, dry_run=bool(dry_run)) for prod in products]
     if not dry_run:

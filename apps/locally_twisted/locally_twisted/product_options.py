@@ -530,12 +530,11 @@ def _source_catalog_paths() -> tuple[Path, ...]:
         pass
     configured.append(os.environ.get("LT_SOURCE_CATALOG_PATH"))
     paths = [Path(value) for value in configured if value]
-    paths.append(Path("/tmp/lt-odoo-live-catalog.json"))
-    paths.append(Path(__file__).resolve().parent / "seed" / "_data" / "catalog.json")
+    paths.append(Path("/tmp/lt-catalog-source.json"))
+    paths.append(Path(__file__).resolve().parent / "seed" / "lt_catalog_seed" / "catalog.json")
     try:
-        app_root = Path(frappe.get_app_path("locally_twisted")).parent
-        paths.append(Path(frappe.get_app_path("locally_twisted")) / "seed" / "_data" / "catalog.json")
-        paths.append(app_root / "_resources" / "odoo-live" / "catalog.json")
+        app_root = Path(frappe.get_app_path("locally_twisted"))
+        paths.append(app_root / "seed" / "lt_catalog_seed" / "catalog.json")
     except Exception:
         pass
     return tuple(dict.fromkeys(paths))

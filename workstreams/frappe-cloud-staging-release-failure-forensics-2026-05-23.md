@@ -25,6 +25,19 @@ or owner-review proof. The later deploy closeout supersedes this original
 report's stopped-state app hash, but it does not supersede the root failure
 rules or owner-review NO-GO boundary.
 
+2026-05-23 later owner-review seed boundary: a subsequent staging-only recovery
+packet reached app mirror/staging hash
+`2ec290621e044dcaa9d2c322675ce074ae489f7a` from source
+`e87a6b1039e3c096a1e6c656a989a1d425633363`, and hosted preflight passed.
+That did not make the shop ready. Bootstrap/RQ then failed because catalog
+seeding still expected local Odoo reference material at `_resources/odoo-live`.
+Odoo is reference-only until transformed into Locally Twisted / ERPNext-owned
+deployable seed data. Do not send Jeff a staging shop link until the owner
+review gate proves nonzero staging catalog/Product Setup/gallery data,
+required users, paused checkout, disabled indexing, `/shop`, and
+representative product routes on the actual staging host. Blocker:
+`workstreams/release-artifacts/2026-05-23-staging-owner-review-e87a6b1-use-now/odoo-reference-boundary-blocker.md`.
+
 ## Scope Boundary
 
 - Applies to: Locally Twisted Frappe Cloud staging owner-review push,
@@ -102,6 +115,8 @@ mutation from this session's momentum.
   import, Product Setup projection, and gallery projection into one large
   mutation path without a preflight dry-run that could fail before provider
   mutation.
+- The catalog seed path still depended on a local Odoo reference folder instead
+  of an LT/ERPNext-owned seed artifact that can be proved on hosted staging.
 - Early staging gates had loose thresholds and weak gallery/account proof.
   Worker D and Worker G identified this before the process was truly complete.
 
@@ -150,19 +165,25 @@ These are gates, not suggestions.
    galleries, authenticated owner/backend routes, guest pause behavior, disabled
    public indexing, app order, installed hash, and zero running provider jobs.
 
-6. **Triad must own artifacts.**
+6. **Catalog seed source must be LT/ERPNext-owned.**
+   The next bootstrap/import attempt must prove its catalog seed source exists
+   on staging under a neutral Locally Twisted / ERPNext-owned path. Do not make
+   `_resources/odoo-live`, Odoo-named seed folders, or Odoo shortcut paths part
+   of the deployable app mirror just to get a shop link out faster.
+
+7. **Triad must own artifacts.**
    Required roles:
    Controller, Provider Witness, Gate/Fixer, Recorder. Provider Witness must
    own provider-state proof. Gate/Fixer must own executable gate evidence or a
    blocking patch. Recorder must own docs parity. Advisory-only comments do not
    satisfy release triad.
 
-7. **No launch continuation after GL stops execution.**
+8. **No launch continuation after GL stops execution.**
    If GL says stop, no polling, no deploys, no bootstrap, no "one more check."
    Future work becomes read-only forensic investigation until GL explicitly
    reopens release execution.
 
-8. **Machine-readable lock, not prose-only warning.**
+9. **Machine-readable lock, not prose-only warning.**
    The action items in
    `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
    must become an executable release lock and controller guard before staging
@@ -202,6 +223,7 @@ reopen provider mutation.
 - `capabilities/failures/release-controller-churn-after-stop.md`
 - `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
 - `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`
+- `workstreams/release-artifacts/2026-05-23-staging-owner-review-e87a6b1-use-now/odoo-reference-boundary-blocker.md`
 
 ## Next Safe Step
 

@@ -8,6 +8,71 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Staging owner review is the approval gate for live app updates
+
+**Decision:** Future routine LT Frappe Cloud releases must be treated as
+code/app-only update pipelines: source/app update to staging, owner review on
+the actual staging site, recorded owner approval, then live promotion of the
+same reviewed app code while protecting production data and provider state.
+Staging owner review is not the final outcome.
+
+**Reasoning:** GL corrected the goal after the guard review narrowed too far.
+The business need is repeatable website/app updating: Jeff reviews staging as
+he would live, approves or requests changes, and then the approved code/app
+change moves live without corrupting non-code surfaces. Existing staging gates
+protect parts of this path, but they do not by themselves prove owner approval
+or live data/settings protection.
+
+**Implementation boundary:** Do not promote live from staging without a live
+promotion packet that binds the reviewed staging URL/hash, owner approval,
+rollback path, and protected production surfaces. Do not overwrite, purge,
+reseed, or sync over live products, customers, clients, orders, invoices,
+payments, private files, financial records, site settings, checkout/payment
+state, DNS, Stripe, Search Console, or indexing unless separately approved.
+
+**Receipts:**
+`workstreams/frappe-cloud-app-update-release-process-2026-05-23.md`;
+`C:\Users\baenb\projects\codex-framework-backup\skills\frappe-cloud-app-update-release\SKILL.md`.
+
+---
+
+## 2026-05-23 - Odoo reference data is not deployable staging seed data
+
+**Decision:** Odoo-derived catalog files remain reference material until they
+are consciously transformed into Locally Twisted / ERPNext-owned seed data.
+Future staging bootstrap/import work must read a neutral LT-owned seed source,
+or an explicit private staging seed artifact, not `_resources/odoo-live` or an
+Odoo-named shortcut path inside the deployable app mirror.
+
+**Reasoning:** The later e87a6b1 staging owner-review recovery proved the app
+code could deploy cleanly, and hosted preflight passed at app hash
+`2ec290621e044dcaa9d2c322675ce074ae489f7a`. The shop still was not ready:
+bootstrap/RQ failed because `seed_catalog.py` expected local reference files at
+`_resources/odoo-live`, which Frappe Cloud did not have. Shipping that folder
+as app data would blur the source-system reference boundary and make the old
+Odoo scrape part of the product surface.
+
+**Implementation boundary:** The fastest safe Jeff-link route is to create and
+prove a neutral LT/ERPNext seed source, then rerun the approved staging gates.
+App deploy success is not shop readiness. No Jeff link may be sent until the
+staging owner-review gate proves nonzero catalog/Product Setup/gallery data,
+required users, `/shop`, representative product routes, paused checkout, and
+disabled indexing on the actual Frappe Cloud staging host.
+
+**2026-05-23 implementation update:** Runtime seed discovery now points at the
+LT-owned `lt_catalog_seed` artifact, color swatch runtime assets/maps were
+renamed to LT-owned paths, old reference-site price repair helpers were moved
+out of deployable app runtime, and `npm run test:release-prevention` now
+includes `test:odoo-reference-boundary`. The old broad price modifier verifier
+is parked as diagnostic until rebuilt around the LT-owned seed price contract.
+
+**Receipts:**
+`workstreams/release-artifacts/2026-05-23-staging-owner-review-e87a6b1-use-now/odoo-reference-boundary-blocker.md`;
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`;
+`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+
+---
+
 ## 2026-05-23 - Staging app deploy proof is not owner-review readiness
 
 **Decision:** The approved staging-only app mirror sync and Frappe Cloud

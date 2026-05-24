@@ -8,7 +8,37 @@ chain-binding guard plus freeze-reopen approval timestamp guard. The later
 approved staging-only app mirror sync and deploy/update reached staging app
 hash `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, but owner-review remains
 NO-GO. Do not use this as permission to bootstrap, clear cache, touch live, or
-open checkout.**
+open checkout. The later e87a6b1 owner-review recovery reached staging app
+hash `2ec290621e044dcaa9d2c322675ce074ae489f7a`, but the shop is still not
+ready for Jeff.**
+
+2026-05-23 goal correction: the durable goal is a repeatable Frappe Cloud
+code/app-only update release, not a one-off staging link. Staging owner review
+is the approval gate for a later live app promotion. The live promotion leg must
+protect production products, customers, clients, private files, financial
+records, site settings, checkout/payment state, DNS, Stripe, Search Console,
+and indexing unless separately approved. Process handoff:
+`workstreams/frappe-cloud-app-update-release-process-2026-05-23.md`.
+
+2026-05-23 later owner-review recovery update: staging-only app mirror sync
+and deploy/update later reached app mirror hash
+`2ec290621e044dcaa9d2c322675ce074ae489f7a` from source
+`e87a6b1039e3c096a1e6c656a989a1d425633363`. Hosted preflight passed for that
+hash, but the bootstrap/RQ job failed because catalog seeding still depends on
+the local reference path `_resources/odoo-live`. Staging catalog counts remain
+zero, so owner-review remains NO-GO. Odoo reference material must not be made
+deployable app data unless it is first transformed into a Locally Twisted /
+ERPNext-owned seed artifact. Current blocker artifact:
+`workstreams/release-artifacts/2026-05-23-staging-owner-review-e87a6b1-use-now/odoo-reference-boundary-blocker.md`.
+
+Fastest safe route for a real Jeff staging shop link: create a neutral
+Locally Twisted / ERPNext-owned catalog seed source from the reference scrape,
+prove that seed source exists on staging under a non-Odoo deploy path, then run
+only the approved hosted preflight, bootstrap/RQ job, and owner-review
+route/data gates. Do not send Jeff a link until `/shop` and representative
+product routes pass on the Frappe Cloud staging host with nonzero catalog,
+Product Setup, gallery, owner/reviewer user, paused-checkout, and disabled
+indexing proof.
 
 This document exists because notes were present, but the release process still
 continued. The first executable local gates now exist; the next agent must keep
@@ -489,13 +519,29 @@ execution can leave forensic-freeze.
     recipe:
     `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
 
-34. **Resolve post-deploy hosted preflight blockers before bootstrap/import.** `open-before-provider-mutation`
-    Staging now has the expected app hash, but hosted preflight is NO-GO:
-    missing `LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`,
-    and missing backup/zero-data proof for destructive catalog seed. The next
-    mutation-capable packet must address those blockers and run the controller
-    for the exact next action before bootstrap/import, cache clear, checkout
-    unpause, or owner-review claims.
+34. **Resolve post-deploy hosted preflight blockers before bootstrap/import.** `implemented-staging; superseded-by-action-35`
+    The earlier hosted preflight blockers were resolved for the later
+    e87a6b1 staging packet: `LT Marketing Review Access` exists, owner-review
+    Webshop visibility settings were repaired with checkout still paused, and
+    backup evidence was present. Hosted preflight passed at app mirror hash
+    `2ec290621e044dcaa9d2c322675ce074ae489f7a`. This was still not
+    owner-review readiness; it only allowed the bootstrap attempt to reveal the
+    next blocker.
+
+35. **Decouple staging catalog seed from Odoo reference paths.** `implemented-local; open-before-provider-mutation`
+    The e87a6b1 bootstrap/RQ job failed because `seed_catalog.py` expects
+    `_resources/odoo-live` inside the hosted container. That folder is local
+    reference material, not deployable app data. Future staging bootstrap work
+    must provide a Locally Twisted / ERPNext-owned seed source, or an explicit
+    private staging seed artifact, before running catalog import again. Do not
+    force-add `_resources/odoo-live`, app-side Odoo-named seed folders, or
+    Odoo-named shortcut paths into the app mirror to make Frappe Cloud pass.
+    Local code now defaults runtime seed discovery to `lt_catalog_seed`, parks
+    old reference-site repair helpers outside deployable app runtime, renames
+    color swatch runtime assets/maps to LT-owned paths, and wires
+    `test:odoo-reference-boundary` into `npm run test:release-prevention`.
+    This is local guard hardening only; staging still needs a real seed
+    artifact present on Frappe Cloud and owner-review route/data proof.
 
 ## P1 Actions
 
@@ -520,6 +566,22 @@ execution can leave forensic-freeze.
    reopens staging execution. The still-open work is assembling a current
    mutation-capable packet with real approval and fresh provider artifacts,
    not hand-copying those JSON files.
+
+## Open P0 App-Update Gaps
+
+These are required before this becomes the smooth recurring "update the app"
+path GL needs:
+
+1. **Owner approval artifact for live promotion.** It must bind the staging URL,
+   reviewed source/app hash, Jeff/GL approval, approved deferrals, blocked live
+   surfaces, and rollback path.
+2. **Live code/app-only promotion protector.** It must prove the live target,
+   live-before snapshot, production data/settings protection, approved app hash,
+   terminal provider update, live-after proof, and monitor window. It must fail
+   if a live promotion tries to overwrite, purge, reseed, or sync production
+   data/settings without separate approval.
+3. **Guard-label cleanup.** Package commands that run only `--self-test` should
+   not be presented as provider/staging proof. They prove verifier shape only.
 
 ## Suggested File Targets
 
@@ -561,6 +623,9 @@ Still mandatory before any provider mutation is reopened:
 - real post-deploy/update completion artifact before hosted preflight
 - fresh app mirror freshness artifact proving required hosted-preflight source
   files match the app-root mirror
+- neutral LT-owned catalog seed source present on staging, with Odoo/reference
+  lineage documented separately and no Odoo-named deploy path required by the
+  bootstrap
 - fresh artifact-backed release plan
 - staging bootstrap preflight for hosted constraints
 - staging database/account/product/gallery proof on the actual target site

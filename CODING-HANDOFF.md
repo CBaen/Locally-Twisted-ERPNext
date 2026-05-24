@@ -1,5 +1,38 @@
 # Locally Twisted - Coding Handoff
 
+Current handoff stop on 2026-05-24:
+GL stopped release execution and moved this session into handoff-only cleanup.
+Do not continue staging/provider work from this conversation. No live, DNS,
+Stripe, Search Console, checkout unpause, bootstrap/import, manual migrate,
+manual cache clear, production setting, or customer/financial data mutation is
+authorized by this handoff.
+
+The latest owner-review recovery attempt reached staging app hash
+`2ec290621e044dcaa9d2c322675ce074ae489f7a` from source
+`e87a6b1039e3c096a1e6c656a989a1d425633363`, but it did **not** create a
+Jeff-ready staging shop. Bootstrap/RQ failed because the catalog seed path still
+depended on local reference material under `_resources/odoo-live`. Anything
+named Odoo is reference-only in this ERPNext app; deployable seed data must be a
+Locally Twisted / ERPNext-owned artifact. Current blocker artifact:
+`workstreams/release-artifacts/2026-05-23-staging-owner-review-e87a6b1-use-now/odoo-reference-boundary-blocker.md`.
+
+The corrected durable goal is documented in
+`workstreams/frappe-cloud-app-update-release-process-2026-05-23.md`: stage the
+reviewed custom app, prove the actual staging site passes owner-review gates,
+get Jeff's approval, then promote the same reviewed app code to live through an
+app-only path that preserves production data/settings unless separately
+approved. Staging is the approval gate for live, not the finish line.
+
+Next safe technical step is local-only: replace reference-site/Odoo-coupled
+catalog seed paths with LT-owned ERPNext seed artifacts, prove those artifacts
+are present in the app/package, rerun the source-bound local gates, then freeze
+a fresh source commit for a new explicitly approved staging packet. Do not send
+Jeff a staging link until hosted owner-review route/data gates pass on the
+Frappe Cloud staging host. Ignored local seed duplicates under
+`apps/locally_twisted/locally_twisted/seed/_data/` and
+`apps/locally_twisted/locally_twisted/seed/lt_catalog_seed/` were removed during
+handoff cleanup so they cannot masquerade as archived/release-safe source.
+
 Latest staging app deploy closeout on 2026-05-23:
 `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
 `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.

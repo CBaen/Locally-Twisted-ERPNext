@@ -5,7 +5,7 @@ It uses the agency Together AI image key from the parent Built_by_Cameron
 `.env`, writes dated source assets under `_resources/generated-hero-sources`,
 and writes public WebP derivatives under the LT app hero asset folder.
 
-The prompts intentionally use owner/Odoo balloon color names and swatch asset
+The prompts intentionally use owner/source balloon color names and swatch asset
 references. Hex values are not treated as image-generation authority.
 """
 
@@ -37,7 +37,7 @@ USER_AGENT = (
 )
 
 APP_ROOT = REPO_ROOT / "apps" / "locally_twisted" / "locally_twisted"
-SWATCH_MAP_PATH = APP_ROOT / "catalog_contract" / "odoo_color_swatch_map.json"
+SWATCH_MAP_PATH = APP_ROOT / "catalog_contract" / "lt_color_swatch_map.json"
 PUBLIC_HERO_DIR = APP_ROOT / "public" / "images" / "heroes"
 SOURCE_DIR = REPO_ROOT / "_resources" / "generated-hero-sources" / "2026-05-22"
 PUBLIC_SWATCH_ROOT = APP_ROOT / "public"
@@ -215,7 +215,7 @@ def build_prompt(spec: HeroSpec, swatch_refs: list[str]) -> str:
         "Photorealistic premium commercial event photography for a Utah balloon decor website, "
         f"extra-wide 4.9:1 website hero banner composition at {SOURCE_SIZE[0]}x{SOURCE_SIZE[1]}. "
         f"Subject: {spec.shape_prompt}. "
-        f"Use only these owner/Odoo balloon color names as the palette: {colors}. "
+        f"Use only these owner/source balloon color names as the palette: {colors}. "
         "Treat the named balloon colors and supplied swatch references as the authority, not hex values. "
         f"Swatch reference asset paths: {refs}. "
         "Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, "
@@ -384,7 +384,7 @@ def main() -> int:
         "model_default": args.model,
         "source": "project VITE_TOGETHER_API_KEY from Built_by_Cameron .env",
         "note": (
-            "Shop category representative generated heroes. Owner/Odoo swatches and "
+            "Shop category representative generated heroes. Owner/source swatches and "
             "balloon color names are prompt authority; sampled hex values are not."
         ),
         "source_size": list(SOURCE_SIZE),
