@@ -10,7 +10,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ## 2026-05-24 - Shop taxonomy uses physical primary categories and broad secondary occasions
 
-**Decision:** Product names remain unchanged. Shop taxonomy will use physical
+**Decision:** Product names remain unchanged. Shop taxonomy uses physical
 product type as the primary category and one consistent broad occasion/use-case
 layer as the secondary category. Fulfillment, product options, specific holiday
 names, character/theme names, and menu labels are not categories.
@@ -30,20 +30,25 @@ category; and specific terms like Easter, Halloween, Mother's Day, and Pride
 belong in product names/search/copy under the broad `Holiday` secondary
 category when no tertiary category layer exists.
 
-**Implementation boundary:** This decision records the approved taxonomy map
-only. It does not change ERPNext records, Website Items, Item Groups, secondary
-Website Item Group rows, product names, routes, slugs, prices, images,
-checkout behavior, staging, live, DNS, Stripe, or Search Console. Future
-implementation must use a source-owned mapping/projection path with verifier
-guards and route/redirect planning before any primary category mutation.
+**Implementation boundary:** Implemented locally/source on 2026-05-24 through
+a source-owned mapping/projection path with verifier guards and route aliases.
+It changed local ERPNext category projection for `51` published Website Items,
+`9` template Items, `2,852` variant Items, and `51` secondary Website Item
+Group rows. It did not change product names, slugs, prices, images, checkout
+behavior, payment settings, staging, live, DNS, Stripe, Search Console, or
+production data.
 
 **Receipts:**
 `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`;
-local ERPNext published Website Item review on 2026-05-24 found 51 published
-Website Items and 0 existing `Website Item Group` secondary rows.
+`apps/locally_twisted/locally_twisted/shop_taxonomy.py`;
+`apps/locally_twisted/locally_twisted/seed/sync_shop_taxonomy.py`;
+`apps/locally_twisted/locally_twisted/patches/sync_shop_taxonomy_20260524.py`;
+`scripts/verify/shop_taxonomy_contract.py`. Verification passed locally:
+shop taxonomy, catalog public sellability, commerce rules, nav IA, category
+media candidates, category hero images, public asset integrity, and shop smoke.
 
 **Decided by:** Guiding Light taxonomy correction and approval on 2026-05-24;
-Codex read-only local ERPNext review and documentation packet.
+Codex local/source implementation and triad review.
 
 ---
 
@@ -158,18 +163,19 @@ local verification on 2026-05-22.
 
 ---
 
-## 2026-05-22 - Shop category heroes use owner/Odoo balloon color authority
+## 2026-05-22 - Shop category heroes use owner-approved balloon color authority
 
 **Decision:** `/shop-items/<group>` hero imagery is generated representative
-hero art per category, not proof photography, not cropped Odoo product photos,
+hero art per category, not proof photography, not cropped product photos,
 and not generic reused shop lifestyle imagery. Generated hero prompts must use
-category shape plus exact owner/Odoo balloon color names and swatch references.
+category shape plus exact owner-approved balloon color names and swatch
+references.
 Hex values are retained only as best web-match approximations for CSS,
 documents, and customer matching.
 
 **Reasoning:** GL rejected the first crop-based repair because the banners were
 bad images and did not represent the product categories with the right balloon
-color system. Hex values can drift from real balloon stock; the owner/Odoo
+color system. Hex values can drift from real balloon stock; the owner-approved
 swatch images and balloon color names are the closest local authority for LT's
 actual color offering. Category pages need product-shaped, ratio-aware hero
 art, while proof photography and ERPNext Item Group image assignment remain
@@ -502,7 +508,7 @@ destructive import so future reimports do not depend on a remembered manual
 step. Product Setup/readiness labels use `Configurable product page`; legacy
 `Custom quote page` input is accepted only as a safe alias.
 
-**Reasoning:** The all-Odoo sellable reimport made every product purchasable,
+**Reasoning:** The sellable reimport made every product purchasable,
 but it left older `Add Foil Number` variants enabled on 13 bouquet templates.
 That caused `catalog_variant_contract.py` to fail with 10,617 active variants
 instead of 10,227 active variants. The correct fix is not to loosen the
@@ -565,10 +571,10 @@ exposed the regression; Codex implemented and verified locally on 2026-05-17.
 
 ---
 
-## 2026-05-17 - Local Odoo reimport includes every product as sellable
+## 2026-05-17 - Local source reimport includes every product as sellable
 
-**Decision:** The corrected local Odoo-to-ERPNext import includes all 53
-Odoo-imported products, excludes 0 products, and writes product contracts as
+**Decision:** The corrected local source-to-ERPNext import included all 53
+then-approved products, excluded 0 products, and wrote product contracts as
 sellable checkout targets. Review-only add-on controls and unclassified extra
 images may remain hidden/held, but they do not make the base products
 non-products.
@@ -3073,7 +3079,7 @@ scope; Codex implemented and verified the site slice.
 
 ## 2026-05-07 - Public page heroes use one compact height contract
 
-**Decision:** Every LT public page hero must use the shared compact hero contract instead of route-local oversized hero guesses. The implemented standard is 220px mobile, 250px tablet, and 280px desktop, with hard caps of 280px mobile, 300px tablet, and 320px desktop. Vertical padding is capped at 24px mobile, 28px tablet, and 32px desktop; hero H1 size is capped at 32px mobile, 40px tablet, and 44px desktop. The current Playwright verifier covers `/`, the four event audience pages, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/seasonal-specialty`; `/event-balloons` is removed.
+**Decision:** Every LT public page hero must use the shared compact hero contract instead of route-local oversized hero guesses. The implemented standard is 220px mobile, 250px tablet, and 280px desktop, with hard caps of 280px mobile, 300px tablet, and 320px desktop. Vertical padding is capped at 24px mobile, 28px tablet, and 32px desktop; hero H1 size is capped at 32px mobile, 40px tablet, and 44px desktop. The historical Playwright verifier covered `/`, the four event audience pages, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and one then-current category route; `/event-balloons` is removed. Category route hero assignment is now covered separately for the 8 active primary categories.
 
 **Reasoning:** GL rejected the inconsistent and oversized hero pattern as a recurring agency-level failure. The live LT routes proved the problem: home, event-balloons, portfolio, BTFP, contact, shop, and category pages all had different min-heights, section padding, title clamps, and inner padding. Several heroes consumed most or all of the first viewport, hiding products, proof, forms, and useful content.
 
@@ -3269,7 +3275,7 @@ Recent Celebrations follows reviews.
 
 **Implementation:** Commit `b82eaf9` replaced the duplicated `/shop` chip wall and `/shop-items/<group>` category tile wall with the shared rail/select include, updated `/shop` and category templates, and cache-busted `lt-shop-showroom.css` to `v=20260506-showroom-5`.
 
-**Verification receipt:** `python scripts/verify/smoke_shop.py` passed. Focused checks passed: `npm run test:interactive-layout -- --grep "/shop category navigation"` 4/4, `npm run test:layout-fit -- --grep shop` 26/26, and `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` 39/39. Browser geometry confirmed desktop rail/mobile select behavior on `/shop` and `/shop-items/get-well-bouquets`, with no `.lt-shop__chip` controls and no old `.lt-shop__toolbar--categories` wall.
+**Verification receipt:** `python scripts/verify/smoke_shop.py` passed. Focused checks passed: `npm run test:interactive-layout -- --grep "/shop category navigation"` 4/4, `npm run test:layout-fit -- --grep shop` 26/26, and `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` 39/39. Browser geometry confirmed desktop rail/mobile select behavior on `/shop` and a then-current category route, with no `.lt-shop__chip` controls and no old `.lt-shop__toolbar--categories` wall.
 
 **Alternatives considered:** Keep the symmetrical button grid. Rejected because GL had already rejected the button-control treatment as unusable. Replace the whole entry with a photo category gateway. Deferred until category imagery is approved. Keep `/shop` as in-page filtering. Rejected for this pass because the chosen simple/intuitive path is category navigation to real category pages.
 
@@ -3972,6 +3978,11 @@ payment reconciliation.
 
 **Decision:** `Plan by Occasion` is product discovery navigation, not a shortcut into the inquiry form. Current occasion links point to real product/category pages: Birthdays -> Birthday Deliveries; Baby Showers & Reveals -> Baby Shower Garland; Graduations -> Graduation Grab n Go; Get Well -> Get-Well Bouquets; Missionary Farewells & Homecomings -> Large head Missionary; Church Events/Weddings -> Garlands; Religious Celebrations -> Easter Arch; Corporate Events -> Logo 3 layered bouquet; Schools & Community -> Basketball Arch; Holidays & Seasons -> Seasonal & Specialty.
 
+**Supersession note, 2026-05-24:** Product-backed occasion navigation still
+applies, but the listed legacy group labels are historical. Active top-level
+shop categories are now the 8 physical primary categories, with broad occasion
+labels under hidden `Shop Occasions`.
+
 **Reasoning:** GL corrected the contact-first interpretation directly: if a customer opens an occasion menu in a shop, they expect products. Routing every occasion to `/contact?occasion=...` made the menu feel empty and evasive. The contact path already exists in the top utility bar and primary CTAs; the occasion dropdown should keep customers browsing purchasable or inspectable products.
 
 **Alternatives considered:** Keep all occasion links as prefilled contact form URLs. Rejected by GL. Create new occasion landing pages now. Deferred because current ERPNext Website Items already provide concrete product/category targets and new landing pages would add more surface before the shop IA is stable.
@@ -4090,6 +4101,10 @@ payment reconciliation.
 
 **Decision:** The Hetzner mirror has 3 mega menu panels (Special Occasions / Holidays & Seasons / What We Make) with 2-level hierarchy. Our ERPNext catalog has 11 flat children under "Shop Items" (Arches, Columns, Bouquets, etc. — verified by the catalog port: 53 Website Items, 10,578 variants, 10,613 Item Prices). Rather than restructuring the Item Group tree to add Special Occasions + Holidays & Seasons parents (and reassigning all 53 Website Items), we keep the flat 11 and group them into the 3 Hetzner panels at the **template layer** via three new context keys exposed by `navbar_context.py`: `mega_special_occasions`, `mega_holidays_seasons`, `mega_what_we_make`. Each is a list of `{label, route}` dicts. Some leafs (Birthdays, Showers, Graduations, Missionary, Get-Well) point at content-only routes that may not have published pages yet — those will resolve via Phase 2 page builds OR remain as 404 placeholders until populated.
 
+**Supersession note, 2026-05-24:** This 11-group menu model is historical. The
+active source-owned shop taxonomy uses 8 visible physical primary categories
+under `Shop Items` and hidden secondary occasion groups under `Shop Occasions`.
+
 **Reasoning:** Lower blast radius. Restructuring the catalog tree would risk the just-verified data integrity (53/10,578/10,613). Template-level grouping is reversible — if GL prefers the 2-level Item Group tree structure later, we restructure `fixtures/item_group.json` and re-tag the 53 Website Items, and the navbar template adjusts. The "flat + template-group" choice preserves all existing investment in catalog data while delivering Hetzner's 3-panel UX.
 
 **Alternatives considered:** Restructure the Item Group tree with Special Occasions + Holidays & Seasons as new parents under "Shop Items," reassign the 11 children appropriately. Rejected because it touches the data layer that was just verified at high cost.
@@ -4181,6 +4196,10 @@ The right framing: **migration of business intent + catalog data into a fresh ER
 ## 2026-04-30 — 11-category Item Group hierarchy
 
 **Decision:** `Shop Items` becomes a parent (`is_group=1`) with 11 children: Arches (10), Columns (10), Bouquets (16), Get-Well Bouquets (3), Garlands (4), Drops (1), Grab & Go (2), Table Decor (3), Stands & Easels (2), Deliveries (1), Seasonal & Specialty (1). Each `show_in_website=1`. Routes auto-generated as `shop-items/<scrubbed-name>`.
+
+**Supersession note, 2026-05-24:** This hierarchy is historical. The active
+fixture now has 8 visible physical primary groups under `Shop Items`; former
+fulfillment/menu/occasion groups are hidden with compatibility route aliases.
 
 **Reasoning:** GL directive: mega menu populated from Odoo's natural taxonomy. The taxonomy is implied by Odoo product slug patterns (`*-arch`, `*-column`, `*-bouquet`, etc.) — formalized as 11 explicit BBC-decision Item Groups. Captured as a fixture so it's reproducible on transfer.
 

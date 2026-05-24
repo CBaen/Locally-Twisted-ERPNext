@@ -23,7 +23,7 @@ call this live checkout approval, DNS approval, Search Console approval, or
 production payment proof. Decision packet:
 `decisions/2026-05-24-staging-owner-review-recovery.md`.
 
-Codex shop taxonomy direction on 2026-05-24: GL approved the category model in
+Codex shop taxonomy implementation on 2026-05-24: GL approved the category model in
 `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
 Product names stay unchanged. Primary category is physical product type.
 Secondary category is one broad occasion/use-case from the approved set: Any
@@ -31,10 +31,19 @@ Occasion, Birthday, Holiday, Graduation, Baby Shower, Sports, Get Well,
 Religious, and Corporate. Do not treat delivery, pickup, latex-free, colors,
 sizes, add-ons, foil numbers, `Grab & Go`, specific holiday names, character
 or theme names, or product options as categories. Pride Progress Rainbow
-Balloon Arch is approved as primary `Arches`, secondary `Holiday`. This packet
-is docs-only; no ERPNext Item Group, Website Item, secondary Website Item
-Group, product name, route, checkout, staging, live, provider, DNS, Stripe, or
-Search Console mutation has been performed.
+Balloon Arch is primary `Arches`, secondary `Holiday`. Local/source now owns
+the taxonomy through `shop_taxonomy.py`, `sync_shop_taxonomy.py`,
+`item_group.json`, and `sync_shop_taxonomy_20260524.py`. Local ERPNext result:
+`51` published Website Items, `8` visible primary categories under
+`Shop Items`, `9` secondary categories under hidden `Shop Occasions`, and `51`
+secondary Website Item Group rows. Prior visible primary groups were hidden
+with route aliases retained. Product names, checkout behavior, payment
+settings, staging, live, provider state, DNS, Stripe, Search Console, and
+production data were not changed. Verification passed:
+`shop_taxonomy_contract.py`, `catalog_public_sellability_contract.py`,
+`commerce_rules_contract.run`, `nav_ia.py`, `category_media_candidates.py`,
+`shop_category_hero_images.spec.js`, `public_asset_integrity.py`, and
+`smoke_shop.py`.
 
 Codex product gallery architecture restoration on 2026-05-22: product-page
 additional photos are restored as permanent architecture, not staging polish.
@@ -92,10 +101,11 @@ display. Recovered-lane proof: `npm run test:product-options-experience`
 passed `4/4`; final pre-commit run also passed `4/4`. Rerun if source changes
 again before staging.
 
-Codex shop category hero/color-catalog closeout on 2026-05-22: all 11
+Codex shop category hero/color-catalog closeout on 2026-05-22, refreshed for
+the 2026-05-24 taxonomy implementation: all 8 active
 `/shop-items/<group>` compact hero routes now use category-specific generated
 WebP crops instead of the repeated generic shop lifestyle image. The generated
-source authority is the owner/Odoo balloon swatch system and exact balloon
+source authority is the owner-approved balloon swatch system and exact balloon
 color names, not hex-only prompts. Source assets and manifest:
 `_resources/generated-hero-sources/2026-05-22/`; color authority:
 `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`; feature handoff:
@@ -104,11 +114,11 @@ capability: `capabilities/recipes/lt-balloon-color-generated-hero-contract.md`;
 research brief: `research/research-shop-category-generated-heroes/research-brief.md`.
 This did not mutate ERPNext Item Group `image` fields, did not approve
 category card/mega-menu photography, and did not stage or deploy live. Verified
-locally: `python scripts\verify\odoo_color_swatch_contract.py`,
+locally: the color swatch contract,
 `python -m py_compile scripts\setup\generate_shop_category_heroes.py`,
 `python scripts\dev\clear_website_cache.py`,
 `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
-passed 35/35, `npm run test:public-assets`,
+passed for the active category route set, `npm run test:public-assets`,
 `npm run test:container-contract -- --grep "seasonal-category|shop"`, and
 `npm run test:layout-fit -- --grep "seasonal-category|shop"`.
 
@@ -329,8 +339,8 @@ is intentionally open with `lt_ecommerce_paused=0` so GL can test
 release-packet work. GL local testing is still required before any live
 promotion.
 
-Codex all-Odoo sellable reimport closeout on 2026-05-17: GL corrected the
-catalog contract again: every Odoo-imported product is a product and the local
+Codex sellable reimport closeout on 2026-05-17: GL corrected the
+catalog contract again: every source-imported product is a product and the local
 target is sellable checkout behavior, not a permanent quote-first category.
 The local `frontend` ERPNext site was backed up, cleaned of two generated proof
 products, snapshotted, and reimported with 53 included products, 0 exclusions,
@@ -615,10 +625,11 @@ guards: `python scripts\verify\nav_ia.py` and `npm run test:search-contract`.
 
 Codex ecommerce scaffold update on 2026-05-12: complex product checkout
 planning is now source-backed and local-only through
-`scripts/verify/complex_checkout_scaffold.py`. After the 2026-05-17 all-Odoo
-sellable reimport, the scaffold passes with 53 direct checkout guards, 0
+`scripts/verify/complex_checkout_scaffold.py`. After the 2026-05-17
+sellable reimport, the scaffold passed with 53 direct checkout guards, 0
 simple lane-flip candidates, 0 complex UI blockers, 0 add-on/conditional
-product blockers, and 0 needs-review products. It supersedes older heuristic
+product blockers, and 0 needs-review products. Re-run it before using that
+count as current proof after the 2026-05-24 taxonomy cleanup. It supersedes older heuristic
 quote-first flip lists and does not authorize live site, Frappe Cloud, DNS, or
 Stripe exposure. Feature handoff:
 `workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`; current
@@ -651,9 +662,9 @@ the correct orientation rather than relying on EXIF orientation. Commit
 `0e9d4f8` already pushed this code/image slice; the docs below now record it.
 
 Codex backend closeout on 2026-05-11 is historical. The old 48 kept / 5
-Classic-excluded local import packet is superseded by the 2026-05-17 all-Odoo
-sellable reimport: 53 products included, 0 excluded, 290 priced sale units, all
-53 routes browser-proved locally, and `lt_ecommerce_paused=1` restored. Current
+Classic-excluded local import packet is superseded by the 2026-05-17
+sellable reimport; the 2026-05-24 taxonomy cleanup now treats 51 published
+products as current and explicitly excludes 2 duplicate source slugs. Current
 front-door handoff:
 `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
 
@@ -1045,7 +1056,7 @@ Docs that still mention `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 
 
 Record-level fail-loud hardening is the active backend automation handoff from GL/Codex/OpenClaw. All current LT data is fake/test data for automation testing until GL explicitly says otherwise. Use it aggressively to prove automation, but do not treat it as live business truth. The next safe implementation slice is documented in `workstreams/fail-loud-record-level-hardening.md`: create a reusable backend failure recorder, then wire Lead cascade partial failures, checkout note/Lead-conversion failures, paid-order receipt failures, and record-level business automation index rows.
 
-Category browse media is parked as of 2026-05-06. The safe prep work is done: candidate report generation, approval-template generation, dry-run Frappe sync, and unapproved-apply refusal are available. No live Item Group images were assigned, and the latest DB check still showed all 11 customer-facing child Item Groups under `Shop Items` with `image = null`.
+Category browse media is parked. The safe prep work is done: candidate report generation, approval-template generation, dry-run Frappe sync, and unapproved-apply refusal are available. No live Item Group images were assigned. The 2026-05-24 taxonomy pass now has 8 active customer-facing child Item Groups under `Shop Items`; route hero art exists, but ERPNext Item Group `image` fields remain unapproved.
 
 Resume the category media lane only after GL/Jeff approve the category image selections. The resume path is: regenerate `output/category-media-candidates.md`, create or update the approval file, mark only approved rows with `approved: true`, dry-run `scripts/setup/sync_category_media.py`, then use `--apply` only for approved selections. Do not assign category media by judgment and do not revive `/shop-by-category`.
 
@@ -1096,11 +1107,11 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `/event-playground` is a hidden internal-preview route for the first PlayCanvas decor planner. Keep it out of the ASAP website launch lane unless GL explicitly reopens it here. The PlayCanvas/Vite source, research packet, and design-studio capabilities moved to the standalone repo at `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\`; this LT repo retains only the Frappe route shell at `www/event_playground.html`/`.py`, the local iframe wrapper for `127.0.0.1:4306`, and the contact handoff contract. The browser preview is framed as `Plan Custom Decor`, emits `event-playground-v2`, adds `design_studio_contract.schema_version = design-studio-v1`, adds event date/city contact fields, and exposes quote-honesty warnings. Render counts are explicitly visual density, not quote math. Production estimates are candidate-only, `quote_ready: false`, and `customer_visible: false` until Locally Twisted approves formulas, fill/support assumptions, overage, venue review, and pricing. Submit Inquiry still hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage`; the existing contact form now pre-fills name, email, phone, ISO event date, event location/city, services, colors, decor type, package notes, and the design summary. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, share link, or full organic/twisting physics in this slice.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
-- Category browse media is still empty in ERPNext: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` as of the 2026-05-06 DB recheck. `python scripts/verify/category_media_candidates.py` now creates a no-mutation approval packet from existing product-source and portfolio-proof media, with quick picks for all 11 categories in ignored local `output/category-media-candidates.md`. `scripts/setup/sync_category_media.py` creates the approval template and dry-runs the Frappe-backed Item Group image update path; `--apply` only writes rows marked `approved: true`. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment only after Jeff/GL approval.
+- Category browse media is still empty in ERPNext Item Group image fields. `python scripts/verify/category_media_candidates.py` now creates a no-mutation approval packet from existing product-source and portfolio-proof media for the 8 active customer-facing categories. `scripts/setup/sync_category_media.py` creates the approval template and dry-runs the Frappe-backed Item Group image update path; `--apply` only writes rows marked `approved: true`. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment only after Jeff/GL approval.
 - Product detail breadcrumbs now use `All Balloon Decor > category > product`; the retired `Shop by Category` label/link is blocked by `scripts/verify/smoke_shop.py`.
 - Product detail pages are now company-first and clear-control, not generic ecommerce recommendation or boxed-option surfaces. The Webshop lower Additional Info/Reviews/Recommended Items panel was removed on 2026-05-07, the old auxiliary/recommendation CSS selectors are gone, and product options/variant chips/selects/price-add-to-cart groups are no longer framed boxes. Pickup/delivery is the approved framed product-page exception. `smoke_shop.py` fails if the recommendation selectors return or if product option controls regain boxed backgrounds, borders, or shadows. Use `capabilities/recipes/frappe-product-page-company-first.md` and `capabilities/recipes/frappe-product-clear-control-contract.md` before changing product detail templates or product-page CSS.
 - Civic Celebration is now the V1 visual direction across the public site. See `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, and `workstreams/civic-sitewide-redesign.md`. The pass covers shared header/footer/theme CSS, homepage, contact/book form, BTFP, portfolio, FAQ, policies, accessibility, thank-you/payment success, shop, category pages, product detail, cart, and checkout. The homepage hero now uses generated lifestyle hero crops from the project image-generation API; the real optimized install photo stays reserved for proof/portfolio surfaces.
-- Compact hero standard is now implemented and guarded. Public page heroes use 220px mobile, 250px tablet, and 280px desktop standard heights, with padding/title caps documented in `_resources/STYLE-GUIDE.md` v4.5 and `capabilities/recipes/compact-hero-contract.md`. The current verifier covers `/`, the four event audience pages, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/seasonal-specialty` through `npm run test:interactive-layout -- --grep "compact hero height contract"`. `/event-balloons` is removed and should not return to the hero matrix unless a future GL decision recreates the route. The root cause was stacked page-local hero sizing: global `section` padding, route-level min-heights, inner padding, and giant title clamps all competing.
+- Compact hero standard is now implemented and guarded. Public page heroes use 220px mobile, 250px tablet, and 280px desktop standard heights, with padding/title caps documented in `_resources/STYLE-GUIDE.md` v4.5 and `capabilities/recipes/compact-hero-contract.md`. Category route hero assignment is now covered by `scripts/verify/shop_category_hero_images.spec.js` for the 8 active primary categories. `/event-balloons` is removed and should not return to the hero matrix unless a future GL decision recreates the route. The root cause was stacked page-local hero sizing: global `section` padding, route-level min-heights, inner padding, and giant title clamps all competing.
 - Homepage launch repair completed on 2026-05-07: the hero uses one visible stable H1, the first viewport shows Google reviews immediately after the hero on desktop and 320px mobile, the homepage trust/authority bar is removed for now while the icon assets are preserved, the cookie notice renders inline after reviews instead of covering CTAs, Recent Celebrations appears after review cards, the closing CTA leads with corporate/school/civic/community work, and stale homepage v2/design-studio comments were removed.
 - Homepage review cards and the trusted-business client crawl both crawl left-to-right as full-stage horizontal proof lines. Review cards use the canonical `540s` loop; a homepage-only sync script measures both duplicated tracks and assigns the trusted-business crawl a proportional duration so its visible pixel speed matches the reviews. Reduced-motion mode intentionally keeps these two business-proof crawls slow, moving, horizontal/full-stage, and scrollbar-free; do not restore the static/overflow fallback that caused the recurring real-browser failure.
 - Current crawl verification on 2026-05-07 proved left-to-right deltas, hidden overflow, matched visible speed, and moving reduced-motion proof crawls. The deliberate red run failed 5/5 against the previous right-to-left direction; the corrected implementation then passed focused crawl regression 5/5, home layout 13/13, homepage/cookie 12/12, compact hero 14/14, and full `npm run test:website-verify`. Live diagnostics showed positive left-to-right deltas with hidden overflow and near-zero speed delta in both `no-preference` and `reduce`; screenshots are in `output/playwright/home-crawl-left-to-right-20260507/`.
@@ -1183,7 +1194,7 @@ Next safest slices:
 - Send `_resources/policies/legal-accounting-review-packet-2026-05-06.md` to Jeff/legal/accounting before treating the public policy set as final.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Finish payment live-mode configuration and run `python scripts/verify/payment_launch_readiness.py --mode live` only when cutover work begins. It is not a blocker for current synthetic/backend automation work.
-- Review skipped/unmatched catalog media with GL/Jeff: parked until approval. The automated pass only mapped photos whose Odoo labels clearly matched product options. Product-page source gallery media is now role-approved through Product Setup and Website Slideshow; category/reference/media-menu assignments are still separate approval lanes. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning variant/category media. Regenerate `output/category-media-candidates.md` for the 11 category quick picks before the approval conversation. Do not assign generic category/reference images by guess.
+- Review skipped/unmatched catalog media with GL/Jeff: parked until approval. The automated pass only mapped photos whose source labels clearly matched product options. Product-page source gallery media is now role-approved through Product Setup and Website Slideshow; category/reference/media-menu assignments are still separate approval lanes. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning variant/category media. Regenerate the category-media candidate packet for the 8 active primary categories before the approval conversation. Do not assign generic category/reference images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Continue brand review from `workstreams/brand-style-guide-consolidation.md`. The emergency menu/container/product repair is verified; remaining visual work is GL/Jeff review of photos, proof hierarchy, exact review/trust counts, and category/product imagery.
 - Keep the responsive container gate green for any new public UI. Add route-specific interactive checks when a change introduces a new drawer, modal, accordion, filter, product control, or breakpoint state.

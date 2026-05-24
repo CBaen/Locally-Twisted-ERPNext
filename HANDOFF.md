@@ -20,10 +20,10 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
   held behind Product Setup media approval.
 - Guard: `python scripts/verify/variant_media_contract.py`; no live deploy.
 
-**Current-session delta (2026-05-17 - all-Odoo local reimport):**
-- Active ecommerce coordination lives in `CODING-HANDOFF.md`, `ECOMMERCE-SHOP-HANDOFF.md`, `locally-twisted-queue.md`, and `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
-- Local import logic now treats 53/53 Odoo-imported products as sellable checkout targets with 0 exclusions and 290 priced sale units.
-- Local browser proof covered all 53 live Website Item routes in two cart-safe batches; `lt_ecommerce_paused=1` was restored after proof.
+**Current-session delta (2026-05-17 local reimport; taxonomy refreshed 2026-05-24):**
+- Active ecommerce coordination lives in `CODING-HANDOFF.md`, `ECOMMERCE-SHOP-HANDOFF.md`, `locally-twisted-queue.md`, and the ecommerce audit workstreams.
+- Current taxonomy proof covers 51 published products, 8 active primary categories, and 9 hidden secondary occasion categories.
+- Older 53-route browser proof is historical; rerun current gates before using it as launch evidence. `lt_ecommerce_paused=1` was restored after that proof.
 - No staging/live/Frappe Cloud/Stripe/DNS deployment was performed. GL still needs to test locally before any live push.
 
 **Current-session delta (2026-05-05):**
@@ -55,7 +55,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - Header/footer IA has been corrected against current routes: `What We Make`, `About Us`, and `Book an Event` are removed. `All Products` remains.
 - Primary nav order was `Shop Balloon Decor`; superseded 2026-05-02 by `Balloon Decor`.
 - Top utility bar keeps the only `Contact Us` CTA. No lower-nav Contact duplicate and no mobile-drawer Contact duplicate.
-- `Plan by Occasion` routes to product/category pages, not `/contact?occasion=...` shortcuts. Verified current links: Birthday Deliveries, Baby Shower Garland, Graduation Grab n Go, Get-Well Bouquets, Large head Missionary, Garlands, Easter Arch, Logo 3 layered bouquet, Basketball Arch, Seasonal & Specialty.
+- `Plan by Occasion` routes to product/category pages, not `/contact?occasion=...` shortcuts. Product names remain unchanged, but fulfillment/menu/occasion labels such as Delivery, Get Well, Grab & Go, and Seasonal are no longer active top-level shop categories after the 2026-05-24 taxonomy cleanup.
 - No Gallery link in current nav.
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`; CTAs now use `/contact`.
 - `/shop-items` and `/all-products` previously aliased to `/shop-by-category`; superseded 2026-05-02. They now route to `/shop`.
@@ -123,7 +123,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 | `/shop-items` + `/all-products` | Route to `/shop` |
 | `Plan by Occasion` | Product/category links only; no contact shortcuts |
 | `/privacy` + `/terms-of-service` | Static policy routes live; Stripe Dashboard wiring still pending |
-| Shop catalog | Current catalog details belong in `CODING-HANDOFF.md`; 2026-05-17 local proof covers 53 Odoo products, 0 exclusions, and 290 priced sale units |
+| Shop catalog | Current catalog details belong in `CODING-HANDOFF.md`; 2026-05-24 local taxonomy proof covers 51 published products, 8 active primary categories, and 9 hidden secondary occasion categories |
 | Stripe checkout (test mode) | Same as yesterday — guest cart + Checkout Session + cascade |
 
 ## What's NOT done (next session candidates, by priority)
@@ -184,7 +184,7 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 
 ## Suggested next move
 
-1. Have GL open `localhost:8081/` plus `/shop-items/seasonal-specialty`, `/shop-items/seasonal-specialty/easter-balloon-cups`, `/privacy`, and `/terms-of-service` in a real browser.
+1. Have GL open `localhost:8081/` plus `/shop`, `/shop-items/table-decor`, `/shop-items/table-decor/easter-balloon-cups`, `/privacy`, and `/terms-of-service` in a real browser.
 2. Wire Stripe Dashboard policy URLs after GL/legal approval of `/privacy` and `/terms-of-service`.
 3. Continue Phase 2 in the current order above. `/contact` is the inquiry surface; `/book` redirects to `/contact?intent=quick`.
 4. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between Hetzner and our DB, fix at the seed layer first.

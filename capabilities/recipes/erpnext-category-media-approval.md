@@ -88,14 +88,22 @@ python scripts/setup/sync_category_media.py --selection output/category-media-se
 
 ## LT Receipt
 
-On 2026-05-06, the live DB still had empty `image` fields for all 11 direct
-customer-facing Item Groups under `Shop Items`. `scripts/verify/category_media_candidates.py`
-generated quick picks for all 11 categories without changing ERPNext data.
-`scripts/setup/sync_category_media.py` wrote a selection template, dry-ran 11
-would-update rows, and an unapproved apply safety check made 0 live updates.
+On 2026-05-06, the live DB still had empty `image` fields for the then-current
+direct customer-facing Item Groups under `Shop Items`.
+`scripts/verify/category_media_candidates.py` generated quick picks without
+changing ERPNext data. `scripts/setup/sync_category_media.py` wrote a
+selection template, dry-ran candidate updates, and an unapproved apply safety
+check made 0 live updates.
+
+On 2026-05-24, the approved shop taxonomy superseded the 11 direct-category
+model with 8 visible primary groups under `Shop Items` and hidden secondary
+occasion groups under `Shop Occasions`. Category media approval now applies to
+the 8 visible primary groups unless GL explicitly opens a secondary image
+treatment.
 
 On 2026-05-22, route-level category hero art was repaired through generated
-WebP crops and CSS mapping. That work is tracked in
+WebP crops and CSS mapping, then refreshed for the 8-category taxonomy on
+2026-05-24. That work is tracked in
 `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md` and
 `capabilities/recipes/lt-balloon-color-generated-hero-contract.md`; it leaves
 this ERPNext Item Group approval lane parked until GL/Jeff approve DB images.

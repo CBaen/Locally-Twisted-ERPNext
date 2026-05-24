@@ -56,7 +56,7 @@ it before route proof.
 
 1. Write or refresh a research brief before generation.
 2. Pick category shape and palette names from the color addendum.
-3. Include owner/Odoo swatch refs in the generation manifest/prompt. Do not
+3. Include owner-approved swatch refs in the generation manifest/prompt. Do not
    print or commit API keys.
 4. Generate wide source art and breakpoint crops with
    `scripts/setup/generate_shop_category_heroes.py`.
@@ -94,8 +94,10 @@ npm run test:layout-fit -- --grep "seasonal-category|shop"
 
 ## LT Receipt
 
-On 2026-05-22, all 11 `/shop-items/<group>` routes were mapped to unique
-generated WebP hero crops. The generation manifest records category shape,
-owner/Odoo color names, swatch refs, and the "not hex authority" rule. The
-focused Playwright verifier passed 35/35, and public asset, container, and
-layout gates passed for shop/category routes.
+On 2026-05-22, category route heroes were mapped to generated WebP crops. On
+2026-05-24, the route set was refreshed to the 8 active primary categories,
+including a dedicated generated Photo Ops & Backdrops asset and source-manifest
+entry. The generation manifest records category shape, owner-approved color
+names, swatch refs, and the "not hex authority" rule. The focused Playwright
+verifier checks rendered route image assignments and hero heights for the
+active route set; it does not parse the generation manifest.

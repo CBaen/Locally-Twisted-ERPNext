@@ -40,8 +40,11 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   secondary category is one broad occasion/use-case. Delivery, pickup,
   latex-free, colors, sizes, add-ons, foil numbers, `Grab & Go`, specific
   holiday names, character/theme names, and product options are not categories.
-  This is documentation only; no ERPNext product/category records have been
-  changed yet.
+  This is now implemented locally/source: `51` published Website Items, `8`
+  visible primary categories under `Shop Items`, `9` secondary categories under
+  hidden `Shop Occasions`, and `51` secondary Website Item Group rows. Product
+  names, checkout behavior, staging, live, provider state, DNS, Stripe, Search
+  Console, and production data were not changed.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
 - 2026-05-24 staging feature handoffs:
@@ -62,9 +65,10 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   intentionally in product details, and foil-number add-ons are capped at
   3 digits. Handoff:
   `workstreams/ecommerce-audit/product-option-selection-ux-2026-05-22.md`.
-- Category detail heroes were repaired locally on 2026-05-22. All 11
+- Category detail heroes were repaired locally on 2026-05-22 and refreshed for
+  the 2026-05-24 taxonomy implementation. All 8 active
   `/shop-items/<group>` routes now use generated category-specific hero crops
-  built from owner/Odoo balloon swatches and exact color names. This is route
+  built from owner-approved balloon swatches and exact color names. This is route
   hero art only: ERPNext Item Group `image` fields remain unapproved and
   unchanged. Handoff:
   `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`;
@@ -75,11 +79,12 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   `Website Slideshow`, and renders in the product gallery rail. Variant media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
-- Current local product import proof treats all 53 Odoo-imported products as
-  real products. Direct checkout is now bounded for high-complexity color
-  products: the two graduation products use college color preset checkout
-  variants, while hyperspecialized 50+ color products route to quote request
-  until their UI/UX, pricing, color logic, and operator flow are approved.
+- Current local shop taxonomy proof covers `51` published products. Two
+  duplicate source slugs are explicitly excluded from the import subset.
+  Direct checkout is bounded for high-complexity color products: the two
+  graduation products use college color preset checkout variants, while
+  hyperspecialized 50+ color products route to quote request until their UI/UX,
+  pricing, color logic, and operator flow are approved.
   Do not promote this local proof to public/live without GL local approval
   plus the separate Frappe Cloud, Stripe, DNS, webhook, and live payment
   cutover gates.
@@ -225,11 +230,12 @@ Feature handoff:
 - `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`
 
 Evidence summary: the previous category pages all inherited the same generic
-shop hero image. A first repair using Odoo/photo crops was rejected. The kept
-repair generates representative wide hero art per category, prompts with the
-category shape plus owner/Odoo balloon color names and swatch references, crops
-to the compact hero breakpoints, and maps each `/shop-items/<group>` route to a
-unique WebP set. The style guide now has a balloon color addendum with 53
+shop hero image. A first repair using product-photo crops was rejected. The
+kept repair generates representative wide hero art per category, prompts with
+the category shape plus owner-approved balloon color names and swatch
+references, crops to the compact hero breakpoints, and maps each active
+`/shop-items/<group>` route to a unique WebP set. The style guide now has a
+balloon color addendum with 53
 drawer options, swatch references, and best web-match hex values for matching
 only. Hex values are not image-generation authority.
 
@@ -277,7 +283,7 @@ Green gates:
 - `python scripts\verify\school_seasonal_color_preset_contract.py`
 - `python scripts\verify\catalog_variant_contract.py`
 - `python scripts\dev\clear_website_cache.py`
-- Browser Playwright probes for `/shop-items/grab-go/graduation-grab-n-go`,
+- Browser Playwright probes for `/shop-items/garlands/graduation-grab-n-go`,
   `/shop-items/stands-easels/6-graduation-stands`, and
   `/shop-items/arches/classic-arch`
 
@@ -346,7 +352,7 @@ Green gates:
 - `python scripts\verify\cart_checkout_contract.py`
 - `python scripts\verify\product_page_runtime_contract.py`
 
-### All-Odoo sellable product reimport - 2026-05-17
+### Sellable product reimport - 2026-05-17
 
 Owner: `Codex`
 
@@ -357,14 +363,16 @@ Feature handoff:
 
 - `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`
 
-Evidence summary: GL corrected the product model: every Odoo-imported product
+Evidence summary: GL corrected the product model: every source-imported product
 is a product. The local `frontend` site was backed up, cleaned of two generated
-proof products, snapshotted, and reimported with 53 included products, 0
-exclusions, and 290 priced sale units. Price enrichment now feeds
+proof products, snapshotted, and reimported with the then-current approved
+manifest. The 2026-05-24 taxonomy pass now treats 51 published products as
+current and explicitly excludes 2 duplicate source slugs from the import
+subset. Price enrichment now feeds
 `seed_catalog.py`, preventing bouquet-size variants from flattening to the page
 base price. Product-level Website Item contracts now outrank stale
 item-group/category fallback in product pages, shop cards, and cart display
-rows. Browser proof passed all 53 live Website Item routes in two batches under
+rows. Historical browser proof passed all 53 live Website Item routes in two batches under
 the 50-line cart cap at desktop and mobile widths, including cart and checkout
 preview. `lt_ecommerce_paused=1` was restored and verified.
 
@@ -566,8 +574,9 @@ Expected gated result:
   because the public/live exposure safety lock is on. That lock does not block
   local ecommerce implementation work.
 
-Evidence summary after the 2026-05-17 reimport: 53 product rows are mapped
-through the generic receiving architecture and all 53 are checkout allowed.
+Evidence summary after the 2026-05-17 reimport was 53 product rows mapped
+through the generic receiving architecture. The 2026-05-24 taxonomy pass now
+treats 51 published products as current, with 30 checkout and 21 quote-first.
 There are no business quote-first product categories; legacy `quote_first`
 values are internal holds only where field names remain. Payload targets are
 `selected_options`, `color_recipes`, `add_ons`, and `quote_context`;

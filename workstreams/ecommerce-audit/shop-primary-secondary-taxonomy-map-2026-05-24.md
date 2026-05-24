@@ -2,18 +2,20 @@
 
 ## Status
 
-Approved direction from GL for documentation and future implementation planning.
-This packet does not change ERPNext data, product names, slugs, routes, prices,
-images, checkout behavior, payment settings, staging, live, DNS, Stripe, or
-Search Console.
+Implemented locally/source on 2026-05-24 after GL approval.
 
-Verified local source before writing:
+This packet changed local/source taxonomy records and local ERPNext catalog
+projection only. It did not change product names, prices, images, checkout
+behavior, payment settings, staging, live, DNS, Stripe, Search Console, or
+production data.
+
+Verified local result after implementation:
 
 - Local ERPNext published `Website Item` count: `51`.
-- Current Ready-to-Order menu source: visible `Item Group` children of
-  `Shop Items`.
-- Current secondary `Website Item Group` rows: `0`; secondary taxonomy is not
-  yet implemented in the local catalog data.
+- Visible primary `Item Group` children of `Shop Items`: `8`.
+- Secondary `Website Item Group` rows: `51`.
+- Secondary categories live under hidden parent group `Shop Occasions`.
+- Product names remain unchanged.
 
 ## Taxonomy Contract
 
@@ -113,8 +115,7 @@ not belong in the two-level category model.
 
 ## Primary Category Cleanup
 
-These current primary groups should be removed or demoted during the eventual
-implementation:
+These prior primary groups were hidden/demoted by the implementation:
 
 - `Deliveries` is fulfillment, not a product category.
 - `Get-Well Bouquets` is an occasion/use-case grouping; approved primary is
@@ -123,8 +124,7 @@ implementation:
   but the approved primary for those current products is `Garlands`.
 - `Seasonal & Specialty` is not a product type. The current product maps to
   `Table Decor` with secondary `Holiday`.
-- `Drops` should become `Balloon Drops` if route and redirect planning approves
-  that primary label change.
+- `Drops` became `Balloon Drops`; route aliases preserve old inbound URLs.
 
 New or confirmed primary categories needed by the approved mapping:
 
@@ -137,23 +137,42 @@ New or confirmed primary categories needed by the approved mapping:
 - Stands & Easels
 - Table Decor
 
-## Implementation Notes For Future Agents
+## Implementation Receipts
 
-Do not implement this by manually editing random Desk records. The safe path is:
+Source-owned contract:
 
-1. Create a source-owned taxonomy mapping artifact from this approved packet.
-2. Add a verifier that fails if banned primary or secondary category terms
-   appear in the product taxonomy.
-3. Add or confirm any needed primary `Item Group` records.
-4. Apply primary category changes through the reviewed seed/sync path.
-5. Add secondary categories through the Webshop `Website Item Group` child table
-   or an equivalent source-owned projection, then update menu/category/search
-   code only after the data model is verified.
-6. Plan route and redirect behavior before changing any primary category that
-   affects public URLs.
-7. Clear website cache and verify `/shop`, `/shop-items/<group>`, product pages,
-   header menu/search, cart, and checkout smoke paths.
+- `apps/locally_twisted/locally_twisted/shop_taxonomy.py`
+- `apps/locally_twisted/locally_twisted/seed/sync_shop_taxonomy.py`
+- `apps/locally_twisted/locally_twisted/patches/sync_shop_taxonomy_20260524.py`
+- `apps/locally_twisted/locally_twisted/fixtures/item_group.json`
 
-No staging/live/provider mutation is approved by this packet. Promotion must use
-the normal Frappe Cloud staging release gate and protect production data,
+Runtime projection:
+
+- `51` Website Items retagged to approved primary groups.
+- `9` template Items retagged.
+- `2,852` variant Items retagged.
+- `51` secondary Website Item Group rows created.
+- Prior visible primary groups were hidden, with compatibility routes retained
+  through `website_route_rules`.
+
+Verifier receipts:
+
+- `python scripts\verify\shop_taxonomy_contract.py`
+- `python scripts\verify\catalog_public_sellability_contract.py`
+- `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.commerce_rules_contract.run`
+- `python scripts\verify\nav_ia.py`
+- `python scripts\verify\category_media_candidates.py --json output\category-media-candidates-taxonomy-smoke.json --markdown output\category-media-candidates-taxonomy-smoke.md --max-per-category 2`
+- `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line`
+- `python scripts\verify\public_asset_integrity.py`
+- `python scripts\verify\smoke_shop.py`
+
+Related copy hardening:
+
+- Bouquet size labels were normalized away from supplier shorthand through
+  `normalize_bouquet_size_labels_20260524.py`.
+- Product Setup gallery/customer copy was normalized through
+  `normalize_product_setup_bouquet_copy_20260524.py`.
+
+No staging/live/provider mutation is approved by this packet. Promotion must
+use the normal Frappe Cloud staging release gate and protect production data,
 payment settings, DNS, Search Console, and live Stripe.

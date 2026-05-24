@@ -28,19 +28,23 @@ Ready-to-Order menu categories come from live ERPNext `Item Group` children of
 `Shop Items` with `show_in_website=1`, ordered by weightage. This matches the
 existing `/shop` category source in `website_context.py` and `www/shop.py`.
 
-Live local DB proof on 2026-05-21 returned these 11 category rows:
+2026-05-24 supersession: the menu architecture remains current, but the old
+11-row category content below is historical. Current active primary categories
+are:
 
 - Arches -> `shop-items/arches`
-- Columns -> `shop-items/columns`
+- Balloon Drops -> `shop-items/balloon-drops`
 - Bouquets -> `shop-items/bouquets`
-- Get-Well Bouquets -> `shop-items/get-well-bouquets`
+- Columns -> `shop-items/columns`
 - Garlands -> `shop-items/garlands`
-- Drops -> `shop-items/drops`
-- Grab & Go -> `shop-items/grab-go`
-- Table Decor -> `shop-items/table-decor`
+- Photo Ops & Backdrops -> `shop-items/photo-ops-backdrops`
 - Stands & Easels -> `shop-items/stands-easels`
-- Deliveries -> `shop-items/deliveries`
-- Seasonal & Specialty -> `shop-items/seasonal-specialty`
+- Table Decor -> `shop-items/table-decor`
+
+Historical local DB proof on 2026-05-21 returned 11 category rows. That list
+is intentionally not repeated here because the active 2026-05-24 taxonomy above
+supersedes those labels and routes. Use git history if the old proof list is
+needed for forensics.
 
 Proof command shape:
 
@@ -123,7 +127,8 @@ python scripts/verify/smoke_shop.py
 Direct homepage HTML probe after cache clear:
 
 - `Browse ready-to-order by category.` present.
-- Category links for Arches, Bouquets, and Seasonal & Specialty present.
+- Historical category links for Arches, Bouquets, and Seasonal & Specialty
+  present. Current proof should use the 8 active primary categories.
 - Product links for Unicorn Bouquet and Easter Balloon Cups absent from the
   header HTML.
 - `ERPNext`, `Website Item`, and `Backend-approved` absent from the header

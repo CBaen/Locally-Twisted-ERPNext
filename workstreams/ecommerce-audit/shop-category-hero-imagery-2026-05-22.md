@@ -1,20 +1,24 @@
 # Shop Category Hero Imagery - 2026-05-22
 
-Status: local browser-verified and ready for GL localhost review. No
-staging/live release, Frappe Cloud update, DNS change, Stripe change, or
-ERPNext Item Group image mutation has been performed.
+Status: local browser-verified and refreshed for the 2026-05-24 approved shop
+taxonomy. No staging/live release, Frappe Cloud update, DNS change, Stripe
+change, or ERPNext Item Group image mutation has been performed.
 
 ## Problem
 
-All `/shop-items/<category>` Item Group pages inherited the same generic shop hero image. A first local repair replaced the repeated image with cropped Odoo product-source photos, but GL correctly rejected those as bad hero assets. The current requirement is generated, category-specific hero art designed for the compact hero ratio and using the real LT balloon color system.
+All `/shop-items/<category>` Item Group pages inherited the same generic shop
+hero image. A first local repair replaced the repeated image with cropped
+product-source photos, but GL correctly rejected those as bad hero assets. The
+current requirement is generated, category-specific hero art designed for the
+compact hero ratio and using the real LT balloon color system.
 
 ## Source Decision
 
 Use generated representative hero images, not real/proof photos and not Odoo product-photo crops. The generation prompt authority is:
 
 1. category shape;
-2. exact owner/Odoo balloon color names;
-3. owner/Odoo swatch asset references;
+2. exact owner-approved balloon color names;
+3. owner-approved swatch asset references;
 4. hero-banner composition requirements.
 
 Hex is not image-generation authority. Hex values live in `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md` only as best web-match approximations for customer/design matching.
@@ -42,14 +46,11 @@ Research brief:
 | `/shop-items/arches` | `classic-arch-category-hero-{mobile,tablet,desktop}.webp` | Blue Slate, Reflex Champagne, Blush, Dusk Green Tea, White |
 | `/shop-items/columns` | `classic-column-category-hero-{mobile,tablet,desktop}.webp` | Royal Blue, Reflex Gold, White, Blue Slate, black |
 | `/shop-items/bouquets` | `mothers-day-bouquet-category-hero-{mobile,tablet,desktop}.webp` | Pastel Pink, Pastel Blue, Pastel Yellow, Pastel Purple, Reflex Champagne |
-| `/shop-items/get-well-bouquets` | `bandage-get-well-bouquet-latex-free-category-hero-{mobile,tablet,desktop}.webp` | Dusk Green Tea, Pastel Yellow, Robin's Egg, White, Blush |
 | `/shop-items/garlands` | `classic-organic-balloon-garland-category-hero-{mobile,tablet,desktop}.webp` | Reflex Champagne, Dusk Rose, eucalyptus, White, Blush |
-| `/shop-items/drops` | `balloon-drop-category-hero-{mobile,tablet,desktop}.webp` | Red, Orange, yellow, Royal Blue, Shamrock, Violet, White |
-| `/shop-items/grab-go` | `graduation-grab-n-go-category-hero-{mobile,tablet,desktop}.webp` | Reflex Gold, black, White, Blue Slate, Reflex Silver |
+| `/shop-items/balloon-drops` | `balloon-drop-category-hero-{mobile,tablet,desktop}.webp` | Red, Orange, yellow, Royal Blue, Shamrock, Violet, White |
+| `/shop-items/photo-ops-backdrops` | `baby-shower-combination-photo-opt-category-hero-{mobile,tablet,desktop}.webp` | Reflex Gold, Royal Blue, White, black, Reflex Silver |
 | `/shop-items/table-decor` | `marble-table-decor-category-hero-{mobile,tablet,desktop}.webp` | Blush, Reflex Champagne, Dusk Rose, White, Clear |
 | `/shop-items/stands-easels` | `6-graduation-stands-category-hero-{mobile,tablet,desktop}.webp` | Reflex Gold, Royal Blue, White, black, Reflex Silver |
-| `/shop-items/deliveries` | `birthday-deliveries-category-hero-{mobile,tablet,desktop}.webp` | Reflex Champagne, raspberry, bubble Gum, Pastel Pink, White |
-| `/shop-items/seasonal-specialty` | `easter-balloon-cups-category-hero-{mobile,tablet,desktop}.webp` | Pastel Yellow, Pastel Melon, Pastel Green, Teal, Blush |
 
 ## Verification
 
@@ -61,7 +62,11 @@ Research brief:
 - `npm run test:container-contract -- --grep "seasonal-category|shop"`
 - `npm run test:layout-fit -- --grep "seasonal-category|shop"`
 
-The focused hero verifier checks all 11 category routes at mobile, tablet, and desktop widths. It also verifies the dated generation manifest keeps palette names, owner/Odoo swatch references, and the "not hex authority" rule for each category.
+The focused hero verifier checks all 8 active category routes at mobile,
+tablet, and desktop widths and confirms the rendered route uses the expected
+WebP asset instead of the generic shop lifestyle hero. The dated generation
+manifest is retained as source provenance, but the Playwright verifier does
+not currently parse that manifest.
 
 Visual proof sheets:
 

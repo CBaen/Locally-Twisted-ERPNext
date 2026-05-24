@@ -48,8 +48,8 @@ leaving a lone orphan card or a ragged chip row.
   photo-first product grid. It must not fall back to a Frappe/Webshop
   sidebar-card feeling.
 - Category navigation is a slim desktop left rail and a native mobile select.
-  It includes `All Ready-to-Order` plus the 11 customer-facing `Shop Items`
-  children.
+  It includes `All Ready-to-Order` plus the 8 active customer-facing
+  `Shop Items` primary children.
 - Do not restore text-width chips, a top 12-button tile wall, or in-place
   category filtering on `/shop` unless GL explicitly reverses this decision.
 - `/shop` product grids and category product grids must not leave one desktop
