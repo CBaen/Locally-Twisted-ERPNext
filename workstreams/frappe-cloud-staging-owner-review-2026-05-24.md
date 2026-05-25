@@ -13,9 +13,9 @@ monolith.
 
 | Surface | Restore point | Current point | Notes |
 |---|---|---|---|
-| Full repo | `c668543 Restore trusted staging source` | `203127a Hide unsafe checkout provider errors` | `main` and `origin/main` matched at this point before documentation work. |
-| Frappe app mirror | `8d69683` | `9ce07f2` | GitHub compare showed the mirror ahead by 7 commits and behind by 0. |
-| Hosted staging | `https://locallytwisted-staging.frappe.cloud` | owner-review candidate | Product/cart route tests pass; Stripe test-mode checkout and ERPNext paid-order records passed. |
+| Full repo | `c668543 Restore trusted staging source` | `8913160 Document shop taxonomy implementation` | `main` and `origin/main` include the approved shop taxonomy implementation and docs. |
+| Frappe app mirror | `8d69683` | `bb19a4b` | App-root mirror was synced from current app root for staging-only owner review. |
+| Hosted staging | `https://locallytwisted-staging.frappe.cloud` | owner-review candidate | Product/cart route tests pass; Stripe test-mode checkout and ERPNext paid-order records passed; approved taxonomy is staged. |
 
 Full-repo commits after the trusted restore:
 
@@ -23,6 +23,9 @@ Full-repo commits after the trusted restore:
 - `4d5c287 Fix product gallery thumbnail copy`
 - `70b8869 Fix staging checkout product flow`
 - `203127a Hide unsafe checkout provider errors`
+- `55942f0 Document approved shop taxonomy map`
+- `1a72d27 Apply approved shop taxonomy`
+- `8913160 Document shop taxonomy implementation`
 
 App-mirror commits after the staging restore point:
 
@@ -33,6 +36,7 @@ App-mirror commits after the staging restore point:
 - `a4a0fc0 Fix staging checkout product flow press-deploy-bench-40102`
 - `5bb9326 Hide unsafe checkout provider errors press-deploy-bench-40102`
 - `9ce07f2 Trigger staging checkout safety deploy press-deploy-bench-40102`
+- `bb19a4b Sync shop taxonomy staging app`
 
 ## Feature Handoffs
 
@@ -42,6 +46,8 @@ App-mirror commits after the staging restore point:
   `workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`
 - Checkout product flow and payment proof:
   `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`
+- Approved primary/secondary shop taxonomy:
+  `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`
 - Payment failure recipe:
   `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`
 - Email failure recipe:
@@ -76,6 +82,10 @@ App-mirror commits after the staging restore point:
 7. Checkout error safety:
    source now shields provider/decryption wording from customer-facing checkout
    errors. Operators still need the exact server-side error in logs.
+8. Shop taxonomy:
+   primary shop categories now use physical product types, secondary categories
+   use broad occasions/use cases, and duplicate product routes for `easter-arch`
+   and `pride-arch` stay gone. Product names were not changed.
 
 ## Hosted Staging Proof
 
@@ -111,6 +121,29 @@ completed one Stripe test-mode payment:
   staging temporary password through Administrator/System Console and verified
   in a clean browser session. It landed at `/app/Workspaces/Owner%20Home` with
   title `Owner Home`.
+
+Latest hosted taxonomy release proof:
+
+- App mirror `bb19a4b` was selected as the only app update in Frappe Cloud.
+- Bench deploy `2ve3dgt97a` succeeded.
+- Site migration job `22jih1qaln` succeeded for
+  `locallytwisted-staging.frappe.cloud`.
+- Frappe Cloud cache clear completed through the site action.
+- `npm run test:search-contract` passed `4/4` against staging.
+- `npm run test:product-gallery-experience` passed `4/4` against staging.
+- `npm run test:checkout-experience` passed `3/3` against staging.
+- `shop_category_hero_images.spec.js` passed `25/25` against staging.
+- `public_asset_integrity.py --base-url https://locallytwisted-staging.frappe.cloud`
+  passed for `31` routes and `315` local asset URLs.
+- Public route probes returned `200` for `/shop`,
+  `/shop-items/photo-ops-backdrops`, `/shop-items/stands-easels`,
+  `/shop-items/arches/easter-balloon-arch-bunny-ear`, and
+  `/shop-items/arches/pride-progress-rainbow-balloon-arch`; duplicate routes
+  `/shop-items/arches/easter-arch` and `/shop-items/arches/pride-arch`
+  returned `404`.
+- A transient Frappe Cloud Bad Gateway was observed once immediately after
+  cache clear and cleared on the next public health probe; `/` and `/shop`
+  returned `200` afterward, and hosted tests were rerun successfully.
 
 Earlier failure evidence still matters as the guard: final submit first reached
 the payment setup layer and failed because `Stripe Settings.Test.secret_key`

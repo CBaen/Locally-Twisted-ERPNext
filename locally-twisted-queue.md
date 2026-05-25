@@ -10,23 +10,20 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P0 staging payment config before owner checkout review (2026-05-24):** Active
-handoff is `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with
-checkout detail in
-`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md` and
-failure recipe
-`capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`. Decision
-packet: `decisions/2026-05-24-staging-owner-review-recovery.md`. The
-trusted-recovery source is now on staging far enough for route proof:
-`npm run test:checkout-experience` passed `3/3` and
-`npm run test:product-gallery-experience` passed `4/4` against
-`https://locallytwisted-staging.frappe.cloud`. The remaining blocker before
-owner card-path testing is staging payment-secret/config drift:
-`Stripe Settings.Test.secret_key` could not be decrypted in staging. Next safe
-step is to repair staging test payment settings, clear cache, rerun the route
-and payment gates, then run one authorized Stripe test-mode checkout with
-ERPNext record/receipt/operator-email proof. Do not touch live payment settings,
-DNS, Search Console, or production data from this queue item.
+**P0 owner staging review and change intake (2026-05-24):** Active handoff is
+`workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout
+detail in `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`
+and taxonomy detail in
+`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
+Decision packet: `decisions/2026-05-24-staging-owner-review-recovery.md`.
+Current staging source is full repo `8913160` and app mirror `bb19a4b`.
+Frappe Cloud staging deploy `2ve3dgt97a`, site migration job `22jih1qaln`, and
+cache clear have completed. Hosted staging proof passes checkout `3/3`,
+product gallery `4/4`, search `4/4`, category heroes `25/25`, and public asset
+integrity for `31` routes / `315` local asset URLs. The next safe step is owner
+review on staging and a change log from that review. Do not touch live payment
+settings, DNS, Search Console, live Stripe, or production data from this queue
+item.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

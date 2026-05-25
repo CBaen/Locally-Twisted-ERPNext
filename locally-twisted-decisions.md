@@ -31,12 +31,13 @@ belong in product names/search/copy under the broad `Holiday` secondary
 category when no tertiary category layer exists.
 
 **Implementation boundary:** Implemented locally/source on 2026-05-24 through
-a source-owned mapping/projection path with verifier guards and route aliases.
-It changed local ERPNext category projection for `51` published Website Items,
-`9` template Items, `2,852` variant Items, and `51` secondary Website Item
-Group rows. It did not change product names, slugs, prices, images, checkout
-behavior, payment settings, staging, live, DNS, Stripe, Search Console, or
-production data.
+a source-owned mapping/projection path with verifier guards and route aliases,
+then deployed to Frappe Cloud staging through app mirror `bb19a4b`, bench
+deploy `2ve3dgt97a`, and site migration job `22jih1qaln`. It changed ERPNext
+category projection for `51` published Website Items, `9` template Items,
+`2,852` variant Items, and `51` secondary Website Item Group rows. It did not
+change product names, slugs, prices, checkout behavior, payment settings, live,
+DNS, Search Console, live Stripe, or production data.
 
 **Receipts:**
 `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`;
@@ -46,6 +47,9 @@ production data.
 `scripts/verify/shop_taxonomy_contract.py`. Verification passed locally:
 shop taxonomy, catalog public sellability, commerce rules, nav IA, category
 media candidates, category hero images, public asset integrity, and shop smoke.
+Hosted staging proof passed search, checkout, product-gallery, category-hero,
+public-asset, and route probes; duplicate product routes `easter-arch` and
+`pride-arch` returned `404`.
 
 **Decided by:** Guiding Light taxonomy correction and approval on 2026-05-24;
 Codex local/source implementation and triad review.

@@ -1,26 +1,32 @@
 # Locally Twisted - Coding Handoff
 
-Current staging owner-review recovery as of 2026-05-24: work restarted from
-trusted source commit `c668543 Restore trusted staging source` and is now at
-full-repo commit `203127a Hide unsafe checkout provider errors` before this
-documentation pass. The matching Frappe app mirror is at `9ce07f2` after the
-mobile footer, product gallery, checkout product-flow, and checkout error-safety
-fixes were pushed for staging. Umbrella handoff:
+Current staging owner-review state as of 2026-05-24: work restarted from
+trusted source commit `c668543 Restore trusted staging source` and the current
+full-repo source point is `8913160 Document shop taxonomy implementation`.
+The matching Frappe app mirror is `bb19a4b Sync shop taxonomy staging app`.
+Frappe Cloud staging deploy `2ve3dgt97a` succeeded; staging site migration job
+`22jih1qaln` succeeded; staging cache was cleared through Frappe Cloud.
+Umbrella handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`; feature
 handoffs:
 `workstreams/mobile-footer-columns-staging-2026-05-24.md`,
 `workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`,
+`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`,
 and
-`workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`.
+`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
 Fresh hosted staging proof on `https://locallytwisted-staging.frappe.cloud`
-passed `npm run test:checkout-experience` `3/3` and
-`npm run test:product-gallery-experience` `4/4`. Final payment/card-path
-testing is still blocked by staging payment-secret configuration:
-`Stripe Settings.Test.secret_key` could not be decrypted in the staging site
-context. Failure recipe:
-`capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`. Do not
-call this live checkout approval, DNS approval, Search Console approval, or
-production payment proof. Decision packet:
+passed `npm run test:checkout-experience` `3/3`,
+`npm run test:product-gallery-experience` `4/4`,
+`npm run test:search-contract` `4/4`,
+`shop_category_hero_images.spec.js` `25/25`, and
+`public_asset_integrity.py --base-url https://locallytwisted-staging.frappe.cloud`
+for `31` routes and `315` local asset URLs. A route probe confirmed `/shop`,
+the corrected category routes, and target product routes return `200`, while
+duplicate routes `/shop-items/arches/easter-arch` and
+`/shop-items/arches/pride-arch` return `404`. Hosted Stripe test-mode payment
+proof also exists in the staging checkout handoff. Do not call this live
+checkout approval, DNS approval, Search Console approval, live Stripe approval,
+or production payment proof. Decision packet:
 `decisions/2026-05-24-staging-owner-review-recovery.md`.
 
 Codex shop taxonomy implementation on 2026-05-24: GL approved the category model in
@@ -37,9 +43,11 @@ the taxonomy through `shop_taxonomy.py`, `sync_shop_taxonomy.py`,
 `51` published Website Items, `8` visible primary categories under
 `Shop Items`, `9` secondary categories under hidden `Shop Occasions`, and `51`
 secondary Website Item Group rows. Prior visible primary groups were hidden
-with route aliases retained. Product names, checkout behavior, payment
-settings, staging, live, provider state, DNS, Stripe, Search Console, and
-production data were not changed. Verification passed:
+with route aliases retained. The same app code is now on Frappe Cloud staging
+through app mirror `bb19a4b`, deploy `2ve3dgt97a`, and site migration job
+`22jih1qaln`. Product names, checkout behavior, payment settings, live,
+DNS, Search Console, live Stripe, and production data were not changed.
+Verification passed:
 `shop_taxonomy_contract.py`, `catalog_public_sellability_contract.py`,
 `commerce_rules_contract.run`, `nav_ia.py`, `category_media_candidates.py`,
 `shop_category_hero_images.spec.js`, `public_asset_integrity.py`, and

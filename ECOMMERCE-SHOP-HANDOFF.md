@@ -7,14 +7,26 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
 - Branch: `main`
 - Trusted staging recovery restarted from:
   `c668543 Restore trusted staging source`.
-- Current source point before this documentation pass:
-  `203127a Hide unsafe checkout provider errors`.
+- Current source point:
+  `8913160 Document shop taxonomy implementation`.
 - Current Frappe app mirror point:
-  `9ce07f2 Trigger staging checkout safety deploy press-deploy-bench-40102`.
+  `bb19a4b Sync shop taxonomy staging app`.
+- Latest Frappe Cloud staging release:
+  deploy `2ve3dgt97a`, site migration job `22jih1qaln`, cache clear through
+  Frappe Cloud.
 - Hosted staging owner-review proof on
   `https://locallytwisted-staging.frappe.cloud` passes
   `npm run test:checkout-experience` `3/3` and
   `npm run test:product-gallery-experience` `4/4`.
+- Latest taxonomy staging proof also passes `npm run test:search-contract`
+  `4/4`, `shop_category_hero_images.spec.js` `25/25`, and
+  `public_asset_integrity.py --base-url https://locallytwisted-staging.frappe.cloud`
+  for `31` routes and `315` local asset URLs. Public route probes confirmed
+  `/shop`, `/shop-items/photo-ops-backdrops`, `/shop-items/stands-easels`,
+  `/shop-items/arches/easter-balloon-arch-bunny-ear`, and
+  `/shop-items/arches/pride-progress-rainbow-balloon-arch` return `200`;
+  duplicate routes `/shop-items/arches/easter-arch` and
+  `/shop-items/arches/pride-arch` return `404`.
 - Hosted Stripe test-mode checkout proof on 2026-05-24 created and paid
   staging Sales Order `SAL-ORD-2026-00024`, Payment Request
   `ACC-PRQ-2026-00021`, and Sales Invoice `ACC-SINV-2026-00004` with grand
@@ -43,8 +55,9 @@ Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
   This is now implemented locally/source: `51` published Website Items, `8`
   visible primary categories under `Shop Items`, `9` secondary categories under
   hidden `Shop Occasions`, and `51` secondary Website Item Group rows. Product
-  names, checkout behavior, staging, live, provider state, DNS, Stripe, Search
-  Console, and production data were not changed.
+  names, checkout behavior, live, DNS, Search Console, live Stripe, and
+  production data were not changed. The taxonomy code is now staged on Frappe
+  Cloud through app mirror `bb19a4b`.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
 - 2026-05-24 staging feature handoffs:

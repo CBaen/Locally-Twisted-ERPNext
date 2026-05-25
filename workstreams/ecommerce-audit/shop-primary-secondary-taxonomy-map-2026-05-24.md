@@ -2,12 +2,12 @@
 
 ## Status
 
-Implemented locally/source on 2026-05-24 after GL approval.
+Implemented locally/source and deployed to Frappe Cloud staging on 2026-05-24
+after GL approval.
 
-This packet changed local/source taxonomy records and local ERPNext catalog
-projection only. It did not change product names, prices, images, checkout
-behavior, payment settings, staging, live, DNS, Stripe, Search Console, or
-production data.
+This packet changed source-owned taxonomy records and the staging ERPNext
+catalog projection. It did not change product names, prices, checkout behavior,
+payment settings, live, DNS, Search Console, live Stripe, or production data.
 
 Verified local result after implementation:
 
@@ -16,6 +16,23 @@ Verified local result after implementation:
 - Secondary `Website Item Group` rows: `51`.
 - Secondary categories live under hidden parent group `Shop Occasions`.
 - Product names remain unchanged.
+
+Staging release result:
+
+- Full repo source: `8913160 Document shop taxonomy implementation`.
+- Frappe app mirror: `bb19a4b Sync shop taxonomy staging app`.
+- Frappe Cloud bench deploy: `2ve3dgt97a`, `Success`.
+- Frappe Cloud site migration job: `22jih1qaln`, `Success`.
+- Staging cache was cleared through the Frappe Cloud site action.
+- Hosted route probe confirmed active category routes and target product routes
+  return `200`; duplicate product routes `/shop-items/arches/easter-arch` and
+  `/shop-items/arches/pride-arch` return `404`.
+- Hosted staging proof passed `npm run test:search-contract` `4/4`,
+  `npm run test:product-gallery-experience` `4/4`,
+  `npm run test:checkout-experience` `3/3`,
+  `shop_category_hero_images.spec.js` `25/25`, and
+  `public_asset_integrity.py --base-url https://locallytwisted-staging.frappe.cloud`
+  for `31` routes and `315` local asset URLs.
 
 ## Taxonomy Contract
 
