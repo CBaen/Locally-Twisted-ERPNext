@@ -53,20 +53,23 @@
                 </div>
             </div>
 
-            <fieldset class="lt-checkout__fieldset">
-                <legend>Pickup or delivery</legend>
+            <fieldset class="lt-checkout__fieldset" id="co-fulfillment-fieldset">
+                <legend id="co-fulfillment-legend">Pickup or delivery</legend>
                 <div class="lt-checkout__choice-row" role="radiogroup" aria-label="Pickup or delivery">
-                    <label class="lt-checkout__choice">
+                    <label class="lt-checkout__choice" id="co-delivery-choice">
                         <input type="radio" name="fulfillment_method" value="delivery" checked>
-                        <span>Delivery</span>
+                        <span id="co-delivery-label">Delivery</span>
                     </label>
-                    <label class="lt-checkout__choice">
+                    <label class="lt-checkout__choice" id="co-pickup-choice">
                         <input type="radio" name="fulfillment_method" value="pickup">
-                        <span>Pickup</span>
+                        <span id="co-pickup-label">Pickup</span>
                     </label>
                 </div>
-                <p class="lt-checkout__hint">
+                <p class="lt-checkout__hint" id="co-fulfillment-hint">
                     Pickup and delivery windows are requested until Locally Twisted confirms timing.
+                </p>
+                <p class="lt-checkout__hint" id="co-delivery-only-note" hidden>
+                    Delivery-only items will be delivered. Pickup is still available for pickup-eligible items in the same cart.
                 </p>
             </fieldset>
 
@@ -175,7 +178,9 @@
                         <p class="lt-checkout__line-name">
                             {% if item_route %}<a href="/{{ item_route }}">{{ item.web_item_name }}</a>{% else %}{{ item.web_item_name }}{% endif %}
                         </p>
-                        <p class="lt-checkout__line-meta">Qty {{ qty }} &middot; ${{ "%.2f"|format(unit_price) }} each</p>
+                        <p class="lt-checkout__line-meta">
+                            Qty {{ qty }}{% if item.fulfillment_policy == "delivery_only" %} &middot; Delivery only{% endif %} &middot; ${{ "%.2f"|format(unit_price) }} each
+                        </p>
                     </div>
                     <p class="lt-checkout__line-amount">${{ "%.2f"|format(line_total) }}</p>
                 </div>
@@ -260,6 +265,14 @@
     var deliveryFields = document.getElementById('co-delivery-fields');
     var pickupFields = document.getElementById('co-pickup-fields');
     var pickupLocation = document.getElementById('co-pickup-location');
+    var pickupChoice = document.getElementById('co-pickup-choice');
+    var pickupRadio = form.querySelector('input[name="fulfillment_method"][value="pickup"]');
+    var deliveryRadio = form.querySelector('input[name="fulfillment_method"][value="delivery"]');
+    var fulfillmentLegend = document.getElementById('co-fulfillment-legend');
+    var fulfillmentHint = document.getElementById('co-fulfillment-hint');
+    var deliveryOnlyNote = document.getElementById('co-delivery-only-note');
+    var deliveryLabel = document.getElementById('co-delivery-label');
+    var pickupLabel = document.getElementById('co-pickup-label');
     var windowStart = document.getElementById('co-window-start');
     var windowEnd = document.getElementById('co-window-end');
     var dateInput = document.getElementById('co-date');
@@ -384,13 +397,57 @@
         return checked ? checked.value : 'delivery';
     }
 
+    function checkoutPolicyCounts() {
+        var deliveryOnly = 0;
+        var pickupAllowed = 0;
+        var items = Array.isArray(currentCheckoutItems) ? currentCheckoutItems : [];
+        for (var i = 0; i < items.length; i++) {
+            var policy = String(items[i].fulfillment_policy || 'pickup_or_delivery');
+            if (policy === 'delivery_only') deliveryOnly++;
+            else pickupAllowed++;
+        }
+        return { deliveryOnly: deliveryOnly, pickupAllowed: pickupAllowed };
+    }
+
+    function hasDeliveryOnlyItems() {
+        return checkoutPolicyCounts().deliveryOnly > 0;
+    }
+
+    function hasPickupAllowedItems() {
+        return checkoutPolicyCounts().pickupAllowed > 0;
+    }
+
+    function requiresDeliveryAddress() {
+        return selectedFulfillment() === 'delivery' || hasDeliveryOnlyItems();
+    }
+
+    function requiresPickupDetails() {
+        return selectedFulfillment() === 'pickup' && hasPickupAllowedItems();
+    }
+
     function syncFulfillmentFields() {
+        var counts = checkoutPolicyCounts();
+        if (counts.deliveryOnly && !counts.pickupAllowed && deliveryRadio) {
+            deliveryRadio.checked = true;
+        }
         var method = selectedFulfillment();
-        var isPickup = method === 'pickup';
-        if (pickupFields) pickupFields.hidden = !isPickup;
-        if (deliveryFields) deliveryFields.hidden = isPickup;
+        var needsDelivery = requiresDeliveryAddress();
+        var needsPickup = requiresPickupDetails();
+        if (pickupChoice) pickupChoice.hidden = !!(counts.deliveryOnly && !counts.pickupAllowed);
+        if (pickupRadio) pickupRadio.disabled = !!(counts.deliveryOnly && !counts.pickupAllowed);
+        if (deliveryFields) deliveryFields.hidden = !needsDelivery;
+        if (pickupFields) pickupFields.hidden = !needsPickup;
+        if (fulfillmentLegend) fulfillmentLegend.textContent = counts.deliveryOnly && !counts.pickupAllowed ? 'Delivery only' : 'Pickup or delivery';
+        if (deliveryLabel) deliveryLabel.textContent = counts.deliveryOnly && counts.pickupAllowed ? 'Deliver all items' : 'Delivery';
+        if (pickupLabel) pickupLabel.textContent = counts.deliveryOnly ? 'Pick up eligible items' : 'Pickup';
+        if (fulfillmentHint) {
+            fulfillmentHint.textContent = counts.deliveryOnly
+                ? 'Delivery-only items will be delivered. Pickup and delivery windows are requested until Locally Twisted confirms timing.'
+                : 'Pickup and delivery windows are requested until Locally Twisted confirms timing.';
+        }
+        if (deliveryOnlyNote) deliveryOnlyNote.hidden = !counts.deliveryOnly;
         currentQuoteRequired = false;
-        if (sumDelivery) sumDelivery.textContent = isPickup ? '$0.00' : 'Calculated after ZIP';
+        if (sumDelivery) sumDelivery.textContent = needsDelivery ? 'Calculated after ZIP' : '$0.00';
         if (sumTax) sumTax.textContent = 'Calculated after location';
         if (sumGrand) sumGrand.textContent = fmtMoney(currentSubtotal || 0);
         populateWindows();
@@ -595,6 +652,7 @@
                 options: optionSummary(server),
                 unit_price: server.price_list_rate,
                 line_total: lineTotal,
+                fulfillment_policy: server.fulfillment_policy || 'pickup_or_delivery',
                 display_lines: server.display_lines || []
             });
 
@@ -620,6 +678,7 @@
             var meta = el('p', { 'class': 'lt-checkout__line-meta',
                                  text: 'Qty ' + line.qty + ' · ' + fmtMoney(server.price_list_rate) + ' each' });
             var metaParts = ['Qty ' + line.qty];
+            if ((server.fulfillment_policy || '') === 'delivery_only') metaParts.push('Delivery only');
             var optionsText = optionSummary(server);
             if (optionsText) metaParts.push(optionsText);
             metaParts.push(fmtMoney(server.price_list_rate) + ' each');
@@ -645,7 +704,7 @@
 
         if (itemsJsonInput) itemsJsonInput.value = JSON.stringify(itemsForSubmit);
         enableSubmit();
-        updateTotals();
+        syncFulfillmentFields();
     }
 
     function showSummaryLineMismatchError() {
@@ -707,8 +766,11 @@
             if (!itemsJson || itemsJson === '[]') return false;
         }
         if (!dateInput || !dateInput.value || !windowStart || !windowStart.value) return false;
-        if (method === 'pickup') return !!(pickupLocation && pickupLocation.value);
-        return !!((fd.get('city') || '').toString().trim() && (fd.get('postal_code') || '').toString().trim());
+        if (requiresPickupDetails() && !(pickupLocation && pickupLocation.value)) return false;
+        if (requiresDeliveryAddress()) {
+            return !!((fd.get('city') || '').toString().trim() && (fd.get('postal_code') || '').toString().trim());
+        }
+        return true;
     }
 
     function updateTotals() {
@@ -785,11 +847,11 @@
             setFeedback('error', 'Please fill in all required fields.');
             return;
         }
-        if (method === 'pickup' && !pickup) {
+        if (requiresPickupDetails() && !pickup) {
             setFeedback('error', 'Please choose a pickup location.');
             return;
         }
-        if (method === 'delivery' && (!addr1 || !city || !state || !zip)) {
+        if (requiresDeliveryAddress() && (!addr1 || !city || !state || !zip)) {
             setFeedback('error', 'Please give us a complete delivery address.');
             return;
         }

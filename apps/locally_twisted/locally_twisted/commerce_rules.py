@@ -35,6 +35,13 @@ RETAIL_CHECKOUT_GROUPS = {
 # Product group alone must not make a cart item quote-only. A customer-facing
 # quote fallback is a fulfillment rule, currently driven by delivery zone.
 QUOTE_REQUIRED_GROUPS = set()
+DELIVERY_ONLY_ITEM_GROUPS = {
+    "Arches",
+    "Balloon Drops",
+    "Columns",
+    "Garlands",
+    "Photo Ops & Backdrops",
+}
 
 PICKUP_LOCATIONS = {
     "West Jordan": {
@@ -208,6 +215,17 @@ def normalize_city(city: str | None) -> str:
 
 def checkout_lane_for_item_group(item_group: str | None) -> str:
     return "retail_checkout"
+
+
+def is_delivery_only_item_group(item_group: str | None) -> bool:
+    normalized_groups = {normalize_city(group) for group in DELIVERY_ONLY_ITEM_GROUPS}
+    return normalize_city(item_group) in normalized_groups
+
+
+def fulfillment_policy_for_item_group(item_group: str | None) -> str:
+    if is_delivery_only_item_group(item_group):
+        return "delivery_only"
+    return "pickup_or_delivery"
 
 
 def is_taxable_item(*, item_code: str | None = "", item_group: str | None = "") -> bool:
@@ -499,11 +517,32 @@ def public_fulfillment_panel(
     item_group: str | None, commerce_lane: str | None = None
 ) -> dict:
     commerce_lane = (commerce_lane or "").strip()
+    delivery_only = is_delivery_only_item_group(item_group)
     lane = (
         "quote_required"
         if commerce_lane in {"quote_first", "needs_review"}
         else checkout_lane_for_item_group(item_group)
     )
+    if delivery_only and lane == "quote_required":
+        return {
+            "lane": "delivery_only_quote_required",
+            "heading": "Delivery only",
+            "body": "This piece is delivery only. It starts with a quote so delivery, setup, timing, and venue access are planned correctly.",
+            "cta_label": "Request a quote",
+            "cta_href": "/contact",
+        }
+    if delivery_only:
+        return {
+            "lane": "delivery_only",
+            "heading": "Delivery only",
+            "body": (
+                "This item is delivery only so the size, setup, and timing stay safe. "
+                "Standard local delivery is $15. Park City delivery is $50. "
+                "Out-of-area delivery starts with a quote."
+            ),
+            "cta_label": "Add to cart",
+            "cta_href": "",
+        }
     if lane == "quote_required":
         return {
             "lane": lane,

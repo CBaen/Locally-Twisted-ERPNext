@@ -27,6 +27,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address, flt, cint
 
 from locally_twisted import commerce_rules
+from locally_twisted import checkout_fulfillment
 from locally_twisted.failure_recorder import record_backend_failure
 
 no_cache = 1
@@ -418,6 +419,7 @@ def get_context(context):
                 "website_item_code": cart_item.get("website_item_code"),
                 "name": cart_item.get("web_item_name") or cart_item["item_code"],
                 "qty": qty,
+                "fulfillment_policy": cart_item.get("fulfillment_policy") or "pickup_or_delivery",
             }
         ])
     else:
@@ -577,11 +579,15 @@ def _resolve_sale_lines(cart_items):
     return so_line_items, resolved_items
 
 
-def _item_tax_override(line):
+def _item_tax_override(line, tax_rate=None):
     if commerce_rules.is_taxable_item(
         item_code=line.get("item_code"),
         item_group=line.get("item_group"),
     ):
+        if tax_rate is not None:
+            return {
+                "item_tax_rate": json.dumps({commerce_rules.TAX_ACCOUNT_HEAD: float(tax_rate)}),
+            }
         return {}
     return {
         "item_tax_template": _non_taxable_item_tax_template(),
@@ -631,58 +637,52 @@ def _validate_preferred_contact_method(value):
     return label
 
 
-def _fulfillment_for_request(
-    *,
-    fulfillment_method,
-    pickup_location,
-    city,
-    postal_code,
-):
-    method = (fulfillment_method or "delivery").strip().lower()
-    if method not in {"pickup", "delivery"}:
-        frappe.throw(_("Please choose pickup or delivery."), frappe.ValidationError)
-    if method == "pickup" and pickup_location not in commerce_rules.PICKUP_LOCATIONS:
-        frappe.throw(_("Please choose a pickup location."), frappe.ValidationError)
-    return commerce_rules.resolve_fulfillment(
-        method=method,
-        postal_code=postal_code,
-        city=city,
+def _fulfillment_plan_for_request(*, so_line_items, fulfillment_method, pickup_location, city, postal_code):
+    plan = checkout_fulfillment.build_plan(
+        lines=so_line_items,
+        requested_method=fulfillment_method,
         pickup_location=pickup_location,
+        city=city,
+        postal_code=postal_code,
+    )
+    if plan.requires_pickup and pickup_location not in commerce_rules.PICKUP_LOCATIONS:
+        frappe.throw(_("Please choose a pickup location."), frappe.ValidationError)
+    return plan
+
+
+def _tax_context_for_plan(plan, *, pickup_location, city, postal_code):
+    return checkout_fulfillment.tax_context(
+        plan=plan,
+        pickup_location=pickup_location,
+        city=city,
+        postal_code=postal_code,
     )
 
 
-def _tax_for_fulfillment(fulfillment, *, pickup_location, city, postal_code):
-    if fulfillment.method == "pickup":
-        location = commerce_rules.PICKUP_LOCATIONS[pickup_location]
-        return commerce_rules.resolve_tax_rate(
-            postal_code=location["postal_code"],
-            city=location["city"],
-        )
-    return commerce_rules.resolve_tax_rate(postal_code=postal_code, city=city)
+def _build_plan_totals(so_line_items, plan, taxes):
+    return checkout_fulfillment.build_totals(so_line_items, plan, taxes)
 
 
-def _build_totals(so_line_items, fulfillment, tax):
-    subtotal = commerce_rules.money(sum(flt(row["rate"]) * int(row["qty"]) for row in so_line_items))
-    delivery_fee = commerce_rules.money(fulfillment.delivery_fee)
-    taxable_total = commerce_rules.money(
-        sum(
-            flt(row["rate"]) * int(row["qty"])
-            for row in so_line_items
-            if commerce_rules.is_taxable_item(
-                item_code=row.get("item_code"),
-                item_group=row.get("item_group"),
-            )
-        )
-    )
-    tax_amount = commerce_rules.money(taxable_total * tax.rate / commerce_rules.Decimal("100"))
-    total = commerce_rules.money(subtotal + delivery_fee + tax_amount)
-    return {
-        "subtotal": float(subtotal),
-        "delivery_fee": float(delivery_fee),
-        "tax_rate": float(tax.rate),
-        "tax_amount": float(tax_amount),
-        "total": float(total),
-    }
+def _apply_line_fulfillment_fields(so_line_items, plan, taxes):
+    meta = frappe.get_meta("Sales Order Item")
+    default_tax = checkout_fulfillment.default_tax(taxes)
+    for line in so_line_items:
+        policy = checkout_fulfillment.line_policy_for_item_group(line.get("item_group"))
+        method = checkout_fulfillment.line_method(line, plan)
+        tax = taxes.get(method) or default_tax
+        line.update(_item_tax_override(line, tax_rate=tax.rate))
+        zone = plan.delivery.zone if method == "Delivery" and plan.delivery else "pickup"
+        fields = {
+            checkout_fulfillment.LINE_FULFILLMENT_FIELDNAMES["policy"]: (
+                "Delivery Only" if policy == "delivery_only" else "Pickup or Delivery"
+            ),
+            checkout_fulfillment.LINE_FULFILLMENT_FIELDNAMES["method"]: method,
+            checkout_fulfillment.LINE_FULFILLMENT_FIELDNAMES["zone"]: zone,
+            checkout_fulfillment.LINE_FULFILLMENT_FIELDNAMES["note"]: checkout_fulfillment.line_fulfillment_note(line, plan),
+        }
+        for fieldname, value in fields.items():
+            if meta.has_field(fieldname):
+                line[fieldname] = value
 
 
 def _assert_checkout_api_open(surface: str) -> dict | None:
@@ -747,27 +747,28 @@ def preview_checkout_totals(item_code="", qty=1, items_json="",
     if not cart_items:
         return {"ok": False, "status": "empty_cart", "message": _("Please pick at least one item.")}
     so_line_items, _resolved_items = _resolve_sale_lines(cart_items)
-    fulfillment = _fulfillment_for_request(
+    plan = _fulfillment_plan_for_request(
+        so_line_items=so_line_items,
         fulfillment_method=fulfillment_method,
         pickup_location=(pickup_location or "").strip(),
         city=(city or "").strip(),
         postal_code=(postal_code or "").strip(),
     )
-    if not fulfillment.can_checkout:
+    if not plan.can_checkout:
         subtotal = sum(flt(row["rate"]) * int(row["qty"]) for row in so_line_items)
         return {
             "ok": False,
             "status": "quote_required",
-            "message": fulfillment.message,
+            "message": plan.message,
             "subtotal": float(commerce_rules.money(subtotal)),
         }
-    tax = _tax_for_fulfillment(
-        fulfillment,
+    taxes = _tax_context_for_plan(
+        plan,
         pickup_location=(pickup_location or "").strip(),
         city=(city or "").strip(),
         postal_code=(postal_code or "").strip(),
     )
-    return {"ok": True, "fulfillment": fulfillment.__dict__, **_build_totals(so_line_items, fulfillment, tax)}
+    return {"ok": True, "fulfillment": plan.as_public_dict(), **_build_plan_totals(so_line_items, plan, taxes)}
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -835,13 +836,21 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         requested_window_start,
         requested_window_end,
     )
-    fulfillment = _fulfillment_for_request(
+    # ── Validate each cart line; build SO line list with server prices.
+    # Pricing comes from Item Price here, never from anything the client
+    # sent. Unpublished or unpriced items abort the order — the cart UI
+    # already prunes those at /cart load, so reaching here means the
+    # state changed between cart load and submit (rare, but possible).
+    so_line_items, resolved_items = _resolve_sale_lines(cart_items)
+
+    plan = _fulfillment_plan_for_request(
+        so_line_items=so_line_items,
         fulfillment_method=fulfillment_method,
         pickup_location=pickup_location,
         city=city,
         postal_code=postal_code,
     )
-    if fulfillment.method == "pickup":
+    if plan.requires_pickup:
         pickup_window = commerce_rules.validate_pickup_window(
             pickup_location=pickup_location,
             requested_date=requested_date,
@@ -850,23 +859,16 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         )
         if not pickup_window.ok:
             frappe.throw(_(pickup_window.message), frappe.ValidationError)
-    if fulfillment.method == "delivery" and (not address_line1 or not city or not state or not postal_code):
+    if plan.requires_delivery and (not address_line1 or not city or not state or not postal_code):
         frappe.throw(_("Please give us a complete delivery address."), frappe.ValidationError)
 
-    # ── Validate each cart line; build SO line list with server prices.
-    # Pricing comes from Item Price here, never from anything the client
-    # sent. Unpublished or unpriced items abort the order — the cart UI
-    # already prunes those at /cart load, so reaching here means the
-    # state changed between cart load and submit (rare, but possible).
-    so_line_items, resolved_items = _resolve_sale_lines(cart_items)
-
-    if not fulfillment.can_checkout:
+    if not plan.can_checkout:
         return {
             "ok": False,
             "status": "quote_required",
-            "message": fulfillment.message,
+            "message": plan.message,
             "email": email,
-            "fulfillment": fulfillment.__dict__,
+            "fulfillment": plan.as_public_dict(),
             "items": [
                 {
                     "item_code": row["item_code"],
@@ -877,20 +879,21 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             ],
         }
 
-    tax = _tax_for_fulfillment(
-        fulfillment,
+    taxes = _tax_context_for_plan(
+        plan,
         pickup_location=pickup_location,
         city=city,
         postal_code=postal_code,
     )
-    totals = _build_totals(so_line_items, fulfillment, tax)
+    totals = _build_plan_totals(so_line_items, plan, taxes)
+    _apply_line_fulfillment_fields(so_line_items, plan, taxes)
 
-    if fulfillment.delivery_item_code and fulfillment.delivery_fee:
+    if plan.delivery_item_code and plan.delivery_fee:
         delivery_line = {
-            "item_code": fulfillment.delivery_item_code,
+            "item_code": plan.delivery_item_code,
             "item_group": "Services",
             "qty": 1,
-            "rate": float(fulfillment.delivery_fee),
+            "rate": float(plan.delivery_fee),
         }
         delivery_line.update(_item_tax_override(delivery_line))
         so_line_items.append(delivery_line)
@@ -980,7 +983,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
 
     # ── Address (always create a fresh shipping address per order) ───
     address_doc = None
-    if fulfillment.method == "delivery":
+    if plan.requires_delivery:
         address_doc = frappe.get_doc({
             "doctype": "Address",
             "address_title": safe_name,
@@ -1015,14 +1018,14 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         "taxes": [{
             "charge_type": "On Net Total",
             "account_head": commerce_rules.validate_sales_tax_account_head(),
-            "description": f"Utah sales tax ({tax.label})",
-            "rate": float(tax.rate),
+            "description": f"Utah sales tax ({checkout_fulfillment.default_tax(taxes).label})",
+            "rate": float(checkout_fulfillment.default_tax(taxes).rate),
         }],
     }
     if address_doc:
         so_doc["shipping_address_name"] = address_doc.name
     so_doc.update(_sales_order_custom_fields(
-        fulfillment=fulfillment,
+        fulfillment=plan,
         pickup_location=pickup_location,
         requested_fulfillment_date=requested_fulfillment_date,
         requested_window_start=requested_window_start,
@@ -1038,7 +1041,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             _compose_checkout_notes(
                 order_notes=order_notes,
                 preferred_contact_method=preferred_contact_method,
-                fulfillment=fulfillment,
+                fulfillment=plan,
                 pickup_location=pickup_location,
                 requested_fulfillment_date=requested_fulfillment_date,
                 requested_window_start=requested_window_start,
@@ -1118,7 +1121,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         "address": address_doc.name if address_doc else None,
         "payment_request": pr.name,
         "stripe_redirect_url": stripe_url,
-        "fulfillment": fulfillment.__dict__,
+        "fulfillment": plan.as_public_dict(),
         "totals": totals,
     }
 
@@ -1132,10 +1135,15 @@ def _sales_order_custom_fields(
     requested_window_end,
 ):
     meta = frappe.get_meta("Sales Order")
+    method_label = {
+        "pickup": "Pickup",
+        "delivery": "Delivery",
+        "mixed": "Mixed",
+    }.get(fulfillment.method, "Delivery")
     fields = {
-        "custom_lt_fulfillment_method": "Pickup" if fulfillment.method == "pickup" else "Delivery",
+        "custom_lt_fulfillment_method": method_label,
         "custom_lt_delivery_zone": fulfillment.zone,
-        "custom_lt_pickup_location": pickup_location if fulfillment.method == "pickup" else None,
+        "custom_lt_pickup_location": pickup_location if fulfillment.requires_pickup else None,
         "custom_lt_requested_fulfillment_date": requested_fulfillment_date,
         "custom_lt_requested_window_start": requested_window_start,
         "custom_lt_requested_window_end": requested_window_end,
@@ -1161,7 +1169,7 @@ def _compose_checkout_notes(
         f"Requested date: {requested_fulfillment_date}",
         f"Requested window: {requested_window_start}-{requested_window_end} (requested, not confirmed)",
     ]
-    if fulfillment.method == "pickup":
+    if fulfillment.requires_pickup:
         parts.append(f"Pickup location: {pickup_location}")
     if fulfillment.delivery_fee:
         parts.append(f"Delivery fee: ${totals['delivery_fee']:.2f}")

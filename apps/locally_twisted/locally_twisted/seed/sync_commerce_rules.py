@@ -18,6 +18,7 @@ from locally_twisted.commerce_rules import (
     TAX_PARENT_ACCOUNT_HEAD,
     sales_tax_account_head,
 )
+from locally_twisted.checkout_fulfillment import LINE_FULFILLMENT_FIELDNAMES
 from locally_twisted.product_page_runtime import (
     ADD_ON_ITEM_CONTRACTS,
     COMMERCE_LANE_OPTIONS,
@@ -45,7 +46,7 @@ SO_FIELDS = [
         "fieldname": "custom_lt_fulfillment_method",
         "label": "Fulfillment Method",
         "fieldtype": "Select",
-        "options": "\nPickup\nDelivery\nDelivery Quote",
+        "options": "\nPickup\nDelivery\nMixed\nDelivery Quote",
         "insert_after": "custom_lt_fulfillment_section",
     },
     {
@@ -201,6 +202,39 @@ LINE_CONFIGURATION_FIELDS = [
         "fieldtype": "JSON",
         "insert_after": LINE_FIELDNAMES["summary"],
         "description": "Machine-readable structured product-page payload. Do not hand-edit unless repairing a failed order.",
+    },
+]
+
+LINE_FULFILLMENT_FIELDS = [
+    {
+        "fieldname": LINE_FULFILLMENT_FIELDNAMES["policy"],
+        "label": "LT Fulfillment Policy",
+        "fieldtype": "Select",
+        "options": "\nPickup or Delivery\nDelivery Only",
+        "insert_after": LINE_FIELDNAMES["json"],
+        "description": "Customer-facing fulfillment policy captured for this order line.",
+    },
+    {
+        "fieldname": LINE_FULFILLMENT_FIELDNAMES["method"],
+        "label": "Line Fulfillment Method",
+        "fieldtype": "Select",
+        "options": "\nPickup\nDelivery",
+        "insert_after": LINE_FULFILLMENT_FIELDNAMES["policy"],
+        "description": "Actual pickup/delivery method for this line in a mixed checkout.",
+    },
+    {
+        "fieldname": LINE_FULFILLMENT_FIELDNAMES["zone"],
+        "label": "Line Fulfillment Zone",
+        "fieldtype": "Data",
+        "insert_after": LINE_FULFILLMENT_FIELDNAMES["method"],
+        "description": "Delivery zone or pickup marker used when this line was checked out.",
+    },
+    {
+        "fieldname": LINE_FULFILLMENT_FIELDNAMES["note"],
+        "label": "Line Fulfillment Note",
+        "fieldtype": "Small Text",
+        "insert_after": LINE_FULFILLMENT_FIELDNAMES["zone"],
+        "description": "Operator-readable fulfillment note for mixed pickup/delivery orders.",
     },
 ]
 
@@ -378,6 +412,11 @@ def _ensure_product_page_fields(summary: dict) -> None:
 def _ensure_line_configuration_fields(summary: dict) -> None:
     for dt in ("Sales Order Item", "Sales Invoice Item", "Quotation Item"):
         for spec in LINE_CONFIGURATION_FIELDS:
+            status = _ensure_custom_field(dt, spec)
+            if status:
+                summary["line_configuration_fields"].append(status)
+    for dt in ("Sales Order Item", "Sales Invoice Item"):
+        for spec in LINE_FULFILLMENT_FIELDS:
             status = _ensure_custom_field(dt, spec)
             if status:
                 summary["line_configuration_fields"].append(status)

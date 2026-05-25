@@ -23,7 +23,7 @@ import frappe
 from frappe import _
 from frappe.utils import flt
 
-from locally_twisted.commerce_rules import checkout_lane_for_item_group
+from locally_twisted.commerce_rules import checkout_lane_for_item_group, fulfillment_policy_for_item_group
 from locally_twisted.product_page_runtime import (
     LINE_FIELDNAMES,
     cart_line_key,
@@ -153,6 +153,7 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
         "short_description": website_item.get("short_description") or None,
         "item_group": website_item.get("item_group"),
         "checkout_lane": checkout_lane,
+        "fulfillment_policy": fulfillment_policy_for_item_group(website_item.get("item_group")),
         "product_commerce_lane": product_commerce_lane,
         "product_page_type": product_page_contract.get("product_page_type"),
         "configuration": normalized_configuration,

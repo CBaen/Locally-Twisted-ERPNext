@@ -3,7 +3,9 @@ const { gotoAndSettle } = require("./layout_helpers");
 
 const CART_KEY = "lt_cart";
 const RETAIL_ITEM = "mothers-day-bouquet";
+const DELIVERY_ONLY_ITEM = "graduation-grab-n-go-BYU";
 const ENCANTO_URL = "/shop-items/bouquets/encanto-bouquet";
+const DELIVERY_ONLY_URL = "/shop-items/garlands/graduation-grab-n-go";
 
 function nextIsoDateForJsDay(jsDay) {
 	const date = new Date();
@@ -27,6 +29,25 @@ async function seedRetailCart(page) {
 			);
 		},
 		{ key: CART_KEY, itemCode: RETAIL_ITEM },
+	);
+}
+
+async function seedMixedFulfillmentCart(page) {
+	await page.evaluate(
+		({ key, retailItem, deliveryOnlyItem }) => {
+			window.localStorage.setItem(
+				key,
+				JSON.stringify({
+					v: 3,
+					items: [
+						{ item_code: retailItem, qty: 1, line_key: retailItem + "::" },
+						{ item_code: deliveryOnlyItem, qty: 1, line_key: deliveryOnlyItem + "::" },
+					],
+					updated_at: new Date().toISOString(),
+				}),
+			);
+		},
+		{ key: CART_KEY, retailItem: RETAIL_ITEM, deliveryOnlyItem: DELIVERY_ONLY_ITEM },
 	);
 }
 
@@ -107,5 +128,33 @@ test.describe("Locally Twisted checkout experience", () => {
 		await page.locator("#co-window-start").selectOption("12:00");
 		await expect.poll(async () => page.locator("#lt-checkout-summary-tax").textContent()).not.toContain("Calculated");
 		await expect(page.locator("#co-feedback")).not.toContainText("Tiny snag");
+	});
+
+	test("delivery-only products keep mixed carts pickup-friendly for eligible items", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		await gotoAndSettle(page, DELIVERY_ONLY_URL);
+
+		if (page.url().includes("/ready-to-order-paused")) {
+			await expect(page.locator("body")).toContainText("Ready-to-order is paused");
+			return;
+		}
+
+		await expect(page.locator("body")).toContainText("Delivery only");
+		await expect(page.locator("body")).not.toContainText("Pickup is requested at checkout");
+
+		await gotoAndSettle(page, "/");
+		await seedMixedFulfillmentCart(page);
+		await gotoAndSettle(page, "/checkout");
+
+		if (page.url().includes("/ready-to-order-paused")) {
+			await expect(page.locator("body")).toContainText("Ready-to-order is paused");
+			return;
+		}
+
+		await expect(page.locator("#co-delivery-only-note")).toBeVisible();
+		await expect(page.locator("#co-pickup-label")).toContainText("Pick up eligible items");
+		await page.locator("input[name='fulfillment_method'][value='pickup']").check();
+		await expect(page.locator("#co-delivery-fields")).toBeVisible();
+		await expect(page.locator("#co-pickup-fields")).toBeVisible();
 	});
 });

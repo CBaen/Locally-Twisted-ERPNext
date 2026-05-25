@@ -19,6 +19,7 @@ from locally_twisted.catalog_contract.color_rules import (
     is_balloon_color_axis,
 )
 from locally_twisted.catalog_variant_rules import required_variant_attribute_names
+from locally_twisted.checkout_fulfillment import LINE_FULFILLMENT_FIELDNAMES
 from locally_twisted.product_page_labels import COMMERCE_LANE_OPTIONS, PRODUCT_PAGE_TYPE_OPTIONS
 from locally_twisted.product_setup_runtime import (
     product_setup_schema_for_website_item,
@@ -609,7 +610,7 @@ def copy_sales_order_line_configuration_to_invoice(invoice_doc, sales_order_name
             source_row = candidates[0] if len(candidates) == 1 else None
         if not source_row:
             continue
-        for fieldname in LINE_FIELDNAMES.values():
+        for fieldname in [*LINE_FIELDNAMES.values(), *LINE_FULFILLMENT_FIELDNAMES.values()]:
             value = source_row.get(fieldname)
             if value not in (None, ""):
                 invoice_row.set(fieldname, value)

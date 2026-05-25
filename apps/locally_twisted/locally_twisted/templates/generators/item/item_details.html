@@ -123,7 +123,7 @@
             {{ _(lt_fulfillment_panel.heading) }}
         </h2>
         <p>{{ _(lt_fulfillment_panel.body) }}</p>
-        {% if lt_fulfillment_panel.lane == "quote_required" %}
+        {% if lt_fulfillment_panel.lane in ("quote_required", "delivery_only_quote_required") %}
             <a href="{{ lt_fulfillment_panel.cta_href }}?item={{ doc.item_code }}"
                class="lt-product__fulfillment-link">
                 {{ _(lt_fulfillment_panel.cta_label) }}

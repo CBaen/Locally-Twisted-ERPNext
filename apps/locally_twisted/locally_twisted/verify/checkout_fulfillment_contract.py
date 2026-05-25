@@ -9,6 +9,7 @@ import frappe
 
 
 ITEM_CODE = "mothers-day-bouquet"
+DELIVERY_ONLY_ITEM_CODE = "graduation-grab-n-go-BYU"
 
 
 class ContractFail(Exception):
@@ -50,6 +51,7 @@ def _run_contract():
         "park_city_delivery": _submit_paid_delivery("84060", "Park City", 50.0),
         "pickup": _submit_paid_pickup(),
         "configured_bouquet_pickup": _submit_configured_bouquet_pickup(),
+        "mixed_delivery_only_and_pickup": _submit_mixed_delivery_only_and_pickup(),
         "out_of_area_quote": _submit_out_of_area_quote(),
         "past_date_rejected": _submit_past_date_rejected(),
     }
@@ -72,6 +74,17 @@ def _check_setup_records():
     missing_fields = sorted(field for field in required_so_fields if not meta.has_field(field))
     if missing_fields:
         raise ContractFail(f"Sales Order is missing checkout fulfillment fields: {missing_fields}")
+
+    required_line_fields = {
+        "custom_lt_fulfillment_policy",
+        "custom_lt_line_fulfillment_method",
+        "custom_lt_line_fulfillment_zone",
+        "custom_lt_line_fulfillment_note",
+    }
+    line_meta = frappe.get_meta("Sales Order Item")
+    missing_line_fields = sorted(field for field in required_line_fields if not line_meta.has_field(field))
+    if missing_line_fields:
+        raise ContractFail(f"Sales Order Item is missing checkout line fulfillment fields: {missing_line_fields}")
 
     delivery_items = {
         commerce_rules.DELIVERY_STANDARD_ITEM,
@@ -222,6 +235,43 @@ def _submit_configured_bouquet_pickup():
     if payload.get("selected_options", {}).get("Bouquet Size") != size:
         raise ContractFail(f"configured bouquet size was not preserved: {payload}")
     return {"sales_order": so.name, "item_code": first_line.item_code}
+
+
+def _submit_mixed_delivery_only_and_pickup():
+    result = _submit_checkout(
+        email=f"lt-mixed-fulfillment-{int(time.time())}@example.invalid",
+        item_code="",
+        items_json=json.dumps(
+            [
+                {"item_code": ITEM_CODE, "qty": 1},
+                {"item_code": DELIVERY_ONLY_ITEM_CODE, "qty": 1},
+            ]
+        ),
+        fulfillment_method="pickup",
+        pickup_location="West Jordan",
+        address_line1="123 Mixed Lane",
+        city="West Jordan",
+        state="UT",
+        postal_code="84088",
+        requested_fulfillment_date=_next_pickup_date(),
+        requested_window_start="12:00",
+        requested_window_end="12:30",
+    )
+    so = frappe.get_doc("Sales Order", result["sales_order"])
+    if so.get("custom_lt_fulfillment_method") != "Mixed":
+        raise ContractFail(f"mixed cart should record Mixed fulfillment, found {so.get('custom_lt_fulfillment_method')}")
+    delivery_lines = [row for row in so.items if row.item_code.startswith("DELIVERY-")]
+    if len(delivery_lines) != 1:
+        raise ContractFail(f"mixed cart should include one delivery fee line, found {len(delivery_lines)}")
+    pickup_lines = [row for row in so.items if row.item_code == ITEM_CODE]
+    delivery_only_lines = [row for row in so.items if row.item_code == DELIVERY_ONLY_ITEM_CODE]
+    if not pickup_lines or pickup_lines[0].get("custom_lt_line_fulfillment_method") != "Pickup":
+        raise ContractFail("mixed cart should keep pickup-eligible product as Pickup")
+    if not delivery_only_lines or delivery_only_lines[0].get("custom_lt_line_fulfillment_method") != "Delivery":
+        raise ContractFail("mixed cart should keep delivery-only product as Delivery")
+    if delivery_only_lines[0].get("custom_lt_fulfillment_policy") != "Delivery Only":
+        raise ContractFail("delivery-only line should retain Delivery Only policy")
+    return {"sales_order": so.name, "method": so.get("custom_lt_fulfillment_method")}
 
 
 def _submit_out_of_area_quote():
