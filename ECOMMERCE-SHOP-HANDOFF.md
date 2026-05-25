@@ -1,23 +1,31 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-24 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
 - Branch: `main`
 - Trusted staging recovery restarted from:
   `c668543 Restore trusted staging source`.
-- Current source point:
-  `8913160 Document shop taxonomy implementation`.
-- Current Frappe app mirror point:
-  `bb19a4b Sync shop taxonomy staging app`.
+- Current staged source point:
+  `4722a1c Add delivery-only fulfillment rules`.
+- Current staged Frappe app mirror point:
+  `3ca46bb Add delivery-only fulfillment rules press-deploy-bench-40102`.
 - Latest Frappe Cloud staging release:
-  deploy `2ve3dgt97a`, site migration job `22jih1qaln`, cache clear through
-  Frappe Cloud.
+  installed app commit `3ca46bb`, site update `Migrate` `Success` under
+  `locallytwisted@gmail.com`, cache clear through Frappe Cloud.
 - Hosted staging owner-review proof on
   `https://locallytwisted-staging.frappe.cloud` passes
-  `npm run test:checkout-experience` `3/3` and
+  `npm run test:checkout-experience` `4/4` and
   `npm run test:product-gallery-experience` `4/4`.
+- Delivery-only staging update on 2026-05-25:
+  Garlands, Arches, Columns, Balloon Drops, and Photo Ops & Backdrops are
+  line-level delivery-only categories. Product pages show `Delivery only`, and
+  checkout keeps mixed carts mixed so pickup-eligible items can still be picked
+  up. Handoff:
+  `workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`;
+  decision packet:
+  `decisions/2026-05-25-delivery-only-line-fulfillment.md`.
 - Latest taxonomy staging proof also passes `npm run test:search-contract`
   `4/4`, `shop_category_hero_images.spec.js` `25/25`, and
   `public_asset_integrity.py --base-url https://locallytwisted-staging.frappe.cloud`

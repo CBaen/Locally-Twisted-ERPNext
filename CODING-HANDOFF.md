@@ -1,21 +1,25 @@
 # Locally Twisted - Coding Handoff
 
-Current staging owner-review state as of 2026-05-24: work restarted from
+Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
-full-repo source point is `8913160 Document shop taxonomy implementation`.
-The matching Frappe app mirror is `bb19a4b Sync shop taxonomy staging app`.
-Frappe Cloud staging deploy `2ve3dgt97a` succeeded; staging site migration job
-`22jih1qaln` succeeded; staging cache was cleared through Frappe Cloud.
+full-repo source point for staged behavior is
+`4722a1c Add delivery-only fulfillment rules`. The matching Frappe app mirror
+is
+`3ca46bb Add delivery-only fulfillment rules press-deploy-bench-40102`.
+Frappe Cloud staging app commit `3ca46bb` is installed; staging site migration
+`Migrate` succeeded on 2026-05-25 under `locallytwisted@gmail.com`; staging
+cache was cleared through Frappe Cloud.
 Umbrella handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`; feature
 handoffs:
 `workstreams/mobile-footer-columns-staging-2026-05-24.md`,
 `workstreams/ecommerce-audit/product-gallery-staging-followup-2026-05-24.md`,
 `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`,
+`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`,
 and
-`workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
+`workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`.
 Fresh hosted staging proof on `https://locallytwisted-staging.frappe.cloud`
-passed `npm run test:checkout-experience` `3/3`,
+passed `npm run test:checkout-experience` `4/4`,
 `npm run test:product-gallery-experience` `4/4`,
 `npm run test:search-contract` `4/4`,
 `shop_category_hero_images.spec.js` `25/25`, and
@@ -27,7 +31,20 @@ duplicate routes `/shop-items/arches/easter-arch` and
 proof also exists in the staging checkout handoff. Do not call this live
 checkout approval, DNS approval, Search Console approval, live Stripe approval,
 or production payment proof. Decision packet:
-`decisions/2026-05-24-staging-owner-review-recovery.md`.
+`decisions/2026-05-24-staging-owner-review-recovery.md`; delivery-only
+line-fulfillment decision:
+`decisions/2026-05-25-delivery-only-line-fulfillment.md`.
+
+Codex delivery-only fulfillment staging update on 2026-05-25: products in
+Garlands, Arches, Columns, Balloon Drops, and Photo Ops & Backdrops now show
+`Delivery only` on product pages and checkout treats those cart lines as
+delivery-only. Mixed carts must stay mixed; pickup-eligible items still keep
+pickup available. The source owns this through `checkout_fulfillment.py`,
+`commerce_rules.py`, `checkout.py`, `checkout.html`,
+`sync_commerce_rules.py`, and patch
+`sync_delivery_only_fulfillment_20260525.py`. Hosted staging app commit is
+`3ca46bb`; hosted `npm run test:checkout-experience` passed `4/4`. This did
+not change live, DNS, Search Console, live Stripe, or production data.
 
 Codex shop taxonomy implementation on 2026-05-24: GL approved the category model in
 `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.

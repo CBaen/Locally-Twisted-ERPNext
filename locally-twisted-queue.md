@@ -10,20 +10,23 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P0 owner staging review and change intake (2026-05-24):** Active handoff is
+**P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout
 detail in `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`
 and taxonomy detail in
 `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
 Decision packet: `decisions/2026-05-24-staging-owner-review-recovery.md`.
-Current staging source is full repo `8913160` and app mirror `bb19a4b`.
-Frappe Cloud staging deploy `2ve3dgt97a`, site migration job `22jih1qaln`, and
-cache clear have completed. Hosted staging proof passes checkout `3/3`,
-product gallery `4/4`, search `4/4`, category heroes `25/25`, and public asset
+Current staged source for owner review is full repo `4722a1c` and app mirror
+`3ca46bb`. Frappe Cloud staging installed app commit `3ca46bb`; site update
+`Migrate` `Success` and cache clear have completed. Hosted staging proof
+passes checkout `4/4`, product gallery `4/4`, search `4/4`, category heroes
+`25/25`, and public asset
 integrity for `31` routes / `315` local asset URLs. The next safe step is owner
 review on staging and a change log from that review. Do not touch live payment
 settings, DNS, Search Console, live Stripe, or production data from this queue
-item.
+item. Delivery-only fulfillment handoff:
+`workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`;
+mixed carts must stay mixed.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

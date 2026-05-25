@@ -8,6 +8,35 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-25 - Delivery-only fulfillment is line-level, not whole-cart
+
+**Decision:** Products in Garlands, Arches, Columns, Balloon Drops, and Photo
+Ops & Backdrops require delivery and show `Delivery only` on product pages.
+Mixed carts must stay mixed: delivery-only lines require delivery, while
+pickup-eligible lines can still be picked up.
+
+**Reasoning:** GL rejected a whole-cart delivery-only fallback because it
+would hurt orders and cause customer abandonment. The correct business rule is
+to prevent impossible pickup for installed or oversized products without
+punishing pickup-friendly items in the same cart.
+
+**Implementation boundary:** Implemented as source-owned line fulfillment
+policy, Sales Order Item / Sales Invoice Item custom fields, product-page copy,
+checkout UI behavior, and hosted staging proof. Do not make mixed carts
+delivery-only. Do not use delivery or pickup as a category.
+
+**Receipts:** Full repo `4722a1c`, app mirror `3ca46bb`, Frappe Cloud staging
+installed app commit `3ca46bb`, staging migration `Migrate` `Success`, and
+hosted `LT_BASE_URL=https://locallytwisted-staging.frappe.cloud npm run
+test:checkout-experience` passed `4/4`. Decision packet:
+`decisions/2026-05-25-delivery-only-line-fulfillment.md`. Feature handoff:
+`workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`.
+
+**Decided by:** Guiding Light correction and Codex implementation,
+2026-05-25.
+
+---
+
 ## 2026-05-24 - Shop taxonomy uses physical primary categories and broad secondary occasions
 
 **Decision:** Product names remain unchanged. Shop taxonomy uses physical
