@@ -10,6 +10,16 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 staging release-controller packet (2026-05-29):** Current packet is
+`workstreams/ecommerce-audit/staging-release-controller-packet-2026-05-29.md`.
+Triad witnesses recommend building the source-freeze packet as the next
+professional step, not deploying staging yet and not waiting. The packet names
+local committed `main` `82c86f4`, stale `origin/main` `2a39109`, checkout item
+5 packet branch `86d6908`, and graduation support branch `4147dcb`. Do not
+touch staging/provider, app mirror, migrate/cache, live checkout, live Stripe,
+DNS, Search Console, product data, ERPNext records, email sending, or
+remediation from this queue item.
+
 **P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout
 detail in `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`

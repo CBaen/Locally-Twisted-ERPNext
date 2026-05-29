@@ -1,5 +1,16 @@
 # Locally Twisted - Coding Handoff
 
+Release-controller packet update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-release-controller-packet-2026-05-29.md`
+as the current front-door decision artifact before any new staging push. It
+records the triad recommendation to build a source-freeze packet, not deploy
+yet and not wait. It also records that local committed `main` is `82c86f4`,
+`origin/main` is stale at `2a39109`, checkout item 5 is remote-backed at
+`86d6908`, and graduation support is remote-backed at `4147dcb`. This packet
+does not approve staging deployment, provider changes, app mirror update,
+migrate, cache clear, live checkout, live Stripe, DNS, Search Console, product
+data mutation, ERPNext record mutation, email sending, or remediation.
+
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
 full-repo source point for staged behavior is
