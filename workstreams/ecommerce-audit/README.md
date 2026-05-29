@@ -31,6 +31,14 @@ Current proof orders: `SAL-ORD-2026-00030` for `$176.18` and
 not authorize another staging/provider push before item 3; the next staging
 push should be the combined approved batch.
 
+## 2026-05-29 Item 3 Product-Diversity Scope
+
+Use `staging-checkout-product-diversity-item-3-2026-05-29.md` as the proposed
+item-3 scope. It narrows the next customer checkout audit to product diversity:
+pickup single-SKU, configured bouquet, foil-number add-on, delivery-only
+products, mixed pickup/delivery carts, and quote-first bypass prevention. This
+is a scope packet only; it does not authorize another staging/provider push.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door

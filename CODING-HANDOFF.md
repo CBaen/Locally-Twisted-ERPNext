@@ -12,6 +12,13 @@ email, and internal paid-order notification. Guiding Light approved item 2
 complete on 2026-05-29. Do not push another staging update before item 3; the
 next staging push should be one combined approved batch.
 
+Item 3 scope proposal on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-checkout-product-diversity-item-3-2026-05-29.md`
+as the next checkout audit slice. It focuses on product diversity, delivery-only
+behavior, mixed carts, variants, approved foil-number add-ons, and quote-first
+bypass prevention. This is source scoping only and does not authorize a
+staging/provider push.
+
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
 full-repo source point for staged behavior is
