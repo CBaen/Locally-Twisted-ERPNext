@@ -22,7 +22,8 @@ This file is the durable front door for the item sequence.
 There are currently `5` items on the shop staging audit list.
 
 Items `1` through `4` are approved complete for staging test-mode proof only.
-Item `5` is the next item and must be scoped before execution.
+Item `5` has a proposed scope and needs Guiding Light approval before
+execution.
 
 ## Item List
 
@@ -32,7 +33,7 @@ Item `5` is the next item and must be scoped before execution.
 | 2. Penny parity | Approved complete by Guiding Light | Fix and prove the checkout preview total matches the final Sales Order, Stripe test amount, thank-you page, receipt, and internal notification to the cent. | `staging-checkout-penny-parity-2026-05-29.md` |
 | 3. Product diversity | Approved complete by Guiding Light after triad `PASS WITH NOTES` | Prove staging checkout handles different product types: pickup, delivery-only, mixed carts, variants, approved foil-number add-ons, and quote-first bypass prevention. | `staging-checkout-product-diversity-item-3-2026-05-29.md` |
 | 4. Internal processing | Approved complete by Guiding Light after triad `PASS WITH NOTES` | Prove the internal ERPNext trail after paid checkout: Sales Order, Payment Request, Payment Entry, Sales Invoice, Customer/Contact, Email Queue, Communication, notes, fulfillment, errors, and duplicates. | `staging-checkout-internal-processing-item-4-proof-2026-05-29.md` |
-| 5. Combined staging release/no-go packet | Not scoped yet | Build the business-readable packet for the one larger staging push/review decision: exact commits included, what changed for customers/operators, proof required, what is excluded, stop conditions, and rollback path. | Needs its own scope before execution. |
+| 5. Combined staging release/no-go packet | Scope proposed; awaiting Guiding Light approval | Build the business-readable packet for the one larger staging push/review decision: exact commits included, what changed for customers/operators, proof required, what is excluded, stop conditions, and rollback path. | `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md` |
 
 ## Current Boundary
 
@@ -58,4 +59,6 @@ Before executing item 5, ask for approval using this kind of boundary:
 > Console, live Stripe, product data changes, or remediation work found during
 > item 5.
 
-Item 5 should produce a decision packet, not perform the staging push.
+Item 5 should produce a decision packet, not perform the staging push. The
+proposed scope is
+`staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`.

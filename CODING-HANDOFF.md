@@ -6,9 +6,18 @@ the front-door item sequence for the current staging shop audit. It records `5`
 items: receipt/email delivery, penny parity, product diversity, internal
 processing, and the next combined staging release/no-go packet. Items `1`
 through `4` are approved complete for staging test-mode proof only. Item `5`
-still needs its own scope before execution and does not authorize staging
-deployment, provider changes, live checkout, DNS, Search Console, live Stripe,
-product data mutation, or remediation.
+has a proposed scope in
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`
+and needs Guiding Light approval before execution. It does not authorize
+staging deployment, provider changes, live checkout, DNS, Search Console, live
+Stripe, product data mutation, or remediation.
+
+Item 5 scope proposal on 2026-05-29: the item completes a business-readable
+release/no-go packet for the later combined staging push/review decision. The
+packet must reconcile exact source commits, app-mirror commits, hosted staging
+state, customer proof, internal-processing proof, item 3/item 4 notes, explicit
+exclusions, stop conditions, rollback path, and triad recommendation. Item 5
+is a packet/review task, not the staging push.
 
 Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
 one-cent mismatch by making checkout preview tax rounding match ERPNext's final

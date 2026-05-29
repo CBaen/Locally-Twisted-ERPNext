@@ -24,8 +24,18 @@ Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list
 for the current staging shop audit sequence. It records `5` items:
 receipt/email delivery, penny parity, product diversity, internal processing,
 and the next combined staging release/no-go packet. Items `1` through `4` are
-approved complete for staging test-mode proof only; item `5` still needs its
-own scope before execution.
+approved complete for staging test-mode proof only; item `5` has a proposed
+scope and needs Guiding Light approval before execution.
+
+## 2026-05-29 Item 5 Combined Staging Release/No-Go Scope
+
+Use `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md` as the
+proposed item-5 scope. Item 5 completes a release/no-go packet for the later
+combined staging push/review decision. It must reconcile exact source commits,
+app-mirror commits, hosted staging reality, customer proof, internal-processing
+proof, known notes, exclusions, stop conditions, and rollback path. It does
+not authorize a staging push, provider changes, live checkout, DNS, Search
+Console, live Stripe, product data mutation, or remediation.
 
 ## 2026-05-29 Checkout Penny Parity
 
