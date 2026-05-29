@@ -1,5 +1,108 @@
 # Locally Twisted - Coding Handoff
 
+Staging shop audit master list update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-shop-audit-master-list-2026-05-29.md` as
+the front-door item sequence for the current staging shop audit. It records `5`
+items: receipt/email delivery, penny parity, product diversity, internal
+processing, and the next combined staging release/no-go packet. Items `1`
+through `4` are approved complete for staging test-mode proof only. Item `5`
+has an approved/executed packet in
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`
+and
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
+It does not authorize
+staging deployment, provider changes, live checkout, DNS, Search Console, live
+Stripe, product data mutation, or remediation.
+
+Item 5 scope proposal on 2026-05-29: the item completes a business-readable
+release/no-go packet for the later combined staging push/review decision. The
+packet must reconcile exact source commits, app-mirror commits, hosted staging
+state, customer proof, internal-processing proof, item 3/item 4 notes, explicit
+exclusions, stop conditions, rollback path, and triad recommendation. Item 5
+is a packet/review task, not the staging push.
+
+Item 5 first execution update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
+Focused hosted staging checkout, product-gallery, and search tests passed;
+local/source payment, reconciliation, webhook, amount-parity, and business
+automation contracts passed. Broad `npm run test:public-verify` against
+staging failed only at the logged-in Desk session because valid staging
+`LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` were not available and default
+`Administrator` / `admin` was rejected. Unauthenticated app-version endpoints
+returned `403` / `417`, so the current hosted staging app/source identity was
+not proved in the first pass. This first-pass gap was later resolved in the
+recovery update below.
+
+Item 5 recovery update on 2026-05-29: the logged-in Desk/public-network gap is
+resolved. Using the documented staging owner account, hosted staging passed
+`owner_desk_routes.spec.js` `1/1` and `public_network_integrity.spec.js` `40/40`
+from the item 5 worktree with the main checkout's Node dependency surface. The
+network verifier now accepts `application/octet-stream` for font files, matching
+`public_asset_integrity.py`, so Frappe Cloud's font MIME response does not mask
+the logged-in CSRF proof. Frappe Cloud API also proves hosted staging is running
+`locally_twisted` from `CBaen/Locally-Twisted-Frappe-App` at commit
+`35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` on bench
+`bench-40102-000026-f4-virginia`, matching the GitHub app mirror `main`.
+Current recommendation is `PASS` for item 5 staging release/no-go packet
+readiness only; it still does not approve staging deployment, provider changes,
+live checkout, DNS, Search Console, live Stripe, product data mutation, or
+remediation.
+
+Item 5 approval update on 2026-05-29: Guiding Light approved item 5 complete
+for staging release/no-go packet readiness only. This approval does not approve
+staging deployment, provider changes, live checkout, live Stripe, DNS, Search
+Console, product data changes, ERPNext record mutation, email sending, or
+remediation outside item 5. The next decision is the separate release-controller
+decision about whether to build and execute a larger staging release packet with
+exact source commits.
+
+Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
+one-cent mismatch by making checkout preview tax rounding match ERPNext's final
+Sales Order tax behavior. Source branch `codex/checkout-penny-match` has source
+commit `82f1d56 Fix checkout preview total rounding`. Handoff:
+`workstreams/ecommerce-audit/staging-checkout-penny-parity-2026-05-29.md`.
+Hosted staging proof already exists for mixed cart `$176.18`
+(`SAL-ORD-2026-00030`) and foil-number add-on `$116.00`
+(`SAL-ORD-2026-00031`), including Stripe, thank-you page, customer receipt
+email, and internal paid-order notification. Guiding Light approved item 2
+complete on 2026-05-29. Do not push another staging update before item 3; the
+next staging push should be one combined approved batch.
+
+Item 3 scope proposal on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-checkout-product-diversity-item-3-2026-05-29.md`
+as the item-3 checkout audit slice. It focuses on product diversity,
+delivery-only behavior, mixed carts, variants, approved foil-number add-ons,
+and quote-first bypass prevention. Guiding Light approved this scope on
+2026-05-29. Triad technical review returned `PASS WITH NOTES` from all three
+lenses, and Guiding Light approved item 3 complete for staging test-mode
+checkout product-diversity proof only. Hosted checkout smoke passed `4/4`;
+product/API checks covered pickup, delivery-only, mixed cart, and quote-first
+bypass prevention; corrected paid delivery-only order `SAL-ORD-2026-00034`
+proved Stripe test payment, thank-you page, customer receipt, welcome email,
+and internal notification at `$106.33`. Earlier item-2 Gmail proofs
+`SAL-ORD-2026-00030` and `SAL-ORD-2026-00031` were found by all-mail search
+after being moved/labeled, so mailbox folder placement is not treated as
+checkout failure. This does not authorize a staging/provider push, live work,
+DNS/Search Console work, live Stripe work, or product data mutation.
+
+Item 4 internal-processing proof on 2026-05-29: Guiding Light approved the
+scope in
+`workstreams/ecommerce-audit/staging-checkout-internal-processing-item-4-2026-05-29.md`.
+The triad-reviewed proof packet is
+`workstreams/ecommerce-audit/staging-checkout-internal-processing-item-4-proof-2026-05-29.md`.
+Triad technical review returned `PASS WITH NOTES` for staging test-mode
+internal-processing proof only, and Guiding Light approved item 4 complete on
+2026-05-29 for that boundary. Existing paid staging orders `SAL-ORD-2026-00024`,
+`SAL-ORD-2026-00030`, `SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` were
+inspected with read-only public, ERPNext, Gmail, and local verifier evidence.
+Current-path orders `00030`, `00031`, and `00034` prove the strongest
+operator/accounting trail. `00024` is historical cascade evidence only for
+welcome/fulfillment details. Staging webhook/return-path replay, full
+scheduler/failed-job proof, complete raw export coverage, and fresh Desk
+screenshot proof remain evidence limits. This does not authorize a
+staging/provider push, live checkout, DNS/Search Console work, live Stripe
+work, product data mutation, or remediation work found during item 4.
+
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
 full-repo source point for staged behavior is

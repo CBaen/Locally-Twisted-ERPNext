@@ -52,6 +52,7 @@ def _run_contract():
         "pickup": _submit_paid_pickup(),
         "configured_bouquet_pickup": _submit_configured_bouquet_pickup(),
         "mixed_delivery_only_and_pickup": _submit_mixed_delivery_only_and_pickup(),
+        "preview_total_parity": _check_preview_total_matches_submitted_order(),
         "out_of_area_quote": _submit_out_of_area_quote(),
         "past_date_rejected": _submit_past_date_rejected(),
     }
@@ -272,6 +273,135 @@ def _submit_mixed_delivery_only_and_pickup():
     if delivery_only_lines[0].get("custom_lt_fulfillment_policy") != "Delivery Only":
         raise ContractFail("delivery-only line should retain Delivery Only policy")
     return {"sales_order": so.name, "method": so.get("custom_lt_fulfillment_method")}
+
+
+def _check_preview_total_matches_submitted_order():
+    mixed_items_json = json.dumps(
+        [
+            {"item_code": ITEM_CODE, "qty": 1},
+            {"item_code": DELIVERY_ONLY_ITEM_CODE, "qty": 1},
+        ]
+    )
+    add_on_items_json = json.dumps(
+        [
+            {
+                "item_code": "unicorn-bouquet-MED",
+                "qty": 1,
+                "configuration": _foil_number_configuration("unicorn-bouquet-MED", "12"),
+            }
+        ]
+    )
+    return {
+        "mixed_cart": _assert_preview_matches_submitted_order(
+            "mixed cart",
+            items_json=mixed_items_json,
+            fulfillment_method="pickup",
+            pickup_location="West Jordan",
+            address_line1="123 Mixed Lane",
+            city="West Jordan",
+            state="UT",
+            postal_code="84088",
+            requested_fulfillment_date=_next_pickup_date(),
+            requested_window_start="12:00",
+            requested_window_end="12:30",
+        ),
+        "foil_number_add_on": _assert_preview_matches_submitted_order(
+            "foil-number add-on cart",
+            items_json=add_on_items_json,
+            fulfillment_method="delivery",
+            address_line1="123 Add On Lane",
+            city="West Jordan",
+            state="UT",
+            postal_code="84088",
+            requested_fulfillment_date=_future_date(),
+            requested_window_start="13:00",
+            requested_window_end="13:30",
+        ),
+    }
+
+
+def _assert_preview_matches_submitted_order(case_name: str, **kwargs):
+    from locally_twisted.www.checkout import preview_checkout_totals
+
+    preview = preview_checkout_totals(
+        item_code=kwargs.get("item_code", ""),
+        qty=kwargs.get("qty", 1),
+        items_json=kwargs.get("items_json", ""),
+        fulfillment_method=kwargs.get("fulfillment_method", "delivery"),
+        pickup_location=kwargs.get("pickup_location", ""),
+        city=kwargs.get("city", ""),
+        postal_code=kwargs.get("postal_code", ""),
+    )
+    if not preview.get("ok"):
+        raise ContractFail(f"{case_name} preview did not return checkout totals: {preview!r}")
+
+    result = _submit_checkout(
+        email=f"lt-preview-parity-{case_name.replace(' ', '-')}-{int(time.time())}@example.invalid",
+        item_code=kwargs.get("item_code", ""),
+        qty=kwargs.get("qty", 1),
+        items_json=kwargs.get("items_json", ""),
+        fulfillment_method=kwargs.get("fulfillment_method", "delivery"),
+        pickup_location=kwargs.get("pickup_location", ""),
+        address_line1=kwargs.get("address_line1", ""),
+        city=kwargs.get("city", ""),
+        state=kwargs.get("state", "UT"),
+        postal_code=kwargs.get("postal_code", ""),
+        requested_fulfillment_date=kwargs.get("requested_fulfillment_date"),
+        requested_window_start=kwargs.get("requested_window_start", "13:00"),
+        requested_window_end=kwargs.get("requested_window_end", "13:30"),
+    )
+    so = frappe.get_doc("Sales Order", result["sales_order"])
+    preview_total_cents = _money_cents(preview["total"])
+    order_total_cents = _money_cents(so.grand_total)
+    if preview_total_cents != order_total_cents:
+        raise ContractFail(
+            f"{case_name} preview total ${float(preview['total']):.2f} did not match "
+            f"Sales Order total ${float(so.grand_total):.2f}"
+        )
+    preview_tax_cents = _money_cents(preview["tax_amount"])
+    order_tax_cents = _money_cents(so.total_taxes_and_charges)
+    if preview_tax_cents != order_tax_cents:
+        raise ContractFail(
+            f"{case_name} preview tax ${float(preview['tax_amount']):.2f} did not match "
+            f"Sales Order tax ${float(so.total_taxes_and_charges):.2f}"
+        )
+    return {
+        "preview_total": float(preview["total"]),
+        "sales_order_total": float(so.grand_total),
+        "preview_tax": float(preview["tax_amount"]),
+        "sales_order_tax": float(so.total_taxes_and_charges),
+    }
+
+
+def _foil_number_configuration(item_code: str, value: str) -> dict:
+    from locally_twisted.api.cart import resolve_cart_item_for_sale
+
+    line = resolve_cart_item_for_sale(item_code)
+    selected_options = {
+        str(row.get("attribute")): str(row.get("attribute_value"))
+        for row in line.get("variant_options") or []
+        if row.get("attribute") and row.get("attribute_value")
+    }
+    return {
+        "schema_version": "lt-product-config-v1",
+        "item_code": item_code,
+        "website_item_code": "unicorn-bouquet",
+        "selected_options": selected_options,
+        "color_recipes": [],
+        "add_ons": [
+            {
+                "key": "foil_number",
+                "label": "Foil number",
+                "value": value,
+                "quantity": len(value),
+            }
+        ],
+        "customizations": [],
+    }
+
+
+def _money_cents(value) -> int:
+    return int(round(float(value) * 100))
 
 
 def _submit_out_of_area_quote():

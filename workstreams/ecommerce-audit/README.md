@@ -18,6 +18,91 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-29 Staging Shop Audit Master List
+
+Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list
+for the current staging shop audit sequence. It records `5` items:
+receipt/email delivery, penny parity, product diversity, internal processing,
+and the next combined staging release/no-go packet. Items `1` through `4` are
+approved complete for staging test-mode proof only; item `5` is approved
+complete for staging release/no-go packet readiness only.
+
+## 2026-05-29 Item 5 Combined Staging Release/No-Go Scope
+
+Use `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md` as the
+approved item-5 scope and
+`staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md` as the executed
+item-5 packet. Item 5 completed a release/no-go packet for the later combined
+staging push/review decision. Recovery proof resolved the logged-in Desk/public
+network gap and Frappe Cloud API proved the hosted staging app/source identity.
+Guiding Light approved item 5 complete on 2026-05-29 for staging release/no-go
+packet readiness only. It does not authorize a staging push, provider changes,
+live checkout, DNS, Search Console, live Stripe, product data mutation, ERPNext
+record mutation, email sending, or remediation.
+
+## 2026-05-29 Checkout Penny Parity
+
+Use `staging-checkout-penny-parity-2026-05-29.md` as the item-2 handoff for the
+one-cent checkout mismatch. The mixed cart and foil-number add-on cart now
+match from hosted staging preview through Stripe, thank-you, customer receipt
+email, and internal paid-order notification. Guiding Light approved item 2
+complete on 2026-05-29.
+
+Current proof orders: `SAL-ORD-2026-00030` for `$176.18` and
+`SAL-ORD-2026-00031` for `$116.00`. This is not live checkout approval and does
+not authorize another staging/provider push before item 3; the next staging
+push should be the combined approved batch.
+
+## 2026-05-29 Item 3 Product-Diversity Scope
+
+Use `staging-checkout-product-diversity-item-3-2026-05-29.md` as the proposed
+item-3 scope. It narrows the next customer checkout audit to product diversity:
+pickup single-SKU, configured bouquet, foil-number add-on, delivery-only
+products, mixed pickup/delivery carts, and quote-first bypass prevention. This
+scope was approved by Guiding Light on 2026-05-29. It does not authorize
+another staging/provider push.
+
+2026-05-29 execution update: item 3 is complete for staging test-mode checkout
+product-diversity proof only. Triad technical review returned `PASS WITH NOTES`
+from all three lenses, and Guiding Light approved the item with the explicit
+boundary that this does not approve live checkout, staging deployment, provider
+changes, DNS, Search Console, live Stripe, or product data changes. Hosted
+checkout smoke passed `4/4`; product/API checks covered pickup, delivery-only,
+mixed cart, and quote-first bypass prevention; corrected paid delivery-only
+order `SAL-ORD-2026-00034` proved Stripe test payment, thank-you page, customer
+receipt, welcome email, and internal notification at `$106.33`. Gmail proof
+used all-mail search because recent purchases may be moved out of the main
+folder; moved proofs `SAL-ORD-2026-00030` and `SAL-ORD-2026-00031` were found
+under `_NEW_WEBSITE/Duplicate Inquiry Request` and `SENT`. This is not live
+approval and does not authorize another staging/provider push.
+
+## 2026-05-29 Item 4 Internal Processing Proof
+
+Use `staging-checkout-internal-processing-item-4-2026-05-29.md` as the approved
+item-4 scope and
+`staging-checkout-internal-processing-item-4-proof-2026-05-29.md` as the
+triad-reviewed proof packet. Item 4 narrows the audit to the internal ERPNext
+trail after a paid staging test-mode checkout: Sales Order, Payment Request,
+Payment Entry, Sales Invoice, Customer/Contact/Lead linkage, Email Queue,
+Communication, checkout notes, fulfillment handoff, Error Log/scheduler health,
+and duplicate payment/email protection.
+
+2026-05-29 execution update: triad technical review returned `PASS WITH NOTES`
+for staging test-mode internal-processing proof only. Existing paid staging
+orders `SAL-ORD-2026-00024`, `SAL-ORD-2026-00030`,
+`SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` were inspected with read-only
+public, ERPNext, Gmail, and local verifier evidence. The current-path orders
+`00030`, `00031`, and `00034` prove the strongest operator/accounting trail.
+`00024` is historical cascade evidence only for welcome/fulfillment details.
+Staging webhook/return-path replay, full scheduler/failed-job proof, complete
+raw export coverage, and fresh Desk screenshot proof remain evidence limits.
+Guiding Light approved item 4 complete on 2026-05-29 for staging test-mode
+internal-processing proof only.
+
+This does not authorize another staging/provider push, live checkout,
+DNS/Search Console work, live Stripe work, product data mutation, or remediation
+work found during item 4.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door

@@ -1,6 +1,6 @@
 # Payment Backend Launch Readiness
 
-Last updated: 2026-05-24
+Last updated: 2026-05-29
 
 This workstream is the payment-specific handoff lane for launch readiness. It is intentionally separate from `PROJECT-STATUS.md`, because that file mixes current receipts with stale historical state.
 
@@ -17,6 +17,17 @@ product setup failure and not live payment approval. Current handoff:
 failure recipes:
 `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md` and
 `capabilities/failures/frappe-cloud-staging-email-secret-drift.md`.
+
+2026-05-29 checkout penny parity update: the hosted staging preview now matches
+the final paid path for the two known one-cent mismatch cases. Mixed cart
+`SAL-ORD-2026-00030` stayed `$176.18` through preview, Stripe, thank-you,
+customer receipt email, and internal paid-order notification. Unicorn bouquet
+with foil-number add-on `SAL-ORD-2026-00031` stayed `$116.00` through the same
+path. Handoff:
+`workstreams/ecommerce-audit/staging-checkout-penny-parity-2026-05-29.md`.
+Guiding Light approved item 2 complete on 2026-05-29. This is not live checkout
+approval and does not authorize another staging provider push before the next
+combined staging batch.
 
 2026-05-11 cutover update: live mode now requires an explicit HTTPS
 `host_name` in site config, in addition to explicit live Stripe settings,
@@ -57,6 +68,11 @@ These are verified local/backend facts, not live-production claims:
   Payment Request `ACC-PRQ-2026-00021` `Paid`, Sales Invoice
   `ACC-SINV-2026-00004` `Paid`, tax `$2.61`, grand total `$37.61`, and Email
   Queue rows `cchsjbegpi` / `cchtiiieuk` `Sent`.
+- Hosted staging penny-parity proof passed on 2026-05-29 for mixed cart
+  `SAL-ORD-2026-00030` at `$176.18` and foil-number add-on
+  `SAL-ORD-2026-00031` at `$116.00`, with matching preview, Stripe,
+  thank-you, customer receipt, and internal paid-order notification totals.
+  Guiding Light approved item 2 complete on 2026-05-29.
 - Staging owner login for `locallytwisted@gmail.com` was reset and verified in
   a clean browser session ending on `Owner Home`; owner Desk payment review can
   use that account during staging review.

@@ -93,6 +93,14 @@ Additional hosted proof after the staging provider settings were repaired:
 - Receipt Email Queue `cchsjbegpi` and operator Email Queue `cchtiiieuk`
   reached `Sent` after re-entering the staging Email Account app password.
 
+2026-05-29 item-2 addendum: the one-cent preview mismatch is documented in
+`staging-checkout-penny-parity-2026-05-29.md`. The mixed cart now matches
+`$176.18` through preview, Stripe, thank-you, customer receipt, and internal
+paid-order notification (`SAL-ORD-2026-00030`). The unicorn bouquet with
+foil-number add-on now matches `$116.00` through the same path
+(`SAL-ORD-2026-00031`). Do not perform another staging/provider push for this
+lane before the next combined staging batch.
+
 ## Resolved Staging Blockers
 
 The product setup blocker is resolved for the tested configured bouquet route.
