@@ -69,7 +69,9 @@ staging test order is only allowed if existing records cannot prove a required
 internal-processing question. This scope is proposed only and still needs
 Guiding Light approval before execution. It does not authorize another
 staging/provider push, live checkout, DNS/Search Console work, live Stripe
-work, or product data mutation.
+work, product data mutation, or remediation work found during item 4. Item 4
+requires triad/witness gates during execution and triad convergence before it
+can be called complete.
 
 ## 2026-05-22 Owner Product Setup Guard Closeout
 

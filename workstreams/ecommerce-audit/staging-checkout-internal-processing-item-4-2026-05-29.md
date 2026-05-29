@@ -2,6 +2,8 @@
 
 Status: scope proposed by Codex after Guiding Light approved item 3 complete.
 This scope needs Guiding Light approval before execution.
+Execution must use triad/witness review. A solo agent cannot call item 4
+complete.
 
 This is not a staging deploy approval, provider-change approval, live checkout
 approval, DNS approval, Search Console approval, live Stripe approval, or product
@@ -51,9 +53,13 @@ Use existing paid staging orders first:
 
 Only create a new staging test order if the existing orders cannot answer a
 required question. If a new order is needed, record exactly why the existing
-orders were not enough.
+orders were not enough and get witness coverage before the order is created.
 
-## Item 4 Matrix
+## Agent-Owned Evidence Matrix
+
+This matrix is not a Guiding Light manual approval checklist. Agents own the
+technical proof. Guiding Light approves the business risk only after the triad
+gives a clear evidence-backed recommendation.
 
 1. Sales Order record chain
 
@@ -103,6 +109,60 @@ orders were not enough.
    Confirm the Desk-facing handoff is understandable for non-technical users:
    what happened, what needs action, and where the order details live.
 
+## Required Evidence Packet
+
+Item 4 cannot pass from screenshots or prose alone. Each pass condition must map
+to source record IDs plus exported or query evidence, with secrets redacted.
+
+The execution packet must include:
+
+- Source/baseline sheet: branch, commit, staging/app-mirror baseline, ERPNext
+  and app version evidence where available, non-secret Stripe test-mode proof,
+  and the no-live/no-provider/no-product-data boundary.
+- Order-by-order matrix for `SAL-ORD-2026-00024`, `SAL-ORD-2026-00030`,
+  `SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034`: Sales Order state, line
+  items, selected options, fulfillment mode, tax, total, customer-facing
+  summary, and record links or IDs.
+- Payment chain export: Payment Request, Stripe test reference, ERPNext paid
+  state, Sales Invoice, Payment Entry where expected, totals, currency, and a
+  written reason for any expected-missing accounting record.
+- Customer/Contact/Lead linkage graph: linked records, supplied contact fields,
+  duplicate search result, and whether checkout conversion touched an existing
+  lead path.
+- Email trail packet: Email Queue and Communication rows by order ID, status,
+  recipient class, subject or summary, and Gmail order-ID search result where
+  mailbox movement could make a sent email look missing.
+- Operator handoff proof: Desk screenshot or field export showing notes,
+  selected options, pickup or delivery handling, and the next operator action.
+- Error/scheduler health packet: bounded Error Log, failed job, scheduler
+  health, and stuck Email Queue evidence. For historical orders, use order-time
+  windows plus current queue health.
+- Duplicate/idempotency packet: before/after counts for charges, Sales
+  Invoices, Payment Entries, receipt emails, and internal emails around any
+  safe repeat webhook or return-path test.
+- Local verifier transcript/report bundle: command, exit code, generated report
+  path, and failure text for any stopped audit.
+
+Do not include secret keys, webhook secrets, raw tokens, OAuth/session material,
+or provider credentials in the packet.
+
+## Witness Gates
+
+Witness coverage is required before these steps:
+
+- Creating any new staging test order.
+- Running any webhook replay, return-path repeat, or idempotency stimulus.
+- Treating a missing Payment Entry or Sales Invoice as expected rather than a
+  failure.
+- Using Gmail or another external email lookup to overturn an apparent missing
+  email finding.
+- Fixing any verifier failure or checkout-processing failure found during item
+  4.
+
+If a failure is found, item 4 stops as a proof failure. Fix work needs a
+separate triad-scoped implementation plan and approval before code or data is
+changed.
+
 ## Proof Order
 
 1. Confirm source branch and staging/app-mirror baseline.
@@ -112,10 +172,12 @@ orders were not enough.
 4. Search Email Queue, Communication, and Gmail by order ID where email tracking
    needs external proof.
 5. Create a new staging test-mode order only if existing paid orders cannot
-   prove a required internal-processing question.
-6. Send the item 4 evidence packet to the triad for technical review.
+   prove a required internal-processing question and the witness gate is active.
+6. Send the item 4 evidence packet to the triad/witness gate. Item 4 cannot be
+   called complete until all three witness lenses return `PASS` or
+   `PASS WITH NOTES`, with blockers and unresolved risks named.
 7. Ask Guiding Light for business approval only after the triad records whether
-   item 4 passed, passed with notes, or failed.
+   item 4 passed, passed with notes, failed, or is blocked.
 
 ## Candidate Local Verifier Set
 
@@ -131,12 +193,14 @@ Use current local verifiers as proof helpers before touching staging:
 - `python scripts/verify/business_automation_index.py --report output/business-automation-index.json`
 - `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json`
 
-If any verifier fails, stop and fix the failing item before widening the audit.
+If any verifier fails, stop, record the failed finding, and create a separate
+triad-scoped implementation plan before fixing.
 
 ## Pass Conditions
 
 Item 4 can pass only when representative paid staging purchases show a consistent
-internal chain:
+internal chain. Every pass condition must map to source record IDs plus exported
+or query evidence, with secrets redacted:
 
 - Sales Order exists and matches the customer-facing purchase
 - Payment Request and paid/reconciliation state match the order total
@@ -150,6 +214,8 @@ internal chain:
 - Customer notes and fulfillment details are visible to the operator
 - No relevant new Error Log, stuck queue, or scheduler failure is left hidden
 - Repeat payment/webhook paths do not create duplicate money or email records
+- If safe duplicate/idempotency testing cannot be executed, that claim is marked
+  blocked or unproven instead of passed
 
 ## Stop Conditions
 
@@ -169,9 +235,9 @@ Stop item 4 and return a failed finding if any of these appear:
 - The next proof step would require provider mutation, live checkout, staging
   deployment, DNS, Search Console, live Stripe, or product data changes
 
-## Triad Review Requirement
+## Triad And Witness Completion Gate
 
-After execution, the triad should review the evidence from three angles:
+After execution, the triad must review the evidence from three angles:
 
 - Customer/business trust: would a non-technical operator know what happened and
   what to do next?
@@ -179,6 +245,20 @@ After execution, the triad should review the evidence from three angles:
   email records agree?
 - Failure handling: does any downstream problem fail loudly instead of looking
   successful?
+
+Each witness lens must report:
+
+- Verdict: `PASS`, `PASS WITH NOTES`, `FAIL`, or `BLOCKED`
+- Orders inspected
+- Evidence used
+- Stop conditions cleared or triggered
+- Unresolved risks
+- Boundary confirmation: no live checkout, no staging deployment, no provider
+  changes, no DNS, no Search Console, no live Stripe, and no product data
+  changes
+
+Any `FAIL` or `BLOCKED` blocks item 4 completion. A solo structured review does
+not count as the triad for this payment, staging, and client-risk path.
 
 Guiding Light should not need to approve the full data matrix manually. Guiding
 Light approves the business risk after the triad gives a clear pass/fail
@@ -190,4 +270,5 @@ Approve this exact scope before execution:
 
 > I approve item 4 scope for staging test-mode internal-processing proof only.
 > This does not approve live checkout, staging deployment, provider changes,
-> DNS, Search Console, live Stripe, or product data changes.
+> DNS, Search Console, live Stripe, product data changes, or remediation work
+> found during item 4.

@@ -40,7 +40,10 @@ payment/email protection. Existing paid staging orders `SAL-ORD-2026-00024`,
 inspected before creating any new staging order. This scope is proposed only
 and needs Guiding Light approval before execution. It does not authorize a
 staging/provider push, live checkout, DNS/Search Console work, live Stripe
-work, or product data mutation.
+work, product data mutation, or remediation work found during item 4. Item 4
+cannot be called complete by a solo agent; it requires triad/witness execution
+gates and triad convergence before Guiding Light is asked to approve business
+risk.
 
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
