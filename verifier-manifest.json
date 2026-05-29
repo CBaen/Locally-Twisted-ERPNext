@@ -169,6 +169,39 @@
       "what_it_does_not_prove": "It does not prove staging/live route behavior, DNS/CDN/cache, final photo approval, or customer-facing launch approval."
     },
     {
+      "id": "lt-fail-loud-local-contract-suite",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "architecture_backed",
+      "graduation_status": "active",
+      "command": "manual-suite: use capabilities/recipes/fail-loud-operating-law.md and run the narrow verifier for the changed surface",
+      "cwd": ".",
+      "scope": "local fail-loud contract selection for LT forms, automations, customer communication, checkout handoffs, record-level failure evidence, layout contracts, and verifier behavior",
+      "environment": "local app, static checks, or rollback-safe fake-data checks depending on the selected verifier",
+      "mutation": "varies by selected verifier; some rollback-safe local fake-data checks may create temporary local records",
+      "approval_required": "yes, because the selected verifier may touch local ERPNext fake-data paths or checkout/customer-communication surfaces",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/fail-loud-contract-result.md or output/<selected-verifier>/<dated-result>",
+      "capability_refs": [
+        "capabilities/recipes/fail-loud-operating-law.md",
+        "capabilities/recipes/erpnext-record-level-failure-recorder.md",
+        "capabilities/recipes/customer-email-delivery-branding-contract.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "running against staging or live",
+        "claiming customer email delivery",
+        "claiming checkout/order/payment readiness",
+        "touching real customer data",
+        "provider or Frappe Cloud mutation",
+        "using a broad verifier when a narrow verifier exists"
+      ],
+      "proves": [
+        "only the selected local fail-loud contract after it is actually run: no false success, actionable developer/operator evidence, and the named narrow surface failing loudly"
+      ],
+      "what_it_does_not_prove": "It does not prove staging or live readiness, email delivery, payment capture, customer receipt, DNS/CDN behavior, provider configuration, or launch approval."
+    },
+    {
       "id": "lt-ecommerce-local-contract",
       "tier": "tier_2_local_integrated",
       "graduation_stage": "gate_backed",

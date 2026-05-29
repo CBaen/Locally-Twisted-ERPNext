@@ -1,7 +1,8 @@
 ---
 id: fail-loud-operating-law
 name: Fail Loud Operating Law
-schema_version: 2.0
+schema_version: 2.5
+profile: foundation
 level: recipe
 maturity: candidate
 scope: Locally Twisted forms, automations, customer documents, route/layout contracts, containers, verification, and agent communication
@@ -12,6 +13,18 @@ evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
 regressions: 0
+graduation_stage: architecture_backed
+graduation_status: active
+graduation_required: true
+supporting_artifacts:
+  - ../../verifier-manifest.json
+  - ../../workstreams/fail-loud-record-level-hardening.md
+  - ../../scripts/verify/verifier_cli_contract.py
+  - ../../scripts/verify/customer_email_policy_contract.py
+  - ../../scripts/verify/business_automation_index.py
+  - ../../scripts/verify/record_level_failure_contract.py
+graduation_reason: approved LT review found fail-loud behavior is an operating law spanning forms, automations, checkout, documents, customer messaging, verification, and agent claims; keep as LT-local architecture-backed support, not a staging or live release gate by itself
+graduation_review: 2026-05-29
 depends_on:
   - customer-facing-failure-voice
 used_by:
@@ -34,6 +47,19 @@ tags:
 # Fail Loud Operating Law
 
 Mantra: **If it can fail, it must fail loudly.**
+
+## Support Status
+
+As of 2026-05-29, Guiding Light treats fail-loud behavior as LT operating
+infrastructure, not optional writing style. This card is architecture-backed:
+it tells agents which failure surfaces must block false success and which
+narrow verifier to reach for.
+
+Use the project root `verifier-manifest.json` for the current tier boundary.
+The `lt-fail-loud-local-contract-suite` entry is a manual selector, not one
+automatic staging gate. Passing a local fail-loud verifier does not approve
+staging, live checkout, provider changes, DNS, Search Console, live Stripe,
+product data, customer-data use, or email sending.
 
 Use this before changing any surface where a customer, operator, accounting
 person, scheduler, verifier, or future agent could mistake partial success for
