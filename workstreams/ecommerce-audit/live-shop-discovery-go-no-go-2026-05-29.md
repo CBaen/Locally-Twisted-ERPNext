@@ -1,6 +1,16 @@
 # Live Shop Discovery Go/No-Go Packet - 2026-05-29
 
-Status: READY FOR EXACT LIVE APPROVAL. Not deployed by this packet.
+Status: SUPERSEDED BY LIVE EXECUTION NO-GO.
+
+The approved live execution was attempted after this packet and did not launch.
+Use `live-shop-discovery-deployment-execution-2026-05-29.md` as the current
+release-control record before any further live action. The blocker is live
+catalog/data parity: Frappe Cloud recovered after
+`locally_twisted.patches.sync_shop_taxonomy_20260524` failed on missing live
+product `Item` records.
+
+Do not deploy from this packet without a new remediation slice, staging proof,
+and fresh live approval.
 
 This packet is for `https://locallytwisted.com` only. It prepares the live
 shop-discovery release decision after staging passed browse-only shop proof.
