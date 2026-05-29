@@ -1,9 +1,16 @@
 # Live Shop Discovery Release - 2026-05-29
 
-Status: source preparation in progress. No live deployment, provider change,
-site-config change, product-data mutation, ERPNext production mutation, Stripe
-change, DNS/Search Console action, or email sending has been performed by this
-slice.
+Status: historical planning record. Current live decision packet is
+`live-shop-discovery-go-no-go-2026-05-29.md`.
+
+Do not deploy from this planning note. Some anchors below were correct when
+written but are now stale. The current exact live target is Frappe Cloud release
+`c81v7r3b67` at app mirror hash
+`cc5426401b4d3f69a57b8efb77320d943c5c95ea`.
+
+No live deployment, provider change, site-config change, product-data mutation,
+ERPNext production mutation, Stripe change, DNS/Search Console action, or email
+sending has been performed by this slice.
 
 ## Plain-English Goal
 

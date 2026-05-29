@@ -25,6 +25,12 @@ for getting public shop/category/product discovery live while cart, checkout,
 payment, order creation, email, and ERPNext purchase mutation remain blocked.
 This is a shop-discovery release, not live checkout approval.
 
+Use `live-shop-discovery-go-no-go-2026-05-29.md` as the current live decision
+packet. It corrects stale earlier approval hashes and records the exact
+Frappe Cloud target release: `c81v7r3b67` at
+`cc5426401b4d3f69a57b8efb77320d943c5c95ea`. It is ready for exact live
+approval only; it does not itself deploy live.
+
 Use `staging-shop-discovery-verification-2026-05-29.md` as the staging proof
 packet for the same browse-only mode. It records the hosted staging deployment,
 source/provider identity, no-checkout mutation proof, SEO/AEO/GEO, accessibility,
