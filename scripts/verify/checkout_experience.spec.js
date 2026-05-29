@@ -105,6 +105,14 @@ test.describe("Locally Twisted checkout experience", () => {
 			input.checked = true;
 			input.dispatchEvent(new Event("change", { bubbles: true }));
 		});
+		if (await addButton.isDisabled()) {
+			await expect(addButton).toContainText(/quote/i);
+			await expect(page.getByRole("link", { name: /request a quote/i })).toBeVisible();
+			await gotoAndSettle(page, "/checkout");
+			await expect(page).toHaveURL(/\/ready-to-order-paused/);
+			await expect(page.locator("body")).toContainText("Ready-to-order is paused");
+			return;
+		}
 		await expect(addButton).toBeEnabled();
 		await addButton.click();
 		await expect(page.locator(".lt-cart-count.is-populated").first()).toHaveText("1");

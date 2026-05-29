@@ -5,6 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from _cli import parse_noop_args
+
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -118,6 +120,7 @@ def verify_customer_controls() -> None:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     verify_pause_controls()
     verify_indexing_and_sitemap()
     verify_context_and_navigation()

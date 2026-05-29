@@ -79,13 +79,30 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		for (const path of ["/home", "/about-us", "/event-balloons", "/event_balloons", "/balloon_twisting_and_face_painting", "/refund_policy", "/terms_of_service"]) {
 			expect(xml, `sitemap should exclude duplicate ${path}`).not.toContain(absolutePath(path));
 		}
-		for (const path of ["/shop", "/all-products", "/products", "/shop-items", "/shop-items/seasonal-specialty"]) {
+		const canonicalEcommercePaths = [
+			"/shop",
+			"/all-products",
+			"/products",
+			"/shop-items",
+			"/shop-items/arches",
+			"/shop-items/balloon-drops",
+			"/shop-items/bouquets",
+			"/shop-items/columns",
+			"/shop-items/garlands",
+			"/shop-items/photo-ops-backdrops",
+			"/shop-items/stands-easels",
+			"/shop-items/table-decor",
+		];
+		for (const path of canonicalEcommercePaths) {
 			if (ecommercePaused) {
 				expect(xml, `paused ecommerce URL should be out of sitemap: ${path}`).not.toContain(absolutePath(path));
 			} else {
 				if (path === "/products") continue;
 				expect(xml, `open ecommerce URL should remain in sitemap: ${path}`).toContain(absolutePath(path));
 			}
+		}
+		for (const path of ["/shop-items/seasonal-specialty", "/shop-items/drops", "/shop-items/grab-go", "/shop-items/deliveries", "/shop-items/get-well-bouquets"]) {
+			expect(xml, `legacy ecommerce URL should stay out of sitemap: ${path}`).not.toContain(absolutePath(path));
 		}
 
 		expect(xml, "sitemap should not advertise the Frappe Cloud vanity host").not.toContain("locallytwisted.v.frappe.cloud");

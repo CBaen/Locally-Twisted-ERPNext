@@ -25,6 +25,12 @@ for getting public shop/category/product discovery live while cart, checkout,
 payment, order creation, email, and ERPNext purchase mutation remain blocked.
 This is a shop-discovery release, not live checkout approval.
 
+Use `staging-shop-discovery-verification-2026-05-29.md` as the staging proof
+packet for the same browse-only mode. It records the hosted staging deployment,
+source/provider identity, no-checkout mutation proof, SEO/AEO/GEO, accessibility,
+layout, log/job, and security checks. It is staging-only proof and does not
+approve live deployment or live checkout.
+
 ## 2026-05-29 Staging Deployment Execution
 
 Use `staging-deployment-execution-2026-05-29.md` as the current staging push
