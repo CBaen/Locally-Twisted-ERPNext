@@ -1,0 +1,44 @@
+{
+  "artifact_type": "lt_live_indexing_source_correction_proof_summary",
+  "date": "2026-05-29",
+  "secrets_printed": false,
+  "approval": "Provider-source correction approved to change live bench bench-39776 locally_twisted source from main to live-seo-indexing-20260528 only so approved commit 5bbdc48 can become deployable.",
+  "target": {
+    "bench_group": "bench-39776",
+    "site": "locallytwisted.v.frappe.cloud",
+    "app": "locally_twisted",
+    "target_branch": "live-seo-indexing-20260528",
+    "approved_hash": "5bbdc484d86729c4f2afdf7776e9f6649b02c080"
+  },
+  "read_only_branch_check": {
+    "method": "press.api.bench.branch_list",
+    "ok": true,
+    "target_branch_present": true
+  },
+  "attempts": [
+    {
+      "method": "press.api.bench.change_branch",
+      "api_url_shape": "standard method URL",
+      "result_status": 308,
+      "result": "Permanent Redirect",
+      "provider_state_changed": false
+    },
+    {
+      "method": "press.api.bench.change_branch",
+      "api_url_shape": "slash-safe method URL",
+      "result_status": 308,
+      "result": "Permanent Redirect",
+      "provider_state_changed": false
+    }
+  ],
+  "provider_state_after_attempts": {
+    "branch": "main",
+    "current_branch": "main",
+    "current_hash": "b4b3bf80108234c12051b572ac9b9cd4728f0efc",
+    "next_release": "bu86t39ov3",
+    "next_hash": "ad0a408c2df5ecb711062f35887b94520220b2c8",
+    "update_available": true,
+    "will_branch_change": false
+  },
+  "decision": "BLOCKED before live mutation after two related provider API failures. No live deploy/update was run."
+}

@@ -98,3 +98,47 @@ proves `locally_twisted` next release hash is exactly
 
 Do not deploy the current live bench next release while it points to
 `ad0a408c2df5ecb711062f35887b94520220b2c8`.
+
+## Provider Source Correction Attempt
+
+Guiding Light approved changing the live Frappe Cloud app source for
+`locally_twisted` on `bench-39776` from `main` to
+`live-seo-indexing-20260528` only to make approved commit
+`5bbdc484d86729c4f2afdf7776e9f6649b02c080` deployable.
+
+First API call result:
+
+- Method: `press.api.bench.change_branch`
+- Intended change: `main` -> `live-seo-indexing-20260528`
+- Result: `308 Permanent Redirect`
+- Provider state after poll: unchanged; live branch remained `main`
+- Live next release remained blocked hash
+  `ad0a408c2df5ecb711062f35887b94520220b2c8`
+- Live deploy/update was not run
+
+Guard before any corrected provider call:
+
+- Use the slash-safe API method URL form for the corrected call.
+- Re-read Frappe Cloud branch list or source state first.
+- After source correction, deploy only if live deploy information proves
+  `next_hash == 5bbdc484d86729c4f2afdf7776e9f6649b02c080`.
+- Stop before live deployment if the next release remains `ad0a408` or any
+  other hash.
+
+Corrected API call result:
+
+- Read-only branch list passed; `live-seo-indexing-20260528` is visible to
+  Frappe Cloud.
+- Corrected `press.api.bench.change_branch` call still returned
+  `308 Permanent Redirect`.
+- Provider state after polling remained unchanged:
+  - branch: `main`
+  - current hash: `b4b3bf80108234c12051b572ac9b9cd4728f0efc`
+  - next release: `bu86t39ov3`
+  - next hash: `ad0a408c2df5ecb711062f35887b94520220b2c8`
+- Live deploy/update was not run.
+
+Provider mutation is now stopped after two related API failures. The next
+release-control plan needs a different execution path, such as provider UI
+automation with visible source proof or a verified alternate API endpoint,
+before attempting another source correction.

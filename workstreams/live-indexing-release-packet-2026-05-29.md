@@ -179,5 +179,6 @@ sending, or deployment of app-mirror-release-20260529/ad0a408.
 - `workstreams/selective-indexing-gate-2026-05-21.md`
 - `workstreams/seo-geo-aeo-contract.md`
 - `workstreams/live-indexing-release-execution-2026-05-29.md`
+- `workstreams/live-indexing-release-provider-source-recovery-plan-2026-05-29.md`
 - `capabilities/recipes/lt-seo-geo-aeo-contract.md`
 - `capabilities/failures/frappe-cloud-sitemap-public-domain-drift.md`
