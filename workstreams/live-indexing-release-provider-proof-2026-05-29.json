@@ -1,0 +1,41 @@
+{
+  "artifact_type": "lt_live_indexing_provider_proof_summary",
+  "date": "2026-05-29",
+  "secrets_printed": false,
+  "approved_candidate": {
+    "branch": "live-seo-indexing-20260528",
+    "hash": "5bbdc484d86729c4f2afdf7776e9f6649b02c080",
+    "path": "C:\\Users\\baenb\\agent-worktrees\\builtbycameron-lt\\codex-20260528-lt-live-seo-indexing-patch__app-mirror-live-hotfix"
+  },
+  "live_site": {
+    "public_url": "https://locallytwisted.com",
+    "frappe_cloud_site": "locallytwisted.v.frappe.cloud",
+    "status": "Active",
+    "server": "f94-virginia.frappe.cloud",
+    "release_group": "bench-39776",
+    "bench": "bench-39776-000015-f94v",
+    "running_jobs_count": 0
+  },
+  "current_live_app": {
+    "app": "locally_twisted",
+    "repository": "CBaen/Locally-Twisted-Frappe-App",
+    "current_branch": "main",
+    "current_hash": "b4b3bf80108234c12051b572ac9b9cd4728f0efc",
+    "current_release": "1m4hv2gag4"
+  },
+  "approved_diff_from_current_live": [
+    "M locally_twisted/ecommerce_pause.py",
+    "M locally_twisted/seo.py",
+    "M locally_twisted/templates/generators/item_group.html",
+    "M locally_twisted/www/ready_to_order_paused.py",
+    "A locally_twisted/www/robots.py",
+    "A locally_twisted/www/robots.txt",
+    "M locally_twisted/www/sitemap.py"
+  ],
+  "blocked_available_release": {
+    "release": "bu86t39ov3",
+    "hash": "ad0a408c2df5ecb711062f35887b94520220b2c8",
+    "reason": "This is the larger staging candidate explicitly blocked by the live indexing approval."
+  },
+  "decision": "NO-GO before live mutation because the exact approved candidate was not available as the live bench next release."
+}

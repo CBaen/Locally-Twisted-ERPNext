@@ -1,0 +1,100 @@
+# Live Indexing Release Execution - 2026-05-29
+
+## Decision
+
+Status: `NO-GO - stopped before live mutation`.
+
+Guiding Light approved a narrow live public discovery/indexing release for
+`https://locallytwisted.com` using app mirror branch
+`live-seo-indexing-20260528` at commit
+`5bbdc484d86729c4f2afdf7776e9f6649b02c080`.
+
+The approved code was not deployed because the live Frappe Cloud bench does not
+currently expose that exact commit as the deployable next release.
+
+## What Was Verified
+
+Approved app mirror:
+
+- Path:
+  `C:\Users\baenb\agent-worktrees\builtbycameron-lt\codex-20260528-lt-live-seo-indexing-patch__app-mirror-live-hotfix`
+- Branch: `live-seo-indexing-20260528`
+- HEAD: `5bbdc484d86729c4f2afdf7776e9f6649b02c080`
+- Git state: clean
+
+Live Frappe Cloud site:
+
+- Public target: `https://locallytwisted.com`
+- Frappe Cloud site object: `locallytwisted.v.frappe.cloud`
+- Site status: `Active`
+- Server: `f94-virginia.frappe.cloud`
+- Release group: `bench-39776`
+- Bench: `bench-39776-000015-f94v`
+- Team: `5b8acl3gba`
+- Running jobs: `0`
+
+Current live `locally_twisted` app:
+
+- Repository: `CBaen/Locally-Twisted-Frappe-App`
+- Current branch: `main`
+- Current hash: `b4b3bf80108234c12051b572ac9b9cd4728f0efc`
+- Current release: `1m4hv2gag4`
+- Rollback target before any mutation: current live hash/release above
+
+Approved candidate diff from current live hash:
+
+```text
+M	locally_twisted/ecommerce_pause.py
+M	locally_twisted/seo.py
+M	locally_twisted/templates/generators/item_group.html
+M	locally_twisted/www/ready_to_order_paused.py
+A	locally_twisted/www/robots.py
+A	locally_twisted/www/robots.txt
+M	locally_twisted/www/sitemap.py
+```
+
+This diff is narrow and matches the indexing-only packet scope.
+
+## Blocker
+
+Frappe Cloud live deploy information for `bench-39776` shows the next available
+`locally_twisted` release as:
+
+- Next release: `bu86t39ov3`
+- Next release hash: `ad0a408c2df5ecb711062f35887b94520220b2c8`
+
+That is the larger staging candidate explicitly blocked by the approval.
+
+The approved hotfix commit
+`5bbdc484d86729c4f2afdf7776e9f6649b02c080` was not present as an available
+release for the live bench. Deploying through the current available update path
+would have promoted the wrong source.
+
+## Boundary Kept
+
+No live deploy/update was run.
+
+No DNS, Search Console, checkout, Stripe, product/catalog, production data,
+ERPNext production record, or email mutation was performed.
+
+Local Frappe Cloud credentials were used only for read-only provider proof and
+were not printed.
+
+## Evidence Artifacts
+
+Committed evidence summary:
+
+- `workstreams/live-indexing-release-provider-proof-2026-05-29.json`
+
+Temporary raw provider snapshots were used to build the summary and were not
+needed as source-history artifacts. They contained sanitized provider responses
+and no credential values.
+
+## Next Safe Step
+
+Create a deployable live hotfix release whose Frappe Cloud deploy information
+proves `locally_twisted` next release hash is exactly
+`5bbdc484d86729c4f2afdf7776e9f6649b02c080`, then repeat the pre-live gate.
+
+Do not deploy the current live bench next release while it points to
+`ad0a408c2df5ecb711062f35887b94520220b2c8`.
