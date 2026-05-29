@@ -104,6 +104,104 @@
       "what_it_does_not_prove": "It does not prove DNS, CDN, cache, live Frappe Cloud settings, or external customer access."
     },
     {
+      "id": "lt-shared-inquiry-form-live-release-gate",
+      "tier": "tier_4_live_or_external",
+      "graduation_stage": "release_live_approval_backed",
+      "graduation_status": "active",
+      "command": "manual-gate: use capabilities/recipes/shared-inquiry-form-experience.md and the active inquiry-form release workstream before any live form release claim",
+      "cwd": ".",
+      "scope": "live public inquiry form release proof for /contact and service-page inquiry-v1 consumers",
+      "environment": "live public site plus authenticated Frappe Cloud backend proof",
+      "mutation": "may create an approved live smoke Lead, private Files, CRM photo rows, and Email Queue rows",
+      "approval_required": "yes, explicit Guiding Light approval required every time before live form smoke or customer-facing release claim",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/shared-inquiry-form-live-release-result.md",
+      "capability_refs": [
+        "capabilities/recipes/shared-inquiry-form-experience.md",
+        "capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md",
+        "capabilities/recipes/customer-email-delivery-branding-contract.md",
+        "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "live route",
+        "customer-facing form",
+        "Frappe Cloud",
+        "email delivery",
+        "file upload",
+        "customer data"
+      ],
+      "proves": [
+        "only the approved live inquiry-form release evidence after it is actually run: current Lead, customer Email Queue, owner Email Queue, private Files, CRM photo rows, and owner attachment refs"
+      ],
+      "what_it_does_not_prove": "It does not prove ecommerce, Stripe, DNS, broad site launch, or future form changes."
+    },
+    {
+      "id": "lt-portfolio-proof-reel-contract",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "npm run test:portfolio-reel",
+      "cwd": ".",
+      "scope": "local browser contract for the LT portfolio proof reel route",
+      "environment": "local Frappe route plus Playwright",
+      "mutation": "none",
+      "approval_required": "no, when run only against the local developer app",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/portfolio-proof-gallery.md or output/playwright/portfolio-reel/<dated-result>",
+      "capability_refs": [
+        "capabilities/recipes/frappe-portfolio-proof-reel.md",
+        "capabilities/recipes/frappe-public-container-contract.md",
+        "capabilities/recipes/responsive-container-audit.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "non-local BaseUrl",
+        "claiming staging or live route proof",
+        "changing portfolio images or route code",
+        "launch approval"
+      ],
+      "proves": [
+        "local browser contract for /portfolio proof reel behavior, no captions/frame wrappers, locked reel sizing/motion, mobile stream, and hero stacking"
+      ],
+      "what_it_does_not_prove": "It does not prove staging/live route behavior, DNS/CDN/cache, final photo approval, or customer-facing launch approval."
+    },
+    {
+      "id": "lt-fail-loud-local-contract-suite",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "architecture_backed",
+      "graduation_status": "active",
+      "command": "manual-suite: use capabilities/recipes/fail-loud-operating-law.md and run the narrow verifier for the changed surface",
+      "cwd": ".",
+      "scope": "local fail-loud contract selection for LT forms, automations, customer communication, checkout handoffs, record-level failure evidence, layout contracts, and verifier behavior",
+      "environment": "local app, static checks, or rollback-safe fake-data checks depending on the selected verifier",
+      "mutation": "varies by selected verifier; some rollback-safe local fake-data checks may create temporary local records",
+      "approval_required": "yes, because the selected verifier may touch local ERPNext fake-data paths or checkout/customer-communication surfaces",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/fail-loud-contract-result.md or output/<selected-verifier>/<dated-result>",
+      "capability_refs": [
+        "capabilities/recipes/fail-loud-operating-law.md",
+        "capabilities/recipes/erpnext-record-level-failure-recorder.md",
+        "capabilities/recipes/customer-email-delivery-branding-contract.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "running against staging or live",
+        "claiming customer email delivery",
+        "claiming checkout/order/payment readiness",
+        "touching real customer data",
+        "provider or Frappe Cloud mutation",
+        "using a broad verifier when a narrow verifier exists"
+      ],
+      "proves": [
+        "only the selected local fail-loud contract after it is actually run: no false success, actionable developer/operator evidence, and the named narrow surface failing loudly"
+      ],
+      "what_it_does_not_prove": "It does not prove staging or live readiness, email delivery, payment capture, customer receipt, DNS/CDN behavior, provider configuration, or launch approval."
+    },
+    {
       "id": "lt-ecommerce-local-contract",
       "tier": "tier_2_local_integrated",
       "graduation_stage": "gate_backed",

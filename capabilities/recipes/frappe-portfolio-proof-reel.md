@@ -1,7 +1,8 @@
 ---
 id: frappe-portfolio-proof-reel
 name: Frappe Portfolio Proof Reel
-schema_version: 2.0
+schema_version: 2.5
+profile: foundation
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe portfolio and proof-gallery visual work
@@ -12,6 +13,17 @@ evidence_quality: direct
 successful_uses: 8
 failed_uses: 1
 regressions: 3
+graduation_stage: verifier_backed
+graduation_status: active
+graduation_required: true
+supporting_artifacts:
+  - ../../verifier-manifest.json
+  - ../../scripts/verify/portfolio_reel.spec.js
+  - ../../scripts/verify/layout_fit.spec.js
+  - ../../scripts/verify/container_contract.spec.js
+  - ../../scripts/verify/interactive_layout.spec.js
+graduation_reason: approved item 2 review found repeated portfolio visual regressions and strong local verifier coverage; keep as LT-local verifier-backed capability, not a live-release gate
+graduation_review: 2026-05-29
 depends_on:
   - external-design-reference-translation
   - frappe-public-container-contract
@@ -29,6 +41,17 @@ tags:
 # Frappe Portfolio Proof Reel
 
 Use this recipe when `/portfolio` or another proof-gallery route is being redesigned from a visual reference or prototype.
+
+## Verifier Status
+
+As of 2026-05-29, Guiding Light approved this as an LT-local
+verifier-backed capability. The verifier protects the local browser contract
+for the portfolio proof reel; it does not approve staging, live launch, DNS,
+CDN/cache, photo/content approval, or customer-facing release readiness.
+
+Use the project root `verifier-manifest.json` for the current tier boundary.
+The `lt-portfolio-proof-reel-contract` bundle is Tier 2 local integrated proof
+and should stay manual-only.
 
 First read `external-design-reference-translation`. The portfolio reel is a
 special case of that broader rule: the approved external reference supplies the
