@@ -10,6 +10,22 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 live shop catalog parity remediation (2026-05-29):** Current release
+record is
+`workstreams/ecommerce-audit/live-shop-discovery-deployment-execution-2026-05-29.md`.
+The approved live shop-discovery app-only release did not launch. Frappe Cloud
+accepted release pipeline `56qgv7c8hm`, but live site migrate job
+`7b0egjdlkn` failed in
+`locally_twisted.patches.sync_shop_taxonomy_20260524` because live is missing
+the expected product `Item` records, then recovery job `ec084t4jgs` restored
+the prior live app state. Hosted live `/shop`, category, and representative
+product routes remain paused. Do not retry unchanged, do not use
+`skip_failing_patches=true`, and do not mutate live products/catalog without a
+new product-data approval. Next safe step is a remediation packet that proves
+live catalog parity needs and chooses either an approved live catalog/product
+data migration or a source patch that safely handles missing live catalog data,
+then returns through staging proof and fresh live approval.
+
 **P0 staging release-controller packet (2026-05-29):** Current packet is
 `workstreams/ecommerce-audit/staging-release-controller-packet-2026-05-29.md`.
 Triad witnesses recommend building the source-freeze packet as the next
