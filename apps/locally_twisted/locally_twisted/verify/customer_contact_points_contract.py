@@ -285,7 +285,7 @@ def _shop_search_surface(sources: dict[str, str]) -> dict[str, Any]:
         sources["navbar"],
         (
             "lt-site-search-panel__form",
-            "action=\"{% if ecommerce_paused %}/contact{% else %}/shop{% endif %}\"",
+            "action=\"{% if shop_discovery_open %}/shop{% else %}/contact{% endif %}\"",
             "method=\"get\"",
         ),
     )

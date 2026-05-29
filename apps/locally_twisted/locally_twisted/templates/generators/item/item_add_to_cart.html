@@ -15,6 +15,13 @@
 {% set cart_settings = shopping_cart.cart_settings %}
 {% set product_info = shopping_cart.product_info %}
 {% set lt_checkout_lane = lt_product_runtime.commerce_lane if lt_product_runtime is defined else checkout_lane_for_item_group(doc.item_group) %}
+{% if lt_checkout_paused is defined %}
+    {% set checkout_paused = lt_checkout_paused %}
+{% elif lt_ecommerce_paused is defined %}
+    {% set checkout_paused = lt_ecommerce_paused %}
+{% else %}
+    {% set checkout_paused = true %}
+{% endif %}
 
 <div class="lt-product__cart" data-variant-item-code="{{ item_code }}">
 
@@ -61,8 +68,8 @@
 
     {# Add to Cart — teal earned CTA. #}
     <div class="lt-product__actions">
-        {% if lt_checkout_lane == "quote_required" %}
-            <a href="/contact?item={{ doc.item_code }}"
+        {% if lt_checkout_lane == "quote_required" or checkout_paused %}
+            <a href="/contact?intent=quote&source=product-page&item={{ doc.item_code }}"
                class="lt-product__cta lt-product__cta--primary">
                 {{ _("Request a Quote") }}
             </a>
@@ -80,6 +87,7 @@
 
 </div>
 
+{% if not checkout_paused %}
 <script>
     frappe.ready(() => {
         $('.page_content').on('click', '.btn-add-to-cart', (e) => {
@@ -99,5 +107,6 @@
         });
     });
 </script>
+{% endif %}
 
 {% endif %}

@@ -692,9 +692,9 @@ def _assert_checkout_api_open(surface: str) -> dict | None:
     checkout UI does not show Frappe's generic/internal-error language. The
     guard still fails loudly through Error Log via _log_paused_checkout_api_block.
     """
-    from locally_twisted.ecommerce_pause import is_ecommerce_paused
+    from locally_twisted.ecommerce_pause import is_checkout_paused
 
-    if not is_ecommerce_paused():
+    if not is_checkout_paused():
         return None
 
     _log_paused_checkout_api_block(surface)

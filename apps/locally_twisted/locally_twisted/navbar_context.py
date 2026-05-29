@@ -4,7 +4,7 @@ from __future__ import annotations
 import frappe
 from frappe.utils import strip_html
 
-from locally_twisted.ecommerce_pause import is_ecommerce_paused
+from locally_twisted.ecommerce_pause import is_shop_discovery_open
 from locally_twisted.shop_taxonomy import CATEGORY_ICON_BY_NAME, CATEGORY_SUMMARY_BY_NAME
 
 EVENT_LINKS = [
@@ -61,7 +61,7 @@ def _category_summary(label: str) -> str:
 
 
 def _ready_to_order_category_links() -> list[dict[str, str]]:
-    if is_ecommerce_paused():
+    if not is_shop_discovery_open():
         return []
 
     categories = frappe.db.get_all(

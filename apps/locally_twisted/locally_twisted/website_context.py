@@ -3,7 +3,11 @@ from __future__ import annotations
 
 import frappe
 
-from locally_twisted.ecommerce_pause import is_ecommerce_paused
+from locally_twisted.ecommerce_pause import (
+    is_checkout_paused,
+    is_ecommerce_paused,
+    is_shop_discovery_open,
+)
 from locally_twisted.seo import apply_seo_context
 
 
@@ -29,12 +33,16 @@ def update_website_context(context):
 
     try:
         context["lt_ecommerce_paused"] = is_ecommerce_paused()
+        context["lt_shop_discovery_open"] = is_shop_discovery_open()
+        context["lt_checkout_paused"] = is_checkout_paused()
     except Exception as e:
         frappe.log_error(
             title="LT website context",
-            message=f"website_context.is_ecommerce_paused failed: {e}",
+            message=f"website_context ecommerce exposure flags failed: {e}",
         )
         context["lt_ecommerce_paused"] = True
+        context["lt_shop_discovery_open"] = False
+        context["lt_checkout_paused"] = True
 
     try:
         children = frappe.db.get_all(

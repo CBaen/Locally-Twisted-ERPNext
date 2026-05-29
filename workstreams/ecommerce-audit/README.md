@@ -18,6 +18,13 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-29 Live Shop Discovery Release Prep
+
+Use `live-shop-discovery-release-2026-05-29.md` as the current planning record
+for getting public shop/category/product discovery live while cart, checkout,
+payment, order creation, email, and ERPNext purchase mutation remain blocked.
+This is a shop-discovery release, not live checkout approval.
+
 ## 2026-05-29 Staging Deployment Execution
 
 Use `staging-deployment-execution-2026-05-29.md` as the current staging push

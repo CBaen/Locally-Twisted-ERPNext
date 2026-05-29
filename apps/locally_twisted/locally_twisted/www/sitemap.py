@@ -6,7 +6,12 @@ from frappe.utils import nowdate
 from frappe.website.router import get_pages
 from frappe.www.sitemap import get_public_pages_from_doctypes
 
-from locally_twisted.ecommerce_pause import is_ecommerce_discovery_path, is_ecommerce_paused
+from locally_twisted.ecommerce_pause import (
+    PAUSE_ROUTE,
+    is_checkout_path,
+    is_shop_discovery_open,
+    is_shop_discovery_path,
+)
 from locally_twisted.seo import absolute_url, canonical_path, normalize_path
 
 
@@ -23,7 +28,11 @@ def _sitemap_url(path: str) -> str:
 
 def _add_link(links: list[dict[str, str]], seen: set[str], path: str, lastmod: str) -> None:
     canonical = canonical_path(path)
-    if is_ecommerce_paused() and is_ecommerce_discovery_path(canonical):
+    if canonical == PAUSE_ROUTE:
+        return
+    if is_checkout_path(canonical):
+        return
+    if is_shop_discovery_path(canonical) and not is_shop_discovery_open():
         return
     loc = _sitemap_url(canonical)
     if loc in seen:

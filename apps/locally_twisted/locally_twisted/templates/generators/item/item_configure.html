@@ -18,11 +18,18 @@
 {%- set lt_variant_attributes = get_variant_attribute_options(doc.item_code) or [] -%}
 {%- set lt_starting_price_display = get_variant_starting_price_display(doc.item_code) -%}
 {%- set lt_add_on_options = get_checkout_add_on_options(doc.item_code) or [] -%}
+{% if lt_checkout_paused is defined %}
+    {% set checkout_paused = lt_checkout_paused %}
+{% elif lt_ecommerce_paused is defined %}
+    {% set checkout_paused = lt_ecommerce_paused %}
+{% else %}
+    {% set checkout_paused = true %}
+{% endif %}
 
 {% if lt_checkout_lane == "quote_required" %}
 <div class="lt-product__cart" data-variant-item-code="">
     <div class="lt-product__actions">
-        <a href="/contact?item={{ doc.item_code }}"
+        <a href="/contact?intent=quote&source=product-page&item={{ doc.item_code }}"
            class="lt-product__cta lt-product__cta--primary">
             {{ _("Request a Quote") }}
         </a>
@@ -215,12 +222,19 @@
                     class="lt-product__cta lt-product__cta--primary"
                     disabled
                     data-item-code="">
-                {{ _("Choose your options to add to cart") }}
+                {{ _("Choose your options to request a quote") if checkout_paused else _("Choose your options to add to cart") }}
             </button>
+            {% if checkout_paused %}
+            <a href="/contact?intent=quote&source=product-page&item={{ doc.item_code }}"
+               class="lt-product__cta lt-product__cta--secondary">
+                {{ _("Request a Quote") }}
+            </a>
+            {% else %}
             <a href="/cart"
                class="lt-product__cta lt-product__cta--secondary lt-view-in-cart hidden">
                 {{ _("View in Cart") }}
             </a>
+            {% endif %}
         </div>
     </div>
 </form>
@@ -243,10 +257,12 @@
     var variantRequestSerial = 0;
     var activeBasePriceNumber = null;
     var activeBasePriceText = '';
+    var checkoutPaused = {{ 'true' if checkout_paused else 'false' }};
 
     var msgChooseOptions = "{{ _('Pick a value for each option.') | replace("'", "\\'") }}";
-    var msgIncomplete = "{{ _('Choose your options to add to cart') | replace("'", "\\'") }}";
+    var msgIncomplete = "{{ (_('Choose your options to request a quote') if checkout_paused else _('Choose your options to add to cart')) | replace("'", "\\'") }}";
     var msgAddToCart = "{{ _('Add to Cart') | replace("'", "\\'") }}";
+    var msgCheckoutPaused = "{{ _('Request a quote to order') | replace("'", "\\'") }}";
     var msgUnavailable = "{{ _('Tiny snag: that combination is not available. Please try a different option.') | replace("'", "\\'") }}";
     var msgPickValid = "{{ _('Choose another option') | replace("'", "\\'") }}";
     var msgFrappeNotReady = "{{ _('Loading...') | replace("'", "\\'") }}";
@@ -623,12 +639,16 @@
     }
 
     function enableAdd(variantCode, formattedPrice, basePriceNumber) {
-        addBtn.disabled = false;
-        addBtn.textContent = msgAddToCart;
-        addBtn.setAttribute('data-item-code', variantCode);
         activeBasePriceText = formattedPrice || msgPriceWaiting;
         activeBasePriceNumber = typeof basePriceNumber === 'number' && !Number.isNaN(basePriceNumber) ? basePriceNumber : null;
         updateDisplayedPrice();
+        if (checkoutPaused) {
+            disableAdd(msgCheckoutPaused);
+            return;
+        }
+        addBtn.disabled = false;
+        addBtn.textContent = msgAddToCart;
+        addBtn.setAttribute('data-item-code', variantCode);
     }
 
     function selectedConfiguration(variantCode) {
@@ -856,22 +876,24 @@
         }
     });
 
-    addBtn.addEventListener('click', function () {
-        var code = addBtn.getAttribute('data-item-code');
-        if (!code) return;
-        addBtn.disabled = true;
-        webshop.webshop.shopping_cart.update_cart({
-            item_code: code,
-            qty: 1,
-            configuration: selectedConfiguration(code),
-            callback: function (r) {
-                addBtn.disabled = false;
-                if (r.message && viewInCart) {
-                    viewInCart.classList.remove('hidden');
+    if (!checkoutPaused) {
+        addBtn.addEventListener('click', function () {
+            var code = addBtn.getAttribute('data-item-code');
+            if (!code) return;
+            addBtn.disabled = true;
+            webshop.webshop.shopping_cart.update_cart({
+                item_code: code,
+                qty: 1,
+                configuration: selectedConfiguration(code),
+                callback: function (r) {
+                    addBtn.disabled = false;
+                    if (r.message && viewInCart) {
+                        viewInCart.classList.remove('hidden');
+                    }
                 }
-            }
+            });
         });
-    });
+    }
 
     refresh();
 })();

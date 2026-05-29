@@ -19,6 +19,13 @@
 {% set lt_product_runtime = get_product_page_runtime_context(doc.item_code) %}
 {% set lt_product_architecture_json = get_product_page_architecture_json(doc.item_code) %}
 {% set lt_product_setup_schema_json = get_product_setup_schema_json(doc.item_code) %}
+{% if lt_checkout_paused is defined %}
+    {% set checkout_paused = lt_checkout_paused %}
+{% elif lt_ecommerce_paused is defined %}
+    {% set checkout_paused = lt_ecommerce_paused %}
+{% else %}
+    {% set checkout_paused = true %}
+{% endif %}
 
 <div class="col-md-7 lt-product__details {{ width_class }}">
 
@@ -62,7 +69,11 @@
 
     {% if lt_product_runtime.is_ready_to_order %}
         <p class="lt-product__standard-note">
-            {{ _("Ready to order: choose the available options here, add any approved upgrades, and we’ll keep those details with your order.") }}
+            {% if checkout_paused %}
+                {{ _("Ready to browse: choose the available options here, then request a quote so we can confirm timing, pickup or delivery, and final details.") }}
+            {% else %}
+                {{ _("Ready to order: choose the available options here, add any approved upgrades, and we’ll keep those details with your order.") }}
+            {% endif %}
         </p>
     {% endif %}
 

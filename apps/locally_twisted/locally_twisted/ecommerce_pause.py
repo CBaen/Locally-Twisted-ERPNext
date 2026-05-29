@@ -10,19 +10,24 @@ from werkzeug.utils import redirect
 
 ECOMMERCE_PAUSED_DEFAULT = True
 ECOMMERCE_PAUSED = ECOMMERCE_PAUSED_DEFAULT
+SHOP_DISCOVERY_OPEN_DEFAULT = False
+CHECKOUT_PAUSED_DEFAULT = True
 PAUSE_ROUTE = "/ready-to-order-paused"
 
-BLOCKED_PUBLIC_PATHS = (
+SHOP_DISCOVERY_PUBLIC_PATHS = (
     "/shop",
     "/shop-items",
     "/shop-by-category",
     "/all-products",
     "/products",
+)
+
+CHECKOUT_PUBLIC_PATHS = (
     "/cart",
     "/checkout",
 )
 
-ECOMMERCE_DISCOVERY_PATHS = BLOCKED_PUBLIC_PATHS + (PAUSE_ROUTE,)
+ECOMMERCE_DISCOVERY_PATHS = SHOP_DISCOVERY_PUBLIC_PATHS + CHECKOUT_PUBLIC_PATHS + (PAUSE_ROUTE,)
 
 
 def _as_bool(value: object) -> bool:
@@ -40,25 +45,54 @@ def is_ecommerce_paused() -> bool:
     return _as_bool(frappe.conf.get("lt_ecommerce_paused", ECOMMERCE_PAUSED_DEFAULT))
 
 
+def is_shop_discovery_open() -> bool:
+    """Allow shop/category/product browsing without opening checkout."""
+    if not is_ecommerce_paused():
+        return True
+    return _as_bool(frappe.conf.get("lt_shop_discovery_open", SHOP_DISCOVERY_OPEN_DEFAULT))
+
+
+def is_checkout_paused() -> bool:
+    """Return whether cart, checkout pages, and checkout APIs are blocked."""
+    if is_ecommerce_paused():
+        return True
+    configured = frappe.conf.get("lt_checkout_paused", None)
+    if configured is not None:
+        return _as_bool(configured)
+    return False
+
+
 def normalize_path(path: str | None) -> str:
     normalized = "/" + str(path or "").strip("/")
     return "/" if normalized == "/" else normalized.rstrip("/")
 
 
-def is_blocked_public_path(path: str | None) -> bool:
+def _matches_path(path: str | None, roots: tuple[str, ...]) -> bool:
     normalized = normalize_path(path)
     return any(
-        normalized == blocked or normalized.startswith(f"{blocked}/")
-        for blocked in BLOCKED_PUBLIC_PATHS
+        normalized == root or normalized.startswith(f"{root}/")
+        for root in roots
     )
+
+
+def is_shop_discovery_path(path: str | None) -> bool:
+    return _matches_path(path, SHOP_DISCOVERY_PUBLIC_PATHS)
+
+
+def is_checkout_path(path: str | None) -> bool:
+    return _matches_path(path, CHECKOUT_PUBLIC_PATHS)
+
+
+def is_blocked_public_path(path: str | None) -> bool:
+    if is_checkout_path(path):
+        return is_checkout_paused()
+    if is_shop_discovery_path(path):
+        return not is_shop_discovery_open()
+    return False
 
 
 def is_ecommerce_discovery_path(path: str | None) -> bool:
-    normalized = normalize_path(path)
-    return any(
-        normalized == blocked or normalized.startswith(f"{blocked}/")
-        for blocked in ECOMMERCE_DISCOVERY_PATHS
-    )
+    return _matches_path(path, ECOMMERCE_DISCOVERY_PATHS)
 
 
 def before_request() -> None:
@@ -68,7 +102,7 @@ def before_request() -> None:
     Guests get a clear launch-safe message instead of unstable product, cart,
     or checkout surfaces.
     """
-    if not is_ecommerce_paused():
+    if not is_ecommerce_paused() and not is_checkout_paused():
         return
     if frappe.session.user != "Guest":
         return

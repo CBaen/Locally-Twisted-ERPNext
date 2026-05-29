@@ -4,6 +4,7 @@
 Examples:
   python scripts/verify/ecommerce_expected_mode.py --expect open
   python scripts/verify/ecommerce_expected_mode.py --expect paused
+  python scripts/verify/ecommerce_expected_mode.py --expect shop-discovery
 """
 from __future__ import annotations
 
@@ -20,7 +21,8 @@ BASE_URL = os.environ.get("LT_BASE_URL", "http://localhost:8081").rstrip("/")
 CONTAINER = os.environ.get("LT_FRAPPE_BACKEND_CONTAINER", "locally-twisted-erpnext-v15-backend-1")
 SITE = os.environ.get("LT_FRAPPE_SITE", "frontend")
 PAUSE_PATH = "/ready-to-order-paused"
-OPEN_ROUTES = ("/shop", "/cart", "/checkout")
+SHOP_DISCOVERY_ROUTES = ("/shop", "/shop-items/garlands/graduation-grab-n-go")
+CHECKOUT_ROUTES = ("/cart", "/checkout")
 
 
 class ModeFail(Exception):
@@ -29,22 +31,22 @@ class ModeFail(Exception):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--expect", choices=("open", "paused"), required=True)
+    parser.add_argument("--expect", choices=("open", "paused", "shop-discovery"), required=True)
     args = parser.parse_args()
 
     try:
-        paused = is_configured_paused()
-        assert_expected_config(args.expect, paused)
+        state = read_exposure_state()
+        assert_expected_config(args.expect, state)
         assert_routes_match_expectation(args.expect)
     except ModeFail as exc:
         print(f"[ECOMMERCE EXPECTED MODE] FAIL: {exc}", file=sys.stderr)
         return 1
 
-    print(f"[ECOMMERCE EXPECTED MODE] PASS expect={args.expect} paused={paused}")
+    print(f"[ECOMMERCE EXPECTED MODE] PASS expect={args.expect} state={state}")
     return 0
 
 
-def is_configured_paused() -> bool:
+def bench_execute_bool(method: str) -> bool:
     proc = subprocess.run(
         [
             "docker",
@@ -54,7 +56,7 @@ def is_configured_paused() -> bool:
             "--site",
             SITE,
             "execute",
-            "locally_twisted.ecommerce_pause.is_ecommerce_paused",
+            method,
         ],
         text=True,
         capture_output=True,
@@ -62,7 +64,7 @@ def is_configured_paused() -> bool:
     )
     if proc.returncode != 0:
         raise ModeFail(
-            "bench execute failed while reading lt_ecommerce_paused\n"
+            f"bench execute failed while reading {method}\n"
             f"STDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
         )
 
@@ -75,15 +77,46 @@ def is_configured_paused() -> bool:
         return text.lower() not in {"0", "false", "no", "off", "open"}
 
 
-def assert_expected_config(expect: str, paused: bool) -> None:
-    if expect == "open" and paused:
-        raise ModeFail("expected local ecommerce open, but lt_ecommerce_paused is active")
-    if expect == "paused" and not paused:
-        raise ModeFail("expected ecommerce paused, but lt_ecommerce_paused is open")
+def read_exposure_state() -> dict[str, bool]:
+    return {
+        "ecommerce_paused": bench_execute_bool("locally_twisted.ecommerce_pause.is_ecommerce_paused"),
+        "shop_discovery_open": bench_execute_bool("locally_twisted.ecommerce_pause.is_shop_discovery_open"),
+        "checkout_paused": bench_execute_bool("locally_twisted.ecommerce_pause.is_checkout_paused"),
+    }
+
+
+def assert_expected_config(expect: str, state: dict[str, bool]) -> None:
+    shop_open = state["shop_discovery_open"]
+    checkout_paused = state["checkout_paused"]
+    if expect == "open" and (not shop_open or checkout_paused):
+        raise ModeFail(f"expected full ecommerce open, got {state}")
+    if expect == "paused" and (shop_open or not checkout_paused):
+        raise ModeFail(f"expected ecommerce fully paused, got {state}")
+    if expect == "shop-discovery" and (
+        not state["ecommerce_paused"] or not shop_open or not checkout_paused
+    ):
+        raise ModeFail(f"expected shop-discovery open with checkout paused, got {state}")
 
 
 def assert_routes_match_expectation(expect: str) -> None:
-    for route in OPEN_ROUTES:
+    for route in SHOP_DISCOVERY_ROUTES:
+        status, final_url, body = get_final(route)
+        if status >= 400:
+            raise ModeFail(f"{route} returned HTTP {status}")
+
+        final_path = urlparse(final_url).path.rstrip("/") or "/"
+        if expect in {"open", "shop-discovery"}:
+            if final_path == PAUSE_PATH:
+                raise ModeFail(f"{route} should be open, but landed on {final_url}")
+            if "lt-ecommerce-paused" in body:
+                raise ModeFail(f"{route} should be open, but rendered the pause shell")
+        else:
+            if final_path != PAUSE_PATH:
+                raise ModeFail(f"{route} should be paused, but landed on {final_url}")
+            if "Ready-to-order is paused" not in body:
+                raise ModeFail(f"{route} paused route did not render the branded pause message")
+
+    for route in CHECKOUT_ROUTES:
         status, final_url, body = get_final(route)
         if status >= 400:
             raise ModeFail(f"{route} returned HTTP {status}")
@@ -96,7 +129,7 @@ def assert_routes_match_expectation(expect: str) -> None:
                 raise ModeFail(f"{route} should be open, but rendered the pause shell")
         else:
             if final_path != PAUSE_PATH:
-                raise ModeFail(f"{route} should be paused, but landed on {final_url}")
+                raise ModeFail(f"{route} should be checkout-paused, but landed on {final_url}")
             if "Ready-to-order is paused" not in body:
                 raise ModeFail(f"{route} paused route did not render the branded pause message")
 

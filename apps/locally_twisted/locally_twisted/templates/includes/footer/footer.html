@@ -44,6 +44,11 @@
 {% else %}
     {% set ecommerce_paused = true %}
 {% endif %}
+{% if lt_shop_discovery_open is defined %}
+    {% set shop_discovery_open = lt_shop_discovery_open %}
+{% else %}
+    {% set shop_discovery_open = not ecommerce_paused %}
+{% endif %}
 
 <footer class="lt-footer">
 
@@ -160,7 +165,7 @@
                 <div class="col-12 col-md-4 lt-footer__col">
                     <p class="lt-footer__col-title">Event Work</p>
                     <ul class="list-unstyled lt-footer__col-list">
-                        {% if not ecommerce_paused %}
+                        {% if shop_discovery_open %}
                             <li><a class="lt-footer__col-link" href="/shop">All Ready-to-Order</a></li>
                         {% endif %}
                         <li><a class="lt-footer__col-link" href="/portfolio">Portfolio</a></li>

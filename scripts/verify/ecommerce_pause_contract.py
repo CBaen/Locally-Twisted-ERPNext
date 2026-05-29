@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Verify that public ecommerce matches the configured launch/testing mode.
 
-The source default is paused. Local commerce testing can open the routes with
-the site config key `lt_ecommerce_paused = 0`; this verifier then expects
-shop/product/cart/checkout lanes and public navigation to be visible.
+The source default is fully paused. Local commerce testing can open full
+ecommerce with `lt_ecommerce_paused = 0`. Live shop discovery can separately
+open shop/category/product browsing with `lt_shop_discovery_open = 1` while
+cart, checkout pages, and checkout APIs remain blocked by `lt_checkout_paused`.
 """
 from __future__ import annotations
 
@@ -31,7 +32,7 @@ FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/
 CHECKOUT_SOURCE = ROOT / "apps/locally_twisted/locally_twisted/www/checkout.py"
 PAUSE_PAGE_SOURCE = ROOT / "apps/locally_twisted/locally_twisted/www/ready_to_order_paused.py"
 
-BLOCKED_ROUTES = (
+SHOP_DISCOVERY_ROUTES = (
     "/shop",
     "/shop?q=arches",
     "/shop-items",
@@ -39,6 +40,8 @@ BLOCKED_ROUTES = (
     "/shop-items/bouquets/unicorn-bouquet",
     "/shop-by-category",
     "/all-products",
+)
+CHECKOUT_ROUTES = (
     "/cart",
     "/checkout",
     "/checkout?item=mothers-day-bouquet&qty=1",
@@ -113,6 +116,14 @@ def is_configured_paused() -> bool:
     return bool(bench_execute("locally_twisted.ecommerce_pause.is_ecommerce_paused"))
 
 
+def is_shop_discovery_open() -> bool:
+    return bool(bench_execute("locally_twisted.ecommerce_pause.is_shop_discovery_open"))
+
+
+def is_checkout_paused() -> bool:
+    return bool(bench_execute("locally_twisted.ecommerce_pause.is_checkout_paused"))
+
+
 def mutation_counts() -> dict[str, int]:
     doctypes = list(MUTATION_DOCTYPES)
     doctypes.extend(doctype for doctype in OPTIONAL_MUTATION_DOCTYPES if doctype_exists(doctype))
@@ -157,6 +168,14 @@ def assert_source_has_safe_default() -> None:
         fail("ecommerce pause source default must stay paused")
     if 'lt_ecommerce_paused' not in source:
         fail("ecommerce pause must be controlled by lt_ecommerce_paused site config")
+    if "SHOP_DISCOVERY_OPEN_DEFAULT = False" not in source:
+        fail("shop discovery must default closed")
+    if "CHECKOUT_PAUSED_DEFAULT = True" not in source:
+        fail("checkout must default paused")
+    if 'lt_shop_discovery_open' not in source:
+        fail("shop discovery must be controlled by lt_shop_discovery_open site config")
+    if 'lt_checkout_paused' not in source:
+        fail("checkout pause must be controlled by lt_checkout_paused site config")
 
     pause_source = read(PAUSE_PAGE_SOURCE)
     if '"robots": "noindex, follow"' not in pause_source:
@@ -165,41 +184,51 @@ def assert_source_has_safe_default() -> None:
         fail("paused ecommerce page must not nofollow crawler-visible fallback links")
 
 
-def assert_navigation_matches_mode(paused: bool) -> None:
+def assert_navigation_matches_mode(shop_open: bool, checkout_paused: bool) -> None:
     status, final_url, body = get_final("/")
     if status >= 400:
         fail(f"homepage returned HTTP {status} while checking ecommerce navigation")
     if urlparse(final_url).path.rstrip("/") not in ("", "/"):
         fail(f"homepage navigation check unexpectedly landed on {final_url}")
 
-    open_markers = (
+    shop_markers = (
         'data-lt-megamenu-trigger="lt-mega-products"',
         'href="/shop"',
-        'href="/cart"',
         'action="/shop"',
         "data-lt-search-ready-order-entry",
     )
-    if paused:
-        for needle in open_markers:
+    checkout_markers = (
+        'href="/cart"',
+    )
+    if not shop_open:
+        for needle in shop_markers:
             if needle in body:
-                fail(f"paused homepage still exposes ecommerce surface: {needle}")
+                fail(f"paused homepage still exposes shop discovery surface: {needle}")
         if "Ready-to-Order" in body:
             fail("paused homepage still advertises Ready-to-Order")
     else:
-        for needle in open_markers:
+        for needle in shop_markers:
             if needle not in body:
-                fail(f"open homepage is missing ecommerce surface: {needle}")
+                fail(f"open homepage is missing shop discovery surface: {needle}")
         if "Ready-to-Order" not in body:
             fail("open homepage must advertise Ready-to-Order")
+    if checkout_paused:
+        for needle in checkout_markers:
+            if needle in body:
+                fail(f"checkout-paused homepage still exposes checkout surface: {needle}")
+    else:
+        for needle in checkout_markers:
+            if needle not in body:
+                fail(f"open checkout homepage is missing checkout surface: {needle}")
 
 
-def assert_routes_match_mode(paused: bool) -> None:
-    for route in BLOCKED_ROUTES:
+def assert_routes_match_mode(shop_open: bool, checkout_paused: bool) -> None:
+    for route in SHOP_DISCOVERY_ROUTES:
         status, final_url, body = get_final(route)
         final_path = urlparse(final_url).path.rstrip("/")
         if status >= 400:
             fail(f"{route} returned HTTP {status}")
-        if paused:
+        if not shop_open:
             if final_path != PAUSE_PATH:
                 fail(f"{route} should land on {PAUSE_PATH}, landed on {final_url}")
             if "Ready-to-order is paused" not in body:
@@ -208,9 +237,27 @@ def assert_routes_match_mode(paused: bool) -> None:
                 fail(f"{route} did not render the contact fallback")
         else:
             if final_path == PAUSE_PATH:
-                fail(f"{route} is still paused in open-commerce mode")
+                fail(f"{route} is still paused in open shop-discovery mode")
             if "lt-ecommerce-paused" in body:
-                fail(f"{route} rendered the pause page shell in open-commerce mode")
+                fail(f"{route} rendered the pause page shell in open shop-discovery mode")
+
+    for route in CHECKOUT_ROUTES:
+        status, final_url, body = get_final(route)
+        final_path = urlparse(final_url).path.rstrip("/")
+        if status >= 400:
+            fail(f"{route} returned HTTP {status}")
+        if checkout_paused:
+            if final_path != PAUSE_PATH:
+                fail(f"{route} should land on {PAUSE_PATH}, landed on {final_url}")
+            if "Ready-to-order is paused" not in body:
+                fail(f"{route} did not render the branded pause message")
+            if "Start a custom event quote" not in body:
+                fail(f"{route} did not render the contact fallback")
+        else:
+            if final_path == PAUSE_PATH:
+                fail(f"{route} is still paused in open-checkout mode")
+            if "lt-ecommerce-paused" in body:
+                fail(f"{route} rendered the pause page shell in open-checkout mode")
 
 
 def post_checkout_api(method: str) -> dict[str, object]:
@@ -280,13 +327,16 @@ def assert_direct_checkout_apis_blocked() -> None:
 def main() -> int:
     parse_noop_args(__doc__)
     paused = is_configured_paused()
+    shop_open = is_shop_discovery_open()
+    checkout_paused = is_checkout_paused()
     assert_source_has_safe_default()
-    assert_navigation_matches_mode(paused)
+    assert_navigation_matches_mode(shop_open, checkout_paused)
     assert_checkout_api_guard_order()
-    assert_routes_match_mode(paused)
-    if paused:
+    assert_routes_match_mode(shop_open, checkout_paused)
+    if checkout_paused:
         assert_direct_checkout_apis_blocked()
-    print(f"Ecommerce {'pause' if paused else 'open testing'} contract passed")
+    mode = "shop-discovery" if shop_open and checkout_paused else ("pause" if paused else "open testing")
+    print(f"Ecommerce {mode} contract passed")
     return 0
 
 

@@ -3,6 +3,13 @@
 {% block page_content %}
 
 <style>{{ page_css }}</style>
+{% if lt_checkout_paused is defined %}
+    {% set checkout_paused = lt_checkout_paused %}
+{% elif lt_ecommerce_paused is defined %}
+    {% set checkout_paused = lt_ecommerce_paused %}
+{% else %}
+    {% set checkout_paused = true %}
+{% endif %}
 
 <div class="lt-shop lt-shop--landing">
 <section class="lt-shop__hero" aria-label="Shop header">
@@ -61,9 +68,15 @@
                     <span class="lt-shop__card-price">{{ item.price_display }}</span>
                     {% if item.checkout_lane == "quote_required" %}
                     <a class="lt-shop__card-add lt-shop__card-add--link"
-                       href="/contact?item={{ item.item_code }}"
+                       href="/contact?intent=quote&source=shop-card&item={{ item.item_code }}"
                        aria-label="Request a quote for {{ item.web_item_name }}">
                         Request quote
+                    </a>
+                    {% elif checkout_paused %}
+                    <a class="lt-shop__card-add lt-shop__card-add--link"
+                       href="/{{ item.route }}"
+                       aria-label="View details for {{ item.web_item_name }}">
+                        View details
                     </a>
                     {% elif item.has_variants %}
                     <a class="lt-shop__card-add lt-shop__card-add--link"

@@ -6,7 +6,12 @@ from urllib.parse import urlparse
 
 import frappe
 
-from locally_twisted.ecommerce_pause import PAUSE_ROUTE, is_ecommerce_discovery_path, is_ecommerce_paused
+from locally_twisted.ecommerce_pause import (
+    PAUSE_ROUTE,
+    is_checkout_path,
+    is_shop_discovery_open,
+    is_shop_discovery_path,
+)
 
 
 SITE_NAME = "Locally Twisted"
@@ -96,7 +101,9 @@ def should_noindex_path(path: str | None) -> bool:
         return True
     if not is_public_indexing_enabled():
         return True
-    if is_ecommerce_paused() and is_ecommerce_discovery_path(path):
+    if is_checkout_path(path):
+        return True
+    if is_shop_discovery_path(path) and not is_shop_discovery_open():
         return True
     return False
 

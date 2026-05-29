@@ -6,7 +6,7 @@
    - #lt-mobile-backdrop and #lt-mobile-close close the drawer.
    - [data-lt-drawer-accordion-trigger] toggles same-id drawer panels.
    - [data-lt-search-toggle] opens #lt-site-search-panel without leaving the page.
-   - Ready-to-Order category surfaces are hidden while the online shop is paused.
+   - Ready-to-Order category surfaces can open while cart/checkout stay paused.
 #}
 
 {% set event_links = lt_nav_event_links or [
@@ -24,6 +24,16 @@
     {% set ecommerce_paused = lt_ecommerce_paused %}
 {% else %}
     {% set ecommerce_paused = true %}
+{% endif %}
+{% if lt_shop_discovery_open is defined %}
+    {% set shop_discovery_open = lt_shop_discovery_open %}
+{% else %}
+    {% set shop_discovery_open = not ecommerce_paused %}
+{% endif %}
+{% if lt_checkout_paused is defined %}
+    {% set checkout_paused = lt_checkout_paused %}
+{% else %}
+    {% set checkout_paused = ecommerce_paused %}
 {% endif %}
 
 <header class="lt-header lt-mega-header">
@@ -86,7 +96,7 @@
                         </div>
                     </li>
 
-                    {% if not ecommerce_paused %}
+                    {% if shop_discovery_open %}
                         <li class="lt-mega-nav__item">
                             <button class="lt-mega-nav__button"
                                     type="button"
@@ -133,7 +143,7 @@
             </nav>
 
             <div class="lt-mega-header__actions">
-                {% if not ecommerce_paused %}
+                {% if not checkout_paused %}
                     <a class="lt-mega-header__cart" href="/cart" aria-label="Shopping cart">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                             <circle cx="8" cy="21" r="1"></circle>
@@ -169,7 +179,7 @@
             </a>
 
             <div class="lt-mega-header__mobile-actions">
-                {% if not ecommerce_paused %}
+                {% if not checkout_paused %}
                     <a class="lt-mega-header__mobile-action" href="/cart" aria-label="Shopping cart">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                             <circle cx="8" cy="21" r="1"></circle>
@@ -192,7 +202,7 @@
     </div>
 
     <div class="lt-site-search-panel" id="lt-site-search-panel" hidden aria-labelledby="lt-site-search-title">
-        <form class="lt-site-search-panel__form" action="{% if ecommerce_paused %}/contact{% else %}/shop{% endif %}" method="get" role="search">
+        <form class="lt-site-search-panel__form" action="{% if shop_discovery_open %}/shop{% else %}/contact{% endif %}" method="get" role="search">
             <label class="lt-site-search-panel__label" id="lt-site-search-title" for="lt-site-search-input">Search Locally Twisted</label>
             <div class="lt-site-search-panel__field">
                 <input id="lt-site-search-input"
@@ -206,8 +216,8 @@
         </form>
 
         <div class="lt-site-search-panel__quick" data-lt-search-list>
-            {% if not ecommerce_paused %}
-                <a href="/shop" data-lt-search-entry data-lt-search-ready-order-entry data-lt-search-keywords="ready order shop all categories pickup checkout balloon decor">
+            {% if shop_discovery_open %}
+                <a href="/shop" data-lt-search-entry data-lt-search-ready-order-entry data-lt-search-keywords="ready order shop all categories pickup balloon decor">
                     <strong>All Ready-to-Order</strong>
                     <span>Browse every ready-to-order category in one place.</span>
                 </a>
@@ -286,7 +296,7 @@
             </div>
         </div>
 
-        {% if not ecommerce_paused %}
+        {% if shop_discovery_open %}
             <div class="lt-mega-drawer__section">
                 <button class="lt-mega-drawer__toggle"
                         type="button"
@@ -310,7 +320,7 @@
         <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
         <a class="lt-mega-drawer__single" href="/about">About Us</a>
         <a class="lt-mega-drawer__single" href="/faq">FAQ</a>
-        {% if not ecommerce_paused %}
+        {% if not checkout_paused %}
             <a class="lt-mega-drawer__single" href="/cart">
                 <span>Cart</span>
                 <span class="lt-cart-count lt-cart-count--mobile" aria-live="polite" aria-label="Items in cart"></span>
