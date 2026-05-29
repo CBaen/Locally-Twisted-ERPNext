@@ -31,6 +31,18 @@ This is not staging deployment approval and not provider, app mirror, migrate,
 cache clear, live checkout, live Stripe, DNS, Search Console, product data,
 ERPNext record, email sending, or remediation approval.
 
+## 2026-05-29 Staging Release Candidate Freeze
+
+Use `staging-release-candidate-freeze-2026-05-29.md` as the integrated
+branch-only source-freeze record. Branch
+`codex/lt-staging-release-candidate-freeze` includes checkout item 5 packet
+chain `86d6908`, graduation support `4147dcb`, and release-controller packet
+`708fac0` on local committed `main` `82c86f4`.
+
+Graduation support belongs in this freeze as repo/process support, not as item
+5 checkout proof. The branch still does not approve staging deployment or
+provider/live/payment/data/email mutation.
+
 ## 2026-05-29 Staging Shop Audit Master List
 
 Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list

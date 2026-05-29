@@ -11,6 +11,15 @@ does not approve staging deployment, provider changes, app mirror update,
 migrate, cache clear, live checkout, live Stripe, DNS, Search Console, product
 data mutation, ERPNext record mutation, email sending, or remediation.
 
+Release-candidate freeze update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-release-candidate-freeze-2026-05-29.md`
+for the integrated branch-only source-freeze candidate. Branch
+`codex/lt-staging-release-candidate-freeze` includes local committed `main`
+`82c86f4`, checkout item 5 packet chain `86d6908`, graduation support
+`4147dcb`, and release-controller packet `708fac0`. Graduation support is
+included as repo/process support, not as item 5 checkout proof. This still does
+not approve staging deployment or any provider/live/payment/data/email mutation.
+
 Staging shop audit master list update on 2026-05-29: use
 `workstreams/ecommerce-audit/staging-shop-audit-master-list-2026-05-29.md` as
 the front-door item sequence for the current staging shop audit. It records `5`

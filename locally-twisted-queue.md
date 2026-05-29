@@ -20,6 +20,14 @@ touch staging/provider, app mirror, migrate/cache, live checkout, live Stripe,
 DNS, Search Console, product data, ERPNext records, email sending, or
 remediation from this queue item.
 
+**P0 staging release-candidate freeze (2026-05-29):** Current freeze record is
+`workstreams/ecommerce-audit/staging-release-candidate-freeze-2026-05-29.md`.
+Branch `codex/lt-staging-release-candidate-freeze` integrates checkout item 5
+packet chain `86d6908`, graduation support `4147dcb`, and release-controller
+packet `708fac0` on local committed `main` `82c86f4`. Graduation support is
+included as repo/process support, not item 5 checkout proof. Next safe step is
+local validation and branch push for review, not staging deployment.
+
 **P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout
 detail in `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.md`
