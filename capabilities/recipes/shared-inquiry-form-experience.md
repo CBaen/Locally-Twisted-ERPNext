@@ -1,7 +1,7 @@
 ---
 id: shared-inquiry-form-experience
 name: Shared Inquiry Form Experience
-schema_version: 2.1
+schema_version: 2.5
 profile: governed
 level: recipe
 maturity: candidate
@@ -13,6 +13,18 @@ evidence_quality: direct
 successful_uses: 6
 failed_uses: 5
 regressions: 0
+graduation_stage: gate_backed
+graduation_status: active
+graduation_required: true
+supporting_artifacts:
+  - ../../verifier-manifest.json
+  - ../../scripts/verify/form_experience.spec.js
+  - ../../scripts/verify/smoke_forms.py
+  - ../../scripts/verify/book_form_repeat_email_photos.py
+  - ../../scripts/verify/inquiry_spam_gate.py
+  - ../../scripts/verify/inquiry_sales_solicitation_filter.py
+graduation_reason: approved item 1 review found recurring customer-facing form, email, upload, spam, and live-release failure evidence; keep as LT-local gate-backed capability, not a global form rule
+graduation_review: 2026-05-29
 depends_on:
   - erpnext-intake-form-parity
   - fail-loud-operating-law
@@ -41,6 +53,31 @@ form. The current consumers are `/contact` and the embedded form on
 
 This recipe does not own Lead schema parity or field taxonomy. Use
 `erpnext-intake-form-parity` for public-field-to-ERPNext mapping.
+
+## Gate Status
+
+As of 2026-05-29, Guiding Light approved this as an LT-local
+gate-backed capability. The global reusable lesson is verifier tier selection;
+this card owns only Locally Twisted's shared `inquiry-v1` public form behavior.
+
+The gate exists because this form has already produced real trust failures:
+false success risk, stale Email Queue proof, repeat-email `409` failures,
+missing owner photo attachments, spam, and live-release proof gaps.
+
+## Support Tiers
+
+- Tier 2 local proof covers local UI behavior, local backend submit behavior,
+  anti-bot token/honeypot rejection, sales-solicitation suppression,
+  repeat-email handling, and photo upload handling. Passing Tier 2 does not
+  prove live readiness.
+- Tier 4 live/external proof covers the customer-facing route, Frappe Cloud
+  backend state, current Lead proof, customer Email Queue proof, owner Email
+  Queue proof, private File proof, CRM photo-row proof, owner attachment refs,
+  and the release receipt. Tier 4 requires explicit approval every time.
+
+Do not claim live form readiness from local checks alone. Do not turn this into
+a global public-form rule unless another project proves the same pattern with
+its own incidents and verifiers.
 
 ## Contract
 

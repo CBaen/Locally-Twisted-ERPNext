@@ -104,6 +104,40 @@
       "what_it_does_not_prove": "It does not prove DNS, CDN, cache, live Frappe Cloud settings, or external customer access."
     },
     {
+      "id": "lt-shared-inquiry-form-live-release-gate",
+      "tier": "tier_4_live_or_external",
+      "graduation_stage": "release_live_approval_backed",
+      "graduation_status": "active",
+      "command": "manual-gate: use capabilities/recipes/shared-inquiry-form-experience.md and the active inquiry-form release workstream before any live form release claim",
+      "cwd": ".",
+      "scope": "live public inquiry form release proof for /contact and service-page inquiry-v1 consumers",
+      "environment": "live public site plus authenticated Frappe Cloud backend proof",
+      "mutation": "may create an approved live smoke Lead, private Files, CRM photo rows, and Email Queue rows",
+      "approval_required": "yes, explicit Guiding Light approval required every time before live form smoke or customer-facing release claim",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/shared-inquiry-form-live-release-result.md",
+      "capability_refs": [
+        "capabilities/recipes/shared-inquiry-form-experience.md",
+        "capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md",
+        "capabilities/recipes/customer-email-delivery-branding-contract.md",
+        "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "live route",
+        "customer-facing form",
+        "Frappe Cloud",
+        "email delivery",
+        "file upload",
+        "customer data"
+      ],
+      "proves": [
+        "only the approved live inquiry-form release evidence after it is actually run: current Lead, customer Email Queue, owner Email Queue, private Files, CRM photo rows, and owner attachment refs"
+      ],
+      "what_it_does_not_prove": "It does not prove ecommerce, Stripe, DNS, broad site launch, or future form changes."
+    },
+    {
       "id": "lt-ecommerce-local-contract",
       "tier": "tier_2_local_integrated",
       "graduation_stage": "gate_backed",
