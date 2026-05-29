@@ -33,10 +33,11 @@ Use `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md` as the
 approved item-5 scope and
 `staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md` as the executed
 item-5 packet. Item 5 completed a release/no-go packet for the later combined
-staging push/review decision. The packet recommendation is `BLOCKED/NO-GO` for
-staging release execution unless Guiding Light explicitly approves the named
-evidence deferrals: current hosted staging app/source identity and logged-in
-Desk public-network proof. It does not authorize a staging push, provider
+staging push/review decision. Recovery proof resolved the logged-in Desk/public
+network gap, but the packet recommendation remains `BLOCKED/NO-GO` for staging
+release execution until current hosted staging app/source identity is
+provider/API-proven or Guiding Light explicitly approves that remaining evidence
+gap as a named deferral. It does not authorize a staging push, provider
 changes, live checkout, DNS, Search Console, live Stripe, product data
 mutation, or remediation.
 

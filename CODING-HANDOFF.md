@@ -34,6 +34,19 @@ approval of those deferrals first. Current recommendation is `BLOCKED/NO-GO`
 for staging release execution unless those named evidence deferrals are
 explicitly approved.
 
+Item 5 recovery update on 2026-05-29: the logged-in Desk/public-network gap is
+resolved. Using the documented staging owner account, hosted staging passed
+`owner_desk_routes.spec.js` `1/1` and `public_network_integrity.spec.js` `40/40`
+from the item 5 worktree with the main checkout's Node dependency surface. The
+network verifier now accepts `application/octet-stream` for font files, matching
+`public_asset_integrity.py`, so Frappe Cloud's font MIME response does not mask
+the logged-in CSRF proof. Authenticated ERPNext `get_versions` proves
+`locally_twisted` is installed, and GitHub shows the app mirror `main` at
+`35ac2b12c3cee96a611e5193b024c0ddf8c95b7b`; however, the exact hosted Frappe
+Cloud deployed app/source commit is still not provider/API-proven. Current
+recommendation remains `BLOCKED/NO-GO` for staging release execution until that
+remaining source-identity gap is verified or explicitly approved as a deferral.
+
 Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
 one-cent mismatch by making checkout preview tax rounding match ERPNext's final
 Sales Order tax behavior. Source branch `codex/checkout-penny-match` has source

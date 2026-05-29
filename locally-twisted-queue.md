@@ -41,9 +41,10 @@ mutation, or remediation. The next shop-audit step is Guiding Light approval
 of item 5 scope; item 5 execution should produce a release/no-go packet and
 triad recommendation, not a staging push. 2026-05-29 update: item 5 packet is
 `workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`;
-the recommendation is `BLOCKED/NO-GO` for staging release execution unless
-Guiding Light explicitly approves the named evidence deferrals for current
-hosted staging app/source identity and logged-in Desk public-network proof.
+the logged-in Desk/public-network gap is now resolved, but the recommendation
+remains `BLOCKED/NO-GO` for staging release execution unless the current hosted
+staging app/source identity is provider/API-proven or Guiding Light explicitly
+approves that remaining evidence gap as a named deferral.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

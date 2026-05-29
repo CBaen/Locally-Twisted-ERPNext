@@ -1,8 +1,11 @@
 # Staging Shop Audit Item 5 - Release/No-Go Packet - 2026-05-29
 
-Status: item 5 packet complete for staging test-mode release/no-go review.
-Recommendation: `BLOCKED/NO-GO` for staging release execution unless Guiding
-Light explicitly approves the named evidence deferrals below.
+Status: item 5 packet recovery update recorded for staging test-mode
+release/no-go review.
+Recommendation: `BLOCKED/NO-GO` for staging release execution until the hosted
+staging app/source identity is verified by an approved provider/API path or
+Guiding Light explicitly approves that remaining evidence gap as a named
+deferral.
 
 This packet does not approve live checkout, staging deployment, provider
 changes, DNS, Search Console, live Stripe, product data changes, production
@@ -15,13 +18,13 @@ summarize: focused hosted checkout, product-gallery, search, public route,
 local payment, backend automation, reconciliation, webhook, and amount-parity
 proof all passed in this pass.
 
-The release decision is still no-go because the packet cannot prove the exact
-hosted staging app/source identity from a credentialed provider or ERPNext
-path, and the broad hosted public verifier also failed its logged-in Desk check
-because the available staging credentials were not valid.
+The release decision is still no-go because the packet still cannot prove the
+exact hosted staging app/source identity from a credentialed provider/API path.
+The logged-in Desk evidence gap from the first item 5 pass has now been
+resolved with the documented staging owner account.
 
-Those are not customer checkout failures. They are release-evidence gaps. They
-must not be hidden behind the passing public checkout tests.
+This is not a customer checkout failure. It is a release-evidence gap. It must
+not be hidden behind the passing public checkout tests.
 
 ## Item 5 Approval Boundary
 
@@ -46,7 +49,7 @@ mutation, or remediation was performed during item 5.
 | Item 4 internal processing | `staging-checkout-internal-processing-item-4-proof-2026-05-29.md`; branch tip `9fa3a51`; branch `origin/codex/item4-internal-processing-scope` | Approved complete for staging test-mode proof after triad `PASS WITH NOTES` |
 | Item 5 scope | `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`; branch tip before packet `0fbcecf` | Approved scope; this packet executes it |
 | Delivery-only staging history | `delivery-only-fulfillment-staging-2026-05-25.md`; full repo `4722a1c`; app mirror `3ca46bb` | Historical hosted staging release proof |
-| Item 2 app-mirror evidence | App mirror code `39e20ca`; app mirror trigger `35ac2b1` | Recorded in item 2 and used by item 3/item 4 proof; current hosted install not reverified by authenticated provider/API in item 5 |
+| Item 2 app-mirror evidence | App mirror code `39e20ca`; app mirror trigger `35ac2b1`; GitHub app mirror `main` currently `35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` | Source-side app mirror state verified through GitHub; current hosted install still not reverified by authenticated Frappe Cloud provider/API commit proof |
 | Payment/email drift guards | `frappe-cloud-staging-stripe-secret-drift.md`; `frappe-cloud-staging-email-secret-drift.md` | Guardrails for future staging release execution |
 
 ## Exclusion List
@@ -79,10 +82,14 @@ Read-only public hosted checks against
 | `/privacy` | `200`, title `Privacy Policy | Locally Twisted` |
 | `/shop-items/garlands/graduation-grab-n-go` | `200`, product route rendered |
 | unauthenticated app-version endpoints | `403` / `417`; installed app commit unverified |
+| authenticated ERPNext app roster | `frappe` 15.107.5, `erpnext` 15.108.1, `payments` 0.0.1, `webshop` 0.0.1, `locally_twisted` 0.0.1 |
+| GitHub app mirror source | `CBaen/Locally-Twisted-Frappe-App` default branch `main` at `35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` |
 
 Important limit: public route success does not prove the exact installed app
-commit. The current hosted staging app/source identity remains unverified
-without an approved authenticated Frappe Cloud, ERPNext, or provider/API path.
+commit. The authenticated ERPNext app roster proves the expected app is present,
+but it does not expose the deployed app commit. The current hosted staging
+app/source identity remains unverified without an approved authenticated Frappe
+Cloud provider/API commit path.
 
 ## Customer-Facing Proof Summary
 
@@ -188,7 +195,7 @@ $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:public-verify
 ```
 
-Partial results:
+First-pass results:
 
 - Verifier CLI safety contract: `PASS`.
 - Navigation IA: `PASS`.
@@ -209,6 +216,25 @@ payment, or customer-route regression. It is evidence that item 5 did not have
 a valid credentialed staging Desk proof path. That must stay visible as a
 release-evidence gap.
 
+Recovery proof after the documented staging owner account was used:
+
+```powershell
+$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+$env:LT_DESK_TEST_USER='<documented staging owner user>'
+$env:LT_DESK_TEST_PASSWORD='<documented staging owner password>'
+node --check scripts\verify\public_network_integrity.spec.js
+node C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\node_modules\@playwright\test\cli.js test --config=C:\Users\baenb\agent-worktrees\builtbycameron-lt\i5scope\playwright.config.js --grep "public network integrity" --reporter=line
+node C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\node_modules\@playwright\test\cli.js test --config=C:\Users\baenb\agent-worktrees\builtbycameron-lt\i5scope\playwright.config.js --grep "Owner Desk route recovery" --reporter=line
+```
+
+Recovery results:
+
+- `public_network_integrity.spec.js`: `40/40` passed against hosted staging.
+- `owner_desk_routes.spec.js`: `1/1` passed against hosted staging.
+- The verifier now accepts `application/octet-stream` for font assets, matching
+  `public_asset_integrity.py`; this keeps Frappe Cloud's font MIME response from
+  masking the real logged-in Desk/Webshop CSRF proof.
+
 ## Witness Review
 
 Three read-only witness lanes reviewed item 5:
@@ -216,30 +242,30 @@ Three read-only witness lanes reviewed item 5:
 | Lens | First Pass | Second Pass After New Verification |
 |---|---|---|
 | Customer checkout, money, and email consistency | `PASS WITH NOTES` | Customer path passes with notes, but final item 5 packet is `BLOCKED/NO-GO` unless hosted app/source identity is verified or explicitly approved as a named deferral |
-| Operator, accounting, and internal processing | `PASS WITH NOTES` | `PASS WITH APPROVED DEFERRALS` if hosted app identity and Desk credential gaps are explicitly named and not treated as proof |
-| Release boundary, rollback, and fail-loud risk | `PASS WITH NOTES` | `PASS WITH APPROVED DEFERRALS` if the logged-in Desk-only check and authenticated app identity proof are explicit deferrals |
+| Operator, accounting, and internal processing | `PASS WITH NOTES` | `PASS WITH APPROVED DEFERRALS` if the hosted app identity gap is explicitly named and not treated as proof; Desk gap resolved in recovery proof |
+| Release boundary, rollback, and fail-loud risk | `PASS WITH NOTES` | `PASS WITH APPROVED DEFERRALS` only if the authenticated app identity gap is an explicit deferral; logged-in Desk/public-network proof now passes |
 
 Main-agent synthesis:
 
 - The triad agrees the customer checkout and backend/payment evidence is strong.
-- The triad does not agree that the packet can be called passed without
-  handling the app-identity and Desk-auth evidence gaps.
-- Because Guiding Light has not explicitly approved those two new deferrals,
-  the release/no-go recommendation stays `BLOCKED/NO-GO`.
+- The logged-in Desk/public-network evidence gap has now been resolved.
+- The packet still cannot be called passed without handling the hosted
+  app/source identity gap.
+- Because Guiding Light has not explicitly approved that remaining deferral, the
+  release/no-go recommendation stays `BLOCKED/NO-GO`.
 
 ## Named Deferrals That Would Need Explicit Approval
 
-Guiding Light could later approve these as deferrals, but item 5 does not assume
+Guiding Light could later approve this as a deferral, but item 5 does not assume
 that approval:
 
 1. Authenticated hosted staging app/source identity:
-   unauthenticated app-version endpoints returned `403` / `417`, so the current
-   installed app commit was not proved through provider/API evidence.
-2. Logged-in Desk public-network proof:
-   the broad verifier's Desk session check failed because item 5 did not have
-   valid `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for staging.
+   unauthenticated app-version endpoints returned `403` / `417`; the
+   authenticated ERPNext app roster proves `locally_twisted` is installed, but
+   the current installed app commit was not proved through Frappe Cloud
+   provider/API evidence.
 
-If those are approved as explicit deferrals, the packet could become
+If this is approved as an explicit deferral, the packet could become
 `PASS WITH APPROVED DEFERRALS` for staging release planning only. That still
 would not approve the staging push itself.
 
@@ -249,8 +275,8 @@ Stop before any staging push or owner release execution if:
 
 - the hosted staging app/source commit cannot be verified by an approved
   credentialed path;
-- a future credentialed Desk/network rerun shows real staging route, asset,
-  permission, or app-version drift rather than a credentials-only failure;
+- a future credentialed Desk/network rerun shows real staging route, asset, or
+  permission drift;
 - source commit, app-mirror commit, hosted staging behavior, or packet
   inclusion list disagree and cannot be reconciled;
 - any preview, Stripe, thank-you, receipt, internal notification, ERPNext, or
@@ -290,11 +316,10 @@ Minimum recovery plan for that future task:
 
 Item 5 produced the release/no-go packet and triad review.
 
-Decision for the later staging release execution: `BLOCKED/NO-GO` until the two
-named evidence gaps are resolved or explicitly approved as deferrals:
+Decision for the later staging release execution: `BLOCKED/NO-GO` until the
+remaining named evidence gap is resolved or explicitly approved as a deferral:
 
-- current hosted staging app/source identity;
-- logged-in Desk public-network proof with valid staging credentials.
+- current hosted staging app/source identity.
 
 This does not roll back or reduce the approvals for items 1 through 4. Those
 remain approved complete for staging test-mode proof only.

@@ -41,7 +41,11 @@ function contentTypeMatches(contentType, expectedType) {
 	if (expectedType === "javascript") return normalized.includes("javascript") || normalized.includes("ecmascript");
 	if (expectedType === "css") return normalized.includes("text/css");
 	if (expectedType === "image") return normalized.startsWith("image/");
-	if (expectedType === "font") return normalized.startsWith("font/") || normalized.includes("font");
+	if (expectedType === "font") {
+		return normalized.startsWith("font/")
+			|| normalized.includes("application/font")
+			|| normalized.includes("application/octet-stream");
+	}
 	return true;
 }
 
