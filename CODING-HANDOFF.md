@@ -35,8 +35,8 @@ scope in
 The triad-reviewed proof packet is
 `workstreams/ecommerce-audit/staging-checkout-internal-processing-item-4-proof-2026-05-29.md`.
 Triad technical review returned `PASS WITH NOTES` for staging test-mode
-internal-processing proof only; Guiding Light completion approval is still
-pending. Existing paid staging orders `SAL-ORD-2026-00024`,
+internal-processing proof only, and Guiding Light approved item 4 complete on
+2026-05-29 for that boundary. Existing paid staging orders `SAL-ORD-2026-00024`,
 `SAL-ORD-2026-00030`, `SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` were
 inspected with read-only public, ERPNext, Gmail, and local verifier evidence.
 Current-path orders `00030`, `00031`, and `00034` prove the strongest

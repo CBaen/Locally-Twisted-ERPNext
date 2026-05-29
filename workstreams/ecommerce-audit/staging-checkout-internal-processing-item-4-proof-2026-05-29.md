@@ -1,7 +1,7 @@
 # Staging Checkout Internal Processing - Item 4 Proof - 2026-05-29
 
-Status: triad technical review complete: `PASS WITH NOTES`. Guiding Light
-completion approval is pending.
+Status: Guiding Light approved complete on 2026-05-29 for staging test-mode
+internal-processing proof only after triad technical review `PASS WITH NOTES`.
 
 This is staging test-mode internal-processing proof only. It does not approve
 live checkout, staging deployment, provider changes, DNS, Search Console, live
@@ -18,6 +18,13 @@ Guiding Light approved:
 
 Scope source:
 `workstreams/ecommerce-audit/staging-checkout-internal-processing-item-4-2026-05-29.md`
+
+Completion approval recorded on 2026-05-29:
+
+> I approve item 4 as complete for staging test-mode internal-processing proof
+> only. This does not approve live checkout, staging deployment, provider
+> changes, DNS, Search Console, live Stripe, product data changes, or
+> remediation work found during item 4.
 
 ## Source And Environment Boundary
 
@@ -210,13 +217,6 @@ is:
 > replay, scheduler depth, complete raw export coverage, and fresh Desk
 > screenshot proof as unresolved follow-up risks.
 
-This technical review does not approve live checkout, staging deployment,
+This approved completion does not approve live checkout, staging deployment,
 provider changes, DNS, Search Console, live Stripe, product data changes, or
 remediation work found during item 4.
-
-Suggested Guiding Light approval marker, if accepted:
-
-> I approve item 4 as complete for staging test-mode internal-processing proof
-> only. This does not approve live checkout, staging deployment, provider
-> changes, DNS, Search Console, live Stripe, product data changes, or
-> remediation work found during item 4.

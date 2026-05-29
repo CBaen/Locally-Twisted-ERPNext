@@ -74,7 +74,8 @@ public, ERPNext, Gmail, and local verifier evidence. The current-path orders
 `00024` is historical cascade evidence only for welcome/fulfillment details.
 Staging webhook/return-path replay, full scheduler/failed-job proof, complete
 raw export coverage, and fresh Desk screenshot proof remain evidence limits.
-Guiding Light completion approval is still pending.
+Guiding Light approved item 4 complete on 2026-05-29 for staging test-mode
+internal-processing proof only.
 
 This does not authorize another staging/provider push, live checkout,
 DNS/Search Console work, live Stripe work, product data mutation, or remediation
