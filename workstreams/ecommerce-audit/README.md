@@ -30,12 +30,15 @@ scope and needs Guiding Light approval before execution.
 ## 2026-05-29 Item 5 Combined Staging Release/No-Go Scope
 
 Use `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md` as the
-proposed item-5 scope. Item 5 completes a release/no-go packet for the later
-combined staging push/review decision. It must reconcile exact source commits,
-app-mirror commits, hosted staging reality, customer proof, internal-processing
-proof, known notes, exclusions, stop conditions, and rollback path. It does
-not authorize a staging push, provider changes, live checkout, DNS, Search
-Console, live Stripe, product data mutation, or remediation.
+approved item-5 scope and
+`staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md` as the executed
+item-5 packet. Item 5 completed a release/no-go packet for the later combined
+staging push/review decision. The packet recommendation is `BLOCKED/NO-GO` for
+staging release execution unless Guiding Light explicitly approves the named
+evidence deferrals: current hosted staging app/source identity and logged-in
+Desk public-network proof. It does not authorize a staging push, provider
+changes, live checkout, DNS, Search Console, live Stripe, product data
+mutation, or remediation.
 
 ## 2026-05-29 Checkout Penny Parity
 

@@ -19,6 +19,21 @@ state, customer proof, internal-processing proof, item 3/item 4 notes, explicit
 exclusions, stop conditions, rollback path, and triad recommendation. Item 5
 is a packet/review task, not the staging push.
 
+Item 5 execution update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
+Focused hosted staging checkout, product-gallery, and search tests passed;
+local/source payment, reconciliation, webhook, amount-parity, and business
+automation contracts passed. Broad `npm run test:public-verify` against
+staging failed only at the logged-in Desk session because valid staging
+`LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` were not available and default
+`Administrator` / `admin` was rejected. Unauthenticated app-version endpoints
+returned `403` / `417`, so the current hosted staging app/source identity was
+not proved. Triad review split: two lenses would allow `PASS WITH APPROVED
+DEFERRALS`, while the customer/money/email lens requires explicit Guiding Light
+approval of those deferrals first. Current recommendation is `BLOCKED/NO-GO`
+for staging release execution unless those named evidence deferrals are
+explicitly approved.
+
 Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
 one-cent mismatch by making checkout preview tax rounding match ERPNext's final
 Sales Order tax behavior. Source branch `codex/checkout-penny-match` has source

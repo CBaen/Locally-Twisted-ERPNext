@@ -19,8 +19,8 @@ Decision packet: `decisions/2026-05-24-staging-owner-review-recovery.md`.
 The current staging shop audit master list is
 `workstreams/ecommerce-audit/staging-shop-audit-master-list-2026-05-29.md`: it
 has `5` items, with items `1` through `4` approved complete for staging
-test-mode proof only and item `5` scope proposed in
-`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`.
+test-mode proof only and item `5` packet complete in
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
 Current staged source for owner review is full repo `4722a1c` and app mirror
 `3ca46bb`. Frappe Cloud staging installed app commit `3ca46bb`; site update
 `Migrate` `Success` and cache clear have completed. Hosted staging proof
@@ -39,7 +39,11 @@ internal-processing proof only, and the proof does not authorize live checkout,
 staging/provider changes, DNS, Search Console, live Stripe, product data
 mutation, or remediation. The next shop-audit step is Guiding Light approval
 of item 5 scope; item 5 execution should produce a release/no-go packet and
-triad recommendation, not a staging push.
+triad recommendation, not a staging push. 2026-05-29 update: item 5 packet is
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`;
+the recommendation is `BLOCKED/NO-GO` for staging release execution unless
+Guiding Light explicitly approves the named evidence deferrals for current
+hosted staging app/source identity and logged-in Desk public-network proof.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

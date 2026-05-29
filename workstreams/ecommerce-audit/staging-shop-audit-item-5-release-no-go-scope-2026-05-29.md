@@ -1,7 +1,7 @@
 # Staging Shop Audit Item 5 - Combined Release/No-Go Packet Scope - 2026-05-29
 
-Status: scope proposed by Codex after Guiding Light approved item 4 complete.
-This scope needs Guiding Light approval before execution.
+Status: scope approved by Guiding Light on 2026-05-29 and executed in
+`staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
 
 This is a staging release/no-go packet scope only. It does not approve live
 checkout, staging deployment, provider changes, DNS, Search Console, live
@@ -214,7 +214,7 @@ Use this wording before executing item 5:
 
 ## Next Safe Action
 
-After Guiding Light approves this scope, execute item 5 as a packet-building and
-review task. The output should be a concise decision packet plus triad result.
-Only after that packet exists and receives a separate execution approval can a
-future task consider any staging push or provider action.
+Item 5 execution produced a release/no-go packet and triad result in
+`staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`. Only after that
+packet receives a separate release-execution approval can a future task consider
+any staging push or provider action.
