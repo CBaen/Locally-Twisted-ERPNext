@@ -1,11 +1,10 @@
 # Staging Shop Audit Item 5 - Release/No-Go Packet - 2026-05-29
 
-Status: item 5 packet recovery update recorded for staging test-mode
+Status: item 5 packet complete after recovery proof for staging test-mode
 release/no-go review.
-Recommendation: `BLOCKED/NO-GO` for staging release execution until the hosted
-staging app/source identity is verified by an approved provider/API path or
-Guiding Light explicitly approves that remaining evidence gap as a named
-deferral.
+Recommendation: `PASS` for the item 5 staging release/no-go packet. This means
+the packet is ready for Guiding Light review of the later staging release
+decision; it does not approve staging deployment or any excluded work below.
 
 This packet does not approve live checkout, staging deployment, provider
 changes, DNS, Search Console, live Stripe, product data changes, production
@@ -18,13 +17,15 @@ summarize: focused hosted checkout, product-gallery, search, public route,
 local payment, backend automation, reconciliation, webhook, and amount-parity
 proof all passed in this pass.
 
-The release decision is still no-go because the packet still cannot prove the
-exact hosted staging app/source identity from a credentialed provider/API path.
-The logged-in Desk evidence gap from the first item 5 pass has now been
+The release packet now has the missing source-identity proof. Frappe Cloud API
+confirms hosted staging is active on `bench-40102-000026-f4-virginia` and is
+running `locally_twisted` from `CBaen/Locally-Twisted-Frappe-App` at commit
+`35ac2b12c3cee96a611e5193b024c0ddf8c95b7b`, matching the item-2 app-mirror
+trigger. The logged-in Desk evidence gap from the first item 5 pass is also
 resolved with the documented staging owner account.
 
-This is not a customer checkout failure. It is a release-evidence gap. It must
-not be hidden behind the passing public checkout tests.
+No item 5 evidence deferral remains for the staging test-mode release/no-go
+packet.
 
 ## Item 5 Approval Boundary
 
@@ -49,7 +50,7 @@ mutation, or remediation was performed during item 5.
 | Item 4 internal processing | `staging-checkout-internal-processing-item-4-proof-2026-05-29.md`; branch tip `9fa3a51`; branch `origin/codex/item4-internal-processing-scope` | Approved complete for staging test-mode proof after triad `PASS WITH NOTES` |
 | Item 5 scope | `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`; branch tip before packet `0fbcecf` | Approved scope; this packet executes it |
 | Delivery-only staging history | `delivery-only-fulfillment-staging-2026-05-25.md`; full repo `4722a1c`; app mirror `3ca46bb` | Historical hosted staging release proof |
-| Item 2 app-mirror evidence | App mirror code `39e20ca`; app mirror trigger `35ac2b1`; GitHub app mirror `main` currently `35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` | Source-side app mirror state verified through GitHub; current hosted install still not reverified by authenticated Frappe Cloud provider/API commit proof |
+| Item 2 app-mirror evidence | App mirror code `39e20ca`; app mirror trigger `35ac2b1`; GitHub app mirror `main` currently `35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` | Source-side app mirror state verified through GitHub; hosted install reverified by authenticated Frappe Cloud API proof |
 | Payment/email drift guards | `frappe-cloud-staging-stripe-secret-drift.md`; `frappe-cloud-staging-email-secret-drift.md` | Guardrails for future staging release execution |
 
 ## Exclusion List
@@ -84,12 +85,11 @@ Read-only public hosted checks against
 | unauthenticated app-version endpoints | `403` / `417`; installed app commit unverified |
 | authenticated ERPNext app roster | `frappe` 15.107.5, `erpnext` 15.108.1, `payments` 0.0.1, `webshop` 0.0.1, `locally_twisted` 0.0.1 |
 | GitHub app mirror source | `CBaen/Locally-Twisted-Frappe-App` default branch `main` at `35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` |
+| Frappe Cloud provider source identity | `locally_twisted`, branch `main`, repository `CBaen/Locally-Twisted-Frappe-App`, commit `35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` on bench `bench-40102-000026-f4-virginia`; bench deployed on `2026-05-29 06:28:23.643172` |
 
-Important limit: public route success does not prove the exact installed app
-commit. The authenticated ERPNext app roster proves the expected app is present,
-but it does not expose the deployed app commit. The current hosted staging
-app/source identity remains unverified without an approved authenticated Frappe
-Cloud provider/API commit path.
+Important limit: public route success alone does not prove the exact installed
+app commit. That gap is now closed by the authenticated Frappe Cloud provider
+API result above.
 
 ## Customer-Facing Proof Summary
 
@@ -241,40 +241,33 @@ Three read-only witness lanes reviewed item 5:
 
 | Lens | First Pass | Second Pass After New Verification |
 |---|---|---|
-| Customer checkout, money, and email consistency | `PASS WITH NOTES` | Customer path passes with notes, but final item 5 packet is `BLOCKED/NO-GO` unless hosted app/source identity is verified or explicitly approved as a named deferral |
-| Operator, accounting, and internal processing | `PASS WITH NOTES` | `PASS WITH APPROVED DEFERRALS` if the hosted app identity gap is explicitly named and not treated as proof; Desk gap resolved in recovery proof |
-| Release boundary, rollback, and fail-loud risk | `PASS WITH NOTES` | `PASS WITH APPROVED DEFERRALS` only if the authenticated app identity gap is an explicit deferral; logged-in Desk/public-network proof now passes |
+| Customer checkout, money, and email consistency | `PASS WITH NOTES` | `PASS`; customer path passes with notes and hosted source identity is now provider-proven |
+| Operator, accounting, and internal processing | `PASS WITH NOTES` | `PASS`; Desk gap resolved in recovery proof and hosted source identity is now provider-proven |
+| Release boundary, rollback, and fail-loud risk | `PASS WITH NOTES` | `PASS`; no item 5 evidence deferral remains, while staging/live/provider mutation remains excluded |
 
 Main-agent synthesis:
 
 - The triad agrees the customer checkout and backend/payment evidence is strong.
 - The logged-in Desk/public-network evidence gap has now been resolved.
-- The packet still cannot be called passed without handling the hosted
-  app/source identity gap.
-- Because Guiding Light has not explicitly approved that remaining deferral, the
-  release/no-go recommendation stays `BLOCKED/NO-GO`.
+- The hosted app/source identity gap has now been resolved by Frappe Cloud API
+  proof.
+- The release/no-go packet recommendation is now `PASS` for staging test-mode
+  packet readiness only.
 
-## Named Deferrals That Would Need Explicit Approval
+## Named Deferrals
 
-Guiding Light could later approve this as a deferral, but item 5 does not assume
-that approval:
+No item 5 evidence deferrals remain after recovery proof.
 
-1. Authenticated hosted staging app/source identity:
-   unauthenticated app-version endpoints returned `403` / `417`; the
-   authenticated ERPNext app roster proves `locally_twisted` is installed, but
-   the current installed app commit was not proved through Frappe Cloud
-   provider/API evidence.
-
-If this is approved as an explicit deferral, the packet could become
-`PASS WITH APPROVED DEFERRALS` for staging release planning only. That still
-would not approve the staging push itself.
+This still does not approve the staging push itself. It means the release/no-go
+packet is complete enough for Guiding Light to decide whether to approve the
+next staging release execution step.
 
 ## Stop Conditions
 
 Stop before any staging push or owner release execution if:
 
-- the hosted staging app/source commit cannot be verified by an approved
-  credentialed path;
+- a future rerun cannot verify the hosted staging app/source commit by an
+  approved credentialed path;
 - a future credentialed Desk/network rerun shows real staging route, asset, or
   permission drift;
 - source commit, app-mirror commit, hosted staging behavior, or packet
@@ -285,10 +278,9 @@ Stop before any staging push or owner release execution if:
 - fulfillment or internal order processing is unclear enough for an operator to
   act incorrectly;
 - Email Queue proof is treated as inbox proof where inbox proof is required;
-- resolving the remaining evidence gaps would require staging deployment,
-  provider/dashboard mutation, DNS/Search Console change, live Stripe action,
-  product-data mutation, production-data mutation, or remediation outside a
-  separately approved scope.
+- a new issue would require staging deployment, provider/dashboard mutation,
+  DNS/Search Console change, live Stripe action, product-data mutation,
+  production-data mutation, or remediation outside a separately approved scope.
 
 ## Rollback And Recovery Path For Future Staging Execution
 
@@ -316,10 +308,8 @@ Minimum recovery plan for that future task:
 
 Item 5 produced the release/no-go packet and triad review.
 
-Decision for the later staging release execution: `BLOCKED/NO-GO` until the
-remaining named evidence gap is resolved or explicitly approved as a deferral:
-
-- current hosted staging app/source identity.
+Decision for the item 5 packet: `PASS` for staging release/no-go packet
+readiness only.
 
 This does not roll back or reduce the approvals for items 1 through 4. Those
 remain approved complete for staging test-mode proof only.

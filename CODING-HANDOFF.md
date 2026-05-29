@@ -40,12 +40,14 @@ resolved. Using the documented staging owner account, hosted staging passed
 from the item 5 worktree with the main checkout's Node dependency surface. The
 network verifier now accepts `application/octet-stream` for font files, matching
 `public_asset_integrity.py`, so Frappe Cloud's font MIME response does not mask
-the logged-in CSRF proof. Authenticated ERPNext `get_versions` proves
-`locally_twisted` is installed, and GitHub shows the app mirror `main` at
-`35ac2b12c3cee96a611e5193b024c0ddf8c95b7b`; however, the exact hosted Frappe
-Cloud deployed app/source commit is still not provider/API-proven. Current
-recommendation remains `BLOCKED/NO-GO` for staging release execution until that
-remaining source-identity gap is verified or explicitly approved as a deferral.
+the logged-in CSRF proof. Frappe Cloud API also proves hosted staging is running
+`locally_twisted` from `CBaen/Locally-Twisted-Frappe-App` at commit
+`35ac2b12c3cee96a611e5193b024c0ddf8c95b7b` on bench
+`bench-40102-000026-f4-virginia`, matching the GitHub app mirror `main`.
+Current recommendation is `PASS` for item 5 staging release/no-go packet
+readiness only; it still does not approve staging deployment, provider changes,
+live checkout, DNS, Search Console, live Stripe, product data mutation, or
+remediation.
 
 Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
 one-cent mismatch by making checkout preview tax rounding match ERPNext's final
