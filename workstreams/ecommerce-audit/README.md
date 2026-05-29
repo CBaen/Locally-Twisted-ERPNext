@@ -54,24 +54,31 @@ folder; moved proofs `SAL-ORD-2026-00030` and `SAL-ORD-2026-00031` were found
 under `_NEW_WEBSITE/Duplicate Inquiry Request` and `SENT`. This is not live
 approval and does not authorize another staging/provider push.
 
-## 2026-05-29 Item 4 Internal Processing Scope
+## 2026-05-29 Item 4 Internal Processing Proof
 
-Use `staging-checkout-internal-processing-item-4-2026-05-29.md` as the proposed
-item-4 scope. It narrows the next audit to the internal ERPNext trail after a
-paid staging test-mode checkout: Sales Order, Payment Request, Payment Entry,
-Sales Invoice, Customer/Contact/Lead linkage, Email Queue, Communication,
-checkout notes, fulfillment handoff, Error Log/scheduler health, and duplicate
-payment/email protection.
+Use `staging-checkout-internal-processing-item-4-2026-05-29.md` as the approved
+item-4 scope and
+`staging-checkout-internal-processing-item-4-proof-2026-05-29.md` as the
+triad-reviewed proof packet. Item 4 narrows the audit to the internal ERPNext
+trail after a paid staging test-mode checkout: Sales Order, Payment Request,
+Payment Entry, Sales Invoice, Customer/Contact/Lead linkage, Email Queue,
+Communication, checkout notes, fulfillment handoff, Error Log/scheduler health,
+and duplicate payment/email protection.
 
-Existing paid staging orders `SAL-ORD-2026-00024`, `SAL-ORD-2026-00030`,
-`SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` should be inspected first. A new
-staging test order is only allowed if existing records cannot prove a required
-internal-processing question. This scope is proposed only and still needs
-Guiding Light approval before execution. It does not authorize another
-staging/provider push, live checkout, DNS/Search Console work, live Stripe
-work, product data mutation, or remediation work found during item 4. Item 4
-requires triad/witness gates during execution and triad convergence before it
-can be called complete.
+2026-05-29 execution update: triad technical review returned `PASS WITH NOTES`
+for staging test-mode internal-processing proof only. Existing paid staging
+orders `SAL-ORD-2026-00024`, `SAL-ORD-2026-00030`,
+`SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` were inspected with read-only
+public, ERPNext, Gmail, and local verifier evidence. The current-path orders
+`00030`, `00031`, and `00034` prove the strongest operator/accounting trail.
+`00024` is historical cascade evidence only for welcome/fulfillment details.
+Staging webhook/return-path replay, full scheduler/failed-job proof, complete
+raw export coverage, and fresh Desk screenshot proof remain evidence limits.
+Guiding Light completion approval is still pending.
+
+This does not authorize another staging/provider push, live checkout,
+DNS/Search Console work, live Stripe work, product data mutation, or remediation
+work found during item 4.
 
 ## 2026-05-22 Owner Product Setup Guard Closeout
 

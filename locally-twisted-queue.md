@@ -26,7 +26,12 @@ review on staging and a change log from that review. Do not touch live payment
 settings, DNS, Search Console, live Stripe, or production data from this queue
 item. Delivery-only fulfillment handoff:
 `workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`;
-mixed carts must stay mixed.
+mixed carts must stay mixed. Item 4 internal-processing proof has triad
+technical review `PASS WITH NOTES` in
+`workstreams/ecommerce-audit/staging-checkout-internal-processing-item-4-proof-2026-05-29.md`;
+Guiding Light completion approval is pending, and the proof does not authorize
+live checkout, staging/provider changes, DNS, Search Console, live Stripe,
+product data mutation, or remediation.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global
