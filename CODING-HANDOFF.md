@@ -6,9 +6,11 @@ the front-door item sequence for the current staging shop audit. It records `5`
 items: receipt/email delivery, penny parity, product diversity, internal
 processing, and the next combined staging release/no-go packet. Items `1`
 through `4` are approved complete for staging test-mode proof only. Item `5`
-has a proposed scope in
+has an approved/executed packet in
 `workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`
-and needs Guiding Light approval before execution. It does not authorize
+and
+`workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
+It does not authorize
 staging deployment, provider changes, live checkout, DNS, Search Console, live
 Stripe, product data mutation, or remediation.
 
@@ -19,7 +21,7 @@ state, customer proof, internal-processing proof, item 3/item 4 notes, explicit
 exclusions, stop conditions, rollback path, and triad recommendation. Item 5
 is a packet/review task, not the staging push.
 
-Item 5 execution update on 2026-05-29: use
+Item 5 first execution update on 2026-05-29: use
 `workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`.
 Focused hosted staging checkout, product-gallery, and search tests passed;
 local/source payment, reconciliation, webhook, amount-parity, and business
@@ -28,11 +30,8 @@ staging failed only at the logged-in Desk session because valid staging
 `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` were not available and default
 `Administrator` / `admin` was rejected. Unauthenticated app-version endpoints
 returned `403` / `417`, so the current hosted staging app/source identity was
-not proved. Triad review split: two lenses would allow `PASS WITH APPROVED
-DEFERRALS`, while the customer/money/email lens requires explicit Guiding Light
-approval of those deferrals first. Current recommendation is `BLOCKED/NO-GO`
-for staging release execution unless those named evidence deferrals are
-explicitly approved.
+not proved in the first pass. This first-pass gap was later resolved in the
+recovery update below.
 
 Item 5 recovery update on 2026-05-29: the logged-in Desk/public-network gap is
 resolved. Using the documented staging owner account, hosted staging passed
@@ -48,6 +47,14 @@ Current recommendation is `PASS` for item 5 staging release/no-go packet
 readiness only; it still does not approve staging deployment, provider changes,
 live checkout, DNS, Search Console, live Stripe, product data mutation, or
 remediation.
+
+Item 5 approval update on 2026-05-29: Guiding Light approved item 5 complete
+for staging release/no-go packet readiness only. This approval does not approve
+staging deployment, provider changes, live checkout, live Stripe, DNS, Search
+Console, product data changes, ERPNext record mutation, email sending, or
+remediation outside item 5. The next decision is the separate release-controller
+decision about whether to build and execute a larger staging release packet with
+exact source commits.
 
 Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
 one-cent mismatch by making checkout preview tax rounding match ERPNext's final

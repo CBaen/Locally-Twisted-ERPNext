@@ -22,9 +22,8 @@ This file is the durable front door for the item sequence.
 There are currently `5` items on the shop staging audit list.
 
 Items `1` through `4` are approved complete for staging test-mode proof only.
-Item `5` has an executed release/no-go packet. The packet recommendation is
-`BLOCKED/NO-GO` for staging release execution unless Guiding Light explicitly
-approves the named evidence deferrals.
+Item `5` is approved complete for staging release/no-go packet readiness only
+after recovery proof. No item approves staging deployment.
 
 ## Item List
 
@@ -34,11 +33,12 @@ approves the named evidence deferrals.
 | 2. Penny parity | Approved complete by Guiding Light | Fix and prove the checkout preview total matches the final Sales Order, Stripe test amount, thank-you page, receipt, and internal notification to the cent. | `staging-checkout-penny-parity-2026-05-29.md` |
 | 3. Product diversity | Approved complete by Guiding Light after triad `PASS WITH NOTES` | Prove staging checkout handles different product types: pickup, delivery-only, mixed carts, variants, approved foil-number add-ons, and quote-first bypass prevention. | `staging-checkout-product-diversity-item-3-2026-05-29.md` |
 | 4. Internal processing | Approved complete by Guiding Light after triad `PASS WITH NOTES` | Prove the internal ERPNext trail after paid checkout: Sales Order, Payment Request, Payment Entry, Sales Invoice, Customer/Contact, Email Queue, Communication, notes, fulfillment, errors, and duplicates. | `staging-checkout-internal-processing-item-4-proof-2026-05-29.md` |
-| 5. Combined staging release/no-go packet | Packet complete; release execution `BLOCKED/NO-GO` unless named deferrals are approved | Build the business-readable packet for the one larger staging push/review decision: exact commits included, what changed for customers/operators, proof required, what is excluded, stop conditions, and rollback path. | `staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md` |
+| 5. Combined staging release/no-go packet | Approved complete by Guiding Light for packet readiness only | Build the business-readable packet for the one larger staging push/review decision: exact commits included, what changed for customers/operators, proof required, what is excluded, stop conditions, and rollback path. | `staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md` |
 
 ## Current Boundary
 
-The first four items prove staging test-mode behavior only. They do not approve:
+The five items prove staging test-mode behavior and packet readiness only. They
+do not approve:
 
 - live checkout;
 - staging deployment or another Frappe Cloud pull;
@@ -46,19 +46,20 @@ The first four items prove staging test-mode behavior only. They do not approve:
 - DNS or Search Console changes;
 - live Stripe;
 - product data mutation;
+- ERPNext record mutation;
+- email sending;
 - remediation discovered during proof.
 
-Item 5 must keep those exclusions unless Guiding Light explicitly changes the
-boundary.
+Item 5 is complete only inside those exclusions.
 
-## Item 5 Scoping Prompt
+## Item 5 Approval Boundary
 
-Before executing item 5, ask for approval using this kind of boundary:
+Guiding Light approved item 5 complete on 2026-05-29 with this boundary:
 
-> I approve item 5 scope for a staging release/no-go packet only. This does not
-> approve live checkout, staging deployment, provider changes, DNS, Search
-> Console, live Stripe, product data changes, or remediation work found during
-> item 5.
+> I approve item 5 as complete for staging release/no-go packet readiness only.
+> This does not approve staging deployment, provider changes, live checkout,
+> live Stripe, DNS, Search Console, product data changes, ERPNext record
+> mutation, email sending, or remediation outside item 5.
 
 Item 5 produced a decision packet and did not perform the staging push. The
 scope is `staging-shop-audit-item-5-release-no-go-scope-2026-05-29.md`; the

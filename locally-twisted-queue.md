@@ -37,15 +37,13 @@ technical review `PASS WITH NOTES` in
 Guiding Light approved item 4 complete on 2026-05-29 for staging test-mode
 internal-processing proof only, and the proof does not authorize live checkout,
 staging/provider changes, DNS, Search Console, live Stripe, product data
-mutation, or remediation. The next shop-audit step is Guiding Light approval
-of item 5 scope; item 5 execution should produce a release/no-go packet and
-triad recommendation, not a staging push. 2026-05-29 update: item 5 packet is
+mutation, or remediation. 2026-05-29 update: item 5 packet is
 `workstreams/ecommerce-audit/staging-shop-audit-item-5-release-no-go-packet-2026-05-29.md`;
 the logged-in Desk/public-network gap and hosted staging app/source identity gap
-are both resolved. Item 5 recommendation is now `PASS` for staging release/no-go
-packet readiness only; it still does not approve staging deployment, provider
-changes, live checkout, DNS, Search Console, live Stripe, product data mutation,
-or remediation.
+are both resolved. Guiding Light approved item 5 complete for staging
+release/no-go packet readiness only; it still does not approve staging
+deployment, provider changes, live checkout, DNS, Search Console, live Stripe,
+product data mutation, ERPNext record mutation, email sending, or remediation.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

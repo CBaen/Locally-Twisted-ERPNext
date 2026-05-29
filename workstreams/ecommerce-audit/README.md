@@ -24,8 +24,8 @@ Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list
 for the current staging shop audit sequence. It records `5` items:
 receipt/email delivery, penny parity, product diversity, internal processing,
 and the next combined staging release/no-go packet. Items `1` through `4` are
-approved complete for staging test-mode proof only; item `5` has a proposed
-scope and needs Guiding Light approval before execution.
+approved complete for staging test-mode proof only; item `5` is approved
+complete for staging release/no-go packet readiness only.
 
 ## 2026-05-29 Item 5 Combined Staging Release/No-Go Scope
 
@@ -35,10 +35,10 @@ approved item-5 scope and
 item-5 packet. Item 5 completed a release/no-go packet for the later combined
 staging push/review decision. Recovery proof resolved the logged-in Desk/public
 network gap and Frappe Cloud API proved the hosted staging app/source identity.
-The packet recommendation is now `PASS` for staging release/no-go packet
-readiness only. It does not authorize a staging push, provider
-changes, live checkout, DNS, Search Console, live Stripe, product data
-mutation, or remediation.
+Guiding Light approved item 5 complete on 2026-05-29 for staging release/no-go
+packet readiness only. It does not authorize a staging push, provider changes,
+live checkout, DNS, Search Console, live Stripe, product data mutation, ERPNext
+record mutation, email sending, or remediation.
 
 ## 2026-05-29 Checkout Penny Parity
 
