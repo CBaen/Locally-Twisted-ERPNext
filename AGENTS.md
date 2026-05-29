@@ -95,6 +95,32 @@ do not queue, and agent replies that imply success without verification.
 - The live Odoo test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
 - Do not modify `C:\Users\baenb\projects\locally-twisted-odoo\` from this project.
 
+## Catalog Authority And Product Scope
+
+Product counts, product inclusion, exclusions, and catalog scope are
+time-sensitive operating facts, not permanent truths.
+
+Do not treat old docs, manifests, snapshots, handoffs, verifier expectations, or
+audit artifacts as having complete authority over the current product set. They
+are evidence only.
+
+The active authority for catalog scope is:
+
+1. Guiding Light's current explicit decision.
+2. Work recently implemented by Guiding Light or with Guiding Light's explicit
+   approval.
+3. Indexed conversation evidence showing the approval trail or decision context,
+   especially before asking Guiding Light to repeat a product-scope decision.
+4. Fresh verification against the current repo/database/runtime, only for facts
+   it can actually prove.
+
+If a change, verifier, branch, restore, or cleanup would include, exclude,
+retire, revive, rename, or count active products, check indexed conversations
+for an existing approval trail first. If the approval trail is missing or
+unclear, stop and ask Guiding Light before choosing product scope. Agents may
+report inconsistency and make safety tools fail loudly, but must not choose
+product scope from stale artifacts.
+
 ## Current Verified State
 
 Verified against the local ERPNext database on 2026-05-18:
