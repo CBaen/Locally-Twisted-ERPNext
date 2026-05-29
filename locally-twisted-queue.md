@@ -26,7 +26,9 @@ Branch `codex/lt-staging-release-candidate-freeze` integrates checkout item 5
 packet chain `86d6908`, graduation support `4147dcb`, and release-controller
 packet `708fac0` on local committed `main` `82c86f4`. Graduation support is
 included as repo/process support, not item 5 checkout proof. Next safe step is
-local validation and branch push for review, not staging deployment.
+explicit staging deployment approval. Local payment/backend validation passed,
+and `scripts/release/release_status_report.py` now fails loudly until the
+deployment approval artifact exists.
 
 **P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout

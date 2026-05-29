@@ -43,6 +43,10 @@ Graduation support belongs in this freeze as repo/process support, not as item
 5 checkout proof. The branch still does not approve staging deployment or
 provider/live/payment/data/email mutation.
 
+Payment/backend validation passed on the integrated branch. Release prevention
+now lives at `scripts/release/release_status_report.py` and stays `BLOCKED`
+until explicit staging deployment approval is recorded.
+
 ## 2026-05-29 Staging Shop Audit Master List
 
 Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list

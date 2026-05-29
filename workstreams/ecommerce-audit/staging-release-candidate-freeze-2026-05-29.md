@@ -124,12 +124,55 @@ Results:
 - Public network integrity syntax check: `PASS`.
 - `git diff --check`: `PASS`.
 
+Additional payment/backend validation run from the same branch:
+
+```powershell
+$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+python scripts\verify\payment_backend_config_contract.py
+python scripts\verify\payment_launch_readiness.py --base-url https://locallytwisted-staging.frappe.cloud
+python scripts\verify\business_automation_index.py --report output\business-automation-index-release-freeze.json
+python scripts\verify\synthetic_business_pipeline.py --report output\synthetic-business-pipeline-release-freeze.json
+python scripts\verify\payment_cascade_contract.py
+python scripts\verify\payment_success_reconciliation_contract.py --report output\payment-success-reconciliation-contract-release-freeze.json
+python scripts\verify\payment_webhook_contract.py
+python scripts\verify\stripe_amount_parity_contract.py
+```
+
+Results:
+
+- Payment backend config: `PASS`.
+- Payment launch readiness: `PASS` in local/test mode, with policy routes
+  returning `200`; live-mode remains cutover-only.
+- Business automation index: `PASS`, 27 connected surfaces, 0 launch-required
+  missing, 0 loud-failure gaps.
+- Synthetic business pipeline: `PASS`, synthetic-only, 22 readiness contracts,
+  0 broken piping.
+- Payment cascade: `PASS`, rollback completed.
+- Payment success reconciliation: `PASS`.
+- Payment webhook: `PASS`.
+- Stripe amount parity: `PASS`.
+
+Release-prevention gate added:
+
+```powershell
+python scripts\release\release_status_report.py
+npm run test:release-prevention
+```
+
+Current expected state before deployment approval:
+
+- `release_status_report.py`: `BLOCKED` because deployment approval is not yet
+  recorded.
+- `npm run test:release-prevention`: expected to fail until
+  `workstreams/ecommerce-audit/staging-deployment-approval-2026-05-29.md`
+  exists.
+
+This is intentional fail-loud behavior, not a regression.
+
 ## Required Verification Before Any Deploy Request
 
-Before this branch can be used to request staging deployment approval, run and
-record:
+Before this branch can be used to execute staging deployment, run and record:
 
-- payment/backend contract set that item 5 required;
 - hosted proof only after a separately approved staging deployment;
 - provider-backed app/source identity proof only with explicit credential
   approval.

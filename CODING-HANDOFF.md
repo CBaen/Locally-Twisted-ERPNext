@@ -19,6 +19,10 @@ for the integrated branch-only source-freeze candidate. Branch
 `4147dcb`, and release-controller packet `708fac0`. Graduation support is
 included as repo/process support, not as item 5 checkout proof. This still does
 not approve staging deployment or any provider/live/payment/data/email mutation.
+Payment/backend validation also passed on the integrated branch. A release
+prevention gate now exists at `scripts/release/release_status_report.py`; it
+correctly reports `BLOCKED` until explicit staging deployment approval is
+recorded as a repo artifact.
 
 Staging shop audit master list update on 2026-05-29: use
 `workstreams/ecommerce-audit/staging-shop-audit-master-list-2026-05-29.md` as
