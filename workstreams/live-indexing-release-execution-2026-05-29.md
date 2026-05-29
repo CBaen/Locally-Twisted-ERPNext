@@ -142,3 +142,86 @@ Provider mutation is now stopped after two related API failures. The next
 release-control plan needs a different execution path, such as provider UI
 automation with visible source proof or a verified alternate API endpoint,
 before attempting another source correction.
+
+## Redirect-Aware Recovery And Live Deployment
+
+Redirect root cause:
+
+- `frappecloud.com` returned `308 Permanent Redirect` to `cloud.frappe.io` for
+  API method calls.
+- Read-only GET calls tolerated that redirect, but POST source-correction calls
+  did not.
+
+Recovery steps:
+
+1. Called `press.api.bench.change_branch` directly on `cloud.frappe.io`.
+2. Source correction returned HTTP `200`.
+3. `locally_twisted` disappeared from deploy information until Frappe Cloud
+   created a release for the new branch source.
+4. Called `press.api.bench.fetch_latest_app_update`.
+5. Frappe Cloud then proved:
+   - branch: `live-seo-indexing-20260528`
+   - next release: `1mh0jab7pc`
+   - next hash:
+     `5bbdc484d86729c4f2afdf7776e9f6649b02c080`
+6. Ran `press.api.bench.deploy_and_update` for `locally_twisted` only.
+7. Deploy response: `emuqqk2m1j`.
+
+Final provider state:
+
+- Site: `locallytwisted.v.frappe.cloud`
+- Release group: `bench-39776`
+- Bench: `bench-39776-000015-f94v`
+- App: `locally_twisted`
+- Installed branch: `live-seo-indexing-20260528`
+- Installed hash:
+  `5bbdc484d86729c4f2afdf7776e9f6649b02c080`
+- Deploy status: no candidate, no deploy in progress, not validating
+- Running jobs: `0`
+
+## Hosted Live Verification
+
+Direct public probes after deploy:
+
+| Surface | Result |
+|---|---|
+| `https://locallytwisted.com/robots.txt` | HTTP 200; advertises `https://locallytwisted.com/sitemap.xml` |
+| `https://locallytwisted.com/sitemap.xml` | HTTP 200; 14/14 `<loc>` values use `https://locallytwisted.com`; 0 Frappe vanity URLs |
+| `/` | HTTP 200; canonical and `og:url` use `https://locallytwisted.com/`; robots `index, follow` |
+| `/about` | HTTP 200; canonical and `og:url` use `https://locallytwisted.com/about`; robots `index, follow` |
+| `/contact` | HTTP 200; canonical and `og:url` use `https://locallytwisted.com/contact`; robots `index, follow` |
+| `/shop` | lands on `/ready-to-order-paused?from=%2Fshop`; robots `noindex, follow` |
+
+Scripted verification:
+
+```powershell
+python scripts\verify\cloudflare_launch_readiness.py --base-url https://locallytwisted.com
+$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
+```
+
+Results:
+
+- Cloudflare launch readiness: `PASS`, 10 checks, 0 blockers, 0 warnings.
+- SEO contract: `PASS`, 13/13 tests.
+
+## Final Decision
+
+Status: `LIVE VERIFIED - indexing-only release`.
+
+The live public discovery/indexing release is complete for
+`https://locallytwisted.com`.
+
+Still not approved or performed:
+
+- live checkout;
+- live Stripe;
+- DNS changes;
+- Search Console submission or removals;
+- product/catalog changes;
+- production data mutation;
+- ERPNext production record mutation;
+- email sending.
+
+Follow-up: the live Frappe Cloud source now points at the hotfix branch
+`live-seo-indexing-20260528`. Any later realignment back to `main` should be a
+separate controlled release plan, not an incidental cleanup.

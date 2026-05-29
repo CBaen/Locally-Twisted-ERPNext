@@ -2,11 +2,15 @@
 
 ## Current State
 
-The live indexing release remains blocked before live mutation.
+Superseded by successful redirect-aware recovery and live deployment.
 
 The approved hotfix branch exists and is visible to Frappe Cloud, but the API
 call used to change the live release group source returned `308 Permanent
 Redirect` twice and did not apply the change.
+
+Later recovery proved the redirect target was `cloud.frappe.io`. Calling the
+same provider methods directly against `cloud.frappe.io`, then fetching the
+latest app update, made approved commit `5bbdc48` deployable and live.
 
 Live Frappe Cloud state after both attempts:
 
@@ -54,8 +58,8 @@ Stop before deployment if:
 
 ## Approval Needed
 
-The next execution needs fresh approval because two related provider API calls
-already failed.
+Resolved. The redirect-aware recovery was executed and verified under the live
+indexing release boundary.
 
 Suggested approval wording:
 

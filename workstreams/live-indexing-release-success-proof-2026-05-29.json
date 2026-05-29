@@ -1,0 +1,82 @@
+{
+  "artifact_type": "lt_live_indexing_release_success_proof_summary",
+  "date": "2026-05-29",
+  "secrets_printed": false,
+  "provider_source_recovery": {
+    "redirect_root_cause": "frappecloud.com redirects API traffic to cloud.frappe.io; direct cloud.frappe.io API calls were required for POST source correction.",
+    "change_branch_method": "press.api.bench.change_branch",
+    "change_branch_status": 200,
+    "target_branch": "live-seo-indexing-20260528",
+    "fetch_latest_app_update_status": 200,
+    "proved_next_release": "1mh0jab7pc",
+    "proved_next_hash": "5bbdc484d86729c4f2afdf7776e9f6649b02c080"
+  },
+  "deployment": {
+    "method": "press.api.bench.deploy_and_update",
+    "deploy_response": "emuqqk2m1j",
+    "bench_group": "bench-39776",
+    "site": "locallytwisted.v.frappe.cloud",
+    "site_bench": "bench-39776-000015-f94v",
+    "app": "locally_twisted",
+    "installed_hash": "5bbdc484d86729c4f2afdf7776e9f6649b02c080",
+    "installed_branch": "live-seo-indexing-20260528",
+    "deploy_in_progress": false,
+    "running_jobs_count": 0
+  },
+  "hosted_public_verification": {
+    "robots_txt": {
+      "status": 200,
+      "body": "User-agent: *\\nAllow: /\\n\\nSitemap: https://locallytwisted.com/sitemap.xml"
+    },
+    "sitemap_xml": {
+      "status": 200,
+      "loc_count": 14,
+      "locallytwisted_com_count": 14,
+      "frappe_vanity_count": 0
+    },
+    "canonical_pages": [
+      {
+        "path": "/",
+        "status": 200,
+        "canonical": "https://locallytwisted.com/",
+        "og_url": "https://locallytwisted.com/",
+        "robots": "index, follow"
+      },
+      {
+        "path": "/about",
+        "status": 200,
+        "canonical": "https://locallytwisted.com/about",
+        "og_url": "https://locallytwisted.com/about",
+        "robots": "index, follow"
+      },
+      {
+        "path": "/contact",
+        "status": 200,
+        "canonical": "https://locallytwisted.com/contact",
+        "og_url": "https://locallytwisted.com/contact",
+        "robots": "index, follow"
+      }
+    ],
+    "shop_boundary": {
+      "path": "/shop",
+      "final_url": "https://locallytwisted.com/ready-to-order-paused?from=%2Fshop",
+      "robots": "noindex, follow"
+    },
+    "cloudflare_launch_readiness": "PASS 10/10",
+    "seo_contract": "PASS 13/13"
+  },
+  "blocked_surfaces_remained_blocked": [
+    "live checkout",
+    "live Stripe",
+    "DNS changes",
+    "Search Console submission or removals",
+    "product/catalog changes",
+    "production data mutation",
+    "ERPNext production record mutation",
+    "email sending"
+  ],
+  "follow_up": {
+    "search_console": "Still requires separate approval after this live proof.",
+    "provider_source": "Live bench source now points at hotfix branch live-seo-indexing-20260528; later realignment to main should happen only through a separate controlled release plan."
+  }
+}
