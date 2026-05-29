@@ -1,5 +1,15 @@
 # Locally Twisted - Coding Handoff
 
+Staging shop audit master list update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-shop-audit-master-list-2026-05-29.md` as
+the front-door item sequence for the current staging shop audit. It records `5`
+items: receipt/email delivery, penny parity, product diversity, internal
+processing, and the next combined staging release/no-go packet. Items `1`
+through `4` are approved complete for staging test-mode proof only. Item `5`
+still needs its own scope before execution and does not authorize staging
+deployment, provider changes, live checkout, DNS, Search Console, live Stripe,
+product data mutation, or remediation.
+
 Checkout penny parity update on 2026-05-29: item 2 fixed the preview-vs-final
 one-cent mismatch by making checkout preview tax rounding match ERPNext's final
 Sales Order tax behavior. Source branch `codex/checkout-penny-match` has source

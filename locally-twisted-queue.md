@@ -16,6 +16,10 @@ detail in `workstreams/ecommerce-audit/staging-checkout-product-flow-2026-05-24.
 and taxonomy detail in
 `workstreams/ecommerce-audit/shop-primary-secondary-taxonomy-map-2026-05-24.md`.
 Decision packet: `decisions/2026-05-24-staging-owner-review-recovery.md`.
+The current staging shop audit master list is
+`workstreams/ecommerce-audit/staging-shop-audit-master-list-2026-05-29.md`: it
+has `5` items, with items `1` through `4` approved complete for staging
+test-mode proof only and item `5` still needing scope.
 Current staged source for owner review is full repo `4722a1c` and app mirror
 `3ca46bb`. Frappe Cloud staging installed app commit `3ca46bb`; site update
 `Migrate` `Success` and cache clear have completed. Hosted staging proof

@@ -18,6 +18,15 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-29 Staging Shop Audit Master List
+
+Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list
+for the current staging shop audit sequence. It records `5` items:
+receipt/email delivery, penny parity, product diversity, internal processing,
+and the next combined staging release/no-go packet. Items `1` through `4` are
+approved complete for staging test-mode proof only; item `5` still needs its
+own scope before execution.
+
 ## 2026-05-29 Checkout Penny Parity
 
 Use `staging-checkout-penny-parity-2026-05-29.md` as the item-2 handoff for the
