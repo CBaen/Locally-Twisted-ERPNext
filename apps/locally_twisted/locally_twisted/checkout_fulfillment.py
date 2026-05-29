@@ -186,15 +186,24 @@ def build_totals(
     plan: CheckoutFulfillmentPlan,
     taxes: dict[str, commerce_rules.TaxRateResult],
 ) -> dict:
-    subtotal = commerce_rules.money(sum(flt(row["rate"]) * int(row["qty"]) for row in lines))
-    tax_amount = commerce_rules.money(0)
+    subtotal = commerce_rules.money(sum(_line_total(row) for row in lines))
+    taxable_subtotals_by_rate: dict[Decimal, Decimal] = {}
     for row in lines:
         if not commerce_rules.is_taxable_item(item_code=row.get("item_code"), item_group=row.get("item_group")):
             continue
         method = line_method(row, plan)
         tax = taxes[method]
-        line_total = commerce_rules.money(flt(row["rate"]) * int(row["qty"]))
-        tax_amount += commerce_rules.money(line_total * tax.rate / Decimal("100"))
+        line_total = _line_total(row)
+        taxable_subtotals_by_rate[tax.rate] = (
+            taxable_subtotals_by_rate.get(tax.rate, commerce_rules.money(0)) + line_total
+        )
+    tax_amount = sum(
+        (
+            commerce_rules.money(taxable_subtotal * tax_rate / Decimal("100"))
+            for tax_rate, taxable_subtotal in taxable_subtotals_by_rate.items()
+        ),
+        commerce_rules.money(0),
+    )
     delivery_fee = commerce_rules.money(plan.delivery_fee)
     total = commerce_rules.money(subtotal + delivery_fee + tax_amount)
     tax = default_tax(taxes)
@@ -205,6 +214,10 @@ def build_totals(
         "tax_amount": float(tax_amount),
         "total": float(total),
     }
+
+
+def _line_total(row: dict) -> Decimal:
+    return commerce_rules.money(Decimal(str(flt(row["rate"]))) * Decimal(str(int(row["qty"]))))
 
 
 def line_fulfillment_note(line: dict, plan: CheckoutFulfillmentPlan) -> str:
