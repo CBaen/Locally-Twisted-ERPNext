@@ -18,6 +18,19 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-29 Staging Release Controller Packet
+
+Use `staging-release-controller-packet-2026-05-29.md` as the current release
+decision artifact before any new staging push. Triad witnesses recommended the
+professional next step: build a source-freeze packet, not deploy staging yet and
+not wait. The packet records local committed `main` `82c86f4`, stale
+`origin/main` `2a39109`, checkout item 5 packet branch `86d6908`, and
+graduation support branch `4147dcb`.
+
+This is not staging deployment approval and not provider, app mirror, migrate,
+cache clear, live checkout, live Stripe, DNS, Search Console, product data,
+ERPNext record, email sending, or remediation approval.
+
 ## 2026-05-29 Staging Shop Audit Master List
 
 Use `staging-shop-audit-master-list-2026-05-29.md` as the durable master list
