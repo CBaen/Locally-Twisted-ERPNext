@@ -1,5 +1,20 @@
 # Locally Twisted - Coding Handoff
 
+Staging deployment execution update on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-deployment-execution-2026-05-29.md` as
+the current staging push record. Guiding Light approved staging-only execution,
+the approval artifact was committed at `1374fc3`, the app mirror was pushed to
+`ad0a408`, Frappe Cloud deployed new bench
+`bench-40102-000027-f4-virginia`, and
+`locallytwisted-staging.frappe.cloud` is now attached to that bench. Hosted
+ping, `/shop`, payment launch readiness, public asset integrity, checkout
+experience, product gallery, and search passed. `test:public-network` passed
+39/40 and failed only on missing reusable Desk credentials; the logged-in
+session/CSRF path was then proved with a Frappe Cloud provider session. This is
+staging-only and does not approve live checkout, live Stripe, DNS, Search
+Console, production data changes, ERPNext production mutation, or live
+deployment.
+
 Release-controller packet update on 2026-05-29: use
 `workstreams/ecommerce-audit/staging-release-controller-packet-2026-05-29.md`
 as the current front-door decision artifact before any new staging push. It

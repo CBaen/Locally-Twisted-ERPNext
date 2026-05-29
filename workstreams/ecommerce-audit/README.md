@@ -18,6 +18,24 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-29 Staging Deployment Execution
+
+Use `staging-deployment-execution-2026-05-29.md` as the current staging push
+execution record. The release candidate was approved, the approval artifact was
+committed at `1374fc3`, the app mirror was pushed to `ad0a408`, Frappe Cloud
+deployed new bench `bench-40102-000027-f4-virginia`, and
+`locallytwisted-staging.frappe.cloud` is now attached to that bench.
+
+Hosted public/customer proof passed: ping, `/shop`, payment launch readiness,
+public asset integrity, checkout experience, product gallery, and search. The
+only remaining note is reusable Desk-test credential hygiene: broad
+`test:public-network` passed 39/40, then the logged-in session/CSRF path was
+proved through a Frappe Cloud provider session without printing secrets.
+
+This is staging-only. It does not approve live checkout, live Stripe, DNS,
+Search Console, production data changes, ERPNext production mutation, or live
+deployment.
+
 ## 2026-05-29 Staging Release Controller Packet
 
 Use `staging-release-controller-packet-2026-05-29.md` as the current release
