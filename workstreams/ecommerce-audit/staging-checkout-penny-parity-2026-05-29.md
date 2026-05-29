@@ -1,8 +1,9 @@
 # Staging Checkout Penny Parity - 2026-05-29
 
-Status: item 2 is agent-approved for human review. The two known one-cent
-checkout mismatches now match from checkout preview through Stripe, thank-you,
-customer receipt email, and internal paid-order notification on hosted staging.
+Status: item 2 is approved complete by Guiding Light on 2026-05-29. The two
+known one-cent checkout mismatches now match from checkout preview through
+Stripe, thank-you, customer receipt email, and internal paid-order notification
+on hosted staging.
 
 ## Scope
 
@@ -29,6 +30,12 @@ Known bad staging examples before the fix:
 No additional Frappe Cloud or staging provider update is authorized before
 item 3. The next staging push should be one combined push after the approved
 batch is ready.
+
+## Human Approval
+
+Guiding Light approved item 2 complete on 2026-05-29. This approval is for the
+checkout penny-parity fix and proof only. It does not authorize another
+staging/provider push before item 3.
 
 ## Root Cause
 
@@ -93,5 +100,5 @@ notification for both plus-address test orders.
 
 ## Next Item Gate
 
-Do not start item 3 until Guiding Light accepts item 2 or explicitly tells the
-agent to move on.
+Item 2 is accepted. Item 3 should start only under its own explicit scope, and
+the next staging push should remain a combined approved batch.

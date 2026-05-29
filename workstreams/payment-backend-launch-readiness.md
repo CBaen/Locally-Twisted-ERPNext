@@ -25,8 +25,9 @@ customer receipt email, and internal paid-order notification. Unicorn bouquet
 with foil-number add-on `SAL-ORD-2026-00031` stayed `$116.00` through the same
 path. Handoff:
 `workstreams/ecommerce-audit/staging-checkout-penny-parity-2026-05-29.md`.
-This is not live checkout approval and does not authorize another staging
-provider push before the next combined staging batch.
+Guiding Light approved item 2 complete on 2026-05-29. This is not live checkout
+approval and does not authorize another staging provider push before the next
+combined staging batch.
 
 2026-05-11 cutover update: live mode now requires an explicit HTTPS
 `host_name` in site config, in addition to explicit live Stripe settings,
@@ -71,6 +72,7 @@ These are verified local/backend facts, not live-production claims:
   `SAL-ORD-2026-00030` at `$176.18` and foil-number add-on
   `SAL-ORD-2026-00031` at `$116.00`, with matching preview, Stripe,
   thank-you, customer receipt, and internal paid-order notification totals.
+  Guiding Light approved item 2 complete on 2026-05-29.
 - Staging owner login for `locallytwisted@gmail.com` was reset and verified in
   a clean browser session ending on `Owner Home`; owner Desk payment review can
   use that account during staging review.

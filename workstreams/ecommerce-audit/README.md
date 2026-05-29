@@ -23,7 +23,8 @@ gate.
 Use `staging-checkout-penny-parity-2026-05-29.md` as the item-2 handoff for the
 one-cent checkout mismatch. The mixed cart and foil-number add-on cart now
 match from hosted staging preview through Stripe, thank-you, customer receipt
-email, and internal paid-order notification.
+email, and internal paid-order notification. Guiding Light approved item 2
+complete on 2026-05-29.
 
 Current proof orders: `SAL-ORD-2026-00030` for `$176.18` and
 `SAL-ORD-2026-00031` for `$116.00`. This is not live checkout approval and does

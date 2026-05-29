@@ -8,8 +8,9 @@ commit `82f1d56 Fix checkout preview total rounding`. Handoff:
 Hosted staging proof already exists for mixed cart `$176.18`
 (`SAL-ORD-2026-00030`) and foil-number add-on `$116.00`
 (`SAL-ORD-2026-00031`), including Stripe, thank-you page, customer receipt
-email, and internal paid-order notification. Do not push another staging update
-before item 3; the next staging push should be one combined approved batch.
+email, and internal paid-order notification. Guiding Light approved item 2
+complete on 2026-05-29. Do not push another staging update before item 3; the
+next staging push should be one combined approved batch.
 
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
