@@ -18,6 +18,18 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-29 Checkout Penny Parity
+
+Use `staging-checkout-penny-parity-2026-05-29.md` as the item-2 handoff for the
+one-cent checkout mismatch. The mixed cart and foil-number add-on cart now
+match from hosted staging preview through Stripe, thank-you, customer receipt
+email, and internal paid-order notification.
+
+Current proof orders: `SAL-ORD-2026-00030` for `$176.18` and
+`SAL-ORD-2026-00031` for `$116.00`. This is not live checkout approval and does
+not authorize another staging/provider push before item 3; the next staging
+push should be the combined approved batch.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door
