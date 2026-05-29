@@ -40,6 +40,17 @@ products, mixed pickup/delivery carts, and quote-first bypass prevention. This
 scope was approved by Guiding Light on 2026-05-29. It does not authorize
 another staging/provider push.
 
+2026-05-29 execution update: item 3 is now agent-approved for Guiding Light
+review after hosted staging test-mode proof. Hosted checkout smoke passed
+`4/4`; product/API checks covered pickup, delivery-only, mixed cart, and
+quote-first bypass prevention; corrected paid delivery-only order
+`SAL-ORD-2026-00034` proved Stripe test payment, thank-you page, customer
+receipt, welcome email, and internal notification at `$106.33`. Gmail proof
+used all-mail search because recent purchases may be moved out of the main
+folder; moved proofs `SAL-ORD-2026-00030` and `SAL-ORD-2026-00031` were found
+under `_NEW_WEBSITE/Duplicate Inquiry Request` and `SENT`. This is not live
+approval and does not authorize another staging/provider push.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door

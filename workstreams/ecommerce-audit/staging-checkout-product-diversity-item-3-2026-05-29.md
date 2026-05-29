@@ -1,7 +1,7 @@
-# Staging Checkout Product Diversity - Item 3 Scope - 2026-05-29
+# Staging Checkout Product Diversity - Item 3 Scope And Proof - 2026-05-29
 
-Status: scope approved by Guiding Light on 2026-05-29. No staging/provider/live
-change has been authorized by this scope.
+Status: execution proof is ready for Guiding Light review on 2026-05-29. No
+staging/provider/live change has been authorized by this item.
 
 ## Human Outcome
 
@@ -24,6 +24,11 @@ Guiding Light approved this item 3 scope on 2026-05-29. Approval means the
 product-diversity matrix below is the next checkout audit slice. It does not
 mean item 3 is complete, and it does not authorize deployment or provider
 changes.
+
+Guiding Light later confirmed the item-3 order email did show up, but not in
+the main Gmail folder. The proof below therefore treats email delivery as
+working and mailbox placement as a Gmail organization/filtering concern, not a
+checkout or receipt-generation failure.
 
 ## Source Baseline
 
@@ -121,3 +126,61 @@ After Guiding Light accepts this scope, item 3 should begin with read-only or
 test-mode staging verification of the matrix above. The first execution pass
 should prefer existing item-2 paid orders plus browser/API proof before creating
 new Stripe test orders.
+
+## Execution Evidence - 2026-05-29
+
+### Hosted staging checkout proof
+
+- Hosted staging browser smoke passed: `npm run test:checkout-experience`
+  against `https://locallytwisted-staging.frappe.cloud` passed `4/4`.
+- Delivery-only product pages returned `200` and stayed quote/delivery-only
+  coherent for Classic Organic Arch, Balloon Drop, and 7' Butterfly Column.
+- Quote-first bypass was blocked for `7-butterfly-column-REF`; the cart API
+  returned no item and reported `quote_required`.
+- Pickup single-SKU preview passed for `mothers-day-bouquet`: subtotal `$65.00`,
+  delivery fee `$0.00`, tax `$4.84`, total `$69.84`.
+- Mixed pickup plus delivery-only preview passed for `mothers-day-bouquet` plus
+  `graduation-grab-n-go-BYU`: subtotal `$150.00`, delivery fee `$15.00`, tax
+  `$11.18`, total `$176.18`.
+- Standalone delivery-only preview passed for `graduation-grab-n-go-BYU`:
+  subtotal `$85.00`, delivery fee `$15.00`, tax `$6.33`, total `$106.33`.
+
+### Paid staging order proof
+
+- Existing mixed-cart order `SAL-ORD-2026-00030` still rendered a valid
+  thank-you page for `$176.18` with Mother's Day Bouquet, Graduation Grab n
+  Go-BYU, and Standard Delivery.
+- Existing foil-number add-on order `SAL-ORD-2026-00031` still rendered a valid
+  thank-you page for `$116.00` with Unicorn Bouquet-MED, Foil number: 12, and
+  Standard Delivery.
+- New order `SAL-ORD-2026-00033` proved payment and thank-you rendering for a
+  standalone delivery-only cart at `$106.33`, but the checkout email used
+  `example.invalid`; do not count it as customer receipt delivery proof.
+- Corrected new order `SAL-ORD-2026-00034` proved standalone delivery-only paid
+  checkout with Stripe test mode, thank-you page, customer receipt, welcome
+  email, and internal notification at `$106.33`.
+
+### Gmail proof
+
+- Search used `in:anywhere`, not only the main inbox, because some staging
+  purchase messages had been moved or labeled.
+- `SAL-ORD-2026-00034` was found in Gmail with both the internal paid-order
+  notice and the customer receipt. The customer receipt was addressed to
+  `locallytwisted+item3-delivery-1780037320165@gmail.com`; the internal notice
+  was addressed to `locallytwisted@gmail.com`.
+- Searching the corrected item-3 customer email also found the first-order
+  welcome email.
+- Earlier moved proofs `SAL-ORD-2026-00030` and `SAL-ORD-2026-00031` were found
+  by all-mail search. They are under `_NEW_WEBSITE/Duplicate Inquiry Request`
+  and `SENT`, not the main inbox.
+- The email contents agree with the paid order totals and line items:
+  `SAL-ORD-2026-00030` `$176.18`, `SAL-ORD-2026-00031` `$116.00`, and
+  `SAL-ORD-2026-00034` `$106.33`.
+
+## Current Decision
+
+Item 3 is agent-approved for Guiding Light review after staging test-mode
+proof. It is not live approval, not staging deployment approval, and not
+permission to push the app mirror or run a new Frappe Cloud update. Guiding
+Light approval is still needed before this item is marked complete and the next
+checkout-review item starts.

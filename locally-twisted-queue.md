@@ -28,6 +28,21 @@ item. Delivery-only fulfillment handoff:
 `workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`;
 mixed carts must stay mixed.
 
+**P0 item 3 checkout product-diversity review (2026-05-29):** Active evidence
+is
+`workstreams/ecommerce-audit/staging-checkout-product-diversity-item-3-2026-05-29.md`.
+The scope is approved and the execution proof is agent-approved for Guiding
+Light review. Hosted checkout smoke passed `4/4`; product/API checks covered
+pickup, delivery-only, mixed cart, and quote-first bypass prevention; corrected
+paid delivery-only order `SAL-ORD-2026-00034` proved Stripe test payment,
+thank-you page, customer receipt, welcome email, and internal notification at
+`$106.33`. Recent purchase emails may be outside the main Gmail folder; all-mail
+search found earlier moved proofs `SAL-ORD-2026-00030` and
+`SAL-ORD-2026-00031` under `_NEW_WEBSITE/Duplicate Inquiry Request` and `SENT`.
+No staging/provider/live/DNS/Search Console/live Stripe/product-data mutation
+is authorized from this item. Next safe step is Guiding Light approval or
+specific correction notes.
+
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global
 Capability Graduation Ladder seed (`schema_version: 2.5`) but must adopt it

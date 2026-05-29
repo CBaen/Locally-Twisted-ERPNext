@@ -17,7 +17,16 @@ Item 3 scope proposal on 2026-05-29: use
 as the next checkout audit slice. It focuses on product diversity, delivery-only
 behavior, mixed carts, variants, approved foil-number add-ons, and quote-first
 bypass prevention. Guiding Light approved this scope on 2026-05-29. This is
-source scoping only and does not authorize a staging/provider push.
+now agent-approved for Guiding Light review after staging test-mode execution
+proof. Hosted checkout smoke passed `4/4`; product/API checks covered pickup,
+delivery-only, mixed cart, and quote-first bypass prevention; corrected paid
+delivery-only order `SAL-ORD-2026-00034` proved Stripe test payment,
+thank-you page, customer receipt, welcome email, and internal notification at
+`$106.33`. Earlier item-2 Gmail proofs `SAL-ORD-2026-00030` and
+`SAL-ORD-2026-00031` were found by all-mail search after being moved/labeled,
+so mailbox folder placement is not treated as checkout failure. This does not
+authorize a staging/provider push, live work, DNS/Search Console work, live
+Stripe work, or product data mutation.
 
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
