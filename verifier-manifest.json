@@ -1,0 +1,169 @@
+{
+  "schema_version": "verifier-manifest/v1",
+  "project": "Locally Twisted",
+  "updated": "2026-05-29",
+  "run_policy": "manual_only",
+  "policy": {
+    "purpose": "Classify the main LT verifier bundles without running them automatically.",
+    "default_rule": "Use the lowest tier that proves the claim; do not treat a passing local bundle as live readiness.",
+    "execution_rule": "Follow LT AGENTS.md, Frappe Cloud, Cloudflare, Stripe, email, and customer-data gates before running non-local checks."
+  },
+  "tiers": {
+    "tier_0_static": "Reads files or metadata only.",
+    "tier_1_local_fast": "Local lint, parser, unit, or shape checks with no external service.",
+    "tier_2_local_integrated": "Local integration checks that may require local app services or local test records.",
+    "tier_3_staging_or_private": "Staging, private platform, sandbox, or authenticated non-live checks.",
+    "tier_4_live_or_external": "Live, customer-facing, publish, billing, public account, marketplace, deployment, or other external-impact gates."
+  },
+  "bundles": [
+    {
+      "id": "lt-public-form-experience",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "npm run test:form-experience",
+      "cwd": ".",
+      "scope": "local browser contract for the shared public inquiry form experience",
+      "environment": "local Frappe route plus Playwright",
+      "mutation": "none",
+      "approval_required": "no, when run only against the local developer app",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/form-experience-result.md",
+      "capability_refs": [
+        "capabilities/recipes/shared-inquiry-form-experience.md",
+        "capabilities/recipes/erpnext-intake-form-parity.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "using a staging or live BaseUrl",
+        "claiming email delivery",
+        "claiming ERPNext backend record persistence"
+      ],
+      "proves": [
+        "local UI contract for the public form path"
+      ],
+      "what_it_does_not_prove": "It does not prove live email delivery, live ERPNext persistence, Frappe Cloud settings, or customer-facing release readiness."
+    },
+    {
+      "id": "lt-public-form-backend-contract",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python .\\scripts\\verify\\smoke_forms.py --base-url http://127.0.0.1:8081 --skip-newsletter && python .\\scripts\\verify\\inquiry_spam_gate.py --base-url http://127.0.0.1:8081 && python .\\scripts\\verify\\inquiry_sales_solicitation_filter.py --base-url http://127.0.0.1:8081",
+      "cwd": ".",
+      "scope": "local backend contract for inquiry intake, spam guard, and sales-solicitation suppression",
+      "environment": "local Frappe app with local test data only",
+      "mutation": "local test inquiry or Lead records may be created",
+      "approval_required": "yes, because this can create local CRM/form test records",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/public-form-backend-contract-result.md",
+      "capability_refs": [
+        "capabilities/recipes/shared-inquiry-form-experience.md",
+        "capabilities/recipes/fail-loud-operating-law.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "running against staging or live",
+        "testing real customer submissions",
+        "claiming email delivery or inbox receipt"
+      ],
+      "proves": [
+        "local public form backend guard behavior"
+      ],
+      "what_it_does_not_prove": "It does not prove customer email receipt, live anti-spam health, or Frappe Cloud route configuration."
+    },
+    {
+      "id": "lt-public-site-route-contract",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "npm run test:public-verify",
+      "cwd": ".",
+      "scope": "local public route launch contract",
+      "environment": "local app unless AGENTS.md authorizes another target",
+      "mutation": "none",
+      "approval_required": "no, when run only against the local developer app",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/<feature>/public-route-contract-result.md",
+      "capability_refs": [
+        "capabilities/recipes/homepage-launch-proof-contract.md",
+        "capabilities/recipes/frappe-sitewide-visual-overhaul.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "non-local BaseUrl",
+        "Cloudflare or Frappe Cloud route proof",
+        "live launch approval"
+      ],
+      "proves": [
+        "local public route contract checks"
+      ],
+      "what_it_does_not_prove": "It does not prove DNS, CDN, cache, live Frappe Cloud settings, or external customer access."
+    },
+    {
+      "id": "lt-ecommerce-local-contract",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "gate_backed",
+      "graduation_status": "active",
+      "command": "npm run test:ecommerce-full",
+      "cwd": ".",
+      "scope": "local ecommerce, cart, checkout, product, and fulfillment contract bundle",
+      "environment": "local app and local ecommerce test state only",
+      "mutation": "local cart, checkout, and test commerce state may be touched",
+      "approval_required": "yes, because this touches checkout and commerce-state surfaces even when local",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/ecommerce-audit/<feature>-ecommerce-full-result.md",
+      "capability_refs": [
+        "capabilities/recipes/erpnext-ecommerce-receiving-architecture.md",
+        "capabilities/recipes/erpnext-checkout-commerce-rules.md",
+        "source:capabilities-framework/capabilities/recipes/verifier-tier-selection.md"
+      ],
+      "risk_triggers": [
+        "payment provider calls",
+        "live checkout",
+        "Frappe Cloud staging",
+        "real customer or order data"
+      ],
+      "proves": [
+        "local ecommerce contract behavior across the named npm bundle"
+      ],
+      "what_it_does_not_prove": "It does not prove payment capture, Stripe live readiness, public sellability on production, or launch approval."
+    },
+    {
+      "id": "lt-frappe-cloud-cloudflare-stripe-launch-gate",
+      "tier": "tier_4_live_or_external",
+      "graduation_stage": "release_live_approval_backed",
+      "graduation_status": "active",
+      "command": "manual-gate: use capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md and the active launch workstream",
+      "cwd": ".",
+      "scope": "Frappe Cloud, Cloudflare, Stripe, email, ecommerce fallback, and live cutover approval",
+      "environment": "staging, live, and external provider accounts",
+      "mutation": "may change external account, routing, payment, or live release state if approved",
+      "approval_required": "yes, explicit project and account-context approval required every time",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11/<dated-launch-gate-result>.md",
+      "capability_refs": [
+        "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
+        "capabilities/recipes/take-live-coordinated-workflows.md",
+        "source:capabilities-framework/capabilities/recipes/client-release-safety-gates.md"
+      ],
+      "risk_triggers": [
+        "DNS",
+        "payment settings",
+        "live route",
+        "email delivery",
+        "customer data",
+        "production Frappe Cloud"
+      ],
+      "proves": [
+        "only the approved launch-gate evidence named in the workstream after it is actually run"
+      ],
+      "what_it_does_not_prove": "The manifest itself proves nothing; it only marks this as a live/external approval boundary."
+    }
+  ]
+}

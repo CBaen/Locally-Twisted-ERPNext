@@ -39,6 +39,9 @@ files needed for the current task.
 - Use source/provenance metadata when a capability is borrowed, researched, inspired, agent-generated, or adapted from official docs/user practice; local proof still needs evidence.
 - Use graduation metadata when a capability becomes backed by a skill,
   verifier, gate, automation, architecture, or release/live approval boundary.
+- Use the project root `verifier-manifest.json` for LT verifier tiers. It is a
+  manual-only map, not proof that checks passed and not permission to run live,
+  staging, email, payment, or customer-data checks.
 
 ## Capability Lifecycle
 
@@ -196,6 +199,8 @@ pattern that feels familiar.
 
 - [evidence/](evidence/) - compact append-only events for use, upvotes, downvotes, failures, fixes, and promotions.
 - [registry/](registry/) - generated compact retrieval indexes.
+- [../verifier-manifest.json](../verifier-manifest.json) - manual-only LT
+  verifier bundle tiers and approval boundaries.
 
 ## Reading Order On Arrival
 
