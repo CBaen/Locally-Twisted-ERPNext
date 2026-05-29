@@ -29,6 +29,19 @@ after being moved/labeled, so mailbox folder placement is not treated as
 checkout failure. This does not authorize a staging/provider push, live work,
 DNS/Search Console work, live Stripe work, or product data mutation.
 
+Item 4 scope proposal on 2026-05-29: use
+`workstreams/ecommerce-audit/staging-checkout-internal-processing-item-4-2026-05-29.md`
+as the next checkout audit slice. It focuses on what happens inside ERPNext
+after a paid staging test-mode purchase: Sales Order, Payment Request, Payment
+Entry, Sales Invoice, customer/contact linkage, Email Queue, Communication,
+checkout notes, fulfillment handoff, Error Log/scheduler health, and duplicate
+payment/email protection. Existing paid staging orders `SAL-ORD-2026-00024`,
+`SAL-ORD-2026-00030`, `SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` should be
+inspected before creating any new staging order. This scope is proposed only
+and needs Guiding Light approval before execution. It does not authorize a
+staging/provider push, live checkout, DNS/Search Console work, live Stripe
+work, or product data mutation.
+
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
 full-repo source point for staged behavior is

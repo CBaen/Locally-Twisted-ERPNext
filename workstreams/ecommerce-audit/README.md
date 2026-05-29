@@ -54,6 +54,23 @@ folder; moved proofs `SAL-ORD-2026-00030` and `SAL-ORD-2026-00031` were found
 under `_NEW_WEBSITE/Duplicate Inquiry Request` and `SENT`. This is not live
 approval and does not authorize another staging/provider push.
 
+## 2026-05-29 Item 4 Internal Processing Scope
+
+Use `staging-checkout-internal-processing-item-4-2026-05-29.md` as the proposed
+item-4 scope. It narrows the next audit to the internal ERPNext trail after a
+paid staging test-mode checkout: Sales Order, Payment Request, Payment Entry,
+Sales Invoice, Customer/Contact/Lead linkage, Email Queue, Communication,
+checkout notes, fulfillment handoff, Error Log/scheduler health, and duplicate
+payment/email protection.
+
+Existing paid staging orders `SAL-ORD-2026-00024`, `SAL-ORD-2026-00030`,
+`SAL-ORD-2026-00031`, and `SAL-ORD-2026-00034` should be inspected first. A new
+staging test order is only allowed if existing records cannot prove a required
+internal-processing question. This scope is proposed only and still needs
+Guiding Light approval before execution. It does not authorize another
+staging/provider push, live checkout, DNS/Search Console work, live Stripe
+work, or product data mutation.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door
