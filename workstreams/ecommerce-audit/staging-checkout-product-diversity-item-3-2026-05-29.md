@@ -1,7 +1,7 @@
 # Staging Checkout Product Diversity - Item 3 Scope - 2026-05-29
 
-Status: scoped for Guiding Light review. No staging/provider/live change has
-been authorized by this scope.
+Status: scope approved by Guiding Light on 2026-05-29. No staging/provider/live
+change has been authorized by this scope.
 
 ## Human Outcome
 
@@ -17,6 +17,13 @@ a real customer would expect:
 
 This item is the product-diversity checkout matrix. It is not a live launch
 approval, not a catalog import, and not a new staging push.
+
+## Human Approval
+
+Guiding Light approved this item 3 scope on 2026-05-29. Approval means the
+product-diversity matrix below is the next checkout audit slice. It does not
+mean item 3 is complete, and it does not authorize deployment or provider
+changes.
 
 ## Source Baseline
 

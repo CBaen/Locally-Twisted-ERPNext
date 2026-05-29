@@ -37,7 +37,8 @@ Use `staging-checkout-product-diversity-item-3-2026-05-29.md` as the proposed
 item-3 scope. It narrows the next customer checkout audit to product diversity:
 pickup single-SKU, configured bouquet, foil-number add-on, delivery-only
 products, mixed pickup/delivery carts, and quote-first bypass prevention. This
-is a scope packet only; it does not authorize another staging/provider push.
+scope was approved by Guiding Light on 2026-05-29. It does not authorize
+another staging/provider push.
 
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
