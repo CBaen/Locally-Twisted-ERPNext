@@ -179,6 +179,7 @@ This project supports multi-agent / multi-handoff work. Active handoffs should b
 - Use feature-specific `workstreams/<feature-slug>.md` files for live coordination when multiple agents are active on different slices.
 - Treat `PROJECT-STATUS.md` as a broad project map only when it is current. Do not treat it as the active source of truth by default.
 - Treat `HANDOFF.md` as still valid reference guidance, not the only active handoff surface. Read it for context, then verify against the current feature lane, git state, files, and the running ERPNext site before acting.
+- When Guiding Light asks for triad/subagent help on implementation work, do not default the lanes to read-only review. Decide lane mode from the task: use implementation-capable builder lanes when scoped edits, test artifacts, or verifiers can help, and use read-only lanes only when the work is explicitly audit/review/research or when write access would be unsafe.
 
 ## Capabilities
 
