@@ -276,7 +276,7 @@
         if (!img || !src) return;
 
         if (window.LT && typeof window.LT.setProductGalleryImage === 'function') {
-            window.LT.setProductGalleryImage(src, alt || '', { addIfMissing: true });
+            window.LT.setProductGalleryImage(src, alt || '', { addIfMissing: false });
             return;
         }
 

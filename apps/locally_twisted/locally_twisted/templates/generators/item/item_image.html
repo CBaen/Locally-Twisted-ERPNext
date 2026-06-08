@@ -249,21 +249,41 @@
         align-items: center;
         background: rgba(0, 0, 0, 0.8);
         z-index: 1080;
+        cursor: zoom-out;
     }
 
     .image-zoom-view img {
         max-height: 100%;
         max-width: 100%;
+        cursor: default;
     }
 
     .image-zoom-view button {
         position: absolute;
         right: 3rem;
         top: 2rem;
+        width: 2.75rem;
+        height: 2.75rem;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #111111;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        cursor: pointer;
     }
 
     .image-zoom-view svg {
-        color: var(--white);
+        color: currentColor;
+    }
+
+    .image-zoom-view button:hover,
+    .image-zoom-view button:focus-visible {
+        background: var(--white);
+        outline: 3px solid rgba(255, 255, 255, 0.45);
+        outline-offset: 3px;
     }
 </style>
 <script>
@@ -284,6 +304,11 @@
         });
 
         $zoom_wrapper.on('click', 'button', hide_preview);
+        $zoom_wrapper.on('click', (e) => {
+            if (e.target === e.currentTarget) {
+                hide_preview();
+            }
+        });
 
         $(document).on('keydown', (e) => {
             if (e.key === 'Escape') {

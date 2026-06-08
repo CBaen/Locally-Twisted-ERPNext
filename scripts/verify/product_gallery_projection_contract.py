@@ -7,6 +7,7 @@ Run:
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import subprocess
@@ -158,7 +159,45 @@ def _contract_failures() -> list[str]:
             if render_failure:
                 failures.append(render_failure)
 
+    if not ecommerce_paused:
+        failures.extend(_all_product_gallery_render_failures(website_items, slideshow_images))
+
     return failures
+
+
+def _all_product_gallery_render_failures(
+    website_items: dict[str, dict[str, Any]],
+    slideshow_images: dict[str, list[str]],
+) -> list[str]:
+    failures: list[str] = []
+    for item_code, website_item in sorted(website_items.items()):
+        route = str(website_item.get("route") or "").strip()
+        if not route or not route.lstrip("/").startswith("shop-items/"):
+            continue
+        slide_images = [image for image in slideshow_images.get(str(website_item.get("slideshow") or ""), []) if image]
+        failure = _render_architecture_failure(item_code, website_item, slide_images)
+        if failure:
+            failures.append(failure)
+    return failures
+
+
+def _render_architecture_failure(item_code: str, website_item: dict[str, Any], slide_images: list[str]) -> str | None:
+    route = str(website_item.get("route") or "").strip()
+    html = _get_route_html(route)
+    expected_count = _unique_renderable_image_count([str(website_item.get("website_image") or ""), *slide_images])
+    rail_count = _rendered_thumbnail_button_count(html)
+
+    if expected_count < 2 and rail_count:
+        return f"{item_code}: rendered a gallery rail for {expected_count} distinct product image(s)"
+    if expected_count >= 2 and rail_count != expected_count:
+        return f"{item_code}: rendered {rail_count} gallery thumbnail(s), expected {expected_count} distinct product image(s)"
+
+    rendered_paths = _rendered_gallery_paths(html)
+    duplicate_groups = _duplicate_content_groups(rendered_paths)
+    if duplicate_groups:
+        details = "; ".join(", ".join(group) for group in duplicate_groups[:5])
+        return f"{item_code}: rendered duplicate image content under different URLs: {details}"
+    return None
 
 
 def _render_failure(slug: str, website_item: dict[str, Any], slide_images: list[str]) -> str | None:
@@ -167,16 +206,56 @@ def _render_failure(slug: str, website_item: dict[str, Any], slide_images: list[
         return f"{slug}: Website Item has slideshow but no route for rendered gallery proof"
 
     html = _get_route_html(route)
-    rail_count = len(re.findall(r"\blt-product__thumbnail-button\b", html))
-    expected_rendered = len(_unique([str(website_item.get("website_image") or ""), *slide_images]))
-    if rail_count < max(2, expected_rendered):
+    rail_count = _rendered_thumbnail_button_count(html)
+    expected_rendered = _unique_renderable_image_count([str(website_item.get("website_image") or ""), *slide_images])
+    if expected_rendered < 2:
+        return None
+    if rail_count < expected_rendered:
         return (
             f"{slug}: product route renders {rail_count} thumbnail button(s), "
-            f"expected at least {max(2, expected_rendered)}"
+            f"expected at least {expected_rendered}"
         )
     if 'data-lt-gallery-role="standard-product-thumbnails"' not in html:
         return f"{slug}: product route rendered thumbnails without the LT gallery rail role"
     return None
+
+
+def _rendered_gallery_paths(html: str) -> list[str]:
+    paths = re.findall(r'<img[^>]+class="[^"]*\b(?:website-image|item-slideshow-image)\b[^"]*"[^>]+src="([^"]+)"', html)
+    return _unique(paths)
+
+
+def _rendered_thumbnail_button_count(html: str) -> int:
+    return len(re.findall(r'<button[^>]+class="[^"]*\blt-product__thumbnail-button\b', html))
+
+
+def _duplicate_content_groups(images: list[str]) -> list[list[str]]:
+    by_key: dict[str, list[str]] = {}
+    for image in _unique(images):
+        key = _image_content_key(image)
+        by_key.setdefault(key, []).append(image)
+    return [paths for paths in by_key.values() if len(paths) > 1]
+
+
+def _unique_renderable_image_count(images: list[str]) -> int:
+    keys: set[str] = set()
+    for image in _unique(images):
+        keys.add(_image_content_key(image))
+    return len(keys)
+
+
+def _image_content_key(image: str) -> str:
+    image = str(image or "").strip()
+    if not image:
+        return ""
+    url = urljoin(BASE_URL + "/", image.lstrip("/"))
+    request = Request(url, headers={"User-Agent": "LT product gallery projection verifier"})
+    try:
+        with urlopen(request, timeout=20) as response:
+            digest = hashlib.sha256(response.read()).hexdigest()
+            return f"sha256:{digest}"
+    except (HTTPError, URLError):
+        return f"url:{image}"
 
 
 def _get_route_html(route: str) -> str:

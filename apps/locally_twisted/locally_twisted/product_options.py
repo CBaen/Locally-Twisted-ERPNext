@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from functools import lru_cache
 import os
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlparse
 
 import frappe
 from frappe.utils import flt, fmt_money
@@ -181,7 +183,11 @@ def get_balloon_color_groups(values, axis_name: str | None = None, item_code: st
     return grouped_colors(clean_values, axis_name=axis_name, item_code=item_code)
 
 
-def get_product_gallery_slides(item_code: str | None, primary_image: str | None = None, limit: int = 12) -> list[dict[str, str]]:
+def get_product_gallery_slides(
+    item_code: str | None,
+    primary_image: str | None = None,
+    limit: int | None = None,
+) -> list[dict[str, str]]:
     """Return source-approved product gallery slides for a product template.
 
     Website Slideshow rows are the backend-approved product-level gallery path.
@@ -191,14 +197,21 @@ def get_product_gallery_slides(item_code: str | None, primary_image: str | None 
     if not item_code:
         return []
 
-    seen: set[str] = set()
+    seen_urls: set[str] = set()
+    seen_media_keys: set[str] = set()
     slides: list[dict[str, str]] = []
 
     def add_slide(image: str | None, heading: str) -> None:
         image = str(image or "").strip()
-        if not image or image in seen or len(slides) >= limit:
+        if not image or image in seen_urls:
             return
-        seen.add(image)
+        media_key = _gallery_image_content_key(image)
+        if media_key in seen_media_keys:
+            return
+        if limit is not None and len(slides) >= limit:
+            return
+        seen_urls.add(image)
+        seen_media_keys.add(media_key)
         slides.append({"image": image, "heading": heading})
 
     add_slide(primary_image, "Main product photo")
@@ -213,19 +226,64 @@ def get_product_gallery_slides(item_code: str | None, primary_image: str | None 
             add_slide(website_item.get("website_image"), "Main product photo")
         slideshow_name = website_item.get("slideshow")
         if slideshow_name:
-            rows = frappe.get_all(
-                "Website Slideshow Item",
-                filters={"parent": slideshow_name},
-                fields=["image", "heading", "description"],
-                order_by="idx asc",
-                limit_page_length=limit,
-            )
+            slideshow_args: dict[str, Any] = {
+                "filters": {"parent": slideshow_name},
+                "fields": ["image", "heading", "description"],
+                "order_by": "idx asc",
+            }
+            if limit is not None:
+                slideshow_args["limit_page_length"] = limit
+            rows = frappe.get_all("Website Slideshow Item", **slideshow_args)
             for row in rows:
                 add_slide(
                     row.get("image"),
                     row.get("heading") or row.get("description") or website_item.get("web_item_name") or "Product photo",
                 )
     return slides
+
+
+@lru_cache(maxsize=1024)
+def _gallery_image_content_key(image: str) -> str:
+    """Return a stable key for duplicate uploaded files used in gallery rails."""
+    image = str(image or "").strip()
+    if not image:
+        return ""
+
+    file_hash = _public_file_sha256(image)
+    if file_hash:
+        return f"file-sha256:{file_hash}"
+
+    rows = frappe.get_all(
+        "File",
+        filters={"file_url": image},
+        fields=["content_hash"],
+        order_by="creation asc",
+        limit_page_length=1,
+    )
+    content_hash = str(rows[0].get("content_hash") or "").strip() if rows else ""
+    if content_hash:
+        return f"file-hash:{content_hash}"
+    return f"file-url:{image}"
+
+
+def _public_file_sha256(image: str) -> str:
+    path = unquote(urlparse(image).path or "")
+    if not path.startswith("/files/"):
+        return ""
+    filename = Path(path).name
+    if not filename:
+        return ""
+
+    files_dir = Path(frappe.get_site_path("public", "files")).resolve()
+    candidate = (files_dir / filename).resolve()
+    if not candidate.is_file() or files_dir not in candidate.parents:
+        return ""
+
+    digest = hashlib.sha256()
+    with candidate.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def get_product_page_runtime_context(item_code: str | None) -> dict[str, Any]:
