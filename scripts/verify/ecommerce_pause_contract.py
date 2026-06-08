@@ -183,14 +183,14 @@ def assert_navigation_matches_mode(paused: bool) -> None:
         for needle in open_markers:
             if needle in body:
                 fail(f"paused homepage still exposes ecommerce surface: {needle}")
-        if "Ready-to-Order" in body:
-            fail("paused homepage still advertises Ready-to-Order")
+        if "Balloons-to-Order" in body:
+            fail("paused homepage still advertises Balloons-to-Order")
     else:
         for needle in open_markers:
             if needle not in body:
                 fail(f"open homepage is missing ecommerce surface: {needle}")
-        if "Ready-to-Order" not in body:
-            fail("open homepage must advertise Ready-to-Order")
+        if "Balloons-to-Order" not in body:
+            fail("open homepage must advertise Balloons-to-Order")
 
 
 def assert_routes_match_mode(paused: bool) -> None:

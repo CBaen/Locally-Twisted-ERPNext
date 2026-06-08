@@ -47,21 +47,20 @@ def test_desktop_nav_order(navbar: str) -> None:
     primary_nav = navbar[nav_start:nav_end]
     expected = [
         "data-lt-megamenu-trigger=\"lt-mega-events\"",
-        "Event Balloons",
+        "Event Decor",
         "data-lt-megamenu-trigger=\"lt-mega-products\"",
-        "Ready-to-Order",
+        "Balloons-to-Order",
         'lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting"',
         "<span>Twisting &amp;</span>",
         "<span>Face Painting</span>",
         "/portfolio",
         "/about",
-        "/faq",
     ]
     positions = [_line_index(primary_nav, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Primary nav order must be Event Balloons, Ready-to-Order, Twisting & Face Painting, "
-            "Portfolio, About Us, FAQ, with deliberate mega-menu triggers"
+            "Primary nav order must be Event Decor, Balloons-to-Order, Twisting & Face Painting, "
+            "Portfolio, About Us, with deliberate mega-menu triggers"
         )
 
 
@@ -93,7 +92,7 @@ def test_top_banner_links_are_owner_approved(navbar: str) -> None:
     top_start = _line_index(navbar, '<ul class="lt-mega-header__top-links">')
     top_end = _line_index(navbar[top_start:], '</ul>') + top_start
     top_links = navbar[top_start:top_end]
-    short_notice = "SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!"
+    short_notice = "SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS' LEAD TIME!"
     row_required = (
         f'<a class="lt-mega-header__top-message" href="/contact">{short_notice}</a>',
     )
@@ -104,7 +103,7 @@ def test_top_banner_links_are_owner_approved(navbar: str) -> None:
         'href="/contact">Free Event Quote</a>',
     )
     forbidden = (
-        'href="/shop">Ready-to-Order</a>',
+        'href="/shop">Balloons-to-Order</a>',
         'href="/cart">Cart</a>',
         'href="/portfolio">Recent Work</a>',
         "Prepared design, clean installs, and invoiced event support across Utah.",
@@ -304,26 +303,25 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
     drawer = navbar[drawer_start:]
     expected = [
         'data-lt-drawer-accordion-trigger="lt-mobile-events"',
-        "Event Balloons",
+        "Event Decor",
         'data-lt-drawer-accordion-trigger="lt-mobile-products"',
-        "Ready-to-Order",
+        "Balloons-to-Order",
         'class="lt-mega-drawer__single lt-mega-drawer__single--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting',
         'href="/portfolio"',
         'href="/about"',
-        'href="/faq"',
         'class="lt-mega-drawer__cta" href="/contact">Contact Us',
         'class="lt-mega-drawer__search"',
     ]
     positions = [_line_index(drawer, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Mobile drawer must follow desktop primary order: Event Balloons, "
-            "Ready-to-Order, Twisting & Face Painting, Portfolio, About Us, FAQ, Contact Us, Search"
+            "Mobile drawer must follow desktop primary order: Event Decor, "
+            "Balloons-to-Order, Twisting & Face Painting, Portfolio, About Us, Contact Us, Search"
         )
     if 'href="/search"' in drawer:
         raise AssertionError("Mobile drawer must not expose the retired /search page")
     if "lt-mobile-help" in drawer or "Help and Details" in drawer:
-        raise AssertionError("Mobile drawer must not hide FAQ behind the retired Help and Details panel")
+        raise AssertionError("Mobile drawer must not hide footer-only FAQ behind the retired Help and Details panel")
     if "lt-mobile-nav-heading" in drawer or ">Locally Twisted</span>" in drawer:
         raise AssertionError("Mobile drawer brand must show the logo only, without duplicate Locally Twisted text")
     if 'data-lt-drawer-accordion-trigger="lt-mobile-products"' not in drawer:
@@ -334,7 +332,7 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
     combined = f"{navbar}\n{footer}"
     required = (
         "{% if not ecommerce_paused %}",
-        "Ready-to-Order",
+        "Balloons-to-Order",
         'href="/shop"',
         "data-lt-search-ready-order-entry",
         'href="/cart"',
