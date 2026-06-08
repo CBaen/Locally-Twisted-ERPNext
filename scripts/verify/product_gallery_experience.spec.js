@@ -7,6 +7,7 @@ const CLASSIC_ARCH_URL = new URL("/shop-items/arches/classic-arch", BASE_URL).to
 const SINGLE_EXTRA_GALLERY_URL = new URL("/shop-items/stands-easels/6-graduation-stands", BASE_URL).toString();
 const BABY_SHOWER_GARLAND_URL = new URL("/shop-items/garlands/baby-shower-garland", BASE_URL).toString();
 const ENCANTO_BOUQUET_URL = new URL("/shop-items/bouquets/encanto-bouquet", BASE_URL).toString();
+const MICKEY_MOUSE_BOUQUET_URL = new URL("/shop-items/bouquets/mickey-mouse-bouquet", BASE_URL).toString();
 const UNICORN_BOUQUET_URL = new URL("/shop-items/bouquets/unicorn-bouquet", BASE_URL).toString();
 
 function imagePath(src) {
@@ -24,6 +25,26 @@ async function sha256ForPath(request, path) {
 	expect(response.ok(), `${path} should be fetchable for image duplicate proof`).toBeTruthy();
 	const body = await response.body();
 	return crypto.createHash("sha256").update(body).digest("hex");
+}
+
+async function imageContentHashes(request, paths) {
+	const hashes = [];
+	for (const path of paths) {
+		hashes.push(await sha256ForPath(request, path));
+	}
+	return hashes;
+}
+
+async function expectNoDuplicateThumbnailContent(page, request, label) {
+	const paths = await thumbnailPaths(page);
+	const hashToPaths = new Map();
+	for (const path of paths) {
+		const hash = await sha256ForPath(request, path);
+		hashToPaths.set(hash, [...(hashToPaths.get(hash) || []), path]);
+	}
+	for (const duplicatePaths of hashToPaths.values()) {
+		expect(duplicatePaths.length, `${label} thumbnail rail must not repeat exact image content`).toBe(1);
+	}
 }
 
 function localWebsiteItems() {
@@ -54,7 +75,7 @@ function localWebsiteItems() {
 	);
 }
 
-test("Classic Arch renders permanent product gallery thumbnails on desktop", async ({ page }) => {
+test("Classic Arch renders permanent product gallery thumbnails on desktop", async ({ page, request }) => {
 	await page.setViewportSize({ width: 1366, height: 900 });
 	await page.goto(CLASSIC_ARCH_URL, { waitUntil: "domcontentloaded" });
 	await page.waitForSelector(".product-image img.website-image");
@@ -77,6 +98,7 @@ test("Classic Arch renders permanent product gallery thumbnails on desktop", asy
 		imgs.map((img) => img.getAttribute("src")).filter(Boolean),
 	);
 	expect(new Set(sources).size, "gallery thumbnails should not duplicate source images").toBe(sources.length);
+	await expectNoDuplicateThumbnailContent(page, request, "Classic Arch");
 	const firstPath = imagePath(firstSrc);
 	expect(imagePath(sources[0]), "the initial product photo should stay available as the first thumbnail").toBe(firstPath);
 
@@ -108,40 +130,21 @@ test("Classic Arch renders permanent product gallery thumbnails on desktop", asy
 	await expect.poll(async () => imagePath(await page.locator(".product-image img.website-image").getAttribute("src"))).toBe(firstPath);
 });
 
-test("single-extra projected galleries still render the permanent thumbnail rail", async ({ page }) => {
+test("visually duplicate slideshow extras collapse to the single-photo layout", async ({ page }) => {
 	await page.setViewportSize({ width: 1366, height: 900 });
 	await page.goto(SINGLE_EXTRA_GALLERY_URL, { waitUntil: "domcontentloaded" });
 	await page.waitForSelector(".product-image img.website-image");
 
 	const rail = page.locator('[data-lt-gallery-role="standard-product-thumbnails"]');
-	await expect(rail).toBeVisible();
-
-	const thumbs = page.locator(".lt-product__thumbnail-button");
-	const thumbCount = await thumbs.count();
-	expect(thumbCount, "a projected one-extra-or-more Website Slideshow must render primary plus gallery thumbnails").toBeGreaterThan(1);
+	await expect(rail).toHaveCount(0);
+	await expect(page.locator(".lt-product__thumbnail-button")).toHaveCount(0);
 
 	const mainImage = page.locator(".product-image");
-	const boxes = await page.evaluate(() => {
-		const rail = document.querySelector('[data-lt-gallery-role="standard-product-thumbnails"]');
-		const main = document.querySelector(".product-image");
-		const railBox = rail?.getBoundingClientRect();
-		const mainBox = main?.getBoundingClientRect();
-		return {
-			rail: railBox ? { x: railBox.x, height: railBox.height } : null,
-			main: mainBox ? { x: mainBox.x, height: mainBox.height } : null,
-			overflowY: rail ? getComputedStyle(rail).overflowY : "",
-			scrollHeight: rail?.scrollHeight || 0,
-			clientHeight: rail?.clientHeight || 0,
-			documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-		};
-	});
 	await expect(mainImage).toBeVisible();
-	expect(boxes.rail.x, "thumbnail rail should be left of the main image").toBeLessThan(boxes.main.x);
-	expect(boxes.rail.height, "thumbnail rail cannot exceed main image height").toBeLessThanOrEqual(boxes.main.height + 2);
+	const boxes = await page.evaluate(() => ({
+		documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+	}));
 	expect(Math.abs(boxes.documentOverflow), "product gallery must not create horizontal overflow").toBeLessThanOrEqual(1);
-	if (boxes.scrollHeight > boxes.clientHeight + 2) {
-		expect(["auto", "scroll"].includes(boxes.overflowY), "overflow stays inside the thumbnail rail").toBeTruthy();
-	}
 });
 
 test("product gallery survives variant selection and supports mobile swipe", async ({ page }) => {
@@ -223,7 +226,7 @@ test("configured bouquet keeps the base product photo available after selecting 
 	await expect.poll(async () => imagePath(await page.locator(".product-image img.website-image").getAttribute("src"))).toBe(basePath);
 });
 
-test("configured bouquet variant images do not mutate the Product Setup gallery rail", async ({ page }) => {
+test("configured bouquet variant images do not mutate the Product Setup gallery rail", async ({ page, request }) => {
 	const products = [
 		{
 			url: UNICORN_BOUQUET_URL,
@@ -231,6 +234,14 @@ test("configured bouquet variant images do not mutate the Product Setup gallery 
 				Large: "/files/unicorn-bouquet-large.webp",
 				Medium: "/files/unicorn-bouquet-medium.webp",
 				Small: "/files/unicorn-bouquet-small.webp",
+			},
+		},
+		{
+			url: MICKEY_MOUSE_BOUQUET_URL,
+			variantPaths: {
+				Large: "/files/mickey-mouse-bouquet-large.webp",
+				Medium: "/files/mickey-mouse-bouquet-medium.webp",
+				Small: "/files/mickey-mouse-bouquet-small.webp",
 			},
 		},
 		{
@@ -250,9 +261,17 @@ test("configured bouquet variant images do not mutate the Product Setup gallery 
 
 		const initialPaths = await thumbnailPaths(page);
 		const basePath = imagePath(await page.locator(".product-image img.website-image").getAttribute("src"));
+		const initialContentHashes = await imageContentHashes(request, initialPaths);
 		expect(initialPaths.length, `${product.url} should render the Product Setup gallery rail`).toBeGreaterThan(1);
 		expect(new Set(initialPaths).size, `${product.url} thumbnails must not duplicate image URLs on load`).toBe(
 			initialPaths.length,
+		);
+		expect(
+			new Set(initialContentHashes).size,
+			`${product.url} thumbnails must not duplicate exact image content on load`,
+		).toBe(initialContentHashes.length);
+		expect(initialContentHashes[0], `${product.url} should keep the main photo as first thumbnail content`).toBe(
+			await sha256ForPath(request, basePath),
 		);
 		expect(initialPaths[0], `${product.url} should keep the main photo as the first thumbnail`).toBe(basePath);
 

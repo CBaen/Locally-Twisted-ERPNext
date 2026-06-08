@@ -4,8 +4,9 @@
    Website Slideshow is the LT gallery authority; Webshop `slides` is only a
    fallback for older/non-LT gallery contexts. #}
 {% set lt_projected_slides = get_product_gallery_slides(doc.item_code, doc.website_image) %}
-{% set lt_gallery_slides = lt_projected_slides if lt_projected_slides and (lt_projected_slides | length > 1) else (slides or lt_projected_slides) %}
+{% set lt_gallery_slides = lt_projected_slides if lt_projected_slides else slides %}
 {% set has_gallery = lt_gallery_slides and (lt_gallery_slides | length > 1) %}
+{% set lt_single_image = lt_gallery_slides[0].image if lt_gallery_slides else doc.website_image %}
 {% set column_size = 4 %}
 <div class="col-md-{{ column_size }} h-100 d-flex mb-4 lt-product__media-column">
     <div class="lt-product__media-shell {% if has_gallery %}has-thumbnails{% endif %}">
@@ -119,34 +120,9 @@
                         return found;
                     }
 
-                    function ensureGalleryThumbnail(src, alt) {
-                        if (!src || !$galleryRail.length) return -1;
-                        const existing = galleryIndexForSrc(src);
-                        if (existing >= 0) return existing;
-                        const $button = $('<button>', {
-                            type: 'button',
-                            class: 'lt-product__thumbnail-button',
-                            'aria-label': 'View selected product photo',
-                            'aria-pressed': 'false',
-                        });
-                        $('<img>', {
-                            class: 'item-slideshow-image mb-2',
-                            src: src,
-                            alt: alt || '',
-                        }).appendTo($button);
-                        $galleryRail.append($button);
-                        syncGalleryTotal();
-                        syncGalleryFrame();
-                        return galleryImages().length - 1;
-                    }
-
                     function setProductGalleryImage(src, alt, options) {
                         if (!src) return false;
-                        const opts = options || {};
                         let index = galleryIndexForSrc(src);
-                        if (index < 0 && opts.addIfMissing) {
-                            index = ensureGalleryThumbnail(src, alt);
-                        }
                         if (index >= 0) {
                             showGalleryImage(index);
                             return true;
@@ -198,7 +174,6 @@
                     window.LT = window.LT || {};
                     window.LT.syncProductGalleryHeight = syncGalleryFrame;
                     window.LT.setProductGalleryImage = setProductGalleryImage;
-                    window.LT.ensureProductGalleryThumbnail = ensureGalleryThumbnail;
                     $('.product-image img').on('load', syncGalleryFrame);
                     const mainImage = $('.product-image img').first().get(0);
                     if (mainImage && window.MutationObserver) {
@@ -213,7 +188,7 @@
                 })
             </script>
         {% else %}
-            {{ product_image(doc.website_image, alt=doc.website_image_alt or doc.item_name) }}
+            {{ product_image(lt_single_image, alt=doc.website_image_alt or doc.item_name) }}
         {% endif %}
     </div>
 

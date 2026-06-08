@@ -191,14 +191,17 @@ def get_product_gallery_slides(
     """Return source-approved product gallery slides for a product template.
 
     Website Slideshow rows are the backend-approved product-level gallery path.
-    Live variant Item.image rows are intentionally held back here unless they
-    are approved through simple variant media or Product Setup media rules.
+    Approved Product Setup media rules are customer-facing product photos too:
+    they may swap the main image on selection, but they still need to be
+    selectable from the rail on initial page load. Live variant Item.image rows
+    are intentionally held back here unless Product Setup approves them.
     """
     if not item_code:
         return []
 
     seen_urls: set[str] = set()
     seen_media_keys: set[str] = set()
+    seen_visual_keys: list[str] = []
     slides: list[dict[str, str]] = []
 
     def add_slide(image: str | None, heading: str) -> None:
@@ -208,22 +211,26 @@ def get_product_gallery_slides(
         media_key = _gallery_image_content_key(image)
         if media_key in seen_media_keys:
             return
+        visual_key = _gallery_image_visual_key(image)
+        if visual_key and any(_visual_hashes_match(visual_key, seen_key) for seen_key in seen_visual_keys):
+            return
         if limit is not None and len(slides) >= limit:
             return
         seen_urls.add(image)
         seen_media_keys.add(media_key)
+        if visual_key:
+            seen_visual_keys.append(visual_key)
         slides.append({"image": image, "heading": heading})
 
-    add_slide(primary_image, "Main product photo")
     website_item = frappe.db.get_value(
         "Website Item",
         {"item_code": item_code},
         ["web_item_name", "website_image", "slideshow"],
         as_dict=True,
     )
+
+    add_slide(primary_image or (website_item.get("website_image") if website_item else ""), "Main product photo")
     if website_item:
-        if not primary_image:
-            add_slide(website_item.get("website_image"), "Main product photo")
         slideshow_name = website_item.get("slideshow")
         if slideshow_name:
             slideshow_args: dict[str, Any] = {
@@ -239,7 +246,37 @@ def get_product_gallery_slides(
                     row.get("image"),
                     row.get("heading") or row.get("description") or website_item.get("web_item_name") or "Product photo",
                 )
+
+    blueprint_name = _product_setup_name_for_item(item_code)
+    if blueprint_name:
+        rows = frappe.get_all(
+            "LT Product Blueprint Media Rule",
+            filters={"parent": blueprint_name, "approved_for_customer": 1},
+            fields=["image", "rule_name", "selection_group", "selection_value", "variant_item"],
+            order_by="idx asc",
+            limit_page_length=0,
+        )
+        for row in rows:
+            heading = (
+                row.get("rule_name")
+                or row.get("selection_value")
+                or row.get("selection_group")
+                or row.get("variant_item")
+                or "Option-specific product photo"
+            )
+            add_slide(row.get("image"), heading)
     return slides
+
+
+def _product_setup_name_for_item(item_code: str) -> str:
+    """Return the Product Setup record that owns public media for an item."""
+    if not frappe.db.exists("DocType", "LT Product Blueprint"):
+        return ""
+    return (
+        frappe.db.get_value("LT Product Blueprint", {"target_item_code": item_code}, "name")
+        or frappe.db.get_value("LT Product Blueprint", {"product_slug": item_code}, "name")
+        or ""
+    )
 
 
 @lru_cache(maxsize=1024)
@@ -266,17 +303,51 @@ def _gallery_image_content_key(image: str) -> str:
     return f"file-url:{image}"
 
 
-def _public_file_sha256(image: str) -> str:
-    path = unquote(urlparse(image).path or "")
-    if not path.startswith("/files/"):
-        return ""
-    filename = Path(path).name
-    if not filename:
+@lru_cache(maxsize=1024)
+def _gallery_image_visual_key(image: str) -> str:
+    """Return a compact visual fingerprint for near-duplicate gallery photos."""
+    candidate = _public_file_path(image)
+    if not candidate:
         return ""
 
-    files_dir = Path(frappe.get_site_path("public", "files")).resolve()
-    candidate = (files_dir / filename).resolve()
-    if not candidate.is_file() or files_dir not in candidate.parents:
+    try:
+        from PIL import Image
+    except ImportError:
+        return ""
+
+    try:
+        with Image.open(candidate) as source:
+            if source.mode in {"RGBA", "LA"} or (source.mode == "P" and "transparency" in source.info):
+                canvas = Image.new("RGBA", source.size, (255, 255, 255, 255))
+                canvas.alpha_composite(source.convert("RGBA"))
+                source = canvas.convert("RGB")
+            else:
+                source = source.convert("RGB")
+            grayscale = source.convert("L").resize((16, 16), Image.Resampling.LANCZOS)
+            pixels = list(grayscale.getdata())
+    except Exception:
+        return ""
+
+    if not pixels:
+        return ""
+    average = sum(pixels) / len(pixels)
+    bits = "".join("1" if pixel >= average else "0" for pixel in pixels)
+    return f"visual-ahash-16:{int(bits, 2):064x}"
+
+
+def _visual_hashes_match(left: str, right: str, max_distance: int = 10) -> bool:
+    prefix = "visual-ahash-16:"
+    if not left.startswith(prefix) or not right.startswith(prefix):
+        return left == right
+    try:
+        return (int(left.removeprefix(prefix), 16) ^ int(right.removeprefix(prefix), 16)).bit_count() <= max_distance
+    except ValueError:
+        return left == right
+
+
+def _public_file_sha256(image: str) -> str:
+    candidate = _public_file_path(image)
+    if not candidate:
         return ""
 
     digest = hashlib.sha256()
@@ -284,6 +355,21 @@ def _public_file_sha256(image: str) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _public_file_path(image: str) -> Path | None:
+    path = unquote(urlparse(image).path or "")
+    if not path.startswith("/files/"):
+        return None
+    filename = Path(path).name
+    if not filename:
+        return None
+
+    files_dir = Path(frappe.get_site_path("public", "files")).resolve()
+    candidate = (files_dir / filename).resolve()
+    if not candidate.is_file() or files_dir not in candidate.parents:
+        return None
+    return candidate
 
 
 def get_product_page_runtime_context(item_code: str | None) -> dict[str, Any]:
