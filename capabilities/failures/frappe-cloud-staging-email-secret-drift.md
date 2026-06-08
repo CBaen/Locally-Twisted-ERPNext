@@ -12,6 +12,7 @@ related_capabilities:
   - ../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md
   - ../recipes/customer-email-delivery-branding-contract.md
 related_failures:
+  - frappe-cloud-staging-email-scheduler-stale.md
   - frappe-cloud-staging-stripe-secret-drift.md
   - public-form-stale-email-queue-idempotency.md
 tags:
@@ -57,6 +58,9 @@ passwords fail at send time.
 ## Detection Signals
 
 - Email Queue records stay `Not Sent` or flip to `Error`.
+- If rows stay `Not Sent` with no row-level error and scheduled job timestamps
+  are stale, check `frappe-cloud-staging-email-scheduler-stale.md` before
+  changing SMTP credentials.
 - Desk dev logs mention `Email Account.<name>.password`, decryption failure, or
   site encryption key mismatch.
 - Re-entering the password changes the failure from decrypt error to a normal
@@ -79,7 +83,8 @@ Before saying staging checkout receipts are ready for owner review:
    succeeds.
 2. Re-enter the staging Email Account app password, or restore the correct site
    encryption key if staging should keep copied encrypted fields.
-3. Retry the affected Email Queue rows.
+3. Retry the affected Email Queue rows only after preserving evidence of
+   whether the automatic scheduler path was running.
 4. Confirm status changes to `Sent`.
 5. If status becomes `Error` again, inspect the current error before changing
    code. Do not print SMTP passwords.
