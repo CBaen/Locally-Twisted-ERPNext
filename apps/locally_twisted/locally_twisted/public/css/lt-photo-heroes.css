@@ -64,51 +64,51 @@ html body .lt-shop__hero {
 }
 
 html body[data-path="shop-items/arches"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/classic-arch-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/classic-arch-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-arch-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/arches-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/arches-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/arches-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/balloon-drops"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/balloon-drop-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/balloon-drops-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/balloon-drops-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/balloon-drops-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/bouquets"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/mothers-day-bouquet-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/mothers-day-bouquet-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/mothers-day-bouquet-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/bouquets-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/bouquets-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/bouquets-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/columns"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-column-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/columns-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/columns-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/columns-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/garlands"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/classic-organic-balloon-garland-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/classic-organic-balloon-garland-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/classic-organic-balloon-garland-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/garlands-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/garlands-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/garlands-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/photo-ops-backdrops"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/baby-shower-combination-photo-opt-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/baby-shower-combination-photo-opt-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/baby-shower-combination-photo-opt-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/photo-ops-backdrops-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/photo-ops-backdrops-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/photo-ops-backdrops-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/table-decor"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/marble-table-decor-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/marble-table-decor-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/marble-table-decor-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/table-decor-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/table-decor-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/table-decor-category-generated-hero-desktop.webp");
 }
 
 html body[data-path="shop-items/stands-easels"] .lt-shop__hero {
-  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/6-graduation-stands-category-hero-mobile.webp");
-  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/6-graduation-stands-category-hero-tablet.webp");
-  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/6-graduation-stands-category-hero-desktop.webp");
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/stands-easels-category-generated-hero-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/stands-easels-category-generated-hero-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/stands-easels-category-generated-hero-desktop.webp");
 }
 
 html body :is(

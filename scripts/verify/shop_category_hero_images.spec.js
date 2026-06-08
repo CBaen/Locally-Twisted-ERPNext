@@ -10,18 +10,18 @@ const VIEWPORTS = [
 ];
 
 const CATEGORY_HEROES = [
-	{ route: "/shop-items/arches", title: "Arches", file: "classic-arch-category-hero" },
-	{ route: "/shop-items/balloon-drops", title: "Balloon Drops", file: "balloon-drop-category-hero" },
-	{ route: "/shop-items/bouquets", title: "Bouquets", file: "mothers-day-bouquet-category-hero" },
-	{ route: "/shop-items/columns", title: "Columns", file: "classic-column-category-hero" },
-	{ route: "/shop-items/garlands", title: "Garlands", file: "classic-organic-balloon-garland-category-hero" },
+	{ route: "/shop-items/arches", title: "Arches", file: "arches-category-generated-hero" },
+	{ route: "/shop-items/balloon-drops", title: "Balloon Drops", file: "balloon-drops-category-generated-hero" },
+	{ route: "/shop-items/bouquets", title: "Bouquets", file: "bouquets-category-generated-hero" },
+	{ route: "/shop-items/columns", title: "Columns", file: "columns-category-generated-hero" },
+	{ route: "/shop-items/garlands", title: "Garlands", file: "garlands-category-generated-hero" },
 	{
 		route: "/shop-items/photo-ops-backdrops",
 		title: "Photo Ops & Backdrops",
-		file: "baby-shower-combination-photo-opt-category-hero",
+		file: "photo-ops-backdrops-category-generated-hero",
 	},
-	{ route: "/shop-items/stands-easels", title: "Stands & Easels", file: "6-graduation-stands-category-hero" },
-	{ route: "/shop-items/table-decor", title: "Table Decor", file: "marble-table-decor-category-hero" },
+	{ route: "/shop-items/stands-easels", title: "Stands & Easels", file: "stands-easels-category-generated-hero" },
+	{ route: "/shop-items/table-decor", title: "Table Decor", file: "table-decor-category-generated-hero" },
 ];
 
 for (const viewport of VIEWPORTS) {

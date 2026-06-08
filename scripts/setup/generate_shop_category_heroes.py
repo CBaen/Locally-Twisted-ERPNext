@@ -39,7 +39,7 @@ USER_AGENT = (
 APP_ROOT = REPO_ROOT / "apps" / "locally_twisted" / "locally_twisted"
 SWATCH_MAP_PATH = APP_ROOT / "catalog_contract" / "odoo_color_swatch_map.json"
 PUBLIC_HERO_DIR = APP_ROOT / "public" / "images" / "heroes"
-SOURCE_DIR = REPO_ROOT / "_resources" / "generated-hero-sources" / "2026-05-22"
+SOURCE_DIR = REPO_ROOT / "_resources" / "generated-hero-sources" / "2026-06-08"
 PUBLIC_SWATCH_ROOT = APP_ROOT / "public"
 
 SOURCE_SIZE = (2048, 416)
@@ -63,7 +63,7 @@ HERO_SPECS = (
     HeroSpec(
         route="/shop-items/arches",
         title="Arches",
-        slug="classic-arch-category-hero",
+        slug="arches-category-generated-hero",
         shape_prompt=(
             "a full event balloon arch spanning a clean venue entry, visible as a true arch "
             "with both side bases and the overhead curve inside the center crop"
@@ -73,7 +73,7 @@ HERO_SPECS = (
     HeroSpec(
         route="/shop-items/balloon-drops",
         title="Balloon Drops",
-        slug="balloon-drop-category-hero",
+        slug="balloon-drops-category-generated-hero",
         shape_prompt=(
             "a ceiling balloon drop net filled with bright balloons above an event floor, "
             "clearly ready to release, with safe venue rigging"
@@ -83,17 +83,17 @@ HERO_SPECS = (
     HeroSpec(
         route="/shop-items/bouquets",
         title="Bouquets",
-        slug="mothers-day-bouquet-category-hero",
+        slug="bouquets-category-generated-hero",
         shape_prompt=(
             "several finished balloon bouquets staged for pickup, ribboned and weighted, "
-            "with round latex balloons and a giftable retail presentation"
+            "with round latex balloons and a giftable retail presentation, not an event install"
         ),
         palette=("Pastel Pink", "Pastel Blue", "Pastel Yellow", "Pastel Purple", "Reflex Champagne"),
     ),
     HeroSpec(
         route="/shop-items/columns",
         title="Columns",
-        slug="classic-column-category-hero",
+        slug="columns-category-generated-hero",
         shape_prompt=(
             "a pair of freestanding balloon columns for a school or civic entrance, each "
             "with stacked round latex balloons and clean weighted bases"
@@ -103,7 +103,7 @@ HERO_SPECS = (
     HeroSpec(
         route="/shop-items/garlands",
         title="Garlands",
-        slug="classic-organic-balloon-garland-category-hero",
+        slug="garlands-category-generated-hero",
         shape_prompt=(
             "an organic balloon garland flowing along a wall and corner installation, "
             "dense clusters of different balloon sizes, no arch shape"
@@ -113,17 +113,19 @@ HERO_SPECS = (
     HeroSpec(
         route="/shop-items/photo-ops-backdrops",
         title="Photo Ops & Backdrops",
-        slug="baby-shower-combination-photo-opt-category-hero",
+        slug="photo-ops-backdrops-category-generated-hero",
         shape_prompt=(
-            "a freestanding balloon photo op frame and backdrop moment for a baby shower, "
-            "with visible display structure and room for people to stand in front"
+            "a freestanding balloon photo op frame with a blank cream fabric backdrop, "
+            "visible display structure, and room for people to stand in front; the backdrop "
+            "is completely plain and the surrounding walls are completely plain with no words, "
+            "no letters, no numbers, no icons, and no symbols anywhere"
         ),
         palette=("Blush", "White", "Pastel Pink", "Pastel Blue", "Reflex Champagne"),
     ),
     HeroSpec(
         route="/shop-items/table-decor",
         title="Table Decor",
-        slug="marble-table-decor-category-hero",
+        slug="table-decor-category-generated-hero",
         shape_prompt=(
             "low balloon table decor centerpieces on an event table, small polished "
             "arrangements that do not block conversation"
@@ -133,11 +135,11 @@ HERO_SPECS = (
     HeroSpec(
         route="/shop-items/stands-easels",
         title="Stands & Easels",
-        slug="6-graduation-stands-category-hero",
+        slug="stands-easels-category-generated-hero",
         shape_prompt=(
             "freestanding gold hoop display stands and slim metal easel frames with balloon "
             "clusters attached, vertical display hardware clearly visible, no poster board "
-            "and no printed sign surface"
+            "and no printed sign surface, composed full bleed with no black bars or side padding"
         ),
         palette=("Reflex Gold", "Royal Blue", "White", "black", "Reflex Silver"),
     ),
@@ -193,7 +195,9 @@ def build_prompt(spec: HeroSpec, swatch_refs: list[str]) -> str:
         "Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, "
         "no labels, no writing, no letters, no words, and no brand names anywhere in the image. "
         "Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. "
-        "Leave calm darker negative space at the left and right for a black readability overlay. "
+        "Fill the entire banner edge to edge with a real venue or studio background; no black bars, no side padding, "
+        "no empty black margins, no dark vignette, and no framed-photo look. "
+        "Keep the left side calm and lower-contrast for the site overlay without making it black. "
         "No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art."
     )
 
