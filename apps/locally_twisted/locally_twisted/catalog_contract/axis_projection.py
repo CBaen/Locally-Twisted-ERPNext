@@ -21,6 +21,7 @@ SINGLE_COLOR_SALE_UNIT_PATTERNS = frozenset(
         "explicit_single_color_sale_unit",
     }
 )
+COLOR_RECIPE_FALLBACK_VALUE_THRESHOLD = 16
 
 
 def live_variant_axis_projection(
@@ -35,8 +36,9 @@ def live_variant_axis_projection(
     clean_values = tuple(_clean(value) for value in values if _clean(value))
     source_axis_contract = source_axis_contract or {}
     color_axis = is_balloon_color_axis(clean_attribute)
-    color_recipe = color_axis and source_color_axis_requires_recipe(
+    color_recipe = color_axis and _color_axis_requires_recipe(
         clean_attribute,
+        clean_values,
         source_axis_contract,
     )
 
@@ -58,7 +60,7 @@ def live_variant_axis_projection(
     notes = ["Live ERPNext required variant axis targets selected_options."]
     if color_axis:
         notes.append(
-            "Balloon-color attribute stays sale_unit because no source recipe contract marks it as customization."
+            "Balloon-color attribute stays sale_unit because no source recipe contract or high-cardinality color set marks it as customization."
         )
 
     return {
@@ -82,6 +84,21 @@ def source_color_axis_requires_recipe(axis_name: str, source_axis_contract: Mapp
         return False
     patterns = {str(pattern) for pattern in source_axis_contract.get("patterns") or ()}
     return bool(patterns & COLOR_RECIPE_PATTERNS)
+
+
+def _color_axis_requires_recipe(
+    axis_name: str,
+    values: Sequence[str],
+    source_axis_contract: Mapping[str, Any],
+) -> bool:
+    if source_color_axis_requires_recipe(axis_name, source_axis_contract):
+        return True
+    if source_axis_contract:
+        return False
+    return (
+        is_balloon_color_axis(axis_name)
+        and len(tuple(value for value in values if value)) >= COLOR_RECIPE_FALLBACK_VALUE_THRESHOLD
+    )
 
 
 def source_axis_is_explicit_single_color_sale_unit(source_axis_contract: Mapping[str, Any]) -> bool:

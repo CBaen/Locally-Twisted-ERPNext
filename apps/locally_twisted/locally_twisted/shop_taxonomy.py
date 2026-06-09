@@ -180,7 +180,6 @@ PRODUCT_TAXONOMY: dict[str, dict[str, str]] = {
     "pemium-organic-column": {"primary": "Columns", "secondary": "Any Occasion"},
     "premium-organic-arch": {"primary": "Arches", "secondary": "Any Occasion"},
     "premium-organic-garland": {"primary": "Garlands", "secondary": "Any Occasion"},
-    "pride-progress-rainbow-balloon-arch": {"primary": "Arches", "secondary": "Holiday"},
     "shooting-star-get-well-bouquet-latex-free": {"primary": "Bouquets", "secondary": "Get Well"},
     "sleepy-baby-column": {"primary": "Columns", "secondary": "Baby Shower"},
     "soccer-bouquet": {"primary": "Bouquets", "secondary": "Sports"},
