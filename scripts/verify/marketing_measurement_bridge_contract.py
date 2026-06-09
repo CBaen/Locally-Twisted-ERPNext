@@ -2,6 +2,7 @@
 """Verify LT's disabled-by-default marketing measurement bridge."""
 from __future__ import annotations
 
+import argparse
 import importlib
 import json
 import sys
@@ -73,6 +74,9 @@ def check_contact_submit_integration() -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args()
+
     checks = [
         check_python_contract,
         check_browser_bridge_source,
