@@ -13,6 +13,10 @@ from locally_twisted.seo import absolute_url, canonical_path, normalize_path
 no_cache = 1
 base_template_path = "www/sitemap.xml"
 
+PUBLIC_ECOMMERCE_ALIAS_PATHS = (
+    "/shop-items/seasonal-specialty",
+)
+
 
 def _sitemap_url(path: str) -> str:
     canonical = normalize_path(path)
@@ -43,5 +47,8 @@ def get_context(context):
 
     for route, data in get_public_pages_from_doctypes().items():
         _add_link(links, seen, route or "", f"{data['modified']:%Y-%m-%d}")
+
+    for path in PUBLIC_ECOMMERCE_ALIAS_PATHS:
+        _add_link(links, seen, path, nowdate())
 
     return {"links": links}
