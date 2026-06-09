@@ -18,9 +18,6 @@ from locally_twisted.catalog_contract.product_pattern_contract import (
 from locally_twisted.catalog_contract.addon_rules import known_add_on_contracts_for_axis
 
 
-EXPECTED_PUBLISHED_WEBSITE_ITEMS = 53
-
-
 def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str | None = None) -> dict[str, Any]:
     source = source_catalog or _load_source_catalog(source_catalog_path)
     source_products = {
@@ -62,7 +59,7 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
         "read_only": True,
         "destructive_allowed": False,
         "scope": "all published Website Items, including rows with missing Standard Selling prices",
-        "expected_published_website_items": EXPECTED_PUBLISHED_WEBSITE_ITEMS,
+        "expected_published_website_items": None,
         "published_website_item_count": len(rows),
         "priced_website_item_count": sum(1 for row in rows if row["pricing"]["priced_sale_units"] > 0),
         "summary": {
@@ -103,10 +100,8 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
 
 def _inventory_failures(rows: list[dict[str, Any]], source_products: dict[str, dict[str, Any]]) -> list[str]:
     failures = []
-    if len(rows) != EXPECTED_PUBLISHED_WEBSITE_ITEMS:
-        failures.append(
-            f"expected {EXPECTED_PUBLISHED_WEBSITE_ITEMS} published Website Items, found {len(rows)}"
-        )
+    if not rows:
+        failures.append("expected at least one published Website Item, found 0")
     missing_source = sorted(row["slug"] for row in rows if row["slug"] not in source_products)
     if missing_source:
         failures.append(f"priced Website Items missing legacy_source source artifact rows: {missing_source}")

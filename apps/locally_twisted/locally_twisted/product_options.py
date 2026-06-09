@@ -501,7 +501,6 @@ def _option_value(value: Any) -> str:
     return str(value or "").strip()
 
 
-@lru_cache(maxsize=256)
 def _source_axis_contracts_by_name(item_code: str | None) -> dict[str, dict[str, Any]]:
     source_product = _source_product_for_item(item_code)
     if not source_product:
@@ -517,7 +516,6 @@ def _source_axis_contracts_by_name(item_code: str | None) -> dict[str, dict[str,
     }
 
 
-@lru_cache(maxsize=1)
 def _source_products_by_slug() -> dict[str, dict[str, Any]]:
     source = None
     for catalog_path in _source_catalog_paths():

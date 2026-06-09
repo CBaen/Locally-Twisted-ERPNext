@@ -14,6 +14,8 @@ SMTP_SENDER_WITH_ROUTED_ALIAS_RISK = "locallytwisted@gmail.com"
 
 def validate_email_queue_delivery(doc: Any, method: str | None = None) -> None:
     """Block known Cloudflare Email Routing alias loops before SMTP handoff."""
+    apply_site_email_subject_prefix(doc)
+
     sender = _sender_email(doc)
     if sender != SMTP_SENDER_WITH_ROUTED_ALIAS_RISK:
         return
@@ -30,6 +32,19 @@ def validate_email_queue_delivery(doc: Any, method: str | None = None) -> None:
         "a delivery-safe business mailbox.",
         title="Blocked Unsafe Email Route",
     )
+
+
+def apply_site_email_subject_prefix(doc: Any) -> None:
+    """Apply a site-local QA subject prefix before email queue insertion."""
+    prefix = str(frappe.conf.get("lt_email_subject_prefix") or "").strip()
+    if not prefix:
+        return
+
+    subject = str(getattr(doc, "subject", "") or "")
+    if subject.startswith(prefix):
+        return
+
+    doc.subject = f"{prefix} {subject}".strip()
 
 
 def _sender_email(doc: Any) -> str:

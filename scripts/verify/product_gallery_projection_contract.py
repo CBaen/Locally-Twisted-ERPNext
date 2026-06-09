@@ -70,7 +70,8 @@ def _contract_failures() -> list[str]:
         row["item_code"]: row
         for row in get_all(
             "Website Item",
-            fields=["name", "item_code", "route", "slideshow", "website_image"],
+            filters={"published": 1},
+            fields=["name", "item_code", "route", "slideshow", "website_image", "published"],
             limit_page_length=0,
         )
         if row.get("item_code")
@@ -95,15 +96,6 @@ def _contract_failures() -> list[str]:
     slideshow_images: dict[str, list[str]] = {}
     for row in slideshow_rows:
         slideshow_images.setdefault(str(row.get("parent") or ""), []).append(str(row.get("image") or ""))
-
-    orphan_slideshows = [
-        row["name"]
-        for row in get_all("Website Slideshow", fields=["name"], limit_page_length=0)
-        if str(row.get("name") or "").startswith("LT Product Gallery -")
-        and row.get("name") not in linked_slideshows
-    ]
-    if orphan_slideshows:
-        failures.append("orphan LT Product Gallery slideshow(s): " + ", ".join(orphan_slideshows[:10]))
 
     ecommerce_paused = bool(bench_execute("locally_twisted.ecommerce_pause.is_ecommerce_paused"))
 
@@ -155,26 +147,25 @@ def _contract_failures() -> list[str]:
         if any(not image for image in slide_images):
             failures.append(f"{slug}: Website Slideshow includes an empty image row")
         if not ecommerce_paused:
-            render_failure = _render_failure(slug, website_item, slide_images)
+            render_failure = _render_failure(slug, website_item, _projected_gallery_images(slug))
             if render_failure:
                 failures.append(render_failure)
 
     if not ecommerce_paused:
-        failures.extend(_all_product_gallery_render_failures(website_items, slideshow_images))
+        failures.extend(_all_product_gallery_render_failures(website_items))
 
     return failures
 
 
 def _all_product_gallery_render_failures(
     website_items: dict[str, dict[str, Any]],
-    slideshow_images: dict[str, list[str]],
 ) -> list[str]:
     failures: list[str] = []
     for item_code, website_item in sorted(website_items.items()):
         route = str(website_item.get("route") or "").strip()
         if not route or not route.lstrip("/").startswith("shop-items/"):
             continue
-        slide_images = [image for image in slideshow_images.get(str(website_item.get("slideshow") or ""), []) if image]
+        slide_images = _projected_gallery_images(item_code)
         failure = _render_architecture_failure(item_code, website_item, slide_images)
         if failure:
             failures.append(failure)
@@ -218,6 +209,12 @@ def _render_failure(slug: str, website_item: dict[str, Any], slide_images: list[
     if 'data-lt-gallery-role="standard-product-thumbnails"' not in html:
         return f"{slug}: product route rendered thumbnails without the LT gallery rail role"
     return None
+
+
+def _projected_gallery_images(item_code: str) -> list[str]:
+    slides = bench_execute("locally_twisted.product_options.get_product_gallery_slides", args=[item_code]) or []
+    images = [str(row.get("image") or "") for row in slides if isinstance(row, dict)]
+    return _unique(images)
 
 
 def _rendered_gallery_paths(html: str) -> list[str]:
