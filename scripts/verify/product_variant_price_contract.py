@@ -19,7 +19,7 @@ CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 PRICE_LIST = "Standard Selling"
 
-# Recovered from old Odoo via /website_sale/get_combination_info on 2026-05-08.
+# Recovered from old legacy_source via /website_sale/get_combination_info on 2026-05-08.
 BOUQUET_TEMPLATES = (
     "elsa-bouquet",
     "encanto-bouquet",

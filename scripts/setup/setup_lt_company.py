@@ -2,7 +2,7 @@
 """
 Complete the LT ERPNext setup wizard via API and seed the Locally Twisted
 Company record with real address/phone/email/website pulled from the existing
-Odoo project (locally-twisted-odoo).
+legacy_source project (locally-twisted-legacy_source).
 
 After completion:
   - System Settings.setup_complete = 1
@@ -32,7 +32,7 @@ BASE = "http://localhost:8081"
 USER = "Administrator"
 PWD = "admin"
 
-# Wizard payload — values pulled from locally-twisted-odoo source:
+# Wizard payload — values pulled from locally-twisted-legacy_source source:
 #   - Company name + tagline: data/res_company.xml + automation_data.xml
 #   - Address: automation_data.xml signature blocks
 #   - Phone: views/footer.xml + page_accessibility.xml

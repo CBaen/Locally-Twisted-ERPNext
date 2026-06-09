@@ -23,7 +23,7 @@
 | 13 | AGPL licensing risk of Frappe Builder | Found | Not surfaced | Not surfaced | SINGLE-SOURCE (Web Scout only) |
 | 14 | Page Builder = effectively legacy / no new investment | Found — community sources | Found — zero new features since ~v15.50, community calls it legacy | Ground Truth — failed in practice, rolled back | CONVERGED |
 | 15 | !important chains in lt-theme.css still present and broken | Not found | Not found | Found — 28 occurrences, lines 388-415 data URI SVG bug confirmed unresolved | SINGLE-SOURCE (Ground Truth only — immediate blocker) |
-| 16 | Approved copy in Odoo XML is complete, structured, and available | Not applicable (fetched from locallytwisted.com instead — Odoo server down) | Not applicable | Found — 43 XML files, complete content | SINGLE-SOURCE (Ground Truth only for Odoo XML; Web Scout has alternate source) |
+| 16 | Approved copy in legacy_source XML is complete, structured, and available | Not applicable (fetched from locallytwisted.com instead — legacy_source server down) | Not applicable | Found — 43 XML files, complete content | SINGLE-SOURCE (Ground Truth only for legacy_source XML; Web Scout has alternate source) |
 | 17 | web_include_css conflict with active Website Theme | Not surfaced | Found — documented conflict, no official fix | Ground Truth — `website_theme_scss` is commented out; web_include_css active; no Website Theme active = no conflict currently | PARTIAL (Docs found the conflict; Ground Truth shows current state avoids it by not activating a theme; Web Scout missed it) |
 | 18 | No Jinja template overrides exist yet in LT app | Not surfaced | Not applicable | Found — no `templates/` directory in app | SINGLE-SOURCE (Ground Truth; critical gap) |
 | 19 | Frappe Builder v1.23.3 (April 2026 release, actively maintained) | Found — POST-CUTOFF | Not surfaced at version level | Not installed / not examined | NEW (Web Scout only; post-cutoff) |
@@ -143,7 +143,7 @@ All three sources confirm:
 
 **Source:** Ground Truth only. Found during container inspection of `webshop/web_template/hero_slider/hero_slider.html`.
 
-**Finding:** `data-ride="carousel"` (Bootstrap 4) is used in the webshop Hero Slider template. The ERPNext v15 stack uses Bootstrap 5, which uses `data-bs-ride` and removed jQuery's `.carousel()` method. If Page Builder is used with the Hero Slider template, carousel autoplay will silently not work. The Odoo `s_lt_hero.xml` correctly uses Bootstrap 5 syntax — confirming this is a template bug, not a design intent.
+**Finding:** `data-ride="carousel"` (Bootstrap 4) is used in the webshop Hero Slider template. The ERPNext v15 stack uses Bootstrap 5, which uses `data-bs-ride` and removed jQuery's `.carousel()` method. If Page Builder is used with the Hero Slider template, carousel autoplay will silently not work. The legacy_source `s_lt_hero.xml` correctly uses Bootstrap 5 syntax — confirming this is a template bug, not a design intent.
 
 **Why this matters even though single-source:** This is a code-level fact, not an interpretation. The bytes in the file are what they are. Web Scout and Docs did not look at this specific file, but if they had, they would have found the same thing. The finding is trustworthy despite being single-source because it is directly observable.
 
@@ -167,7 +167,7 @@ All three sources confirm:
 
 **Why this matters:** Multiple prior instances described the Jinja override path as "the path forward" but none implemented it. The custom footer with the 3-column layout (Shop / Company / Get In Touch from `footer.xml`) does not exist yet. The header with the two-tier utility strip does not exist yet.
 
-**Action:** Do not treat planned Jinja overrides as done. They must be built from scratch. The Odoo XML source (`footer.xml`, `header.xml`) provides the content blueprint; the Frappe template override mechanism provides the delivery path.
+**Action:** Do not treat planned Jinja overrides as done. They must be built from scratch. The legacy_source XML source (`footer.xml`, `header.xml`) provides the content blueprint; the Frappe template override mechanism provides the delivery path.
 
 ### S4: AGPL licensing risk for Frappe Builder in commercial deployments
 
@@ -179,13 +179,13 @@ All three sources confirm:
 
 **Note:** This is a single-source finding from Web Scout. Docs & Standards did not explicitly surface this despite examining Builder's marketplace listing. However, AGPL-3.0 is a verifiable fact about the Builder repository license — trustworthy despite single-source.
 
-### S5: Odoo image URLs in catalog.json are not local files — will 404 after Odoo decommission
+### S5: legacy_source image URLs in catalog.json are not local files — will 404 after legacy_source decommission
 
 **Source:** Ground Truth only.
 
-**Finding:** All 48 product images in `catalog.json` are Odoo server URLs (`http://5.78.136.133/web/image/...`). The Odoo stack is currently running, making these fetchable now. When the Odoo server is decommissioned (planned), all 48 image URLs become 404.
+**Finding:** All 48 product images in `catalog.json` are legacy_source server URLs (`http://5.78.136.133/web/image/...`). The legacy_source stack is currently running, making these fetchable now. When the legacy_source server is decommissioned (planned), all 48 image URLs become 404.
 
-**Action:** Export all product images from the Odoo server before it is decommissioned. This is a time-sensitive dependency — the Odoo server is described as a temporary reference.
+**Action:** Export all product images from the legacy_source server before it is decommissioned. This is a time-sensitive dependency — the legacy_source server is described as a temporary reference.
 
 ### S6: Catalog has no product descriptions (48 of 51 products have description: null)
 
@@ -197,17 +197,17 @@ All three sources confirm:
 
 ## DIVERGENT Findings (Conflict)
 
-### D1: Is the Odoo server at 5.78.136.133 accessible?
+### D1: Is the legacy_source server at 5.78.136.133 accessible?
 
 **Web Scout:** CONNECTION REFUSED on both attempts. Server appears down or firewalled.
 
-**Ground Truth:** Odoo stack is currently running locally (`locally-twisted-odoo-web-1 Up 30 hours`). Product images are fetchable from `http://5.78.136.133/...` URLs.
+**Ground Truth:** legacy_source stack is currently running locally (`locally-twisted-legacy_source-web-1 Up 30 hours`). Product images are fetchable from `http://5.78.136.133/...` URLs.
 
-**Resolution:** These are not the same thing. Web Scout was accessing the HETZNER remote server (the failed deployment at http://5.78.136.133/ — the public-facing Odoo). Ground Truth was examining the LOCAL Docker Odoo stack running on Wardenclyffe (`locally-twisted-odoo-web-1`). They are two different Odoo instances:
-- **Remote Hetzner Odoo** (http://5.78.136.133/): Public, appears down per Web Scout.
-- **Local Wardenclyffe Odoo** (local Docker, port unknown): Running, Ground Truth confirmed Up 30 hours.
+**Resolution:** These are not the same thing. Web Scout was accessing the HETZNER remote server (the failed deployment at http://5.78.136.133/ — the public-facing legacy_source). Ground Truth was examining the LOCAL Docker legacy_source stack running on Wardenclyffe (`locally-twisted-legacy_source-web-1`). They are two different legacy_source instances:
+- **Remote Hetzner legacy_source** (http://5.78.136.133/): Public, appears down per Web Scout.
+- **Local Wardenclyffe legacy_source** (local Docker, port unknown): Running, Ground Truth confirmed Up 30 hours.
 
-The catalog.json image URLs point at the **Hetzner server** (http://5.78.136.133/). If that server is down (per Web Scout), those image URLs are already broken. The local Odoo is a separate Docker container, likely at a different localhost port, not accessible at 5.78.136.133.
+The catalog.json image URLs point at the **Hetzner server** (http://5.78.136.133/). If that server is down (per Web Scout), those image URLs are already broken. The local legacy_source is a separate Docker container, likely at a different localhost port, not accessible at 5.78.136.133.
 
 **Practical implication:** The catalog.json images may already be broken. This needs verification.
 
@@ -215,15 +215,15 @@ The catalog.json image URLs point at the **Hetzner server** (http://5.78.136.133
 
 **Web Scout (from locallytwisted.com):** Facebook, Twitter, Instagram, Pinterest — 4 icons.
 
-**Ground Truth (from Odoo footer.xml):** Facebook, Instagram, Pinterest — 3 icons. Explicitly no Twitter. Notes: "The `setup_slice2_header_footer.py` script added Twitter — that was wrong per the Odoo source."
+**Ground Truth (from legacy_source footer.xml):** Facebook, Instagram, Pinterest — 3 icons. Explicitly no Twitter. Notes: "The `setup_slice2_header_footer.py` script added Twitter — that was wrong per the legacy_source source."
 
 **Resolution:** These are two different "Jeff-approved" sources:
 - `locallytwisted.com` (current live customer-facing site): shows Twitter/X.
-- Odoo `footer.xml` (the new-build blueprint Jeff reviewed): explicitly excludes Twitter.
+- legacy_source `footer.xml` (the new-build blueprint Jeff reviewed): explicitly excludes Twitter.
 
-The Odoo XML was built more recently and represents the new build's intent. If Jeff approved the Odoo design, the 3-icon footer (no Twitter) is the correct choice. However, the live site includes Twitter — which may mean Jeff added it there deliberately, or the Odoo design was built based on a different intent at that time.
+The legacy_source XML was built more recently and represents the new build's intent. If Jeff approved the legacy_source design, the 3-icon footer (no Twitter) is the correct choice. However, the live site includes Twitter — which may mean Jeff added it there deliberately, or the legacy_source design was built based on a different intent at that time.
 
-**This conflict requires GL clarification.** Neither source can definitively override the other without knowing Jeff's current preference. For the ERPNext build, the Ground Truth (Odoo XML) is the stated authoritative source per the CLAUDE.md "canonical sources" section — use 3 icons unless GL confirms otherwise.
+**This conflict requires GL clarification.** Neither source can definitively override the other without knowing Jeff's current preference. For the ERPNext build, the Ground Truth (legacy_source XML) is the stated authoritative source per the CLAUDE.md "canonical sources" section — use 3 icons unless GL confirms otherwise.
 
 ---
 
@@ -265,11 +265,11 @@ Frappe held their annual developer conference weeks before this research — sig
 
 ## Approved Content for Q3
 
-This section reconciles the two sources of "Jeff-approved" content: locallytwisted.com (Web Scout) and the Odoo XML source (Ground Truth). These are materially different documents with the same customer.
+This section reconciles the two sources of "Jeff-approved" content: locallytwisted.com (Web Scout) and the legacy_source XML source (Ground Truth). These are materially different documents with the same customer.
 
 ### Where they agree (HIGH CONFIDENCE — use these)
 
-| Content Element | locallytwisted.com | Odoo XML |
+| Content Element | locallytwisted.com | legacy_source XML |
 |---|---|---|
 | Phone | (801) 285-0860 | (801) 285-0860 |
 | Hours | Tue-Fri 12-6pm, Sat 10-4pm, Mon closed | "Tue-Fri 12-6, Sat 10-4" |
@@ -283,22 +283,22 @@ This section reconciles the two sources of "Jeff-approved" content: locallytwist
 | Pinterest | Listed | https://pinterest.com/locallytwisted |
 | Email (contact) | hi@locallytwisted.com (implied) | hi@locallytwisted.com (explicit in BTFP sidebar) |
 
-**The founding year has a discrepancy:** locallytwisted.com says "Over 22 years" (which at 2024 ≈ 2002 founding). Odoo XML says "since 1998" (28 years). The CLAUDE.md project brief confirms "27-year-old Utah balloon decor business" which corroborates 1998. The "22 years" on locallytwisted.com is stale. Use "since 1998" in the new build.
+**The founding year has a discrepancy:** locallytwisted.com says "Over 22 years" (which at 2024 ≈ 2002 founding). legacy_source XML says "since 1998" (28 years). The CLAUDE.md project brief confirms "27-year-old Utah balloon decor business" which corroborates 1998. The "22 years" on locallytwisted.com is stale. Use "since 1998" in the new build.
 
 ### Where they diverge (REQUIRES DECISION)
 
-| Content Element | locallytwisted.com | Odoo XML | Recommendation |
+| Content Element | locallytwisted.com | legacy_source XML | Recommendation |
 |---|---|---|---|
-| Hero headline | "Make Your Party POP!" | "Utah's Balloon Specialists" | Odoo XML is the new-build intent; more authoritative. Use "Utah's Balloon Specialists." |
-| Hero sub | "Anything you imagine, we can shape into reality." | "Making celebrations unforgettable since 1998" | Odoo XML — quieter, less pushy. Consistent with Quiet Confidence voice. |
-| Social accounts | Facebook, Twitter, Instagram, Pinterest (4) | Facebook, Instagram, Pinterest (3, no Twitter) | Use Odoo XML (3 icons). Ground Truth confirms Twitter was an error in prior script. Verify with GL. |
-| Footer copyright | "Copyright 2021 Locally Twisted, LLC" | "© 2026 Locally Twisted. All rights reserved." | Odoo XML — current year, cleaner format. |
-| Review count | Not shown | 4.9 stars, 114 reviews (static badge) | Odoo XML — include the badge. More credible than no reviews. |
-| CTA copy | "Contact Us Today!", "Customize Your Order" | "Make Your Celebration Unforgettable" / "Contact Us" | Odoo XML — quieter, less salesy. Better Quiet Confidence fit. |
+| Hero headline | "Make Your Party POP!" | "Utah's Balloon Specialists" | legacy_source XML is the new-build intent; more authoritative. Use "Utah's Balloon Specialists." |
+| Hero sub | "Anything you imagine, we can shape into reality." | "Making celebrations unforgettable since 1998" | legacy_source XML — quieter, less pushy. Consistent with Quiet Confidence voice. |
+| Social accounts | Facebook, Twitter, Instagram, Pinterest (4) | Facebook, Instagram, Pinterest (3, no Twitter) | Use legacy_source XML (3 icons). Ground Truth confirms Twitter was an error in prior script. Verify with GL. |
+| Footer copyright | "Copyright 2021 Locally Twisted, LLC" | "© 2026 Locally Twisted. All rights reserved." | legacy_source XML — current year, cleaner format. |
+| Review count | Not shown | 4.9 stars, 114 reviews (static badge) | legacy_source XML — include the badge. More credible than no reviews. |
+| CTA copy | "Contact Us Today!", "Customize Your Order" | "Make Your Celebration Unforgettable" / "Contact Us" | legacy_source XML — quieter, less salesy. Better Quiet Confidence fit. |
 
 ### The authoritative approved content source for the ERPNext build
 
-Per the LT CLAUDE.md "Reference Disposition" section: Odoo XML source is the canonical source for the new build. The `locallytwisted.com` site is the old site, "damaged beyond repair" and out of scope for editing. The Ground Truth XML captures what the new build was designed to look like.
+Per the LT CLAUDE.md "Reference Disposition" section: legacy_source XML source is the canonical source for the new build. The `locallytwisted.com` site is the old site, "damaged beyond repair" and out of scope for editing. The Ground Truth XML captures what the new build was designed to look like.
 
 **Exception:** Contact info (phone, address, hours) should be verified against both — they agree, so the risk is low. The social account discrepancy (3 vs 4) requires GL clarification.
 
@@ -332,7 +332,7 @@ Docs & Standards noted this gap explicitly: official docs do not publish what "E
 
 ## Synthesis for Devil's Advocate
 
-**The strongest overall picture:** The convergence is remarkable in what it rules OUT. All three sources independently reached the same conclusion: there are no ready-made Frappe v15 themes for a small-business marketing site; the Page Builder (legacy) is not the path forward for LT; the custom Frappe app with `web_include_css` is the correct baseline; the Odoo XML content is a complete, WCAG-correct, Quiet Confidence-voiced blueprint ready to translate into ERPNext. The content problem is solved — the Odoo XML files contain everything needed.
+**The strongest overall picture:** The convergence is remarkable in what it rules OUT. All three sources independently reached the same conclusion: there are no ready-made Frappe v15 themes for a small-business marketing site; the Page Builder (legacy) is not the path forward for LT; the custom Frappe app with `web_include_css` is the correct baseline; the legacy_source XML content is a complete, WCAG-correct, Quiet Confidence-voiced blueprint ready to translate into ERPNext. The content problem is solved — the legacy_source XML files contain everything needed.
 
 **The weakest link:** Frappe Builder. It is the only option that could meaningfully change the build approach (visual drag-drop vs code), and it is also the only option where the three sources diverge on what to do with it. Web Scout says "promising but carry risk"; Docs & Standards says "officially recommended but webshop cart integration is an unresolved feature request"; Ground Truth has no data because it hasn't been tried. The webshop routing question is genuinely open — no one knows if Builder pages at `/`, `/about`, `/contact` coexist cleanly with webshop at `/all-products`, `/cart`, `/checkout` on the same Frappe site. The risk of testing Builder and finding a conflict is that LT has spent time on a dead end when the custom-app path was always available.
 
@@ -342,6 +342,6 @@ Docs & Standards noted this gap explicitly: official docs do not publish what "E
 
 2. **The "custom app is already built" argument conflates scaffolding with substance.** Ground Truth confirmed: no Jinja template overrides, no www/ pages, no hero images, 28 `!important` occurrences including a broken navbar toggler, a placeholder homepage. "The architecture exists" and "the site works" are different claims. The devil's advocate should push: what is the gap between the current state and "polished, mobile-responsive, browser-tested"? That gap has not been measured.
 
-3. **The Odoo XML is not plug-and-play.** The content is ready. The images are not (Odoo attachment IDs, not local files, may already be 404 from Hetzner). The category URLs use Odoo numeric IDs that will not match ERPNext Item Group routes. The client crawl works in any environment. The hero carousel needs Bootstrap 5 markup (not the webshop Hero Slider template which uses Bootstrap 4). The devil's advocate should force the team to enumerate exactly which Odoo XML sections can be directly translated versus which require work.
+3. **The legacy_source XML is not plug-and-play.** The content is ready. The images are not (legacy_source attachment IDs, not local files, may already be 404 from Hetzner). The category URLs use legacy_source numeric IDs that will not match ERPNext Item Group routes. The client crawl works in any environment. The hero carousel needs Bootstrap 5 markup (not the webshop Hero Slider template which uses Bootstrap 4). The devil's advocate should force the team to enumerate exactly which legacy_source XML sections can be directly translated versus which require work.
 
 4. **Testing must happen in a real browser, not assumed.** Every prior failure (Slice 2, landing.py) was discovered by GL opening a browser and seeing something broken. The convergence analysis recommends the custom app path partly because it is the "safest" — but "safe" must be verified in practice. The devil's advocate should require: before any architectural decision is finalized, Stage 0 must be completed (strip !important chains, fix navbar toggler, verify clean render in Chrome at 375px mobile width).

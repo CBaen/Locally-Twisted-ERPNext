@@ -71,7 +71,7 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 
 - `.tmp/`, `output/`, `test-results/`, `test invoices/`, `__pycache__/`, compiled frontend `dist/`, and local `node_modules/` only when safe to regenerate.
 - Raw local image/drop folders under `assets/` unless they are intentionally curated and committed as source.
-- Stale Odoo mirrors, browser render galleries, contest outputs, and prototype/research folders after the relevant production translation lands.
+- Stale legacy_source mirrors, browser render galleries, contest outputs, and prototype/research folders after the relevant production translation lands.
 
 ## 2026-05-10 Receipt
 

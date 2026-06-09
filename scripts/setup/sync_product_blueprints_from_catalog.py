@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Create owner-editable Product Setup records from current Website Items.
 
 Dry run:
@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "_resources" / "odoo-live"
+SOURCE = ROOT / "_resources" / "catalog-source"
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 METHOD = "locally_twisted.seed.sync_product_blueprints_from_catalog.execute"

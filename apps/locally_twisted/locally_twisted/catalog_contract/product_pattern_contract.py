@@ -29,7 +29,7 @@ CART_CONFIGURATION_VERSION = "lt-product-config-v1"
 STANDARD_PRICE_LIST = "Standard Selling"
 
 AxisRole = Literal["sale_unit", "customization", "add_on", "review_only"]
-AxisSource = Literal["odoo_source", "erpnext_variant", "combined"]
+AxisSource = Literal["legacy_source_source", "erpnext_variant", "combined"]
 AxisStatus = Literal["ready", "needs_mapping", "needs_review"]
 PricingStatus = Literal["ready", "missing", "incomplete", "conflict_needs_fix"]
 MediaStatus = Literal["ready", "primary_missing"]
@@ -92,7 +92,7 @@ class AxisContract:
     role: AxisRole
     values: tuple[str, ...] = field(default_factory=tuple)
     selector_type: str = "single_select"
-    source: AxisSource = "odoo_source"
+    source: AxisSource = "legacy_source_source"
     status: AxisStatus = "ready"
     pricing_required: bool = True
     allows_multiple_values: bool = False
@@ -438,7 +438,7 @@ def _axis_contract_from_source(
         role=role,
         values=values,
         selector_type=selector_type,
-        source="odoo_source",
+        source="legacy_source_source",
         status="ready" if role == "sale_unit" else "needs_mapping",
         pricing_required=role == "sale_unit",
         allows_multiple_values=allows_multiple,
@@ -760,7 +760,7 @@ def _apply_mapper_enforcement(
         required_work.append("Attach approved conditional price matrix provenance before checkout.")
     if not source_integrity or not import_requirements:
         fail_loud.append("source_pattern_unpreserved")
-        required_work.append("Carry Odoo mapper source integrity and import requirements into the ProductPatternContract.")
+        required_work.append("Carry legacy_source mapper source integrity and import requirements into the ProductPatternContract.")
 
 
 def _source_requires_customization_payload(
@@ -1139,7 +1139,7 @@ def _warnings(
     if media.status != "ready":
         warnings.extend(media.notes)
     if source_product and not source_pattern:
-        warnings.append("Source product could not be classified by Odoo option-pattern mapper.")
+        warnings.append("Source product could not be classified by legacy_source option-pattern mapper.")
     return tuple(dict.fromkeys(warnings))
 
 

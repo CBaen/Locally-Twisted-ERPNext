@@ -22,10 +22,10 @@ from locally_twisted.catalog_contract.addon_review import build_add_on_approval_
 from locally_twisted.catalog_contract.addon_rules import REVIEW_ADD_ONS
 
 
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
-DEFAULT_REPORT = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/22-product-add-on-approval-packet.json"
-DEFAULT_MARKDOWN = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/22-product-add-on-approval-packet.md"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
+DEFAULT_REPORT = ROOT / "audits/catalog-import-audit-2026-05-08/22-product-add-on-approval-packet.json"
+DEFAULT_MARKDOWN = ROOT / "audits/catalog-import-audit-2026-05-08/22-product-add-on-approval-packet.md"
 
 
 def main() -> int:

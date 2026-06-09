@@ -34,18 +34,18 @@
         "Dusk Green Tea",
         "White"
       ],
-      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a full event balloon arch spanning a clean venue entry, visible as a true arch with both side bases and the overhead curve inside the center crop. Use only these owner-approved balloon color names as the palette: Blue Slate, Reflex Champagne, Blush, Dusk Green Tea, White. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/4b7f304dd53f43516a64084a.jpg, /assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg, /assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg, /assets/locally_twisted/images/color-swatches/odoo/1121172628058b91214321ef.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a full event balloon arch spanning a clean venue entry, visible as a true arch with both side bases and the overhead curve inside the center crop. Use only these owner-approved balloon color names as the palette: Blue Slate, Reflex Champagne, Blush, Dusk Green Tea, White. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/4b7f304dd53f43516a64084a.jpg, /assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg, /assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg, /assets/locally_twisted/images/color-swatches/catalog/1121172628058b91214321ef.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/arches",
       "slug": "classic-arch-category-hero",
       "source": "classic-arch-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/4b7f304dd53f43516a64084a.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1121172628058b91214321ef.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/4b7f304dd53f43516a64084a.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1121172628058b91214321ef.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg"
       ],
       "title": "Arches"
     },
@@ -83,20 +83,20 @@
         "Violet",
         "White"
       ],
-      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a ceiling balloon drop net filled with bright balloons above an event floor, clearly ready to release, with safe venue rigging. Use only these owner-approved balloon color names as the palette: Red, Orange, yellow, Royal Blue, Shamrock, Violet, White. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/51bab5d180e631e3e80b80ff.jpg, /assets/locally_twisted/images/color-swatches/odoo/9b10496ff72ee3e9d3b0f3e8.jpg, /assets/locally_twisted/images/color-swatches/odoo/650d46d274d5d233f4c68bad.jpg, /assets/locally_twisted/images/color-swatches/odoo/5a46d52a86d65ff75a00c947.jpg, /assets/locally_twisted/images/color-swatches/odoo/c2676852587c2365312d585e.jpg, /assets/locally_twisted/images/color-swatches/odoo/12d28f09294e08822f0f375c.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a ceiling balloon drop net filled with bright balloons above an event floor, clearly ready to release, with safe venue rigging. Use only these owner-approved balloon color names as the palette: Red, Orange, yellow, Royal Blue, Shamrock, Violet, White. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/51bab5d180e631e3e80b80ff.jpg, /assets/locally_twisted/images/color-swatches/catalog/9b10496ff72ee3e9d3b0f3e8.jpg, /assets/locally_twisted/images/color-swatches/catalog/650d46d274d5d233f4c68bad.jpg, /assets/locally_twisted/images/color-swatches/catalog/5a46d52a86d65ff75a00c947.jpg, /assets/locally_twisted/images/color-swatches/catalog/c2676852587c2365312d585e.jpg, /assets/locally_twisted/images/color-swatches/catalog/12d28f09294e08822f0f375c.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/balloon-drops",
       "slug": "balloon-drop-category-hero",
       "source": "balloon-drop-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/51bab5d180e631e3e80b80ff.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/9b10496ff72ee3e9d3b0f3e8.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/650d46d274d5d233f4c68bad.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/5a46d52a86d65ff75a00c947.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/c2676852587c2365312d585e.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/12d28f09294e08822f0f375c.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/51bab5d180e631e3e80b80ff.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/9b10496ff72ee3e9d3b0f3e8.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/650d46d274d5d233f4c68bad.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/5a46d52a86d65ff75a00c947.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/c2676852587c2365312d585e.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/12d28f09294e08822f0f375c.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg"
       ],
       "title": "Balloon Drops"
     },
@@ -132,18 +132,18 @@
         "Pastel Purple",
         "Reflex Champagne"
       ],
-      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: several finished balloon bouquets staged for pickup, ribboned and weighted, with round latex balloons and a giftable retail presentation. Use only these owner-approved balloon color names as the palette: Pastel Pink, Pastel Blue, Pastel Yellow, Pastel Purple, Reflex Champagne. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/0f5722005da4219177661054.jpg, /assets/locally_twisted/images/color-swatches/odoo/9903767634d3d8221edb3080.jpg, /assets/locally_twisted/images/color-swatches/odoo/79bc7787311df5788772380a.jpg, /assets/locally_twisted/images/color-swatches/odoo/d69a0a99a3eaa6c6ebc6520c.jpg, /assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: several finished balloon bouquets staged for pickup, ribboned and weighted, with round latex balloons and a giftable retail presentation. Use only these owner-approved balloon color names as the palette: Pastel Pink, Pastel Blue, Pastel Yellow, Pastel Purple, Reflex Champagne. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/0f5722005da4219177661054.jpg, /assets/locally_twisted/images/color-swatches/catalog/9903767634d3d8221edb3080.jpg, /assets/locally_twisted/images/color-swatches/catalog/79bc7787311df5788772380a.jpg, /assets/locally_twisted/images/color-swatches/catalog/d69a0a99a3eaa6c6ebc6520c.jpg, /assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/bouquets",
       "slug": "mothers-day-bouquet-category-hero",
       "source": "mothers-day-bouquet-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/0f5722005da4219177661054.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/9903767634d3d8221edb3080.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/79bc7787311df5788772380a.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/d69a0a99a3eaa6c6ebc6520c.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/0f5722005da4219177661054.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/9903767634d3d8221edb3080.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/79bc7787311df5788772380a.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/d69a0a99a3eaa6c6ebc6520c.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg"
       ],
       "title": "Bouquets"
     },
@@ -179,18 +179,18 @@
         "Blue Slate",
         "black"
       ],
-      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a pair of freestanding balloon columns for a school or civic entrance, each with stacked round latex balloons and clean weighted bases. Use only these owner-approved balloon color names as the palette: Royal Blue, Reflex Gold, White, Blue Slate, black. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/5a46d52a86d65ff75a00c947.jpg, /assets/locally_twisted/images/color-swatches/odoo/7e54731a8b01a8eaf9c2a08d.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/odoo/4b7f304dd53f43516a64084a.jpg, /assets/locally_twisted/images/color-swatches/odoo/7fc429aa5afe3b74a4c51a28.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a pair of freestanding balloon columns for a school or civic entrance, each with stacked round latex balloons and clean weighted bases. Use only these owner-approved balloon color names as the palette: Royal Blue, Reflex Gold, White, Blue Slate, black. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/5a46d52a86d65ff75a00c947.jpg, /assets/locally_twisted/images/color-swatches/catalog/7e54731a8b01a8eaf9c2a08d.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/catalog/4b7f304dd53f43516a64084a.jpg, /assets/locally_twisted/images/color-swatches/catalog/7fc429aa5afe3b74a4c51a28.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/columns",
       "slug": "classic-column-category-hero",
       "source": "classic-column-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/5a46d52a86d65ff75a00c947.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/7e54731a8b01a8eaf9c2a08d.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/4b7f304dd53f43516a64084a.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/7fc429aa5afe3b74a4c51a28.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/5a46d52a86d65ff75a00c947.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/7e54731a8b01a8eaf9c2a08d.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/4b7f304dd53f43516a64084a.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/7fc429aa5afe3b74a4c51a28.jpg"
       ],
       "title": "Columns"
     },
@@ -226,18 +226,18 @@
         "White",
         "Blush"
       ],
-      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: an organic balloon garland flowing along a wall and corner installation, dense clusters of different balloon sizes, no arch shape. Use only these owner-approved balloon color names as the palette: Reflex Champagne, Dusk Rose, eucalyptus, White, Blush. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg, /assets/locally_twisted/images/color-swatches/odoo/cc5d0a79cfc68c27617389ae.jpg, /assets/locally_twisted/images/color-swatches/odoo/172f82db46a9d33a06bb4b1c.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: an organic balloon garland flowing along a wall and corner installation, dense clusters of different balloon sizes, no arch shape. Use only these owner-approved balloon color names as the palette: Reflex Champagne, Dusk Rose, eucalyptus, White, Blush. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg, /assets/locally_twisted/images/color-swatches/catalog/cc5d0a79cfc68c27617389ae.jpg, /assets/locally_twisted/images/color-swatches/catalog/172f82db46a9d33a06bb4b1c.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/garlands",
       "slug": "classic-organic-balloon-garland-category-hero",
       "source": "classic-organic-balloon-garland-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/cc5d0a79cfc68c27617389ae.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/172f82db46a9d33a06bb4b1c.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/cc5d0a79cfc68c27617389ae.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/172f82db46a9d33a06bb4b1c.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg"
       ],
       "title": "Garlands"
     },
@@ -273,18 +273,18 @@
         "Pastel Blue",
         "Reflex Champagne"
       ],
-      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a freestanding balloon photo op frame and backdrop moment for a baby shower, with visible display structure and room for people to stand in front. Use only these owner-approved balloon color names as the palette: Blush, White, Pastel Pink, Pastel Blue, Reflex Champagne. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/odoo/0f5722005da4219177661054.jpg, /assets/locally_twisted/images/color-swatches/odoo/9903767634d3d8221edb3080.jpg, /assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: a freestanding balloon photo op frame and backdrop moment for a baby shower, with visible display structure and room for people to stand in front. Use only these owner-approved balloon color names as the palette: Blush, White, Pastel Pink, Pastel Blue, Reflex Champagne. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/catalog/0f5722005da4219177661054.jpg, /assets/locally_twisted/images/color-swatches/catalog/9903767634d3d8221edb3080.jpg, /assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/photo-ops-backdrops",
       "slug": "baby-shower-combination-photo-opt-category-hero",
       "source": "baby-shower-combination-photo-opt-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/0f5722005da4219177661054.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/9903767634d3d8221edb3080.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/0f5722005da4219177661054.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/9903767634d3d8221edb3080.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg"
       ],
       "title": "Photo Ops & Backdrops"
     },
@@ -320,18 +320,18 @@
         "White",
         "Clear"
       ],
-      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: low balloon table decor centerpieces on an event table, small polished arrangements that do not block conversation. Use only these owner-approved balloon color names as the palette: Blush, Reflex Champagne, Dusk Rose, White, Clear. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg, /assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg, /assets/locally_twisted/images/color-swatches/odoo/cc5d0a79cfc68c27617389ae.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/odoo/e069683e7e69049799e7ef06.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for Locally Twisted, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: low balloon table decor centerpieces on an event table, small polished arrangements that do not block conversation. Use only these owner-approved balloon color names as the palette: Blush, Reflex Champagne, Dusk Rose, White, Clear. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg, /assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg, /assets/locally_twisted/images/color-swatches/catalog/cc5d0a79cfc68c27617389ae.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/catalog/e069683e7e69049799e7ef06.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/table-decor",
       "slug": "marble-table-decor-category-hero",
       "source": "marble-table-decor-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/8512c6fd4a9d1b914c07319a.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/210efeaea3e3d166d68caadf.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/cc5d0a79cfc68c27617389ae.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/e069683e7e69049799e7ef06.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/8512c6fd4a9d1b914c07319a.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/210efeaea3e3d166d68caadf.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/cc5d0a79cfc68c27617389ae.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/e069683e7e69049799e7ef06.jpg"
       ],
       "title": "Table Decor"
     },
@@ -367,18 +367,18 @@
         "black",
         "Reflex Silver"
       ],
-      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: freestanding gold hoop display stands and slim metal easel frames with balloon clusters attached, vertical display hardware clearly visible, no poster board and no printed sign surface. Use only these owner-approved balloon color names as the palette: Reflex Gold, Royal Blue, White, black, Reflex Silver. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/odoo/7e54731a8b01a8eaf9c2a08d.jpg, /assets/locally_twisted/images/color-swatches/odoo/5a46d52a86d65ff75a00c947.jpg, /assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/odoo/7fc429aa5afe3b74a4c51a28.jpg, /assets/locally_twisted/images/color-swatches/odoo/e02310ebb488aebdccb808af.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
+      "prompt": "Photorealistic premium commercial event photography for a Utah balloon decor website, extra-wide 4.9:1 website hero banner composition at 2048x416. Subject: freestanding gold hoop display stands and slim metal easel frames with balloon clusters attached, vertical display hardware clearly visible, no poster board and no printed sign surface. Use only these owner-approved balloon color names as the palette: Reflex Gold, Royal Blue, White, black, Reflex Silver. Treat the named balloon colors and supplied swatch references as the authority, not hex values. Swatch reference asset paths: /assets/locally_twisted/images/color-swatches/catalog/7e54731a8b01a8eaf9c2a08d.jpg, /assets/locally_twisted/images/color-swatches/catalog/5a46d52a86d65ff75a00c947.jpg, /assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg, /assets/locally_twisted/images/color-swatches/catalog/7fc429aa5afe3b74a4c51a28.jpg, /assets/locally_twisted/images/color-swatches/catalog/e02310ebb488aebdccb808af.jpg. Realistic inflated latex balloons with correct glossy/matte supplier finishes where appropriate, polished Utah event styling, clean venue or studio setting, editorial lighting, premium but warm. Use a plain blank architectural background with no signage, no chalkboard, no plaques, no cards, no labels, no writing, no letters, no words, and no brand names anywhere in the image. Keep the main balloon form centered in the middle 40 percent so mobile crops still show the product. Leave calm darker negative space at the left and right for a black readability overlay. No readable text, no fake signage, no logos, no watermark, no cartoon style, no collage, no flat vector art.",
       "route": "/shop-items/stands-easels",
       "slug": "6-graduation-stands-category-hero",
       "source": "6-graduation-stands-category-hero-source.webp",
       "source_height": 416,
       "source_width": 2048,
       "swatch_refs": [
-        "/assets/locally_twisted/images/color-swatches/odoo/7e54731a8b01a8eaf9c2a08d.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/5a46d52a86d65ff75a00c947.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/1024fc160b381431d09c0da8.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/7fc429aa5afe3b74a4c51a28.jpg",
-        "/assets/locally_twisted/images/color-swatches/odoo/e02310ebb488aebdccb808af.jpg"
+        "/assets/locally_twisted/images/color-swatches/catalog/7e54731a8b01a8eaf9c2a08d.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/5a46d52a86d65ff75a00c947.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/1024fc160b381431d09c0da8.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/7fc429aa5afe3b74a4c51a28.jpg",
+        "/assets/locally_twisted/images/color-swatches/catalog/e02310ebb488aebdccb808af.jpg"
       ],
       "title": "Stands & Easels"
     }

@@ -1,4 +1,4 @@
-﻿D:2026-05-10 | Check:GL 15:01 agent-training direction + current ecommerce audit artifacts | Confidence:high
+D:2026-05-10 | Check:GL 15:01 agent-training direction + current ecommerce audit artifacts | Confidence:high
 # Agent brief â€” ready-to-order ecommerce infrastructure
 
 ## Mission
@@ -20,15 +20,15 @@ We are building/verifying an ERPNext/Frappe **receiving infrastructure**:
 - No broad `git add .`.
 - No destructive product purge/delete/reimport.
 - No public launch/payment success claims without backend proof.
-- Odoo is read-only source witness only.
-- Do not save/create/delete/send/post/pay/import/publish in Odoo.
+- legacy_source is read-only source witness only.
+- Do not save/create/delete/send/post/pay/import/publish in legacy_source.
 - Do not expose customer/admin PII, access tokens, Stripe keys, or live checkout details.
 - No artifact = no evidence.
 - If using subagents: each agent must leave a named artifact under `workstreams/ecommerce-audit/`.
 
 ## Current strategic decision
 
-Direct checkout is **not** for all Odoo product complexity.
+Direct checkout is **not** for all legacy_source product complexity.
 
 ### Ready-to-order shop
 
@@ -64,9 +64,9 @@ Read these before making claims:
 1. `workstreams/ecommerce-audit/README.md`
 2. `workstreams/ecommerce-audit/ready-to-order-checkout-scope-decision-2026-05-10.md`
 3. `workstreams/ecommerce-audit/event-pages-vs-ready-to-order-shop-contract-2026-05-10.md`
-4. `workstreams/ecommerce-audit/odoo-backend-architecture-and-checkout-logic-2026-05-10.md`
+4. `workstreams/ecommerce-audit/legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md`
 5. `workstreams/ecommerce-audit/ecommerce-infrastructure-readiness-packet-2026-05-10.md`
-6. `workstreams/ecommerce-audit/erpnext-receiving-build-spec-from-odoo-2026-05-10.md`
+6. `workstreams/ecommerce-audit/erpnext-receiving-build-spec-from-legacy_source-2026-05-10.md`
 7. `workstreams/ecommerce-audit/cart-checkout-intent-preservation-audit-2026-05-10.md`
 
 Useful code:
@@ -79,9 +79,9 @@ Useful code:
 - `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html`
 - `apps/locally_twisted/locally_twisted/verify/product_page_architecture_readiness.py`
 
-## Odoo witness summary
+## legacy_source witness summary
 
-Odoo taught us the pattern:
+legacy_source taught us the pattern:
 
 - true variants only for SKU/price identity,
 - no-variant options for big/customer-choice dimensions,
@@ -99,7 +99,7 @@ Classic Arch proof:
 
 Catalog-wide proof:
 
-- 128 saleable Odoo templates checked,
+- 128 saleable legacy_source templates checked,
 - 48 have no-variant attributes,
 - 45 have multi-select attributes,
 - option complexity is systemic, not a one-off.
@@ -119,7 +119,7 @@ Bad outputs:
 - claims without files/tests/source lines,
 - full catalog launch recommendation,
 - direct checkout expansion for high-ticket decor,
-- copying Odoo code/schema.
+- copying legacy_source code/schema.
 
 ## Parent integration rule
 

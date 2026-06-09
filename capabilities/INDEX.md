@@ -79,7 +79,7 @@ combination.
 
 Workflows. Multi-step. Clear start and finish.
 
-- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing or exposing Odoo-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, live-exposure safety lock separation, and the current all-53 Odoo sellable product local proof.
+- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing or exposing legacy_source-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, live-exposure safety lock separation, and the current all-53 legacy_source sellable product local proof.
 - [erpnext-webshop-guest-party-contract](recipes/erpnext-webshop-guest-party-contract.md) - preserve and verify the `Guest` User/Customer/Portal User/Contact infrastructure that anonymous Webshop product pricing, variants, cart, and cleanup safety depend on.
 - [erpnext-product-blueprint-authoring](recipes/erpnext-product-blueprint-authoring.md) - add staff-authored, local-only ERPNext product blueprints for highly customizable products, with validation, dry-run preview, guarded unpublished local apply, and fixed-price add-on runtime cascade proof.
 
@@ -94,7 +94,7 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-owner-business-access-api](recipes/erpnext-owner-business-access-api.md) - expose owner/support business actions through provider-neutral DTOs, phone-first local UI, fake local data, and assistant-ready read/write boundaries without raw ERPNext record access.
 - [erpnext-inquiry-photo-delivery-contract](recipes/erpnext-inquiry-photo-delivery-contract.md) - keep public inquiry photo uploads aligned across Lead Files, CRM photo rows, customer count-only confirmations, and owner-only Email Queue attachment refs.
 - [erpnext-business-automation-index](recipes/erpnext-business-automation-index.md) - index ERPNext/Frappe business automations by connected, partially connected, required-missing, useful-missing, fake-data, and loud-failure status.
-- [erpnext-catalog-variant-price-parity](recipes/erpnext-catalog-variant-price-parity.md) - audit and repair ERPNext Item variant prices from Odoo/source price enrichment instead of page base price.
+- [erpnext-catalog-variant-price-parity](recipes/erpnext-catalog-variant-price-parity.md) - audit and repair ERPNext Item variant prices from legacy_source/source price enrichment instead of page base price.
 - [erpnext-finance-controlled-automation](recipes/erpnext-finance-controlled-automation.md) - build ERPNext finance/payroll migration surfaces with review queues and accountant approval gates before automation.
 - [erpnext-maintenance-heartbeat-boundary](recipes/erpnext-maintenance-heartbeat-boundary.md) - expose scheduled ERPNext maintenance status through sanitized heartbeat records and a narrow role instead of raw logs or broad admin access.
 - [erpnext-no-live-customer-reminders](recipes/erpnext-no-live-customer-reminders.md) - prepare customer reminder review queues, cadence suggestions, and blockers without live sending or accounting mutation.
@@ -107,7 +107,7 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-simplified-role-verification](recipes/erpnext-simplified-role-verification.md) - verify a simplified ERPNext backend role from login through workspace, shortcuts, permissions, and real records.
 - [external-design-reference-translation](recipes/external-design-reference-translation.md) - translate Claude/designer/prototype reference code into Frappe-owned production files without silently changing the approved visual contract.
 - [fail-loud-operating-law](recipes/fail-loud-operating-law.md) - make forms, automations, documents, containers, and agent claims block false success with actionable failures and verifier evidence.
-- [lt-balloon-color-generated-hero-contract](recipes/lt-balloon-color-generated-hero-contract.md) - generate or revise LT balloon/category hero images from owner/Odoo color names and swatches, with hex values treated only as matching approximations.
+- [lt-balloon-color-generated-hero-contract](recipes/lt-balloon-color-generated-hero-contract.md) - generate or revise LT balloon/category hero images from owner-approved color names and swatches, with hex values treated only as matching approximations.
 - [lt-frappe-erpnext-quirks-library](recipes/lt-frappe-erpnext-quirks-library.md) - candidate triage card for LT stack quirks (status, symptom, cause, guardrail, verifier) to check before repeating old framework mistakes.
 - [large-source-document-intake](recipes/large-source-document-intake.md) - chunk and source-map large LT reference documents before using them for catalog, policy, checkout, or migration claims.
 - [launch-repo-cleanup-and-evidence-retention](recipes/launch-repo-cleanup-and-evidence-retention.md) - clean launch repo debris, raw drops, generated evidence, stale mirrors, and historical experiment output without deleting active source or other-agent work.

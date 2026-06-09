@@ -20,8 +20,8 @@ CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 METHOD = "locally_twisted.verify.product_page_architecture_readiness.run"
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_CATALOG = ROOT / "_resources" / "odoo-live" / "catalog.json"
-CONTAINER_SOURCE_CATALOG = "/tmp/lt-odoo-live-catalog.json"
+SOURCE_CATALOG = ROOT / "_resources" / "catalog-source" / "catalog.json"
+CONTAINER_SOURCE_CATALOG = "/tmp/lt-catalog-source-catalog.json"
 
 
 class ArchitectureReadinessFail(Exception):

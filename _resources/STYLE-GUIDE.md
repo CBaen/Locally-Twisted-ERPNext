@@ -11,7 +11,7 @@ Civic Celebration is the structural foundation, Slate Blue and Berry is the
 main palette discipline, and the Locally Twisted Brand Direction banner is the
 quality bar for typography, icon work, and premium corporate finish.
 
-The older Odoo guide is reference material only. Claude-era notes and design
+The older legacy_source guide is reference material only. Claude-era notes and design
 competition files can provide useful history, but they are not authority unless
 their claims are verified against this repo and the running ERPNext site.
 The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 because
@@ -28,7 +28,7 @@ Existing real/proof photos are reserved for portfolio, product, and proof
 surfaces. It also keeps the portfolio correction:
 portfolio photos carry the proof alone, without captions or visible frame
 wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
-It also adds the balloon color addendum as the source for owner/Odoo swatches,
+It also adds the balloon color addendum as the source for owner-approved swatches,
 supplier-style color names, drawer grouping, and best web-match hex values.
 
 ---
@@ -79,8 +79,8 @@ Practical translation:
 - Treat `If it can fail, it must fail loudly` as the operating law. A route,
   form, document, automation, container, or claim is not done if failure can
   look like success.
-- Treat old Odoo, Claude, handoff, and design-competition files as claims to verify.
-- Do not copy implementation language from the Odoo guide into ERPNext work.
+- Treat old legacy_source, Claude, handoff, and design-competition files as claims to verify.
+- Do not copy implementation language from the legacy_source guide into ERPNext work.
 - When this file conflicts with current verified route/form decisions, check
   `locally-twisted-decisions.md` and the running site before editing.
 - Do not use the deleted `_resources/design-guide/` synthesis, old light-blue/blush screenshots, or its Next.js TSX files as current visual guidance.
@@ -258,7 +258,7 @@ photos provide most color.
 
 Balloon color selection, generated hero prompts, and customer color matching use
 the separate addendum: [`STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`](STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md).
-The balloon color name and owner/Odoo swatch image are the authority; sampled
+The balloon color name and owner-approved swatch image are the authority; sampled
 hex values are only web approximations.
 
 ### Core Palette

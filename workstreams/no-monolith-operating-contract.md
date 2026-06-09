@@ -47,7 +47,7 @@ immediately; it is a warning list for future agents before they add more.
 - `apps/locally_twisted/locally_twisted/seed/sync_invoice_branding.py` - 611 lines.
 - `apps/locally_twisted/locally_twisted/www/book.py` - 593 lines.
 - `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py` - 579 lines.
-- `scripts/setup/scrape_odoo_live.py` - 571 lines.
+- `scripts/setup/scrape_legacy_source_live.py` - 571 lines.
 - `apps/locally_twisted/locally_twisted/www/shop.py` - 556 lines.
 - `apps/locally_twisted/locally_twisted/maintenance/heartbeat.py` - 502 lines.
 

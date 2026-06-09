@@ -3,7 +3,7 @@
 /contact renders the form partial. /book redirects to /contact?intent=quick.
 
 Spec: Hetzner http://5.78.136.133/book — saved 2026-04-29 to
-_resources/odoo-live-snapshot/hetzner-book.html. The local Odoo clone is
+_resources/retired-source-snapshot/hetzner-book.html. The local legacy_source clone is
 stale; do not use it as canonical.
 
 The form mirrors Hetzner's structure with the current /contact consolidation:
@@ -39,7 +39,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address
 
-from locally_twisted import commerce_rules, lead_cascade
+from locally_twisted import commerce_rules, lead_cascade, marketing_measurement
 from locally_twisted.failure_recorder import record_backend_failure
 from locally_twisted.inquiry_sales_filter import classify_inquiry_sales_solicitation
 
@@ -201,6 +201,9 @@ def submit_book_inquiry():
     """
     fd = frappe.form_dict
     _validate_inquiry_spam_gate(fd)
+    marketing_attribution = marketing_measurement.normalize_public_attribution(
+        fd.get(marketing_measurement.ATTRIBUTION_FORM_FIELD)
+    )
 
     # Event basics
     occasion = (fd.get("x_occasion_type") or "").strip()
@@ -447,6 +450,7 @@ def submit_book_inquiry():
         delivery_notes, package_notes, other_notes, description, attached, payment_rule,
         photo_uploads,
     )
+    marketing_measurement.record_lead_attribution_note(lead, marketing_attribution)
     business_notification = _send_deferred_business_notification(
         lead,
         photo_uploads,

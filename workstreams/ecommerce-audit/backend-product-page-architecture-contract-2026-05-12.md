@@ -30,7 +30,7 @@ allowed by this contract.
 - `apps/locally_twisted/locally_twisted/product_options.py` exposes the live
   Webshop projection for product templates. It reads the source catalog from
   `lt_source_catalog_path`, `LT_SOURCE_CATALOG_PATH`,
-  `/tmp/lt-odoo-live-catalog.json`, or the app-local `_resources` path.
+  `/tmp/lt-catalog-source-catalog.json`, or the app-local `_resources` path.
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item_details.html`
   emits `.js-lt-product-page-architecture` JSON on product pages.
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html`

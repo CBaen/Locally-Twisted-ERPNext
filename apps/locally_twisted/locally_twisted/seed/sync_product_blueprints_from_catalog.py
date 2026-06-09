@@ -1,4 +1,4 @@
-"""Create owner-editable Product Setup records from the current Website Items.
+﻿"""Create owner-editable Product Setup records from the current Website Items.
 
 This sync does not mutate Item, Website Item, Item Price, route, or checkout
 records. It only creates or fills LT Product Blueprint records so owners can
@@ -24,9 +24,9 @@ PRICE_LIST = "Standard Selling"
 SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
 DEFAULT_DATA_DIRS = [
     Path("/tmp/lt-product-gallery-source"),
-    Path("/workspace/_resources/odoo-live"),
-    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
-    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
+    Path("/workspace/_resources/catalog-source"),
+    Path("/home/frappe/frappe-bench/_resources/catalog-source"),
+    Path("/home/frappe/frappe-bench/sites/_resources/catalog-source"),
 ]
 
 

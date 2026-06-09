@@ -22,14 +22,14 @@ SIMPLE_REHEARSAL_PRODUCTS = {
         "source_price": 175.0,
         "source_variant_count": 30,
         "required_attributes": ("Missionary", "skin color", "Hair color"),
-        "source_price_basis": "Odoo base price; live ERPNext snapshot prices match every variant",
+        "source_price_basis": "legacy_source base price; live ERPNext snapshot prices match every variant",
     },
     "mothers-day-front-yard-7-column": {
         "source_name": "Mother's day front yard 7' Column",
         "source_price": 140.0,
         "source_variant_count": 0,
         "required_attributes": (),
-        "source_price_basis": "Odoo base price",
+        "source_price_basis": "legacy_source base price",
     },
 }
 

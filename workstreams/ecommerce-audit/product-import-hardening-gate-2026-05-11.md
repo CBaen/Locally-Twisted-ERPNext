@@ -14,7 +14,7 @@ This handoff is written for peer GPT 5.5 agents working in the LT Frappe stack:
 - App order matters: `locally_twisted` must stay last in `installed_apps` so hooks, fixtures, and template overrides win.
 - Frappe Cloud target: Git-backed private bench deployment; repo changes must persist through hooks, fixtures, patches, and site config, not local Desk-only edits.
 - Technical code/verifier choices route to Leader. Ask the user only for business-owner approvals such as destructive catalog purge/import, real catalog approval, live payment tests, secrets/account access, DNS cutover, or production customer-record mutation.
-- Odoo CE 19 remains a read-only source witness for product meaning. If source mapping goes beyond the existing approved packets, route it to the Odoo-to-Frappe specialist instead of guessing.
+- legacy_source CE 19 remains a read-only source witness for product meaning. If source mapping goes beyond the existing approved packets, route it to the legacy_source-to-Frappe specialist instead of guessing.
 
 ## Gate Command
 
@@ -76,10 +76,10 @@ The import must derive Website Item page template and buying path from the sourc
 
 Before destructive import is allowed, the gate requires:
 
-- `_resources/odoo-live/catalog.json`
-- `_resources/odoo-live/slug_to_group.json`
-- `_resources/odoo-live/value_normalize_map.json`
-- `_resources/odoo-live/images/`
+- `_resources/catalog-source/catalog.json`
+- `_resources/catalog-source/slug_to_group.json`
+- `_resources/catalog-source/value_normalize_map.json`
+- `_resources/catalog-source/images/`
 - `15-product-page-contract-source-audit.json`
 - `21-product-page-price-enrichment-candidates.json`
 - `22-product-add-on-approval-packet.json`
@@ -90,7 +90,7 @@ Before destructive import is allowed, the gate requires:
 
 ## V1 Product Re-Export/Re-Import Acceptance Proof
 
-Owner question: will the Odoo CE 19 V1 product re-export/re-import path produce
+Owner question: will the legacy_source CE 19 V1 product re-export/re-import path produce
 correct ERPNext/Frappe Webshop product pages?
 
 Acceptance answer is **only yes after a post-import proof passes**. The proof
@@ -119,7 +119,7 @@ Post-import acceptance checks:
    content must be traceable to ERPNext/Frappe records or approved source
    packets.
 3. Variant behavior matches source meaning:
-   where Odoo source says a selected variant changes image or price, the
+   where legacy_source source says a selected variant changes image or price, the
    ERPNext Item Variant / Item Price / media mapping must drive the visible
    change. If source says no public checkout variant exists, the product must
    stay quote-first or blocked from paid checkout.
@@ -196,7 +196,7 @@ Fresh read-only gate result on 2026-05-12:
   exclusions, 225 deterministic source-priced sale units.
 - Purge scope: 48 templates, 6,894 variants, 6,928 prices.
 - Snapshot: fresh local snapshot exists at
-  `audits/odoo-erpnext-migration-audit-2026-05-08/current-state-snapshot-2026-05-11-1050`.
+  `audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-11-1050`.
 - Backup guard path recorded:
   `/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-database.sql.gz`.
 - Import runner contains required product-page authority fields and destructive

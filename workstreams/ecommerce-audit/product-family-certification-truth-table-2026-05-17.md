@@ -2,13 +2,13 @@
 
 ## Superseded Current State
 
-This tranche table is historical as of the later 2026-05-17 all-Odoo sellable
+This tranche table is historical as of the later 2026-05-17 all-legacy_source sellable
 reimport. Do not use the older tranche counts below as the current product
 queue.
 
 Current control artifact:
-`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
-Current verified state: 53 Odoo-imported products included, 0 excluded, 290
+`workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`.
+Current verified state: 53 legacy_source-imported products included, 0 excluded, 290
 priced sale units, 53 checkout-allowed product pages, and all 53 live Website
 Item routes browser-proved in two batches before restoring
 `lt_ecommerce_paused=1`. The remaining work is optional-surface follow-through:
@@ -20,7 +20,7 @@ until mapped.
 Historical backend-first certification map for existing Locally Twisted
 ecommerce product families. This was the control artifact for the earlier
 tranche goal. The active control artifact is now
-`odoo-sellable-product-reimport-2026-05-17.md`.
+`legacy_source-sellable-product-reimport-2026-05-17.md`.
 
 This is not a live-release approval. `lt_ecommerce_paused=1` remains the
 customer exposure lock.
@@ -30,7 +30,7 @@ customer exposure lock.
 GL corrected the product model on 2026-05-17: there are no business
 "quote-first" products. That label came from agent-side safety modeling, not
 from Locally Twisted's intended catalog. If it is a product, the target state is
-purchasable. Pricing and product details should come from the Odoo product
+purchasable. Pricing and product details should come from the legacy_source product
 export list; if a product cannot be mapped cleanly, repull or repair the import
 source instead of treating "quote-first" as a final business lane.
 
@@ -65,7 +65,7 @@ Website Item was unpublished.
 | Product-page runtime | PASS | `python scripts/verify/product_page_runtime_contract.py`; selected config preserved through SO/SI/Quotation paths in rollback |
 | Cart/checkout runtime | PASS | `python scripts/verify/cart_checkout_contract.py`; blocked-product guards, cart line keys, add-ons, over-limit quantities, stale payload failures, and color-recipe/variant mismatch failures guarded |
 | Open-mode product UX | PASS / local only | Temporarily set local `lt_ecommerce_paused=0`, ran `node scripts/verify/post_import_checkout_proof.js`, restored `lt_ecommerce_paused=1`, and cleared website cache; product page, cart, and checkout preview passed for all 18 current checkout families at desktop and mobile widths |
-| Product source repair map | PASS | `python scripts/verify/product_source_repair_map.py`; 53/53 Odoo export rows found, 18 certified checkout products, 35 blocked-until-certified products, 0 contract failures |
+| Product source repair map | PASS | `python scripts/verify/product_source_repair_map.py`; 53/53 legacy_source export rows found, 18 certified checkout products, 35 blocked-until-certified products, 0 contract failures |
 | Simple purchasable rehearsal | PASS / backend only | `python scripts/verify/simple_purchasable_rehearsal_contract.py`; 4 simple repair-lane products, 33 sale SKUs, source-backed prices, SO/SI line preservation, and rollback cleanup passed |
 | Simple purchasable browser proof | PASS / local only | `python scripts/verify/simple_purchasable_browser_proof.py`; temporary local opening proved the same 4 products through desktop/mobile product pages, cart, checkout preview, and verified restoration |
 | Simple purchasable payment cascade | PASS / rollback only | `python scripts/verify/simple_purchasable_payment_cascade_contract.py`; all 33 sale lines passed Payment Request, Payment Entry, Sales Invoice, receipt, operator email, welcome email, idempotency, and rollback cleanup |
@@ -229,7 +229,7 @@ source meaning, add-ons, and media/pricing presentation are reviewed.
 2. Get final owner/product-scope approval before exposing the simple
    repair-lane products or the multi-color repair-lane products to customers.
 3. Use `product-source-repair-map-2026-05-17.md` to repair the remaining
-   product-family holds into purchasable products; repull the Odoo export if
+   product-family holds into purchasable products; repull the legacy_source export if
    current source data is incomplete or unclear.
 4. Keep all other product families blocked, needs-review, or hidden until their
    tranche gate passes; do not present `quote_first` as the business model.

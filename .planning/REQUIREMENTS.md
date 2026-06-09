@@ -59,7 +59,7 @@
 - [ ] **CUTOVER-03**: Site ownership transferred to Jeff Kimber's Frappe Cloud team account. Cameron retains developer-role access only.
 - [ ] **CUTOVER-04**: Jeff onboarded — can log in, place a test order in his own admin, and navigate without assistance.
 - [ ] **CUTOVER-05**: Old `locallytwisted.com` site decommissioned and snapshotted.
-- [ ] **CUTOVER-06**: References retired per CLAUDE.md "Reference Disposition": Odoo dir archived + removed from local; failed Hetzner deployment shut down; GitHub Odoo repo marked read-only.
+- [ ] **CUTOVER-06**: References retired per CLAUDE.md "Reference Disposition": legacy_source dir archived + removed from local; failed Hetzner deployment shut down; GitHub legacy_source repo marked read-only.
 
 ---
 
@@ -79,7 +79,7 @@
 - **Standalone Services index page** — service info lives on individual service pages and homepage (GL directive 2026-04-26)
 - **Standalone /pricing page** — pricing calculator embedded on Balloon Twisting + Face Painting service page (GL directive 2026-04-26)
 - **Gusto / third-party payroll** — agency standard is ERPNext native HRMS for all clients (decision 2026-04-26)
-- **"Migration" framing of any kind** — this is a NEW BUILD; the prior Odoo attempt is reference material that will be retired
+- **"Migration" framing of any kind** — this is a NEW BUILD; the prior legacy_source attempt is reference material that will be retired
 - **Multi-company in one ERPNext site** — rejected; per-client isolation is structural
 - **Self-hosted Hetzner production** — superseded by Frappe Cloud (managed, transferable per-site)
 - **Telling Jeff the verdict before there's a working replacement** — stealth on the verdict until Phase 1 is demo-ready

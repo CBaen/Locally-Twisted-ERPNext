@@ -1,0 +1,270 @@
+{
+  "affected_product_count": 9,
+  "approved_for_checkout_count": 0,
+  "purpose": "Source-backed approval packet for legacy_source-derived add-on axes before ERPNext import/reopen.",
+  "review_axes": [
+    {
+      "approval_required_for_checkout": true,
+      "axis": "Add Bouquet",
+      "checkout_allowed": false,
+      "decision_needed": "Decide whether companion bouquets are product bundles, separate checkout lines, quote-only upsells, or removed from import.",
+      "product_count": 1,
+      "products": [
+        {
+          "attribute_value_count": 3,
+          "category_hint": "Deliveries",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "birthday-deliveries",
+          "source_url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+          "source_values": [
+            "5 balloon bouquet",
+            "7 balloon bouquet",
+            "Small 3 balloon bouquet"
+          ],
+          "title": "Birthday Deliveries",
+          "variant_rows_with_axis": 2430
+        }
+      ],
+      "recommended_safe_default": "quote_only_until_approved",
+      "source_note": "May be optional companion bouquet on deliveries; needs GL/product-family confirmation.",
+      "source_value_count": 3,
+      "source_values": [
+        "5 balloon bouquet",
+        "7 balloon bouquet",
+        "Small 3 balloon bouquet"
+      ],
+      "variant_rows_with_axis": 2430
+    },
+    {
+      "approval_required_for_checkout": true,
+      "axis": "Add ons",
+      "checkout_allowed": false,
+      "decision_needed": "Decide whether each value is a priced add-on, included decor choice, quote-only prompt, or source artifact to drop.",
+      "product_count": 3,
+      "products": [
+        {
+          "attribute_value_count": 2,
+          "category_hint": "Arches",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "premium-organic-arch",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+          "source_values": [
+            "Foil stars",
+            "themed foils"
+          ],
+          "title": "Premium Organic Arch",
+          "variant_rows_with_axis": 424
+        },
+        {
+          "attribute_value_count": 2,
+          "category_hint": "Columns",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "pemium-organic-column",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+          "source_values": [
+            "Foil stars",
+            "themed foils"
+          ],
+          "title": "Pemium Organic Column",
+          "variant_rows_with_axis": 636
+        },
+        {
+          "attribute_value_count": 3,
+          "category_hint": "Arches",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "classic-organic-arch",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+          "source_values": [
+            "Foil stars",
+            "themed foils",
+            "None"
+          ],
+          "title": "Classic Organic Arch",
+          "variant_rows_with_axis": 636
+        }
+      ],
+      "recommended_safe_default": "quote_only_until_approved",
+      "source_note": "Potential optional add-ons; needs product-family mapping.",
+      "source_value_count": 3,
+      "source_values": [
+        "Foil stars",
+        "themed foils",
+        "None"
+      ],
+      "variant_rows_with_axis": 1696
+    },
+    {
+      "approval_required_for_checkout": true,
+      "axis": "Orbz toppers",
+      "checkout_allowed": false,
+      "decision_needed": "Decide topper eligibility, visual/media treatment, price, fulfillment notes, and quote-vs-checkout behavior.",
+      "product_count": 2,
+      "products": [
+        {
+          "attribute_value_count": 10,
+          "category_hint": "Columns",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "star-column",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+          "source_values": [
+            "Black/gold",
+            "Blue Marble",
+            "Blue/gold",
+            "Blue/Green",
+            "Fantacy",
+            "Gold Marble",
+            "Pink Marble",
+            "Pink/gold",
+            "Purple",
+            "Red"
+          ],
+          "title": "Star Column",
+          "variant_rows_with_axis": 1160
+        },
+        {
+          "attribute_value_count": 10,
+          "category_hint": "Table Decor",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "marble-table-decor",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+          "source_values": [
+            "Black/gold",
+            "Blue Marble",
+            "Blue/gold",
+            "Blue/Green",
+            "Fantacy",
+            "Gold Marble",
+            "Pink Marble",
+            "Pink/gold",
+            "Purple",
+            "Red"
+          ],
+          "title": "Marble table decor",
+          "variant_rows_with_axis": 10
+        }
+      ],
+      "recommended_safe_default": "quote_only_until_approved",
+      "source_note": "Potential optional topper upgrades; needs product-family mapping.",
+      "source_value_count": 10,
+      "source_values": [
+        "Black/gold",
+        "Blue Marble",
+        "Blue/gold",
+        "Blue/Green",
+        "Fantacy",
+        "Gold Marble",
+        "Pink Marble",
+        "Pink/gold",
+        "Purple",
+        "Red"
+      ],
+      "variant_rows_with_axis": 1170
+    },
+    {
+      "approval_required_for_checkout": true,
+      "axis": "Plush add ons",
+      "checkout_allowed": false,
+      "decision_needed": "Decide product eligibility, supplier/stock behavior, price, quantity rule, and whether plush should ever be paid checkout.",
+      "product_count": 3,
+      "products": [
+        {
+          "attribute_value_count": 2,
+          "category_hint": "Get-Well Bouquets",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "butterfly-get-well-bouquet-latex-free",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+          "source_values": [
+            "Teddy Bear",
+            "None"
+          ],
+          "title": "Butterfly \"GET WELL\" Bouquet (Latex free)",
+          "variant_rows_with_axis": 2
+        },
+        {
+          "attribute_value_count": 2,
+          "category_hint": "Get-Well Bouquets",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "bandage-get-well-bouquet-latex-free",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+          "source_values": [
+            "Teddy Bear",
+            "None"
+          ],
+          "title": "Bandage \"GET WELL\" Bouquet (Latex free)",
+          "variant_rows_with_axis": 2
+        },
+        {
+          "attribute_value_count": 2,
+          "category_hint": "Get-Well Bouquets",
+          "checkout_allowed": false,
+          "commerce_lane": "quote_first",
+          "commerce_lane_label": "Quote request first",
+          "current_runtime_behavior": "route_to_quote_before_paid_checkout",
+          "product_page_type": "complex_custom_product",
+          "product_page_type_label": "Custom quote page",
+          "slug": "shooting-star-get-well-bouquet-latex-free",
+          "source_url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+          "source_values": [
+            "Teddy Bear",
+            "None"
+          ],
+          "title": "Shooting star \"GET WELL\" Bouquet (Latex free)",
+          "variant_rows_with_axis": 2
+        }
+      ],
+      "recommended_safe_default": "quote_only_until_approved",
+      "source_note": "Potential optional plush upgrades; needs product-family mapping.",
+      "source_value_count": 2,
+      "source_values": [
+        "Teddy Bear",
+        "None"
+      ],
+      "variant_rows_with_axis": 6
+    }
+  ],
+  "review_axis_count": 4,
+  "safe_default": "quote_only_until_approved",
+  "schema_version": "lt-product-add-on-approval-packet-v1",
+  "source_product_count": 53,
+  "warning": "This packet does not approve checkout. Every review-only add-on must stay quote-only until GL/Locally Twisted approves product-family mapping, pricing, quantity, and fulfillment behavior."
+}

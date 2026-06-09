@@ -4,7 +4,7 @@
 
 [VERIFIED LOCAL PASS — customer-surface white-label gate added; one unrelated backend blocker remains in business automation index]
 
-Launch-blocking cleanup for Locally Twisted customer/client-facing surfaces. Goal: Jeff, customers, accounts payable contacts, event buyers, procurement contacts, and public visitors do not see ERPNext/Frappe/Odoo/platform branding or framework-language leakage in outward surfaces.
+Launch-blocking cleanup for Locally Twisted customer/client-facing surfaces. Goal: Jeff, customers, accounts payable contacts, event buyers, procurement contacts, and public visitors do not see ERPNext/Frappe/legacy_source/platform branding or framework-language leakage in outward surfaces.
 
 ## Scope
 
@@ -44,7 +44,7 @@ C. Verification: durable white-label gates that separate backend false positives
 
 - ERPNext
 - Frappe
-- Odoo
+- legacy_source
 - Built on Frappe
 - framework/platform phrasing that exposes implementation
 - internal terms such as Desk, DocType, Sales Order, Lead, Payment Entry when shown to public customers where a friendly label exists
@@ -69,7 +69,7 @@ Operator-only emails may keep backend record labels/links when needed for operat
   - rendered outbound preview HTML,
   - public/local rendered route visible text,
   - generator/banner source leaks without failing on framework asset URLs.
-- Expanded Playwright public white-label word gate to include Odoo.
+- Expanded Playwright public white-label word gate to include legacy_source.
 - Regenerated HTML previews under `output/playwright/outbound-documents-white-label-20260509/`.
 
 ## Verified gates 2026-05-09 23:20 MDT

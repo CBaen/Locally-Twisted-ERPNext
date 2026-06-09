@@ -66,7 +66,7 @@ def project_required_variant_combo(combo: Mapping[str, str] | None) -> dict[str,
 
 
 def dedupe_required_variant_rows(rows: Iterable[Mapping[str, Any]] | None) -> list[dict[str, Any]]:
-    """Project scraped Odoo rows to required attrs and remove add-on duplicates."""
+    """Project scraped legacy_source rows to required attrs and remove add-on duplicates."""
     deduped: dict[tuple[tuple[str, str], ...], dict[str, Any]] = {}
     for row in rows or []:
         combo = project_required_variant_combo(row.get("combo") if isinstance(row, Mapping) else None)

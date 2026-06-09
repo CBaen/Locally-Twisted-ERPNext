@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-"""Stage Odoo catalog media in Docker and map it onto ERPNext variants.
+﻿#!/usr/bin/env python3
+"""Stage catalog source catalog media in Docker and map it onto ERPNext variants.
 
 Run:
   python scripts/setup/sync_variant_media.py
@@ -19,7 +19,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "_resources" / "odoo-live"
+SOURCE = ROOT / "_resources" / "catalog-source"
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 STAGE = "/tmp/lt-variant-media"

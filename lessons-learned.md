@@ -132,7 +132,7 @@ fulfillment panels, product contracts, or category fallback logic.
 ## 2026-05-19 - Price existence is not source-price truth
 
 The Easter Bunny Ear Arch failure was not a product-page styling bug and not a
-single Odoo import cleanup. GL selected different sizes and the price did not
+single legacy_source import cleanup. GL selected different sizes and the price did not
 change. The cart/checkout architecture was mostly doing the right thing by
 trusting server-side ERPNext `Item Price`; the deeper failure was that many
 variant Item Prices had been flattened upstream by an import path and the
@@ -190,7 +190,7 @@ captured.
 
 ## 2026-05-18 - Sellable product does not mean raw-source checkout
 
-The all-Odoo sellable reimport correctly restored every imported item as a
+The all-legacy_source sellable reimport correctly restored every imported item as a
 product, but the next review exposed a different failure: high-complexity
 products with 50+ raw color choices were still direct checkout products. That
 made products "sellable" by flattening business nuance into unsafe SKU axes.
@@ -210,7 +210,7 @@ expose every source option directly to payment.
 
 ## 2026-05-18 - One-off data repairs must become import closeout steps
 
-After the all-Odoo sellable reimport, `catalog_variant_contract.py` failed
+After the all-legacy_source sellable reimport, `catalog_variant_contract.py` failed
 because 390 old `Add Foil Number` variants were enabled again as active SKU
 choices. The repair script already existed and worked, but it was not wired
 into the import runner, so the system depended on an agent remembering to run
@@ -249,7 +249,7 @@ category/reference media - into one generic "hold everything" rule.
 
 ## 2026-05-17 - Browser proof route authority must be the live Website Item route
 
-After the all-Odoo import, `post_import_checkout_proof.js` correctly loaded
+After the all-legacy_source import, `post_import_checkout_proof.js` correctly loaded
 all 53 products from the V1 manifest but initially used planned manifest routes
 for browser navigation. `baby-shower-combination-photo-opt` failed at 404
 because the current Website Item route is
@@ -267,7 +267,7 @@ reason.
 
 ## 2026-05-17 - Product contract authority must outrank category fallback
 
-The local all-Odoo sellable reimport correctly stored `7-butterfly-column` as
+The local all-legacy_source sellable reimport correctly stored `7-butterfly-column` as
 `complex_custom_product|checkout`, but the rendered page still showed the
 quote-first gate until the Frappe web worker restarted. The immediate code
 cause was older product-page/shop/cart paths using item-group/category checkout
@@ -316,7 +316,7 @@ action alone.
 
 ## 2026-05-17 - Source color casing drift can break product proof
 
-The multi-color rehearsal initially failed before checkout because Odoo had
+The multi-color rehearsal initially failed before checkout because legacy_source had
 duplicate source color labels with different casing, such as `Blue Slate` /
 `Blue slate` and `Smoke Grey` / `Smoke grey`. The Item Attribute fixture path
 already knew to collapse those values, but the runtime color canonicalizer did
@@ -324,7 +324,7 @@ not yet know the same aliases.
 
 **Counter-move:** color cleanup must be shared by import, product-page runtime,
 cart/checkout validation, and verifier expectations. When a source product
-looks short by one or two color values, check the Odoo value-normalize map
+looks short by one or two color values, check the legacy_source value-normalize map
 before assuming the product export or ERPNext variants are wrong.
 
 ---
@@ -464,7 +464,7 @@ unverified media, failed verifier, missing staging proof, or owner approval.
 
 ## 2026-05-14 - Employee product authoring cannot depend on an agent editing code
 
-The ecommerce architecture could preserve existing fixture/Odoo-derived product
+The ecommerce architecture could preserve existing fixture/legacy_source-derived product
 meaning, but GL clarified that employees must be able to add future highly
 custom products through the software interface. A flow where Codex writes each
 product as code does not bridge the operational gap.
@@ -472,7 +472,7 @@ product as code does not bridge the operational gap.
 **Counter-move:** custom product work needs a staff-facing record, validation
 evidence, preview/apply plan, and runtime cascade proof. For LT that surface is
 `LT Product Blueprint`, backed by `product_blueprint_contract.py` and
-`product_blueprint_live_contract.py`. Treat Odoo as a behavior witness, not the
+`product_blueprint_live_contract.py`. Treat legacy_source as a behavior witness, not the
 boundary of what the product architecture can express.
 
 ---
@@ -803,7 +803,7 @@ The ecommerce audit dispatch proved the failure mode clearly: Lane B, C, and D p
 
 ## 2026-05-10 - Version mismatch labels are part of ecommerce evidence
 
-The destination runtime reported ERPNext `15.105.0` and Frappe `15.106.0`, while the dispatch anchor named `frappe/erpnext:v15.105.0` and the container image appeared as `locally-twisted-erpnext:v15`. The Odoo source witness local module reported `19.0.2.15.0`, while prior notes warn production may be `19.0.2.14.0`.
+The destination runtime reported ERPNext `15.105.0` and Frappe `15.106.0`, while the dispatch anchor named `frappe/erpnext:v15.105.0` and the container image appeared as `locally-twisted-erpnext:v15`. The legacy_source source witness local module reported `19.0.2.15.0`, while prior notes warn production may be `19.0.2.14.0`.
 
 **Counter-move:** carry `[VERSION-MISMATCH]` or equivalent labels directly in research artifacts and handoffs. Do not let a useful proof slice become a false universal claim when source/destination versions are unresolved.
 
@@ -1158,7 +1158,7 @@ against a mixed-duration case, not only the symmetric easy case.
 After the bouquet-size prices were repaired, a fresh audit question exposed the
 next risk: the system had proof for the repaired bouquet family, not for every
 product. Live ERPNext still had 36 non-bouquet variant templates with one price
-point each, and quick Odoo resolver probes proved several longer arch variants
+point each, and quick legacy_source resolver probes proved several longer arch variants
 were still underpriced.
 
 **Counter-move:** phrase pricing closeout by family and verifier. "Bouquet
@@ -1169,19 +1169,19 @@ price-contract coverage.
 
 ---
 
-## 2026-05-08 - Odoo page base price is not variant price
+## 2026-05-08 - legacy_source page base price is not variant price
 
 The Unicorn Bouquet repair proved the catalog importer had flattened dynamic
-Odoo variant prices into the page base price. The page JSON-LD/base price showed
-$35, but Odoo's `/website_sale/get_combination_info` returned the real bouquet
+legacy_source variant prices into the page base price. The page JSON-LD/base price showed
+$35, but legacy_source's `/website_sale/get_combination_info` returned the real bouquet
 size prices: Small $35, Medium $70, Large $85. Full combos with the optional
 foil-number add-on returned a different number again, so optional add-ons must
 not be confused with the ERPNext-required variant price.
 
-**Counter-move:** any Odoo-to-ERPNext product import that touches variants must
-resolve prices through Odoo's combination endpoint, not the product page base
+**Counter-move:** any legacy_source-to-ERPNext product import that touches variants must
+resolve prices through legacy_source's combination endpoint, not the product page base
 price. If optional axes are intentionally dropped from ERPNext variants, query
-Odoo with only the required attribute IDs for the ERPNext Item Price. Guard
+legacy_source with only the required attribute IDs for the ERPNext Item Price. Guard
 launch-critical products with `npm run test:product-prices` or an equivalent
 price contract.
 
@@ -1855,7 +1855,7 @@ Stage movement needs to do real work, but not every stage is ready to carry fina
 
 ## 2026-05-02 - Client CRM stages should not hijack ERPNext native status
 
-The Odoo reference used `Archive` to remove cards from the active Kanban, but its local stage data also marked Archive like a won/folded stage. Copying those values into ERPNext `Lead.status` would risk distorting conversion logic, finance/reporting assumptions, or future workflow triggers.
+The legacy_source reference used `Archive` to remove cards from the active Kanban, but its local stage data also marked Archive like a won/folded stage. Copying those values into ERPNext `Lead.status` would risk distorting conversion logic, finance/reporting assumptions, or future workflow triggers.
 
 **Counter-move:** when translating CRM stages into ERPNext, first separate "what the operator needs to see" from "what ERPNext uses internally." Put client-friendly board stages on a custom Select field when there is any chance native status affects reporting or accounting. Treat `Archive` as off-board only unless the business explicitly says it is won, lost, billable, or ready for a finance cascade.
 
@@ -1961,7 +1961,7 @@ Header/footer/menu/product verification generated many Chrome/Edge profile folde
 
 ### Context
 
-GL exhausted. Catalog port shipped that morning but visually disappointed them ("I hate the entire shop"). They directed: clone Hetzner Odoo deployment wholesale into ERPNext-coded chrome + pages, keep only the homepage, use agent teams. Then went to nap. I ran an autonomous chain: tool research → mirror → /plan-deepen → 6 pre-tasks → triadic chrome rebuild → fix round → audit. Chrome shipped (with desktop polish flagged); Phase 2 page rebuilds deferred to next session.
+GL exhausted. Catalog port shipped that morning but visually disappointed them ("I hate the entire shop"). They directed: clone Hetzner legacy_source deployment wholesale into ERPNext-coded chrome + pages, keep only the homepage, use agent teams. Then went to nap. I ran an autonomous chain: tool research → mirror → /plan-deepen → 6 pre-tasks → triadic chrome rebuild → fix round → audit. Chrome shipped (with desktop polish flagged); Phase 2 page rebuilds deferred to next session.
 
 ### Lesson 1 — When GL names a frame, the live correction beats the documented rule.
 
@@ -1997,7 +1997,7 @@ Python's `hash()` builtin uses PYTHONHASHSEED which is randomized per process by
 
 ### Lesson 9 — Auto-orchestrate the architectural calls + log reversibility, don't ask GL when they're asleep.
 
-GL gave clear authorization: *"if it's Odoo only and there's an ERPNext equivalent, do that. OR DON'T, and just tell me what you couldn't do."* Two architectural decisions came up mid-build (mega menu IA — extend Item Group tree vs template-grouping; category URL shape — match Hetzner's `/shop/category/X-N` vs ERPNext native `/shop-items/X`). I picked the lower-blast-radius option for both, logged them as reversible in `locally-twisted-decisions.md`, and proceeded. GL's wake-up message confirmed this was the right shape: "you've done a really good job so far." **Counter-move:** when GL is unavailable and authorization is broad, decide + log + proceed. Don't pile up gates that block work.
+GL gave clear authorization: *"if it's legacy_source only and there's an ERPNext equivalent, do that. OR DON'T, and just tell me what you couldn't do."* Two architectural decisions came up mid-build (mega menu IA — extend Item Group tree vs template-grouping; category URL shape — match Hetzner's `/shop/category/X-N` vs ERPNext native `/shop-items/X`). I picked the lower-blast-radius option for both, logged them as reversible in `locally-twisted-decisions.md`, and proceeded. GL's wake-up message confirmed this was the right shape: "you've done a really good job so far." **Counter-move:** when GL is unavailable and authorization is broad, decide + log + proceed. Don't pile up gates that block work.
 
 ### Lesson 10 — Read the actual screenshots, don't just trust DOM facts + script flags.
 
@@ -2005,21 +2005,21 @@ The Playwright audit script extracted DOM facts (`.lt-header` count, `.lt-footer
 
 ### What this means for the next instance
 
-The chrome work shipped (Phase 1 of the mirror rebuild). Phase 2 page rebuilds (~12 routes) are next — single focused builder per page is probably the right shape (lower interdependency than chrome). Reserve full triadic for things touching every page. The mirror at `_resources/odoo-live-mirror/` IS the spec — read the relevant page file before each rebuild. GL named the desktop chrome polish issue at session close; address it early in your session as a quick win. Don't ask GL questions they've already answered. Document architectural calls as reversible. Read your own screenshots.
+The chrome work shipped (Phase 1 of the mirror rebuild). Phase 2 page rebuilds (~12 routes) are next — single focused builder per page is probably the right shape (lower interdependency than chrome). Reserve full triadic for things touching every page. The mirror at `_resources/retired-source-mirror/` IS the spec — read the relevant page file before each rebuild. GL named the desktop chrome polish issue at session close; address it early in your session as a quick win. Don't ask GL questions they've already answered. Document architectural calls as reversible. Read your own screenshots.
 
 ---
 
-## 2026-04-30 — Full catalog port from live Odoo to ERPNext webshop
+## 2026-04-30 — Full catalog port from live legacy_source to ERPNext webshop
 
 ### Six lessons from a 53-Website-Item / 10,631-Item / 10,613-Item-Price port
 
-**Context.** GL's directive: rebuild the entire old live Odoo test shop catalog (`http://5.78.136.133/shop`) into ERPNext webshop. Every product, every variant, every option, no exceptions. Result after DB verification: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, 32,002 Item Variant Attribute child rows, 11 Item Group children + restructured hierarchy, mega menu, on-brand product detail pages with inline variant selectors. Smoke tests pass. This was catalog-data porting into a new ERPNext build, not an Odoo migration.
+**Context.** GL's directive: rebuild the entire old live legacy_source test shop catalog (`http://5.78.136.133/shop`) into ERPNext webshop. Every product, every variant, every option, no exceptions. Result after DB verification: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, 32,002 Item Variant Attribute child rows, 11 Item Group children + restructured hierarchy, mega menu, on-brand product detail pages with inline variant selectors. Smoke tests pass. This was catalog-data porting into a new ERPNext build, not an legacy_source migration.
 
 ### Lesson 1 — The catalog source of truth is the LIVE site, not the cached export.
 
-The existing `_resources/odoo-export/catalog.json` (created 2026-04-26) had 51 products. The live re-scrape on 2026-04-30 found **53 products** — Odoo had added `birthday-deliveries` and `large-head-missionary` since the cached export. Five products had `image_url=null` in the cached file but DO have images on the live site (the original scraper's regex missed `data-src` lazy-load patterns). For any catalog work: re-scrape live, don't trust caches.
+The existing `_resources/legacy_source-export/catalog.json` (created 2026-04-26) had 51 products. The live re-scrape on 2026-04-30 found **53 products** — legacy_source had added `birthday-deliveries` and `large-head-missionary` since the cached export. Five products had `image_url=null` in the cached file but DO have images on the live site (the original scraper's regex missed `data-src` lazy-load patterns). For any catalog work: re-scrape live, don't trust caches.
 
-**To do differently:** treat `_resources/odoo-export/catalog.json` as historical reference; produce a fresh `_resources/odoo-live/catalog.json` from the live site at the start of any catalog rebuild.
+**To do differently:** treat `_resources/legacy_source-export/catalog.json` as historical reference; produce a fresh `_resources/catalog-source/catalog.json` from the live site at the start of any catalog rebuild.
 
 ### Lesson 2 — Frappe `installed_apps` order determines who wins template ChoiceLoader resolution.
 
@@ -2084,9 +2084,9 @@ The image file must exist on disk at `sites/<site>/public/files/<slug>.png` befo
 
 This is the right call here even though `!important` chains are normally a code smell — we can't override a compiled JS bundle without forking it. The CSS-hide is contained and removes the jargon at customer-render time.
 
-### Bonus — Odoo's per-product attribute-exclusions data is captured in the scrape and respected.
+### Bonus — legacy_source's per-product attribute-exclusions data is captured in the scrape and respected.
 
-Odoo's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's catalog this filtered down to 10,578 ERPNext Item Variants (vs the naive cartesian count of more). Odoo's `archived_combinations` is also captured but currently empty for LT's catalog.
+legacy_source's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's catalog this filtered down to 10,578 ERPNext Item Variants (vs the naive cartesian count of more). legacy_source's `archived_combinations` is also captured but currently empty for LT's catalog.
 
 The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 �- Delivery themes 27 �- Add Foil Number 10 �- Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
 
@@ -2096,7 +2096,7 @@ ERPNext's `make_variant_item_code` builds variant `item_code` as `<template>-<ab
 
 ### Bonus — Item Attribute Value rejects case-only duplicates.
 
-Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors` — same color, two ptav rows from different attribute lines. ERPNext's Item Attribute validate() throws `Attribute value: Blue Slate must appear only once` (case-insensitive). The fixture builder dedupes case-insensitively + whitespace-normalized, preserves first-seen casing as canonical, and persists a `value_normalize_map.json` so the bulk import script remaps Odoo's lower-case ptav references to the canonical capitalized name. 197 raw values → 195 canonical.
+legacy_source had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors` — same color, two ptav rows from different attribute lines. ERPNext's Item Attribute validate() throws `Attribute value: Blue Slate must appear only once` (case-insensitive). The fixture builder dedupes case-insensitively + whitespace-normalized, preserves first-seen casing as canonical, and persists a `value_normalize_map.json` so the bulk import script remaps legacy_source's lower-case ptav references to the canonical capitalized name. 197 raw values → 195 canonical.
 
 ---
 
@@ -2106,7 +2106,7 @@ Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors
 
 ### When GL points at a URL, read the URL. Stop pivoting to stale local files when one tool fails to reach it.
 
-**What happened.** GL asked me to rebuild `/book` to match `http://5.78.136.133/book` exactly. My first WebFetch on that URL returned `ECONNREFUSED`. I took that as proof Hetzner was offline — plausible per the project's Reference Disposition ("Failed Hetzner deployment ... will be decommissioned"). I pivoted to the local Odoo clone at `C:\Users\baenb\projects\locally-twisted-odoo\` as my canonical spec, read `addons/locally_twisted/views/pages/page_book.xml`, and reported what I saw there as authoritative.
+**What happened.** GL asked me to rebuild `/book` to match `http://5.78.136.133/book` exactly. My first WebFetch on that URL returned `ECONNREFUSED`. I took that as proof Hetzner was offline — plausible per the project's Reference Disposition ("Failed Hetzner deployment ... will be decommissioned"). I pivoted to the local legacy_source clone at `C:\Users\baenb\projects\locally-twisted-legacy_source\` as my canonical spec, read `addons/locally_twisted/views/pages/page_book.xml`, and reported what I saw there as authoritative.
 
 **The local clone was stale.** Its XML had:
 - Single-select `x_event_type` (one service per Lead)
@@ -2115,7 +2115,7 @@ Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors
 
 **Hetzner had been independently updated** to:
 - Multi-select `x_services` checkboxes (Balloon Decor / Twisting / Painting / Delivery Only / Event Package / Something Else)
-- Per-service conditional notes — `decor_notes`, `twisting_notes`, `painting_notes`, etc. — show/hide via Odoo's `data-visibility-dependency="x_services"` + `data-visibility-comparator="contains"` pattern
+- Per-service conditional notes — `decor_notes`, `twisting_notes`, `painting_notes`, etc. — show/hide via legacy_source's `data-visibility-dependency="x_services"` + `data-visibility-comparator="contains"` pattern
 - Environment fields (Indoor/Outdoor, Shade Required, Colors) appearing when ANY service is selected
 - 5 files �- 25 MB photo upload
 
@@ -2125,7 +2125,7 @@ I kept reporting the local clone's old spec as canonical and surfacing every dif
 
 > *"I don't know where the hell you're looking! ... Why the hell are you fighting me on it? ... Stop fighting me on this. What's the problem? ... I'm nervous about you touching anything if you keep saying this."*
 
-**The technical fix that broke me out:** Bash `curl http://5.78.136.133/book` returned HTTP 200 cleanly (68 KB of HTML). The earlier `ECONNREFUSED` was a WebFetch tool sandbox limitation, not a real network outage. Different tools have different network surfaces. The snapshot files at `_resources/odoo-live-snapshot/hetzner-{book,contact}.html` are now on disk as the canonical spec going forward — they survive even after Hetzner decommissions.
+**The technical fix that broke me out:** Bash `curl http://5.78.136.133/book` returned HTTP 200 cleanly (68 KB of HTML). The earlier `ECONNREFUSED` was a WebFetch tool sandbox limitation, not a real network outage. Different tools have different network surfaces. The snapshot files at `_resources/retired-source-snapshot/hetzner-{book,contact}.html` are now on disk as the canonical spec going forward — they survive even after Hetzner decommissions.
 
 **Three lessons:**
 
@@ -2742,14 +2742,14 @@ External research (Magic Research / `frappe-erpnext-non-gpl-hooks-comparison.md`
 **What happened:** This session's instance built a landing page using `Web Page` content_type=Page Builder with 4 default Web Templates. The build looked complete from DOM facts (curl showed all sections rendered, Playwright captured a 1366�-3818 screenshot, all the section IDs and class names were present). The instance reported it as "tier 1 native" and ready for review. GL opened the page in their actual browser. **It wasn't visible. It wasn't responsive. The copy was made-up.**
 
 **Root cause is now nameable:** Both this session's failure AND the prior Slice 2 failure share the same anti-pattern:
-1. **Invent placeholder copy** instead of pulling from the approved Odoo XML / live site source
+1. **Invent placeholder copy** instead of pulling from the approved legacy_source XML / live site source
 2. **Use band-aid CSS** (`!important` chains in the prior session; default Page Builder template + thin theme CSS in this session) instead of using the framework's intended override surfaces
 3. **Declare done off DOM facts** (the DOM has the elements; the page must be working) instead of verifying GL can see the rendered output in a real browser at multiple viewport widths
 
 **The architectural primitives weren't the problem.** Web Page DocType + Page Builder + custom Frappe app + web_include_css are all valid Frappe paths. They CAN produce a working result. They DID NOT, twice in a row, because the technique inside the architecture was wrong.
 
 **What the third instance must do differently:**
-1. **Source content from the Odoo XML or live locallytwisted.com — never invent.** Documented as a standing decision this session.
+1. **Source content from the legacy_source XML or live locallytwisted.com — never invent.** Documented as a standing decision this session.
 2. **GL's eyes on the actual page > any DOM fact.** A successful Playwright capture is a precondition, not a verdict. GL opens the page on their phone and their laptop and confirms. THEN it's done.
 3. **Match GL's STYLE-GUIDE.md visual identity.** Not "looks roughly right." The brand foundation has specific fonts, colors, spacing. Slop fails.
 4. **Mobile-first verification.** 375px viewport BEFORE 1366px desktop. If it doesn't work on mobile, it isn't done — Jeff's customers use phones.
@@ -2932,13 +2932,13 @@ The previous "305 px constraint" observation likely came from one or more of:
 
 ## 2026-04-26 — "Jeff doesn't know" needs more precision than the standing docs gave it
 
-**What happened:** Inherited HANDOFF.md and CLAUDE.md framing that read, in effect, "Jeff Kimber doesn't know about the prior failed Odoo attempt; no artifact on disk should leak that." Operated under that assumption for the first part of this session. GL corrected the framing directly: Jeff knows about the Odoo attempt and has lived its failures over months of paid work. What Jeff does not yet know is that GL has decided to migrate infrastructure entirely to ERPNext. The hidden piece is the platform pivot, not the existence of the prior work.
+**What happened:** Inherited HANDOFF.md and CLAUDE.md framing that read, in effect, "Jeff Kimber doesn't know about the prior failed legacy_source attempt; no artifact on disk should leak that." Operated under that assumption for the first part of this session. GL corrected the framing directly: Jeff knows about the legacy_source attempt and has lived its failures over months of paid work. What Jeff does not yet know is that GL has decided to migrate infrastructure entirely to ERPNext. The hidden piece is the platform pivot, not the existence of the prior work.
 
 **What was learned:**
 
-1. **One-line summaries of trust dynamics lose load-bearing nuance.** "Jeff doesn't know about the prior Odoo attempt" is a paraphrase that erased months of paid work Jeff has been watching firsthand. A future instance reading the cleaner version might guard the wrong fact and either over-disclose (treating the prior work as something to confess) or under-disclose (acting in conversation as if Odoo never existed, which would be jarring against Jeff's actual experience).
+1. **One-line summaries of trust dynamics lose load-bearing nuance.** "Jeff doesn't know about the prior legacy_source attempt" is a paraphrase that erased months of paid work Jeff has been watching firsthand. A future instance reading the cleaner version might guard the wrong fact and either over-disclose (treating the prior work as something to confess) or under-disclose (acting in conversation as if legacy_source never existed, which would be jarring against Jeff's actual experience).
 
-2. **The actual operating rule (per GL 2026-04-26):** Jeff knows the Odoo work happened and watched it struggle. He does not know that GL is migrating off Odoo entirely. The platform pivot stays internal until Phase 1 (customer-facing site + storefront) is demo-ready. The recovery move is showing Jeff a working customer-facing site as the result of months of work, not announcing a do-over.
+2. **The actual operating rule (per GL 2026-04-26):** Jeff knows the legacy_source work happened and watched it struggle. He does not know that GL is migrating off legacy_source entirely. The platform pivot stays internal until Phase 1 (customer-facing site + storefront) is demo-ready. The recovery move is showing Jeff a working customer-facing site as the result of months of work, not announcing a do-over.
 
 3. **Operational implication:** Phase 1's bar is not "functional." It is "visibly polished enough that Jeff's reaction is 'oh, this is real.'" The visual quality is what makes the platform pivot land as "I built you something good" rather than "I had to throw it all out." Functional-but-ugly fails the demo even if every test passes.
 
@@ -2948,7 +2948,7 @@ The previous "305 px constraint" observation likely came from one or more of:
 
 ## 2026-04-26 — A project frame can be wrong, not just labels. Reframe early, propagate everywhere, delete the old.
 
-**What happened:** Inherited a project framed as "Odoo → ERPNext migration." Spent half a session deepening planning artifacts on top of that framing (PROJECT.md, ROADMAP.md, queue, decisions log, HANDOFF, scripts, capability docs). Then GL revealed: there is no production Odoo — it failed in testing, never went live, Jeff doesn't know. The frame wasn't just labeled wrong; it was structurally wrong. The 10-phase ROADMAP organized work around model translations from a system that's reference material, not a system being migrated. The "stealth migration / trust damage from prior failures" Core Value referenced damage Jeff never experienced.
+**What happened:** Inherited a project framed as "legacy_source → ERPNext migration." Spent half a session deepening planning artifacts on top of that framing (PROJECT.md, ROADMAP.md, queue, decisions log, HANDOFF, scripts, capability docs). Then GL revealed: there is no production legacy_source — it failed in testing, never went live, Jeff doesn't know. The frame wasn't just labeled wrong; it was structurally wrong. The 10-phase ROADMAP organized work around model translations from a system that's reference material, not a system being migrated. The "stealth migration / trust damage from prior failures" Core Value referenced damage Jeff never experienced.
 
 **What was learned:**
 1. **Surface framing assumptions BEFORE building artifacts on top of them.** The first instance who built the planning machinery never asked "wait, is this even a migration?" because the standing files said it was. Cost: significant churn to undo.
@@ -3091,7 +3091,7 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 
 ## 2026-04-25 — When GL forbids touching one file, the boundary is the file (don't extrapolate to "GL must do the work")
 
-**What happened:** GL said "leave odoo specific scripts and skills alone — we need to create ERPNext specific ones." I extrapolated this to "GL must be the executor of any production-touching work" and drafted a human-in-the-loop pattern where GL would paste production query results back to me. GL corrected: "the standard process is YOU preparing the script and executing it once it's been researched and built correctly."
+**What happened:** GL said "leave legacy_source specific scripts and skills alone — we need to create ERPNext specific ones." I extrapolated this to "GL must be the executor of any production-touching work" and drafted a human-in-the-loop pattern where GL would paste production query results back to me. GL corrected: "the standard process is YOU preparing the script and executing it once it's been researched and built correctly."
 
 **What to do:** When GL sets a boundary on a *file*, the boundary is on that file. Build new tooling elsewhere. The standard process — agent builds, agent tests, agent executes — still applies. Don't outsource execution to GL based on a misread of the boundary's scope.
 
@@ -3099,7 +3099,7 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 
 ## 2026-04-25 — Building infrastructure ≠ building the thing GL asked for
 
-**What happened:** Spent significant tokens scaffolding GSD project structure (PROJECT.md, REQUIREMENTS.md, ROADMAP.md, config), then planning Phase 1 with research + planner + checker + revision iterations + threat models + validation strategies. Two ERPNext sites running but completely empty. Zero translation from Odoo had occurred. GL: "you haven't even rebuilt the site in ERPNext?! Focus on the rebuild."
+**What happened:** Spent significant tokens scaffolding GSD project structure (PROJECT.md, REQUIREMENTS.md, ROADMAP.md, config), then planning Phase 1 with research + planner + checker + revision iterations + threat models + validation strategies. Two ERPNext sites running but completely empty. Zero translation from legacy_source had occurred. GL: "you haven't even rebuilt the site in ERPNext?! Focus on the rebuild."
 
 **What to do:** When GL asks for a *thing*, the score is "is the thing built yet?" not "is there a beautiful planning artifact for the thing." Set up the minimum scaffolding required to start building, then start building. The planning machinery is meant to *serve* the build, not to *be* the build. If you find yourself iterating planner-checker loops on a phase that hasn't moved one bit closer to the deliverable, stop and start doing the deliverable.
 
@@ -3111,7 +3111,7 @@ This is the global anti-pattern #2 (Drift from GL's actual ask). Receipt added t
 
 **Lesson:** For ERP/ecommerce migrations, importing product records is fake progress unless the destination system can receive the product's behavior everywhere. Field names and data values are not enough. The destination needs executable homes for variant logic, add-on logic, price resolution, media visibility, cart/checkout payloads, invoice/order meaning, fulfillment notes, mobile/desktop customer journeys, and fail-loud missing-data reports.
 
-**What happened:** During the Locally Twisted product-page/catalog work, GL clarified that the goal is not to copy Odoo or decorate ERPNext product pages. Odoo is a conceptual witness for mature ecommerce behavior, while ERPNext native ecommerce is insufficient. The build must create an ERPNext-side ecommerce logic ecosystem before any real product migration matters.
+**What happened:** During the Locally Twisted product-page/catalog work, GL clarified that the goal is not to copy legacy_source or decorate ERPNext product pages. legacy_source is a conceptual witness for mature ecommerce behavior, while ERPNext native ecommerce is insufficient. The build must create an ERPNext-side ecommerce logic ecosystem before any real product migration matters.
 
 **Do this next time:** Before importing customer-facing products from a more mature ecommerce source into a weaker shell, define the receiving architecture first: destination fields/DocTypes, ownership of each behavior, template/process classes, cart/checkout/invoice integration, and verifiers. Treat proof products as test fixtures, not migration completion.
 
@@ -3369,7 +3369,7 @@ missing reference or trust field against current LT files before editing.
 
 ## 2026-05-22 - Balloon color prompts need swatch authority, not hex confidence
 
-**Lesson:** For LT balloon visuals, exact owner/Odoo swatch images and balloon
+**Lesson:** For LT balloon visuals, exact owner-approved swatch images and balloon
 color names outrank hex values. Hex can help web matching, but it is not enough
 to make generated balloon imagery look like the colors Jeff actually offers.
 

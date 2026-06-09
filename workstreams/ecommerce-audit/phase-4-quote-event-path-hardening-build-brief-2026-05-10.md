@@ -17,7 +17,7 @@ Use the Phase 2 classified product sets:
 - `QUOTE_FIRST`: 33 complex/custom/event products, expected `complex_custom_product|quote_first`.
 - `HIDE_OR_NEEDS_REVIEW`: 5 products, expected `needs_review|needs_review`.
 
-Phase 4 does not open public ecommerce, process live payment, mutate Odoo, approve hidden/seasonal products, or convert quote-first decor into direct checkout.
+Phase 4 does not open public ecommerce, process live payment, mutate legacy_source, approve hidden/seasonal products, or convert quote-first decor into direct checkout.
 
 ## Build actions
 
@@ -45,4 +45,4 @@ After parent-run gates pass, request separated reviews:
 
 - Architecture: Does the boundary belong in runtime/cart resolution and not just templates?
 - Edge cases: Does the verifier cover direct URL, stale localStorage, needs-review fallback, and all classified rows?
-- Security/ops: Does the verifier remain read-only/rollback-safe, avoid PII/live payment/customer messages/Odoo mutation, and keep public ecommerce paused?
+- Security/ops: Does the verifier remain read-only/rollback-safe, avoid PII/live payment/customer messages/legacy_source mutation, and keep public ecommerce paused?

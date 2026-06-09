@@ -21,8 +21,8 @@ SITE = "frontend"
 METHOD = "locally_twisted.verify.product_page_architecture_contract.run"
 DEFAULT_OUTPUT = Path("output/product-page-architecture-contract.json")
 DEFAULT_MARKDOWN = Path("output/product-page-architecture-contract.md")
-SOURCE_CATALOG = Path("_resources/odoo-live/catalog.json")
-CONTAINER_SOURCE_CATALOG = "/tmp/lt-odoo-live-catalog.json"
+SOURCE_CATALOG = Path("_resources/catalog-source/catalog.json")
+CONTAINER_SOURCE_CATALOG = "/tmp/lt-catalog-source-catalog.json"
 
 
 class ContractFail(Exception):

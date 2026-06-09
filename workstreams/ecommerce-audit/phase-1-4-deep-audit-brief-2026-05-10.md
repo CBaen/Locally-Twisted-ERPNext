@@ -27,7 +27,7 @@ Do **not** run a purge/reupload in this audit. Destructive product import/purge 
 
 - Worktree: `C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted`.
 - Branch rule: `main` only. Do not create branches.
-- Do not commit, push, stage, reset, purge, reimport, mutate Odoo, open public ecommerce, process live payments, or send real customer messages.
+- Do not commit, push, stage, reset, purge, reimport, mutate legacy_source, open public ecommerce, process live payments, or send real customer messages.
 - Public ecommerce stays paused with `lt_ecommerce_paused=1`.
 - Use current products only as test fixtures.
 - Rollback/Frappe DB verifiers are not parallel-safe. Audit agents should avoid DB-mutating verifiers. Parent will run serial gates.

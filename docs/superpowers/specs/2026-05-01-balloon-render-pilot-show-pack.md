@@ -12,12 +12,12 @@ The goal is not to make random pretty balloon pictures. The goal is to make imag
 
 Local LT references:
 
-- `_resources/odoo-live/images/classic-arch.png` and 22 extra classic-arch images.
-- `_resources/odoo-live/images/classic-column.png` and 5 extra classic-column images.
-- `_resources/odoo-live/images/classic-organic-balloon-garland.png`.
-- `_resources/odoo-live/images/birthday-deliveries.png` and 14 extra birthday-delivery images.
+- `_resources/catalog-source/images/classic-arch.png` and 22 extra classic-arch images.
+- `_resources/catalog-source/images/classic-column.png` and 5 extra classic-column images.
+- `_resources/catalog-source/images/classic-organic-balloon-garland.png`.
+- `_resources/catalog-source/images/birthday-deliveries.png` and 14 extra birthday-delivery images.
 
-Catalog facts from `_resources/odoo-live/catalog.json`:
+Catalog facts from `_resources/catalog-source/catalog.json`:
 
 | Product | Relevant options | Source images |
 |---|---|---:|

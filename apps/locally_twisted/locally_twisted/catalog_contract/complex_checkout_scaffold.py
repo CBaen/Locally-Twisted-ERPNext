@@ -2,7 +2,7 @@
 
 This module is pure/data-oriented. It translates the current
 ProductPatternContract report into the checkout regression and enhancement map
-for Odoo-imported products.
+for legacy_source-imported products.
 """
 
 from __future__ import annotations
@@ -521,7 +521,7 @@ def _proof_ladder_stage(
 
 def _proof_ladder() -> dict[str, str]:
     return {
-        "01_preserve_existing_direct_checkout": "Keep all 53 Odoo-imported checkout products green.",
+        "01_preserve_existing_direct_checkout": "Keep all 53 legacy_source-imported checkout products green.",
         "02_simple_axis_lane_flip_rehearsal": "Locally prove any internal-hold product before checkout exposure.",
         "03_first_multi_color_recipe_case": "Build and prove one multi-color recipe product before broader rollout.",
         "04_classic_column_before_arch": "Prove the column-shaped complex product path before the full arch path.",

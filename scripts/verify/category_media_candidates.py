@@ -19,9 +19,9 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_IMAGE_DIR = ROOT / "_resources" / "odoo-live" / "images"
-SLUG_TO_GROUP = ROOT / "_resources" / "odoo-live" / "slug_to_group.json"
-CATALOG = ROOT / "_resources" / "odoo-live" / "catalog.json"
+SOURCE_IMAGE_DIR = ROOT / "_resources" / "catalog-source" / "images"
+SLUG_TO_GROUP = ROOT / "_resources" / "catalog-source" / "slug_to_group.json"
+CATALOG = ROOT / "_resources" / "catalog-source" / "catalog.json"
 PORTFOLIO_CONTROLLER = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "www" / "portfolio.py"
 PORTFOLIO_OPTIMIZED_DIR = (
     ROOT / "apps" / "locally_twisted" / "locally_twisted" / "public" / "images" / "portfolio" / "optimized"

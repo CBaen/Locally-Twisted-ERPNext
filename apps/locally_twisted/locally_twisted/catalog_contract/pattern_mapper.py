@@ -1,4 +1,4 @@
-"""Reusable Odoo option-pattern mapper for product imports.
+"""Reusable legacy_source option-pattern mapper for product imports.
 
 This module is pure reporting code. It reads saved source product rows and
 describes the ERPNext primitives needed to preserve their option meaning before
@@ -28,7 +28,7 @@ AxisPattern = Literal[
     "review_only_axis",
 ]
 
-SCHEMA_VERSION = "lt-odoo-option-pattern-contract-v1"
+SCHEMA_VERSION = "lt-legacy_source-option-pattern-contract-v1"
 LARGE_COLOR_VALUE_THRESHOLD = 12
 FINITE_AXIS_VALUE_LIMIT = 12
 
@@ -100,7 +100,7 @@ class MediaRoleRequirement:
 @dataclass(frozen=True)
 class ProductPatternContract:
     slug: str
-    odoo_product_id: str
+    legacy_source_product_id: str
     source_name: str
     source_url: str
     currency: str
@@ -154,7 +154,7 @@ class ProductPatternReport:
             "metadata": self.metadata,
             "read_only": True,
             "destructive_allowed": False,
-            "purpose": "Reusable Odoo option-pattern classification feeding ERPNext ProductPatternContract imports.",
+            "purpose": "Reusable legacy_source option-pattern classification feeding ERPNext ProductPatternContract imports.",
             "summary": self.summary(),
             "products": [product.to_dict() for product in self.products],
         }
@@ -162,7 +162,7 @@ class ProductPatternReport:
     def to_markdown(self) -> str:
         summary = self.summary()
         lines = [
-            "# Odoo Option Pattern Mapper",
+            "# legacy_source Option Pattern Mapper",
             "",
             "This is a read-only source classifier. It does not import, purge, delete, or mutate ERPNext.",
             "Product names are examples only; classification is driven by source axes, prices, descriptions, and media shape.",
@@ -178,7 +178,7 @@ class ProductPatternReport:
             "",
             "## Pattern Matrix",
             "",
-            "| Odoo pattern | ERPNext primitive / contract | Missing generic architecture | Import implications |",
+            "| legacy_source pattern | ERPNext primitive / contract | Missing generic architecture | Import implications |",
             "|---|---|---|---|",
         ]
         lines.extend(_pattern_matrix_rows())
@@ -225,7 +225,7 @@ def build_product_pattern_contract(product: dict[str, Any]) -> ProductPatternCon
     pattern_names = _product_patterns(product, axes)
     return ProductPatternContract(
         slug=_clean(product.get("slug")),
-        odoo_product_id=_clean(product.get("odoo_id")),
+        legacy_source_product_id=_clean(product.get("legacy_source_id")),
         source_name=_clean(product.get("name")),
         source_url=_clean(product.get("url")),
         currency=_clean(product.get("currency")),
@@ -614,7 +614,7 @@ def _source_integrity(product: dict[str, Any]) -> dict[str, Any]:
         for name, axis in sorted(attributes.items(), key=lambda item: str(item[0]).lower())
     }
     return {
-        "odoo_product_id": _clean(product.get("odoo_id")),
+        "legacy_source_product_id": _clean(product.get("legacy_source_id")),
         "currency": _clean(product.get("currency")),
         "source_declared_variant_count": _int_or_none(product.get("variant_count")),
         "source_valid_variant_count": len(variants),

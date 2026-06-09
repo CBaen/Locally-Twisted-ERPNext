@@ -1,8 +1,8 @@
 # Locally Twisted — Mirror Rebuild Plan
 
 **Date:** 2026-04-30
-**Source of truth:** `_resources/odoo-live-mirror/` (the captured Hetzner site)
-**Inventory reference:** `_resources/odoo-live-mirror/INVENTORY.md`
+**Source of truth:** `_resources/retired-source-mirror/` (the captured Hetzner site)
+**Inventory reference:** `_resources/retired-source-mirror/INVENTORY.md`
 **Authorized by:** GL — *"clone my old site http://5.78.136.133/, the only page that stays is the landing page... using capabilities, rebuild the whole site. make sure it's frappe and ERPNext coded."*
 
 This is a **mirror rebuild**: visual + IA + content + page-shapes from Hetzner are reproduced through Frappe v15 + ERPNext v15 primitives (Jinja partials, `apps/locally_twisted/.../www/` controllers, theme CSS, ERPNext webshop overrides). The rebuild is faithful to Hetzner's rendered output, not a creative re-interpretation.
@@ -32,7 +32,7 @@ This is a **mirror rebuild**: visual + IA + content + page-shapes from Hetzner a
 |---|---|---|
 | Header (desktop + mobile) | `pages/index.html` lines ~286–635 | `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html` |
 | Footer (newsletter + 3-col + legal) | `pages/index.html` lines ~1111–1223 | `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` |
-| Newsletter signup endpoint | (new — replaces Odoo `js_subscribe`) | New `api/newsletter.py` whitelist + a Custom DocType `LT Newsletter Signup` |
+| Newsletter signup endpoint | (new — replaces legacy_source `js_subscribe`) | New `api/newsletter.py` whitelist + a Custom DocType `LT Newsletter Signup` |
 
 Header structure to reproduce:
 - Desktop: utility bar (delivery truck tagline left | centered logo | sign in / cart / Contact CTA right) + primary nav row (Balloon Twisting & Face Painting | Special Occasions mega menu | Holidays & Seasons mega menu | What We Make mega menu | overflow: Contact, Blog | search modal trigger)
@@ -98,12 +98,12 @@ The current LT CSS is ~700 lines. The replacement will be larger because Hetzner
 The header + footer + theme CSS overhaul are the highest-interdependency work. Builder agents need to coordinate (header CSS affects mobile drawer JS; footer link IDs affect nav state; theme tokens affect every page). Reviewer agents during construction catch drift before it propagates.
 
 Triadic dispatch:
-- **Builder 1 — Jinja chrome:** writes `templates/includes/navbar/navbar.html` and `templates/includes/footer/footer.html` from the mirror's verbatim markup, translating Odoo classes (`o_*`) to LT-owned BEM classes (`lt-*`) where Odoo classes carry framework-specific behavior. Preserves visible structure exactly.
-- **Builder 2 — CSS:** appends to `public/css/lt-theme.css` with `lt-header__*`, `lt-utility-bar__*`, `lt-megamenu__*`, `lt-footer-newsletter__*`, `lt-footer__*`, `lt-footer-bar__*` blocks. No `!important`. Pulls computed styles from the mirror's CSS files in `_resources/odoo-live-mirror/assets/web/static/...`.
+- **Builder 1 — Jinja chrome:** writes `templates/includes/navbar/navbar.html` and `templates/includes/footer/footer.html` from the mirror's verbatim markup, translating legacy_source classes (`o_*`) to LT-owned BEM classes (`lt-*`) where legacy_source classes carry framework-specific behavior. Preserves visible structure exactly.
+- **Builder 2 — CSS:** appends to `public/css/lt-theme.css` with `lt-header__*`, `lt-utility-bar__*`, `lt-megamenu__*`, `lt-footer-newsletter__*`, `lt-footer__*`, `lt-footer-bar__*` blocks. No `!important`. Pulls computed styles from the mirror's CSS files in `_resources/retired-source-mirror/assets/web/static/...`.
 - **Builder 3 — JS:** writes `public/js/lt-megamenu.js`, `public/js/lt-newsletter.js`, `public/js/lt-search.js`. Vanilla JS, no jQuery, posts to whitelisted Frappe endpoints.
 - **Reviewer 1 — Hetzner-fidelity:** loads the mirrored `pages/index.html` and renders both. Checks the rebuilt header and footer pixel-match Hetzner at desktop (1280) and mobile (375). Specific check: utility bar 3-column layout, mega menu 4-column dropdown structure, footer 3-column link structure, newsletter form alignment.
 - **Reviewer 2 — Accessibility:** WCAG 2.1 AA on the chrome — keyboard navigation through nav, focus-visible outlines, ARIA labels on icon buttons, color contrast on links, mobile drawer screen-reader announce.
-- **Reviewer 3 — Frappe-integration:** confirms `web_include_css` / `web_include_js` registration, partial override paths, `installed_apps` order still has `locally_twisted` last, no Odoo classes that bind to absent JS, no broken `/web/*` Odoo URLs.
+- **Reviewer 3 — Frappe-integration:** confirms `web_include_css` / `web_include_js` registration, partial override paths, `installed_apps` order still has `locally_twisted` last, no legacy_source classes that bind to absent JS, no broken `/web/*` legacy_source URLs.
 
 Acceptance for Phase 1: all three reviewers PASS, screenshot diff against `pages/index.html` shows visual parity at desktop + mobile, no console errors, no 404 asset requests.
 
@@ -147,7 +147,7 @@ Each page commit is atomic and reverts cleanly if the audit pass flags it.
 
 After all pages are built:
 - Capture Playwright viewport-only screenshots of every rebuilt route at desktop (1280) + mobile (375), saved to `_resources/audit-2026-04-30/<route>-{desktop,mobile}.png`.
-- Side-by-side diff: rebuilt screenshot vs `_resources/odoo-live-mirror/pages/<route>.html` rendered (capture Hetzner's actual render via Playwright pointed at the local mirrored HTML file or at the live Hetzner URL while it's still up).
+- Side-by-side diff: rebuilt screenshot vs `_resources/retired-source-mirror/pages/<route>.html` rendered (capture Hetzner's actual render via Playwright pointed at the local mirrored HTML file or at the live Hetzner URL while it's still up).
 - Per-product variant correctness diff: for each of 53 canonical product slugs, parse the mirrored page's `data-attribute-exclusions` JSON and compare to the variant set in our ERPNext DB (query via `bench --site frontend execute`). Mismatches noted in `VERIFICATION.md`.
 - WCAG 2.1 AA pass via `axe-playwright` or equivalent on every page.
 - Output: `VERIFICATION.md` with one row per route — PASS / FLAG / FAIL + screenshot path + specific findings.
@@ -169,14 +169,14 @@ Things that exist on Hetzner but are deliberately NOT cloned, with reason:
 
 | Hetzner surface | Reason | ERPNext equivalent / decision |
 |---|---|---|
-| `/web/login`, `/web/signup`, `/web/reset_password` | Odoo's auth UI — different from ERPNext's `/login` | Use ERPNext's native auth pages |
+| `/web/login`, `/web/signup`, `/web/reset_password` | legacy_source's auth UI — different from ERPNext's `/login` | Use ERPNext's native auth pages |
 | `/services` | Hetzner returns 404 (route exists, no published content) | Skip — not a real page |
 | `/shop/wishlist` | Auth-required and Hetzner shows it conditionally; ERPNext webshop has its own wishlist with different behavior | Skip for now; Phase 5 portal work |
 | `/shop/event-booking-deposit-32` | Hetzner returns 404 (product was unpublished) | Skip — not a real page |
 | Empty category pages (Valentine's Day, Father's Day, 4th of July, Fall, Christmas, Photo Frames) | Hetzner shows them with no products | Suppress from category tree until populated |
-| Odoo's `/contactus` route | Duplicate of `/contact` | Frappe `website_route_rules` redirect |
-| Odoo's bundled CSS/JS (`/web/static/src/...`) | Framework files, not LT content | Frappe ships its own; we write LT-owned CSS/JS |
-| Color swatch images (`/web/image/product.attribute.value/<id>/image`) | Odoo dynamic image URLs not captured in asset crawl; ERPNext `Item Attribute Value.colour` is hex-only | Document as known gap; future enhancement uses hex tiles or custom field |
+| legacy_source's `/contactus` route | Duplicate of `/contact` | Frappe `website_route_rules` redirect |
+| legacy_source's bundled CSS/JS (`/web/static/src/...`) | Framework files, not LT content | Frappe ships its own; we write LT-owned CSS/JS |
+| Color swatch images (`/web/image/product.attribute.value/<id>/image`) | legacy_source dynamic image URLs not captured in asset crawl; ERPNext `Item Attribute Value.colour` is hex-only | Document as known gap; future enhancement uses hex tiles or custom field |
 
 (Additions during execution will append rows here.)
 
@@ -206,7 +206,7 @@ If context tightens before Phase 4 completes, the next session reads `MIRROR-REB
 6. **The `/book` form is the most complex single deliverable.** 30+ fields, conditional show/hide, file upload validation, confirmation modal. Builder agent for `/book` gets the longest brief and a dedicated reviewer pass.
 7. **Per-product variant correctness diff (Phase 3) may surface real data discrepancies** between Hetzner's offering and our DB. If found, they're fixed at the seed layer (`apps/locally_twisted/locally_twisted/seed/seed_catalog.py`), not papered over visually.
 8. **Historical note superseded 2026-05-02:** Hetzner's product page showed many inline color controls, but ERPNext variant attributes are single-select. LT now keeps high-cardinality color values as a dropdown and verifies chip controls as radio/single-select, not checkbox inputs.
-9. **Newsletter signup needs a destination** — Hetzner posts to Odoo's mailing list. ERPNext doesn't have a mailing list module by default. We add a `LT Newsletter Signup` Custom DocType (single-field + email + opt-in timestamp) and a whitelisted endpoint `api/newsletter.py` that creates one record per submit.
+9. **Newsletter signup needs a destination** — Hetzner posts to legacy_source's mailing list. ERPNext doesn't have a mailing list module by default. We add a `LT Newsletter Signup` Custom DocType (single-field + email + opt-in timestamp) and a whitelisted endpoint `api/newsletter.py` that creates one record per submit.
 10. **OG images and meta tags:** Hetzner has OG images per page (`og-home.png`, `og-book.png`, `og-contact.png`). Most weren't crawled (asset crawl missed dynamic OG image URLs). The page rebuilds need to set `<meta property="og:image">` to local files in `apps/locally_twisted/.../public/images/og/` — placeholders OK in v1.
 
 ---
@@ -294,6 +294,6 @@ When this plan is fully executed:
 4. `VERIFICATION.md` exists with one row per route; `FAIL` rows have remediation notes.
 5. `MIRROR-REBUILD-COMPLETE.md` exists with the full state report, including the NOT-CLONED log.
 6. Every commit is in `git log --grep="^mirror-rebuild"` order.
-7. GL can open any route in their real browser and see Hetzner's site at that route — minus authenticated/Odoo-only pages explicitly logged in NOT-CLONED.
+7. GL can open any route in their real browser and see Hetzner's site at that route — minus authenticated/legacy_source-only pages explicitly logged in NOT-CLONED.
 
 If any of those clauses can't be met, the failure is named and surfaced in the final report — not papered over.

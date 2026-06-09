@@ -138,7 +138,7 @@ Security/ops verified:
 - no live payment path;
 - no customer message path;
 - no PII/token/session exposure;
-- no Odoo mutation path;
+- no legacy_source mutation path;
 - rollback/no business-record deltas remain safe;
 - artifact exists/readable and reports `ok: true`.
 

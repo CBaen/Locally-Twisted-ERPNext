@@ -11,7 +11,7 @@
 - **Files Changed:**
   - `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html` — full replacement (384 lines → ~290 lines of clean Jinja; the prior 140 lines of inline `<style>` + `<script>` are gone)
 
-- **Approach:** Wholesale replacement of the prior single-flat-Shop-mega-menu template with a two-tier desktop nav (utility bar + primary nav row with 3 mega menus) and a mobile single-row + offcanvas drawer. All Odoo `data-bs-*` attributes replaced with custom `data-lt-megamenu-trigger` / `data-lt-accordion-trigger` data attributes per the API contract. No inline `<style>` or `<script>` blocks; both removed as required by Build Brief §Hard Constraints 4+5. Inline SVG path data used only in template files (not CMS fields) for caret icons — all other icons reference external `.svg` files via `<img src>`.
+- **Approach:** Wholesale replacement of the prior single-flat-Shop-mega-menu template with a two-tier desktop nav (utility bar + primary nav row with 3 mega menus) and a mobile single-row + offcanvas drawer. All legacy_source `data-bs-*` attributes replaced with custom `data-lt-megamenu-trigger` / `data-lt-accordion-trigger` data attributes per the API contract. No inline `<style>` or `<script>` blocks; both removed as required by Build Brief §Hard Constraints 4+5. Inline SVG path data used only in template files (not CMS fields) for caret icons — all other icons reference external `.svg` files via `<img src>`.
 
 - **New Interfaces exposed to Builder JS:**
   - Desktop mega triggers: `<button data-lt-megamenu-trigger="<panel-id>" aria-expanded="false" aria-controls="<panel-id>">` — three triggers, panel IDs: `lt-mega-special-occasions`, `lt-mega-holidays-seasons`, `lt-mega-what-we-make`
@@ -27,7 +27,7 @@
 - **Files Changed:**
   - `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` — full replacement (101 lines → ~160 lines)
 
-- **Approach:** Added newsletter strip as Section 1 (was entirely absent from prior footer). Preserved existing brand band + social icons + 3-column links + legal bar structure. Changed column classes from `col-4` (always-3-across) to `col-12 col-md-4` (stacks on mobile, 3-across at md+) per Build Brief direction to default to Hetzner-faithful layout. Renamed Odoo `s_lt_*` class names to `lt-footer__*` BEM namespace. Switched "Get In Touch" icons from Unicode emoji to FontAwesome classes (`fa-map-marker`, `fa-phone`, `fa-clock-o`) matching Hetzner source. Updated footer Shop column links: "Special Occasions" → `/shop/category/special-occasions-1`, "Holidays & Seasons" → `/shop/category/holidays-seasons-2`, "What We Make" → `/{{ shop_root_route }}` (live ERPNext route). Loud-failure rule honored: error container includes phone fallback `(801) 285-0860`.
+- **Approach:** Added newsletter strip as Section 1 (was entirely absent from prior footer). Preserved existing brand band + social icons + 3-column links + legal bar structure. Changed column classes from `col-4` (always-3-across) to `col-12 col-md-4` (stacks on mobile, 3-across at md+) per Build Brief direction to default to Hetzner-faithful layout. Renamed legacy_source `s_lt_*` class names to `lt-footer__*` BEM namespace. Switched "Get In Touch" icons from Unicode emoji to FontAwesome classes (`fa-map-marker`, `fa-phone`, `fa-clock-o`) matching Hetzner source. Updated footer Shop column links: "Special Occasions" → `/shop/category/special-occasions-1`, "Holidays & Seasons" → `/shop/category/holidays-seasons-2`, "What We Make" → `/{{ shop_root_route }}` (live ERPNext route). Loud-failure rule honored: error container includes phone fallback `(801) 285-0860`.
 
 - **New Interfaces exposed to Builder JS:**
   - `<form data-lt-newsletter novalidate>` — JS reads this to wire the submit handler
@@ -164,9 +164,9 @@ Footer chrome BEM blocks:
 
 ### Decisions Made
 
-1. **Search: `/search` fallback route used.** Hetzner used `data-bs-target="#o_search_modal"` (Odoo's modal). ERPNext has no equivalent modal wired by default. The desktop search button links to `/search` (Frappe's built-in search route). Mobile drawer has an inline search form posting to `/search`. This degrades gracefully — if no search page is wired, it 404s, but at least no JS error. Builder JS can upgrade the desktop button to open a modal later if wired. Documented in build report rather than silently omitting search.
+1. **Search: `/search` fallback route used.** Hetzner used `data-bs-target="#o_search_modal"` (legacy_source's modal). ERPNext has no equivalent modal wired by default. The desktop search button links to `/search` (Frappe's built-in search route). Mobile drawer has an inline search form posting to `/search`. This degrades gracefully — if no search page is wired, it 404s, but at least no JS error. Builder JS can upgrade the desktop button to open a modal later if wired. Documented in build report rather than silently omitting search.
 
-2. **Footer Shop links: Odoo category slugs retained.** The footer "Special Occasions" and "Holidays & Seasons" links point to `/shop/category/special-occasions-1` and `/shop/category/holidays-seasons-2` (Odoo-style slugs). These are content-only routes in ERPNext — they will 404 until Phase 2 redirects are added. "What We Make" uses the live ERPNext `shop_root_route`. This matches the Hetzner footer links verbatim and is flagged for Phase 2.
+2. **Footer Shop links: legacy_source category slugs retained.** The footer "Special Occasions" and "Holidays & Seasons" links point to `/shop/category/special-occasions-1` and `/shop/category/holidays-seasons-2` (legacy_source-style slugs). These are content-only routes in ERPNext — they will 404 until Phase 2 redirects are added. "What We Make" uses the live ERPNext `shop_root_route`. This matches the Hetzner footer links verbatim and is flagged for Phase 2.
 
 3. **Column layout: `col-12 col-md-4` (stacks on mobile).** Prior footer used `col-4` (always 3-across). Build Brief defaulted to Hetzner-faithful stacking. GL may override to `col-4` after visual review.
 
@@ -225,7 +225,7 @@ book 200
 
 2. **Desktop mega menus are also non-functional until Builder JS ships.** The `hidden` attribute is set on all three panels at render time. Without `lt-megamenu.js` toggling them, no mega menu opens on hover or click. Desktop nav link items (Balloon Twisting, Contact, Blog) work normally as they're plain `<a>` tags.
 
-3. **Footer Shop column `/shop/category/*` links will 404 in ERPNext.** These are Odoo-style category routes. ERPNext's webshop uses `/shop-items/<slug>`. Phase 2 must add redirects or update the footer links to ERPNext-native routes.
+3. **Footer Shop column `/shop/category/*` links will 404 in ERPNext.** These are legacy_source-style category routes. ERPNext's webshop uses `/shop-items/<slug>`. Phase 2 must add redirects or update the footer links to ERPNext-native routes.
 
 4. **`mega_special_occasions` Birthday Parties, Graduations route to `seasonal-specialty` — not a dedicated category.** This is technically correct given the current ERPNext Item Group tree (no "Birthday Parties" group), but clicking "Birthday Parties" in the mega menu lands the user on a page showing all seasonal items. This is a Phase 2 content/category concern, not a chrome bug.
 

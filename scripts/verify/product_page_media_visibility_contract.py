@@ -22,10 +22,10 @@ from locally_twisted.catalog_contract.media_visibility import build_media_visibi
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
 REPORT_PATH = ROOT / Path(
-    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "audits/catalog-import-audit-2026-05-08/"
     "20-product-page-media-visibility-report.md"
 )
 

@@ -143,7 +143,7 @@ Feature handoff:
 
 - `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`
 
-Evidence summary: source/Odoo additional product photos are now role-based
+Evidence summary: source/legacy_source additional product photos are now role-based
 media, not a blanket held bucket. `gallery` media renders only after Product
 Setup owns it and the guarded apply path projects it into native ERPNext
 `Website Slideshow` rows. `variant_image`, `reference`, and
@@ -262,7 +262,7 @@ only. Hex values are not image-generation authority.
 
 Green gates:
 
-- `python scripts\verify\odoo_color_swatch_contract.py`
+- `python scripts\verify\color_swatch_contract.py`
 - `python -m py_compile scripts\setup\generate_shop_category_heroes.py`
 - `python scripts\dev\clear_website_cache.py`
 - `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
@@ -382,7 +382,7 @@ DNS change, Stripe live change, or public exposure change was made.
 
 Feature handoff:
 
-- `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`
+- `workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`
 
 Evidence summary: GL corrected the product model: every source-imported product
 is a product. The local `frontend` site was backed up, cleaned of two generated
@@ -400,7 +400,7 @@ preview. `lt_ecommerce_paused=1` was restored and verified.
 Green gates:
 
 - `python scripts\verify\product_import_readiness_gate.py --report output\product-import-readiness-gate.json`
-- `python scripts\verify\v1_odoo_erpnext_import_manifest.py`
+- `python scripts\verify\v1_legacy_source_erpnext_import_manifest.py`
 - `python scripts\verify\catalog_purge_scope_dry_run.py`
 - `python scripts\verify\product_source_repair_map.py`
 - `python scripts\verify\complex_checkout_scaffold.py`
@@ -523,7 +523,7 @@ Result: complete in `e4186c1 Hide homepage custom decor block`.
 
 Evidence: `run_playwright.cmd` uses Program Files Node and package scripts call the wrapper. Search contract, checkout experience, ecommerce browser proof, and focused interactive layout passed. Broad layout-fit showed 310/312 then exact rerun 2/2 pass; remaining issue is transient ERPNext HTTP behavior only.
 
-### Odoo option-pattern mapper
+### legacy_source option-pattern mapper
 
 Older mapper task `991323ce` was already published in `d0d5c41`. No docs work was done by `source-contract-sprinter` for `60a5e721`; this handoff replaces that missing closeout.
 
@@ -689,7 +689,7 @@ that appears in product options and fails loudly above its quantity max.
   widths for product pages, visible color drawers, cart, and checkout preview.
   Payment/customer-message cascade, media update behavior, final owner/product
   approval, and live exposure are still pending for that tranche.
-- The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
+- The shared worktree may still show regenerated audit artifacts under `audits/catalog-import-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
 

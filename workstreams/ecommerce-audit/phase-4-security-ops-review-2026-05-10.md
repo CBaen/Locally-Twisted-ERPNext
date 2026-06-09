@@ -24,12 +24,12 @@ PASS.
 - Static search of the verifier/runner found no `insert`, `save`, `submit`, `set_value`, sendmail, Stripe, or payment-session calls. The only payment/customer doctypes referenced are count targets for rollback/delta checks.
 - The verifier artifact contains item codes, lane status, runtime booleans, block outcomes, rollback status, and record-count deltas only. I found no customer PII, payment token, session secret, checkout URL, email, phone, address, or customer message content.
 
-### No Odoo mutation
+### No legacy_source mutation
 
 PASS.
 
 - The reviewed verifier runs inside ERPNext via `docker exec ... bench --site frontend execute locally_twisted.verify.quote_event_checkout_boundary_contract.run`.
-- The implementation uses Frappe reads and local runtime/checkout/cart resolution functions only. I found no Odoo API/client imports, network calls, export calls, or Odoo write paths in the reviewed verifier/runner.
+- The implementation uses Frappe reads and local runtime/checkout/cart resolution functions only. I found no legacy_source API/client imports, network calls, export calls, or legacy_source write paths in the reviewed verifier/runner.
 
 ### Rollback/no business-record deltas
 

@@ -21,9 +21,9 @@ sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 from locally_twisted.catalog_contract.price_review import build_price_review_packet
 
 
-SOURCE_ARTIFACT = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/21-product-page-price-enrichment-candidates.json"
-DEFAULT_REPORT = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.json"
-DEFAULT_MARKDOWN = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.md"
+SOURCE_ARTIFACT = ROOT / "audits/catalog-import-audit-2026-05-08/21-product-page-price-enrichment-candidates.json"
+DEFAULT_REPORT = ROOT / "audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.json"
+DEFAULT_MARKDOWN = ROOT / "audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.md"
 
 
 def main() -> int:

@@ -1,4 +1,4 @@
-﻿"""Verify the saved ERPNext catalog state snapshot before purge/rebuild work.
+"""Verify the saved ERPNext catalog state snapshot before purge/rebuild work.
 
 This is a read-only artifact verifier. It proves the current transition state was
 saved as evidence before treating product rows as rebuildable pipeline output.
@@ -11,7 +11,7 @@ from pathlib import Path
 
 from _cli import parse_noop_args
 
-AUDIT_ROOT = Path("audits/odoo-erpnext-migration-audit-2026-05-08")
+AUDIT_ROOT = Path("audits/catalog-import-audit-2026-05-08")
 
 REQUIRED_JSON_FILES = {
     "summary.json",

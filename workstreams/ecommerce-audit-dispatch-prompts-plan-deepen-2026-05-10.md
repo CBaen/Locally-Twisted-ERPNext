@@ -1,4 +1,4 @@
-﻿# Plan-Deepen — Ecommerce Audit Dispatch Prompts
+# Plan-Deepen — Ecommerce Audit Dispatch Prompts
 
 Date: 2026-05-10
 Input: `workstreams/ecommerce-audit-dispatch-prompts-2026-05-10.md`
@@ -13,15 +13,15 @@ Outcome: **Adjust before dispatch**
 
 ## 2. Version / model specificity
 
-- Evidence checked: prompts include ERPNext/Frappe v15 `frappe/erpnext:v15.105.0`, Odoo 19 Community, module `19.0.2.15.0`, possible production `19.0.2.14.0`.
+- Evidence checked: prompts include ERPNext/Frappe v15 `frappe/erpnext:v15.105.0`, legacy_source 19 Community, module `19.0.2.15.0`, possible production `19.0.2.14.0`.
 - Risks found: Prompts require version evidence, but do not require agents to cite how version was verified at runtime vs docs/handoff. A lane could repeat the prompt instead of verifying.
 - Plan adjustment: Add: "Do not restate version anchors as verified. Verify via current repo/config/runtime/docs when possible; otherwise label `[UNVERIFIED-VERSION]`."
 - Open question/escalation: if runtime version cannot be verified without risky access, report as `[BLOCKED]`.
 
-## 3. Odoo docs / action convergence
+## 3. legacy_source docs / action convergence
 
 - Evidence checked: Lane E prompt.
-- Risks found: Lane E covers Odoo docs and observed behavior, but should also include official ERPNext/Frappe/Webshop docs/source where relevant. Otherwise it may compare mature Odoo docs to only observed ERPNext UI and miss native framework-supported primitives.
+- Risks found: Lane E covers legacy_source docs and observed behavior, but should also include official ERPNext/Frappe/Webshop docs/source where relevant. Otherwise it may compare mature legacy_source docs to only observed ERPNext UI and miss native framework-supported primitives.
 - Plan adjustment: Require official/current ERPNext/Frappe/Webshop docs/source references for destination concepts when available.
 - Open question/escalation: none.
 
@@ -48,7 +48,7 @@ Outcome: **Adjust before dispatch**
 
 ## 7. Security / privacy / license
 
-- Evidence checked: prompts forbid Odoo code copy, real payment/email, secrets exposure.
+- Evidence checked: prompts forbid legacy_source code copy, real payment/email, secrets exposure.
 - Risks found: Need explicit instruction not to paste proprietary code into reports; cite path/function/concept instead. Also no screenshots containing private customer/admin data unless redacted.
 - Plan adjustment: Add no proprietary code excerpts beyond tiny identifiers; no secrets/customer data screenshots; summarize private observations minimally.
 - Open question/escalation: none.

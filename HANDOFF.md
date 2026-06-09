@@ -77,9 +77,9 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - GL review feedback is captured: the column is closest; organic garland is possible but not assumed approved; the first arch drafts were rejected/misaligned; classic arch scale changes span/opening, not default density. Dense rainbow/multi-row arch work is custom/high-density, not the default `classic-arch` product.
 - No generated pilot images have been attached to ERPNext products or Website Items.
 
-**1. The frame is now "migration."** Earlier today I parroted the prior reframe ("new build, not a migration") and GL stopped me cold: *"it is a migration, not a new build."* Project frame is **migration of business intent + catalog data into a fresh ERPNext install**. The 2026-04-26 reframe is superseded. Internal docs use migration framing freely; Jeff-disclosure stealth survives as a separate constraint (he doesn't yet know the prior Odoo attempt failed in testing). All docs updated. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
+**1. The frame is now "migration."** Earlier today I parroted the prior reframe ("new build, not a migration") and GL stopped me cold: *"it is a migration, not a new build."* Project frame is **migration of business intent + catalog data into a fresh ERPNext install**. The 2026-04-26 reframe is superseded. Internal docs use migration framing freely; Jeff-disclosure stealth survives as a separate constraint (he doesn't yet know the prior legacy_source attempt failed in testing). All docs updated. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
 
-**2. The mirror landed.** Full clone of `http://5.78.136.133/` lives at `_resources/odoo-live-mirror/` — 346 pages + 510 assets + INVENTORY.md (38 KB structural analysis). Tool: `crawl4ai` (Python, Playwright-backed; chosen over httrack/wget because Odoo's site is JS-rendered). Mirror script at `scripts/mirror/mirror_hetzner.py` is reusable; re-run if you need a fresh capture. Tool-discovery research at `research/website-mirror-tool-discovery.md`.
+**2. The mirror landed.** Full clone of `http://5.78.136.133/` lives at `_resources/retired-source-mirror/` — 346 pages + 510 assets + INVENTORY.md (38 KB structural analysis). Tool: `crawl4ai` (Python, Playwright-backed; chosen over httrack/wget because legacy_source's site is JS-rendered). Mirror script at `scripts/mirror/mirror_hetzner.py` is reusable; re-run if you need a fresh capture. Tool-discovery research at `research/website-mirror-tool-discovery.md`.
 
 **3. Chrome rebuild Phase 1 SHIPPED via /triadic-construction-v2.** 3 builders + 3 reviewers (Architect/SecOps/Execution Engine) + GL Proxy + fix round. The triadic discipline caught 4 critical defects + 4 important + several advisories that solo build would have shipped:
    - Mobile drawer always visible (CSS class mismatch — every mobile page would have looked broken)
@@ -149,7 +149,7 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 - Partial option selections now consume `valid_options_for_attributes` and disable invalid later choices.
 - Verification receipts: `python scripts/verify/smoke_shop.py`, `python scripts/verify/cart_checkout_contract.py`, `python scripts/verify/variant_media_contract.py`, and `python scripts/verify/catalog_variant_contract.py`.
 
-**P0 — Per-product variant correctness diff resolved 2026-05-02.** `scripts/verify/catalog_variant_contract.py` compares normalized `_resources/odoo-live/catalog.json` `valid_variants` to live ERPNext `Item Variant Attribute` rows. Latest result: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products, PASS.
+**P0 — Per-product variant correctness diff resolved 2026-05-02.** `scripts/verify/catalog_variant_contract.py` compares normalized `_resources/catalog-source/catalog.json` `valid_variants` to live ERPNext `Item Variant Attribute` rows. Latest result: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products, PASS.
 
 **P1 — Newsletter X-Forwarded-For strip at nginx layer (Option B).** Option A (email-keyed rate limit on newsletter) shipped this session. Option B would protect `/contact`, `/checkout`, `/balloon-twisting-and-face-painting` too — they all use IP-based rate limit and share the same vulnerability. Ops/infra task.
 
@@ -208,7 +208,7 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 - No background processes from this session (all builders/reviewers exited cleanly).
 - All session writes auto-committed via the post-write hook.
 - No customer or transactional test data created. Newsletter test records get cleaned up by the smoke test runner.
-- Mirror dir at `_resources/odoo-live-mirror/` is REFERENCE for Phase 2 page rebuilds — keep until those are done. ~30 MB. Gitignored.
+- Mirror dir at `_resources/retired-source-mirror/` is REFERENCE for Phase 2 page rebuilds — keep until those are done. ~30 MB. Gitignored.
 - Audit screenshots at `_resources/audit-2026-04-30-chrome/` — keep as before/after evidence for chrome work; ~6 PNGs.
 
 ## A quick honesty pass for the next instance

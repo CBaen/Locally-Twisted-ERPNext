@@ -438,6 +438,12 @@ async function auditPageLayout(page, options = {}) {
 				return rect.width > 0 && rect.height > 0;
 			}
 
+			function isIgnoredLayoutTarget(element) {
+				return Boolean(
+					element.closest("[data-lt-layout-ignore], [aria-hidden='true'], [hidden]"),
+				);
+			}
+
 			function clipsOrScrollsX(element) {
 				if (!element || element === document.documentElement || element === document.body) {
 					return false;
@@ -507,6 +513,7 @@ async function auditPageLayout(page, options = {}) {
 
 			for (const selector of targetSelectors) {
 				for (const element of Array.from(document.querySelectorAll(selector))) {
+					if (isIgnoredLayoutTarget(element)) continue;
 					const style = window.getComputedStyle(element);
 					if (!isVisible(element, style)) continue;
 					const rect = element.getBoundingClientRect();

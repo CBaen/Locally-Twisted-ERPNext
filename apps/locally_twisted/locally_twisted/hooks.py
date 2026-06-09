@@ -1,4 +1,4 @@
-﻿app_name = "locally_twisted"
+app_name = "locally_twisted"
 app_title = "Locally Twisted"
 app_publisher = "Built by Cameron"
 app_description = "Business system customizations and theme for Locally Twisted (BBC client)"
@@ -45,11 +45,11 @@ doctype_js = {
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
-    "/assets/locally_twisted/css/lt-theme.css?v=20260510-btfp-cleanup-1",
+    "/assets/locally_twisted/css/lt-theme.css?v=20260609-grid-balance-1",
     "/assets/locally_twisted/css/lt-mega-menu.css?v=20260511-blue-banner-2",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260510-product-runtime-1",
-    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
-    "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260519-odoo-swatches-1",
+    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260609-feature-grid-1",
+    "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260608-color-swatches-1",
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260510-btfp-crawl-1",
     "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260522-category-heroes-1",
     "/assets/locally_twisted/css/lt-form-experience.css?v=20260514-contact-required-1",
@@ -128,8 +128,8 @@ website_route_rules = [
     # that was winning resolution even with the route rule in place.
     {"from_route": "/cart",
      "to_route": "lt_cart"},
-    # Odoo's default contact route â€” the Hetzner mirror has links pointing
-    # at /contactus throughout the navbar. Redirect to our /contact.
+    # Legacy site mirrors may have links pointing at /contactus throughout
+    # the navbar. Redirect those visitors to our /contact.
     {"from_route": "/contactus",
      "to_route": "contact"},
     # ERPNext's root Item Group page and the old all-products alias are too
@@ -205,7 +205,7 @@ update_website_context = [
 # Per BBC fixture-discipline: Item Group children + Item Attribute
 # records are SEED state. At Phase 6 cutover the operator-owned
 # subset gets removed from this list (per NOUPDATE-DRIFT.md, TBD).
-# Receipts: 2026-04-30 catalog rebuild from live Odoo.
+# Receipts: 2026-04-30 catalog rebuild from the retired catalog reference.
 # ---------------------------------------------------------------
 fixtures = [
     {

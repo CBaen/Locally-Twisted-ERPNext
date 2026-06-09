@@ -2,18 +2,18 @@
 
 ### 1. Want
 
-Each `/shop-items/<category>` page needs a compact, high-quality, realistic hero image that shows the actual category shape at the LT hero aspect ratio. The image should feel intentionally art-directed for the page, not like a bad source-photo crop. Balloon colors must come from the LT owner/Odoo color system: exact source color names and swatch images first, sampled hex only as a web approximation.
+Each `/shop-items/<category>` page needs a compact, high-quality, realistic hero image that shows the actual category shape at the LT hero aspect ratio. The image should feel intentionally art-directed for the page, not like a bad source-photo crop. Balloon colors must come from the LT owner-approved color system: exact source color names and swatch images first, sampled hex only as a web approximation.
 
 ### 2. Have
 
-The local ERPNext/Frappe site runs at `http://localhost:8081`, with public hero image CSS in `apps/locally_twisted/locally_twisted/public/css/lt-photo-heroes.css`. Existing generated hero sources live under `_resources/generated-hero-sources/2026-05-10/`, with public breakpoint crops in `apps/locally_twisted/locally_twisted/public/images/heroes/`. The Odoo color source is verified through `_resources/odoo-live/catalog.json`, `apps/locally_twisted/locally_twisted/catalog_contract/odoo_color_swatch_map.json`, and `python scripts\verify\odoo_color_swatch_contract.py`, which currently reports 53 `latex colors` drawer options and owner swatches.
+The local ERPNext/Frappe site runs at `http://localhost:8081`, with public hero image CSS in `apps/locally_twisted/locally_twisted/public/css/lt-photo-heroes.css`. Existing generated hero sources live under `_resources/generated-hero-sources/2026-05-10/`, with public breakpoint crops in `apps/locally_twisted/locally_twisted/public/images/heroes/`. The catalog color source is verified through `_resources/catalog-source/catalog.json`, `apps/locally_twisted/locally_twisted/catalog_contract/color_swatch_map.json`, and `python scripts\verify\color_swatch_contract.py`, which currently reports 53 `latex colors` drawer options and owner swatches.
 
 ### 3. Won't Accept
 
 - No reused bad product-source photo crops as category heroes.
 - No generic stock-like balloon scenes that could be any balloon business.
 - No image prompts that rely only on hex values.
-- No model-invented colors outside the owner/Odoo swatch catalog.
+- No model-invented colors outside the owner-approved swatch catalog.
 - No proof-photo implication; generated heroes are representative product visualization only.
 - No readable text, logos, watermarks, misspelled signage, or fake brand marks inside images.
 - No hero composition that fails the compact hero crop at desktop, tablet, or mobile.

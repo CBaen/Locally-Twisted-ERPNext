@@ -10,7 +10,7 @@
 
 **Stay on the current path: ERPNext + Webshop + the `locally_twisted` custom contract layer. Do NOT pivot.**
 
-The build IS worth it. The architecture is correct. The cumulative iteration cost is real but is producing a coherent receiving-layer system that matches the behavioral pattern Odoo demonstrably uses.
+The build IS worth it. The architecture is correct. The cumulative iteration cost is real but is producing a coherent receiving-layer system that matches the behavioral pattern legacy_source demonstrably uses.
 
 ## 2. Reasoning (Plain Language)
 
@@ -24,7 +24,7 @@ The strategic question was: "Should we have picked a more professional, scaffold
 
 **The architectural insight that resolves the "50+ colors and combinations" pain:**
 
-Odoo's Classic Arch (live, observed by OpenClaw) has 4 attributes:
+legacy_source's Classic Arch (live, observed by OpenClaw) has 4 attributes:
 - **Arch Size** (4 values, `always` mode) → creates 4 real `product.product` variants. Pricing varies per size.
 - **latex colors** (53 values, `no_variant` mode) → does NOT create variants. Stored as cart/order-line configuration.
 - **Design** (2 values, `no_variant`) → cart/order-line config.
@@ -32,9 +32,9 @@ Odoo's Classic Arch (live, observed by OpenClaw) has 4 attributes:
 
 OpenClaw selected all 53 colors → URL became `attribute_values=...,...` → product_id stayed at 91 (no variant explosion) → add-to-cart remained enabled. The order line auto-name preserves "latex colors: Wintergreen, Royal Blue" for fulfillment.
 
-**Multi-color "combinations" should NOT be SKU variants in either Odoo or ERPNext.** They should be no-variant structured options preserved on the cart/order line. The "10,000+ combo SKUs" framing was the wrong problem.
+**Multi-color "combinations" should NOT be SKU variants in either legacy_source or ERPNext.** They should be no-variant structured options preserved on the cart/order line. The "10,000+ combo SKUs" framing was the wrong problem.
 
-The LT custom app is already implementing this pattern. OpenClaw's `erpnext-receiving-build-spec-from-odoo-2026-05-10.md` documents the existing alignment:
+The LT custom app is already implementing this pattern. OpenClaw's `erpnext-receiving-build-spec-from-legacy_source-2026-05-10.md` documents the existing alignment:
 - `apps/locally_twisted/locally_twisted/catalog_contract/models.py` already has product page contract with `commerce_lane`, `product_page_type`, axes, add-ons, dependency matrices, gallery contracts.
 - `apps/locally_twisted/locally_twisted/product_page_runtime.py` already writes line payload fields (`custom_lt_product_template_item`, `custom_lt_product_page_type`, `custom_lt_configuration_version`, `custom_lt_configuration_summary`, `custom_lt_configuration_json`).
 - `apps/locally_twisted/locally_twisted/product_quote_runtime.py` already creates draft Quotation from Lead and preserves payload.
@@ -50,11 +50,11 @@ The question that DOES depend on X is the launch posture (see Section 8).
 
 | Option | Already Built | Remaining Work | Risk | Verdict |
 |--------|---------------|----------------|------|---------|
-| **A. Continue Webshop + LT contract layer** | Catalog imported (53/10672/10617/10654); 2 product page templates; custom guest cart; custom Stripe checkout; color drawers with 55 hex mappings; variant media swap API; quote-first bridge; add-on dependency contract (`foil_number`); paid-order cascade; CRM stage guards; record-level failure verifiers; 14/0 architecture readiness pass. | Validation gates (53 product classifications, 273 price approvals, 95 media classifications, 4 add-on family decisions, browser proof for 2 family flows). NOT architectural rework. | **Low.** Path is converged with Odoo's behavior. | **RECOMMENDED.** |
+| **A. Continue Webshop + LT contract layer** | Catalog imported (53/10672/10617/10654); 2 product page templates; custom guest cart; custom Stripe checkout; color drawers with 55 hex mappings; variant media swap API; quote-first bridge; add-on dependency contract (`foil_number`); paid-order cascade; CRM stage guards; record-level failure verifiers; 14/0 architecture readiness pass. | Validation gates (53 product classifications, 273 price approvals, 95 media classifications, 4 add-on family decisions, browser proof for 2 family flows). NOT architectural rework. | **Low.** Path is converged with legacy_source's behavior. | **RECOMMENDED.** |
 | **B. Pivot to Medusa / Saleor / Sylius / Spree / Bagisto / Shopware (integrated)** | Nothing. Catalog re-port required. ERPNext integration greenfield. | Build webhook/sync layer, customer/order/inventory parity, Stripe mapping, two-system maintenance burden permanent. | **High.** No production prior art for any of these with ERPNext. Estimated maintenance cost dominates the project. | Reject. |
 | **C. Clone from source (read another platform's variant/photo/cart code, port to Jinja)** | Nothing. Source-clone work doesn't address ERPNext's receiving layer. | Equivalent to Option A's remaining work, plus re-doing template/UX layer that LT already has. | **Medium-high.** The cloning would be of templates; the architectural value is in the runtime, which is ERPNext-side. | Reject. |
 | **D. Custom on ERPNext primitives only (no Webshop)** | Most of LT's custom app is already this — Webshop is mostly the shell. | Replace Webshop's residual cart/checkout/category routing with full custom equivalents. | **Medium.** The current LT app is already overriding most of what Webshop provides; full removal of Webshop is incremental, not architectural. | Possible future direction; not necessary for Phase 1. |
-| **E. Keep Odoo's storefront, decommission rest of Odoo** | Odoo storefront has the depth. | Build Odoo↔ERPNext sync layer for orders/customers/inventory. Two systems, two admins, ongoing Odoo upgrade maintenance. | **High.** Inverts the project's stated direction. Odoo failed in testing for reasons that may not be storefront-specific. | Reject. |
+| **E. Keep legacy_source's storefront, decommission rest of legacy_source** | legacy_source storefront has the depth. | Build legacy_source↔ERPNext sync layer for orders/customers/inventory. Two systems, two admins, ongoing legacy_source upgrade maintenance. | **High.** Inverts the project's stated direction. legacy_source failed in testing for reasons that may not be storefront-specific. | Reject. |
 
 ## 5. Risks per Option
 
@@ -71,13 +71,13 @@ The question that DOES depend on X is the launch posture (see Section 8).
 OpenClaw's safety referee (`ecommerce-rebuild-safety-referee-2026-05-10.md`) and its GL Proxy review (`gl-proxy-ecommerce-rebuild-acceptance-2026-05-10.md`) provide adversarial review of the architecture. The adversarial findings:
 
 - **Architecture readiness verifier passing** is necessary but not sufficient. 53 published Website Items still hold `needs_review` page-template/buying-path fields. Runtime fallback protects testing but go-live requires saved classifications.
-- **Lane A Odoo source map** was missing initially (now filled by OpenClaw's `odoo-source-commerce-map-2026-05-10.md` + the live backend witness). Process discipline: no artifact, no evidence.
+- **Lane A legacy_source source map** was missing initially (now filled by OpenClaw's `legacy_source-source-commerce-map-2026-05-10.md` + the live backend witness). Process discipline: no artifact, no evidence.
 - **Price packet status:** 273 review units, 0 approved public prices. No public price promise can stand on this.
 - **Media packet status:** 95 unclassified source extra images. No "complete gallery" promise can stand.
 - **Add-on review status:** 4 source add-on families (`Add ons`, `Plush add ons`, `Orbz toppers`, `Add Bouquet`) are quote-only-until-approved. Only `foil_number` is currently a paid checkout add-on.
-- **Version mismatch:** local Odoo `19.0.2.15.0`, possibly production `19.0.2.14.0`; container image label vs digest. These are `[VERSION-MISMATCH]` until resolved.
+- **Version mismatch:** local legacy_source `19.0.2.15.0`, possibly production `19.0.2.14.0`; container image label vs digest. These are `[VERSION-MISMATCH]` until resolved.
 
-**The strongest adversarial case AGAINST staying** would be: "the iteration tempo proves the platform is wrong." That argument doesn't survive scrutiny, because the architecture that emerged from iteration matches Odoo's proven pattern. The iteration cost was the cost of discovering the right architecture, not the cost of the wrong platform.
+**The strongest adversarial case AGAINST staying** would be: "the iteration tempo proves the platform is wrong." That argument doesn't survive scrutiny, because the architecture that emerged from iteration matches legacy_source's proven pattern. The iteration cost was the cost of discovering the right architecture, not the cost of the wrong platform.
 
 **The strongest adversarial case AGAINST pivoting** is identical to the recommendation reasoning: no production integration prior art exists for any alternative platform with ERPNext, and the LT custom contract layer is ERPNext-side and travels with the platform choice.
 
@@ -92,7 +92,7 @@ Translated for GL:
 
 GL proxy notes that GL would not be able to verify unaided:
 - Whether selected customer options survive into Sales Order/Invoice rows.
-- Whether current prices came from Odoo resolver, ERPNext snapshot, or manual fallback.
+- Whether current prices came from legacy_source resolver, ERPNext snapshot, or manual fallback.
 - Whether source photos are variant-changing, parent-gallery, category/reference, or unsafe to show.
 - Whether an add-on is truly priced/fulfillable or just visually present.
 
@@ -145,21 +145,21 @@ These are the unique contributions of the source-separated researcher dispatch:
 - `research-brief.md` (5 pages)
 - `web-scout-findings.md` (38KB — open-source platform survey)
 - `docs-standards-findings.md` (28KB — official Frappe Webshop docs + override surface)
-- `ground-truth-findings.md` (34KB — local LT codebase + Odoo clone benchmark)
+- `ground-truth-findings.md` (34KB — local LT codebase + legacy_source clone benchmark)
 
 **OpenClaw's parallel expedition (`workstreams/ecommerce-audit/`):**
 - `README.md` — evidence inventory
-- `odoo-source-commerce-map-2026-05-10.md` — Lane A Odoo source map
+- `legacy_source-source-commerce-map-2026-05-10.md` — Lane A legacy_source source map
 - `erpnext-receiving-parity-matrix-2026-05-10.md` — Lane B parity matrix
 - `cart-checkout-intent-preservation-audit-2026-05-10.md` — Lane C
 - `native-frappe-product-template-architecture-2026-05-10.md` — Lane D
-- `odoo-docs-agent-action-convergence-2026-05-10.md` — Lane E convergence
-- `odoo-backend-architecture-and-checkout-logic-2026-05-10.md` — live Odoo backend witness
+- `legacy_source-docs-agent-action-convergence-2026-05-10.md` — Lane E convergence
+- `legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md` — live legacy_source backend witness
 - `gl-proxy-ecommerce-rebuild-acceptance-2026-05-10.md` — OpenClaw's GL Proxy review
 - `ecommerce-rebuild-safety-referee-2026-05-10.md` — OpenClaw's safety referee
 - `cart-checkout-verification-gates-2026-05-10.md`
 - `erpnext-receiving-rebuild-requirements-2026-05-10.md`
-- `erpnext-receiving-build-spec-from-odoo-2026-05-10.md` — concrete build spec
+- `erpnext-receiving-build-spec-from-legacy_source-2026-05-10.md` — concrete build spec
 - `ecommerce-infrastructure-readiness-packet-2026-05-10.md` — most recent state
 - `ecommerce-infrastructure-doc-map-and-synthesis-2026-05-10.md`
 - `ecommerce-infrastructure-plan-v2-2026-05-10.md`
@@ -171,7 +171,7 @@ These are the unique contributions of the source-separated researcher dispatch:
 
 The expedition skill's full protocol calls for Phase 2 (Convergence), Phase 3 (Devil's Advocate), and Phase 4 (GL Proxy review) before Phase 5 (Synthesis). These were skipped here because:
 
-- **Phase 2 (Convergence):** Substantively performed by OpenClaw's `odoo-docs-agent-action-convergence-2026-05-10.md` plus the explicit cross-source agreement between my 3 researcher findings and OpenClaw's audit packets. Running a formal convergence agent would be triangulation-of-triangulation.
+- **Phase 2 (Convergence):** Substantively performed by OpenClaw's `legacy_source-docs-agent-action-convergence-2026-05-10.md` plus the explicit cross-source agreement between my 3 researcher findings and OpenClaw's audit packets. Running a formal convergence agent would be triangulation-of-triangulation.
 
 - **Phase 3 (Devil's Advocate):** Substantively performed by OpenClaw's `ecommerce-rebuild-safety-referee-2026-05-10.md`. The strongest adversarial cases are documented in Section 6.
 

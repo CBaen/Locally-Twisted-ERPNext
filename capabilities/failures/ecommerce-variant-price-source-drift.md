@@ -50,7 +50,7 @@ amount.
 
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
-| 2026-04-30 to 2026-05-19 | Locally Twisted | Odoo-to-ERPNext catalog import and Webshop product pages | Importing Odoo catalog into ERPNext Items, variants, and Item Prices | Non-bouquet variant families flattened many active variant `Item Price` rows to base price; Easter Bunny Ear Arch `25ft` showed `$375` instead of `$440` | `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; `workstreams/catalog-variant-price-recovery.md`; `9aa117f`; local `product_price_modifier_contract.py` repair evidence | added | guarded-local |
+| 2026-04-30 to 2026-05-19 | Locally Twisted | legacy_source-to-ERPNext catalog import and Webshop product pages | Importing legacy_source catalog into ERPNext Items, variants, and Item Prices | Non-bouquet variant families flattened many active variant `Item Price` rows to base price; Easter Bunny Ear Arch `25ft` showed `$375` instead of `$440` | `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; `workstreams/catalog-variant-price-recovery.md`; `9aa117f`; local `product_price_modifier_contract.py` repair evidence | added | guarded-local |
 
 ## Root pattern
 
@@ -79,7 +79,7 @@ base price as if it were the complete per-variant price matrix.
 
 ## Required guard
 
-For LT's Odoo-derived catalog:
+For LT's legacy_source-derived catalog:
 
 - `python scripts/verify/product_price_modifier_contract.py`
 - `npm run test:product-prices`
@@ -130,7 +130,7 @@ ERPNext/Stripe parity can mean anything.
 ## Evidence quality
 
 Verified locally on 2026-05-19: the reported Easter Bunny Ear Arch price now
-matches Odoo source pricing on the product page and cart API, and the broad
+matches legacy_source source pricing on the product page and cart API, and the broad
 modifier dry-run reports 0 remaining active variant price changes across 49
 variant products / 10,186 active variants. Staging/live are not verified by this
 recipe.

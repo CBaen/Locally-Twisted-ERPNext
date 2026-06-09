@@ -84,7 +84,7 @@ Current guards:
 
 ## Evidence Quality
 
-Verified locally against source Odoo export, local ERPNext Product Setup rows,
+Verified locally against source legacy_source export, local ERPNext Product Setup rows,
 native Website Slideshow rows, rendered product routes, desktop browser
 geometry, mobile gallery behavior, variant media persistence, owner-product
 safety, and ecommerce full gates. Live remains unmodified.

@@ -35,7 +35,7 @@ GL stopped the work and asked: there must be existing Frappe themes / GitHub rep
 - Custom Web Templates in a custom app — when do real Frappe theme authors use these vs. Web Page Page Builder?
 - The current LT site has the `locally_twisted` custom app installed with `web_include_css` registered for `/assets/locally_twisted/css/lt-theme.css`. Should we be using `website_theme_scss` instead? Or installing a theme that registers its own SCSS via the Website Theme DocType?
 
-**Question 3 (SECONDARY but load-bearing):** Capture the Jeff-approved homepage content from the live Odoo at `http://5.78.136.133/` AND from the local Odoo project at `C:/Users/baenb/projects/locally-twisted-odoo/addons/locally_twisted/views/` (header.xml, footer.xml, homepage.xml). Output to a structured markdown so future build attempts use Jeff-vetted content, not invented copy.
+**Question 3 (SECONDARY but load-bearing):** Capture the Jeff-approved homepage content from the live legacy_source at `http://5.78.136.133/` AND from the local legacy_source project at `C:/Users/baenb/projects/locally-twisted-legacy_source/addons/locally_twisted/views/` (header.xml, footer.xml, homepage.xml). Output to a structured markdown so future build attempts use Jeff-vetted content, not invented copy.
 
 ## Constraints
 
@@ -48,10 +48,10 @@ GL stopped the work and asked: there must be existing Frappe themes / GitHub rep
 
 ## Destructive boundaries
 
-- Do NOT modify anything in `C:/Users/baenb/projects/locally-twisted-odoo/` (read-only reference per agency rule).
+- Do NOT modify anything in `C:/Users/baenb/projects/locally-twisted-legacy_source/` (read-only reference per agency rule).
 - Do NOT modify the Frappe / ERPNext source under `apps/frappe/` or `apps/erpnext/`.
 - Do NOT add `!important` chains to LT theme CSS (that anti-pattern is named in `anti-gl-patterns.md` section 0).
-- Do NOT generate new placeholder copy — the approved content already exists in Odoo and must be captured.
+- Do NOT generate new placeholder copy — the approved content already exists in legacy_source and must be captured.
 
 ## Failed approaches
 
@@ -62,7 +62,7 @@ GL stopped the work and asked: there must be existing Frappe themes / GitHub rep
 
 1. **2-4 candidate Frappe themes** ranked by suitability (install instructions, demo URLs, maintenance status, license, pros/cons for LT specifically).
 2. **A clear architectural pattern** for LT customer-facing pages — grounded in what real Frappe websites actually do, not hypothesis.
-3. **The Odoo-approved homepage copy** captured into `_resources/approved-content/homepage.md`.
+3. **The legacy_source-approved homepage copy** captured into `_resources/approved-content/homepage.md`.
 4. **A go/no-go on Page Builder** — if Page Builder is fine but a Website Theme step was missed, name it. If Page Builder is for internal pages and customer sites need a different pattern, name that pattern.
 
 ## Devil's Advocate concerns to surface

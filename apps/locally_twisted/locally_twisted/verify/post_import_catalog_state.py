@@ -15,7 +15,7 @@ except ImportError:  # pragma: no cover - contract tests exercise pure helpers w
 
 MANIFEST_PATH = Path(
     "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/"
-    "25-v1-odoo-erpnext-import-manifest.json"
+    "25-v1-catalog-import-manifest.json"
 )
 PRIORITY_SLUGS = [
     "easter-balloon-cups",

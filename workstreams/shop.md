@@ -65,7 +65,7 @@ Primary files:
 - `apps/locally_twisted/locally_twisted/api/cart.py`
 - `apps/locally_twisted/locally_twisted/api/variant_media.py`
 - `apps/locally_twisted/locally_twisted/seed/sync_variant_media.py`
-- `apps/locally_twisted/locally_twisted/seed/repair_variant_prices_from_odoo.py`
+- `apps/locally_twisted/locally_twisted/seed/repair_variant_prices_from_legacy_source.py`
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item.html`
 - `apps/locally_twisted/locally_twisted/templates/includes/shop_category_nav.html`
 - `apps/locally_twisted/locally_twisted/www/lt_cart.html`
@@ -88,9 +88,9 @@ Reference and verification files:
 - `MIRROR-REBUILD-PLAN.md`
 - `_resources/STYLE-GUIDE.md`
 - `_resources/STYLE-GUIDE.md` version 4.2 or newer for all current visual guidance; the old `_resources/design-guide/` synthesis was deleted on 2026-05-05 and must not be used.
-- `_resources/odoo-live/catalog.json`
-- `_resources/odoo-live/images/`
-- `_resources/odoo-live/value_normalize_map.json`
+- `_resources/catalog-source/catalog.json`
+- `_resources/catalog-source/images/`
+- `_resources/catalog-source/value_normalize_map.json`
 - `scripts/verify/smoke_shop.py`
 - `scripts/verify/cart_checkout_contract.py`
 - `scripts/verify/product_variant_price_contract.py`
@@ -109,7 +109,7 @@ Reference and verification files:
 - Current local taxonomy state verified 2026-05-24 by `shop_taxonomy_contract.py` is 51 published Website Items, 8 visible primary groups under `Shop Items`, 9 secondary groups under hidden `Shop Occasions`, and 51 secondary Website Item Group rows. Current sellability proof is 30 checkout Website Items and 21 quote-first Website Items. Re-check the target DB before changing seed logic or making staging/live claims from these numbers.
 - Item Group hierarchy under `Shop Items` has 8 customer-facing children: Arches, Balloon Drops, Bouquets, Columns, Garlands, Photo Ops & Backdrops, Stands & Easels, and Table Decor. Prior fulfillment/menu/occasion groups are hidden and covered by route aliases.
 - Webshop settings are documented with variants and attribute filters enabled.
-- Bulk catalog import lives in `seed_catalog.py` and honors captured Odoo `data-attribute-exclusions`.
+- Bulk catalog import lives in `seed_catalog.py` and honors captured legacy_source `data-attribute-exclusions`.
 - Product listing cards use `lt_brand_description` through `locally_twisted.api.product_listing`.
 - `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; category detail pages stay at `/shop-items/<group>`.
 - `/shop-items/arches` previously required restoring `.item-group-content`; do not remove that structure without retesting group pages.
@@ -124,12 +124,12 @@ Reference and verification files:
 - `/shop` cards for variant templates link to "Choose options" instead of adding an unpriced template code. Single-SKU cards add directly when priced.
 - `/shop` and Webshop-rendered category product cards are whole-card clickable from non-interactive card areas. The delegated handler preserves real links/buttons, `Add to cart`, `Choose options`, `Request quote`, selectors, modified clicks, and text selection. Do not wrap entire cards in anchors; use `lt-product-card-click.js` and `.lt-product-card-clickable`.
 - `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`, distinguishes optional add-on checkboxes from variant chips, and checks the showroom contracts for `/shop`, `/shop-items`, `/shop-items/<group>`, product detail image scale/containment, the desktop rail/mobile select category navigation contract, `/shop` product-grid orphan prevention, and category-product-grid orphan prevention. `cart_checkout_contract.py` verifies the shared API/checkout contract.
-- Variant media first pass completed 2026-05-02: 1,712 variant `Item.image` values are set from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists.
+- Variant media first pass completed 2026-05-02: 1,712 variant `Item.image` values are set from `_resources/catalog-source/images/` where legacy_source image labels clearly matched product options. Product pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists.
 - Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media review is now reproducible with `python scripts/verify/category_media_candidates.py`. Latest taxonomy smoke on 2026-05-24 checked the 8 active customer-facing Item Groups and wrote ignored local reports to `output/category-media-candidates-taxonomy-smoke.json` and `output/category-media-candidates-taxonomy-smoke.md`. `python scripts/setup/sync_category_media.py --write-template` creates an approval template, and the dry-run helper stages approved selections through Frappe without writing unless `--apply` is used. No ERPNext image fields were changed.
 - Product breadcrumbs on detail pages now start at `All Balloon Decor` instead of the retired `Shop by Category` route.
-- Per-product variant correctness now compares normalized Odoo `valid_variants` plus approved preset projections to active, required-choice ERPNext variants. Current pass on 2026-05-19: `scripts/verify/catalog_variant_contract.py` checked 53 products, 10,186 expected active variants, 10,186 live active variants, and 4 single-SKU products. Disabled legacy optional-add-on/raw-color variants are intentionally ignored by this customer-facing contract. This is variant-shape parity only.
-- Catalog variant price parity is locally guarded after the 2026-05-19 incident. The bouquet-size contract still covers the historical bouquet failure; `product_price_modifier_contract.py` now checks broad Odoo option price modifiers across active variant products; `product_price_display.spec.js` proves the reported Easter Bunny Ear Arch page changes visible price and selected item code. Continue in `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and `workstreams/catalog-variant-price-recovery.md`.
+- Per-product variant correctness now compares normalized legacy_source `valid_variants` plus approved preset projections to active, required-choice ERPNext variants. Current pass on 2026-05-19: `scripts/verify/catalog_variant_contract.py` checked 53 products, 10,186 expected active variants, 10,186 live active variants, and 4 single-SKU products. Disabled legacy optional-add-on/raw-color variants are intentionally ignored by this customer-facing contract. This is variant-shape parity only.
+- Catalog variant price parity is locally guarded after the 2026-05-19 incident. The bouquet-size contract still covers the historical bouquet failure; `product_price_modifier_contract.py` now checks broad legacy_source option price modifiers across active variant products; `product_price_display.spec.js` proves the reported Easter Bunny Ear Arch page changes visible price and selected item code. Continue in `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and `workstreams/catalog-variant-price-recovery.md`.
 - Product option UX P0 pass completed 2026-05-02: no per-attribute Jinja DB lookup, progressive invalid-option disabling wired to `valid_options_for_attributes`, and chip inputs verified as radio/single-select. Active uncommitted work may also be refining variant starting-price display; verify before claiming that slice complete.
 - `.product-code` CSS hiding is the known intentional `!important` exception.
 - The stale Webshop generated asset map was corrected in the running ERPNext stack on 2026-05-02. No package install was needed: Yarn Classic exists at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include it in `PATH`. Build Webshop assets with `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH`. The frontend/nginx container must be built last because shared `assets.json` points to files served from that container's app-public symlink. Current rendered `/shop` references `/assets/webshop/dist/css/webshop-web.bundle.C4VO6TJ6.css` and `/assets/webshop/dist/css-rtl/webshop-web.bundle.JDOEFDY5.css`, both returning `200 text/css`; Playwright console sweeps returned 0 errors/warnings.
@@ -139,7 +139,7 @@ Reference and verification files:
 ## Active Risks
 
 - Category browse media is still unassigned in ERPNext. The 2026-05-24 taxonomy pass retained that boundary: route hero art exists in source, but Item Group `image` fields remain unapproved. `scripts/verify/category_media_candidates.py` creates a no-mutation approval packet for the 8 active categories, but Jeff/GL still need to approve selected images before live assignment. Do not restore the retired `/shop-by-category` card index as a shortcut.
-- Catalog media remains incomplete where the Odoo image labels were too generic to map safely. Do not assign skipped images by guess; review them with GL/Jeff or add explicit mapping rules.
+- Catalog media remains incomplete where the legacy_source image labels were too generic to map safely. Do not assign skipped images by guess; review them with GL/Jeff or add explicit mapping rules.
 
 ## Dependencies And Collision Points
 

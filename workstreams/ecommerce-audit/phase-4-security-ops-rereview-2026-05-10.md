@@ -30,15 +30,15 @@ PASS.
 PASS.
 
 - The verifier and runner do not call `submit_guest_order`, `get_payment_gateway_account`, Stripe session creation, Payment Request creation/submission, Sales Order insertion/submission, or checkout note/Communication creation.
-- Static search of the reviewed verifier/runner found no database insert/save/submit/set-value calls, sendmail calls, Stripe/payment-session calls, Odoo calls, or network-client imports.
+- Static search of the reviewed verifier/runner found no database insert/save/submit/set-value calls, sendmail calls, Stripe/payment-session calls, legacy_source calls, or network-client imports.
 - Artifact content is limited to item codes, lane/template status, block outcomes, precedence outcomes, rollback status, and count deltas. I found no customer email, phone, address, name, token, secret, checkout URL, payment session, or customer message body.
 
-### No Odoo mutation risk
+### No legacy_source mutation risk
 
 PASS.
 
 - The runner executes a local Frappe method inside the ERPNext container via `docker exec ... bench --site frontend execute locally_twisted.verify.quote_event_checkout_boundary_contract.run`.
-- The reviewed verifier path uses Frappe reads plus local runtime/cart/checkout boundary functions. I found no Odoo imports, API clients, export calls, XML-RPC/JSON-RPC calls, or other network write paths.
+- The reviewed verifier path uses Frappe reads plus local runtime/cart/checkout boundary functions. I found no legacy_source imports, API clients, export calls, XML-RPC/JSON-RPC calls, or other network write paths.
 
 ### Rollback-safe / no persistent business-record deltas
 

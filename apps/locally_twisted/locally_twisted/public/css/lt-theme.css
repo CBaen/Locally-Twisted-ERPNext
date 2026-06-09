@@ -2295,6 +2295,10 @@ body.lt-filter-open {
         grid-template-columns: 1fr 1fr 1fr;
         gap: 1.5rem;
     }
+
+    #products-grid-area[data-lt-grid-balance="two"] {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 /* Each card cell — webshop wraps each card in .item-card.col-sm-4.

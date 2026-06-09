@@ -1,6 +1,6 @@
 # Service Area, Pickup, and Delivery Fees
 
-Confirmed by Odoo policy reference and Guiding Light on 2026-05-05; delivery/legal details clarified by Guiding Light business proxy on 2026-05-06.
+Confirmed by legacy_source policy reference and Guiding Light on 2026-05-05; delivery/legal details clarified by Guiding Light business proxy on 2026-05-06.
 
 ## Ready-to-order checkout
 

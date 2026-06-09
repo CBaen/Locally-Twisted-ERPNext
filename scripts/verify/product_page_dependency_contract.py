@@ -21,8 +21,8 @@ from locally_twisted.catalog_contract import (
 )
 
 
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
 
 
 def _products() -> list[dict]:

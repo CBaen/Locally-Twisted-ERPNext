@@ -96,15 +96,15 @@ Nimbalyst-Local/
 _resources/a11y-audit-2026-04-30/*.json
 _resources/a11y-audit-2026-04-30/*.png
 _resources/audit-2026-04-30-chrome/
-_resources/odoo-live-mirror/assets/
-_resources/odoo-live-mirror/pages/
-_resources/odoo-live-mirror/manifest.json
+_resources/retired-source-mirror/assets/
+_resources/retired-source-mirror/pages/
+_resources/retired-source-mirror/manifest.json
 _resources/webshop-spec-2026-04-30/
 _resources/webshop-state-vs-spec-2026-04-30/screenshots/
 
-# Bind-mount staging copy of the seed data — duplicate of _resources/odoo-live/
+# Bind-mount staging copy of the seed data — duplicate of _resources/catalog-source/
 # kept here so it's accessible inside the locally_twisted container at the same
-# path. Re-staged from _resources/odoo-live/ when the seed needs to run.
+# path. Re-staged from _resources/catalog-source/ when the seed needs to run.
 apps/locally_twisted/locally_twisted/seed/_data/
 apps/locally_twisted/locally_twisted/seed/_guard/
 
@@ -114,7 +114,7 @@ apps/locally_twisted/locally_twisted/public/images/landing-page-pics/**/image-fi
 apps/locally_twisted/locally_twisted/public/images/landing-page-pics/landing-page/popcorn 2.webp
 
 # Throwaway HTML fetched during scraper development. Re-fetchable; not source-of-truth.
-_resources/_tmp_odoo_sample.html
+_resources/_tmp_legacy_source_sample.html
 
 # Local-only design/research packets kept for active critique or OpenClaw handoff.
 # Do not track these as LT production source; keep production translation in app files.

@@ -472,13 +472,14 @@ every deploy.
                        id="book_spam_token"
                        name="lt_form_token"
                        value="{{ inquiry_spam_token or '' }}">
-                <div class="lt-book__bot-check" aria-hidden="true">
+                <div class="lt-book__bot-check" aria-hidden="true" data-lt-layout-ignore="true">
                     <label for="book_website">Leave this field blank</label>
                     <input type="text"
                            id="book_website"
                            name="website"
                            autocomplete="off"
-                           tabindex="-1">
+                           tabindex="-1"
+                           aria-hidden="true">
                 </div>
                 {% if requested_item_code %}
                 <input type="hidden" name="lt_requested_item_code" value="{{ requested_item_code }}">

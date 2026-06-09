@@ -20,14 +20,14 @@ const OUT_DIR = path.join(process.cwd(), "output", "playwright");
 const DEFAULT_PRODUCTS_MANIFEST = path.join(
 	process.cwd(),
 	"audits",
-	"odoo-erpnext-migration-audit-2026-05-08",
-	"25-v1-odoo-erpnext-import-manifest.json",
+	"catalog-import-audit-2026-05-08",
+	"25-v1-catalog-import-manifest.json",
 );
 const DEFAULT_WEBSITE_ITEMS_SNAPSHOT = path.join(
 	process.cwd(),
 	"audits",
-	"odoo-erpnext-migration-audit-2026-05-08",
-	"current-state-snapshot-2026-05-17-2132-clean-odoo-products",
+	"catalog-import-audit-2026-05-08",
+	"current-state-snapshot-2026-05-17-2132-clean-legacy_source-products",
 	"website_items.json",
 );
 const REPORT_PATH = process.env.LT_CHECKOUT_PROOF_REPORT

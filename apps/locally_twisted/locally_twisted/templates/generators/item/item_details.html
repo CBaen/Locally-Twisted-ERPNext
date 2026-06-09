@@ -1,4 +1,4 @@
-﻿{# Locally Twisted override of webshop's item_details.html.
+{# Locally Twisted override of webshop's item_details.html.
    Replaces apps/webshop/webshop/templates/generators/item/item_details.html
    via same-path resolution in Frappe's ChoiceLoader (locally_twisted is last
    in installed_apps so its template wins).
@@ -8,7 +8,7 @@
    - What’s Included stays below the purchase controls.
    - Pickup/delivery moves below What’s Included.
    - Add-ons/color/full-gallery work remains data-aware and does not stage
-     Odoo source data into the container.
+     legacy_source source data into the container.
 #}
 {% set width_class = "expand" if not slides else "" %}
 {% set cart_settings = shopping_cart.cart_settings %}

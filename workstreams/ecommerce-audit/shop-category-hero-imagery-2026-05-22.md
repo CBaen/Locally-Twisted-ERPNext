@@ -14,7 +14,7 @@ compact hero ratio and using the real LT balloon color system.
 
 ## Source Decision
 
-Use generated representative hero images, not real/proof photos and not Odoo product-photo crops. The generation prompt authority is:
+Use generated representative hero images, not real/proof photos and not legacy_source product-photo crops. The generation prompt authority is:
 
 1. category shape;
 2. exact owner-approved balloon color names;
@@ -54,7 +54,7 @@ Research brief:
 
 ## Verification
 
-- `python scripts\verify\odoo_color_swatch_contract.py`
+- `python scripts\verify\color_swatch_contract.py`
 - `python -m py_compile scripts\setup\generate_shop_category_heroes.py`
 - `python scripts\dev\clear_website_cache.py`
 - `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`

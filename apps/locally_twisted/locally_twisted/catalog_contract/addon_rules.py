@@ -1,4 +1,4 @@
-﻿"""Rules for separating required variant axes from optional add-ons."""
+"""Rules for separating required variant axes from optional add-ons."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ CONFIRMED_ADD_ONS = {
     ),
 }
 
-# Odoo axes that smell like add-ons but need product-family review before import.
+# legacy_source axes that smell like add-ons but need product-family review before import.
 REVIEW_ADD_ONS = {
     "Add ons": "Potential optional add-ons; needs product-family mapping.",
     "Plush add ons": "Potential optional plush upgrades; needs product-family mapping.",

@@ -10,9 +10,9 @@ GL is the approval proxy for Jeff on this render system.
 
 ## Source Of Truth Order
 
-1. Jeff/LT actual photos in `_resources/odoo-live/images/`.
+1. Jeff/LT actual photos in `_resources/catalog-source/images/`.
 2. Balloon construction and physics rules from professional references.
-3. Product catalog metadata in `_resources/odoo-live/catalog.json`.
+3. Product catalog metadata in `_resources/catalog-source/catalog.json`.
 4. LT brand/style guidance in `_resources/STYLE-GUIDE.md` and `_resources/design-guide/`.
 5. Generated image judgement by GL before any broad product rollout.
 

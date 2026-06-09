@@ -1,0 +1,25 @@
+{
+  "container": "locally-twisted-erpnext-v15-backend-1",
+  "counts": {
+    "files_product_related": 2020,
+    "item_attribute_values": 205,
+    "item_attributes": 26,
+    "item_groups": 18,
+    "item_prices": 10656,
+    "item_variant_attributes": 32028,
+    "items": 10674,
+    "website_item_groups_child_rows": 0,
+    "website_items": 53,
+    "website_slideshow_items": 0,
+    "website_slideshows": 0
+  },
+  "generated_at": "2026-05-11T10:50:18Z",
+  "read_only": true,
+  "site": "frontend",
+  "snapshot_dir": "audits\\catalog-import-audit-2026-05-08\\current-state-snapshot-2026-05-11-1050",
+  "source_files": {
+    "catalog": "_resources\\catalog-source\\catalog.json",
+    "slug_to_group": "_resources\\catalog-source\\slug_to_group.json"
+  },
+  "warnings": []
+}

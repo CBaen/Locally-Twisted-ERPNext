@@ -5,7 +5,7 @@ D:2026-05-10 | Check:ready-to-order candidate list + Phase 6 launch decision pac
 
 Help GL/Locally Twisted cut the ecommerce launch scope without pretending every product belongs in direct checkout.
 
-This is a planning/status artifact only. It does **not** approve product import, product deletion, Odoo mutation, ERPNext catalog mutation, public launch, or live checkout.
+This is a planning/status artifact only. It does **not** approve product import, product deletion, legacy_source mutation, ERPNext catalog mutation, public launch, or live checkout.
 
 GL correction at 2026-05-10 22:18 MDT: the current ERPNext products are **test products only**. Future product work must prove a controlled purge/reupload/import path where products that fit the LT schema fill the correct Website Item/custom fields, use cascading/dependency information, and trigger the intended automations. This plan narrows what should be tested first; it is not permission to trust or preserve the current product records as final catalog truth.
 

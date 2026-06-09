@@ -4,13 +4,13 @@ D:2026-05-10 | Check:indexed memory + local repo/artifact readback + official ER
 
 ## Correction
 
-The operative question is not “which products are ready?” It is whether the ERPNext/Frappe destination has a trustworthy ecommerce **receiving infrastructure** capable of preserving Odoo-derived business meaning without silent loss.
+The operative question is not “which products are ready?” It is whether the ERPNext/Frappe destination has a trustworthy ecommerce **receiving infrastructure** capable of preserving legacy_source-derived business meaning without silent loss.
 
 A product matrix is a downstream audit view. It is not the architecture. The architecture is the contract layer, runtime preservation layer, quote/checkout bridges, record-level failure evidence, and verifier gates.
 
 ## Decision this answers
 
-Can Locally Twisted safely continue building native ERPNext ecommerce infrastructure from Odoo’s behavior witness without copying Odoo code or pretending ERPNext Webshop alone is enough?
+Can Locally Twisted safely continue building native ERPNext ecommerce infrastructure from legacy_source’s behavior witness without copying legacy_source code or pretending ERPNext Webshop alone is enough?
 
 Answer: **yes for the infrastructure direction; no for any claim that native ERPNext alone solves the problem.** ERPNext/Frappe needs LT-owned infrastructure around Webshop before product import/reopen claims are safe.
 
@@ -20,7 +20,7 @@ Answer: **yes for the infrastructure direction; no for any claim that native ERP
 
 - 2026-05-07 durable rule: fake data is allowed, fake success is not; every field/automation that can or should happen must either happen or fail loudly with record-level evidence. Source: `memory/2026-05-07.md#L4-L6`.
 - 2026-05-08 catalog/product-page lane created contract-layer files and verifiers, but source contract audit was intentionally blocked by unresolved/import-hardening issues; no full catalog import readiness claim. Source: `memory/2026-05-08.md#L45-L52`.
-- Project framing says this is a migration of business intent + catalog data into a fresh ERPNext install, not an automated Odoo schema/module translation. Source: `.planning/PROJECT.md`.
+- Project framing says this is a migration of business intent + catalog data into a fresh ERPNext install, not an automated legacy_source schema/module translation. Source: `.planning/PROJECT.md`.
 
 ### 2. Official ERPNext/Frappe docs checked 2026-05-10
 
@@ -82,7 +82,7 @@ This only proves Python syntax/loadability for the inspected infrastructure file
 
 | Layer | Owner | Why it exists | Evidence |
 |---|---|---|---|
-| Source witness intake | Odoo repo + audit artifacts | Capture mature ecommerce meaning without copying Odoo implementation. | `locally-twisted-odoo`, `odoo-source-commerce-map-2026-05-10.md` |
+| Source witness intake | legacy_source repo + audit artifacts | Capture mature ecommerce meaning without copying legacy_source implementation. | `locally-twisted-legacy_source`, `legacy_source-source-commerce-map-2026-05-10.md` |
 | Contract builder | `catalog_contract/source_builder.py` + models | Classify source concepts before they touch Webshop. | `catalog_contract/models.py`, `source_builder.py` |
 | Product-page class labels | `product_page_labels.py` + Website Item custom fields | Store machine values, show operator-friendly labels. | readiness output: `two_reusable_template_types` pass |
 | Runtime configuration payload | `product_page_runtime.py` | Version and validate selected meaning before cart/checkout/quote. | `CONFIG_VERSION = lt-product-config-v1` |
@@ -121,7 +121,7 @@ This only proves Python syntax/loadability for the inspected infrastructure file
 - The correct architectural layer exists: LT-owned contract/runtime infrastructure around ERPNext/Webshop.
 - The current design aligns with official ERPNext/Frappe constraints instead of fighting them.
 - Prior synthesis, capability recipe, code readback, and existing readiness output converge: ERPNext native records are the base, LT custom layer preserves meaning.
-- The direction avoids Odoo code copying; Odoo remains a witness for behavior/meaning.
+- The direction avoids legacy_source code copying; legacy_source remains a witness for behavior/meaning.
 
 ### Not safe to claim yet
 
@@ -136,7 +136,7 @@ This only proves Python syntax/loadability for the inspected infrastructure file
 2. **Create an infrastructure readiness packet, not a product packet**: one table of infrastructure gates, owners, verifier command, last evidence artifact, and current status.
 3. **Re-run architecture verifier in intended ecommerce mode** after the blocker is fixed, writing a dated report under `output/`.
 4. **Only then** use source/product matrices as downstream input to import/reopen planning.
-5. Keep Odoo read-only and treat Odoo docs/source as behavior witness only.
+5. Keep legacy_source read-only and treat legacy_source docs/source as behavior witness only.
 
 ## Bottom line
 

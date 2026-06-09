@@ -88,12 +88,12 @@ do not queue, and agent replies that imply success without verification.
 - Client: Locally Twisted, owned by Jeff Kimber.
 - Business: custom balloon decor, balloon twisting, and face painting on the Wasatch Front, Utah.
 - Build: Locally Twisted's ERPNext v15 install — the destination of a migration of LT's business intent + catalog data into a fresh ERPNext install (frame revised 2026-04-30 — see `locally-twisted-decisions.md`).
-- "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps.
-- "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
-- The failed Odoo test deployment is reference material only. It never served customers.
-- `C:\Users\baenb\projects\locally-twisted-odoo\` is the separate source of truth for Locally Twisted business details. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to the Odoo business-detail folder or GL/legal approval.
-- The live Odoo test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
-- Do not modify `C:\Users\baenb\projects\locally-twisted-odoo\` from this project.
+- "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps.
+- "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
+- The failed legacy_source test deployment is reference material only. It never served customers.
+- `C:\Users\baenb\projects\locally-twisted-legacy_source\` is the separate source of truth for Locally Twisted business details. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to the legacy_source business-detail folder or GL/legal approval.
+- The live legacy_source test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
+- Do not modify `C:\Users\baenb\projects\locally-twisted-legacy_source\` from this project.
 
 ## Catalog Authority And Product Scope
 
@@ -260,12 +260,12 @@ Do not invent business facts, policy terms, product details, or legal language. 
 - Style guide: `_resources/STYLE-GUIDE.md`
 - Business policies: `_resources/policies/`
 - Utah tax research: `_resources/utah-tax-rates-2026q2.md`
-- Live Odoo catalog scrape output: `_resources/odoo-live/`
-- `/book` and `/contact` snapshots: `_resources/odoo-live-snapshot/hetzner-book.html` and `hetzner-contact.html`
+- Live legacy_source catalog scrape output: `_resources/catalog-source/`
+- `/book` and `/contact` snapshots: `_resources/retired-source-snapshot/hetzner-book.html` and `hetzner-contact.html`
 
 The old `_resources/design-guide/` design-competition synthesis was deleted on 2026-05-05 because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction visual contract and kept reintroducing light-blue/blush styling. Do not recreate it or treat old screenshots/TSX from that direction as current design guidance.
 
-The Odoo snapshots are canonical for the rebuilt `/book` and `/contact` form shape where explicitly stated. They are not blanket authority for the rest of the system.
+The legacy_source snapshots are canonical for the rebuilt `/book` and `/contact` form shape where explicitly stated. They are not blanket authority for the rest of the system.
 
 ## Current Work Selection
 

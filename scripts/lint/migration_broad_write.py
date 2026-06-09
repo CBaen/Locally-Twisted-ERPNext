@@ -50,7 +50,7 @@ class BroadWriteVisitor(ast.NodeVisitor):
         self.findings: list[tuple[int, str]] = []
 
     def visit_Call(self, node: ast.Call):
-        # Pattern 1: any .search([]) call (Frappe + Odoo-style)
+        # Pattern 1: any .search([]) call (Frappe + legacy_source-style)
         if isinstance(node.func, ast.Attribute) and node.func.attr == "search":
             if node.args and isinstance(node.args[0], ast.List) and not node.args[0].elts:
                 self.findings.append((node.lineno, "search([]) — empty filter (broad-write risk)"))

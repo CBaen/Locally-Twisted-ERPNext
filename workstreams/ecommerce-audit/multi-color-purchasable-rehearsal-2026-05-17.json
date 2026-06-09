@@ -29,7 +29,7 @@
       "source_canonical_color_combo_count": 51,
       "source_name": "7' Epic Column",
       "source_price": 100.0,
-      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_price_basis": "legacy_source base price; color recipe choices do not change price",
       "source_valid_variant_count": 53,
       "ui_axis_coverage": {
         "latex colors": {
@@ -469,7 +469,7 @@
       "source_canonical_color_combo_count": 51,
       "source_name": "Baby Shower Combination Photo opt",
       "source_price": 650.0,
-      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_price_basis": "legacy_source base price; color recipe choices do not change price",
       "source_valid_variant_count": 53,
       "ui_axis_coverage": {
         "latex colors": {
@@ -909,7 +909,7 @@
       "source_canonical_color_combo_count": 2,
       "source_name": "Baby Table decor",
       "source_price": 30.0,
-      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_price_basis": "legacy_source base price; color recipe choices do not change price",
       "source_valid_variant_count": 2,
       "ui_axis_coverage": {
         "Baby color": {
@@ -957,7 +957,7 @@
       "source_canonical_color_combo_count": 51,
       "source_name": "classic organic for easel",
       "source_price": 100.0,
-      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_price_basis": "legacy_source base price; color recipe choices do not change price",
       "source_valid_variant_count": 53,
       "ui_axis_coverage": {
         "latex colors": {
@@ -1402,7 +1402,7 @@
       "source_canonical_color_combo_count": 357,
       "source_name": "Number Balloon Columns",
       "source_price": 55.0,
-      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_price_basis": "legacy_source base price; color recipe choices do not change price",
       "source_valid_variant_count": 371,
       "ui_axis_coverage": {
         "Number colors": {
@@ -4654,7 +4654,7 @@
       "source_canonical_color_combo_count": 51,
       "source_name": "Sleepy Baby Column",
       "source_price": 220.0,
-      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_price_basis": "legacy_source base price; color recipe choices do not change price",
       "source_valid_variant_count": 53,
       "ui_axis_coverage": {
         "latex colors": {

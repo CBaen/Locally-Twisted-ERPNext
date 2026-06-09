@@ -10,7 +10,7 @@ Product Blueprint Gallery Image` -> ERPNext `Website Slideshow` / `Website
 Slideshow Item` -> existing Webshop product gallery template.
 
 The target customer behavior is the product-page gallery GL pointed to in the
-old Odoo reference: desktop thumbnails at the left of the main photo, thumbnail
+old legacy_source reference: desktop thumbnails at the left of the main photo, thumbnail
 rail capped to the main photo height with internal scroll, and mobile gallery
 behavior that keeps thumbnails/indicator state while allowing swipe-like image
 changes. Variant selection may update the main image, but must not remove or
@@ -19,7 +19,7 @@ rebuild away the product gallery.
 ## Have
 
 - Local ERPNext/Frappe Webshop route: `http://localhost:8081`.
-- Source Odoo catalog/image witness under `_resources/odoo-live/`.
+- Source legacy_source catalog/image witness under `_resources/catalog-source/`.
 - Owner-safe product-management layer: `LT Product Blueprint` / Product Setup.
 - Existing Product Setup apply path already knows how to create/update native
   ERPNext `Website Slideshow` records.
@@ -32,7 +32,7 @@ rebuild away the product gallery.
 
 ## Won't Accept
 
-- Holding all Odoo additional images forever under the old "unclassified
+- Holding all legacy_source additional images forever under the old "unclassified
   extra" rule.
 - Rendering selected variant media as product gallery thumbnails.
 - Rendering category/reference media as product gallery thumbnails.
@@ -45,7 +45,7 @@ rebuild away the product gallery.
 
 ## Open To
 
-- Dedupe paired Odoo thumbnail/full-size URLs by semantic source key so a
+- Dedupe paired legacy_source thumbnail/full-size URLs by semantic source key so a
   single product photo does not become duplicate gallery thumbnails.
 - Let source additional product-page images default to role `gallery` when
   they are part of the source-approved product gallery set. Keep separate roles

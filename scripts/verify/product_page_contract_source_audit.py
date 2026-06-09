@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dry-run the product-page contract against the saved Odoo/source catalog.
+"""Dry-run the product-page contract against the saved legacy_source/source catalog.
 
 This verifier is intentionally read-only. It does not touch ERPNext DB state.
 It shows whether source data is ready to drive a purge/rebuild import.
@@ -18,14 +18,14 @@ sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 from locally_twisted.catalog_contract import build_product_page_contract
 from locally_twisted.catalog_contract.addon_rules import REVIEW_ADD_ONS
 
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
 REPORT_PATH = ROOT / Path(
-    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "audits/catalog-import-audit-2026-05-08/"
     "15-product-page-contract-source-audit.md"
 )
 JSON_PATH = ROOT / Path(
-    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "audits/catalog-import-audit-2026-05-08/"
     "15-product-page-contract-source-audit.json"
 )
 
@@ -89,7 +89,7 @@ def main() -> int:
     lines = [
         "# Product Page Contract Source Audit",
         "",
-        "This is a read-only dry run from Odoo/source catalog data into the new product-page contract shape.",
+        "This is a read-only dry run from legacy_source/source catalog data into the new product-page contract shape.",
         "It is not an ERPNext import and does not mutate the database.",
         "",
         "## Counts",
@@ -158,7 +158,7 @@ def main() -> int:
         "## Interpretation",
         "",
         "The contract builder separates confirmed foil-number add-ons from required axes and keeps unmapped add-on families out of checkout add-on controls.",
-        "Every source product is now classified into one of the two reusable product-page template types and all 53 Odoo-imported products target checkout.",
+        "Every source product is now classified into one of the two reusable product-page template types and all 53 legacy_source-imported products target checkout.",
         "Resolver-backed price notes remain audit signals: variant rows may lack `erpnext_variant_price`, but the import path can still use source row price/base price and the separate price gates verify Item Price coverage.",
         "`product_page_price_readiness_contract.py` checks the separate live-ERPNext Item Price gate for the current database.",
         "`product_page_price_enrichment_contract.py` builds the separate candidate price map for purge/reimport rehearsal without mutating the source scrape.",
@@ -171,9 +171,9 @@ def main() -> int:
 
     blocking = not products or commerce_lane_counts.get("checkout", 0) != len(products)
     if blocking:
-        lines.append("**BLOCKED for destructive purge/import.** Not every Odoo product resolved to checkout.")
+        lines.append("**BLOCKED for destructive purge/import.** Not every legacy_source product resolved to checkout.")
     else:
-        lines.append("**PASS with review notes.** All Odoo products resolve to sellable checkout targets; add-on/media/price notes remain separate gates.")
+        lines.append("**PASS with review notes.** All legacy_source products resolve to sellable checkout targets; add-on/media/price notes remain separate gates.")
 
     artifact = {
         "source_products": len(products),

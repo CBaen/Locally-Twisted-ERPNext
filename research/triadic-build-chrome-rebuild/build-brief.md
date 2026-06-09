@@ -11,7 +11,7 @@
 
 The persistent header + footer chrome for Locally Twisted's ERPNext site, Hetzner-faithful in structure and content. Replaces the current intermediate-state navbar.html and footer.html. Overhauls lt-theme.css (replaces ~340 lines of dead code targeting Frappe's native chrome that no longer renders). Adds 3-panel mega menus, newsletter strip, megamenu JS, newsletter JS + endpoint + DocType.
 
-**Mirror reference:** `_resources/odoo-live-mirror/pages/index.html` (header lines ~286-635, footer lines ~1111-1223). **Inventory reference:** `_resources/odoo-live-mirror/INVENTORY.md` sections 2 + 3.
+**Mirror reference:** `_resources/retired-source-mirror/pages/index.html` (header lines ~286-635, footer lines ~1111-1223). **Inventory reference:** `_resources/retired-source-mirror/INVENTORY.md` sections 2 + 3.
 
 **Architectural decisions logged 2026-04-30 in `MIRROR-REBUILD-PLAN.md` Research Notes** — both reversible:
 - **Decision A** — Mega menus populated via template-level grouping over the existing flat 11-Item-Group hierarchy. NOT restructuring the catalog.

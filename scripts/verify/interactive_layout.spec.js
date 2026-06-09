@@ -9,7 +9,7 @@ const {
 	expectNoLayoutFailures,
 } = require("./layout_helpers");
 
-const PLATFORM_WORDS = /\b(?:ERPNext|Frappe|Odoo)\b/i;
+const PLATFORM_WORDS = /\b(?:ERPNext|Frappe|legacy_source)\b/i;
 const DESK_USER = process.env.LT_DESK_TEST_USER;
 const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
 
@@ -670,7 +670,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 					targetSelectors: [
 						".lt-book__submit",
 						".lt-book__check",
-						".lt-book input:not([type='checkbox'])",
+						".lt-book input:not([type='checkbox']):not([aria-hidden='true']):not([type='hidden'])",
 						".lt-book select",
 						".lt-book textarea",
 					],

@@ -31,7 +31,7 @@
 
 ## 📌 Architectural decisions made autonomously (reversible)
 
-You authorized "if it's Odoo only and there's an ERPNext equivalent, do that. OR DON'T, and just tell me what you couldn't do." Two calls made under that authorization:
+You authorized "if it's legacy_source only and there's an ERPNext equivalent, do that. OR DON'T, and just tell me what you couldn't do." Two calls made under that authorization:
 
 **Decision A — Mega menu IA: flat 11-Item-Group structure preserved, template-level grouping for the 3 Hetzner panels.**
 The Hetzner mirror has a 2-level category hierarchy (Special Occasions → Birthdays / Showers / etc.; Holidays & Seasons → Easter / Halloween / etc.; What We Make → Arches / Columns / etc.). Our ERPNext catalog has 11 flat children under "Shop Items" — the structure verified by the catalog port (53 Website Items, 10,578 variants, 10,613 prices). Restructuring the catalog tree would risk that data; static grouping at the template layer is reversible and preserves the verified state.
@@ -87,7 +87,7 @@ When you wake and want the next bite:
 |---|---|
 | `MIRROR-REBUILD-PLAN.md` | The full rebuild plan with Research Notes from /plan-deepen + GL Proxy review |
 | `MIRROR-REBUILD-COMPLETE.md` | This file |
-| `_resources/odoo-live-mirror/` | 346 captured pages + 510 assets + INVENTORY.md |
+| `_resources/retired-source-mirror/` | 346 captured pages + 510 assets + INVENTORY.md |
 | `research/website-mirror-tool-discovery.md` | Why crawl4ai was chosen as the mirroring tool |
 | `research/triadic-build-chrome-rebuild/build-brief.md` | Phase 1 chrome Build Brief with API contract |
 | `research/triadic-build-chrome-rebuild/round-1/` | 3 builder reports |

@@ -325,7 +325,7 @@
 
 ---
 
-## Practical Odoo Fiscal Position Summary
+## Practical legacy_source Fiscal Position Summary
 
 For balloon décor deliveries, these are the rates to configure in fiscal positions (use ZIP or city matching):
 

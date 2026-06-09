@@ -16,7 +16,7 @@ D:2026-05-10 | Check:local repo/docs/source + existing audit artifacts 2026-05-1
   - `workstreams/ecommerce-audit/cart-checkout-intent-preservation-audit-2026-05-10.md`
   - `workstreams/ecommerce-audit/native-frappe-product-template-architecture-2026-05-10.md`
 - **Current destination version evidence inherited from audits:** local/test ERPNext stack reports `frappe 15.106.0`, `erpnext 15.105.0`, `payments 0.0.1`, `webshop 0.0.1`, `locally_twisted 0.0.1`; backend image witness in Lane B was `locally-twisted-erpnext:v15`, not dispatch anchor `frappe/erpnext:v15.105.0` **[VERSION-MISMATCH]**.
-- **Current source witness mismatch inherited from Lane B:** local Odoo module `19.0.2.15.0`; older handoff warns production DB may remain `19.0.2.14.0` **[VERSION-MISMATCH]**.
+- **Current source witness mismatch inherited from Lane B:** local legacy_source module `19.0.2.15.0`; older handoff warns production DB may remain `19.0.2.14.0` **[VERSION-MISMATCH]**.
 - **Confidence:** high that a simple import is unsafe; medium-high for the receiving model below because it is grounded in current repo contracts and same-day audit artifacts; medium for final product-by-product requirements until source/version mismatches and business review packets are resolved.
 
 ## Executive requirement
@@ -71,7 +71,7 @@ These are the blockers that make a simple purge/import unsafe:
 6. **Color/customization semantics are not final.**
    - Color-heavy products are safely routed quote-first in current architecture, but color axes/customizations still require business/source review before a rebuild can claim parity.
 7. **Source authority is not clean.**
-   - Odoo local module/source witness and possible production DB version differ.
+   - legacy_source local module/source witness and possible production DB version differ.
    - Final rebuild requirements must specify which source witness controls.
 8. **Aggregate readiness has a live mismatch to clear.**
    - Lane B says direct quote delivery contracts passed on rerun, but aggregate architecture readiness captured a transient MariaDB deadlock and must rerun cleanly before launch/rebuild approval.
@@ -202,7 +202,7 @@ Before purge/rebuild, the following verifier classes must exist and pass against
 No product purge/rebuild/import may start until all items below have evidence artifacts:
 
 1. **Source authority chosen.**
-   - Resolve or explicitly choose between Odoo local `19.0.2.15.0` and possible production `19.0.2.14.0`.
+   - Resolve or explicitly choose between legacy_source local `19.0.2.15.0` and possible production `19.0.2.14.0`.
 2. **Every source product has a receiving row.**
    - No missing class/lane.
    - No unresolved target Website Item/Item strategy.
@@ -329,7 +329,7 @@ Minimum rollback/audit packet before any destructive work:
 
 ## Actionable next steps
 
-1. Resolve source authority/version mismatch or record which Odoo/source witness controls rebuild.
+1. Resolve source authority/version mismatch or record which legacy_source/source witness controls rebuild.
 2. Generate a product receiving staging register for all 53 source/published Website Items and all current ERPNext product records affected by purge/recreate.
 3. Convert current blockers into review packets:
    - 49 missing resolver price products.

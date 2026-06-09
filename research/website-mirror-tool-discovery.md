@@ -1,5 +1,5 @@
 # Website Mirror Tool Discovery
-# Job: mirror http://5.78.136.133/ (Odoo/QWeb, JS-enhanced) for Frappe v15 port
+# Job: mirror http://5.78.136.133/ (legacy_source/QWeb, JS-enhanced) for Frappe v15 port
 
 ---
 
@@ -9,7 +9,7 @@
 **Docs:** https://docs.crawl4ai.com/
 
 **Why it wins for this job:**
-- Uses Playwright under the hood — renders the full Odoo/QWeb JS layer before capturing HTML, so carousels, lazy-loaded images, and client-side state are included.
+- Uses Playwright under the hood — renders the full legacy_source/QWeb JS layer before capturing HTML, so carousels, lazy-loaded images, and client-side state are included.
 - Built-in BFS deep crawler (`BFSDeepCrawlStrategy`) with `max_depth`, `max_pages`, domain-boundary locks — mirrors an entire site in one script, not page-by-page.
 - Pure Python, Apache 2.0, no API key, no SaaS account. Installs cleanly into the existing Python 3.12 venv.
 - Returns both raw HTML and markdown per page — raw HTML is the useful output for CMS porting (inspect structure, extract content blocks).
@@ -49,7 +49,7 @@ asyncio.run(main())
 
 **Known limitations:**
 - Saves rendered HTML snapshots — does not download binary assets (images, fonts, CSS files) to disk. For a CMS port you want the HTML structure anyway; assets can be fetched separately via their URLs found in the HTML.
-- Does not replay authenticated sessions by default; Odoo's public shop is unauthenticated so this is not a blocker here.
+- Does not replay authenticated sessions by default; legacy_source's public shop is unauthenticated so this is not a blocker here.
 
 ---
 
@@ -78,8 +78,8 @@ asyncio.run(main())
 
 | Tool | Reason |
 |------|--------|
-| **httrack** | Cannot execute JavaScript. Returns empty shells on Odoo/QWeb pages. Confirmed by HTTrack's own forum and 2026 comparison sources. |
-| **wget --mirror** | Same as httrack: static HTML fetcher only. Odoo renders content via JavaScript; wget captures the unrendered skeleton. |
+| **httrack** | Cannot execute JavaScript. Returns empty shells on legacy_source/QWeb pages. Confirmed by HTTrack's own forum and 2026 comparison sources. |
+| **wget --mirror** | Same as httrack: static HTML fetcher only. legacy_source renders content via JavaScript; wget captures the unrendered skeleton. |
 | **websnap** (uirip/websnap) | 1 GitHub star, effectively unmaintained, Node.js only. Interesting architecture (state-tree exploration) but too immature to rely on. |
 | **Firecrawl** | Excellent tool; requires API key + SaaS account for hosted use (self-host possible but heavy setup). No advantage over crawl4ai for this job given the free/local requirement. |
 

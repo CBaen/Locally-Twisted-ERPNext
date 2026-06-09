@@ -1,6 +1,6 @@
-D:2026-05-10 | Check:local Odoo-source audit JSON + media packet + price packet 2026-05-10 | Confidence:[LOCAL-PROOF]
+D:2026-05-10 | Check:local legacy_source-source audit JSON + media packet + price packet 2026-05-10 | Confidence:[LOCAL-PROOF]
 
-# Ecommerce Product Proof Matrix — Odoo → ERPNext
+# Ecommerce Product Proof Matrix — legacy_source → ERPNext
 
 Purpose: one product-row matrix for launch/rebuild planning. This is not import approval, price approval, media approval, or go-live approval.
 
@@ -21,7 +21,7 @@ A row marked `checkout` is only a candidate lane, not launch approval. Public ch
 
 ## Product matrix
 
-| # | Product | Odoo ID | Lane | Required axes | Customization axes | Add-ons | Price status | Units | Media | Purge/import status | Immediate action |
+| # | Product | legacy_source ID | Lane | Required axes | Customization axes | Add-ons | Price status | Units | Media | Purge/import status | Immediate action |
 |---:|---|---:|---|---|---|---|---|---:|---|---|---|
 | 1 | `baby-shower-combination-photo-opt` Baby Shower Combination Photo opt | 14 | quote_first | — | latex colors | — | PASS_PRICE_ENRICHMENT | 1 | 1 extra / hold | PRICE_ENRICHABLE_BUT_PURGE_BLOCKED | keep quote-first; media classify; customization proof |
 | 2 | `classic-organic-balloon-garland` Classic Organic Balloon Garland | 19 | quote_first | Garland Length | latex colors | — | PASS_PRICE_ENRICHMENT | 3 | none listed | PRICE_ENRICHABLE_BUT_PURGE_BLOCKED | keep quote-first; price review; customization proof |
@@ -87,7 +87,7 @@ A row marked `checkout` is only a candidate lane, not launch approval. Public ch
 
 ## Source artifacts
 
-- `audits/odoo-erpnext-migration-audit-2026-05-08/21-product-page-price-enrichment-candidates.json`
-- `audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.json`
-- `audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.md`
-- `workstreams/ecommerce-audit/odoo-source-commerce-map-2026-05-10.md`
+- `audits/catalog-import-audit-2026-05-08/21-product-page-price-enrichment-candidates.json`
+- `audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.json`
+- `audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.md`
+- `workstreams/ecommerce-audit/legacy_source-source-commerce-map-2026-05-10.md`

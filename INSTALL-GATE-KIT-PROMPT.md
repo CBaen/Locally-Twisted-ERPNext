@@ -24,7 +24,7 @@ You are an Opus instance starting a fresh session at the Locally Twisted Frappe 
 
 ## Context (read first; do not skip)
 
-Yesterday GL completed an 8-lane retrospective expedition on two months of Odoo work. The expedition's central finding: **documentation alone produced zero behavior change; mechanical gates held when they existed.** The expedition produced three deliverables, plus a reusable gate-kit template. Your job today is to install that template into the LT Frappe migration target.
+Yesterday GL completed an 8-lane retrospective expedition on two months of legacy_source work. The expedition's central finding: **documentation alone produced zero behavior change; mechanical gates held when they existed.** The expedition produced three deliverables, plus a reusable gate-kit template. Your job today is to install that template into the LT Frappe migration target.
 
 The gates split into two categories per the architectural principle GL established:
 

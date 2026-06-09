@@ -24,7 +24,7 @@ After GL reviewed the first install, four follow-ups landed in the same session:
 
 ## What this is (plain language)
 
-A self-contained set of four framework-protective gates that ship inside this repo. They are designed to fire on every deploy and to keep firing if the repo ever leaves Built_by_Cameron — to a contractor, to Jeff Kimber, or to another agency. Together they protect against four classes of failure that happened on Locally Twisted's prior Odoo work: schema drift between code and database, unfiltered "rewrite everything" migrations, silent form failures (the /book 10-day silence pattern), and reporting visual work as "done" without observing it. A fifth check inside the deploy orchestrator refuses to deploy from auto-committed code so that nothing reaches production unreviewed. The kit has zero dependencies on `~/.claude/` or any agency tooling — `python scripts/deploy.py` runs cleanly on a fresh clone with `playwright` and `requests` installed.
+A self-contained set of four framework-protective gates that ship inside this repo. They are designed to fire on every deploy and to keep firing if the repo ever leaves Built_by_Cameron — to a contractor, to Jeff Kimber, or to another agency. Together they protect against four classes of failure that happened on Locally Twisted's prior legacy_source work: schema drift between code and database, unfiltered "rewrite everything" migrations, silent form failures (the /book 10-day silence pattern), and reporting visual work as "done" without observing it. A fifth check inside the deploy orchestrator refuses to deploy from auto-committed code so that nothing reaches production unreviewed. The kit has zero dependencies on `~/.claude/` or any agency tooling — `python scripts/deploy.py` runs cleanly on a fresh clone with `playwright` and `requests` installed.
 
 ## What was installed (file list + purpose)
 
@@ -84,7 +84,7 @@ Ran `docs/offboarding-check.md` end-to-end on 2026-04-26.
 
 ## Three-sentence summary
 
-The kit protects this repo against four classes of failure that hit Odoo: schema drift between code and DB, unfiltered broad-write migrations, silent form-submission failures, and "done" claims on visual work without observation — plus a fifth check that refuses to deploy from auto-committed code. What's wired and works: the orchestrator runs all gates with explicit per-gate PASS/SKIP/FAIL and saves a real screenshot of the live LT home. What's not wired: there's no booking form yet (Phase 2), there's no `requirements.txt`, the production URL is TBD until cutover, and the lint scope still sweeps third-party webshop code that needs triage.
+The kit protects this repo against four classes of failure that hit legacy_source: schema drift between code and DB, unfiltered broad-write migrations, silent form-submission failures, and "done" claims on visual work without observation — plus a fifth check that refuses to deploy from auto-committed code. What's wired and works: the orchestrator runs all gates with explicit per-gate PASS/SKIP/FAIL and saves a real screenshot of the live LT home. What's not wired: there's no booking form yet (Phase 2), there's no `requirements.txt`, the production URL is TBD until cutover, and the lint scope still sweeps third-party webshop code that needs triage.
 
 ---
 

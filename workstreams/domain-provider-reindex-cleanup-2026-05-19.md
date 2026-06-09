@@ -46,18 +46,18 @@ the customer-facing domain. It does not prove Frappe Cloud dashboard ownership,
 Search Console ownership inside the UI, Google Ads control, or Meta Business
 control.
 
-## Hetzner / Odoo Status
+## Hetzner / legacy_source Status
 
-`http://5.78.136.133/` is the old Odoo/Hetzner reference deployment. It is not
+`http://5.78.136.133/` is the old legacy_source/Hetzner reference deployment. It is not
 the current public `locallytwisted.com` web path.
 
 Keep it read-only until the old-platform archive/decommission decision is
-complete. Do not modify the old Odoo source or server from this ERPNext repo.
+complete. Do not modify the old legacy_source source or server from this ERPNext repo.
 
 Cleanup target:
 
 1. Confirm any remaining Hetzner server, snapshot, DNS, or billing surface.
-2. Archive the old Odoo repo/source state if not already done.
+2. Archive the old legacy_source repo/source state if not already done.
 3. Confirm no live DNS, ads, Search Console, Meta, or customer workflows still
    point to `5.78.136.133`.
 4. Only then shut down/decommission with owner approval.

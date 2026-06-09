@@ -21,10 +21,10 @@ sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 from locally_twisted.catalog_contract.media_classification import build_media_classification_packet
 
 
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
-DEFAULT_REPORT = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.json"
-DEFAULT_MARKDOWN = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
+DEFAULT_REPORT = ROOT / "audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.json"
+DEFAULT_MARKDOWN = ROOT / "audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.md"
 EXPECTED_ALLOWED_ROLES = ["primary", "gallery", "variant_image", "reference", "ignored_artifact"]
 
 

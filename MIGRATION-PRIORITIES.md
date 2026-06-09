@@ -2,7 +2,7 @@
 title: Migration Priorities — LT Frappe Build
 date: 2026-04-26
 audience: Future Opus arriving at the LT Frappe migration; GL secondary
-produced_by: Synthesis Agent D (Synthesis Writer), retro-odoo-2026-04-26 expedition
+produced_by: Synthesis Agent D (Synthesis Writer), retro-legacy_source-2026-04-26 expedition
 ---
 
 # Migration Priorities
@@ -27,7 +27,7 @@ produced_by: Synthesis Agent D (Synthesis Writer), retro-odoo-2026-04-26 expedit
 
 ## Part 1: The Pattern Has Already Fired
 
-The executional pattern that produced 76 lessons-learned entries on Odoo has already fired twice in the first two LT Frappe sessions. It will recur without the six gates below. With the six gates, it can be interrupted. [Lane 8 §Q5; DA §Audit 8-A; Proxy §SN-3]
+The executional pattern that produced 76 lessons-learned entries on legacy_source has already fired twice in the first two LT Frappe sessions. It will recur without the six gates below. With the six gates, it can be interrupted. [Lane 8 §Q5; DA §Audit 8-A; Proxy §SN-3]
 
 Session 1 (2026-04-25): An instance built toward Frappe before reading the framework source. CSS friction appeared. The instance band-aided with `!important` chains rather than reading how Frappe's Bootstrap cascade works. `anti-gl-patterns.md (LT) §0` documents this accurately.
 
@@ -59,9 +59,9 @@ These are in priority order. Each must exist before LT goes live on Frappe. Each
 
 **What it gates:** Claude Code instance behavior in the first minutes of any Frappe session. Without this, every arriving instance rediscovers framework friction independently and band-aids it independently.
 
-**What it prevents:** The same failure curve that produced 76 Odoo lessons. The catalog does not prevent failures by itself (documentation alone fails — see AGENCY-WISDOM.md Finding 1) — it is the prerequisite for building Gates 2-4 correctly.
+**What it prevents:** The same failure curve that produced 76 legacy_source lessons. The catalog does not prevent failures by itself (documentation alone fails — see AGENCY-WISDOM.md Finding 1) — it is the prerequisite for building Gates 2-4 correctly.
 
-**How it's built:** Create `C:\Users\baenb\.claude\HOW-TO-WIN-AT-FRAPPE\auto-behaviors.md` with the 8 seed entries from Lane 8's investigation (F1 through F8). Each entry has: behavior name, mechanism, receipt, defense, verification. Mirror the structure of `HOW-TO-WIN-AT-ODOO\auto-behaviors.md`. Add a pointer from this file.
+**How it's built:** Create `C:\Users\baenb\.claude\HOW-TO-WIN-AT-FRAPPE\auto-behaviors.md` with the 8 seed entries from Lane 8's investigation (F1 through F8). Each entry has: behavior name, mechanism, receipt, defense, verification. Mirror the structure of `HOW-TO-WIN-AT-legacy_source\auto-behaviors.md`. Add a pointer from this file.
 
 Seed entries to include (mark each VERIFIED or PROBABLE per DA §D4 guidance):
 
@@ -90,7 +90,7 @@ GL can verify by asking the arriving instance at the start of a session: "Name t
 
 **What it gates:** The moment before dangerous Frappe actions. Requires an instance to have invoked the relevant skill before proceeding.
 
-**What it prevents:** The "build before reading framework" pull, which fired in Session 1 and has fired in every Odoo project [Lane 8 §Break 2; Convergence §SC-2].
+**What it prevents:** The "build before reading framework" pull, which fired in Session 1 and has fired in every legacy_source project [Lane 8 §Break 2; Convergence §SC-2].
 
 **How it's built:** Create `C:\Users\baenb\.claude\hooks\frappe-pretooluse-gate.py` wired into the existing hook infrastructure. Minimum 5 fingerprints:
 
@@ -232,13 +232,13 @@ Defense: Navigate to Settings > Scheduled Jobs > Recent Logs in ERPNext. Verify 
 
 **Trap 4: Fixture modified timestamp skip (PROBABLE — see HOW-TO-WIN-AT-FRAPPE F7).**
 
-Bench migrate fixture sync compares modified timestamps and skips records where the DB record is newer. Jeff's UI edits to DocType records will prevent fixture updates from applying. This is the Frappe analog of Odoo's `noupdate=1` drift — the mechanism is structural, and the failure to reach for the correct documented path (pin modified timestamps, verify fields post-migrate) is executional. [Convergence §PC-4 by analogy; DA §D4; Proxy §EM-2]
+Bench migrate fixture sync compares modified timestamps and skips records where the DB record is newer. Jeff's UI edits to DocType records will prevent fixture updates from applying. This is the Frappe analog of legacy_source's `noupdate=1` drift — the mechanism is structural, and the failure to reach for the correct documented path (pin modified timestamps, verify fields post-migrate) is executional. [Convergence §PC-4 by analogy; DA §D4; Proxy §EM-2]
 
 ---
 
 ## Part 5: Loud-Failure Parity
 
-Every form, cascade, and integration in the LT Frappe build must have the same loud-failure coverage required on Odoo. Three audiences must see every failure: the user, the developer, the monitor. A blank page is not a failure message. [CLAUDE.md rule `loud-failure.md`]
+Every form, cascade, and integration in the LT Frappe build must have the same loud-failure coverage required on legacy_source. Three audiences must see every failure: the user, the developer, the monitor. A blank page is not a failure message. [CLAUDE.md rule `loud-failure.md`]
 
 **Forms:**
 - Booking form: smoke test required (Gate 4) before launch
@@ -281,19 +281,19 @@ Every form, cascade, and integration in the LT Frappe build must have the same l
 
 ---
 
-## Part 6: Two Outstanding LT-Odoo Issues Before Frappe Cutover
+## Part 6: Two Outstanding LT-legacy_source Issues Before Frappe Cutover
 
-These were flagged by the GL Proxy as requiring attention before the Odoo-to-Frappe cutover. The next LT-Odoo instance should address them. [Proxy §Section 4, doc parity audit]
+These were flagged by the GL Proxy as requiring attention before the legacy_source-to-Frappe cutover. The next LT-legacy_source instance should address them. [Proxy §Section 4, doc parity audit]
 
 **Issue 1: Module version parity divergence.**
 
 The production database runs 19.0.2.14.0. The `origin/main` branch contains 19.0.2.15.0 (Command Center deploy). These versions diverged and have not been reconciled. CLAUDE.md, PROJECT-STATUS.md, and HANDOFF.md may reflect different states. Before cutover, verify the correct current version across all three documents and deploy or explicitly defer the 19.0.2.15.0 Command Center deploy.
 
-Verification: ask the arriving LT-Odoo instance at session start: "What version is currently deployed to production?" The correct answer is: "19.0.2.14.0 in the production database; 19.0.2.15.0 on origin/main, not yet deployed."
+Verification: ask the arriving LT-legacy_source instance at session start: "What version is currently deployed to production?" The correct answer is: "19.0.2.14.0 in the production database; 19.0.2.15.0 on origin/main, not yet deployed."
 
 **Issue 2: Blog post `author_id=2` returns 403 for anonymous visitors.**
 
-This issue was flagged in three consecutive HANDOFF documents without action. A blog post authored by `res.users` id=2 (the default OdooBot user) returns a 403 access denied for anonymous website visitors. This affects public blog post visibility. Before cutover, either reassign all blog posts to Jeff's user account or investigate the portal access rule causing the 403.
+This issue was flagged in three consecutive HANDOFF documents without action. A blog post authored by `res.users` id=2 (the default legacy_sourceBot user) returns a 403 access denied for anonymous website visitors. This affects public blog post visibility. Before cutover, either reassign all blog posts to Jeff's user account or investigate the portal access rule causing the 403.
 
 Verification: navigate to `/blog` on the live LT site from an incognito browser window. Verify all published blog posts are visible without login.
 

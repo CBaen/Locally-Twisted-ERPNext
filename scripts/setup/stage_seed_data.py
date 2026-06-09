@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
-"""Stage Odoo catalog seed data into the ignored app-local container path.
+﻿#!/usr/bin/env python3
+"""Stage catalog source catalog seed data into the ignored app-local container path.
 
-The source of truth remains `_resources/odoo-live/`. This script refreshes the
+The source of truth remains `_resources/catalog-source/`. This script refreshes the
 ignored duplicate at `apps/locally_twisted/locally_twisted/seed/_data/` for
 bench commands that run inside the locally_twisted app container.
 
@@ -15,12 +15,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "_resources" / "odoo-live"
+SOURCE = ROOT / "_resources" / "catalog-source"
 TARGET = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "seed" / "_data"
 PRICE_ENRICHMENT = (
     ROOT
     / "audits"
-    / "odoo-erpnext-migration-audit-2026-05-08"
+    / "catalog-import-audit-2026-05-08"
     / "21-product-page-price-enrichment-candidates.json"
 )
 

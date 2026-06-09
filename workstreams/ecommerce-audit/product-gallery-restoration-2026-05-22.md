@@ -23,7 +23,7 @@ not as a visual staging patch.
 The permanent chain is:
 
 ```text
-Odoo/source-approved product gallery media
+legacy_source/source-approved product gallery media
 -> LT Product Blueprint Gallery Image
 -> ERPNext Website Slideshow / Website Slideshow Item
 -> Website Item.slideshow
@@ -41,7 +41,7 @@ Media roles are now explicit:
 
 ## What Changed
 
-- Added `catalog_contract/gallery_media.py` so Odoo paired thumbnail/full-size
+- Added `catalog_contract/gallery_media.py` so legacy_source paired thumbnail/full-size
   URLs dedupe by semantic source key and prefer the best local file.
 - Updated the source Product Setup sync to create/update Product Setup gallery
   child rows from source-approved gallery media.
@@ -114,7 +114,7 @@ Observed results:
 
 ## Staging Handoff Note
 
-The local `--apply-gallery` wrapper stages `_resources/odoo-live` into the
+The local `--apply-gallery` wrapper stages `_resources/catalog-source` into the
 Docker container before running the in-app sync. A staging/Frappe Cloud packet
 must provide the same source files to the app/site execution environment before
 running Product Setup gallery projection. Do not treat the local Docker staging

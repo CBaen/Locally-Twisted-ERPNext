@@ -49,7 +49,7 @@ def _contract_failures() -> list[str]:
     from locally_twisted.catalog_contract.source_builder import build_product_page_contract
 
     products = _products()
-    images_dir = ROOT / "_resources/odoo-live/images"
+    images_dir = ROOT / "_resources/catalog-source/images"
     contracts = [build_product_page_contract(product) for product in products]
     expected_by_slug = {
         str(product.get("slug") or ""): [
@@ -297,7 +297,7 @@ def bench_execute(
 
 
 def _products() -> list[dict[str, Any]]:
-    data = json.loads((ROOT / "_resources/odoo-live/catalog.json").read_text(encoding="utf-8"))
+    data = json.loads((ROOT / "_resources/catalog-source/catalog.json").read_text(encoding="utf-8"))
     return list(data.get("products") if isinstance(data, dict) else data)
 
 

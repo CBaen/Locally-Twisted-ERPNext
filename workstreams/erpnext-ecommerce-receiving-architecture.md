@@ -25,8 +25,8 @@ invoice, and receipt. See
 ## GL decision / framing
 
 - ERPNext native ecommerce is visually, logically, and operationally insufficient for Locally Twisted.
-- Odoo ecommerce is not the target infrastructure, but it is the conceptual witness for mature ecommerce behavior: variant-driven prices, variant media logic, backend-fed fields, option availability, add-ons, and meaningful configured cart/checkout payloads.
-- Do not create or import Odoo-style fields that ERPNext cannot actually store/use. Unsupported fields silently fail unless the ERPNext receiving architecture exists first.
+- legacy_source ecommerce is not the target infrastructure, but it is the conceptual witness for mature ecommerce behavior: variant-driven prices, variant media logic, backend-fed fields, option availability, add-ons, and meaningful configured cart/checkout payloads.
+- Do not create or import legacy_source-style fields that ERPNext cannot actually store/use. Unsupported fields silently fail unless the ERPNext receiving architecture exists first.
 - Any incomplete, awkward, or unmappable logic must be brought to GL with plain explanation before import or build.
 - If ERPNext native ecommerce cannot represent a required feature, design the missing ERPNext-side feature deliberately, including blast radius and cascading effects, before building it.
 - Test products may be used as proof cases only. They are not proof of migration completion.
@@ -51,7 +51,7 @@ Before real import, define and verify:
 
 - Product type classification and template assignment.
 - Required backend fields and optional backend fields.
-- Odoo concept -> ERPNext native/custom/missing/unsafe mapping.
+- legacy_source concept -> ERPNext native/custom/missing/unsafe mapping.
 - Destination existence for every imported field.
 - Required variant axes vs optional add-ons vs customization axes vs backend-only fields vs needs-review fields.
 - Add-on contract: eligibility, fields, dependencies, quantity, price, cart, tax, invoice, fulfillment notes.
@@ -68,7 +68,7 @@ Stop and bring to GL if:
 
 - A needed destination field/DocType/child table does not exist.
 - A behavior exists only in frontend JS and not in backend/cart/checkout truth.
-- A source Odoo concept maps only to a field label, not to executable ERPNext behavior.
+- A source legacy_source concept maps only to a field label, not to executable ERPNext behavior.
 - A price cannot be resolved authoritatively.
 - Add-on dependencies or required fields are unclear.
 - Cart, checkout, Sales Order, or invoice cannot preserve the configured product meaning.
@@ -98,7 +98,7 @@ Brief must be exact to this stack:
 - ERPNext/Frappe v15 in Docker/Frappe app `locally_twisted`.
 - Current Webshop item override under `apps/locally_twisted/locally_twisted/templates/generators/item/`.
 - Current product contract starter under `apps/locally_twisted/locally_twisted/catalog_contract/`.
-- Odoo source is read-only reference at `C:/Users/baenb/projects/locally-twisted-odoo/` and old Odoo shop behavior is conceptual/reference input, not infrastructure to copy.
+- legacy_source source is read-only reference at `C:/Users/baenb/projects/locally-twisted-legacy_source/` and old legacy_source shop behavior is conceptual/reference input, not infrastructure to copy.
 - Native ERPNext ecommerce is insufficient; research must identify implementation patterns and risks for building a safer ERPNext-side ecommerce logic layer.
 
 No code/product import until research brief -> expedition -> synthesis -> GL architecture checkpoint.
@@ -188,7 +188,7 @@ Completed:
   cascade, Quotation Item payload preservation, internal packet visibility,
   product-page template labels, idempotency, and stale-cart loud failure in a
   rolled-back live ERPNext transaction.
-- Updated the source contract dry-run so every saved Odoo/source product is
+- Updated the source contract dry-run so every saved legacy_source/source product is
   classified into one of the two reusable template types with plain labels.
   Current source-audit classification is 15 `simple_product` /
   Ready-to-order page candidates and 38 `complex_custom_product` / Custom quote
@@ -213,7 +213,7 @@ Completed:
   products because non-price review gates still exist.
 - Added a focused business price review packet extracted from the price
   enrichment artifact. `python scripts/verify/product_page_price_review_packet.py`
-  writes `audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.md`
+  writes `audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.md`
   and `.json` with only the live-snapshot-priced sale units that still need
   approval or replacement. Current packet covers 36 products and 273 review
   units, with 0 approved public prices.
@@ -225,7 +225,7 @@ Completed:
   product gallery template.
 - Updated the source-backed media classification packet to use explicit roles.
   `python scripts/verify/product_page_media_classification_packet.py` writes
-  `audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md`
+  `audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.md`
   and `.json` with one row per source extra image, allowed roles, and the
   role decision. Current packet covers `70` deduped source gallery images with
   `0` unsafe unclassified images; live projection covers `68` gallery images
@@ -264,7 +264,7 @@ Completed:
   `Add ons` 3, `Plush add ons` 3, `Orbz toppers` 2, and `Add Bouquet` 1.
 - Added a source-backed add-on approval packet for those review-only families.
   `python scripts/verify/product_add_on_approval_packet.py` writes
-  `audits/odoo-erpnext-migration-audit-2026-05-08/22-product-add-on-approval-packet.md`
+  `audits/catalog-import-audit-2026-05-08/22-product-add-on-approval-packet.md`
   and `.json` with affected products, source values, decision needed, and the
   enforced safe default `quote_only_until_approved`. Current packet covers 4
   review axes, 9 affected products, and 0 checkout-approved add-ons.
@@ -438,9 +438,9 @@ Verified 2026-05-10:
   expected BLOCKED report plus JSON artifact with template classification,
   import blockers, and review-only source add-on counts.
 - `python scripts/verify/product_page_price_readiness_contract.py` PASS and
-  wrote `audits/odoo-erpnext-migration-audit-2026-05-08/19-product-page-price-readiness-report.md`.
+  wrote `audits/catalog-import-audit-2026-05-08/19-product-page-price-readiness-report.md`.
 - `python scripts/verify/product_page_price_enrichment_contract.py` PASS and
-  wrote `audits/odoo-erpnext-migration-audit-2026-05-08/21-product-page-price-enrichment-report.md`
+  wrote `audits/catalog-import-audit-2026-05-08/21-product-page-price-enrichment-report.md`
   plus `21-product-page-price-enrichment-candidates.json`.
 - `python scripts/verify/product_page_price_review_packet.py` PASS. Current
   packet covers 36 products and 273 live-snapshot-priced sale units, all kept
@@ -449,7 +449,7 @@ Verified 2026-05-10:
   visible in any import rehearsal.
 - `python scripts/verify/product_page_media_visibility_contract.py` PASS and
   wrote
-  `audits/odoo-erpnext-migration-audit-2026-05-08/20-product-page-media-visibility-report.md`
+  `audits/catalog-import-audit-2026-05-08/20-product-page-media-visibility-report.md`
   with `68` approved live gallery images, `47` Website Items with slideshows,
   and `68` Website Slideshow Item rows.
 - `python scripts/verify/product_page_media_classification_packet.py` PASS.

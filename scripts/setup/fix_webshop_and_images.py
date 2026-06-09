@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Fix webshop visibility + attach uploaded images to Item.image and
+Fix webshop visibility + attach existing uploaded images to Item.image and
 Website Item.website_image.
 
-After scripts/setup/seed_website_items.py runs, three things still need
-explicit attention:
+This is a historical/local repair helper for a bind-mount rebuild where
+Webshop settings or image fields drift. Use current verification gates before
+running it against a launch candidate. It handles three common local issues:
 
 1. **Webshop Settings.enabled = 0 by default.** The 4-page product listing
    (`/all-products`) DOES render, but the listing engine's
@@ -27,9 +28,7 @@ Usage:
     python scripts/setup/fix_webshop_and_images.py
 
 Reads:  Existing Item + Website Item + File records on http://localhost:8081
-Writes: Item.image, Website Item.website_image (33 rows each), Webshop
-        Settings (enabled, show_price, allow_items_not_in_stock,
-        products_per_page).
+Writes: Item.image, Website Item.website_image, Webshop Settings.
 """
 
 import json

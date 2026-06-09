@@ -27,7 +27,7 @@ classification mutation.
 - `apps/locally_twisted/locally_twisted/verify/product_page_runtime_contract.py`
 - `scripts/verify/proof_product_contract.py`
 - `scripts/verify/smoke_shop.py`
-- `audits/odoo-erpnext-migration-audit-2026-05-08/18-proof-product-contract-report.md`
+- `audits/catalog-import-audit-2026-05-08/18-proof-product-contract-report.md`
 
 ## Verification Receipt
 

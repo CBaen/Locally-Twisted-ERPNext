@@ -9,7 +9,7 @@
 **Website:** https://locallytwisted.com
 **Project type:** First professional business management system for Locally Twisted, built on ERPNext v15 (website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll)
 **Status:** ACTIVE — Phase 1 (customer site + storefront) in flight. Frame reset 2026-04-26 is complete; PROJECT.md and ROADMAP.md are the new framing.
-**Currently working on:** **Catalog port from the old live Odoo test shop COMPLETE 2026-04-30.** Verified DB counts: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, and 32,002 Item Variant Attribute rows. The catalog source was the prior Odoo deployment at `http://5.78.136.133/shop`; this project is **the migration of LT's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see decisions log). See `locally-twisted-decisions.md` 2026-04-30 entries for the catalog-port decisions and the frame revision. Next major build: **Slice 10 `/book` form page** (45-field Lead schema, primary inquiry conversion path, 404 today, deferred 3x). Then `/privacy` + `/terms-of-service` (Stripe live-mode requirement).
+**Currently working on:** **Catalog port from the old live legacy_source test shop COMPLETE 2026-04-30.** Verified DB counts: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, and 32,002 Item Variant Attribute rows. The catalog source was the prior legacy_source deployment at `http://5.78.136.133/shop`; this project is **the migration of LT's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see decisions log). See `locally-twisted-decisions.md` 2026-04-30 entries for the catalog-port decisions and the frame revision. Next major build: **Slice 10 `/book` form page** (45-field Lead schema, primary inquiry conversion path, 404 today, deferred 3x). Then `/privacy` + `/terms-of-service` (Stripe live-mode requirement).
 
 ## Local stack
 
@@ -83,46 +83,46 @@ This applies to: Custom Field labels, Property Setter relabels of standard field
 
 (Frame revised 2026-04-30 per GL — see `locally-twisted-decisions.md`. Supersedes the 2026-04-26 "new build, not a migration" framing.)
 
-This project migrates LT's business intent (the 45-field Lead schema, the `/book` and `/contact` form shapes, business policies, brand identity, voice rules) and the full product catalog (53 Website Items / 10,578 variants / 10,613 Item Prices, ported 2026-04-30) **into a fresh ERPNext v15 install**. "Fresh install" — ERPNext was greenfield; we did NOT auto-translate Odoo modules, dump-and-restore the Odoo DB, or carry any Odoo configuration across. Everything in ERPNext was hand-built informed by Odoo discovery work, then catalog data was ported record-by-record. "Migration" — at cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain, and the prior Odoo deployment + the legacy WordPress-era site are retired.
+This project migrates LT's business intent (the 45-field Lead schema, the `/book` and `/contact` form shapes, business policies, brand identity, voice rules) and the full product catalog (53 Website Items / 10,578 variants / 10,613 Item Prices, ported 2026-04-30) **into a fresh ERPNext v15 install**. "Fresh install" — ERPNext was greenfield; we did NOT auto-translate legacy_source modules, dump-and-restore the legacy_source DB, or carry any legacy_source configuration across. Everything in ERPNext was hand-built informed by legacy_source discovery work, then catalog data was ported record-by-record. "Migration" — at cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain, and the prior legacy_source deployment + the legacy WordPress-era site are retired.
 
-LT has never had a professional business management system that customers actually used. The Odoo attempt failed in testing before launch — Jeff was never told. The current `locallytwisted.com` is a years-old site degraded beyond practical repair. So the customer-facing destination is, from Jeff's and his customers' perspective, LT's first professional system. From an internal-architecture perspective, it's the migration described above.
+LT has never had a professional business management system that customers actually used. The legacy_source attempt failed in testing before launch — Jeff was never told. The current `locallytwisted.com` is a years-old site degraded beyond practical repair. So the customer-facing destination is, from Jeff's and his customers' perspective, LT's first professional system. From an internal-architecture perspective, it's the migration described above.
 
 **Two prior surfaces exist as reference material, not source of truth:**
 
 | Surface | Location | What it is |
 |---------|----------|-----------|
-| Failed Odoo test deployment | `http://5.78.136.133/` | Attempt #1 at giving LT a backend. Was in testing phase; never went live to customers. Odoo failed the testing phase before launch. The Hetzner host still responds (HTTP 200) but no customers depend on it. |
-| Odoo GitHub repo | `https://github.com/CBaen/locally-twisted-odoo` | The codebase of attempt #1. |
-| Odoo local clone | `C:\Users\baenb\projects\locally-twisted-odoo` | Working copy on Wardenclyffe. |
+| Failed legacy_source test deployment | `http://5.78.136.133/` | Attempt #1 at giving LT a backend. Was in testing phase; never went live to customers. legacy_source failed the testing phase before launch. The Hetzner host still responds (HTTP 200) but no customers depend on it. |
+| legacy_source GitHub repo | `https://github.com/CBaen/locally-twisted-legacy_source` | The codebase of attempt #1. |
+| legacy_source local clone | `C:\Users\baenb\projects\locally-twisted-legacy_source` | Working copy on Wardenclyffe. |
 | Live customer-facing website | `https://locallytwisted.com` | The current site customers actually use. Damaged beyond repair; out of scope for editing. |
 
-**None of these is authoritative for what the new ERPNext system should do.** The Odoo attempt encodes what GL/Jeff thought they wanted at one point — useful for understanding *intent* (form fields, automation ideas, model shape), but not customer-validated and not battle-tested. When in doubt about what the new system needs, **ask GL or look at how Jeff actually runs the business today** — don't reverse-engineer truth from the failed Odoo attempt.
+**None of these is authoritative for what the new ERPNext system should do.** The legacy_source attempt encodes what GL/Jeff thought they wanted at one point — useful for understanding *intent* (form fields, automation ideas, model shape), but not customer-validated and not battle-tested. When in doubt about what the new system needs, **ask GL or look at how Jeff actually runs the business today** — don't reverse-engineer truth from the failed legacy_source attempt.
 
-**Do NOT modify any file in `locally-twisted-odoo/` from this project** (standing rule 2026-04-25). It has its own git repo and gates. Read it for reference; write nothing back.
+**Do NOT modify any file in `locally-twisted-legacy_source/` from this project** (standing rule 2026-04-25). It has its own git repo and gates. Read it for reference; write nothing back.
 
 ## Reference Disposition (READ THIS BEFORE CITING ANYTHING OUTSIDE THIS FOLDER)
 
-The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local Odoo clone, current locallytwisted.com) are **temporary**. Their disposition is:
+The four reference surfaces above (failed Hetzner site, legacy_source GitHub repo, local legacy_source clone, current locallytwisted.com) are **temporary**. Their disposition is:
 
-- **Local Odoo clone** (`C:\Users\baenb\projects\locally-twisted-odoo\`): will be **archived to GitHub and removed from disk**. Future instances must NOT assume it exists.
+- **Local legacy_source clone** (`C:\Users\baenb\projects\locally-twisted-legacy_source\`): will be **archived to GitHub and removed from disk**. Future instances must NOT assume it exists.
 - **Failed Hetzner deployment** (`http://5.78.136.133/`): will be **decommissioned** after we have a working ERPNext replacement to show. Future instances must NOT assume it is reachable.
-- **Odoo GitHub repo** (`https://github.com/CBaen/locally-twisted-odoo`): will be **archived as read-only**. Useful for historical questions only; never cite as live state.
+- **legacy_source GitHub repo** (`https://github.com/CBaen/locally-twisted-legacy_source`): will be **archived as read-only**. Useful for historical questions only; never cite as live state.
 - **Current `locallytwisted.com`** site: stays live until cutover, but is **damaged beyond repair** and out of scope for editing. After cutover, it will be replaced by the new ERPNext storefront at the same domain.
 
-**This project stands on its own.** Anything from the Odoo dir that applies has been **copied here, scrubbed of Odoo references, and integrated into this folder's structure**. The canonical sources for the migration destination are:
+**This project stands on its own.** Anything from the legacy_source dir that applies has been **copied here, scrubbed of legacy_source references, and integrated into this folder's structure**. The canonical sources for the migration destination are:
 
 - **Style guide:** `_resources/STYLE-GUIDE.md` - the only current visual authority: Civic Celebration + Slate Blue/Berry + Brand Direction, page treatments, components, icon system, photography, voice, and accessibility.
 - **Deleted legacy design guide:** `_resources/design-guide/` was removed on 2026-05-05 because the old synthesis conflicted with the approved visual contract and kept reintroducing light-blue/blush styling. Do not recreate it or use those old screenshots/TSX files as current guidance.
 - **Business policies:** `_resources/policies/` — full set of LT's confirmed business rules + the legal interview answers (sufficient for attorney to draft v1 contract)
 - **Tax data + research:** `_resources/utah-tax-rates-2026q2.md` — Utah destination-based sales tax research, per-jurisdiction rates
 
-**Rule for future instances:** if you find yourself reaching into the Odoo dir for something other than these copied resources, stop. The thing you need either lives here already, or it's not needed in the destination. When in doubt, ask GL.
+**Rule for future instances:** if you find yourself reaching into the legacy_source dir for something other than these copied resources, stop. The thing you need either lives here already, or it's not needed in the destination. When in doubt, ask GL.
 
 ## Hetzner `/book` and `/contact` are the canonical spec for the rebuild
 
-The Odoo deployment at `http://5.78.136.133` is the source of truth for the ERPNext rebuild of `/book` and `/contact`. The local Odoo clone at `C:\Users\baenb\projects\locally-twisted-odoo\` is **stale** relative to Hetzner — its XML shows older single-select `x_event_type` and 3-photo / 10 MB limits. **Hetzner has the actual spec:** multi-select services (`x_services` checkboxes) with per-service conditional notes, indoor/outdoor + shade required + colors environment fields appearing when any service is selected, 5 photos × 25 MB. The 45 ERPNext Lead Custom Fields someone already built mirror Hetzner, not the local clone.
+The legacy_source deployment at `http://5.78.136.133` is the source of truth for the ERPNext rebuild of `/book` and `/contact`. The local legacy_source clone at `C:\Users\baenb\projects\locally-twisted-legacy_source\` is **stale** relative to Hetzner — its XML shows older single-select `x_event_type` and 3-photo / 10 MB limits. **Hetzner has the actual spec:** multi-select services (`x_services` checkboxes) with per-service conditional notes, indoor/outdoor + shade required + colors environment fields appearing when any service is selected, 5 photos × 25 MB. The 45 ERPNext Lead Custom Fields someone already built mirror Hetzner, not the local clone.
 
-**Snapshots on disk** (canonical even after Hetzner decommissions): `_resources/odoo-live-snapshot/hetzner-book.html` and `hetzner-contact.html`. Saved 2026-04-29 via Bash `curl`.
+**Snapshots on disk** (canonical even after Hetzner decommissions): `_resources/retired-source-snapshot/hetzner-book.html` and `hetzner-contact.html`. Saved 2026-04-29 via Bash `curl`.
 
 **Tool-failure routing.** If WebFetch returns ECONNREFUSED on `5.78.136.133`, that's a WebFetch sandbox limitation — not a network outage. Bash `curl` reaches it. Try alternates (curl, Playwright, a browser screenshot) before treating any URL as unreachable.
 
@@ -144,7 +144,7 @@ The old `_resources/design-guide/` folder was deleted on 2026-05-05. The current
 
 ## Loud Failure Coverage
 
-Per global rule at `C:\Users\baenb\.claude\rules\loud-failure.md`. LT-specific surfaces tracked as they're built. The Odoo `/book` form silent-failure incident (2026-04-22) is the founding receipt for this rule — never repeat that pattern.
+Per global rule at `C:\Users\baenb\.claude\rules\loud-failure.md`. LT-specific surfaces tracked as they're built. The legacy_source `/book` form silent-failure incident (2026-04-22) is the founding receipt for this rule — never repeat that pattern.
 
 ## Customer / Contact dedup (Phase 2 work — Lead Intake)
 
@@ -152,7 +152,7 @@ When the customer-facing form lands a Lead in ERPNext, the Lead must auto-link t
 
 ## Form-handler routing (Phase 2 work — Lead Intake)
 
-The new `/book` and `/contact` forms on the ERPNext site post directly to Lead. The prior Odoo site posted under different field names (`contact_name`, `email_from`, `partner_name`, `x_*`). On the ERPNext side, forms post to ERPNext's Lead field names natively (`lead_name`, `phone`, `email_id`, `company_name`, `custom_anything_else`, `custom_*`) — no legacy name-mapping shim needed. Tracked in queue.
+The new `/book` and `/contact` forms on the ERPNext site post directly to Lead. The prior legacy_source site posted under different field names (`contact_name`, `email_from`, `partner_name`, `x_*`). On the ERPNext side, forms post to ERPNext's Lead field names natively (`lead_name`, `phone`, `email_id`, `company_name`, `custom_anything_else`, `custom_*`) — no legacy name-mapping shim needed. Tracked in queue.
 
 ## Project Skills
 

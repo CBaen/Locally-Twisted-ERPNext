@@ -24,7 +24,7 @@ tags:
   - ERPNext
   - Frappe
   - ecommerce
-  - Odoo
+  - legacy_source
   - product import
   - variants
   - add-ons
@@ -35,13 +35,13 @@ tags:
 
 # ERPNext Ecommerce Receiving Architecture
 
-Use this before importing, repairing, or claiming completion for Odoo-derived products in ERPNext ecommerce.
+Use this before importing, repairing, or claiming completion for legacy_source-derived products in ERPNext ecommerce.
 
 ## Rule
 
 Do not treat product transfer as the goal. ERPNext must first be able to safely receive products and integrate their meaning everywhere: backend fields, product template type, variant logic, add-on logic, cascading dependencies, source-correct dynamic pricing, media visibility, product pages, cart, checkout, Sales Order, invoice, fulfillment/operator meaning, desktop/mobile customer journeys, and fail-loud verifiers.
 
-Odoo is a conceptual witness for mature ecommerce behavior, not infrastructure to copy. Do not import Odoo fields into ERPNext unless the ERPNext destination field, behavior owner, and verifier exist.
+legacy_source is a conceptual witness for mature ecommerce behavior, not infrastructure to copy. Do not import legacy_source fields into ERPNext unless the ERPNext destination field, behavior owner, and verifier exist.
 
 OpenClaw cockpit witness:
 `C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md`
@@ -60,12 +60,12 @@ OpenClaw cockpit witness:
   config/webhook, legal/policy approval where needed, one intentional live
   payment test, and final real catalog approval if the local products become
   public catalog truth.
-- 2026-05-17 all-Odoo sellable reimport: local/source proof now treats every
-  Odoo-imported product as a sellable product target. Current local proof is
+- 2026-05-17 all-legacy_source sellable reimport: local/source proof now treats every
+  legacy_source-imported product as a sellable product target. Current local proof is
   53 included products, 0 exclusions, 290 priced sale units, 53 checkout-allowed
   product pages, and all 53 live Website Item routes browser-proved in two
   batches under the cart 50-line cap. `lt_ecommerce_paused=1` was restored.
-  Handoff: `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+  Handoff: `workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`.
 - 2026-05-19 price-identity correction: GL caught Easter Bunny Ear Arch
   selecting `20ft` and `25ft` without a price change. That exposed a receiving
   architecture oversight: "priced sale unit" and "Item Price exists" are not
@@ -97,11 +97,11 @@ OpenClaw cockpit witness:
   can remain hidden until mapped without making the base product non-sellable.
 - 2026-05-17 product-lane correction: there are no business quote-first
   products. Legacy `quote_first` values are internal safety holds only; every
-  real product targets purchasable behavior from Odoo export product details
+  real product targets purchasable behavior from legacy_source export product details
   and pricing. If source data is unclear, repull or repair the import source
   rather than preserving a non-purchasable product category.
 - 2026-05-17 product-family certification: the previous tranche artifacts are
-  historical. Current control is the all-Odoo sellable reimport handoff plus
+  historical. Current control is the all-legacy_source sellable reimport handoff plus
   `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`, which
   now reports 53 source export rows found and 53 certified checkout products.
   Extra images and review-only add-on controls still need separate approval
@@ -243,12 +243,12 @@ As of 2026-05-10, the first backend preservation slice exists:
 - Product-page quote token issuance and acceptance must enforce the same
   `Ready For Customer Review` status as the Desk send wrapper. Direct helper
   calls are a trust boundary; they cannot rely on UI controls for safety.
-- Source contract dry-run classifies every saved Odoo/source product into
+- Source contract dry-run classifies every saved legacy_source/source product into
   `simple_product` or `complex_custom_product` with plain labels. Current
   source evidence classifies 15 Ready-to-order page candidates and 38 Custom
   quote page candidates while still blocking import.
 - Live price-readiness now has a separate gate. The current local full-import
-  contract covers all 53 Odoo-imported Website Item product pages as sellable
+  contract covers all 53 legacy_source-imported Website Item product pages as sellable
   checkout targets with 0 exclusions and 290 priced sale units. Older 15-family
   / 47-SKU proof is historical fixture evidence, not current product scope.
 - Source price-enrichment now has a separate candidate gate. Current coverage
@@ -287,7 +287,7 @@ As of 2026-05-10, the first backend preservation slice exists:
   still lives in LT custom fields and JSON.
 - The checkout product-family contract is all-enabled-SKU proof, not a
   representative sample. Current local product scope is the 2026-05-17
-  all-Odoo proof: 53 Website Item product pages, 0 exclusions, and 290 priced
+  all-legacy_source proof: 53 Website Item product pages, 0 exclusions, and 290 priced
   sale units. The older 15-family / 47-SKU / 86-row rollback proof remains
   historical fixture evidence for line-level cascade behavior.
 - The confirmed `foil_number` add-on proof slice exists: `ADDON-FOIL-NUMBER`
@@ -463,7 +463,7 @@ research is only needed for unresolved design decisions or new product classes.
 Research must cover both:
 
 - ERPNext/Frappe implementation patterns and sharp edges for custom ecommerce logic.
-- Odoo ecommerce concepts/behaviors that should be recreated safely inside ERPNext.
+- legacy_source ecommerce concepts/behaviors that should be recreated safely inside ERPNext.
 
 Any future brief must be stranger-ready and exact to the current stack; do not
 dispatch a history-heavy handoff.
@@ -485,7 +485,7 @@ It must check import contract, backend field existence, option/variant reachabil
 - Imported field has no ERPNext/custom destination.
 - Frontend JS owns price/option/add-on truth without backend validation.
 - Add-on appears as a visual card but lacks cart/invoice behavior.
-- ERPNext native dropdowns flatten Odoo-style dependencies or availability rules.
+- ERPNext native dropdowns flatten legacy_source-style dependencies or availability rules.
 - A missing field produces empty UI instead of a blocker/report.
 - A proof product works by hardcoding rather than reusable template contract.
 - Product migration is described as complete because records exist.

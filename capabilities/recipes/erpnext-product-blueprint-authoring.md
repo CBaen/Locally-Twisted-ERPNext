@@ -35,9 +35,9 @@ authoring in ERPNext instead of developer-coded product packets.
 
 ## Rule
 
-Staff-facing product setup belongs in `LT Product Blueprint`. Odoo product
+Staff-facing product setup belongs in `LT Product Blueprint`. legacy_source product
 records are useful witnesses for behavior, but the architecture must support
-highly customizable products beyond the exact Odoo catalog that happened to
+highly customizable products beyond the exact legacy_source catalog that happened to
 exist. The blueprint is the local bridge from employee-entered product meaning
 to ERPNext Items, Website Items, prices, options, add-ons, and future
 conditional pricing/media flows.

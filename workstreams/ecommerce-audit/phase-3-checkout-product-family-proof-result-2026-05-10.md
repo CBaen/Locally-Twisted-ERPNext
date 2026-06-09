@@ -99,7 +99,7 @@ It verified:
 - `ok: true`, `rolled_back: true`, and zero `customer`/`sales_order`/`sales_invoice` survivors,
 - no public ecommerce opening,
 - no live payment/customer-message path in the inspected verifier/wrapper,
-- no Odoo mutation,
+- no legacy_source mutation,
 - synthetic customer only; no email/phone/address/token/session identifier.
 
 ## Final parent-run gates

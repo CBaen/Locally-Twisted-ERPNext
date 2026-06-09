@@ -4,7 +4,7 @@ name: ERPNext Catalog Variant Price Parity
 schema_version: 2.0
 level: recipe
 maturity: candidate
-scope: Locally Twisted ERPNext/Frappe catalog imports from Odoo website_sale
+scope: Locally Twisted ERPNext/Frappe catalog imports from legacy_source website_sale
 currently_true: local_only
 verification_level: 2
 last_verified: 2026-05-19
@@ -22,7 +22,7 @@ tags:
   - Locally Twisted
   - ERPNext
   - Frappe
-  - Odoo
+  - legacy_source
   - catalog
   - variants
   - pricing
@@ -32,29 +32,29 @@ tags:
 # ERPNext Catalog Variant Price Parity
 
 Use this recipe when importing, repairing, auditing, or claiming prices for
-ERPNext Item variants that came from the old Odoo shop.
+ERPNext Item variants that came from the old legacy_source shop.
 
 ## Rule
 
 Product page base price is not variant price.
 
-For Odoo website_sale products, resolve variant prices through
+For legacy_source website_sale products, resolve variant prices through
 `/website_sale/get_combination_info`. Do not trust JSON-LD, card price, listing
 price, or scraped page base price as the price for every ERPNext variant.
 
 ## Current LT Contract
 
-- The old Odoo shop at `http://5.78.136.133/shop` is the catalog reference for
+- The old legacy_source shop at `http://5.78.136.133/shop` is the catalog reference for
   this migration's imported product data.
-- Odoo's product-card/base price is not enough. Variant price truth comes from
+- legacy_source's product-card/base price is not enough. Variant price truth comes from
   `/website_sale/get_combination_info`, including option price modifiers such
   as size, height, length, topper, LED, and approved add-on deltas.
 - ERPNext sells Item variants, not parent variant templates.
-- Active ERPNext variants intentionally drop optional Odoo axes such as
+- Active ERPNext variants intentionally drop optional legacy_source axes such as
   `Add Foil Number` when those axes are not required product choices.
-- When optional axes are dropped, query Odoo with the required attribute IDs
+- When optional axes are dropped, query legacy_source with the required attribute IDs
   only and store that as the ERPNext Item Price.
-- Full Odoo combinations with optional add-ons may have higher prices. Those are
+- Full legacy_source combinations with optional add-ons may have higher prices. Those are
   add-on/customizer evidence, not automatically the ERPNext required-variant
   price.
 - `scripts/verify/catalog_variant_contract.py` proves variant shape parity, not
@@ -62,7 +62,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 - `scripts/verify/product_variant_price_contract.py` proves the historical
   bouquet-size repair. It is not broad enough for the catalog by itself.
 - `scripts/verify/product_price_modifier_contract.py` is the broad local source
-  price guard for active variant products. It checks the Odoo option-price
+  price guard for active variant products. It checks the legacy_source option-price
   modifiers against ERPNext `Item Price` rows and fails if any active variant
   would change.
 - `scripts/verify/product_price_display.spec.js` proves at least one real
@@ -83,7 +83,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 2. Use the dynamic resolver path:
 
    ```powershell
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
+   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_legacy_source.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
    ```
 
 3. Review `old_rate`, `new_rate`, and `would_change`.
@@ -91,7 +91,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 4. Apply only bounded, reviewed slices:
 
    ```powershell
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'unicorn-bouquet'}"
+   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_legacy_source.execute --kwargs "{'slug_filter':'unicorn-bouquet'}"
    ```
 
 5. Add or extend a product-family verifier before calling that family complete.
@@ -117,7 +117,7 @@ the product page `base_price` into every `valid_variants` row and
 `seed_catalog.py` upserted every Item Price from that base price.
 
 For Unicorn Bouquet, live ERPNext had Small, Medium, and Large all at `$35`.
-Odoo's resolver returned:
+legacy_source's resolver returned:
 
 - Small: `$35`
 - Medium: `$70`
@@ -128,7 +128,7 @@ The same bouquet-size pattern was repaired for 13 bouquet templates on
 
 On 2026-05-19, GL found the same failure class on
 `easter-balloon-arch-bunny-ear`: both active sizes were `$375` in ERPNext while
-Odoo returned `$375` for `20ft` and `$440` for `25ft`. This proved the old
+legacy_source returned `$375` for `20ft` and `$440` for `25ft`. This proved the old
 guard was too narrow. The wider incident is tracked in
 `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and the
 failure recipe
@@ -146,7 +146,7 @@ This now runs both:
 
 - `scripts/verify/product_variant_price_contract.py` for the historical bouquet
   size repair.
-- `scripts/verify/product_price_modifier_contract.py` for broad Odoo modifier
+- `scripts/verify/product_price_modifier_contract.py` for broad legacy_source modifier
   parity across active variant products.
 
 Visible-page guard for the reported Easter Bunny Ear Arch failure:
@@ -185,12 +185,12 @@ cutover approval.
 
 On 2026-05-08, GL flagged that Unicorn Bouquet variants were still the same
 price after active product work. Live ERPNext confirmed all active Unicorn
-variants were `$35`. Direct Odoo resolver probes recovered Small `$35`, Medium
+variants were `$35`. Direct legacy_source resolver probes recovered Small `$35`, Medium
 `$70`, and Large `$85`. The repair script updated live ERPNext prices for the
 bouquet-size family, and `npm run test:product-prices` plus
 `cart_checkout_contract.py` passed afterward.
 
-On 2026-05-17, the all-Odoo sellable reimport first exposed that the import
+On 2026-05-17, the all-legacy_source sellable reimport first exposed that the import
 path could still flatten bouquet-size variants to the scraped page base price.
 `scripts/setup/stage_seed_data.py` now stages the price enrichment artifact and
 `seed_catalog.py` prefers those approved sale-unit prices before page fallback
@@ -199,10 +199,10 @@ prices. The second guarded local reimport passed
 0 exclusions, and 290 source-ready sale units.
 
 On 2026-05-19, GL caught `easter-balloon-arch-bunny-ear` not changing price on
-size selection. Local ERPNext had both active variants at `$375`, while Odoo's
+size selection. Local ERPNext had both active variants at `$375`, while legacy_source's
 combination endpoint returned `$375` for `20ft` and `$440` for `25ft`. The
 local DB was corrected for that item first, then
-`repair_variant_price_modifiers_from_odoo` applied Odoo option modifiers across
+`repair_variant_price_modifiers_from_legacy_source` applied legacy_source option modifiers across
 49 variant products. The apply run corrected 8,405 `Item Price` rows; the
 post-apply modifier contract reported 49 products and 10,186 active variants
 checked with 0 remaining changes. Browser proof now confirms the reported page

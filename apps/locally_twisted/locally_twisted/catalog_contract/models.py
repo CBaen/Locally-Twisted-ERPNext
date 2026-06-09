@@ -1,7 +1,7 @@
-﻿"""Serializable product-page contract models.
+"""Serializable product-page contract models.
 
 The rebuilt product frontend should consume this shape instead of scraping a
-random mix of ERPNext/Odoo fields in templates.
+random mix of ERPNext/legacy_source fields in templates.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ SelectorType = Literal["radio", "single_select", "multi_select_drawer", "cards",
 class GalleryImageContract:
     url: str
     role: ImageRole
-    source: str = "odoo"
+    source: str = "legacy_source"
     label: str = ""
     classification_status: ImageClassificationStatus = "approved"
     render_policy: ImageRenderPolicy = "render"

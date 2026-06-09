@@ -14,13 +14,13 @@ The launch-critical question is not:
 
 The launch-critical question is:
 
-> Can ERPNext/Frappe safely receive Odoo-derived ecommerce meaning from page -> cart/quote -> checkout -> Sales Order -> invoice/operator workflow, while preserving customer intent or failing loudly?
+> Can ERPNext/Frappe safely receive legacy_source-derived ecommerce meaning from page -> cart/quote -> checkout -> Sales Order -> invoice/operator workflow, while preserving customer intent or failing loudly?
 
 Products are downstream test cases. Infrastructure is the main work.
 
 ## Non-negotiables
 
-1. **Odoo is a witness, not a blueprint.** Preserve business meaning; do not copy Odoo code or accidental architecture.
+1. **legacy_source is a witness, not a blueprint.** Preserve business meaning; do not copy legacy_source code or accidental architecture.
 2. **ERPNext is the accounting/catalog spine, not the whole ecommerce brain.** Native Item, Website Item, Item Price, Quotation, Sales Order, and Sales Invoice are necessary but not sufficient.
 3. **LT owns the receiving layer.** Product-page contracts, configuration payloads, quote-first bridge, add-ons, dependency logic, media classification, and fail-loud verifiers are LT infrastructure.
 4. **Quote-first / hold / blocked are valid success states.** Fake checkout is not success.
@@ -35,11 +35,11 @@ Purpose: decide what source evidence controls the rebuild.
 
 Inputs:
 
-- Odoo local source/module evidence.
-- User-provided Odoo surfaces.
-- Any safe public Odoo page captures.
+- legacy_source local source/module evidence.
+- User-provided legacy_source surfaces.
+- Any safe public legacy_source page captures.
 - Existing source maps and audit packets.
-- Official Odoo docs where relevant.
+- Official legacy_source docs where relevant.
 
 Required output:
 
@@ -48,7 +48,7 @@ Required output:
 
 Current blocker:
 
-- Odoo local module evidence is `19.0.2.15.0`; prior notes warn production DB may still be `19.0.2.14.0`.
+- legacy_source local module evidence is `19.0.2.15.0`; prior notes warn production DB may still be `19.0.2.14.0`.
 
 ### Layer 2 - Receiving contract register
 
@@ -58,8 +58,8 @@ This is not primarily a product matrix. It is a contract map:
 
 | Meaning type | Source witness | ERPNext/native destination | LT custom destination | Runtime owner | Verifier | Failure mode |
 |---|---|---|---|---|---|---|
-| Required variant axis | Odoo/source/page | Item Variant / Website Item configure | Contract model / dependency matrix | `product_page_runtime.py` | architecture/cart verifier | block/quote-first |
-| Custom color/design recipe | Odoo/source/page | none sufficient alone | payload JSON / quote child row | quote runtime | quote verifier | quote-first |
+| Required variant axis | legacy_source/source/page | Item Variant / Website Item configure | Contract model / dependency matrix | `product_page_runtime.py` | architecture/cart verifier | block/quote-first |
+| Custom color/design recipe | legacy_source/source/page | none sufficient alone | payload JSON / quote child row | quote runtime | quote verifier | quote-first |
 | Paid checkout add-on | source + business approval | add-on Item + Item Price | add-on payload + linked SO/SI lines | cart/runtime service | backend record proof | reject if unapproved |
 | Media/gallery meaning | source images/pages | Website Item image / Item image / slideshow if approved | classification packet | media/register verifier | browser proof | hold until classified |
 
@@ -206,11 +206,11 @@ Goal: close the missing Lane E gap.
 
 Actions:
 
-1. Create `workstreams/ecommerce-audit/odoo-docs-agent-action-convergence-2026-05-10.md`.
+1. Create `workstreams/ecommerce-audit/legacy_source-docs-agent-action-convergence-2026-05-10.md`.
 2. Reconcile:
    - official ERPNext/Frappe/Webshop docs,
-   - official Odoo ecommerce behavior/doc concepts where useful,
-   - local Odoo source witness,
+   - official legacy_source ecommerce behavior/doc concepts where useful,
+   - local legacy_source source witness,
    - current LT ERPNext code/runtime behavior,
    - prior agent actions and artifacts.
 3. Label mismatches:
@@ -363,7 +363,7 @@ Gate:
 
 - I will not call product matrices the main proof.
 - I will not claim checkout works from visual browser success alone.
-- I will not click/write/mutate authenticated Odoo admin surfaces without preflight and no-write guard.
+- I will not click/write/mutate authenticated legacy_source admin surfaces without preflight and no-write guard.
 - I will not purge/import/rebuild products without explicit approval and rollback/dry-run gates.
 - I will not treat old agent completion output as evidence without reading the artifact.
 - I will not hide `[NO EVIDENCE]` lanes in prose.

@@ -36,7 +36,7 @@ def build_add_on_approval_packet(
     }
     return {
         "schema_version": SCHEMA_VERSION,
-        "purpose": "Source-backed approval packet for Odoo-derived add-on axes before ERPNext import/reopen.",
+        "purpose": "Source-backed approval packet for legacy_source-derived add-on axes before ERPNext import/reopen.",
         "warning": (
             "This packet does not approve checkout. Every review-only add-on "
             "must stay quote-only until GL/Locally Twisted approves product-family mapping, pricing, quantity, and fulfillment behavior."

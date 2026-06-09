@@ -18,8 +18,8 @@ from typing import Any
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 DEFAULT_OUTPUT = Path("output/product-pattern-contract-report.json")
-SOURCE_CATALOG = Path("_resources/odoo-live/catalog.json")
-CONTAINER_SOURCE_CATALOG = "/tmp/lt-odoo-live-catalog.json"
+SOURCE_CATALOG = Path("_resources/catalog-source/catalog.json")
+CONTAINER_SOURCE_CATALOG = "/tmp/lt-catalog-source-catalog.json"
 
 
 class ContractFail(Exception):

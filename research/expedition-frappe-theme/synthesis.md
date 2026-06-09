@@ -8,7 +8,7 @@ The team went looking for ready-made tools that would let us build the LT websit
 
 **True finding 1 — There are no ready-made polished themes for Frappe.** The Frappe ecosystem is like a frame shop that sells raw frames but no finished paintings. If the LT site is going to look professional on Frappe, someone has to paint it by hand. There is no "install this theme and you have a beautiful balloon-business site" option. We checked the marketplace, GitHub, the community, the official documentation. The only Frappe-built sites that actually look polished are sites Frappe themselves built (frappe.io, fossunited.org). No documented case of a balloon company, a restaurant, or any similar small business successfully running a polished customer-facing website on Frappe was found.
 
-**True finding 2 — The approved Jeff content was sitting on the disk the entire time.** Every previous instance invented placeholder copy when the actual approved copy lived in the Odoo project files. The hero headline is "Utah's Balloon Specialists." The tagline is "Making celebrations unforgettable since 1998." The CTA-section heading is "Make Your Celebration Unforgettable." All verbatim. We do not need to invent or guess any of it for the new site.
+**True finding 2 — The approved Jeff content was sitting on the disk the entire time.** Every previous instance invented placeholder copy when the actual approved copy lived in the legacy_source project files. The hero headline is "Utah's Balloon Specialists." The tagline is "Making celebrations unforgettable since 1998." The CTA-section heading is "Make Your Celebration Unforgettable." All verbatim. We do not need to invent or guess any of it for the new site.
 
 **Direction question — Is Frappe the right home for the customer-facing website?** You said at the start: *"if ERPNext can't deliver this visual + UX bar, GL pivots away from ERPNext."* The team found two technically-possible paths to keep building inside Frappe (custom Jinja templates + custom CSS, or installing Frappe Builder as an experiment). Both are real. Both are buildable. But neither is easy, fast, or risk-free. The simpler alternative is to use Frappe ERPNext as the back office (orders, invoices, payroll, taxes — the things it is genuinely good at) and put a different platform on the customer-facing front door — WordPress or Webflow, which is what most small businesses with this much catalog actually use. That switch is easy now because nothing customer-facing is built yet on Frappe. It gets harder with every session.
 
@@ -52,7 +52,7 @@ If GL chooses to keep building inside Frappe:
 Specific build sequence if Frappe wins the direction question:
 1. **Step 0 (mandatory before any new visible work):** Remove the broken navbar toggler block from `lt-theme.css` lines 388-415 (uses non-standard `data:image/svg+xml;utf8,` data URI that silently fails in real browsers). Replace with a real SVG file at `apps/locally_twisted/locally_twisted/public/icons/menu.svg`. Verify at 375px mobile width with Playwright.
 2. **Step 0.5 (mandatory):** Verify the Jinja override path actually works in our Docker setup — drop a minimal `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` with one visible test string, clear cache, confirm it resolves. The HANDOFF has been claiming "override Jinja partials" as the plan for two sessions; nobody has verified it actually works in our specific stack yet.
-3. Then build navbar override + footer override using approved Odoo content.
+3. Then build navbar override + footer override using approved legacy_source content.
 4. Then `www/` static page for the homepage with the approved Jeff copy.
 5. Then BTFP page (the calculator collapses to tier 1 via Web Page's Script tab — confirmed earlier this session).
 6. Then Contact page + ecommerce work.
@@ -70,7 +70,7 @@ Other DA challenges:
 
 Two sources of approved Jeff content now exist:
 
-**Source A — Local Odoo XML (`C:/Users/baenb/projects/locally-twisted-odoo/addons/locally_twisted/views/`):** This was the most recent Odoo-side update before the Odoo project was paused. Per CLAUDE.md, this is the authoritative content for the new build. Key strings (verbatim):
+**Source A — Local legacy_source XML (`C:/Users/baenb/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`):** This was the most recent legacy_source-side update before the legacy_source project was paused. Per CLAUDE.md, this is the authoritative content for the new build. Key strings (verbatim):
 - Utility strip: "Bringing celebration to the Wasatch Front since 1998"
 - Hero (3 slides): "Utah's Balloon Specialists" / "Custom Balloon Designs" / "Events & Special Occasions"
 - CTA section: "Make Your Celebration Unforgettable" / "From birthdays to weddings, baby showers to corporate events — we've been part of Utah celebrations since 1998. Yours is next."
@@ -101,9 +101,9 @@ Two sources of approved Jeff content now exist:
 ## Open Questions (forced to GL — see direction question above)
 
 1. **Platform direction:** Frappe customer-facing OR external front door + Frappe back office? (Load-bearing for everything else.)
-2. **Approved content:** Odoo XML version OR locallytwisted.com version OR a third Jeff confirmation? (Affects every page.)
-3. **Social icons:** 3 (Odoo XML, no Twitter) OR 4 (live site, with Twitter)? (Affects footer build.)
-4. **Founding year:** "since 1998" (Odoo XML; 28 years) OR "Over 22 years" (live site)? Reconcile to one number.
+2. **Approved content:** legacy_source XML version OR locallytwisted.com version OR a third Jeff confirmation? (Affects every page.)
+3. **Social icons:** 3 (legacy_source XML, no Twitter) OR 4 (live site, with Twitter)? (Affects footer build.)
+4. **Founding year:** "since 1998" (legacy_source XML; 28 years) OR "Over 22 years" (live site)? Reconcile to one number.
 5. **Jeff's content self-management:** Will Jeff need to update homepage copy without a developer post-handoff? (Affects choice between Web Page DocType vs. www/ static pages.)
 
 ## What's Filtered Out
@@ -116,7 +116,7 @@ Two sources of approved Jeff content now exist:
 
 These need doing whether the platform stays Frappe or pivots:
 
-1. **Verify catalog image URLs against the Hetzner Odoo server.** All 48 product image URLs in `_resources/odoo-export/catalog.json` point at `http://5.78.136.133/...`. Web Scout confirmed the Hetzner server is ECONNREFUSED. If the images are 404, they need to be re-exported from the local Docker Odoo stack BEFORE that stack is decommissioned. Time-sensitive.
+1. **Verify catalog image URLs against the Hetzner legacy_source server.** All 48 product image URLs in `_resources/legacy_source-export/catalog.json` point at `http://5.78.136.133/...`. Web Scout confirmed the Hetzner server is ECONNREFUSED. If the images are 404, they need to be re-exported from the local Docker legacy_source stack BEFORE that stack is decommissioned. Time-sensitive.
 2. **Strip `!important` band-aids from `lt-theme.css` (full pass).** Step 0 from earlier this session removed the `.web-footer` chains, but Ground Truth audit confirmed 28 `!important` occurrences remain — including the broken navbar toggler block at lines 388-415.
 3. **Verify the Jinja override path works in our Docker setup.** Two sessions of HANDOFF have claimed "override Jinja partials" as the plan; nobody has empirically confirmed the override resolves in our specific bind-mounted bench environment. One test file proves it works (or surfaces another problem to fix).
 

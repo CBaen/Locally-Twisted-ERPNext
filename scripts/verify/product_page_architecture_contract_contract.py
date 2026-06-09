@@ -210,7 +210,7 @@ def _axis(
         "values": values or ["One"],
         "selector_type": "multi_color_recipe_builder" if multi else "single_select",
         "allows_multiple_values": multi,
-        "source": "odoo_source",
+        "source": "legacy_source_source",
         "status": "ready",
         "add_on_contract": {
             "ready_for_checkout": add_on_ready,

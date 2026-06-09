@@ -16,10 +16,10 @@ sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 
 from locally_twisted.catalog_contract import build_product_page_contract
 
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
 REPORT_PATH = ROOT / Path(
-    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "audits/catalog-import-audit-2026-05-08/"
     "18-proof-product-contract-report.md"
 )
 

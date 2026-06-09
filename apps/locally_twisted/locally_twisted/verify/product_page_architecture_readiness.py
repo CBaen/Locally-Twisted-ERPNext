@@ -287,8 +287,8 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
                 "locally_twisted/catalog_contract/addon_rules.py",
                 "locally_twisted/catalog_contract/addon_review.py",
                 "locally_twisted/product_page_runtime.py",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/22-product-add-on-approval-packet.md",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/22-product-add-on-approval-packet.json",
+                "audits/catalog-import-audit-2026-05-08/22-product-add-on-approval-packet.md",
+                "audits/catalog-import-audit-2026-05-08/22-product-add-on-approval-packet.json",
                 "GL instruction 2026-05-10: unblock all business blocks",
             ],
             verifiers=[
@@ -303,10 +303,10 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
             category=BUSINESS_IMPORT_APPROVAL,
             evidence=[
                 "locally_twisted/catalog_contract/price_review.py",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/21-product-page-price-enrichment-report.md",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/21-product-page-price-enrichment-candidates.json",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.md",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.json",
+                "audits/catalog-import-audit-2026-05-08/21-product-page-price-enrichment-report.md",
+                "audits/catalog-import-audit-2026-05-08/21-product-page-price-enrichment-candidates.json",
+                "audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.md",
+                "audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.json",
                 "GL instruction 2026-05-10: unblock all business blocks",
             ],
             verifiers=[
@@ -321,9 +321,9 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
             category=BUSINESS_IMPORT_APPROVAL,
             evidence=[
                 "locally_twisted/catalog_contract/media_classification.py",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/20-product-page-media-visibility-report.md",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md",
-                "audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.json",
+                "audits/catalog-import-audit-2026-05-08/20-product-page-media-visibility-report.md",
+                "audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.md",
+                "audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.json",
                 "GL instruction 2026-05-10: unblock all business blocks",
             ],
             verifiers=[

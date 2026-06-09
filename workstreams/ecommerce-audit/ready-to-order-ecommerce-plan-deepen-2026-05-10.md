@@ -1,4 +1,4 @@
-﻿D:2026-05-10 | Check:/plan_deepen against local artifacts + Odoo account/source witness + ERPNext code 2026-05-10 | Confidence:high
+D:2026-05-10 | Check:/plan_deepen against local artifacts + legacy_source account/source witness + ERPNext code 2026-05-10 | Confidence:high
 # Ready-to-order ecommerce infrastructure plan-deepen
 
 ## Decision
@@ -7,15 +7,15 @@
 
 The clearer plan is right: **direct checkout should be narrow** and reserved for simple ready-to-order products. Complex/high-ticket/event decor should stay visible through event/audience pages as examples, proof, scale, and inspiration, then route quote/invoice-first.
 
-The implementation plan is viable only if the next work treats ERPNext as a receiving system with explicit backend contracts. Do not treat product cards, visible buttons, or Odoo parity tables as launch proof.
+The implementation plan is viable only if the next work treats ERPNext as a receiving system with explicit backend contracts. Do not treat product cards, visible buttons, or legacy_source parity tables as launch proof.
 
 ## Evidence checked in this deepen pass
 
 Primary artifacts:
 
-- `odoo-backend-architecture-and-checkout-logic-2026-05-10.md`
+- `legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md`
 - `ecommerce-infrastructure-readiness-packet-2026-05-10.md`
-- `erpnext-receiving-build-spec-from-odoo-2026-05-10.md`
+- `erpnext-receiving-build-spec-from-legacy_source-2026-05-10.md`
 - `ready-to-order-checkout-scope-decision-2026-05-10.md`
 - `event-pages-vs-ready-to-order-shop-contract-2026-05-10.md`
 - `ready-to-order-product-candidate-list-2026-05-10.md`
@@ -37,22 +37,22 @@ Existing verifier evidence:
 - `payment_cascade_contract.py` passed and rolled back generated records.
 - `checkout_fulfillment_contract.py` currently fails with `KeyError: 'sales_order'`.
 
-## The core architecture insight from Odoo
+## The core architecture insight from legacy_source
 
-Odoo should be treated as a source witness for business meaning, not a schema to clone.
+legacy_source should be treated as a source witness for business meaning, not a schema to clone.
 
-The critical Odoo pattern is:
+The critical legacy_source pattern is:
 
 1. **True variants only for SKU/price identity.**
    - Classic Arch uses real variants for size only.
 2. **Large customer-choice dimensions are no-variant structured options.**
    - 53 latex colors, design, and LED choice are preserved as order-line meaning without exploding SKU variants.
 3. **Cart/order-line preservation is the proof.**
-   - Existing Odoo cart/order evidence preserved no-variant colors and custom text on the sale order line.
+   - Existing legacy_source cart/order evidence preserved no-variant colors and custom text on the sale order line.
 4. **Quote-first is a valid success path.**
-   - Odoo product inquiry creates CRM lead context instead of forcing every configurable product into checkout.
+   - legacy_source product inquiry creates CRM lead context instead of forcing every configurable product into checkout.
 5. **Website orders must stay separated from service/deposit automation.**
-   - Odoo source explicitly skips website orders in custom invoice automation.
+   - legacy_source source explicitly skips website orders in custom invoice automation.
 
 ERPNext/Frappe can support this, but only with the `locally_twisted` runtime/contract layer around native Webshop.
 
@@ -188,7 +188,7 @@ Minimum proof still needed:
 
 ### 7. Event pages and shop must not compete
 
-Event/audience pages should carry the high-ticket decor storytelling. The shop should not become a dumping ground for every Odoo product just because it exists.
+Event/audience pages should carry the high-ticket decor storytelling. The shop should not become a dumping ground for every legacy_source product just because it exists.
 
 Practical rule:
 
@@ -359,7 +359,7 @@ Only then consider setting `lt_ecommerce_paused` open for public direct checkout
 
 | Risk | Why it matters | Mitigation |
 |---|---|---|
-| Variant explosion | 50+ colors/design axes would create unmaintainable ERPNext items | Keep Odoo no-variant dimensions as configuration payloads; only true SKU/price identity becomes Item Variant |
+| Variant explosion | 50+ colors/design axes would create unmaintainable ERPNext items | Keep legacy_source no-variant dimensions as configuration payloads; only true SKU/price identity becomes Item Variant |
 | UI-only confidence | Product page/cart can look right while Sales Order loses meaning | Require Sales Order/Invoice custom field proof for selected options/add-ons |
 | Customer note laundering | Customers may request custom scope in a simple checkout note | Note is communication only; operator copy says requested/not confirmed; complex note patterns should route review/quote language later |
 | Paused checkout breaking tests | Safe public pause causes verifier `KeyError` instead of logic proof | Add deterministic test-mode bypass and clear setup failure |
@@ -387,11 +387,11 @@ Why first:
 
 ## Bottom line
 
-The new scope insight is strong. It turns this from â€œmake all Odoo ecommerce work in ERPNextâ€ into a safer architecture:
+The new scope insight is strong. It turns this from â€œmake all legacy_source ecommerce work in ERPNextâ€ into a safer architecture:
 
 - **Shop:** small, bounded, ready-to-order products with backend proof.
 - **Event pages:** high-ticket/custom decor examples with quote CTAs.
 - **Backend:** ERPNext receives structured customer intent through verified custom contracts.
-- **Odoo:** witness/teacher, not code to copy.
+- **legacy_source:** witness/teacher, not code to copy.
 
 Proceed, but only after fixing the verifier foundation. No product launch, purge, reimport, payment claim, or public checkout opening until the Phase 1â€“6 gates produce artifacts.

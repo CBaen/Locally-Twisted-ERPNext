@@ -1,4 +1,4 @@
-"""Map scraped Odoo extra product photos onto ERPNext variant Items.
+﻿"""Map catalog source extra product photos onto ERPNext variant Items.
 
 Run in-process:
     bench --site frontend execute locally_twisted.seed.sync_variant_media.execute \
@@ -22,9 +22,9 @@ import frappe
 SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
 DEFAULT_DATA_DIRS = [
     Path("/tmp/lt-variant-media"),
-    Path("/workspace/_resources/odoo-live"),
-    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
-    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
+    Path("/workspace/_resources/catalog-source"),
+    Path("/home/frappe/frappe-bench/_resources/catalog-source"),
+    Path("/home/frappe/frappe-bench/sites/_resources/catalog-source"),
 ]
 IGNORED_ATTRIBUTES = {
     "baby color",
@@ -46,7 +46,7 @@ def _find_data_dir(data_dir: str | None) -> Path:
     for p in DEFAULT_DATA_DIRS:
         if (p / "catalog.json").exists() and (p / "images").exists():
             return p
-    raise FileNotFoundError("Could not find staged _resources/odoo-live data for variant media sync.")
+    raise FileNotFoundError("Could not find staged _resources/catalog-source data for variant media sync.")
 
 
 def _normalize(text: str) -> str:

@@ -4,7 +4,7 @@ Last updated: 2026-05-21 by Codex after local fake-data cleanup and access gate 
 
 ## Outcome
 
-Make the ERPNext backend simple enough for Jeff to run without needing to understand ERPNext jargon or the history of the Odoo attempt.
+Make the ERPNext backend simple enough for Jeff to run without needing to understand ERPNext jargon or the history of the legacy_source attempt.
 
 The target backend is not "all possible ERPNext modules." It is a small operating system for Locally Twisted:
 
@@ -14,7 +14,7 @@ The target backend is not "all possible ERPNext modules." It is a small operatin
 - Quote/order/payment records connect cleanly when a customer buys.
 - Backend labels use plain business language.
 - Seed/fixture code does not overwrite future operator edits.
-- Stale Odoo-era schema and scripts are either retired, documented as historical, or deliberately kept.
+- Stale legacy_source-era schema and scripts are either retired, documented as historical, or deliberately kept.
 
 ## Current Stage
 
@@ -77,7 +77,7 @@ The real user-facing outcome is operational:
 - Jeff sees fewer confusing fields.
 - Leads are easier to process.
 - Sample records can support a backend tour.
-- Future agents stop treating old `/book`, Odoo, and experimental Lead-schema notes as current product direction.
+- Future agents stop treating old `/book`, legacy_source, and experimental Lead-schema notes as current product direction.
 - Cameron/Built by Cameron can still maintain the system without turning
   support access into the normal client/operator experience.
 
@@ -378,7 +378,7 @@ Verification receipt on 2026-05-21:
 
 ## 2026-05-02 CRM Pipeline Translation
 
-Odoo reference check found the approved six-stage CRM concept:
+legacy_source reference check found the approved six-stage CRM concept:
 
 `New Inquiry -> Quote Sent/Awaiting Approval -> Approved -> In Production -> Event/Post Event -> Archive`
 
@@ -523,7 +523,7 @@ The next agent should do this in small verified slices:
 
 2. Decide the simplest Jeff-facing Lead layout.
    - Keep fields that receive real website data or support immediate follow-up.
-   - Hide or demote stale Odoo-era fields that no current form populates.
+   - Hide or demote stale legacy_source-era fields that no current form populates.
    - Preserve plain-language labels from project rules.
    - Keep the six-stage business board on `custom_pipeline_stage`; do not repurpose native `Lead.status`.
 
@@ -547,7 +547,7 @@ The next agent should do this in small verified slices:
 
 - Do not rerun old Lead translation/fix scripts until they are audited for stale taxonomy.
 - Do not reintroduce `/book` as a separate public page.
-- Do not add custom DocTypes just to mirror old Odoo models.
+- Do not add custom DocTypes just to mirror old legacy_source models.
 - Do not fixture Singles or operator-owned settings just because it is convenient.
 - Do not rename customer-facing service values without updating frontend form logic, backend `LT Service Type`, Lead Custom Fields, and verification scripts together.
 - Do not hide errors behind "probably." If a DB check cannot be run, mark that state as unverified.

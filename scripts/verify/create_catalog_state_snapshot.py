@@ -19,8 +19,8 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
-AUDIT_ROOT = ROOT / "audits" / "odoo-erpnext-migration-audit-2026-05-08"
-SOURCE_ROOT = ROOT / "_resources" / "odoo-live"
+AUDIT_ROOT = ROOT / "audits" / "catalog-import-audit-2026-05-08"
+SOURCE_ROOT = ROOT / "_resources" / "catalog-source"
 
 DEFAULT_CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 DEFAULT_SITE = "frontend"

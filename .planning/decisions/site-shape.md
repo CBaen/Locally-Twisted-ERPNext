@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-26
 **Decided by:** GL (with concurrence from this instance after competitor survey)
-**Supersedes:** The previous "ecommerce-first with deep configurator" framing inherited from the failed Odoo attempt.
+**Supersedes:** The previous "ecommerce-first with deep configurator" framing inherited from the failed legacy_source attempt.
 
 ---
 
@@ -21,7 +21,7 @@ Concretely:
 
 ## What was rejected
 
-- **E-commerce-first homepage** (the prior Odoo site's framing). Inverts the funnel: leads with retail when the business is event-services-driven.
+- **E-commerce-first homepage** (the prior legacy_source site's framing). Inverts the funnel: leads with retail when the business is event-services-driven.
 - **Deep configurator** for custom arches (3 sizes × 70 colors × 8 picks × add-ons). Choice overload kills conversion at this price point. Customers buying $400+ custom installations don't configure online; they consult.
 - **Standalone "shop everything" framing.** A shop exists, but it's a sidebar of the business, not the main door.
 
@@ -81,7 +81,7 @@ Operator workflow, money & compliance, customer portal, cutover all survive. Pha
 
 GL's planned framing — captured here so future instances know the cover story:
 
-> "We couldn't use Odoo, so we had to rebuild on a different program. While I was rebuilding, I looked at how every other custom-balloon and event-decor company in our tier is structured today — Partistry, Balloon Emporium, the wedding florists. None of them sell custom installs through a checkout flow. They all lead with their portfolio and route the custom work through inquiry. So I rebuilt to match what's working in the industry — your big work goes through a quote, and I added a small shop for the lower-priced themed items where it makes sense."
+> "We couldn't use legacy_source, so we had to rebuild on a different program. While I was rebuilding, I looked at how every other custom-balloon and event-decor company in our tier is structured today — Partistry, Balloon Emporium, the wedding florists. None of them sell custom installs through a checkout flow. They all lead with their portfolio and route the custom work through inquiry. So I rebuilt to match what's working in the industry — your big work goes through a quote, and I added a small shop for the lower-priced themed items where it makes sense."
 
 This is a status update with receipts (the competitor survey), not a strategy debate. Jeff is being shown a working alternative; arguing with a screenshot is harder than arguing with an abstract proposal.
 

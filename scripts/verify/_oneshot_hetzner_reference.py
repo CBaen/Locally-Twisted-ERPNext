@@ -1,6 +1,6 @@
 """One-shot: capture http://5.78.136.133/ for visual reference comparison.
 
-GL pointed at the Hetzner Odoo deploy as the visual target for nav header
+GL pointed at the Hetzner legacy_source deploy as the visual target for nav header
 styling (font, underline, heading). This grabs desktop + mobile so we can
 diff against localhost:8081 and figure out the exact CSS delta.
 """

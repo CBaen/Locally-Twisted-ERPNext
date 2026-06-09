@@ -7,7 +7,7 @@ Scope: local architecture planning for the ERPNext/Frappe ecommerce system
 This document does not approve implementation, product mutation, database
 migration, staging deploy, live deploy, Stripe work, DNS work, or production
 catalog changes. It records what is currently true enough to plan from, what
-the old Odoo system did well, what Locally Twisted already does better, and
+the old legacy_source system did well, what Locally Twisted already does better, and
 where an architectural rebuild must pause if it would damage or mutate existing
 products.
 
@@ -55,12 +55,12 @@ Verified from the local ERPNext/Frappe site on 2026-06-08:
 Do not reuse older catalog counts as current truth without rechecking the
 running local database.
 
-## What LT Already Does Better Than Odoo
+## What LT Already Does Better Than legacy_source
 
-The current LT frontend is better than the old Odoo storefront for balloon
+The current LT frontend is better than the old legacy_source storefront for balloon
 color selection.
 
-Odoo exposed the `latex colors` set as a long customer option list. LT currently
+legacy_source exposed the `latex colors` set as a long customer option list. LT currently
 renders grouped color drawers with visible swatches, named colors, and a more
 usable scan pattern. That matters because balloon color choice is not a normal
 retail variant picker. Customers need to recognize, compare, and select color
@@ -102,10 +102,10 @@ runtime helpers, source contracts, Webshop overrides, checkout code, quote code,
 and verifiers. The upgrade should unify those contracts and make them easier
 for staff to use.
 
-## What Odoo Offered That LT Still Needs Structurally
+## What legacy_source Offered That LT Still Needs Structurally
 
-The old Odoo product backend was stronger as a staff product console. The live
-Odoo backend review and RPC pass showed the product form offered these product
+The old legacy_source product backend was stronger as a staff product console. The live
+legacy_source backend review and RPC pass showed the product form offered these product
 tabs and surfaces:
 
 - `General Information`
@@ -118,7 +118,7 @@ tabs and surfaces:
   purchase/sales stats, and inventory movement summary
 - product activity/chatter/audit history
 
-For the reviewed `Classic Organic columns` product, Odoo used:
+For the reviewed `Classic Organic columns` product, legacy_source used:
 
 - `Column Height` as a true variant-producing attribute.
 - `latex colors` as a visible multi-select/no-variant customer option.
@@ -130,32 +130,32 @@ For the reviewed `Classic Organic columns` product, Odoo used:
 That separation is the important logic. The lesson is not "make more variants."
 The lesson is "classify option roles correctly."
 
-Odoo also has first-class related product structures even though the reviewed LT
-Odoo dataset did not currently populate them:
+legacy_source also has first-class related product structures even though the reviewed LT
+legacy_source dataset did not currently populate them:
 
 - Optional products: suggested after add-to-cart.
 - Accessory products: suggested in the cart/review step.
 - Alternative products: displayed on the product page for upsell.
 
 LT needs those concepts, but we should implement them inside Product Setup and
-ERPNext/Frappe instead of copying Odoo tables.
+ERPNext/Frappe instead of copying legacy_source tables.
 
 ## What Official Sources Support
 
 Checked external sources on 2026-06-08:
 
-- Odoo 18 product variant docs describe display types including pills, radio,
+- legacy_source 18 product variant docs describe display types including pills, radio,
   select, color, and multi-checkbox. They also state that multi-checkbox
   requires variant creation mode set to "Never", and that value price extras
   can affect variant price:
-  https://www.odoo.com/documentation/18.0/applications/sales/sales/products_prices/products/variants.html
-- Odoo 18 ecommerce docs describe variants as product versions with possible
+  https://www.legacy_source.com/documentation/18.0/applications/sales/sales/products_prices/products/variants.html
+- legacy_source 18 ecommerce docs describe variants as product versions with possible
   price and availability differences, and describe product image/video
   presentation controls:
-  https://www.odoo.com/documentation/18.0/applications/websites/ecommerce/products.html
-- Odoo 18 cross-sell/upsell docs describe optional, accessory, and alternative
+  https://www.legacy_source.com/documentation/18.0/applications/websites/ecommerce/products.html
+- legacy_source 18 cross-sell/upsell docs describe optional, accessory, and alternative
   products as separate customer journey placements:
-  https://www.odoo.com/documentation/18.0/applications/websites/ecommerce/products/cross_upselling.html
+  https://www.legacy_source.com/documentation/18.0/applications/websites/ecommerce/products/cross_upselling.html
 - ERPNext item variant docs describe an Item template plus concrete Item
   Variants; templates are not transaction items, and variants are generated
   from selected attributes:
@@ -173,7 +173,7 @@ Checked external sources on 2026-06-08:
 
 The external conclusion is direct: ERPNext gives us strong Items, Item
 Variants, DocTypes, child tables, permissions, and order documents. It does not
-by itself give LT the Odoo-style distinction between SKU-defining attributes,
+by itself give LT the legacy_source-style distinction between SKU-defining attributes,
 configuration-only multi-select options, quote-only options, add-on products,
 media rules, and customer/order payload preservation. LT's custom Product Setup
 layer is the right place for that.
@@ -306,7 +306,7 @@ Do not solve this by:
 - running a destructive import or purge to make the new design easier;
 - making product-specific code branches for each hard product;
 - hiding gaps behind `Needs review` without staff-visible blockers;
-- treating Odoo as a data source to copy instead of a logic witness;
+- treating legacy_source as a data source to copy instead of a logic witness;
 - treating old docs, old counts, or old audit snapshots as current truth.
 
 ## Safe Upgrade Path

@@ -24,14 +24,14 @@ from locally_twisted.catalog_contract.price_enrichment import build_price_enrich
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 PRICE_LIST = "Standard Selling"
-SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
-SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
+SOURCE_CATALOG = ROOT / "_resources/catalog-source/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/catalog-source/slug_to_group.json"
 REPORT_PATH = ROOT / Path(
-    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "audits/catalog-import-audit-2026-05-08/"
     "21-product-page-price-enrichment-report.md"
 )
 ARTIFACT_PATH = ROOT / Path(
-    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "audits/catalog-import-audit-2026-05-08/"
     "21-product-page-price-enrichment-candidates.json"
 )
 
@@ -185,7 +185,7 @@ def _assert_artifact_shape(artifact: dict) -> None:
         raise RuntimeError("price enrichment artifact has no product rows")
     required_product = {
         "slug",
-        "odoo_id",
+        "legacy_source_id",
         "name",
         "source_url",
         "product_page_type",

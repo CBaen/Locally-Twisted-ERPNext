@@ -5,7 +5,7 @@
 This is the handoff for the current `inquiry-v1` public form hardening slice.
 It covers the customer-visible form layout, the backend anti-bot gate, and the
 soft sales-solicitation filter. It does not cover ecommerce product setup,
-marketing-review access, Odoo catalog edits, or checkout.
+marketing-review access, legacy_source catalog edits, or checkout.
 
 Parent form handoff: [contact-form-ux-readiness-2026-05-14.md](contact-form-ux-readiness-2026-05-14.md)
 
@@ -132,7 +132,7 @@ new production-hardening release.
 
 The following dirty worktree areas were intentionally left out of this handoff:
 
-- Odoo live catalog/resource JSON changes.
+- legacy_source live catalog/resource JSON changes.
 - Product blueprint/runtime/product setup code.
 - Marketing review access code, role sync, and `/marketing-review`.
 - Backend simplification/user-access audit docs.

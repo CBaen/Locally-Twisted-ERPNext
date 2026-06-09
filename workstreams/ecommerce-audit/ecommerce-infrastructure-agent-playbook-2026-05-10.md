@@ -1,7 +1,7 @@
-﻿D:2026-05-10 | Check:local ecommerce-audit artifacts + AGENTS/CODING-HANDOFF/capability recipe 2026-05-10 | Confidence:[LOCAL-PROOF]
+D:2026-05-10 | Check:local ecommerce-audit artifacts + AGENTS/CODING-HANDOFF/capability recipe 2026-05-10 | Confidence:[LOCAL-PROOF]
 # Ecommerce infrastructure agent playbook
 
-Use this when a future agent touches Locally Twisted ecommerce infrastructure, product-page checkout, cart/checkout preservation, or Odoo-derived ecommerce research.
+Use this when a future agent touches Locally Twisted ecommerce infrastructure, product-page checkout, cart/checkout preservation, or legacy_source-derived ecommerce research.
 
 ## Sources inspected for this playbook
 
@@ -13,9 +13,9 @@ Use this when a future agent touches Locally Twisted ecommerce infrastructure, p
 - `workstreams/ecommerce-audit/README.md`
 - `workstreams/ecommerce-audit/ready-to-order-checkout-scope-decision-2026-05-10.md`
 - `workstreams/ecommerce-audit/event-pages-vs-ready-to-order-shop-contract-2026-05-10.md`
-- `workstreams/ecommerce-audit/odoo-backend-architecture-and-checkout-logic-2026-05-10.md`
+- `workstreams/ecommerce-audit/legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md`
 - `workstreams/ecommerce-audit/ecommerce-infrastructure-readiness-packet-2026-05-10.md`
-- `workstreams/ecommerce-audit/erpnext-receiving-build-spec-from-odoo-2026-05-10.md`
+- `workstreams/ecommerce-audit/erpnext-receiving-build-spec-from-legacy_source-2026-05-10.md`
 - `workstreams/ecommerce-audit/cart-checkout-intent-preservation-audit-2026-05-10.md`
 
 ## Scope rules
@@ -24,19 +24,19 @@ Do:
 
 - Treat ecommerce as a receiving infrastructure problem, not a product-row migration problem.
 - Work artifact-first under `workstreams/ecommerce-audit/` for research, decisions, verifier gaps, and handoffs.
-- Keep Odoo as a behavioral witness and ERPNext/Frappe as the implementation target.
+- Keep legacy_source as a behavioral witness and ERPNext/Frappe as the implementation target.
 - Preserve ready-to-order checkout, quote-first inquiry, backend line payloads, and verifier gates as separate concerns.
 
 Do not:
 
-- Purge, delete, reimport, launch, publish, pay, send customer messages, or mutate Odoo/ERPNext unless explicitly assigned with rollback/preflight.
-- Copy Odoo schema/code directly into ERPNext.
+- Purge, delete, reimport, launch, publish, pay, send customer messages, or mutate legacy_source/ERPNext unless explicitly assigned with rollback/preflight.
+- Copy legacy_source schema/code directly into ERPNext.
 - Expose customer/admin PII, access tokens, checkout tokens, Stripe keys, raw sessions, caches, logs, or browser profiles.
 - Claim live payment, launch readiness, or full catalog safety from UI appearance alone.
 
-## Odoo witness rules
+## legacy_source witness rules
 
-Odoo evidence is useful only as a source witness for business meaning. It must be read-only unless a fresh task explicitly authorizes otherwise.
+legacy_source evidence is useful only as a source witness for business meaning. It must be read-only unless a fresh task explicitly authorizes otherwise.
 
 Preserve these witnessed patterns:
 
@@ -141,4 +141,4 @@ npm run test:ecommerce-full
 
 ## Bottom line
 
-Future agents should preserve the lesson: Locally Twisted ecommerce is safe when ERPNext receives customer intent through a verified contract layer. Ready-to-order checkout is a narrow, proven lane; complex event decor is quote/invoice-first; Odoo is a witness; artifacts and backend proof decide claims.
+Future agents should preserve the lesson: Locally Twisted ecommerce is safe when ERPNext receives customer intent through a verified contract layer. Ready-to-order checkout is a narrow, proven lane; complex event decor is quote/invoice-first; legacy_source is a witness; artifacts and backend proof decide claims.

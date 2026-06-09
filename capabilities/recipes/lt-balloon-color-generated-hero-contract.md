@@ -35,7 +35,7 @@ chart visuals.
 
 Balloon colors are product truth. For generated images, the authority order is:
 
-1. Owner/Odoo swatch image and exact source balloon color name.
+1. owner-approved swatch image and exact source balloon color name.
 2. Supplier-style balloon color naming in the prompt.
 3. Best web-match hex only as a screen/document approximation.
 
@@ -47,8 +47,8 @@ it before route proof.
 
 - `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`
 - `_resources/generated-hero-sources/2026-05-22/shop-category-generated-hero-manifest.json`
-- `apps/locally_twisted/locally_twisted/catalog_contract/odoo_color_swatch_map.json`
-- `apps/locally_twisted/locally_twisted/public/images/color-swatches/odoo/`
+- `apps/locally_twisted/locally_twisted/catalog_contract/color_swatch_map.json`
+- `apps/locally_twisted/locally_twisted/public/images/color-swatches/catalog/`
 - `scripts/setup/generate_shop_category_heroes.py`
 - `scripts/verify/shop_category_hero_images.spec.js`
 
@@ -70,7 +70,7 @@ it before route proof.
 ## Commands
 
 ```powershell
-python scripts\verify\odoo_color_swatch_contract.py
+python scripts\verify\color_swatch_contract.py
 python -m py_compile scripts\setup\generate_shop_category_heroes.py
 python scripts\dev\clear_website_cache.py
 scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1

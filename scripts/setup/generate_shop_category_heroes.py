@@ -37,7 +37,7 @@ USER_AGENT = (
 )
 
 APP_ROOT = REPO_ROOT / "apps" / "locally_twisted" / "locally_twisted"
-SWATCH_MAP_PATH = APP_ROOT / "catalog_contract" / "odoo_color_swatch_map.json"
+SWATCH_MAP_PATH = APP_ROOT / "catalog_contract" / "color_swatch_map.json"
 PUBLIC_HERO_DIR = APP_ROOT / "public" / "images" / "heroes"
 SOURCE_DIR = REPO_ROOT / "_resources" / "generated-hero-sources" / "2026-06-08"
 PUBLIC_SWATCH_ROOT = APP_ROOT / "public"
@@ -359,7 +359,7 @@ def main() -> int:
         item["title"] = spec.title
         item["palette"] = list(spec.palette)
         if isinstance(item.get("prompt"), str):
-            item["prompt"] = item["prompt"].replace("owner/Odoo", "owner-approved")
+            item["prompt"] = item["prompt"].replace("owner-approved", "owner-approved")
         final_items.append(item)
 
     manifest = {

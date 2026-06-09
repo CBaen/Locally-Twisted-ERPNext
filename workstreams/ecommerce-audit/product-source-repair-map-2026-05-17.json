@@ -5,9 +5,9 @@
   "metadata": {
     "business_rule": "Products target purchasable checkout; legacy quote_first values are internal holds.",
     "generated_at": "2026-05-17T23:10:57Z",
-    "price_enrichment": "audits\\odoo-erpnext-migration-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
+    "price_enrichment": "audits\\catalog-import-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
     "scaffold": "output\\complex-checkout-scaffold.json",
-    "source_catalog": "_resources\\odoo-live\\catalog.json"
+    "source_catalog": "_resources\\catalog-source\\catalog.json"
   },
   "products": [
     {
@@ -15,7 +15,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "14",
+      "legacy_source_id": "14",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -50,7 +50,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "19",
+      "legacy_source_id": "19",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -86,7 +86,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "21",
+      "legacy_source_id": "21",
       "price_evidence": {
         "candidate_units": 2,
         "expected_units": 2,
@@ -119,7 +119,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "22",
+      "legacy_source_id": "22",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -155,7 +155,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "30",
+      "legacy_source_id": "30",
       "price_evidence": {
         "candidate_units": 2,
         "expected_units": 2,
@@ -188,7 +188,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "38",
+      "legacy_source_id": "38",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -223,7 +223,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "39",
+      "legacy_source_id": "39",
       "price_evidence": {
         "candidate_units": 4,
         "expected_units": 4,
@@ -259,7 +259,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "45",
+      "legacy_source_id": "45",
       "price_evidence": {
         "candidate_units": 30,
         "expected_units": 30,
@@ -296,7 +296,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "52",
+      "legacy_source_id": "52",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -332,7 +332,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "53",
+      "legacy_source_id": "53",
       "price_evidence": {
         "candidate_units": 4,
         "expected_units": 4,
@@ -369,7 +369,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "54",
+      "legacy_source_id": "54",
       "price_evidence": {
         "candidate_units": 6,
         "expected_units": 6,
@@ -406,7 +406,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "55",
+      "legacy_source_id": "55",
       "price_evidence": {
         "candidate_units": 4,
         "expected_units": 4,
@@ -441,7 +441,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "57",
+      "legacy_source_id": "57",
       "price_evidence": {
         "candidate_units": 16,
         "expected_units": 16,
@@ -479,7 +479,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "58",
+      "legacy_source_id": "58",
       "price_evidence": {
         "candidate_units": 36,
         "expected_units": 36,
@@ -516,7 +516,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "65",
+      "legacy_source_id": "65",
       "price_evidence": {
         "candidate_units": 6,
         "expected_units": 6,
@@ -552,7 +552,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "71",
+      "legacy_source_id": "71",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -588,7 +588,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "74",
+      "legacy_source_id": "74",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -624,7 +624,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "99",
+      "legacy_source_id": "99",
       "price_evidence": {
         "candidate_units": 4,
         "expected_units": 4,
@@ -661,7 +661,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "115",
+      "legacy_source_id": "115",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -697,7 +697,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "116",
+      "legacy_source_id": "116",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -733,7 +733,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "117",
+      "legacy_source_id": "117",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -769,7 +769,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "118",
+      "legacy_source_id": "118",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -805,7 +805,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "119",
+      "legacy_source_id": "119",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -841,7 +841,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "120",
+      "legacy_source_id": "120",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -877,7 +877,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "121",
+      "legacy_source_id": "121",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -913,7 +913,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "122",
+      "legacy_source_id": "122",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -949,7 +949,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "123",
+      "legacy_source_id": "123",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -985,7 +985,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "124",
+      "legacy_source_id": "124",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -1019,7 +1019,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "125",
+      "legacy_source_id": "125",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1052,7 +1052,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "126",
+      "legacy_source_id": "126",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1087,7 +1087,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "127",
+      "legacy_source_id": "127",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -1123,7 +1123,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "128",
+      "legacy_source_id": "128",
       "price_evidence": {
         "candidate_units": 81,
         "expected_units": 81,
@@ -1161,7 +1161,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "130",
+      "legacy_source_id": "130",
       "price_evidence": {
         "candidate_units": 7,
         "expected_units": 7,
@@ -1196,7 +1196,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "131",
+      "legacy_source_id": "131",
       "price_evidence": {
         "candidate_units": 4,
         "expected_units": 4,
@@ -1231,7 +1231,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "132",
+      "legacy_source_id": "132",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1264,7 +1264,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "133",
+      "legacy_source_id": "133",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1297,7 +1297,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "134",
+      "legacy_source_id": "134",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1332,7 +1332,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "135",
+      "legacy_source_id": "135",
       "price_evidence": {
         "candidate_units": 2,
         "expected_units": 2,
@@ -1365,7 +1365,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "137",
+      "legacy_source_id": "137",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1396,7 +1396,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "140",
+      "legacy_source_id": "140",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1431,7 +1431,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "141",
+      "legacy_source_id": "141",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -1467,7 +1467,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "142",
+      "legacy_source_id": "142",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -1503,7 +1503,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "143",
+      "legacy_source_id": "143",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -1537,7 +1537,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "144",
+      "legacy_source_id": "144",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1570,7 +1570,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "146",
+      "legacy_source_id": "146",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1603,7 +1603,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "147",
+      "legacy_source_id": "147",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1638,7 +1638,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "149",
+      "legacy_source_id": "149",
       "price_evidence": {
         "candidate_units": 2,
         "expected_units": 2,
@@ -1671,7 +1671,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "152",
+      "legacy_source_id": "152",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1704,7 +1704,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "158",
+      "legacy_source_id": "158",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1735,7 +1735,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "165",
+      "legacy_source_id": "165",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,
@@ -1768,7 +1768,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "177",
+      "legacy_source_id": "177",
       "price_evidence": {
         "candidate_units": 3,
         "expected_units": 3,
@@ -1804,7 +1804,7 @@
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
-      "odoo_id": "178",
+      "legacy_source_id": "178",
       "price_evidence": {
         "candidate_units": 6,
         "expected_units": 6,
@@ -1838,7 +1838,7 @@
       "current_customer_state": "certified_checkout",
       "current_website_lane": "checkout",
       "notes": [],
-      "odoo_id": "179",
+      "legacy_source_id": "179",
       "price_evidence": {
         "candidate_units": 1,
         "expected_units": 1,

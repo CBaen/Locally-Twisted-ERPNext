@@ -9,7 +9,7 @@ Operational interpretation in this runtime: run the accepted plan as an owned, a
 
 ## Non-negotiable guardrails
 
-- Do not mutate Odoo.
+- Do not mutate legacy_source.
 - Do not open public ecommerce, launch, publish, purge, delete, reimport, process live payment, or send real customer messages.
 - Keep public ecommerce paused by default.
 - Any test-mode pause bypass must be in-process/rollback-safe and restored.

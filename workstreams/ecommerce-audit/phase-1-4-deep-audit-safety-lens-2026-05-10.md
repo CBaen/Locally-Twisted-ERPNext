@@ -14,7 +14,7 @@ Primary bypass questions checked:
 - Does paused public ecommerce prevent public shop/cart/checkout purchase paths while `lt_ecommerce_paused=1`?
 - What would a future purge/reupload/import need to prove so it does not weaken the current contract?
 
-No DB-mutating verifiers, purge/reupload/import, Odoo mutation, public ecommerce opening, payment processing, commits, staging, or pushes were run. I only performed static/code/doc inspection plus `git rev-parse --abbrev-ref HEAD` (`main`).
+No DB-mutating verifiers, purge/reupload/import, legacy_source mutation, public ecommerce opening, payment processing, commits, staging, or pushes were run. I only performed static/code/doc inspection plus `git rev-parse --abbrev-ref HEAD` (`main`).
 
 ## 2. What I inspected
 

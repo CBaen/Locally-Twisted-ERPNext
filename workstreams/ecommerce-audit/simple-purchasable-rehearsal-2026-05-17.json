@@ -60,7 +60,7 @@
       "sale_sku_count": 30,
       "source_name": "Large head Missionary",
       "source_price": 175.0,
-      "source_price_basis": "Odoo base price; live ERPNext snapshot prices match every variant",
+      "source_price_basis": "legacy_source base price; live ERPNext snapshot prices match every variant",
       "verified_variant_count": 30,
       "verified_variants": [
         {
@@ -374,7 +374,7 @@
       "sale_sku_count": 1,
       "source_name": "Mother's day front yard 7' Column",
       "source_price": 140.0,
-      "source_price_basis": "Odoo base price",
+      "source_price_basis": "legacy_source base price",
       "website_item_code": "mothers-day-front-yard-7-column"
     },
     {
@@ -385,7 +385,7 @@
       "sale_sku_count": 1,
       "source_name": "Easter Arch",
       "source_price": 250.0,
-      "source_price_basis": "Odoo base price",
+      "source_price_basis": "legacy_source base price",
       "website_item_code": "easter-arch"
     },
     {
@@ -396,7 +396,7 @@
       "sale_sku_count": 1,
       "source_name": "Pride Arch",
       "source_price": 325.0,
-      "source_price_basis": "Odoo base price",
+      "source_price_basis": "legacy_source base price",
       "website_item_code": "pride-arch"
     }
   ],

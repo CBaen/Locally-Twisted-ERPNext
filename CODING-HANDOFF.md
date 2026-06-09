@@ -262,7 +262,7 @@ performed. Verified local passes: syntax for touched Python files,
 `allow_guest_surface_inventory.py`, and
 `product_import_readiness_gate_contract.py`. Follow-up on the same day restored
 source-price proof and fresh import-readiness evidence: `stage_seed_data.py`
-made `_resources/odoo-live` container-visible, `product_price_modifier_contract.py`
+made `_resources/catalog-source` container-visible, `product_price_modifier_contract.py`
 passed for 49 products / 10,186 active variants, fresh snapshot
 `current-state-snapshot-2026-05-19-2314` passed, purge-scope dry run passed for
 53 templates / 10,629 variants / 10,664 prices, bench backup
@@ -288,7 +288,7 @@ authoritative DNS -> Frappe Cloud -> ERPNext/Frappe. Cloudflare zone
 `laura.ns.cloudflare.com`, original nameservers were Bluehost
 `ns1.bluehost.com` / `ns2.bluehost.com`, and original registrar is GoDaddy.
 Live `https://locallytwisted.com/` returns `200` from `Server: Frappe Cloud`;
-the old Hetzner/Odoo IP `5.78.136.133` is reference/decommission scope, not
+the old Hetzner/legacy_source IP `5.78.136.133` is reference/decommission scope, not
 the current public site path. Reindex blocker found: live sitemap and canonical
 metadata currently advertise `https://locallytwisted.v.frappe.cloud` instead
 of `https://locallytwisted.com` (29/29 sitemap locs use the vanity host).
@@ -378,10 +378,10 @@ live Website Item routes in two batches under the cart 50-line safety cap, at
 desktop and mobile widths, including cart and checkout preview. Local ecommerce
 was restored to `lt_ecommerce_paused=1`; no Frappe Cloud, staging, live,
 Stripe live, DNS, or public exposure change was performed. Feature handoff:
-`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+`workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`.
 Primary gates: `python scripts/verify/product_import_readiness_gate.py --report
 output/product-import-readiness-gate.json`,
-`python scripts/verify/v1_odoo_erpnext_import_manifest.py`,
+`python scripts/verify/v1_legacy_source_erpnext_import_manifest.py`,
 `python scripts/verify/product_variant_price_contract.py`,
 `python scripts/verify/cart_checkout_contract.py`,
 `python scripts/verify/product_page_architecture_contract.py`,
@@ -659,7 +659,7 @@ quote-first flip lists and does not authorize live site, Frappe Cloud, DNS, or
 Stripe exposure. Feature handoff:
 `workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`; current
 closeout:
-`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`;
+`workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`;
 guards: `python scripts/verify/complex_checkout_scaffold_contract.py` and
 `python scripts/verify/complex_checkout_scaffold.py`.
 
@@ -691,7 +691,7 @@ Classic-excluded local import packet is superseded by the 2026-05-17
 sellable reimport; the 2026-05-24 taxonomy cleanup now treats 51 published
 products as current and explicitly excludes 2 duplicate source slugs. Current
 front-door handoff:
-`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+`workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`.
 
 Codex update on 2026-05-11: homepage Custom Event Decor is hidden for the
 launch page, but its recovery assets are preserved intentionally. The homepage
@@ -822,7 +822,7 @@ Codex update on 2026-05-10: the repeat-email/five-photo public form verifier is 
 
 OpenClaw/Moji update on 2026-05-10: the focused product-page backend reconciliation brief was moved out of the transient `research/` tree and into `workstreams/product-page-backend-reconciliation-research-brief-2026-05-10.md` with the date/check/confidence researcher contract. Use it for the next narrow question: how stored `Website Item.lt_product_page_type` and `lt_commerce_lane` should move from `needs_review` to explicit native ERPNext behavior without hidden runtime fallback. The old transient research folder was removed so Git only carries the durable workstream artifact.
 
-OpenClaw/Moji update on 2026-05-10: ecommerce audit evidence now lives under `workstreams/ecommerce-audit/`. Treat it as an artifact-gated research packet, not a launch verdict. Lane B (`erpnext-receiving-parity-matrix-2026-05-10.md`), Lane C (`cart-checkout-intent-preservation-audit-2026-05-10.md`), and Lane D (`native-frappe-product-template-architecture-2026-05-10.md`) are present. Lane A (`odoo-source-commerce-map-2026-05-10.md`) and Lane E (`odoo-docs-agent-action-convergence-2026-05-10.md`) are missing and must be treated as `[NO EVIDENCE]` until rerun artifact-first. Do not run Lane F synthesis from routed completion text; named artifacts are the evidence boundary. Feature handoff: `workstreams/ecommerce-audit/README.md`.
+OpenClaw/Moji update on 2026-05-10: ecommerce audit evidence now lives under `workstreams/ecommerce-audit/`. Treat it as an artifact-gated research packet, not a launch verdict. Lane B (`erpnext-receiving-parity-matrix-2026-05-10.md`), Lane C (`cart-checkout-intent-preservation-audit-2026-05-10.md`), and Lane D (`native-frappe-product-template-architecture-2026-05-10.md`) are present. Lane A (`legacy_source-source-commerce-map-2026-05-10.md`) and Lane E (`legacy_source-docs-agent-action-convergence-2026-05-10.md`) are missing and must be treated as `[NO EVIDENCE]` until rerun artifact-first. Do not run Lane F synthesis from routed completion text; named artifacts are the evidence boundary. Feature handoff: `workstreams/ecommerce-audit/README.md`.
 
 Last updated: 2026-05-10 by Codex after the day-of-launch posture moved to pages/forms first with ecommerce hidden. Current peer handoff: fake data is allowed and useful; fake success is forbidden. Ecommerce is preserved and tested, but today's safe live posture can keep it hidden behind the branded pause fallback.
 
@@ -916,12 +916,12 @@ hours. Do not return to one shared hours input multiplied by artist count.
 Codex update on 2026-05-08: catalog variant pricing now has a dedicated
 handoff at `workstreams/catalog-variant-price-recovery.md` and capability
 recipe at `capabilities/recipes/erpnext-catalog-variant-price-parity.md`.
-The bouquet-size family was repaired from Odoo's dynamic resolver and is
+The bouquet-size family was repaired from legacy_source's dynamic resolver and is
 guarded by `npm run test:product-prices`.
 
 Codex update on 2026-05-19: GL caught the wider price-identity failure on
 `easter-balloon-arch-bunny-ear`, where `20ft` and `25ft` showed the same local
-price even though Odoo's dynamic resolver returned `$375` and `$440`. Treat this
+price even though legacy_source's dynamic resolver returned `$375` and `$440`. Treat this
 as an ecommerce architecture incident, not a one-product import bug. The active
 incident lane is
 `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; failure
@@ -1056,9 +1056,9 @@ Queue or Communication side effects.
 
 ## State Of Reality
 
-The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current local DB now has 10,686 Items and 10,668 Item Prices after delivery service Items, support Items, the optional-add-on variant repair, and the college color preset repair.
+The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current local DB now has 10,686 Items and 10,668 Item Prices after delivery service Items, support Items, the optional-add-on variant repair, and the college color preset repair.
 
-The catalog port from the old Odoo test deployment appears real, but several docs had stale counts. The Odoo shop at `http://5.78.136.133/shop` was used as the catalog source/reference for that port because GL explicitly named it as the old live account/source for catalog data. That does not make Odoo the product truth for unrelated business scope.
+The catalog port from the old legacy_source test deployment appears real, but several docs had stale counts. The legacy_source shop at `http://5.78.136.133/shop` was used as the catalog source/reference for that port because GL explicitly named it as the old live account/source for catalog data. That does not make legacy_source the product truth for unrelated business scope.
 
 Verified DB counts on 2026-05-18 after the school/seasonal color-preset repair:
 
@@ -1131,7 +1131,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Legal/accounting review packet lives at `_resources/policies/legal-accounting-review-packet-2026-05-06.md`.
 - `/event-playground` is a hidden internal-preview route for the first PlayCanvas decor planner. Keep it out of the ASAP website launch lane unless GL explicitly reopens it here. The PlayCanvas/Vite source, research packet, and design-studio capabilities moved to the standalone repo at `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\`; this LT repo retains only the Frappe route shell at `www/event_playground.html`/`.py`, the local iframe wrapper for `127.0.0.1:4306`, and the contact handoff contract. The browser preview is framed as `Plan Custom Decor`, emits `event-playground-v2`, adds `design_studio_contract.schema_version = design-studio-v1`, adds event date/city contact fields, and exposes quote-honesty warnings. Render counts are explicitly visual density, not quote math. Production estimates are candidate-only, `quote_ready: false`, and `customer_visible: false` until Locally Twisted approves formulas, fill/support assumptions, overage, venue review, and pricing. Submit Inquiry still hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage`; the existing contact form now pre-fills name, email, phone, ISO event date, event location/city, services, colors, decor type, package notes, and the design summary. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, share link, or full organic/twisting physics in this slice.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
-- Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
+- Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/catalog-source/images/` where legacy_source image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media is still empty in ERPNext Item Group image fields. `python scripts/verify/category_media_candidates.py` now creates a no-mutation approval packet from existing product-source and portfolio-proof media for the 8 active customer-facing categories. `scripts/setup/sync_category_media.py` creates the approval template and dry-runs the Frappe-backed Item Group image update path; `--apply` only writes rows marked `approved: true`. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment only after Jeff/GL approval.
 - Product detail breadcrumbs now use `All Balloon Decor > category > product`; the retired `Shop by Category` label/link is blocked by `scripts/verify/smoke_shop.py`.
 - Product detail pages are now company-first and clear-control, not generic ecommerce recommendation or boxed-option surfaces. The Webshop lower Additional Info/Reviews/Recommended Items panel was removed on 2026-05-07, the old auxiliary/recommendation CSS selectors are gone, and product options/variant chips/selects/price-add-to-cart groups are no longer framed boxes. Pickup/delivery is the approved framed product-page exception. `smoke_shop.py` fails if the recommendation selectors return or if product option controls regain boxed backgrounds, borders, or shadows. Use `capabilities/recipes/frappe-product-page-company-first.md` and `capabilities/recipes/frappe-product-clear-control-contract.md` before changing product detail templates or product-page CSS.
@@ -1149,12 +1149,12 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - The active theme/app source has been cleaned away from old font and UI-pastel references. Do not reintroduce `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, old `soft-blue`/`light-blue`, UI `blush`, or unresolved `--lt-primary` in customer-facing source.
 - A 16-asset custom brass-line icon suite now lives at `apps/locally_twisted/locally_twisted/public/icons/brand/`. Balloon-specific surfaces should use balloon-form icons first: pair, cluster, arch, organic garland, column, and bouquet.
 - The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
-- Per-product variant correctness now compares normalized Odoo `valid_variants` plus approved graduation college-preset projection to active, required-choice ERPNext variants. Current pass on 2026-05-18: 53 products checked, 10,186 expected active variants, 10,186 live active variants, 4 single-SKU products. Disabled legacy optional-add-on/raw-color graduation variants are intentionally ignored by this customer-facing contract. This is shape parity only, not price parity.
+- Per-product variant correctness now compares normalized legacy_source `valid_variants` plus approved graduation college-preset projection to active, required-choice ERPNext variants. Current pass on 2026-05-18: 53 products checked, 10,186 expected active variants, 10,186 live active variants, 4 single-SKU products. Disabled legacy optional-add-on/raw-color graduation variants are intentionally ignored by this customer-facing contract. This is shape parity only, not price parity.
 - Catalog variant price parity is locally repaired and guarded for the active variant set after the 2026-05-19 price-identity incident. `c7f9da3` fixed the bouquet-size family first; the 2026-05-19 local modifier repair corrected the broader non-bouquet flattening class, including Easter Bunny Ear Arch `25ft`. Use `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and `workstreams/catalog-variant-price-recovery.md` before any catalog price claim or repair. Local proof does not equal staging/live/public approval.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with the current commerce lane on 2026-05-05. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Quote-required custom installs such as Arches and Garlands intentionally show a `/contact?item=...` quote CTA instead of cart selectors. Retail variants such as `unicorn-bouquet` still render inline single-select chips/selects, consume `valid_options_for_attributes`, and write selected variant codes to `LT_CART`.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
 - `scripts/verify/layout_fit.spec.js` is the committed passive Playwright Test gate. Latest full launch run: `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke` -> 15/15 hidden-ecommerce launch steps passed, including `layout-fit` 325/325 across the current route list and 13 viewport families, `container-contract` 75/75, `interactive-layout` 163/163, `search_contract` 3/3, `portfolio_reel` 6/6, ecommerce pause contract, shop pause smoke, product prices, variant media, checkout experience 2/2, axe accessibility 50 route/viewport checks with 0 violations, manual accessibility, and contact smoke backend proof/cleanup. `scripts/verify/container_contract.spec.js` is the route-level public container contract; focused rerun after the homepage Custom Event Decor repair passed 75/75. `scripts/verify/portfolio_reel.spec.js` is the route-specific proof-gallery gate.
-- Catalog variant counts match the normalized Odoo source: the raw scrape has duplicate-case latex color values, but `_resources/odoo-live/value_normalize_map.json` collapses them and the normalized expected variant counts match ERPNext.
+- Catalog variant counts match the normalized legacy_source source: the raw scrape has duplicate-case latex color values, but `_resources/catalog-source/value_normalize_map.json` collapses them and the normalized expected variant counts match ERPNext.
 - Website cache was cleared after Jinja/CSS changes; the backend was restarted after `home.py` route CSS changed; `hooks.py` cache-busts were bumped for `lt-site-preferences.js` and `lt-page-containment.css`.
 
 Claims from older docs still need re-verification before being repeated:
@@ -1204,7 +1204,7 @@ Next safe paperwork/backend slice: keep the no-send report chain green while res
 - `CLAUDE.md`, `HANDOFF.md`, `PROJECT-STATUS.md`, `lessons-learned.md`, `locally-twisted-decisions.md`, and `locally-twisted-queue.md` contain stale catalog counts in places.
 - `.planning/phases/01-customer-site-and-storefront/PLAN.md` is stale about slice completion. Use the queue/status plus git/files/routes instead.
 - `CLAUDE.md` and related files contain tool-specific mythology and emotionally loaded handoff instructions. Useful technical receipts should be preserved in neutral docs; do not propagate the tone.
-- Existing docs say `24` Item Attributes from the Odoo-derived catalog, but the DB currently has `26` Item Attribute records. Investigate before changing fixture logic.
+- Existing docs say `24` Item Attributes from the legacy_source-derived catalog, but the DB currently has `26` Item Attribute records. Investigate before changing fixture logic.
 
 ## Next Safest Slice
 
@@ -1284,7 +1284,7 @@ Catalog price contract and repair path:
 ```powershell
 npm run test:product-prices
 python scripts/setup/stage_seed_data.py
-docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
+docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_legacy_source.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
 ```
 
 Business automation and paperwork launch spine:
@@ -1305,7 +1305,7 @@ python scripts/verify/payment_launch_readiness.py
 python scripts/verify/payment_launch_readiness.py --mode live
 ```
 
-Variant media sync from the captured Odoo image files:
+Variant media sync from the captured legacy_source image files:
 
 ```powershell
 python scripts/setup/sync_variant_media.py --dry-run

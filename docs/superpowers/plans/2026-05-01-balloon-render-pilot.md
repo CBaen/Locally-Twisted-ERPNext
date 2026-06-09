@@ -6,7 +6,7 @@
 
 **Architecture:** Keep the pilot as source-grounded documentation first: research notes, prompt blocks, variant/media rules, review rubric, then image generation in a separate reviewed step. The generated images must be judged against LT source photos and construction rules before being attached to any ERPNext item or website item.
 
-**Tech Stack:** Markdown docs, local LT image references under `_resources/odoo-live/images/`, ERPNext/Frappe media records later, image-generation tool later.
+**Tech Stack:** Markdown docs, local LT image references under `_resources/catalog-source/images/`, ERPNext/Frappe media records later, image-generation tool later.
 
 ---
 
@@ -63,10 +63,10 @@ Expected: the commit includes only the show pack doc.
 
 **Files:**
 - Read: `docs/superpowers/specs/2026-05-01-balloon-render-pilot-show-pack.md`
-- Read: `_resources/odoo-live/images/classic-arch.png`
-- Read: `_resources/odoo-live/images/classic-column.png`
-- Read: `_resources/odoo-live/images/classic-organic-balloon-garland.png`
-- Read: `_resources/odoo-live/images/birthday-deliveries.png`
+- Read: `_resources/catalog-source/images/classic-arch.png`
+- Read: `_resources/catalog-source/images/classic-column.png`
+- Read: `_resources/catalog-source/images/classic-organic-balloon-garland.png`
+- Read: `_resources/catalog-source/images/birthday-deliveries.png`
 - Create later: `_resources/generated-renders/pilot/README.md`
 - Create later: `_resources/generated-renders/pilot/*.png`
 

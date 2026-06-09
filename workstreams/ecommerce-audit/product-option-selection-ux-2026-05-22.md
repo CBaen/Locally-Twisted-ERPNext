@@ -41,7 +41,7 @@ state.
 - `apps/locally_twisted/locally_twisted/product_options.py`
 - `apps/locally_twisted/locally_twisted/catalog_contract/addon_rules.py`
 - `scripts/verify/product_options_experience.spec.js`
-- `audits/odoo-erpnext-migration-audit-2026-05-08/18-proof-product-contract-report.md`
+- `audits/catalog-import-audit-2026-05-08/18-proof-product-contract-report.md`
 
 ## Verification
 

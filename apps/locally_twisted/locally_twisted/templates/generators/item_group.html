@@ -281,6 +281,7 @@ frappe.ready(() => {
       if (!count) return;
       grid.dataset.ltItemCount = String(count);
       grid.dataset.ltGridBalance = (count > 1 && count % 3 !== 0 && count % 2 === 0) ? 'two' : 'three';
+      grid.dataset.ltGridFeature = (count > 4 && count % 3 === 1 && count % 2 !== 0) ? 'first' : 'none';
     }
 
     applyBalance();

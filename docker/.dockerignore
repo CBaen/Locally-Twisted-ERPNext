@@ -17,6 +17,6 @@ apps/locally_twisted/**/node_modules
 apps/locally_twisted/**/.eggs
 apps/locally_twisted/**/*.egg-info
 
-# Exclude the staging copy of seed data — re-staged from _resources/odoo-live/
+# Exclude the staging copy of seed data — re-staged from _resources/catalog-source/
 # when needed; not part of runtime
 apps/locally_twisted/locally_twisted/seed/_data

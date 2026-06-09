@@ -53,7 +53,7 @@ Recent decisions (full reasoned log in `locally-twisted-decisions.md`):
 - 2026-04-27: About page deferred until Jeff is ready
 - 2026-04-27: Site shape locked — lookbook-forward + small shop sidebar; future Design Studio for customizable categories
 - 2026-04-26 (later): Platform direction RESOLVED — stay Frappe-native (decided by demonstration after 4 surfaces shipped)
-- 2026-04-26: Project reframed from "Odoo → ERPNext migration" to "First professional business platform for LT, built on ERPNext"
+- 2026-04-26: Project reframed from "legacy_source → ERPNext migration" to "First professional business platform for LT, built on ERPNext"
 
 ### Pending Todos
 
@@ -76,7 +76,7 @@ Future scope (post-Phase-1):
 
 ### Blockers/Concerns
 
-None active. All Phase 1 decision gates resolved. Photos for the small shop catalog already exist (`_resources/odoo-export/catalog.json` + 48 product images).
+None active. All Phase 1 decision gates resolved. Photos for the small shop catalog already exist (`_resources/legacy_source-export/catalog.json` + 48 product images).
 
 ## Deferred Items
 

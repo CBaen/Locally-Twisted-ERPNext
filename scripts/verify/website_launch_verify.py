@@ -132,6 +132,7 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
     python = sys.executable
     workers = max(1, args.workers)
     steps = [
+        Step("Forbidden retired-source label gate", [python, "scripts/verify/forbidden_source_label_gate.py"], 120),
         Step("Verifier CLI safety contract", [python, "scripts/verify/verifier_cli_contract.py"], 120),
         Step("Navigation IA", [python, "scripts/verify/nav_ia.py"], 120),
         Step("Public homepage identity", [python, "scripts/verify/public_home_identity.py"], 120),
@@ -165,7 +166,7 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
         Step("Public ecommerce mode contract", [python, "scripts/verify/ecommerce_pause_contract.py"], 180),
         Step("Shop smoke", [python, "scripts/verify/smoke_shop.py"], 900),
         Step("Product variant prices", [python, "scripts/verify/product_variant_price_contract.py"], 180),
-        Step("Product source price modifiers", [python, "scripts/verify/product_price_modifier_contract.py"], 900),
+        Step("Catalog source price modifiers", [python, "scripts/verify/catalog_price_modifier_contract.py"], 900),
         Step(
             "Product visible price display",
             local_playwright_command(workers, "scripts/verify/product_price_display.spec.js"),

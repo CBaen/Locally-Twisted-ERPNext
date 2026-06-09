@@ -18,9 +18,9 @@ Use it before reopening old pause-centric or bouquet-only handoffs.
 
 ## Local Import Result
 
-Artifact: `audits/odoo-erpnext-migration-audit-2026-05-08/29-local-destructive-import-result.json`.
+Artifact: `audits/catalog-import-audit-2026-05-08/29-local-destructive-import-result.json`.
 Final browser proof summary artifact:
-`audits/odoo-erpnext-migration-audit-2026-05-08/30-post-import-checkout-proof-result.json`.
+`audits/catalog-import-audit-2026-05-08/30-post-import-checkout-proof-result.json`.
 
 - Scope: local ERPNext container/site `frontend` only.
 - Frappe Cloud/live touched: no.

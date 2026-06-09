@@ -1,6 +1,6 @@
 """Lead create cascade — what happens immediately when a Lead lands.
 
-Mirrors the Odoo `crm.lead` create() override behavior plus the
+Mirrors the legacy_source `crm.lead` create() override behavior plus the
 `automation_form_ack` base.automation that fired on Hetzner. Three things
 fire on Lead insert from a customer-facing form:
 
@@ -9,7 +9,7 @@ fire on Lead insert from a customer-facing form:
    Painting" instead of the form's literal "Booking Request".
 
 2. after_insert: dedup-or-create a Contact (Frappe's "Contact" doctype,
-   the equivalent of Odoo's res.partner), attach it to the Lead via
+   the equivalent of legacy_source's res.partner), attach it to the Lead via
    the standard `customer_id` link is wrong for Lead -> we use the
    built-in mechanism: a dynamic-link Contact pointing at the Lead via
    Contact's `links` child table.

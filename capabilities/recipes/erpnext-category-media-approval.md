@@ -50,9 +50,9 @@ The safe pattern is:
 
 Current candidate inputs are:
 
-- `_resources/odoo-live/slug_to_group.json`
-- `_resources/odoo-live/catalog.json`
-- `_resources/odoo-live/images/`
+- `_resources/catalog-source/slug_to_group.json`
+- `_resources/catalog-source/catalog.json`
+- `_resources/catalog-source/images/`
 - `apps/locally_twisted/locally_twisted/www/portfolio.py`
 - `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/`
 

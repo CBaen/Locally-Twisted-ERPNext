@@ -1,6 +1,6 @@
 # Roadmap: Locally Twisted — ERPNext Migration
 
-(Frame revised 2026-04-30 — see `.planning/PROJECT.md` and `locally-twisted-decisions.md`. The destination is a fresh ERPNext v15 install; the migration sources are LT's business intent + catalog data from the prior Odoo attempt and the legacy `locallytwisted.com` site.)
+(Frame revised 2026-04-30 — see `.planning/PROJECT.md` and `locally-twisted-decisions.md`. The destination is a fresh ERPNext v15 install; the migration sources are LT's business intent + catalog data from the prior legacy_source attempt and the legacy `locallytwisted.com` site.)
 
 ## Overview
 
@@ -150,7 +150,7 @@ The brand foundation (style guide tokens, fonts, colors, typography) is baked in
 4. Cameron retains developer-role access only — verified by trying (and failing) to access billing
 5. Jeff can log in, place a test order in his own admin, and navigate without assistance
 6. Old `locallytwisted.com` site (the dying current one) is decommissioned and a snapshot is archived
-7. References retired per CLAUDE.md "Reference Disposition": `locally-twisted-odoo/` archived to GitHub and removed from local; failed Hetzner deployment shut down; GitHub Odoo repo marked read-only
+7. References retired per CLAUDE.md "Reference Disposition": `locally-twisted-legacy_source/` archived to GitHub and removed from local; failed Hetzner deployment shut down; GitHub legacy_source repo marked read-only
 
 ## Progress
 

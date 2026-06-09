@@ -4,7 +4,7 @@
 
 This packet separates the current Paperclip-created or Paperclip-adjacent
 changes so the contact form can be handled first without accidentally dragging
-catalog, backend, checkout, or Odoo-derived changes into the same review.
+catalog, backend, checkout, or legacy_source-derived changes into the same review.
 
 Status: active dirty-file cleanup coordination. Bucket 3 was resolved locally on
 2026-05-15 because `patches.txt` referenced an untracked migration patch, which
@@ -89,8 +89,8 @@ stop condition.
 
 Files touched:
 
-- `_resources/odoo-live/catalog.json`
-- `_resources/odoo-live/value_normalize_map.json`
+- `_resources/catalog-source/catalog.json`
+- `_resources/catalog-source/value_normalize_map.json`
 - `apps/locally_twisted/locally_twisted/catalog_contract/color_rules.py`
 - `apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`
 - `apps/locally_twisted/locally_twisted/product_page_runtime.py`
@@ -106,15 +106,15 @@ Files touched:
 Finding:
 
 - appears to rename `Reflex Champage` to `Reflex Champagne` across source,
-  fixtures, Odoo-derived reference data, runtime expectations, and verifiers.
+  fixtures, legacy_source-derived reference data, runtime expectations, and verifiers.
 
 Risk:
 
 - resolved: `patches.txt` and
   `apps/locally_twisted/locally_twisted/patches/rename_reflex_champagne_color_20260515.py`
   are now staged together;
-- `_resources/odoo-live/*` changes are inside this ERPNext repo, but they are
-  Odoo-derived reference data and should not be treated as casual form work.
+- `_resources/catalog-source/*` changes are inside this ERPNext repo, but they are
+  legacy_source-derived reference data and should not be treated as casual form work.
 
 Resolution:
 
@@ -222,15 +222,15 @@ Verification:
 - `python scripts\verify\maintenance_heartbeat.py`
 - `python scripts\verify\maintenance_admin_boundary.py`
 
-## Bucket 7 - External Odoo Project Concern
+## Bucket 7 - External legacy_source Project Concern
 
 Concern:
 
-- GL is worried Paperclip reached into the old Odoo project without permission.
+- GL is worried Paperclip reached into the old legacy_source project without permission.
 
 Read-only check performed:
 
-- external repo checked at `C:\Users\baenb\projects\locally-twisted-odoo`;
+- external repo checked at `C:\Users\baenb\projects\locally-twisted-legacy_source`;
 - no current tracked dirty changes were found there during this audit;
 - the repo is already ahead of origin and has an older untracked `CODEX_REPLY.md`
   from 2026-05-06, which should not be attributed to Paperclip without deeper
@@ -238,8 +238,8 @@ Read-only check performed:
 
 Important distinction:
 
-- Paperclip did touch `_resources/odoo-live/*` inside the ERPNext repo. That is
-  Odoo-derived reference material, but it is not the external Odoo project.
+- Paperclip did touch `_resources/catalog-source/*` inside the ERPNext repo. That is
+  legacy_source-derived reference material, but it is not the external legacy_source project.
 
 ## Stop Conditions
 

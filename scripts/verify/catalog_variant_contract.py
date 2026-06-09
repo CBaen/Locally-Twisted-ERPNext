@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Compare captured Odoo product variants to live ERPNext variants.
+"""Compare captured legacy_source product variants to live ERPNext variants.
 
 This is the per-product variant correctness diff called out in
 MIRROR-REBUILD-PLAN.md. It verifies that the ERPNext catalog still matches the
-normalized Odoo scrape that seeded the shop.
+normalized legacy_source scrape that seeded the shop.
 
 Run:
   python scripts/verify/catalog_variant_contract.py
@@ -26,8 +26,8 @@ sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 from locally_twisted.catalog_variant_rules import dedupe_required_variant_rows
 from locally_twisted.color_preset_rules import COLLEGE_COLOR_PRESET_ATTRIBUTE, COLLEGE_PRESET_LABELS
 
-CATALOG_PATH = ROOT / "_resources" / "odoo-live" / "catalog.json"
-NORMALIZE_PATH = ROOT / "_resources" / "odoo-live" / "value_normalize_map.json"
+CATALOG_PATH = ROOT / "_resources" / "catalog-source" / "catalog.json"
+NORMALIZE_PATH = ROOT / "_resources" / "catalog-source" / "value_normalize_map.json"
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 GRADUATION_GRAB_TEMPLATE = "graduation-grab-n-go"
@@ -227,7 +227,7 @@ def compare() -> tuple[list[dict[str, Any]], dict[str, int]]:
         failures.append(
             {
                 "slug": slug,
-                "problem": "template_not_in_odoo_catalog",
+                "problem": "template_not_in_legacy_source_catalog",
                 "actual_count": len(actual_by_template.get(slug, {})),
             }
         )

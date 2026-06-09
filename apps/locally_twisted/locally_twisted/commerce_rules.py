@@ -526,8 +526,8 @@ def public_fulfillment_panel(
     if delivery_only and lane == "quote_required":
         return {
             "lane": "delivery_only_quote_required",
-            "heading": "Delivery only",
-            "body": "This piece is delivery only. It starts with a quote so delivery, setup, timing, and venue access are planned correctly.",
+            "heading": "Quoted event work",
+            "body": "This delivery-only piece starts with a quote so delivery, setup, timing, and venue access are planned correctly.",
             "cta_label": "Request a quote",
             "cta_href": "/contact",
         }

@@ -46,7 +46,7 @@ The prior plan had Slices 7–9 as "Products listing / Individual product pages 
 **Goal:** First-time visitor lands and immediately understands LT does custom event balloon decor at the level visible in the portfolio. Single primary CTA above the fold: *"Request a Quote."* No featured products, no configurator, no shopping cart in the header above the fold.
 
 **Source content:**
-- Hero copy + tagline: review `_resources/STYLE-GUIDE.md` first. The deleted `_resources/design-guide/` synthesis is no longer a valid visual reference because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction system. Some copy carries from approved Odoo XML, some is GL-confirmed fresh.
+- Hero copy + tagline: review `_resources/STYLE-GUIDE.md` first. The deleted `_resources/design-guide/` synthesis is no longer a valid visual reference because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction system. Some copy carries from approved legacy_source XML, some is GL-confirmed fresh.
 - Hero imagery: from `_resources/images/` (placeholders) until Jeff provides real photography.
 - Corporate logos for trust strip: TBD — needs a list of corporate clients Jeff has served (LinkedIn, Microsoft, etc. — Atlanta Balloon Designer's pattern is the reference).
 
@@ -124,7 +124,7 @@ The prior plan had Slices 7–9 as "Products listing / Individual product pages 
 - Print-friendly stylesheet (so customers can print the chart)
 - Inquiry CTA at the bottom
 
-**Source data:** Jeff's existing color list (TBD where this lives — possibly in the Odoo dir as a structured list, or pulled from supplier color cards).
+**Source data:** Jeff's existing color list (TBD where this lives — possibly in the legacy_source dir as a structured list, or pulled from supplier color cards).
 
 **Success criteria:**
 1. Page renders at 375px (≤4 columns) and ≥992px (10 columns) without horizontal scroll
@@ -136,7 +136,7 @@ The prior plan had Slices 7–9 as "Products listing / Individual product pages 
 
 **Goal:** The primary inquiry conversion path on the site. Form-bearing portal page using the existing 45-field Lead schema in ERPNext. Submission creates a Lead + Communication; visitor sees a confirmation page.
 
-**Source content:** GL designed this form. The field set lives in the existing ERPNext Lead schema (45+ Custom Fields, sectioned, plain-language relabels). The form's structural source is the Odoo `/book` page — but per anti-gl-patterns receipt 2026-04-26, the live `/book` (Odoo `arch_db`) diverged from source XML; cross-check both before final field list. **GL to confirm the canonical field list during build.**
+**Source content:** GL designed this form. The field set lives in the existing ERPNext Lead schema (45+ Custom Fields, sectioned, plain-language relabels). The form's structural source is the legacy_source `/book` page — but per anti-gl-patterns receipt 2026-04-26, the live `/book` (legacy_source `arch_db`) diverged from source XML; cross-check both before final field list. **GL to confirm the canonical field list during build.**
 
 **Scope — page sections (top to bottom):**
 
@@ -263,8 +263,8 @@ These apply to every slice — not separate work items:
 ## Open questions / pending GL input
 
 - **Corporate client list for the homepage trust strip** (Slice 3). Atlanta Balloon Designer / Balloon Emporium pattern. Need real names with Jeff's permission.
-- **Color Chart source data** (Slice 9). Where does the canonical 70-color list with names live? Possibly Odoo dir, possibly supplier card.
-- **`/book` field-list canonical source** (Slice 10). Confirm with GL during build whether to mirror the live Odoo `/book` form (curl the public URL + cross-check) or work directly from the ERPNext Lead Custom Field schema.
+- **Color Chart source data** (Slice 9). Where does the canonical 70-color list with names live? Possibly legacy_source dir, possibly supplier card.
+- **`/book` field-list canonical source** (Slice 10). Confirm with GL during build whether to mirror the live legacy_source `/book` form (curl the public URL + cross-check) or work directly from the ERPNext Lead Custom Field schema.
 - **Lookbook card depth** (Slice 7). Do cards open full case-study pages (each event gets a URL) or lightbox in place? Decide at build based on how much per-event copy Jeff has.
 - **Real photography arrival timing.** Affects Slices 3, 7, 8. Placeholders ship until photos arrive; real photos drop in via re-encode, not redesign.
 - **Blog topic list and first-post copy** (Slice 14). Voice is set; topics need GL.

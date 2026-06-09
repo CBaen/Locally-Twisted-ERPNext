@@ -338,6 +338,18 @@
   .lt-shop.lt-shop--category #products-grid-area[data-lt-grid-balance="two"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .lt-shop.lt-shop--category #products-grid-area[data-lt-grid-feature="first"]:not([data-lt-grid-balance="two"]) .item-card:first-child {
+    grid-row: span 2;
+  }
+
+  .lt-shop.lt-shop--category #products-grid-area[data-lt-grid-feature="first"]:not([data-lt-grid-balance="two"]) .item-card:first-child .card {
+    min-height: 100%;
+  }
+
+  .lt-shop.lt-shop--category #products-grid-area[data-lt-grid-feature="first"]:not([data-lt-grid-balance="two"]) .item-card:first-child .card-img-container {
+    aspect-ratio: 4 / 5;
+  }
 }
 
 @media (min-width: 992px) {

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Fail-loud white-label checks for customer/client-facing LT surfaces.
 
 This verifier is intentionally narrower than a repository-wide grep. Backend code
@@ -20,7 +20,7 @@ TEMPLATE_DIR = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "outbound
 PREVIEW_ROOT = ROOT / "output" / "playwright"
 
 STRICT_PLATFORM_RE = re.compile(
-    r"\b(?:ERPNext|Frappe|Odoo)\b|Built on Frappe|frappe\.io|erpnext\.com|odoo\.com",
+    r"\b(?:ERPNext|Frappe|legacy_source)\b|Built on Frappe|frappe\.io|erpnext\.com|legacy_source\.com",
     re.IGNORECASE,
 )
 

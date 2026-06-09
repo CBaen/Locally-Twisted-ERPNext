@@ -2,7 +2,7 @@
 
 This script does not connect to ERPNext and does not delete anything. It uses the
 snapshot as evidence to identify product-catalog rows in the corrected import
-subset. Odoo-imported products are product targets; variants and high-variant
+subset. legacy_source-imported products are product targets; variants and high-variant
 products are allowed when the current backend schema can preserve their meaning.
 """
 
@@ -28,8 +28,8 @@ from locally_twisted.catalog_import_subset import (
 )
 from locally_twisted.catalog_contract import build_product_page_contract
 
-AUDIT_ROOT = ROOT / "audits" / "odoo-erpnext-migration-audit-2026-05-08"
-SOURCE_ROOT = ROOT / "_resources" / "odoo-live"
+AUDIT_ROOT = ROOT / "audits" / "catalog-import-audit-2026-05-08"
+SOURCE_ROOT = ROOT / "_resources" / "catalog-source"
 REPORT_PATH = AUDIT_ROOT / "16-catalog-purge-scope-dry-run.md"
 REPORT_JSON_PATH = AUDIT_ROOT / "16-catalog-purge-scope-dry-run.json"
 
@@ -162,7 +162,7 @@ def _import_subset() -> dict:
         raise SystemExit("FATAL: " + "; ".join(validation_errors))
 
     return {
-        "rule": "include Odoo-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers",
+        "rule": "include legacy_source-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers",
         "included_slugs": included,
         "included_count": len(included),
         "excluded_products": excluded,

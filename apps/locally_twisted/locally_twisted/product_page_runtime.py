@@ -149,9 +149,9 @@ def _blueprint_add_on_contracts_for_item(website_item_code: str | None) -> dict[
     return contracts
 
 
-# Source/Odoo add-on-looking axes that are known, but not approved for paid
-# checkout. They must fail as quote-required instead of looking like broken
-# setup or silently becoming free options.
+# Retired catalog add-on-looking axes that are known, but not approved for
+# paid checkout. They must fail as quote-required instead of looking like
+# broken setup or silently becoming free options.
 REVIEW_ONLY_SOURCE_ADD_ONS = {
     "add_ons": {
         "label": "Add ons",

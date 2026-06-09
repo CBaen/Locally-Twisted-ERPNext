@@ -2,9 +2,9 @@
 
 Status: Codex-owned research synthesis, 2026-05-09.
 
-Decision informed: how to build two product page types for Locally Twisted on ERPNext/Frappe v15 without silently flattening Odoo product behavior.
+Decision informed: how to build two product page types for Locally Twisted on ERPNext/Frappe v15 without silently flattening legacy_source product behavior.
 
-This is not a rendered product-page review. It is not an Odoo field import plan. It is the backend product architecture research needed before product pages are rebuilt.
+This is not a rendered product-page review. It is not an legacy_source field import plan. It is the backend product architecture research needed before product pages are rebuilt.
 
 ## Research Question
 
@@ -21,11 +21,11 @@ What backend product contract must LT add around ERPNext/Webshop so two product-
 - ERPNext Product Bundle is a sales-side bundle/packing-list mechanism with a virtual non-stock parent and child items. It is useful for fixed bundles, not a general answer for customer-configured custom decor. Source: https://docs.frappe.io/erpnext/product-bundle.
 - Frappe customization supports Custom Fields, Property Setters, client/server scripts, custom DocPerms, and child tables. Child DocTypes are the right shape for many-to-one structured payloads that need to live on a parent document. Sources: https://docs.frappe.io/framework/v15/user/en/basics/doctypes/customize, https://docs.frappe.io/framework/v15/user/en/basics/doctypes/child-doctype, https://docs.frappe.io/framework/v15/user/en/basics/doctypes/fieldtypes.
 
-### Official Odoo docs as behavior witness
+### Official legacy_source docs as behavior witness
 
-- Odoo product variants combine template, attributes, and values; variant records carry SKU/barcode, inventory, price impact, and images. Source: https://www.odoo.com/documentation/18.0/applications/sales/sales/products_prices/products/variants.html.
-- Odoo attribute values can carry price extras and exclusions; attribute display types include pills, color, radio, select, image, and multi-checkbox in current docs. Source: https://www.odoo.com/documentation/master/applications/sales/sales/products_prices/products/variants.html.
-- Odoo optional, accessory, and alternative products are separate ecommerce behaviors shown at different points in the customer journey. Source: https://www.odoo.com/documentation/18.0/applications/websites/ecommerce/products/cross_upselling.html.
+- legacy_source product variants combine template, attributes, and values; variant records carry SKU/barcode, inventory, price impact, and images. Source: https://www.legacy_source.com/documentation/18.0/applications/sales/sales/products_prices/products/variants.html.
+- legacy_source attribute values can carry price extras and exclusions; attribute display types include pills, color, radio, select, image, and multi-checkbox in current docs. Source: https://www.legacy_source.com/documentation/master/applications/sales/sales/products_prices/products/variants.html.
+- legacy_source optional, accessory, and alternative products are separate ecommerce behaviors shown at different points in the customer journey. Source: https://www.legacy_source.com/documentation/18.0/applications/websites/ecommerce/products/cross_upselling.html.
 
 ### LT live ERPNext ground truth
 
@@ -77,7 +77,7 @@ Proof products:
 
 ERPNext's native transactional unit is too narrow for LT's two product-page types. It can sell a concrete Item/variant at a server price, but LT needs extra product meaning to survive beyond the UI.
 
-Odoo's richer product behavior should be treated as a behavioral witness, not a field schema to copy. Some concepts map cleanly to ERPNext native records. Others need LT-owned custom structure.
+legacy_source's richer product behavior should be treated as a behavioral witness, not a field schema to copy. Some concepts map cleanly to ERPNext native records. Others need LT-owned custom structure.
 
 The current LT frontend can choose an ERPNext variant and add it to cart, but it does not have a backend contract for selected add-ons, multi-color recipes, dependencies, customer-entered configuration, or operator/invoice detail.
 
@@ -132,7 +132,7 @@ Do not rely on:
 - Product group as a quote gate.
 - Frontend JS as the owner of price or option truth.
 - Product Bundle as the general add-on/customizer mechanism.
-- Odoo JSON-LD/base page price.
+- legacy_source JSON-LD/base page price.
 - Website Item copy fields as storage for executable product behavior.
 - Sales Order header notes as the only place selected product meaning survives.
 

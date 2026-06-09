@@ -1,13 +1,13 @@
 """Mirror http://5.78.136.133/ for the LT ERPNext rebuild.
 
 Two passes:
-  1. crawl4ai BFS walk — captures rendered HTML per route (post-Odoo-JS DOM).
+  1. crawl4ai BFS walk — captures rendered HTML per route (post-legacy_source-JS DOM).
   2. Asset sweep — parses every captured HTML for <link href>, <script src>,
      <img src>, <source srcset>, and CSS url() refs; downloads each asset
      preserving original directory structure.
 
 Output:
-  _resources/odoo-live-mirror/
+  _resources/retired-source-mirror/
     pages/<slugified-route>.html         rendered DOM per page
     assets/<original-path>/<file>        every linked asset
     manifest.json                         index of pages + assets + status
@@ -30,7 +30,7 @@ from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig
 from crawl4ai.deep_crawling import BFSDeepCrawlStrategy
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "_resources" / "odoo-live-mirror"
+OUT = ROOT / "_resources" / "retired-source-mirror"
 PAGES_DIR = OUT / "pages"
 ASSETS_DIR = OUT / "assets"
 MANIFEST = OUT / "manifest.json"
