@@ -50,8 +50,38 @@ async function dismissCookieBanner(page) {
 	}
 }
 
+async function assertCookieBannerDoesNotCoverLogin(page) {
+	const banner = page.locator(".lt-cookie-consent");
+	if (!(await banner.isVisible({ timeout: 1500 }).catch(() => false))) {
+		return;
+	}
+	const result = await page.evaluate(() => {
+		const notice = document.querySelector(".lt-cookie-consent");
+		const card = document.querySelector("section.for-login .login-content.page-card");
+		const button = document.querySelector("section.for-login .btn-login");
+		const rect = (element) => {
+			if (!element) return null;
+			const r = element.getBoundingClientRect();
+			return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height };
+		};
+		const overlaps = (a, b) => Boolean(a && b && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top);
+		return {
+			isInline: notice ? notice.classList.contains("lt-cookie-consent--inline") : false,
+			notice: rect(notice),
+			card: rect(card),
+			button: rect(button),
+			overlapsCard: overlaps(rect(notice), rect(card)),
+			overlapsButton: overlaps(rect(notice), rect(button)),
+		};
+	});
+	expect(result.isInline, "login cookie notice should be inline, not a floating overlay").toBe(true);
+	expect(result.overlapsCard, "login cookie notice must not cover the form card").toBe(false);
+	expect(result.overlapsButton, "login cookie notice must not cover the sign-in button").toBe(false);
+}
+
 async function assertBrandedLogin(page, screenshotName) {
 	await page.goto(new URL("/login#login", BASE_URL).toString(), { waitUntil: "networkidle" });
+	await assertCookieBannerDoesNotCoverLogin(page);
 	await dismissCookieBanner(page);
 
 	await expect(page.locator("[data-lt-customer-login]")).toBeVisible();
@@ -76,6 +106,25 @@ async function assertBrandedLogin(page, screenshotName) {
 
 	const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 	expect(overflow).toBeLessThanOrEqual(2);
+
+	const fit = await page.evaluate(() => {
+		const section = document.querySelector("section.for-login");
+		const card = document.querySelector("section.for-login .lt-login__card");
+		const form = document.querySelector("section.for-login .login-content.page-card");
+		const rect = (element) => {
+			if (!element) return null;
+			const r = element.getBoundingClientRect();
+			return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height };
+		};
+		return {
+			section: rect(section),
+			card: rect(card),
+			form: rect(form),
+			viewport: { width: window.innerWidth, height: window.innerHeight },
+		};
+	});
+	expect(fit.card.width, "login card should be a deliberate contained surface").toBeLessThanOrEqual(Math.min(fit.viewport.width, 1010) + 2);
+	expect(fit.form.width, "desktop login form should not remain trapped at the old 400px card width").toBeGreaterThan(fit.viewport.width >= 1040 ? 380 : 300);
 
 	await page.screenshot({
 		path: path.join(OUTPUT_DIR, screenshotName),

@@ -92,6 +92,7 @@
         var banner = buildBanner();
         var homeReviews = document.querySelector('.lt-reviews-block');
         var formSurface = document.querySelector('.lt-contact__grid, .lt-btfp__booking-grid');
+        var loginSurface = document.querySelector('[data-lt-customer-login]');
         if (homeReviews) {
             banner.classList.add('lt-cookie-consent--inline');
             homeReviews.insertAdjacentElement('afterend', banner);
@@ -100,6 +101,11 @@
         if (formSurface) {
             banner.classList.add('lt-cookie-consent--inline');
             formSurface.insertAdjacentElement('afterend', banner);
+            return;
+        }
+        if (loginSurface) {
+            banner.classList.add('lt-cookie-consent--inline');
+            loginSurface.insertAdjacentElement('afterend', banner);
             return;
         }
         document.body.appendChild(banner);

@@ -27,8 +27,9 @@ body[data-path="login"] .page_content {
   background: var(--lt-login-paper);
   color: var(--lt-login-ink);
   display: grid;
-  min-height: 100vh;
-  padding: 0;
+  min-height: 100svh;
+  padding: clamp(1rem, 3vw, 2rem);
+  place-items: center;
 }
 
 .lt-login *,
@@ -43,6 +44,8 @@ body[data-path="login"] .page_content {
 
 .lt-login section {
   display: none;
+  padding: 0;
+  width: min(100%, 63rem);
 }
 
 .lt-login section.for-login {
@@ -51,11 +54,15 @@ body[data-path="login"] .page_content {
 
 .lt-login__card {
   background: var(--lt-login-navy);
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 60px rgba(9, 9, 11, 0.18);
   color: var(--lt-login-white);
   display: grid;
   gap: 1rem;
-  min-height: 100vh;
-  padding: 1rem;
+  margin: 0 auto;
+  min-height: auto;
+  padding: clamp(1rem, 3vw, 1.35rem);
+  width: min(100%, 63rem);
 }
 
 .lt-login__chrome,
@@ -332,27 +339,53 @@ body[data-path="login"] .page_content {
 }
 
 @media (min-width: 720px) {
-  .lt-login {
-    padding: 2rem 1rem;
-  }
-
   .lt-login__card {
-    border-radius: 2rem;
-    box-shadow: 0 28px 70px rgba(9, 9, 11, 0.18);
-    margin: 0 auto;
-    max-width: 27rem;
-    min-height: auto;
-    padding: 1.15rem;
+    border-radius: 1.5rem;
+    max-width: 33rem;
   }
 }
 
 @media (min-width: 1040px) {
-  .lt-login {
-    align-items: center;
-    background: var(--lt-login-paper);
+  .lt-login__card {
+    align-items: stretch;
+    gap: 1.1rem 1.4rem;
+    grid-template-areas:
+      "chrome chrome"
+      "intro form"
+      "trust form"
+      "request request";
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 25rem);
+    max-width: 63rem;
+    padding: 1.35rem;
   }
 
-  .lt-login__card {
-    max-width: 30rem;
+  .lt-login__chrome {
+    grid-area: chrome;
+  }
+
+  .lt-login__intro {
+    align-self: end;
+    grid-area: intro;
+  }
+
+  .lt-login__trust-card {
+    align-self: start;
+    grid-area: trust;
+  }
+
+  .lt-login .page-card {
+    align-self: stretch;
+    display: grid;
+    grid-area: form;
+    max-width: none;
+    padding: 1.25rem;
+  }
+
+  .lt-login .form-signin {
+    align-self: center;
+  }
+
+  .lt-login__request-link {
+    grid-area: request;
   }
 }
