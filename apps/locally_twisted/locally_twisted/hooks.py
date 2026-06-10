@@ -75,6 +75,7 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-product-setup-runtime.js?v=20260521-content-2",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
     "/assets/locally_twisted/js/lt-marketing-bridge.js?v=20260609-1",
+    "/assets/locally_twisted/js/lt-marketing-measurement.js?v=20260610-ga4-1",
     "/assets/locally_twisted/js/lt-audience-ribbon.js?v=20260510-collab-slider-1",
 ]
 

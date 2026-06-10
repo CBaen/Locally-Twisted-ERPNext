@@ -16,6 +16,18 @@ GL reports the Google-side dashboards are logged in for the immediate reindex,
 ads, and analytics push. Use that access for read-only inventory and approved
 Google Search Console submission work.
 
+Accountability framing for Jeff/business discussion:
+
+- The lost month is BBC/LT transition debt, not an ENB blame story. The
+  ecommerce replacement was late, so ENB's old landing-page and tracking setup
+  was left without a clean replacement at the time Jeff expected it.
+- The replacement case should be made from current capability and current
+  evidence: LT now has a live ERPNext storefront with Stripe checkout, owned
+  public routes, Search Console sitemap submission, and a path to measure leads
+  and purchases inside the business system.
+- ENB-era account issues still matter operationally, but should be described
+  as repair/integration findings, not as an excuse for the delayed shop launch.
+
 Meta Business Manager is blocked until the Facebook/Meta password is recovered.
 Do not search browser password stores, OS credential stores, session files,
 cookies, local storage, or saved-password exports for Facebook credentials.
@@ -37,6 +49,45 @@ Current verified live-site state:
   `https://locallytwisted.com/sitemap.xml`. Search Console reported `Success`,
   last read `Jun 10, 2026`, and 26 discovered pages.
 
+Read-only Google Ads / GA4 dashboard inventory, checked 2026-06-10:
+
+- Google Ads account: `437-723-0551 Locally Twisted`, logged in as
+  `locallytwisted@gmail.com`.
+- Last 30 days shown in Google Ads: May 11-Jun 9, 2026.
+- Google Ads last-30-days overview: 23 clicks, 223 impressions, average CPC
+  `$2.14`, cost `$49.12`.
+- Campaign `ENB_Sales_Search_Custom Balloon Arches + Delivery - $5/day |
+  12.27.24`: 15 clicks, `$42.06` cost, 8.93% CTR, eligible limited, 9 of 12
+  ads disapproved.
+- Campaign `ENB_Sales_Search_Face Painters - Lowered to $2.22/day from $7/day
+  | 4/23/25`: 8 clicks, `$7.06` cost, 14.55% CTR, eligible limited, 1 of 2 ads
+  disapproved.
+- Google Ads warnings: 7 ads disapproved and "Fix ad destinations for 7
+  disapproved ads." Observed broken/obsolete destinations include
+  `locallytwisted.com/balloon/arches` and
+  `locallytwisted.com/professional/face-painter`.
+- Google Ads conversion overview: Purchases had 0 results; `Submit lead form`
+  was `Misconfigured`; `Purchase`, `Phone call lead`, `Request quote`, and
+  `Page view` were marked `Needs attention`.
+- Billing read-only snapshot: balance `$0.00`; primary payment method displayed
+  as Visa ending `6044`. Do not change billing without explicit approval.
+- GA4 property/account visible as `locally twisted` / `locallytwisted.com`.
+  Dashboard displayed Measurement ID `G-0Z0WY5XQRB`.
+- GA4 home displayed "No data received from your website yet" while also
+  showing historical 90-day metrics. Current interpretation: old analytics
+  history exists, but the new live ERPNext site was not sending GA4 data before
+  the 2026-06-10 measurement-loader code slice.
+- Live homepage source check on 2026-06-10: no `G-0Z0WY5XQRB`, no `gtag(`, no
+  `googletagmanager.com`, no Meta Pixel markers, and `lt-marketing-bridge`
+  present.
+- Code slice added on 2026-06-10: `lt-marketing-measurement.js` loads GA4
+  `G-0Z0WY5XQRB` only after `window.LT_COOKIE_CONSENT.hasAcceptedOptional()`
+  returns true. It does not add Google Ads conversion labels, Meta Pixel,
+  enhanced conversions, customer-list upload, CAPI, billing, budget, keyword,
+  campaign, or access changes.
+- Verification: `python scripts/verify/marketing_measurement_bridge_contract.py`
+  passed after the GA4 loader slice.
+
 Immediate safe execution order:
 
 1. Treat Search Console sitemap submission as complete and monitor the
@@ -47,9 +98,12 @@ Immediate safe execution order:
 3. In Google Ads account `437-723-0551`, inventory access, billing, conversion
    actions, tag diagnostics, final URLs, policy issues, and broken destinations
    before changing campaigns.
-4. In GA4/Google tag surfaces, confirm whether `G-0Z0WY5XQRB` is still the
-   owned/active measurement ID before adding any live tag to the ERPNext site.
-5. Prepare campaign repair/relaunch proposals, but do not publish spend,
+4. Deploy/update the approved app code so the consent-gated GA4 loader reaches
+   the live ERPNext site, then verify the live source and GA4 realtime/debug
+   state after accepting optional tracking in a test browser.
+5. Prepare Google Ads conversion-action repair only after the exact conversion
+   action IDs/labels are visible from the LT-owned account.
+6. Prepare campaign repair/relaunch proposals, but do not publish spend,
    budgets, conversion actions, billing changes, or access changes without
    explicit GL approval.
 

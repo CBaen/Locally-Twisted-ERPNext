@@ -16,10 +16,13 @@ Active controller packet is
 is `MARKETING-REPLACEMENT-AND-SHOP-GO-LIVE-PLAN-2026-06-08.md`. Goal: replace
 ENB's useful lead-generation function with LT/BBC-owned landing URLs,
 conversion tracking, reporting, and explicit shop/payment go-live gates that
-fit the ERP-backed system. This lane is documentation/source proof only until
-GL approves the next stage. Do not touch staging/live/provider/DNS/Search
-Console/Stripe/ad accounts/customer data/ENB access or production ERPNext data
-from this lane without a separate approval.
+fit the ERP-backed system. 2026-06-10 status: live ecommerce and Search Console
+sitemap submission are no longer theoretical; sitemap submission succeeded,
+Google Ads/GA4 read-only inventory is underway, and a consent-gated GA4 loader
+code slice now uses the verified `G-0Z0WY5XQRB` measurement ID. Do not mutate
+ad spend, budgets, billing, conversion actions, Google Ads/Meta access,
+customer-data exports, ENB access, or production ERPNext data without explicit
+approval.
 
 **P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout

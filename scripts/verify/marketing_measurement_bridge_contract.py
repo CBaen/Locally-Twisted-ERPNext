@@ -64,6 +64,19 @@ def check_browser_bridge_source() -> None:
 def check_hooks_include() -> None:
     hooks = (APP / "hooks.py").read_text(encoding="utf-8")
     assert_true("lt-marketing-bridge.js" in hooks, "marketing bridge script must be included on public pages")
+    assert_true(
+        "lt-marketing-measurement.js" in hooks,
+        "consent-gated marketing measurement script must be included on public pages",
+    )
+
+
+def check_ga4_loader_source() -> None:
+    source = (APP / "public" / "js" / "lt-marketing-measurement.js").read_text(encoding="utf-8")
+    assert_true("G-0Z0WY5XQRB" in source, "GA4 loader should use the verified LT measurement ID")
+    assert_true("hasAcceptedOptional" in source, "GA4 loader must honor optional cookie/tracking consent")
+    assert_true("lt-cookie-consent" in source, "GA4 loader must react when a visitor accepts tracking")
+    assert_true("send_page_view" in source, "GA4 loader should send a page view after consent")
+    assert_true("fbq(" not in source, "GA4 loader must not include Meta Pixel before Meta is configured")
 
 
 def check_contact_submit_integration() -> None:
@@ -80,6 +93,7 @@ def main() -> int:
     checks = [
         check_python_contract,
         check_browser_bridge_source,
+        check_ga4_loader_source,
         check_hooks_include,
         check_contact_submit_integration,
     ]
