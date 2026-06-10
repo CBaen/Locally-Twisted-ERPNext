@@ -75,7 +75,7 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-product-setup-runtime.js?v=20260521-content-2",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
     "/assets/locally_twisted/js/lt-marketing-bridge.js?v=20260609-1",
-    "/assets/locally_twisted/js/lt-marketing-measurement.js?v=20260610-ga4-1",
+    "/assets/locally_twisted/js/lt-marketing-measurement.js?v=20260610-config-1",
     "/assets/locally_twisted/js/lt-audience-ribbon.js?v=20260510-collab-slider-1",
 ]
 
@@ -447,11 +447,48 @@ permission_query_conditions = {
     doctype: "locally_twisted.marketing_review_access.marketing_no_records_condition"
     for doctype in _marketing_sensitive_doctypes
 }
+permission_query_conditions["Web Page"] = (
+    "locally_twisted.external_marketing_builder_access.web_page_permission_query_condition"
+)
 
 has_permission = {
     doctype: "locally_twisted.marketing_review_access.has_marketing_sensitive_doc_permission"
     for doctype in _marketing_sensitive_doctypes
 }
+has_permission["Web Page"] = "locally_twisted.external_marketing_builder_access.has_web_page_permission"
+
+_external_marketing_builder_sensitive_doctypes = [
+    "Lead",
+    "Customer",
+    "Contact",
+    "Address",
+    "Quotation",
+    "Sales Order",
+    "Sales Invoice",
+    "Payment Request",
+    "Payment Entry",
+    "Communication",
+    "Email Queue",
+    "File",
+    "Item",
+    "Item Price",
+    "Website Settings",
+    "Webshop Settings",
+    "Project",
+    "Task",
+    "Error Log",
+    "Access Log",
+    "Activity Log",
+    "Version",
+]
+
+for _external_marketing_builder_sensitive_doctype in _external_marketing_builder_sensitive_doctypes:
+    permission_query_conditions[_external_marketing_builder_sensitive_doctype] = (
+        "locally_twisted.external_marketing_builder_access.marketing_or_builder_no_records_condition"
+    )
+    has_permission[_external_marketing_builder_sensitive_doctype] = (
+        "locally_twisted.external_marketing_builder_access.has_marketing_or_builder_sensitive_doc_permission"
+    )
 
 _marketing_mutation_block_doctypes = [
     doctype
@@ -466,6 +503,23 @@ for _marketing_sensitive_doctype in _marketing_mutation_block_doctypes:
             _marketing_sensitive_event,
             "locally_twisted.marketing_review_access.block_marketing_sensitive_doc_mutation",
         )
+
+for _external_marketing_builder_sensitive_doctype in _external_marketing_builder_sensitive_doctypes:
+    if _external_marketing_builder_sensitive_doctype in {"Error Log", "Access Log", "Activity Log", "Version"}:
+        continue
+    doc_events.setdefault(_external_marketing_builder_sensitive_doctype, {})
+    for _external_marketing_builder_event in ("before_insert", "before_save", "on_trash"):
+        doc_events[_external_marketing_builder_sensitive_doctype].setdefault(
+            _external_marketing_builder_event,
+            "locally_twisted.external_marketing_builder_access.block_builder_sensitive_doc_mutation",
+        )
+
+doc_events.setdefault("Web Page", {})
+for _external_marketing_web_page_event in ("before_insert", "before_save"):
+    doc_events["Web Page"].setdefault(
+        _external_marketing_web_page_event,
+        "locally_twisted.external_marketing_builder_access.validate_builder_web_page_mutation",
+    )
 
 
 def _append_doc_event(doctype, event, handler):

@@ -4,6 +4,9 @@ from __future__ import annotations
 import frappe
 
 from locally_twisted.ecommerce_pause import is_ecommerce_paused
+from locally_twisted.locally_twisted.doctype.lt_marketing_tracking_settings.lt_marketing_tracking_settings import (
+    public_tracking_config,
+)
 from locally_twisted.seo import apply_seo_context
 
 
@@ -35,6 +38,15 @@ def update_website_context(context):
             message=f"website_context.is_ecommerce_paused failed: {e}",
         )
         context["lt_ecommerce_paused"] = True
+
+    try:
+        context["lt_marketing_tracking_config"] = public_tracking_config()
+    except Exception as e:
+        frappe.log_error(
+            title="LT marketing tracking config",
+            message=f"website_context.public_tracking_config failed: {e}",
+        )
+        context["lt_marketing_tracking_config"] = {}
 
     try:
         children = frappe.db.get_all(

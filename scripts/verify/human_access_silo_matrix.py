@@ -38,6 +38,11 @@ def main() -> int:
         print(f"  workspaces_checked: {len(matrix.get('workspaces') or {})}")
         external = matrix.get("external_marketing") or {}
         print(f"  external_marketing: {external.get('role')} desk_access={external.get('desk_access')}")
+        external_builder = matrix.get("external_marketing_builder") or {}
+        print(
+            "  external_marketing_builder: "
+            f"{external_builder.get('role')} desk_access={external_builder.get('desk_access')}"
+        )
         indexing = matrix.get("indexing") or {}
         print(f"  indexing: {indexing.get('status')}")
 

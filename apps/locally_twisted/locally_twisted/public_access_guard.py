@@ -6,6 +6,10 @@ from typing import Any
 import frappe
 from frappe import _
 
+from locally_twisted.external_marketing_builder_access import (
+    EXTERNAL_MARKETING_BUILDER_ROLE,
+    FORBIDDEN_BUILDER_ROLES,
+)
 from locally_twisted.marketing_review_access import (
     FORBIDDEN_MARKETING_ROLES,
     MARKETING_REVIEW_ROLE,
@@ -112,19 +116,30 @@ def _validate_role(doc) -> None:
 
 def _validate_user_roles(doc) -> None:
     roles = _role_set(doc)
-    if MARKETING_REVIEW_ROLE not in roles:
-        return
-    forbidden = sorted(roles & FORBIDDEN_MARKETING_ROLES)
-    if forbidden:
-        _block(
-            f"{MARKETING_REVIEW_ROLE} users cannot also have: {', '.join(forbidden)}.",
-            doc,
-        )
-    if doc.get("user_type") != "Website User":
-        _block(
-            f"{MARKETING_REVIEW_ROLE} users must stay Website User accounts.",
-            doc,
-        )
+    if MARKETING_REVIEW_ROLE in roles:
+        forbidden = sorted(roles & FORBIDDEN_MARKETING_ROLES)
+        if forbidden:
+            _block(
+                f"{MARKETING_REVIEW_ROLE} users cannot also have: {', '.join(forbidden)}.",
+                doc,
+            )
+        if doc.get("user_type") != "Website User":
+            _block(
+                f"{MARKETING_REVIEW_ROLE} users must stay Website User accounts.",
+                doc,
+            )
+    if EXTERNAL_MARKETING_BUILDER_ROLE in roles:
+        forbidden = sorted(roles & FORBIDDEN_BUILDER_ROLES)
+        if forbidden:
+            _block(
+                f"{EXTERNAL_MARKETING_BUILDER_ROLE} users cannot also have: {', '.join(forbidden)}.",
+                doc,
+            )
+        if doc.get("user_type") != "System User":
+            _block(
+                f"{EXTERNAL_MARKETING_BUILDER_ROLE} users must be System User accounts for controlled Desk access.",
+                doc,
+            )
 
 
 def _validate_has_role_row(doc) -> None:
@@ -142,6 +157,16 @@ def _validate_has_role_row(doc) -> None:
     if role in FORBIDDEN_MARKETING_ROLES and _user_has_role(parent, MARKETING_REVIEW_ROLE):
         _block(
             f"Users with {MARKETING_REVIEW_ROLE} cannot receive internal business role {role}.",
+            doc,
+        )
+    if role == EXTERNAL_MARKETING_BUILDER_ROLE and _user_has_any_role(parent, FORBIDDEN_BUILDER_ROLES):
+        _block(
+            f"{EXTERNAL_MARKETING_BUILDER_ROLE} cannot be added to a user with internal business roles.",
+            doc,
+        )
+    if role in FORBIDDEN_BUILDER_ROLES and _user_has_role(parent, EXTERNAL_MARKETING_BUILDER_ROLE):
+        _block(
+            f"Users with {EXTERNAL_MARKETING_BUILDER_ROLE} cannot receive internal business role {role}.",
             doc,
         )
 

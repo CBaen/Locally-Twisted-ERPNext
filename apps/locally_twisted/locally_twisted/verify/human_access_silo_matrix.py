@@ -6,6 +6,12 @@ from typing import Any
 
 import frappe
 
+from locally_twisted.external_marketing_builder_access import (
+    EXTERNAL_MARKETING_BUILDER_ROLE,
+    EXTERNAL_MARKETING_WORKSPACE,
+    TRACKING_SETTINGS_DOCTYPE,
+    builder_role_boundary,
+)
 from locally_twisted.maintenance.heartbeat import boundary_report as maintenance_boundary_report
 from locally_twisted.maintenance.heartbeat import MAINTENANCE_WORKSPACE
 from locally_twisted.marketing_review_access import (
@@ -41,7 +47,7 @@ PERSONA_USERS = {
             "System Manager",
             "Website Manager",
         },
-        "forbidden_roles": {"LT Marketing Review Access"},
+        "forbidden_roles": {"LT Marketing Review Access", EXTERNAL_MARKETING_BUILDER_ROLE},
     },
     "lt-manager-temp@example.com": {
         "group": "manager",
@@ -55,6 +61,7 @@ PERSONA_USERS = {
             "LT Owner Access",
             "LT Accountant Access",
             "LT Marketing Review Access",
+            EXTERNAL_MARKETING_BUILDER_ROLE,
         },
         "forbidden_doctype_permissions": {
             "Item Price": {"read", "create", "write", "delete"},
@@ -74,6 +81,7 @@ PERSONA_USERS = {
             "LT Owner Access",
             "LT Accountant Access",
             "LT Marketing Review Access",
+            EXTERNAL_MARKETING_BUILDER_ROLE,
         },
         "forbidden_doctype_permissions": {
             "Lead": {"read", "create", "write", "delete"},
@@ -97,6 +105,7 @@ PERSONA_USERS = {
             "Item Manager",
             "LT Owner Access",
             "LT Marketing Review Access",
+            EXTERNAL_MARKETING_BUILDER_ROLE,
         },
         "forbidden_doctype_permissions": {
             "Lead": {"read", "create", "write", "delete"},
@@ -134,7 +143,21 @@ WORKSPACES = {
         "title": "Marketing Home",
         "landing_for": ["internal marketing/admin only"],
         "required_roles": {"LT Owner Access", "Website Manager", "Newsletter Manager", "System Manager"},
-        "forbidden_roles": {MARKETING_REVIEW_ROLE},
+        "forbidden_roles": {MARKETING_REVIEW_ROLE, EXTERNAL_MARKETING_BUILDER_ROLE},
+    },
+    EXTERNAL_MARKETING_WORKSPACE: {
+        "title": "External Marketing Builder",
+        "landing_for": ["external marketing builder"],
+        "required_roles": {EXTERNAL_MARKETING_BUILDER_ROLE},
+        "forbidden_roles": {
+            "System Manager",
+            "Website Manager",
+            "Item Manager",
+            "LT Owner Access",
+            "LT Accountant Access",
+            "LT Maintenance Admin Access",
+            MARKETING_REVIEW_ROLE,
+        },
     },
     MAINTENANCE_WORKSPACE: {
         "title": "Maintenance Home",
@@ -170,6 +193,7 @@ def run() -> dict[str, Any]:
         "desk_personas": _persona_report(failures),
         "workspaces": _workspace_report(failures),
         "external_marketing": _external_marketing_report(failures),
+        "external_marketing_builder": _external_marketing_builder_report(failures),
         "maintenance": _maintenance_report(failures),
         "customer_portal": _customer_portal_report(failures),
         "indexing": _indexing_report(),
@@ -280,11 +304,36 @@ def _external_marketing_report(failures: list[str]) -> dict[str, Any]:
 
     return {
         "role": MARKETING_REVIEW_ROLE,
+        "purpose": "review-only public marketing packet access",
         "desk_access": boundary.get("desk_access"),
         "review_route": MARKETING_REVIEW_ROUTE,
         "docperm_rows": frappe.db.count("DocPerm", {"role": MARKETING_REVIEW_ROLE}),
         "forbidden_doctypes_checked": boundary.get("forbidden_doctypes"),
-        "indexing_authority": "none; no Desk, no Website Manager, no Website records, no Search Console path",
+        "indexing_authority": "none; this review role has no Desk, no Website Manager, no Website records, no Search Console path",
+    }
+
+
+def _external_marketing_builder_report(failures: list[str]) -> dict[str, Any]:
+    boundary = builder_role_boundary()
+    if not boundary.get("ok"):
+        failures.extend(boundary.get("failures") or [])
+    if boundary.get("desk_access") != 1:
+        failures.append(f"{EXTERNAL_MARKETING_BUILDER_ROLE} must grant controlled Desk access")
+
+    docperm = boundary.get("docperm") or {}
+    expected_doctypes = {"Web Page", "Website Item", "Web Template", "Website Theme", TRACKING_SETTINGS_DOCTYPE}
+    for doctype in sorted(expected_doctypes - set(docperm)):
+        failures.append(f"{EXTERNAL_MARKETING_BUILDER_ROLE} missing controlled DocPerm for {doctype}")
+
+    return {
+        "role": EXTERNAL_MARKETING_BUILDER_ROLE,
+        "purpose": "controlled landing-page and tracking settings access",
+        "workspace": EXTERNAL_MARKETING_WORKSPACE,
+        "desk_access": boundary.get("desk_access"),
+        "allowed_doctypes": sorted(docperm),
+        "landing_route_prefixes": boundary.get("landing_route_prefixes"),
+        "forbidden_doctypes_checked": boundary.get("forbidden_doctypes"),
+        "indexing_authority": "can update approved tracking IDs, landing pages, and product-page marketing content; no pricing, variants, orders, payments, customers, files, raw Website Settings, or Search Console authority",
     }
 
 
@@ -327,9 +376,9 @@ def _customer_portal_report(failures: list[str]) -> dict[str, Any]:
 
 def _indexing_report() -> dict[str, str]:
     return {
-        "status": "parked",
-        "rule": "No Search Console submission, sitemap submission, reindex request, or external marketing indexing work until shop is on staging and owner approves products to go live.",
-        "marketing_company": "review-only public doorway; no ERPNext Desk or indexing authority",
+        "status": "live-ready",
+        "rule": "Search Console, sitemap submission, reindex requests, and paid-tracking work are allowed after owner approval for launch/campaign execution.",
+        "marketing_company": "review-only packet access and separate controlled builder access; builder can manage landing pages, product-page marketing content, and approved tracking IDs without pricing/order/payment/customer authority",
     }
 
 

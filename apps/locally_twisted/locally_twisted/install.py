@@ -5,6 +5,9 @@ import frappe
 
 from locally_twisted.seed.sync_contact_intake_backend import execute as sync_contact_intake_backend
 from locally_twisted.seed.sync_customer_portal import execute as sync_customer_portal
+from locally_twisted.seed.sync_external_marketing_builder_access import (
+    execute as sync_external_marketing_builder_access,
+)
 
 REQUIRED_INSTALL_ROLES = (
     "LT Owner Access",
@@ -17,6 +20,7 @@ def after_install() -> None:
     ensure_required_roles()
     sync_contact_intake_backend(commit=False)
     sync_customer_portal(commit=False)
+    sync_external_marketing_builder_access(commit=False)
 
 
 def after_migrate() -> None:
@@ -24,6 +28,7 @@ def after_migrate() -> None:
     ensure_required_roles()
     sync_contact_intake_backend(commit=False)
     sync_customer_portal(commit=False)
+    sync_external_marketing_builder_access(commit=False)
 
 
 def ensure_required_roles() -> None:

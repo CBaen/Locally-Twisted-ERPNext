@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "creation": "2026-06-10 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "google_section",
+  "ga4_measurement_id",
+  "gtm_container_id",
+  "google_ads_conversion_id",
+  "google_ads_purchase_label",
+  "google_ads_lead_label",
+  "meta_section",
+  "meta_pixel_id",
+  "notes"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Tracking Enabled"
+  },
+  {
+   "fieldname": "google_section",
+   "fieldtype": "Section Break",
+   "label": "Google Tracking"
+  },
+  {
+   "description": "GA4 Measurement ID, for example G-XXXXXXXXXX.",
+   "fieldname": "ga4_measurement_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GA4 Measurement ID",
+   "length": 32
+  },
+  {
+   "description": "Google Tag Manager container ID, for example GTM-XXXXXXX.",
+   "fieldname": "gtm_container_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GTM Container ID",
+   "length": 32
+  },
+  {
+   "description": "Google Ads conversion ID, for example AW-123456789.",
+   "fieldname": "google_ads_conversion_id",
+   "fieldtype": "Data",
+   "label": "Google Ads Conversion ID",
+   "length": 32
+  },
+  {
+   "description": "Google Ads conversion label for paid ecommerce purchases.",
+   "fieldname": "google_ads_purchase_label",
+   "fieldtype": "Data",
+   "label": "Google Ads Purchase Label",
+   "length": 128
+  },
+  {
+   "description": "Google Ads conversion label for successful lead or quote submissions.",
+   "fieldname": "google_ads_lead_label",
+   "fieldtype": "Data",
+   "label": "Google Ads Lead Label",
+   "length": 128
+  },
+  {
+   "fieldname": "meta_section",
+   "fieldtype": "Section Break",
+   "label": "Meta Tracking"
+  },
+  {
+   "description": "Meta Pixel ID. Direct Meta loading is not enabled by default; use GTM or a later approved Meta gate.",
+   "fieldname": "meta_pixel_id",
+   "fieldtype": "Data",
+   "label": "Meta Pixel ID",
+   "length": 32
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Marketing Notes"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-06-10 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Locally Twisted",
+ "name": "LT Marketing Tracking Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "LT External Marketing Builder",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -72,11 +72,19 @@ def check_hooks_include() -> None:
 
 def check_ga4_loader_source() -> None:
     source = (APP / "public" / "js" / "lt-marketing-measurement.js").read_text(encoding="utf-8")
-    assert_true("G-0Z0WY5XQRB" in source, "GA4 loader should use the verified LT measurement ID")
+    base = (APP / "templates" / "base.html").read_text(encoding="utf-8")
+    assert_true(
+        "lt-marketing-tracking-config" in base,
+        "base template should expose safe public tracking config",
+    )
+    assert_true("G-0Z0WY5XQRB" in source, "GA4 loader should preserve the verified LT measurement ID fallback")
+    assert_true("lt-marketing-tracking-config" in source, "GA4 loader should read field-based tracking config")
+    assert_true("gtmContainerId" in source, "measurement loader should support GTM container IDs")
+    assert_true("googleAdsConversionId" in source, "measurement loader should support Google Ads conversion IDs")
     assert_true("hasAcceptedOptional" in source, "GA4 loader must honor optional cookie/tracking consent")
     assert_true("lt-cookie-consent" in source, "GA4 loader must react when a visitor accepts tracking")
     assert_true("send_page_view" in source, "GA4 loader should send a page view after consent")
-    assert_true("fbq(" not in source, "GA4 loader must not include Meta Pixel before Meta is configured")
+    assert_true("fbq(" not in source, "measurement loader must not include direct Meta Pixel before Meta is approved")
 
 
 def check_contact_submit_integration() -> None:

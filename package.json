@@ -37,6 +37,7 @@
     "test:customer-login-visual": "scripts\\verify\\run_playwright.cmd test scripts/verify/customer_login_visual.spec.js --reporter=line",
     "test:human-access": "python scripts/verify/human_access_silo_matrix.py",
     "test:marketing-review-access": "python scripts/verify/marketing_review_access_boundary.py",
+    "test:external-marketing-builder-access": "python scripts/verify/external_marketing_builder_access_contract.py",
     "test:public-access-guard": "python scripts/verify/public_access_guard_contract.py",
     "test:product-quote-first": "scripts\\verify\\run_playwright.cmd test scripts/verify/product_quote_first_experience.spec.js --reporter=line",
     "test:product-prices": "python scripts/verify/product_variant_price_contract.py && python scripts/verify/catalog_price_modifier_contract.py",
