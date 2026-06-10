@@ -10,6 +10,49 @@ This is a planning lane only. It does not approve Google Ads, Meta, billing,
 provider access, DNS, Search Console, Stripe, staging, live, customer-data, or
 ERPNext production-record mutation.
 
+## 2026-06-10 Launch Access Update
+
+GL reports the Google-side dashboards are logged in for the immediate reindex,
+ads, and analytics push. Use that access for read-only inventory and approved
+Google Search Console submission work.
+
+Meta Business Manager is blocked until the Facebook/Meta password is recovered.
+Do not search browser password stores, OS credential stores, session files,
+cookies, local storage, or saved-password exports for Facebook credentials.
+Keep Meta Business inventory queued until GL can provide or recover access.
+
+Current verified live-site state:
+
+- `https://locallytwisted.com/robots.txt` returns 200 and allows crawl.
+- `https://locallytwisted.com/sitemap.xml` returns 200 and lists 26 canonical
+  public URLs on `https://locallytwisted.com`.
+- `www.locallytwisted.com` redirects to the canonical host.
+- Live SEO contract passed 13/13 on 2026-06-10.
+- Live search contract passed 4/4 on 2026-06-10.
+- Live measurement is still no-send: `lt-marketing-bridge` captures campaign
+  attribution into forms, but GA4/GTM/Google Ads/Meta tags were not found on
+  the live homepage.
+- Google Search Console sitemap submission completed on 2026-06-10 from the
+  logged-in `locallytwisted@gmail.com` domain property. Submitted URL:
+  `https://locallytwisted.com/sitemap.xml`. Search Console reported `Success`,
+  last read `Jun 10, 2026`, and 26 discovered pages.
+
+Immediate safe execution order:
+
+1. Treat Search Console sitemap submission as complete and monitor the
+   submitted sitemap row for crawl/indexing changes.
+2. Use URL Inspection for priority launch URLs: `/`, `/shop`, `/shop-items`,
+   `/shop-items/bouquets`, `/shop-items/arches`, `/shop-items/garlands`,
+   `/contact`, `/portfolio`, and `/balloon-twisting-and-face-painting`.
+3. In Google Ads account `437-723-0551`, inventory access, billing, conversion
+   actions, tag diagnostics, final URLs, policy issues, and broken destinations
+   before changing campaigns.
+4. In GA4/Google tag surfaces, confirm whether `G-0Z0WY5XQRB` is still the
+   owned/active measurement ID before adding any live tag to the ERPNext site.
+5. Prepare campaign repair/relaunch proposals, but do not publish spend,
+   budgets, conversion actions, billing changes, or access changes without
+   explicit GL approval.
+
 Conversation recall status for the ENB replacement terms:
 `coverage_incomplete`. Treat the current repo docs and provider dashboards as
 the evidence source, not conversation memory.

@@ -99,6 +99,19 @@ HTTP `404` destination failure. Meta evidence is not dashboard-complete: there
 is Facebook Business Manager email evidence and ENB/HighLevel
 `Facebook Painting Leads` evidence, but no verified Meta ad account ID,
 campaign export, pixel/dataset, lead-form, partner, or billing inventory yet.
+2026-06-10 launch update: GL reports Google-side tools are logged in for the
+reindex/ads/analytics push, but Meta Business Manager is not available because
+the Facebook/Meta password still needs recovery. Keep Meta Business inventory
+queued and blocked until credential recovery; do not search saved password
+stores or treat old Gmail/Drive evidence as dashboard proof. Live crawl
+readiness is green: production robots/sitemap respond on `locallytwisted.com`,
+`www` redirects to the canonical host, live SEO contract passed 13/13, live
+search contract passed 4/4, and the sitemap currently lists 26 canonical public
+URLs. Google Search Console sitemap submission and URL Inspection can proceed
+from the logged-in dashboard; sitemap submission completed successfully on
+2026-06-10. Google Ads/Analytics inventory can proceed, but
+live campaign spend, budget, conversion, tag, billing, or access mutations still
+need explicit action approval.
 Next safe step is authenticated provider-dashboard inventory using
 `capabilities/recipes/ad-account-takeover-provider-control.md`; do not remove
 ENB/agency access, billing, pixels/tags, lead forms, tracking phone numbers, or
