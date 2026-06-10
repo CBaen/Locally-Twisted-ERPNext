@@ -2,13 +2,17 @@
 
 ## Status
 
-Inventory complete. Provider deletion is blocked until the exact target name is
-confirmed.
+Cleanup complete. `bench-39776` and `locallytwisted.v.frappe.cloud` are no
+longer present in active Frappe Cloud site or bench-group listings.
 
 ## User Direction
 
 GL verified that `https://locallytwisted.com` is correct and approved deletion
 of the Frappe bench that is no longer needed for staging cleanup.
+
+Exact approved instruction:
+
+`Delete site locallytwisted.v.frappe.cloud and bench group bench-39776. Do not delete bench-40102.`
 
 ## Current Provider Inventory
 
@@ -63,11 +67,42 @@ Likely delete target:
 - Bench: `bench-39776-000016-f94-virginia`
 - Title: `Version 15 (Localisation) - Cloned`
 
-## Required Final Approval
+## Cleanup Execution
 
-Before deletion, GL must approve the exact target name:
+Completed on 2026-06-10:
 
-`Delete site locallytwisted.v.frappe.cloud and bench group bench-39776. Do not delete bench-40102.`
+- Archived/dropped site `locallytwisted.v.frappe.cloud` through Frappe Cloud.
+- Confirmed the stale URL returns Frappe Cloud `404` for `/` and
+  `/api/method/frappe.ping`.
+- Confirmed active site inventory has zero records for
+  `locallytwisted.v.frappe.cloud` or group `bench-39776`.
+- Attempted release-group deletion for `bench-39776`; Frappe Cloud initially
+  blocked it because stale app source `payments:develop` was incompatible with
+  the Version 15 bench.
+- Confirmed `bench-39776` had zero active sites before app cleanup.
+- Removed the stale `payments` app reference from the empty obsolete release
+  group only.
+- Re-ran release-group deletion for `bench-39776`; API call succeeded.
+
+## Final Proof
+
+Read-only Frappe Cloud API proof after cleanup:
+
+| Check | Result |
+|---|---|
+| Active target sites for `locallytwisted.v.frappe.cloud` / `bench-39776` | 0 |
+| Active target bench groups named `bench-39776` | 0 |
+| Protected bench group `bench-40102` | Active, 1 site, 5 apps |
+| Protected live host | `locallytwisted.com` on `bench-40102` |
+
+Route proof after cleanup:
+
+- `https://locallytwisted.com/api/method/frappe.ping` returned `200`.
+- `https://locallytwisted.com/thank-you?order=SAL-ORD-2026-00043` returned
+  `200`, contained `SAL-ORD-2026-00043`, and contained `Payment Received`.
+- `https://locallytwisted.v.frappe.cloud/api/method/frappe.ping` returned
+  Frappe Cloud `404`.
+- `https://locallytwisted.v.frappe.cloud/` returned Frappe Cloud `404`.
 
 ## Source Protocol
 
