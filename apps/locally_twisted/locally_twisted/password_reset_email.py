@@ -4,6 +4,9 @@ from __future__ import annotations
 import html
 import json
 import re
+import quopri
+from email import policy
+from email.parser import Parser
 from types import SimpleNamespace
 from typing import Any
 
@@ -159,11 +162,12 @@ def validate_password_reset_email_queue(doc: Any) -> None:
     subject = _normalize_spaces(getattr(doc, "subject", "") or "")
     message = cstr(getattr(doc, "message", "") or getattr(doc, "content", "") or "")
     plain = _plain_text(message)
+    recipients = _queue_recipients(doc)
 
     if not _looks_like_password_reset(subject, plain, message):
         return
 
-    generic_reasons = _generic_password_reset_reasons(subject, plain, message)
+    generic_reasons = _generic_password_reset_reasons(subject, plain, message, recipients)
     if not generic_reasons:
         return
 
@@ -281,18 +285,25 @@ def _looks_like_password_reset(subject: str, plain: str, message: str) -> bool:
     )
 
 
-def _generic_password_reset_reasons(subject: str, plain: str, message: str) -> list[str]:
+def _generic_password_reset_reasons(
+    subject: str, plain: str, message: str, recipients: list[str] | None = None
+) -> list[str]:
     reasons: list[str] = []
     clean_subject = _strip_subject_prefix(subject)
     if clean_subject.strip().lower() == "password reset":
         reasons.append("subject is generic 'Password Reset'")
     combined = f"{plain}\n{message}"
+    combined_lower = combined.lower()
     for snippet in GENERIC_RESET_SNIPPETS:
-        if snippet.lower() in combined.lower():
+        if snippet.lower() in combined_lower:
             reasons.append(f"contains generic/forbidden copy {snippet!r}")
-    if "Locally Twisted" not in combined:
+    if "locally twisted" not in combined_lower:
         reasons.append("does not identify Locally Twisted")
-    if "Account email" not in combined:
+    account_visible = "account email" in combined_lower or any(
+        cstr(recipient or "").strip().lower() and cstr(recipient).strip().lower() in combined_lower
+        for recipient in (recipients or [])
+    )
+    if not account_visible:
         reasons.append("does not show the account email")
     return reasons
 
@@ -305,8 +316,50 @@ def _strip_subject_prefix(subject: str) -> str:
 
 
 def _plain_text(value: str) -> str:
-    text = html.unescape(re.sub(r"<[^>]+>", " ", cstr(value or "")))
+    variants = _message_text_variants(value)
+    text = "\n".join(variants)
+    text = html.unescape(re.sub(r"<[^>]+>", " ", text))
     return _normalize_spaces(text)
+
+
+def _message_text_variants(value: str) -> list[str]:
+    raw = cstr(value or "")
+    variants = [raw]
+    try:
+        decoded = quopri.decodestring(raw).decode("utf-8", "replace")
+        if decoded and decoded not in variants:
+            variants.append(decoded)
+    except Exception:
+        pass
+    if "content-type:" in raw.lower() or "mime-version:" in raw.lower():
+        try:
+            msg = Parser(policy=policy.default).parsestr(raw)
+            parts = msg.walk() if msg.is_multipart() else [msg]
+            for part in parts:
+                if part.get_content_maintype() == "multipart":
+                    continue
+                content_type = part.get_content_type()
+                if content_type not in {"text/plain", "text/html"}:
+                    continue
+                try:
+                    content = part.get_content()
+                except Exception:
+                    payload = part.get_payload(decode=True)
+                    content = payload.decode(part.get_content_charset() or "utf-8", "replace") if payload else ""
+                if content and content not in variants:
+                    variants.append(content)
+        except Exception:
+            pass
+    return variants
+
+
+def _queue_recipients(doc: Any) -> list[str]:
+    recipients: list[str] = []
+    for row in getattr(doc, "recipients", None) or []:
+        recipient = getattr(row, "recipient", None) or getattr(row, "email", None)
+        if recipient:
+            recipients.append(cstr(recipient).strip().lower())
+    return recipients
 
 
 def _normalize_spaces(value: str) -> str:
