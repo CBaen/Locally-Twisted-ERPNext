@@ -430,9 +430,9 @@ def _render_reset_email(account_email: str, reset_link: str, preview: bool) -> d
     account_email_html = html.escape(account_email)
     reset_link_html = html.escape(reset_link, quote=True)
     preview_notice = ""
-    subject = "Reset your Locally Twisted password"
+    subject = "Reset your Locally Twisted website password"
     if preview:
-        subject = "[PREVIEW] Reset your Locally Twisted password"
+        subject = "[PREVIEW] Reset your Locally Twisted website password"
         preview_notice = """
         <div style="margin:0 0 22px 0;padding:14px 16px;border-left:4px solid #b08d57;background:#fff7e6;color:#1c2837;font-family:Lato, Arial, sans-serif;font-size:14px;line-height:1.5;">
           <strong>Preview only.</strong> This shows the Locally Twisted reset email style. The button uses a fake preview link and will not reset any account.
@@ -450,7 +450,7 @@ def _render_reset_email(account_email: str, reset_link: str, preview: bool) -> d
             <tr>
               <td style="background:#101b2d;padding:30px 32px 26px 32px;border-bottom:4px solid #b08d57;">
                 <div style="font-family:Lato, Arial, sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#d9bf82;font-size:12px;font-weight:700;">Locally Twisted</div>
-                <h1 style="margin:10px 0 0 0;color:#fffaf0;font-family:'Cormorant Garamond', Georgia, serif;font-size:34px;line-height:1.08;font-weight:600;">Reset your password</h1>
+                <h1 style="margin:10px 0 0 0;color:#fffaf0;font-family:'Cormorant Garamond', Georgia, serif;font-size:34px;line-height:1.08;font-weight:600;">Reset your Locally Twisted website password</h1>
                 <p style="margin:10px 0 0 0;color:#d9e1ea;font-size:15px;line-height:1.5;">Secure account access for locallytwisted.com</p>
               </td>
             </tr>
@@ -459,7 +459,8 @@ def _render_reset_email(account_email: str, reset_link: str, preview: bool) -> d
                 {preview_notice}
                 <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#162033;">Dear {account_email_html},</p>
                 <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#162033;">A password reset was requested for your Locally Twisted website account.</p>
-                <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:#162033;">Use the secure button below to choose your password and sign in.</p>
+                <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:#162033;">Use the secure button below to choose a new password for this Locally Twisted website account.</p>
+                <p style="margin:0 0 18px 0;font-size:14px;line-height:1.6;color:#4b5563;">This link only resets the Locally Twisted website account for {account_email_html}. It does not reset an email inbox, Google account, Facebook account, or any other login.</p>
                 <p style="margin:0 0 26px 0;">
                   <a href="{reset_link_html}" style="display:inline-block;background:#8f1f3b;color:#fffaf0;text-decoration:none;font-family:Lato, Arial, sans-serif;font-size:15px;font-weight:700;letter-spacing:.02em;padding:13px 20px;border:1px solid #8f1f3b;">Reset your Locally Twisted password</a>
                 </p>

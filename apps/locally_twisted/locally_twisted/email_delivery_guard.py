@@ -7,6 +7,7 @@ from typing import Any
 import frappe
 
 from locally_twisted.communication_copy_policy import routed_alias_copy_risks
+from locally_twisted.password_reset_email import validate_password_reset_email_queue
 
 
 SMTP_SENDER_WITH_ROUTED_ALIAS_RISK = "locallytwisted@gmail.com"
@@ -15,6 +16,7 @@ SMTP_SENDER_WITH_ROUTED_ALIAS_RISK = "locallytwisted@gmail.com"
 def validate_email_queue_delivery(doc: Any, method: str | None = None) -> None:
     """Block known Cloudflare Email Routing alias loops before SMTP handoff."""
     apply_site_email_subject_prefix(doc)
+    validate_password_reset_email_queue(doc)
 
     sender = _sender_email(doc)
     if sender != SMTP_SENDER_WITH_ROUTED_ALIAS_RISK:
