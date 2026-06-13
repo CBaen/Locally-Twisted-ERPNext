@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Current live marketing/vendor access closeout as of 2026-06-13: the ENB
+marketing account reset/access slice is complete. The two current client asks
+were handled as controlled external marketing builder access plus one actual
+branded password-reset send to `marketing@exploringnotboring.com`. Source is
+`456c9a3 Fix branded reset email queue guard decoding`; app mirror live branch
+commit is `8b10a92274f1699eeb89713dff347f66a0db75f3`; Frappe Cloud patch
+pipeline `eutojcn0ei` succeeded and activated bench `bench-40102-000037-f4v`.
+The actual reset Email Queue row is `e4aqh31606`, status `Sent`, sender
+`Locally Twisted <accounting@locallytwisted.com>`, subject `Reset your Locally
+Twisted website password`, recipient `marketing@exploringnotboring.com`. A safe
+non-consuming reset-page check returned HTTP 200 on `locallytwisted.com` and the
+reset key remained present afterward. Do not print, store, or re-test the token.
+Do not resend unless ENB/Jeff/GL asks for a new reset. Current handoff:
+`workstreams/external-marketing-builder-access-reset-2026-06-13.md`; capability:
+`capabilities/recipes/erpnext-external-marketing-access-reset.md`; failure
+recipe: `capabilities/failures/frappe-password-reset-silent-generic-drift.md`.
+
+
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current
 full-repo source point for staged behavior is

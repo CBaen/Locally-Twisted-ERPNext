@@ -7,10 +7,10 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-17
+last_verified: 2026-06-13
 evidence_quality: direct
-successful_uses: 5
-failed_uses: 3
+successful_uses: 6
+failed_uses: 4
 regressions: 0
 depends_on:
   - external-document-audience-contract
@@ -92,6 +92,11 @@ privacy copy.
 - Checkout email copy must stay transactional: invoices, receipts, support, and
   order-related information. Marketing email requires newsletter or marketing
   opt-in and must not be implied by ordinary checkout email collection.
+- Known-account password reset emails for external vendors must use the Locally
+  Twisted branded reset template/helper, identify the Locally Twisted website
+  account, show the account email, link only to `https://locallytwisted.com`,
+  explain what other accounts are not reset, and avoid generic Frappe/Built by
+  Cameron/Administrator copy.
 
 ## Implementation Surfaces
 
@@ -106,6 +111,8 @@ privacy copy.
 - `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_cleanup.py`
 - `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_email_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_contact_points_contract.py`
+- `apps/locally_twisted/locally_twisted/password_reset_email.py`
+- `apps/locally_twisted/locally_twisted/marketing_access_reset.py`
 - `scripts/verify/book_form_repeat_email_photos.py`
 - `scripts/verify/frappe_whitelisted_client.py`
 - `scripts/verify/customer_contact_points_contract.py`
@@ -127,6 +134,8 @@ python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-new
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/customer_contact_points_contract.py
+npm run test:password-reset-template
+npm run test:marketing-access-reset
 ```
 
 When print fit changes, create a PDF from the actual queued Email Queue HTML
@@ -178,6 +187,12 @@ attachments.
 position check confirmed `/files/lt-proof-large-chrome.png` was present in the
 receipt message and recipients were the customer plus `locallytwisted@gmail.com`.
 
+2026-06-13 live external-account reset receipt: branded Locally Twisted reset
+Email Queue `e4aqh31606` sent to `marketing@exploringnotboring.com` from
+`Locally Twisted <accounting@locallytwisted.com>` after source/app deploy
+`456c9a3` / `8b10a92`; safe reset-page check returned HTTP 200 and did not
+consume the key.
+
 ## Failure Modes
 
 - Treating `Email Queue.status = Sent` as inbox delivery proof. It only proves
@@ -224,3 +239,7 @@ receipt message and recipients were the customer plus `locallytwisted@gmail.com`
 - Adding a new sendmail surface without `document_copy_kwargs(...)`, explicit
   primary recipients, and a verifier marker.
 - Treating checkout email collection as silent marketing-list consent.
+- Treating a known-account password reset as complete because public forgot-password UI returned success.
+- Letting Frappe generic reset copy, Administrator signature, or Built by Cameron wording reach an external vendor account reset.
+- Checking only pre-send HTML and missing MIME/quoted-printable encoded Email Queue content drift.
+- Printing or committing a real password-reset token/full URL.

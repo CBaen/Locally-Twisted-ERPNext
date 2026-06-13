@@ -8,6 +8,49 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+
+## 2026-06-13 - External marketing access uses a controlled builder lane plus branded fail-loud reset proof
+
+**Decision:** Exploring Not Boring / outside marketing access for Locally
+Twisted is not broad website/admin access. Use explicit least-privilege lanes:
+`LT Marketing Review Access` for review-only Website Users, and `LT External
+Marketing Builder` for the controlled builder Desk lane. Known-account reset
+emails must go through the Locally Twisted branded, fail-loud reset helper and
+must be proven with current Email Queue evidence before claiming they were sent.
+
+**Reasoning:** The client needed a real reset email, not a generic or silent
+forgot-password flow. Frappe's public reset endpoint intentionally avoids account
+enumeration and can look successful from the UI without giving an operator proof
+that the known vendor account received the email. A marketing vendor also needs
+controlled page/tracking work, not System Manager, Website Manager, Item Manager,
+Sales, Accounts, customer, order, payment, file, log, or Email Queue access.
+
+**Implementation boundary:** Source and live app now include the controlled
+external marketing builder role/workspace/permission guards, the
+`marketing_vendor_access` sync helper, the fail-loud `marketing_access_reset`
+helper, the branded `Locally Twisted Password Reset` template, and an
+`Email Queue.before_insert` guard that blocks generic Frappe reset copy. The
+final guard decodes raw, quoted-printable, and parsed MIME text/html variants so
+queued encoded branded mail can pass while generic mail remains blocked.
+
+**Receipts:** Source `456c9a3`; app mirror live branch
+`8b10a92274f1699eeb89713dff347f66a0db75f3`; Frappe Cloud pipeline `eutojcn0ei`
+Success; active bench `bench-40102-000037-f4v`; actual reset Email Queue
+`e4aqh31606` `Sent` to `marketing@exploringnotboring.com` from `Locally Twisted
+<accounting@locallytwisted.com>` with subject `Reset your Locally Twisted
+website password`. Safe reset-page probe returned HTTP `200` and did not consume
+the reset key. Handoff:
+`workstreams/external-marketing-builder-access-reset-2026-06-13.md`.
+Capability:
+`capabilities/recipes/erpnext-external-marketing-access-reset.md`. Failure
+recipe:
+`capabilities/failures/frappe-password-reset-silent-generic-drift.md`.
+
+**Decided by:** Guiding Light/client need for real ENB access/reset completion;
+Hermes implementation, live deployment, send, and verification on 2026-06-13.
+
+---
+
 ## 2026-05-25 - Delivery-only fulfillment is line-level, not whole-cart
 
 **Decision:** Products in Garlands, Arches, Columns, Balloon Drops, and Photo

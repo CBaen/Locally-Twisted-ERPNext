@@ -36,7 +36,7 @@ Out of scope until explicitly approved:
 
 ## Current Stage
 
-Stage: `claimed` / documentation lane on local `main`.
+Stage: `access/reset closeout complete` as of 2026-06-13; marketing/ad/provider lanes remain approval-gated.
 
 Repo: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`
 
@@ -76,6 +76,7 @@ routes if the ad plan actually needs them.
 | Jeff/ENB communication | `workstreams/jeff-enb-transition-communication-lane-2026-06-08.md` | complete |
 | Plan-deepen adjustment | `workstreams/enb-replacement-plan-deepen-2026-06-09.md` | complete: separates 72-hour lead rescue from package tracking bridge and long-term SEO/AEO/GEO |
 | Root decision packet | `MARKETING-REPLACEMENT-AND-SHOP-GO-LIVE-PLAN-2026-06-08.md` | created by controller |
+| External builder access + reset closeout | `workstreams/external-marketing-builder-access-reset-2026-06-13.md` | complete: controlled builder lane deployed; branded reset Email Queue `e4aqh31606` Sent |
 
 ## Local Implementation Notes - 2026-06-09
 
@@ -102,6 +103,31 @@ Current verified catalog split remains mixed, not quote-only:
 - 21 published quote-first Website Items.
 
 ## Approval Gates
+
+
+## Live Access And Reset Closeout - 2026-06-13
+
+Completed the current ENB account-access ask without granting broad admin/site
+control:
+
+- added/deployed controlled `LT External Marketing Builder` access;
+- kept business records, checkout, pricing, customers, orders, files, logs, and
+  Email Queue out of the vendor lane;
+- deployed branded Locally Twisted password-reset template and generic-copy
+  Email Queue guard;
+- patched the guard to decode MIME/quoted-printable queued content instead of
+  loosening the generic-blocker;
+- sent exactly one actual reset email to `marketing@exploringnotboring.com`;
+- verified Email Queue `e4aqh31606` as `Sent` and safely checked the reset page
+  without consuming the key.
+
+Deployment receipt: source `456c9a3`, app mirror
+`8b10a92274f1699eeb89713dff347f66a0db75f3`, Frappe Cloud patch pipeline
+`eutojcn0ei`, active bench `bench-40102-000037-f4v`.
+
+This does not authorize ENB removal, ad account mutations, budget changes,
+customer-data export, live tracking changes, or another reset send.
+
 
 ### Gate A - Local Proof Packet
 

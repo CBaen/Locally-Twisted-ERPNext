@@ -58,6 +58,9 @@ Built before the frame reset; some still active, some legacy reference.
 | `scripts/verify/lead_backend_intake_parity.py` | Current verifier for Lead service taxonomy, conditional fields, submit mapping, and LT Lead Photo wiring | Active |
 | `scripts/setup/sync_backend_workspaces.py` | Current idempotent sync for simplified Owner/Manager/Employee workspace labels and Sales Order booking calendar | Active |
 | `scripts/verify/backend_workspace_parity.py` | Current verifier for simplified workspace labels and booking calendar wiring | Active |
+| `scripts/setup/sync_marketing_vendor_access.py` | Approved operator helper for syncing known external marketing vendor user into review or builder lane | Active; approval-gated for live user changes |
+| `scripts/setup/send_marketing_access_reset.py` | Fail-loud dry-run/preview/send helper for known external marketing account password resets | Active; real send requires explicit approval |
+| `scripts/setup/sync_password_reset_template.py` | Installs/verifies the branded Locally Twisted password-reset Email Template | Active |
 | `scripts/fix/patch_nginx_socketio_origin.py` | nginx /socket.io/ Origin pass-through patch | Active; persistence via compose override is P2 backlog |
 | `scripts/translate/translate_dashboard_review.py` | Dashboard Reviewed Item DocType (early proof-of-pattern) | Done; no current Phase depends on it |
 
@@ -75,6 +78,7 @@ Built before the frame reset; some still active, some legacy reference.
 | File | Purpose |
 |------|---------|
 | `workstreams/launch-v1-success-contract.md` | V1 launch scope contract: website-first quality, buyer priority, commercial lanes, quality targets, deferred 10-year ERPNext maturity, and immediate redesign sequence. |
+| `workstreams/external-marketing-builder-access-reset-2026-06-13.md` | ENB/marketing controlled builder access and branded password-reset closeout: source/app deploy hashes, Email Queue `e4aqh31606`, reset-page non-consuming proof, and future stop rules. |
 | `workstreams/coordination-safety-pilot-2026-05-21.md` | Protected child/client repo pilot for the neutral multi-agent coordination workflow; no product or release approval. |
 | `workstreams/website-launch.md` | Launch controller board and verification gates. |
 | `workstreams/domain-provider-reindex-cleanup-2026-05-19.md` | Current provider-chain and reindex cleanup handoff: GoDaddy registrar, Cloudflare authoritative DNS/email routing, Frappe Cloud hosting, Hetzner/legacy_source old-reference status, Bluehost cleanup target, and live sitemap/canonical vanity-host blocker. |

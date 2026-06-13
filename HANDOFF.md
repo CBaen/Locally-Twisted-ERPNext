@@ -2,13 +2,30 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-05-17 (Codex - variant media restore pointer)
+**Last updated:** 2026-06-13 (Hermes - ENB builder access and branded reset email closeout)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-06-13 - ENB access/reset closeout):**
+- Active closeout handoff:
+  `workstreams/external-marketing-builder-access-reset-2026-06-13.md`.
+- ENB/marketing access is now controlled through `LT External Marketing Builder`,
+  not broad System Manager/Website Manager/Item Manager access.
+- Actual branded password-reset email was sent once to
+  `marketing@exploringnotboring.com`; Email Queue `e4aqh31606` is `Sent` from
+  `Locally Twisted <accounting@locallytwisted.com>` with subject `Reset your
+  Locally Twisted website password`.
+- Frappe Cloud patch pipeline `eutojcn0ei` succeeded; active bench after deploy
+  is `bench-40102-000037-f4v`; source commit `456c9a3`, app mirror commit
+  `8b10a92274f1699eeb89713dff347f66a0db75f3`.
+- The reset page was checked safely without consuming the token: HTTP `200`,
+  reset-password page context present, and the reset key remained on the User.
+- Do not record, paste, or click through the token/full reset URL. Do not resend
+  unless the client/operator asks for a new reset.
 
 **Current-session delta (2026-05-17 - variant media restore):**
 - Active repair handoff:

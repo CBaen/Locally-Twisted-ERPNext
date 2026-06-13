@@ -91,6 +91,7 @@ Workflows. Multi-step. Clear start and finish.
 - [customer-email-delivery-branding-contract](recipes/customer-email-delivery-branding-contract.md) - keep public inquiry email branding, company-copy routing, role inboxes, and Email Queue proof aligned without confusing sent status for delivery.
 - [customer-client-portal-contract](recipes/customer-client-portal-contract.md) - keep invite-only customer/client account routes, safe summaries, portal actions, file registration, organization access, visible logout exits, and branded account shell aligned.
 - [erpnext-external-review-access](recipes/erpnext-external-review-access.md) - give outside website reviewers a no-Desk `Website User` lane with explicit narrow role membership, protected public review route, and backend record denial.
+- [erpnext-external-marketing-access-reset](recipes/erpnext-external-marketing-access-reset.md) - create/audit controlled external marketing builder access and fail-loud branded reset emails without broad admin roles or token leakage.
 - [erpnext-owner-business-access-api](recipes/erpnext-owner-business-access-api.md) - expose owner/support business actions through provider-neutral DTOs, phone-first local UI, fake local data, and assistant-ready read/write boundaries without raw ERPNext record access.
 - [erpnext-inquiry-photo-delivery-contract](recipes/erpnext-inquiry-photo-delivery-contract.md) - keep public inquiry photo uploads aligned across Lead Files, CRM photo rows, customer count-only confirmations, and owner-only Email Queue attachment refs.
 - [erpnext-business-automation-index](recipes/erpnext-business-automation-index.md) - index ERPNext/Frappe business automations by connected, partially connected, required-missing, useful-missing, fake-data, and loud-failure status.
@@ -197,6 +198,7 @@ pattern that feels familiar.
 - [webshop-guest-party-cleanup-regression](failures/webshop-guest-party-cleanup-regression.md) - prevents fake-data cleanup from deleting the `Guest` anonymous Webshop Customer/Portal User/Contact chain and breaking public product pricing/variant calls.
 - [product-fulfillment-copy-lane-drift](failures/product-fulfillment-copy-lane-drift.md) - prevents product-page pickup/delivery copy from using category fallback when the Website Item runtime lane is quote-first or needs-review.
 - [ready-order-menu-product-dump](failures/ready-order-menu-product-dump.md) - prevents the public Ready-to-Order menu/search/drawer from drifting back to product lists or ERPNext/backend copy instead of Item Group category discovery.
+- [frappe-password-reset-silent-generic-drift](failures/frappe-password-reset-silent-generic-drift.md) - prevents known-account reset work from being reported from public UI success or generic Frappe copy instead of branded, current Email Queue proof.
 
 ## Evidence And Registry
 

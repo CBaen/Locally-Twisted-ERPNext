@@ -13,16 +13,20 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 **P0 ENB replacement, lead proof, and shop/payment go-live plan (2026-06-08):**
 Active controller packet is
 `workstreams/enb-replacement-shop-go-live-2026-06-08.md`; root decision packet
-is `MARKETING-REPLACEMENT-AND-SHOP-GO-LIVE-PLAN-2026-06-08.md`. Goal: replace
-ENB's useful lead-generation function with LT/BBC-owned landing URLs,
-conversion tracking, reporting, and explicit shop/payment go-live gates that
-fit the ERP-backed system. 2026-06-10 status: live ecommerce and Search Console
-sitemap submission are no longer theoretical; sitemap submission succeeded,
-Google Ads/GA4 read-only inventory is underway, and a consent-gated GA4 loader
-code slice now uses the verified `G-0Z0WY5XQRB` measurement ID. Do not mutate
-ad spend, budgets, billing, conversion actions, Google Ads/Meta access,
-customer-data exports, ENB access, or production ERPNext data without explicit
-approval.
+is `MARKETING-REPLACEMENT-AND-SHOP-GO-LIVE-PLAN-2026-06-08.md`; latest access
+closeout is
+`workstreams/external-marketing-builder-access-reset-2026-06-13.md`. Goal:
+replace ENB's useful lead-generation function with LT/BBC-owned landing URLs,
+conversion tracking, reporting, and explicit shop/payment go-live gates that fit
+the ERP-backed system. 2026-06-13 status: live ecommerce and Search Console
+sitemap submission are no longer theoretical; sitemap submission succeeded;
+Google Ads/GA4 read-only inventory is underway; the consent-gated GA4 loader
+uses verified `G-0Z0WY5XQRB`; ENB/marketing access now has a controlled `LT
+External Marketing Builder` lane; and the actual branded reset email was sent to
+`marketing@exploringnotboring.com` with Email Queue `e4aqh31606` `Sent`. Do not
+mutate ad spend, budgets, billing, conversion actions, Google Ads/Meta access,
+customer-data exports, ENB access, production ERPNext data, or send another
+reset email without explicit approval.
 
 **P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout

@@ -33,7 +33,7 @@ tags:
 Use this recipe when creating or auditing an outside reviewer account that only
 needs to review the public website, not operate ERPNext.
 
-Current LT example: `Exploring Not Boring` marketing review access.
+Current LT example: `Exploring Not Boring` marketing review access. For controlled Desk-bound vendor building/reset work, use sibling recipe `erpnext-external-marketing-access-reset.md`, not this review-only recipe.
 
 ## Contract
 
@@ -153,6 +153,7 @@ For live local HTTP proof:
   the reviewer asked for "view privileges."
 - Running rollback-heavy customer/marketing verifiers in parallel and confusing
   session/user context.
+- Reusing the review-only recipe to justify broad builder/admin access; builder access has its own narrower contract and reset proof path.
 
 ## Current LT Receipt
 
