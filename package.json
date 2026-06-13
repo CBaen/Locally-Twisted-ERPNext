@@ -53,7 +53,12 @@
     "test:launch-verify": "python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke",
     "test:desk-owner": "scripts\\verify\\run_playwright.cmd test scripts/verify/owner_desk_routes.spec.js --reporter=line",
     "test:desk-personas": "scripts\\verify\\run_playwright.cmd test scripts/verify/persona_desk_routes.spec.js --reporter=line",
-    "test:owner-actions": "python scripts/setup/sync_owner_demo_data.py && scripts\\verify\\run_playwright.cmd test scripts/verify/owner_action_center.spec.js --reporter=line && python scripts/verify/owner_business_access_contract.py"
+    "test:owner-actions": "python scripts/setup/sync_owner_demo_data.py && scripts\\verify\\run_playwright.cmd test scripts/verify/owner_action_center.spec.js --reporter=line && python scripts/verify/owner_business_access_contract.py",
+    "test:marketing-access-reset": "python scripts/setup/send_marketing_access_reset.py --email marketing@exploringnotboring.com --mode builder --expected-site-url https://locallytwisted.com",
+    "send:marketing-access-reset": "python scripts/setup/send_marketing_access_reset.py --email marketing@exploringnotboring.com --mode builder --send --wait-seconds 20 --expected-site-url https://locallytwisted.com",
+    "sync:marketing-vendor-builder-access": "python scripts/setup/sync_marketing_vendor_access.py --email marketing@exploringnotboring.com --mode builder",
+    "sync:marketing-vendor-review-access": "python scripts/setup/sync_marketing_vendor_access.py --email marketing@exploringnotboring.com --mode review",
+    "preview:marketing-access-reset": "python scripts/setup/send_marketing_access_reset.py --email marketing@exploringnotboring.com --mode builder --preview-email cameron@builtbycameron.com --site-url https://locallytwisted.com --wait-seconds 20"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
