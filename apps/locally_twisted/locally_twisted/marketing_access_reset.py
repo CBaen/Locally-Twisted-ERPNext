@@ -46,6 +46,7 @@ class MarketingAccessResetFailure(Exception):
     """Raised when a password reset would otherwise fail silently."""
 
 
+@frappe.whitelist()
 def execute(
     email: str = DEFAULT_MARKETING_EMAIL,
     mode: str = "review",
@@ -69,6 +70,7 @@ def execute(
     Returns:
         JSON string. Does not expose the real password-reset token/link.
     """
+    _require_operator_if_http_request()
     send_bool = _as_bool(send)
     wait = max(0, int(wait_seconds or 0))
     interval = max(1, int(poll_interval or 3))
@@ -129,6 +131,7 @@ def execute(
     return json.dumps(report, sort_keys=True)
 
 
+@frappe.whitelist()
 def send_preview(
     preview_email: str,
     access_email: str = DEFAULT_MARKETING_EMAIL,
@@ -144,6 +147,7 @@ def send_preview(
     The button uses a clearly fake preview key and does not send, reveal, or
     consume the vendor's real reset token.
     """
+    _require_operator_if_http_request()
     preview_email = cstr(preview_email or "").strip().lower()
     access_email = cstr(access_email or "").strip().lower()
     mode = cstr(mode or "builder").strip().lower()
@@ -238,6 +242,18 @@ def _base_report(email: str, mode: str, send_requested: bool, expected_site_url:
         "queue": [],
         "failures": [],
     }
+
+
+def _require_operator_if_http_request() -> None:
+    """Require a trusted operator for HTTP/API calls, while keeping bench execute usable."""
+    if not getattr(getattr(frappe, "local", None), "request", None):
+        return
+    user = cstr(getattr(frappe.session, "user", "") or "")
+    if not user or user == "Guest":
+        frappe.throw("System Manager login required for account reset operations", frappe.PermissionError)
+    roles = set(frappe.get_roles(user) or [])
+    if user != "Administrator" and "System Manager" not in roles:
+        frappe.throw("System Manager role required for account reset operations", frappe.PermissionError)
 
 
 def _validate_mode(mode: str) -> None:

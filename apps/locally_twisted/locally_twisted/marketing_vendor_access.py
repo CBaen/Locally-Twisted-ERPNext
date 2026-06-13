@@ -34,6 +34,7 @@ class MarketingVendorAccessFailure(Exception):
     """Raised when vendor access cannot be synced safely."""
 
 
+@frappe.whitelist()
 def execute(
     email: str = DEFAULT_VENDOR_EMAIL,
     mode: str = "builder",
@@ -47,6 +48,7 @@ def execute(
     access for approved landing Web Pages, product-page marketing edits, and LT
     Marketing Tracking Settings. It is not System Manager or Website Manager.
     """
+    _require_operator_if_http_request()
     email = cstr(email or "").strip().lower()
     mode = cstr(mode or "builder").strip().lower()
     commit_bool = _as_bool(commit)
@@ -83,6 +85,18 @@ def execute(
         _log_loud_failure(report)
     print(json.dumps(report, sort_keys=True))
     return json.dumps(report, sort_keys=True)
+
+
+def _require_operator_if_http_request() -> None:
+    """Require a trusted operator for HTTP/API calls, while keeping bench execute usable."""
+    if not getattr(getattr(frappe, "local", None), "request", None):
+        return
+    user = cstr(getattr(frappe.session, "user", "") or "")
+    if not user or user == "Guest":
+        frappe.throw("System Manager login required for marketing vendor access operations", frappe.PermissionError)
+    roles = set(frappe.get_roles(user) or [])
+    if user != "Administrator" and "System Manager" not in roles:
+        frappe.throw("System Manager role required for marketing vendor access operations", frappe.PermissionError)
 
 
 def _validate(email: str, mode: str) -> None:
