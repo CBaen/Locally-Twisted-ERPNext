@@ -51,9 +51,6 @@ The password-reset template check was verify-only. It confirmed:
 
 ## Not Done
 
-- No successful push. A push attempt after rebase failed because the Kubuntu
-  shell has no working GitHub auth: HTTPS rejected credentials, `gh` is logged
-  out, SSH is denied, and no `GH_TOKEN`/`GITHUB_TOKEN` is present.
 - No staging/live/provider/DNS/payment action.
 - No email send.
 - No destructive Git reset/clean.
@@ -61,5 +58,8 @@ The password-reset template check was verify-only. It confirmed:
 
 ## Next Practical Step
 
-Authenticate GitHub for this Kubuntu shell, then push local `main` without
-force. This is still source archive, not staging or live release.
+GitHub auth was repaired on 2026-06-16 with `gh auth login` plus
+`gh auth setup-git`, and `git push origin main` advanced `origin/main` to
+`af8a382`. This is source archive, not staging or live release. The only
+remaining optional cleanup is deciding whether to keep or drop the retained
+recovery stash after confirming the archive remains clean.

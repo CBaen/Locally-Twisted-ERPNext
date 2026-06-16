@@ -10,19 +10,16 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P1 Kubuntu recovery source-archive auth blocker (2026-06-15):** Source
-cleanup after the Windows-to-Kubuntu move is reconciled locally, rebased on
-remote `5dafae7`, and committed on local `main`, but GitHub archive is blocked
-by missing Kubuntu GitHub auth. `git push origin main` failed because HTTPS
-credentials were rejected; `gh` is logged out; SSH is denied; no `GH_TOKEN` or
-`GITHUB_TOKEN` is present. Handoff:
+**P1 Kubuntu recovery aftercare (2026-06-16):** Source cleanup after the
+Windows-to-Kubuntu move is reconciled, rebased on remote `5dafae7`, and
+archived to GitHub. GitHub auth was repaired with `gh auth login` plus
+`gh auth setup-git`; `origin/main` reached `af8a382`. Handoff:
 `workstreams/kubuntu-recovery-closeout-2026-06-15.md`; reusable recipe:
 `capabilities/recipes/kubuntu-repo-recovery-cleanup.md`. This lane is source
 stability only: no staging/live/provider/DNS/payment/customer-data action. The
-next safe step is authenticate GitHub CLI/HTTPS/SSH and push local `main`
-without force. After a successful push, leave or drop the retained recovery
-stash deliberately after confirming `git status` is clean and `origin/main`
-contains the recovery commits.
+only remaining aftercare is to leave or drop the retained recovery stash
+deliberately after confirming `git status` is clean and `origin/main` contains
+the recovery commits.
 
 **P0 ENB replacement, lead proof, and shop/payment go-live plan (2026-06-08):**
 Active controller packet is

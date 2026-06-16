@@ -77,7 +77,8 @@ Final fast checks:
 
 The password-reset verifier was read/verify-only. No email was sent.
 
-Source archive blocker: after rebase onto remote `5dafae7`, `git push origin
-main` failed because the Kubuntu shell lacked working GitHub auth. Do not
-force-push or substitute file-by-file connector writes for a real source
-archive.
+Source archive note: after rebase onto remote `5dafae7`, the first push failed
+because the Kubuntu shell lacked working GitHub auth. The correct fix was
+`gh auth login`, then `gh auth setup-git`, then a normal `git push origin main`
+without force. Do not substitute file-by-file connector writes for a real
+source archive.
