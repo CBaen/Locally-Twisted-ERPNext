@@ -1,5 +1,29 @@
 # Locally Twisted - Coding Handoff
 
+Kubuntu recovery/source-stability baseline as of 2026-06-15 MDT: this is the
+first in-repo Codex cleanup pass after the host moved from Windows to Kubuntu.
+Treat it as source/archive stabilization, not staging/live release work. Local
+`main` was reconciled from `origin/main`, the reset-helper collision was
+preserved, stale Windows worktree metadata was pruned, and the working tree was
+returned clean. Recovery commits now on local `main` before the final docs
+commit: `7ad632a Preserve Kubuntu verifier and reset email guard`,
+`8b9d6f3 Classify remaining Kubuntu WIP`, `0ba474d Preserve Kubuntu browser
+and reset copy fixes`, and `23fe30a Close out Kubuntu recovery cleanup`.
+Feature handoffs:
+`workstreams/kubuntu-transition-health-2026-06-15.md`,
+`workstreams/kubuntu-transition-preservation-packet-2026-06-15.md`,
+`workstreams/kubuntu-remaining-wip-classification-2026-06-15.md`, and
+`workstreams/kubuntu-recovery-closeout-2026-06-15.md`. Final local proof
+passed `npm run test:verifier-cli`, `npm run test:nav-ia`, `node -e
+"JSON.parse(require('fs').readFileSync('package.json','utf8'))"`, and
+`npm run test:password-reset-template`. The password-reset check was
+verify-only; it did not send email. No staging, live, provider, DNS, Stripe,
+payment, or production customer action was performed. A recovery stash remains
+as an extra safety copy:
+`stash@{...}: lt kubuntu reset-helper collision preserve 2026-06-15`; future
+agents may drop it only after confirming GitHub has archived the recovery
+commits and `git status` is clean.
+
 Current live marketing/vendor access closeout as of 2026-06-13: the ENB
 marketing account reset/access slice is complete. The two current client asks
 were handled as controlled external marketing builder access plus one actual
@@ -16,7 +40,6 @@ Do not resend unless ENB/Jeff/GL asks for a new reset. Current handoff:
 `workstreams/external-marketing-builder-access-reset-2026-06-13.md`; capability:
 `capabilities/recipes/erpnext-external-marketing-access-reset.md`; failure
 recipe: `capabilities/failures/frappe-password-reset-silent-generic-drift.md`.
-
 
 Current staging owner-review state as of 2026-05-25: work restarted from
 trusted source commit `c668543 Restore trusted staging source` and the current

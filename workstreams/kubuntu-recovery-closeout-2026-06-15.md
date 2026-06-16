@@ -5,8 +5,9 @@
 The LT repo has been reconciled after the Windows-to-Kubuntu move.
 
 - Branch: `main`
-- Upstream relationship: local `main` is ahead of `origin/main` by 3 commits.
-- Working tree: clean.
+- Upstream relationship before the final documentation commit: local `main` is
+  ahead of `origin/main` by 4 commits.
+- Working tree before the final documentation commit: clean.
 - Staged changes: none.
 - Stale Windows worktree registry: pruned.
 - Branch refs: still present after prune.
@@ -14,11 +15,13 @@ The LT repo has been reconciled after the Windows-to-Kubuntu move.
 
 ## Local Commits
 
-- `b009760 Preserve Kubuntu verifier and reset email guard`
-- `a04c55d Classify remaining Kubuntu WIP`
-- `cee139b Preserve Kubuntu browser and reset copy fixes`
+- `7ad632a Preserve Kubuntu verifier and reset email guard`
+- `8b9d6f3 Classify remaining Kubuntu WIP`
+- `0ba474d Preserve Kubuntu browser and reset copy fixes`
+- `23fe30a Close out Kubuntu recovery cleanup`
 
-These commits are local only at this closeout. No push was performed.
+These commits were local only when the recovery closeout was written. The final
+documentation/source-archive commit follows this closeout in Git history.
 
 ## What Was Reconciled
 
@@ -56,6 +59,6 @@ The password-reset template check was verify-only. It confirmed:
 
 ## Next Practical Step
 
-Review and push the 3 local recovery commits when ready to archive this Kubuntu
-stabilization work to GitHub. This is still source archive, not staging or live
-release.
+Commit this documentation update and push local `main` when ready to archive
+the Kubuntu stabilization work to GitHub. This is still source archive, not
+staging or live release.

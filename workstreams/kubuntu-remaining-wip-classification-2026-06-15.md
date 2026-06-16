@@ -3,7 +3,7 @@
 ## Scope
 
 This packet classifies the dirty tree after local preservation commit
-`b009760` and the later amended commit subject
+`7ad632a` and the later rebased commit subject
 `Preserve Kubuntu verifier and reset email guard`.
 
 No broad cleanup, reset, branch deletion, push, provider action, database
@@ -15,7 +15,7 @@ this classification.
 - Branch: `main`
 - Upstream relationship: `origin/main...HEAD` is `0 1`.
 - Local preservation commit at close of the prior slice:
-  `b009760 Preserve Kubuntu verifier and reset email guard`.
+  `7ad632a Preserve Kubuntu verifier and reset email guard`.
 - Staged changes: none.
 - Remaining dirty tree: 141 modified tracked files and 1 untracked file.
 - Untracked file: `scripts/verify/run_playwright.js`.

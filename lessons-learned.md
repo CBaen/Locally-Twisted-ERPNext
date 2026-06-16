@@ -6,6 +6,26 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-15 - Separate OS-migration content from line-ending noise
+
+After the Windows-to-Kubuntu move, the repo looked larger and riskier than it
+was because real changes, stale worktree metadata, and CRLF/LF-only tracked
+file noise were mixed together. The useful triad finding was not that the
+project was in crisis; it was that broad staging would have archived noise and
+made future agents distrust the source history.
+
+**Counter-move:** after machine/OS moves, first prove the Git root, branch,
+upstream, stash/worktree state, and push side effects. Use `git diff
+--ignore-cr-at-eol` to classify real content separately from line-ending churn.
+Commit preserved collisions and behavior changes in small source commits,
+restore CRLF-only churn from HEAD, prune stale worktree metadata only after
+checking linked worktrees, and keep source archive language separate from
+staging/live release language. Use
+`capabilities/recipes/kubuntu-repo-recovery-cleanup.md` for the repeatable
+path.
+
+---
+
 ## 2026-05-22 - DB gallery rows are not enough without rendered route proof
 
 The product-gallery restoration almost passed with the backend projection green

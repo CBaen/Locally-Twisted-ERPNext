@@ -10,6 +10,16 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P1 Kubuntu recovery aftercare (2026-06-15):** Source cleanup after the
+Windows-to-Kubuntu move is reconciled locally and should be archived to GitHub
+with the final documentation commit. Handoff:
+`workstreams/kubuntu-recovery-closeout-2026-06-15.md`; reusable recipe:
+`capabilities/recipes/kubuntu-repo-recovery-cleanup.md`. This lane is source
+stability only: no staging/live/provider/DNS/payment/customer-data action. The
+only follow-up after a successful push is to leave or drop the retained recovery
+stash deliberately after confirming `git status` is clean and `origin/main`
+contains the recovery commits.
+
 **P0 ENB replacement, lead proof, and shop/payment go-live plan (2026-06-08):**
 Active controller packet is
 `workstreams/enb-replacement-shop-go-live-2026-06-08.md`; root decision packet

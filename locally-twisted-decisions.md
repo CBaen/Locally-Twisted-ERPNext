@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-15 - Kubuntu recovery is source stabilization, not release work
+
+**Decision:** Treat the Windows-to-Kubuntu transition cleanup as a practical
+source-repo stabilization lane. Preserve real code/docs changes, remove
+line-ending-only noise, keep source archive separate from Frappe Cloud/live
+release, and do not escalate the local repo recovery into provider, payment,
+DNS, or production customer work.
+
+**Reasoning:** The operating-system migration was the hard part. Once Codex was
+running inside the repo on Kubuntu, the right technical move was to reconcile
+local source state cleanly without overdramatizing it: verify the actual Git
+state, preserve collisions, separate content diffs from CRLF/LF churn, prune
+stale Windows worktree metadata, and prove fast local contracts. This keeps the
+client project healthy without spending unnecessary time on ceremony.
+
+**Implementation boundary:** Local source and coordination docs only. This did
+not change staging/live, DNS, Cloudflare, Frappe Cloud, Stripe, payment
+settings, production ERPNext data, Search Console, provider dashboards, or
+customer communications. Push to `origin/main` is source archive, not release
+approval.
+
+**Receipts:** `workstreams/kubuntu-transition-health-2026-06-15.md`;
+`workstreams/kubuntu-transition-preservation-packet-2026-06-15.md`;
+`workstreams/kubuntu-remaining-wip-classification-2026-06-15.md`;
+`workstreams/kubuntu-recovery-closeout-2026-06-15.md`; commits `7ad632a`,
+`8b9d6f3`, `0ba474d`, and `23fe30a`; final checks `npm run
+test:verifier-cli`, `npm run test:nav-ia`, package JSON parse, and `npm run
+test:password-reset-template`.
+
+**Decided by:** Guiding Light correction and approval on 2026-06-15; Codex
+technical lead execution.
+
+---
 
 ## 2026-06-13 - External marketing access uses a controlled builder lane plus branded fail-loud reset proof
 

@@ -17,6 +17,13 @@
 > `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md` and
 > `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`.
 
+> **Kubuntu recovery correction, 2026-06-15:** the repo has been reconciled
+> inside the Kubuntu checkout after the Windows-to-Kubuntu host move. Use
+> `CODING-HANDOFF.md` and
+> `workstreams/kubuntu-recovery-closeout-2026-06-15.md` for the current source
+> baseline. This was source stabilization and archive cleanup only, not
+> staging/live/provider/DNS/payment approval.
+
 **Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15.106.0 verified locally on 2026-05-08, MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
 **Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed legacy_source attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.
