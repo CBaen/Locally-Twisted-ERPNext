@@ -15,11 +15,13 @@ Windows-to-Kubuntu move is reconciled, rebased on remote `5dafae7`, and
 archived to GitHub. GitHub auth was repaired with `gh auth login` plus
 `gh auth setup-git`; `origin/main` reached `af8a382`. Handoff:
 `workstreams/kubuntu-recovery-closeout-2026-06-15.md`; reusable recipe:
-`capabilities/recipes/kubuntu-repo-recovery-cleanup.md`. This lane is source
-stability only: no staging/live/provider/DNS/payment/customer-data action. The
-only remaining aftercare is to leave or drop the retained recovery stash
-deliberately after confirming `git status` is clean and `origin/main` contains
-the recovery commits.
+`capabilities/recipes/kubuntu-repo-recovery-cleanup.md`. Follow-up on
+2026-06-16 added `scripts/verify/kubuntu_doctor.py`, registered
+`lt-kubuntu-doctor` in `verifier-manifest.json`, and scrubbed tracked local
+login values from `AGENTS.md`. This lane is source/runtime preflight only: no
+staging/live/provider/DNS/payment/customer-data action. Remaining aftercare:
+leave or drop the retained recovery stash deliberately after confirming
+`git status` is clean and `origin/main` contains the recovery commits.
 
 **P0 ENB replacement, lead proof, and shop/payment go-live plan (2026-06-08):**
 Active controller packet is

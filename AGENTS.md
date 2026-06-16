@@ -149,8 +149,7 @@ Important correction: older files may claim `10,631 Items`, `10,613 Items`, `10,
 | Stack dir | `Locally-Twisted-Backend/frappe_docker/` |
 | ERPNext image | `frappe/erpnext:v15.105.0` |
 | Frappe site | `frontend` |
-| Admin login | `Administrator` / `admin` |
-| Dev login | `cameron@builtbycameron.com` / `LocalDev2026!` |
+| Admin/dev login | Not stored in committed docs. Use approved local credentials from the operator or environment variables such as `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for verifiers. |
 
 Installed app order must keep `locally_twisted` last:
 
@@ -210,7 +209,7 @@ Work within Frappe and ERPNext.
 - Avoid `head_html` CSS injection and avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja/CSS/Web Page edits, run `python scripts/dev/clear_website_cache.py`.
 - Before declaring visual work done, verify with browser screenshots at desktop and mobile widths, plus the layout gates below.
-- Browser verification is repo-local. `playwright.config.js` prefers installed Chrome/Edge on Windows when Playwright's bundled Chromium is missing. Use `npm run test:layout-fit` for passive public route layout checks, `npm run test:interactive-layout` for stateful menus/drawers/modals/forms/product controls, `npm run test:public-verify` for broad public-site closeout, and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
+- Browser verification is repo-local. `playwright.config.js` prefers installed Brave/Chromium/Chrome/Edge on Kubuntu and also retains Windows browser fallbacks. Use `npm run test:layout-fit` for passive public route layout checks, `npm run test:interactive-layout` for stateful menus/drawers/modals/forms/product controls, `npm run test:public-verify` for broad public-site closeout, and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
 
 ## Launch Provider Ownership
 

@@ -8,6 +8,49 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-16 - Kubuntu doctor is local runtime preflight only
+
+**Decision:** LT now carries a repo-local read-only Kubuntu doctor at
+`scripts/verify/kubuntu_doctor.py`, registered in `verifier-manifest.json` as
+`lt-kubuntu-doctor`. It may be used as a first-pass local source/runtime
+health check, but it must not be used as staging, live, provider, DNS, Stripe,
+Search Console, payment, customer-data, reset-email, or owner-review proof.
+
+**Reasoning:** The post-move software review verified LT is one of the
+strongest repos in the agency set, but local health still depends on host
+facts: Docker, the `locally-twisted-erpnext-v15` containers, port `:8081`,
+bench apps, and route availability. A small doctor gives future agents a loud,
+repeatable preflight before running heavier business verifiers.
+
+**Implementation boundary:** The doctor checks branch, dirty status,
+Docker/container presence, local routes, `bench version`, and expected apps:
+`erpnext`, `frappe`, `payments`, `webshop`, and `locally_twisted`. It does not
+mutate source, ERPNext data, provider state, payment settings, DNS, email, or
+customer records.
+
+**Decided by:** GL approved the next cleanup moves after the repo review;
+Codex implementation on 2026-06-16.
+
+---
+
+## 2026-06-16 - Tracked LT docs must not store local login values
+
+**Decision:** LT tracked instructions may document credential sources and
+required env/operator access, but must not preserve local admin/test login
+values or reset tokens in `AGENTS.md`, handoffs, queues, or capability cards.
+
+**Reasoning:** LT is local-first for development but still git-backed and
+client-transferable. Storing local login values in AI-facing docs makes future
+pushes and handoffs riskier and teaches agents the wrong source of truth.
+
+**Implementation boundary:** `AGENTS.md` now points to env/operator credential
+guidance instead of tracked local values. This did not rotate credentials,
+change users, send reset emails, or alter ERPNext accounts.
+
+**Decided by:** Codex cleanup during the 2026-06-16 review follow-up.
+
+---
+
 ## 2026-06-15 - Kubuntu recovery is source stabilization, not release work
 
 **Decision:** Treat the Windows-to-Kubuntu transition cleanup as a practical

@@ -164,6 +164,35 @@
         "only the approved launch-gate evidence named in the workstream after it is actually run"
       ],
       "what_it_does_not_prove": "The manifest itself proves nothing; it only marks this as a live/external approval boundary."
+    },
+    {
+      "id": "lt-kubuntu-doctor",
+      "tier": "tier_1_local_fast",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python3 scripts/verify/kubuntu_doctor.py",
+      "cwd": ".",
+      "scope": "read-only Wardenclyffe Kubuntu branch, tool, container, route, version, and app-order health check",
+      "environment": "local files and local Docker only",
+      "mutation": "none",
+      "approval_required": "no, local read-only check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "terminal output",
+      "capability_refs": [
+        "capabilities/recipes/fail-loud-operating-law.md",
+        "source:Built_by_Cameron/SOFTWARE-INVENTORY.md"
+      ],
+      "risk_triggers": [
+        "non-local BaseUrl",
+        "container restart",
+        "database writes",
+        "provider accounts"
+      ],
+      "proves": [
+        "local Kubuntu runtime preconditions are present for further verification"
+      ],
+      "what_it_does_not_prove": "It does not prove layout quality, form persistence, checkout behavior, provider readiness, or live launch approval."
     }
   ]
 }

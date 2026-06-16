@@ -1,5 +1,19 @@
 # Locally Twisted - Coding Handoff
 
+Kubuntu doctor/security-doc closeout as of 2026-06-16 MDT: after the
+Wardenclyffe software review, Codex added
+`scripts/verify/kubuntu_doctor.py` and registered it in
+`verifier-manifest.json` as `lt-kubuntu-doctor`. The doctor is read-only and
+checks `main`, dirty-state warning, Docker availability, expected LT
+containers, key local routes on `http://127.0.0.1:8081`, bench versions, and
+expected installed apps: `erpnext`, `frappe`, `payments`, `webshop`, and
+`locally_twisted`. Local run on 2026-06-16 passed with only the expected dirty
+working-tree warning from this docs/code slice. Codex also removed tracked
+local login values from `AGENTS.md` and replaced them with env/operator
+credential guidance. This is local source/runtime hygiene only. It is not
+staging, live, provider, DNS, Stripe, Search Console, payment, reset-email, or
+production customer proof.
+
 Kubuntu recovery/source-stability baseline as of 2026-06-15 MDT: this is the
 first in-repo Codex cleanup pass after the host moved from Windows to Kubuntu.
 Treat it as source/archive stabilization, not staging/live release work. Local
@@ -471,15 +485,17 @@ Failure Recipes:
 `capabilities/failures/frappe-cloud-app-mirror-release-scope-drift.md` and
 `capabilities/failures/frappe-cloud-staging-website-settings-drift.md`.
 
-Codex owner-access hotfix on 2026-05-15: `locallytwisted@gmail.com` now has
-immediate local backend access with the temporary owner password
-`LocalTemp2026!` until GL changes it later. The account is an enabled
-`System User`, defaults to `LT Owner Home`, has owner/operator roles without
-`System Manager`, and is the business-owner account for leads/inquiries.
-Verification passed with `python scripts/verify/backend_workspace_parity.py`
-and `$env:LT_DESK_TEST_USER='locallytwisted@gmail.com';
-$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`.
-Access-track handoff: `workstreams/user-access-audit-2026-05-15.md`.
+Codex owner-access hotfix on 2026-05-15: `locallytwisted@gmail.com` had
+immediate local backend access through an operator-provided temporary owner
+credential. Do not store or repeat the credential in tracked docs; obtain the
+current value from the approved local operator/env source when needed. The
+account is an enabled `System User`, defaults to `LT Owner Home`, has
+owner/operator roles without `System Manager`, and is the business-owner
+account for leads/inquiries. Verification passed with
+`python scripts/verify/backend_workspace_parity.py` and `npm run
+test:desk-owner` using environment-provided `LT_DESK_TEST_USER` /
+`LT_DESK_TEST_PASSWORD`. Access-track handoff:
+`workstreams/user-access-audit-2026-05-15.md`.
 
 Codex inquiry-form hardening closeout on 2026-05-15: the shared `inquiry-v1`
 form now puts Contact Details first, keeps `What are you celebrating?`

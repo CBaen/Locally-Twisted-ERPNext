@@ -16,9 +16,10 @@ files needed for the current task.
   that apply to all clients, secrets, private customer records, raw runtime
   logs, or agent auth/session material.
 - Related roots: system/user root
-  `C:\Users\baenb\capabilities\INDEX.md`, agency root
-  `C:\Users\baenb\projects\Built_by_Cameron\capabilities\INDEX.md`, and source
-  package `C:\Users\baenb\projects\capabilities-framework\capabilities\INDEX.md`.
+  `/home/guidingl/capabilities/INDEX.md` when present, agency root
+  `/home/guidingl/projects/Built_by_Cameron/capabilities/INDEX.md`, and source
+  package `/home/guidingl/projects/capabilities-framework/capabilities/INDEX.md`
+  when present.
 - Latest framework handoff:
   [capabilities-framework-v2-4-seed-update-2026-05-21](../workstreams/capabilities-framework-v2-4-seed-update-2026-05-21.md).
 - Latest graduation handoff:
@@ -57,7 +58,7 @@ that carries or should carry the capability.
 
 ## Principles
 
-- System rule: `C:\Users\baenb\capabilities\principles\no-monolith-files.md` - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
+- System rule: `/home/guidingl/capabilities/principles/no-monolith-files.md` when present - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
 - [multi-agent-coordination-safety](principles/multi-agent-coordination-safety.md) - keep LT parallel-agent work inside the neutral claim/worktree workflow without leaking parent/company repo scope into LT tasks.
 - [Current Truth Needs Evidence](principles/current-truth-needs-evidence.md) - prevents capability claims from becoming false certainty.
 - [No Monolith Files](principles/no-monolith-files.md) - prevents hand-authored production files from becoming giant catch-all modules except research/reference artifacts.
@@ -113,6 +114,7 @@ Workflows. Multi-step. Clear start and finish.
 - [large-source-document-intake](recipes/large-source-document-intake.md) - chunk and source-map large LT reference documents before using them for catalog, policy, checkout, or migration claims.
 - [launch-repo-cleanup-and-evidence-retention](recipes/launch-repo-cleanup-and-evidence-retention.md) - clean launch repo debris, raw drops, generated evidence, stale mirrors, and historical experiment output without deleting active source or other-agent work.
 - [kubuntu-repo-recovery-cleanup](recipes/kubuntu-repo-recovery-cleanup.md) - reconcile LT source after Windows-to-Kubuntu or similar host moves by preserving real diffs, removing CRLF/LF-only churn, pruning stale worktree metadata, and proving fast local contracts before source archive.
+- Agency reference: `/home/guidingl/projects/Built_by_Cameron/capabilities/recipes/kubuntu-client-runtime-doctor.md` explains the cross-client doctor pattern. LT's concrete doctor is `scripts/verify/kubuntu_doctor.py` and its manifest bundle is `lt-kubuntu-doctor`.
 - [provider-release-surface-cleanup](recipes/provider-release-surface-cleanup.md) - inventory, label, retire, or delete Frappe Cloud sites/benches, app mirrors, temp clones, and release surfaces only after public-domain, provider, live-record, and source/app identity proof.
 - [frappe-cloud-cloudflare-stripe-launch-gate](recipes/frappe-cloud-cloudflare-stripe-launch-gate.md) - coordinate Frappe Cloud staging, Cloudflare DNS/security, Stripe live readiness, human account access, and ecommerce fallback without treating preflight as cutover approval.
 - [erpnext-record-level-failure-recorder](recipes/erpnext-record-level-failure-recorder.md) - give partial backend failures one durable blocker/report contract on affected ERPNext records.

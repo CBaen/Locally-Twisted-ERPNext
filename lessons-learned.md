@@ -6,6 +6,33 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-16 - A local doctor catches host drift before bigger LT claims
+
+The Kubuntu review showed LT's real app/runtime state was strong, but future
+agents still need a fast way to prove the local host is coherent before
+claiming readiness. Docker, port `:8081`, expected apps, route responses, and
+bench output can drift separately from source.
+
+**Counter-move:** run `python3 scripts/verify/kubuntu_doctor.py` at the start
+of local runtime work. Treat PASS as permission to continue with scoped local
+work, not as staging/live/payment/provider proof. If the doctor warns about
+dirty state, classify the dirty files before staging or committing anything.
+
+---
+
+## 2026-06-16 - Credential procedures belong in docs, credential values do not
+
+The review cleanup removed local login values from tracked LT agent
+instructions. The useful information is how an agent should obtain or use
+approved local credentials, not the values themselves.
+
+**Counter-move:** use env vars, operator-provided values, or approved reset
+helpers for local credentials. Do not store passwords, reset tokens, or
+one-off login values in `AGENTS.md`, handoffs, queues, capability cards, or
+workstream docs.
+
+---
+
 ## 2026-06-15 - Separate OS-migration content from line-ending noise
 
 After the Windows-to-Kubuntu move, the repo looked larger and riskier than it
