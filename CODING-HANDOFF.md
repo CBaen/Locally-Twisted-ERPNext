@@ -22,7 +22,12 @@ payment, or production customer action was performed. A recovery stash remains
 as an extra safety copy:
 `stash@{...}: lt kubuntu reset-helper collision preserve 2026-06-15`; future
 agents may drop it only after confirming GitHub has archived the recovery
-commits and `git status` is clean.
+commits and `git status` is clean. After rebasing on remote `5dafae7`, local
+`main` was clean and ahead by the recovery/doc commits, but `git push origin
+main` failed because the Kubuntu shell has no working GitHub auth: HTTPS token
+was rejected, `gh` is logged out, SSH is denied, and no `GH_TOKEN` or
+`GITHUB_TOKEN` is present. Next source-archive step is authenticate GitHub and
+push without force.
 
 Current live marketing/vendor access closeout as of 2026-06-13: the ENB
 marketing account reset/access slice is complete. The two current client asks

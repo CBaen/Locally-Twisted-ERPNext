@@ -51,7 +51,9 @@ The password-reset template check was verify-only. It confirmed:
 
 ## Not Done
 
-- No push.
+- No successful push. A push attempt after rebase failed because the Kubuntu
+  shell has no working GitHub auth: HTTPS rejected credentials, `gh` is logged
+  out, SSH is denied, and no `GH_TOKEN`/`GITHUB_TOKEN` is present.
 - No staging/live/provider/DNS/payment action.
 - No email send.
 - No destructive Git reset/clean.
@@ -59,6 +61,5 @@ The password-reset template check was verify-only. It confirmed:
 
 ## Next Practical Step
 
-Commit this documentation update and push local `main` when ready to archive
-the Kubuntu stabilization work to GitHub. This is still source archive, not
-staging or live release.
+Authenticate GitHub for this Kubuntu shell, then push local `main` without
+force. This is still source archive, not staging or live release.
