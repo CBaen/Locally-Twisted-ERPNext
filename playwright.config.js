@@ -7,13 +7,21 @@ const WINDOWS_CHROME_PATHS = [
 	"C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
 	"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
 ];
+const LINUX_CHROME_PATHS = [
+	"/usr/bin/brave-browser",
+	"/usr/bin/chromium",
+	"/usr/bin/chromium-browser",
+	"/usr/bin/google-chrome",
+	"/usr/bin/microsoft-edge",
+];
+const BROWSER_PATHS = [...LINUX_CHROME_PATHS, ...WINDOWS_CHROME_PATHS];
 
 function findBrowserExecutable() {
 	if (process.env.PLAYWRIGHT_CHROME_PATH) {
 		return process.env.PLAYWRIGHT_CHROME_PATH;
 	}
 
-	return WINDOWS_CHROME_PATHS.find((candidate) => fs.existsSync(candidate));
+	return BROWSER_PATHS.find((candidate) => fs.existsSync(candidate));
 }
 
 const executablePath = findBrowserExecutable();
