@@ -18,17 +18,19 @@ import sys
 import time
 from pathlib import Path
 
-try:
-    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
-except ImportError:
-    print("FAIL — playwright not installed. Run: pip install playwright && playwright install chromium")
-    sys.exit(1)
+from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
 def take_screenshots(base_url: str, paths: list[str], output_dir: Path) -> int:
+    try:
+        sync_playwright, PlaywrightTimeout = require_playwright()
+    except MissingPlaywright as exc:
+        print(exc)
+        return 1
+
     output_dir.mkdir(parents=True, exist_ok=True)
     fails = 0
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = launch_chromium(p)
         ctx = browser.new_context(viewport={"width": 1280, "height": 800})
         page = ctx.new_page()
         for path in paths:

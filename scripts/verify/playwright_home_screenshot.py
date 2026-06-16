@@ -18,8 +18,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from _cli import parse_noop_args
-
-from playwright.sync_api import sync_playwright
+from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
 URL = "http://localhost:8081/"
 OUT_DIR = Path("C:/Users/baenb/.claude")
@@ -27,7 +26,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def capture(p, viewport, output_path, *, is_mobile=False):
-    browser = p.chromium.launch(headless=True)
+    browser = launch_chromium(p)
     context = browser.new_context(
         viewport=viewport,
         is_mobile=is_mobile,
@@ -75,6 +74,11 @@ def capture(p, viewport, output_path, *, is_mobile=False):
 
 def main():
     parse_noop_args(__doc__)
+    try:
+        sync_playwright, _ = require_playwright()
+    except MissingPlaywright as exc:
+        print(exc)
+        return 1
     with sync_playwright() as p:
         print("→ Capturing desktop view (1366x900)...")
         d = capture(p, {"width": 1366, "height": 900}, OUT_DIR / "lt-playwright-desktop.png")
@@ -85,7 +89,8 @@ def main():
         m = capture(p, {"width": 375, "height": 812}, OUT_DIR / "lt-playwright-mobile.png", is_mobile=True)
         print(f"  saved: {OUT_DIR / 'lt-playwright-mobile.png'}")
         print(f"  facts: {m}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

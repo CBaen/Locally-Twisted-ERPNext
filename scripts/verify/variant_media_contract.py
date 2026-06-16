@@ -17,7 +17,7 @@ import sys
 from typing import Any
 
 from _cli import parse_noop_args
-from playwright.sync_api import sync_playwright
+from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -143,8 +143,9 @@ def choose_simple_variant(page, label: str) -> None:
 
 
 def check_simple_product_page_swaps_variant_images(media_by_label: dict[str, Any]) -> None:
+    sync_playwright, _ = require_playwright()
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = launch_chromium(p)
         ctx = browser.new_context(viewport={"width": 1280, "height": 800})
         page = ctx.new_page()
         if _guest_product_route_is_paused(page, SIMPLE_PRODUCT_URL):
@@ -258,6 +259,12 @@ def _login_as_operator(page) -> None:
 
 def main() -> int:
     parse_noop_args(__doc__)
+    try:
+        require_playwright()
+    except MissingPlaywright as exc:
+        print(exc)
+        return 1
+
     failures = []
     try:
         complex_media = check_complex_variant_media_api_holds_raw_item_image()

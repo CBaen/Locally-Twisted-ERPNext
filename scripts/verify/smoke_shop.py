@@ -33,15 +33,32 @@ Run:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
-
-from playwright.sync_api import sync_playwright
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 BASE = "http://localhost:8081"
+
+LINUX_BROWSER_CANDIDATES = [
+    "/usr/bin/brave-browser",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+    "/usr/bin/google-chrome",
+    "/usr/bin/microsoft-edge",
+]
+BROWSER_EXECUTABLE = os.environ.get("PLAYWRIGHT_CHROME_PATH") or next(
+    (candidate for candidate in LINUX_BROWSER_CANDIDATES if Path(candidate).exists()),
+    None,
+)
+
+def launch_chromium(playwright):
+    kwargs = {"headless": True}
+    if BROWSER_EXECUTABLE:
+        kwargs["executable_path"] = BROWSER_EXECUTABLE
+    return playwright.chromium.launch(**kwargs)
 ROOT = Path(__file__).resolve().parents[2]
 ITEM_CONFIGURE_TEMPLATE = (
     ROOT
@@ -979,7 +996,7 @@ def check_product_single_page(page):
 
 def check_mobile_drawer(p):
     print("-> Mobile drawer mega links")
-    browser = p.chromium.launch(headless=True)
+    browser = launch_chromium(p)
     ctx = browser.new_context(
         viewport={"width": 375, "height": 812},
         is_mobile=True,
@@ -1059,6 +1076,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     parse_args(argv)
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print(
+            "FAIL - playwright not installed. Run with a Python environment that has "
+            "playwright, or use the Node Playwright npm scripts for browser checks."
+        )
+        return 1
+
     failures = []
     try:
         check_variant_template_contract()
@@ -1067,7 +1093,7 @@ def main(argv: list[str] | None = None) -> int:
         failures.append(str(e))
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = launch_chromium(p)
         ctx = browser.new_context(viewport={"width": 1280, "height": 800})
         page = ctx.new_page()
         page_errors: list[str] = []

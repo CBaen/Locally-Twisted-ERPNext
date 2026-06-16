@@ -3,11 +3,7 @@
 import argparse
 import sys
 
-try:
-    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
-except ImportError:
-    print("FAIL - playwright not installed. Run: pip install playwright && playwright install chromium")
-    sys.exit(1)
+from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
 
 BASE_PATH = "/contact"
@@ -83,9 +79,15 @@ def main() -> int:
     args = parser.parse_args()
     base_url = args.base_url.rstrip("/")
 
+    try:
+        sync_playwright, PlaywrightTimeout = require_playwright()
+    except MissingPlaywright as exc:
+        print(exc)
+        return 1
+
     failures = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = launch_chromium(p)
         page = browser.new_page(viewport={"width": 390, "height": 900})
         try:
             page.goto(base_url + BASE_PATH, wait_until="networkidle", timeout=30000)

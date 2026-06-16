@@ -12,7 +12,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
+from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
 OUT_DIR = Path("C:/Users/baenb/.claude")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -25,7 +25,7 @@ def slugify(route: str) -> str:
 
 
 def capture(p, url: str, viewport: dict, output_path: Path, *, is_mobile: bool = False) -> None:
-    browser = p.chromium.launch(headless=True)
+    browser = launch_chromium(p)
     context = browser.new_context(
         viewport=viewport,
         is_mobile=is_mobile,
@@ -66,6 +66,12 @@ def main():
     desktop_path = OUT_DIR / f"lt-{slug}-desktop.png"
     mobile_path = OUT_DIR / f"lt-{slug}-mobile.png"
 
+    try:
+        sync_playwright, _ = require_playwright()
+    except MissingPlaywright as exc:
+        print(exc)
+        return 1
+
     with sync_playwright() as p:
         print(f"-> Desktop {url}")
         capture(p, url, {"width": 1366, "height": 900}, desktop_path)
@@ -73,7 +79,8 @@ def main():
         print(f"-> Mobile  {url}")
         capture(p, url, {"width": 375, "height": 812}, mobile_path, is_mobile=True)
         print(f"   saved: {mobile_path}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -29,11 +29,10 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-try:
-    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
-except ImportError:
-    print("FAIL — playwright not installed. Run: pip install playwright && playwright install chromium")
-    sys.exit(1)
+from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
+
+sync_playwright = None
+PlaywrightTimeout = TimeoutError
 
 # =============================================================================
 # STACK-SPECIFIC: how to verify the test record was created
@@ -375,7 +374,7 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
     print(f"        Test marker: {test_marker}")
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = launch_chromium(p)
         page = browser.new_page()
 
         # Step 1: navigate
@@ -691,6 +690,13 @@ def main():
     parser.add_argument("--skip-newsletter", action="store_true",
                         help="Skip the newsletter API smoke test")
     args = parser.parse_args()
+
+    global sync_playwright, PlaywrightTimeout
+    try:
+        sync_playwright, PlaywrightTimeout = require_playwright()
+    except MissingPlaywright as exc:
+        print(exc)
+        sys.exit(1)
 
     # /contact is the canonical inquiry form. /book redirects to
     # /contact?intent=quick and is not a separate form surface.
