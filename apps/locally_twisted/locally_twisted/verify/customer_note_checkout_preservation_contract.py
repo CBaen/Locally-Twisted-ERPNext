@@ -15,7 +15,7 @@ import time
 import frappe
 
 
-ITEM_CODE = "mothers-day-bouquet"
+ITEM_CODE = "unicorn-bouquet-SMA"
 UNIQUE_NOTE = "Please leave the bouquet with the blue front-desk sign."
 NO_NOTE_MARKER = "NO_CUSTOMER_NOTE_MARKER_SHOULD_NOT_EXIST"
 

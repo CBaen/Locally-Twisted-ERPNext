@@ -12,6 +12,7 @@ from locally_twisted.shop_taxonomy import (
     PRIMARY_CATEGORY_NAMES,
     PRIMARY_CATEGORY_SPECS,
     PRODUCT_TAXONOMY,
+    RETIRED_PRODUCT_CODES,
     SECONDARY_CATEGORY_NAMES,
     SECONDARY_CATEGORY_SPECS,
     SHOP_ROOT,
@@ -24,6 +25,7 @@ def run() -> dict[str, Any]:
     evidence: dict[str, Any] = {
         "expected_products": len(PRODUCT_TAXONOMY),
         "published_products_checked": 0,
+        "retired_products_checked": 0,
         "primary_categories": list(PRIMARY_CATEGORY_NAMES),
         "secondary_categories": list(SECONDARY_CATEGORY_NAMES),
     }
@@ -32,6 +34,7 @@ def run() -> dict[str, Any]:
     _check_secondary_categories(failures)
     _check_legacy_groups_hidden(failures)
     _check_published_products(failures, evidence)
+    _check_retired_products_hidden(failures, evidence)
 
     return {"ok": not failures, "failures": failures, "evidence": evidence}
 
@@ -155,3 +158,15 @@ def _check_published_products(failures: list[str], evidence: dict[str, Any]) -> 
         actual_secondary = [item["item_group"] for item in secondary_rows]
         if actual_secondary != [secondary]:
             failures.append(f"{item_code} secondary categories expected [{secondary}], found {actual_secondary}")
+
+
+def _check_retired_products_hidden(failures: list[str], evidence: dict[str, Any]) -> None:
+    for item_code in RETIRED_PRODUCT_CODES:
+        name = frappe.db.get_value("Website Item", {"item_code": item_code}, "name")
+        if not name:
+            failures.append(f"retired product Website Item is missing instead of unpublished: {item_code}")
+            continue
+        evidence["retired_products_checked"] += 1
+        published = int(frappe.db.get_value("Website Item", name, "published") or 0)
+        if published:
+            failures.append(f"retired product must not be published: {item_code}")

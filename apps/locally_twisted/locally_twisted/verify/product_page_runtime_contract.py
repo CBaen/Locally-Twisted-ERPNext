@@ -197,7 +197,7 @@ def _assert_product_page_add_on_options_are_eligible() -> None:
         raise ContractFail(f"unicorn-bouquet add-on options did not include foil_number: {eligible}")
     if foil.get("label") != "Foil number" or float(foil.get("unit_price") or 0) != FOIL_NUMBER_ADD_ON_RATE:
         raise ContractFail(f"foil_number add-on option did not preserve label/price: {foil}")
-    ineligible = get_checkout_add_on_options("mothers-day-bouquet")
+    ineligible = get_checkout_add_on_options("easter-balloon-cups")
     if ineligible:
         raise ContractFail(f"ineligible product should not expose add-on options: {ineligible}")
 

@@ -41,7 +41,7 @@ BLOCKED_ROUTES = (
     "/all-products",
     "/cart",
     "/checkout",
-    "/checkout?item=mothers-day-bouquet&qty=1",
+    "/checkout?item=unicorn-bouquet-SMA&qty=1",
 )
 CHECKOUT_API_METHODS = (
     "preview_checkout_totals",

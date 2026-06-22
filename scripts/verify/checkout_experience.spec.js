@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 const { gotoAndSettle } = require("./layout_helpers");
 
 const CART_KEY = "lt_cart";
-const RETAIL_ITEM = "mothers-day-bouquet";
+const RETAIL_ITEM = "unicorn-bouquet-SMA";
 const DELIVERY_ONLY_ITEM = "graduation-grab-n-go-BYU";
 const ENCANTO_URL = "/shop-items/bouquets/encanto-bouquet";
 const DELIVERY_ONLY_URL = "/shop-items/garlands/graduation-grab-n-go";

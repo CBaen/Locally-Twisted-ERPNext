@@ -288,8 +288,8 @@ def main() -> int:
             },
             "items": [
                 {
-                    "item_code": "mothers-day-bouquet",
-                    "name": "Mother's Day Bouquet",
+                    "item_code": "unicorn-bouquet-SMA",
+                    "name": "Unicorn Bouquet - Small",
                     "qty": 2,
                 }
             ],
@@ -324,7 +324,7 @@ def main() -> int:
                 print(f"  FAIL - location did not include delivery address and ZIP: {location!r}")
                 failures += 1
             notes = page.locator("#book_notes").input_value()
-            if "Interested item: Mother's Day Bouquet" not in notes or "mothers-day-bouquet" not in notes:
+            if "Interested item: Unicorn Bouquet - Small" not in notes or "unicorn-bouquet-SMA" not in notes:
                 print(f"  FAIL - notes did not include interested item payload: {notes!r}")
                 failures += 1
             if "Please call before delivery." not in notes:

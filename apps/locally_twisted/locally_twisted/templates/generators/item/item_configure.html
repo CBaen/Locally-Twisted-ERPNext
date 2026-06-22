@@ -316,6 +316,8 @@
     function updateVariantImage(variantCode) {
         var requestId = mediaRequestSerial + 1;
         mediaRequestSerial = requestId;
+        window.LT = window.LT || {};
+        window.LT.productGalleryManualSelection = false;
         frappe.call({
             method: 'locally_twisted.api.variant_media.get_variant_media',
             args: {
@@ -325,6 +327,7 @@
             },
             callback: function (mr) {
                 if (requestId !== mediaRequestSerial) return;
+                if (window.LT && window.LT.productGalleryManualSelection) return;
                 var media = (mr && mr.message) || {};
                 var setupMedia = approvedSetupMedia(variantCode);
                 if (setupMedia && setupMedia.image) {
@@ -337,6 +340,7 @@
             },
             error: function () {
                 if (requestId === mediaRequestSerial) {
+                    if (window.LT && window.LT.productGalleryManualSelection) return;
                     resetProductImage();
                 }
             }

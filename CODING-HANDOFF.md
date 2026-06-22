@@ -111,14 +111,15 @@ Secondary category is one broad occasion/use-case from the approved set: Any
 Occasion, Birthday, Holiday, Graduation, Baby Shower, Sports, Get Well,
 Religious, and Corporate. Do not treat delivery, pickup, latex-free, colors,
 sizes, add-ons, foil numbers, `Grab & Go`, specific holiday names, character
-or theme names, or product options as categories. Pride Progress Rainbow
-Balloon Arch is primary `Arches`, secondary `Holiday`. Local/source now owns
+or theme names, or product options as categories. Local/source now owns
 the taxonomy through `shop_taxonomy.py`, `sync_shop_taxonomy.py`,
-`item_group.json`, and `sync_shop_taxonomy_20260524.py`. Local ERPNext result:
-`51` published Website Items, `8` visible primary categories under
-`Shop Items`, `9` secondary categories under hidden `Shop Occasions`, and `51`
-secondary Website Item Group rows. Prior visible primary groups were hidden
-with route aliases retained. The same app code is now on Frappe Cloud staging
+`item_group.json`, and `sync_shop_taxonomy_20260524.py`. Local ERPNext result
+after the 2026-06-21 requested product retirement: `47` published Website
+Items, `4` retired/unpublished Website Items held as `needs_review|needs_review`,
+`8` visible primary categories under `Shop Items`, `9` secondary categories
+under hidden `Shop Occasions`, and `51` secondary Website Item Group rows (`47`
+attached to currently published products). Prior visible primary groups were
+hidden with route aliases retained. The same app code is now on Frappe Cloud staging
 through app mirror `bb19a4b`, deploy `2ve3dgt97a`, and site migration job
 `22jih1qaln`. Product names, checkout behavior, payment settings, live,
 DNS, Search Console, live Stripe, and production data were not changed.
@@ -748,8 +749,9 @@ the correct orientation rather than relying on EXIF orientation. Commit
 
 Codex backend closeout on 2026-05-11 is historical. The old 48 kept / 5
 Classic-excluded local import packet is superseded by the 2026-05-17
-sellable reimport; the 2026-05-24 taxonomy cleanup now treats 51 published
-products as current and explicitly excludes 2 duplicate source slugs. Current
+sellable reimport; the 2026-06-21 retirement update now treats 47 published
+products as current, with 4 requested products hidden as `needs_review`, and
+explicitly excludes 2 duplicate source slugs. Current
 front-door handoff:
 `workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`.
 
@@ -927,7 +929,7 @@ business/service structured data, and BTFP image alt text. Feature handoff:
 
 OpenClaw/Moji update on 2026-05-10: `/balloon-twisting-and-face-painting` was corrected against GL's exact localhost feedback. The embedded inquiry form now starts with no artist-service checkbox selected; repeat inquiries from the same email are allowed through durable `CRM Settings.allow_lead_duplication_based_on_emails` configuration; and the form's advertised five-photo upload path is guarded by `scripts/verify/book_form_repeat_email_photos.py`. The two service-card photos are now explicit 10-image carousels with prev/next controls and visible status. Source handoff: `workstreams/btfp-service-page.md`; capability: `capabilities/recipes/btfp-live-service-page-contract.md`.
 
-OpenClaw/Moji update on 2026-05-10: the homepage hero now implements GL's seasonal carousel request. First slide is graduation season, followed by Civic & community, Corporate events, Schools & campuses, and Private celebrations audience slides. Source handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`; capability: `capabilities/recipes/homepage-launch-proof-contract.md`.
+Codex update on 2026-06-21: the homepage hero now leads with a Fourth of July seasonal slide, followed by Civic & community, Corporate events, Schools & campuses, and Private celebrations audience slides. Source handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`; capability: `capabilities/recipes/homepage-launch-proof-contract.md`.
 
 Codex update on 2026-05-10: public inquiry acknowledgments now use the branded
 LT email shell with the LT logo, mirrored red balloon-dog footer mark, no
@@ -1116,26 +1118,28 @@ Queue or Communication side effects.
 
 ## State Of Reality
 
-The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current local DB now has 10,686 Items and 10,668 Item Prices after delivery service Items, support Items, the optional-add-on variant repair, and the college color preset repair.
+The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. Current local DB counts are listed below; older count language is historical unless rechecked against the target DB.
 
 The catalog port from the old legacy_source test deployment appears real, but several docs had stale counts. The legacy_source shop at `http://5.78.136.133/shop` was used as the catalog source/reference for that port because GL explicitly named it as the old live account/source for catalog data. That does not make legacy_source the product truth for unrelated business scope.
 
-Verified DB counts on 2026-05-18 after the school/seasonal color-preset repair:
+Verified DB counts on 2026-06-21 after the requested product retirement:
 
 | Record | Count |
 |---|---:|
-| Website Items | 53 |
-| Items total | 10,686 |
+| Website Items total | 51 |
+| Published Website Items | 47 |
+| Retired/unpublished Website Items | 4 |
+| Items total | 10,685 |
 | Variant templates | 49 |
-| Non-variant root Items | 8 |
+| Non-variant root Items | 7 |
 | Active customer-facing variants | 10,186 |
 | Disabled variant records | 443 |
 | All variant records | 10,629 |
-| Item Prices | 10,668 |
+| Item Prices | 10,666 |
 | Item Variant Attribute rows | 32,049 |
 | Item Attributes | 30 |
 
-Docs that still mention `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 Items`, `10,674 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `10,654 Item Prices`, `10,656 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `6 non-variant root Items`, `10,560 variants`, `10,578 variants`, `10,617 variants`, or `10,227 active variants` as current DB totals are stale. The 8 non-variant root Items are 4 catalog single-SKU products, 2 delivery service Items, and 2 support Items (`ADDON-FOIL-NUMBER`, `LT-PRODUCT-QUOTE-REVIEW`). `Add Foil Number` is optional for bouquet-size products. Graduation products now use bounded college preset variants, so the customer-facing active variant count is lower than the raw color-axis port; disabled legacy add-on/raw-color variants remain in the database as history.
+Docs that still mention `53 Website Items`, `51 published products`, `30 checkout products`, `21 quote-first products`, `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 Items`, `10,674 Items`, `10,686 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `10,654 Item Prices`, `10,656 Item Prices`, `10,668 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `6 non-variant root Items`, `8 non-variant root Items`, `10,560 variants`, `10,578 variants`, `10,617 variants`, or `10,227 active variants` as current DB totals are stale. The 4 retired/unpublished Website Items are `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and `pride-progress-rainbow-balloon-arch`. `Add Foil Number` is optional for bouquet-size products. Graduation products now use bounded college preset variants, so the customer-facing active variant count is lower than the raw color-axis port; disabled legacy add-on/raw-color variants remain in the database as history.
 
 ## Current Stopping Point
 
@@ -1222,9 +1226,9 @@ Claims from older docs still need re-verification before being repeated:
 - ERPNext v15.105.0 stack on port `8081`.
 - `locally_twisted` custom app installed.
 - Webshop + payments installed.
-- 53 Website Items published.
+- 47 Website Items published; 4 requested Website Items retired/unpublished.
 - `/shop-by-category` compatibility redirect to `/shop`.
-- Payment backend launch-readiness now has a feature lane at `workstreams/payment-backend-launch-readiness.md`; use `scripts/verify/payment_launch_readiness.py` for non-secret structural checks. Local mode passes; live mode is expected to fail until production Stripe/site config exists.
+- Payment backend launch-readiness now has a feature lane at `workstreams/payment-backend-launch-readiness.md`; use `scripts/verify/payment_launch_readiness.py` for non-secret structural checks of the connected site. Local mode uses Stripe test records by design. Production Stripe is a live Frappe Cloud site_config concern and must be verified on the live target, not inferred from local dev.
 - Existing pages including `/`, `/lookbook`, `/shop`, `/contact`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`.
 
 Treat these as verified only after re-running smoke tests or checking the routes. Do not repeat a visual claim without screenshots.

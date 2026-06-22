@@ -217,7 +217,7 @@ cards; focused review tests passed 5/5 and homepage layout-fit passed 13/13.
 
 ## 2026-05-10 seasonal-carousel override
 
-GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. Current first slide is graduation season, followed by the four event audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.
+GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. The current first slide was updated on 2026-06-21 to a Fourth of July seasonal hero, followed by the four event audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.
 
 ## 2026-05-11 Custom Event Decor hide
 

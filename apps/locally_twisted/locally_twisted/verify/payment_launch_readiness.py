@@ -122,7 +122,9 @@ def _run_contract(mode):
         )
     else:
         if stripe_mode == "test":
-            warnings.append("local mode is using Stripe test keys; run with --mode live before cutover")
+            warnings.append(
+                "local mode is using Stripe test keys; production Stripe lives in the Frappe Cloud site config"
+            )
 
     return {
         "ok": not failures,

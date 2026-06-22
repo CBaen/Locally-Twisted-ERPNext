@@ -17,7 +17,7 @@ DEFAULT_BASE_URL = "http://localhost:8081"
 EXPECTED_TITLE = "Locally Twisted - Utah Balloon Event Decor & Installations"
 REQUIRED_MARKERS = (
     "FREE EVENT QUOTE",
-    "GRADUATION SEASON",
+    "FOURTH OF JULY EVENTS",
     "Balloon moments for public events",
 )
 FORBIDDEN_MARKERS = (

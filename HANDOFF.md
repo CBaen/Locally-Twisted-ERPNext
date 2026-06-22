@@ -39,7 +39,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 **Current-session delta (2026-05-17 local reimport; taxonomy refreshed 2026-05-24):**
 - Active ecommerce coordination lives in `CODING-HANDOFF.md`, `ECOMMERCE-SHOP-HANDOFF.md`, `locally-twisted-queue.md`, and the ecommerce audit workstreams.
-- Current taxonomy proof covers 51 published products, 8 active primary categories, and 9 hidden secondary occasion categories.
+- Current taxonomy proof covers 47 published products, 4 requested products retired/unpublished, 8 active primary categories, and 9 hidden secondary occasion categories.
 - Older 53-route browser proof is historical; rerun current gates before using it as launch evidence. `lt_ecommerce_paused=1` was restored after that proof.
 - No staging/live/Frappe Cloud/Stripe/DNS deployment was performed. GL still needs to test locally before any live push.
 
@@ -140,7 +140,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 | `/shop-items` + `/all-products` | Route to `/shop` |
 | `Plan by Occasion` | Product/category links only; no contact shortcuts |
 | `/privacy` + `/terms-of-service` | Static policy routes live; Stripe Dashboard wiring still pending |
-| Shop catalog | Current catalog details belong in `CODING-HANDOFF.md`; 2026-05-24 local taxonomy proof covers 51 published products, 8 active primary categories, and 9 hidden secondary occasion categories |
+| Shop catalog | Current catalog details belong in `CODING-HANDOFF.md`; 2026-06-21 local taxonomy proof covers 47 published products, 4 requested products retired/unpublished, 8 active primary categories, and 9 hidden secondary occasion categories |
 | Stripe checkout (test mode) | Same as yesterday — guest cart + Checkout Session + cascade |
 
 ## What's NOT done (next session candidates, by priority)

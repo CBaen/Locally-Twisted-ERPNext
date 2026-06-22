@@ -85,15 +85,17 @@ FEATURED_WORK = [
 
 HOME_HERO_SLIDES = [
     {
-        "kicker": "Graduation season",
-        "title": "Graduation balloon decor for Utah schools and families.",
-        "proofline": "Now featuring grad garlands, stages, and photo moments.",
-        "body": "Celebrate the class of 2026 with polished balloon installs for ceremonies, senior nights, grad parties, and campus events.",
-        "image": "/assets/locally_twisted/images/portfolio/optimized/school-grad-garland.webp",
-        "primary_label": "Plan graduation decor",
-        "primary_url": "/contact?intent=quote&source=home-hero-graduation",
+        "kicker": "Fourth of July events",
+        "title": "Fourth of July balloon decor for Utah celebrations.",
+        "proofline": "Red, white, and blue installs for parties, parades, venues, and community events.",
+        "body": "Tell us about the space, timing, and colors; we will shape the decor around your celebration and keep custom details in the quote path.",
+        "image": "/assets/locally_twisted/images/heroes/july-4-home-hero-desktop.webp",
+        "image_tablet": "/assets/locally_twisted/images/heroes/july-4-home-hero-tablet.webp",
+        "image_mobile": "/assets/locally_twisted/images/heroes/july-4-home-hero-mobile.webp",
+        "primary_label": "Plan July 4 decor",
+        "primary_url": "/contact?intent=quote&source=home-hero-july-4",
         "secondary_label": "Start a quote",
-        "secondary_url": "/contact?intent=quote&source=home-hero-graduation-secondary",
+        "secondary_url": "/contact?intent=quote&source=home-hero-july-4-secondary",
     },
     {
         "kicker": "Civic & community",

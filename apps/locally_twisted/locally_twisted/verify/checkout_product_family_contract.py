@@ -45,11 +45,11 @@ EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS = (
     "elsa-bouquet",
     "holy-cow-bouquet",
 )
-MOTHERS_DAY_WEBSITE_ITEM = "mothers-day-bouquet"
 EASTER_BALLOON_CUPS_WEBSITE_ITEM = "easter-balloon-cups"
 GRADUATION_STANDS_WEBSITE_ITEM = "6-graduation-stands"
-BUTTERFLY_COLUMN_WEBSITE_ITEM = "7-butterfly-column"
+BABY_TABLE_DECOR_WEBSITE_ITEM = "baby-table-decor"
 GRADUATION_GRAB_N_GO_WEBSITE_ITEM = "graduation-grab-n-go"
+GRADUATION_GRAB_N_GO_VARIANT = "graduation-grab-n-go-BYU"
 
 
 class ContractFail(Exception):
@@ -103,10 +103,6 @@ def _run_contract(token: str) -> dict[str, Any]:
         expected_base_line_count += int(bouquet_result["enabled_variant_count"])
         expected_add_on_line_count += int(bouquet_result["add_on_line_count"])
 
-    mothers_day_result, mothers_day_lines = _assert_mothers_day_simple_line()
-    sales_order_lines.extend(mothers_day_lines)
-    expected_base_line_count += int(mothers_day_result["sale_sku_count"])
-
     easter_result, easter_lines = _assert_easter_balloon_cups_simple_line()
     sales_order_lines.extend(easter_lines)
     expected_base_line_count += int(easter_result["enabled_variant_count"])
@@ -115,21 +111,24 @@ def _run_contract(token: str) -> dict[str, Any]:
     sales_order_lines.extend(graduation_stands_lines)
     expected_base_line_count += int(graduation_stands_result["enabled_variant_count"])
 
-    butterfly_result, butterfly_lines = _assert_color_recipe_family_line(
-        website_item_code=BUTTERFLY_COLUMN_WEBSITE_ITEM,
-        label="7' Butterfly Column",
+    baby_table_decor_result, baby_table_decor_lines = _assert_color_recipe_family_line(
+        website_item_code=BABY_TABLE_DECOR_WEBSITE_ITEM,
+        label="Baby Table Decor",
+        page_type="complex_custom_product",
+        required_attribute="Baby color",
     )
-    sales_order_lines.extend(butterfly_lines)
-    expected_base_line_count += int(butterfly_result["enabled_variant_count"])
-    expected_color_recipe_line_count += int(butterfly_result["color_recipe_line_count"])
+    sales_order_lines.extend(baby_table_decor_lines)
+    expected_base_line_count += int(baby_table_decor_result["enabled_variant_count"])
+    expected_color_recipe_line_count += int(baby_table_decor_result["color_recipe_line_count"])
 
-    graduation_grab_result, graduation_grab_lines = _assert_color_recipe_family_line(
+    graduation_grab_result, graduation_grab_lines = _assert_variant_simple_line(
         website_item_code=GRADUATION_GRAB_N_GO_WEBSITE_ITEM,
+        variant_item_code=GRADUATION_GRAB_N_GO_VARIANT,
         label="Graduation Grab n Go",
+        no_add_on_failure="Graduation Grab n Go should not expose checkout add-ons",
     )
     sales_order_lines.extend(graduation_grab_lines)
-    expected_base_line_count += int(graduation_grab_result["enabled_variant_count"])
-    expected_color_recipe_line_count += int(graduation_grab_result["color_recipe_line_count"])
+    expected_base_line_count += 1
 
     sales_order = _assert_sales_order_accepts_family_lines(
         token,
@@ -147,13 +146,12 @@ def _run_contract(token: str) -> dict[str, Any]:
     )
 
     return {
-        "direct_checkout_family_count": len(bouquet_results) + 5,
+        "direct_checkout_family_count": len(bouquet_results) + 4,
         "bouquet_family_count": len(bouquet_results),
         "bouquet_family": bouquet_results,
-        "mothers_day": mothers_day_result,
         "easter_balloon_cups": easter_result,
         "graduation_stands": graduation_stands_result,
-        "butterfly_column": butterfly_result,
+        "baby_table_decor": baby_table_decor_result,
         "graduation_grab_n_go": graduation_grab_result,
         "sales_order": sales_order.name,
         "sales_invoice": sales_invoice_name,
@@ -185,7 +183,7 @@ def _assert_foil_number_add_on_scope() -> None:
             "foil_number eligible product-family scope drifted; "
             f"expected {EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS}, found {eligible}"
         )
-    if MOTHERS_DAY_WEBSITE_ITEM in eligible or "birthday-deliveries" in eligible:
+    if EASTER_BALLOON_CUPS_WEBSITE_ITEM in eligible or "birthday-deliveries" in eligible:
         raise ContractFail("foil_number add-on leaked onto non-approved ready-to-order/review products")
 
     _assert_item_price(FOIL_NUMBER_ADD_ON_ITEM, FOIL_NUMBER_ADD_ON_RATE)
@@ -301,14 +299,6 @@ def _assert_unknown_client_selected_options_fail_loudly() -> None:
     raise ContractFail("unknown stale selected option should fail loudly instead of being silently dropped")
 
 
-def _assert_mothers_day_simple_line() -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    return _assert_single_sku_simple_line(
-        website_item_code=MOTHERS_DAY_WEBSITE_ITEM,
-        label="Mother's Day Bouquet",
-        no_add_on_failure="Mother's Day Bouquet should not expose checkout add-ons",
-    )
-
-
 def _assert_easter_balloon_cups_simple_line() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     variant_item_codes = _enabled_variants_for_template(
         EASTER_BALLOON_CUPS_WEBSITE_ITEM,
@@ -396,19 +386,21 @@ def _assert_color_recipe_family_line(
     *,
     website_item_code: str,
     label: str,
+    page_type: str,
+    required_attribute: str,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     from locally_twisted.product_options import get_checkout_add_on_options
     from locally_twisted.www.checkout import _resolve_sale_lines
 
     website_item = _assert_website_item_contract(
         website_item_code,
-        page_type="simple_product",
+        page_type=page_type,
         commerce_lane="checkout",
     )
     if get_checkout_add_on_options(website_item_code):
         raise ContractFail(f"{label} should not expose checkout add-ons")
 
-    variant_item_codes = _enabled_variants_for_template(website_item_code, required_attribute="latex colors")
+    variant_item_codes = _enabled_variants_for_template(website_item_code, required_attribute=required_attribute)
     sale_lines: list[dict[str, Any]] = []
     verified_variants: list[dict[str, Any]] = []
     for variant_item_code in variant_item_codes:
@@ -421,6 +413,11 @@ def _assert_color_recipe_family_line(
         }
         if not color_options:
             raise ContractFail(f"{label} variant {variant_item_code} did not resolve a color axis")
+        sale_unit_options = {
+            attribute: value
+            for attribute, value in selected_options.items()
+            if not is_balloon_color_axis(attribute)
+        }
         configuration = _configuration_payload(
             item_code=variant_item_code,
             website_item_code=website_item_code,
@@ -448,7 +445,7 @@ def _assert_color_recipe_family_line(
             expected_item_code=variant_item_code,
             expected_website_item_code=website_item_code,
             expect_add_on=False,
-            expected_selected_options={},
+            expected_selected_options=sale_unit_options,
         )
         _assert_color_recipe_payload(
             label=variant_item_code,
@@ -460,6 +457,7 @@ def _assert_color_recipe_family_line(
             {
                 "variant_item_code": variant_item_code,
                 "color_recipes": color_options,
+                "selected_options": sale_unit_options,
                 "resolved_line_count": len(lines),
             }
         )
@@ -468,7 +466,7 @@ def _assert_color_recipe_family_line(
         {
             "website_item_code": website_item_code,
             "web_item_name": website_item.get("web_item_name"),
-            "stored_contract": "simple_product|checkout",
+            "stored_contract": f"{page_type}|checkout",
             "enabled_variant_count": len(variant_item_codes),
             "color_recipe_line_count": len(variant_item_codes),
             "add_on_options": 0,

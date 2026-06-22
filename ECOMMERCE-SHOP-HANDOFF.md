@@ -26,15 +26,16 @@ Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
   `workstreams/ecommerce-audit/delivery-only-fulfillment-staging-2026-05-25.md`;
   decision packet:
   `decisions/2026-05-25-delivery-only-line-fulfillment.md`.
-- Latest taxonomy staging proof also passes `npm run test:search-contract`
+- Historical 2026-05-24 taxonomy staging proof passed `npm run test:search-contract`
   `4/4`, `shop_category_hero_images.spec.js` `25/25`, and
   `public_asset_integrity.py --base-url https://locallytwisted-staging.frappe.cloud`
   for `31` routes and `315` local asset URLs. Public route probes confirmed
   `/shop`, `/shop-items/photo-ops-backdrops`, `/shop-items/stands-easels`,
-  `/shop-items/arches/easter-balloon-arch-bunny-ear`, and
-  `/shop-items/arches/pride-progress-rainbow-balloon-arch` return `200`;
+  and `/shop-items/arches/easter-balloon-arch-bunny-ear` returned `200`;
   duplicate routes `/shop-items/arches/easter-arch` and
-  `/shop-items/arches/pride-arch` return `404`.
+  `/shop-items/arches/pride-arch` returned `404`. The 2026-06-21 requested
+  product retirement supersedes the old Pride Progress route proof; that
+  product must stay unpublished unless GL explicitly re-approves it.
 - Hosted Stripe test-mode checkout proof on 2026-05-24 created and paid
   staging Sales Order `SAL-ORD-2026-00024`, Payment Request
   `ACC-PRQ-2026-00021`, and Sales Invoice `ACC-SINV-2026-00004` with grand
@@ -60,9 +61,11 @@ Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
   secondary category is one broad occasion/use-case. Delivery, pickup,
   latex-free, colors, sizes, add-ons, foil numbers, `Grab & Go`, specific
   holiday names, character/theme names, and product options are not categories.
-  This is now implemented locally/source: `51` published Website Items, `8`
-  visible primary categories under `Shop Items`, `9` secondary categories under
-  hidden `Shop Occasions`, and `51` secondary Website Item Group rows. Product
+  This is now implemented locally/source after the 2026-06-21 requested product
+  retirement: `47` published Website Items, `4` retired/unpublished Website
+  Items, `8` visible primary categories under `Shop Items`, `9` secondary
+  categories under hidden `Shop Occasions`, and `51` secondary Website Item
+  Group rows (`47` attached to currently published products). Product
   names, checkout behavior, live, DNS, Search Console, live Stripe, and
   production data were not changed. The taxonomy code is now staged on Frappe
   Cloud through app mirror `bb19a4b`.
@@ -387,8 +390,9 @@ Feature handoff:
 Evidence summary: GL corrected the product model: every source-imported product
 is a product. The local `frontend` site was backed up, cleaned of two generated
 proof products, snapshotted, and reimported with the then-current approved
-manifest. The 2026-05-24 taxonomy pass now treats 51 published products as
-current and explicitly excludes 2 duplicate source slugs from the import
+manifest. The 2026-06-21 retirement update now treats 47 published products as
+current, with 4 requested products hidden as `needs_review`, and explicitly
+excludes 2 duplicate source slugs from the import
 subset. Price enrichment now feeds
 `seed_catalog.py`, preventing bouquet-size variants from flattening to the page
 base price. Product-level Website Item contracts now outrank stale
@@ -458,16 +462,17 @@ Guarded data repair:
 - `python scripts\verify\website_item_classification_contract.py --apply`
 - Changed exactly 5 Website Item classification fields to `needs_review|needs_review`.
 
-Current local ERPNext counts after the 2026-05-18 school/seasonal color-preset
-repair:
+Current local ERPNext counts after the 2026-06-21 requested product retirement:
 
-- 53 published Website Items
-- 10,686 Items
+- 51 total Website Items
+- 47 published Website Items
+- 4 retired/unpublished Website Items
+- 10,685 Items
 - 49 templates
 - 10,629 variants
 - 10,186 active variants
 - 443 disabled variants
-- 10,668 Item Prices
+- 10,666 Item Prices
 - 30 Item Attributes
 - 32,049 Item Variant Attribute rows
 
@@ -547,10 +552,9 @@ Green gates:
 - `python scripts\verify\complex_checkout_scaffold_contract.py`
 - `python scripts\verify\complex_checkout_scaffold.py`
 
-Evidence summary after the 2026-05-17 reimport: 53 products checked; 53 direct
-checkout regression guards; 0 simple lane-flip candidates; 0 complex UI
-blockers; 0 add-on or conditional product blockers; 0 needs-review/missing
-products; 0 explicit checkout architecture gaps. Generated evidence lives
+Evidence summary after the 2026-06-21 retirement update: 47 published products
+remain in the active customer-facing set, 4 requested products are hidden as
+needs-review, and the classification contract has 0 mismatches. Generated evidence lives
 under ignored `output/complex-checkout-scaffold.*` and can be regenerated.
 
 ### Backend product-page architecture contract - 2026-05-12
@@ -596,8 +600,9 @@ Expected gated result:
   local ecommerce implementation work.
 
 Evidence summary after the 2026-05-17 reimport was 53 product rows mapped
-through the generic receiving architecture. The 2026-05-24 taxonomy pass now
-treats 51 published products as current, with 30 checkout and 21 quote-first.
+through the generic receiving architecture. The 2026-06-21 retirement update now
+treats 47 published products as current, with 28 checkout, 19 quote-first, and
+4 retired/unpublished needs-review products.
 There are no business quote-first product categories; legacy `quote_first`
 values are internal holds only where field names remain. Payload targets are
 `selected_options`, `color_recipes`, `add_ons`, and `quote_context`;

@@ -137,6 +137,8 @@
                     $('.page_content').on('click', '.lt-product__thumbnail-button, .item-slideshow-image', (e) => {
                         const $target = $(e.currentTarget);
                         const $img = $target.is('img') ? $target : $target.find('.item-slideshow-image').first();
+                        window.LT = window.LT || {};
+                        window.LT.productGalleryManualSelection = true;
                         showGalleryImage(galleryImages().index($img));
                     });
 

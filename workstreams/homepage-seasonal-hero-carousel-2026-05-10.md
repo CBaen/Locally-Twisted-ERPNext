@@ -2,23 +2,24 @@
 
 ## Outcome
 
-Homepage hero now rotates through five quote-led slides:
+Homepage hero now rotates through five quote-led slides. The first slide was
+updated on 2026-06-21 for the Fourth of July seasonal push:
 
-1. Graduation season first (`school-grad-garland.webp`)
+1. Fourth of July events first (`july-4-home-hero-desktop.webp`)
 2. Civic & community
 3. Corporate events
 4. Schools & campuses
 5. Private celebrations
 
-This implements GL's request for a seasonal first hero followed by the four event audience ads.
+This preserves GL's request for a seasonal first hero followed by the four event audience ads.
 
 ## Contract
 
 - First slide owns the only page-level H1.
 - Later slides use H2s, not extra H1s.
-- First slide must stay graduation-seasonal until GL changes the seasonal campaign.
+- First slide is the active seasonal campaign slot; as of 2026-06-21 it is Fourth of July.
 - Audience slides link to their matching audience routes and include a secondary quote/contact CTA.
-- The graduation slide no longer has a secondary `/event-balloons` CTA because
+- The seasonal slide no longer has a secondary `/event-balloons` CTA because
   the `/event-balloons` hub route is removed.
 - Do not add a hero CTA to `/event-balloons`; use `/contact`, `/portfolio`, or
   the four audience routes only.

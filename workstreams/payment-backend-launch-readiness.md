@@ -51,7 +51,7 @@ These are verified local/backend facts, not live-production claims:
 - `scripts/verify/payment_cascade_contract.py` passes and rolls back its generated ERPNext records.
 - `scripts/verify/cart_checkout_contract.py` passes for purchasable variants, single-SKU items, and shop card behavior.
 - `scripts/verify/payment_launch_readiness.py` passes in local mode.
-- `scripts/verify/payment_launch_readiness.py --mode live` fails, as expected, because the site is still configured for local Stripe test mode and localhost.
+- `scripts/verify/payment_launch_readiness.py --mode live` fails against the local development site, as expected, because local dev is configured for Stripe test mode and localhost. This does not describe the production Frappe Cloud Stripe configuration.
 - Hosted staging route proof and one Stripe test-mode checkout passed on
   2026-05-24. Verified staging records: Sales Order `SAL-ORD-2026-00024`,
   Payment Request `ACC-PRQ-2026-00021` `Paid`, Sales Invoice
@@ -122,6 +122,6 @@ Needs GL or client account access:
 
 ## Trust Boundary
 
-Do not say "payments are live-ready" until `payment_launch_readiness.py --mode live` passes and a real checkout has been completed through Stripe in the intended environment.
+Do not use the local development site's Stripe test records to describe production payment status. Production payment readiness must be checked on the live Frappe Cloud target without printing secrets.
 
-Safe wording right now: "local payment backend structure is ready for the next Stripe test; live cutover configuration is not complete."
+Safe wording right now: "local payment backend structure passes in test mode; production Stripe status belongs to the live Frappe Cloud site/config."

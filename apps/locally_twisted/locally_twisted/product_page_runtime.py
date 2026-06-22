@@ -461,7 +461,7 @@ def sales_order_line_configuration_fields(
     }
     _assert_client_options_match_variant(
         client_configuration=client_configuration,
-        variant_options=sale_unit_options,
+        variant_options=variant_options if setup_resolution else sale_unit_options,
         resolved_item=resolved_item,
         setup_resolution=setup_resolution,
     )
@@ -734,6 +734,10 @@ def _assert_client_options_match_variant(
             frappe.ValidationError,
         )
     if setup_resolution:
+        _assert_selected_options_match_allowed_variant_axes(
+            selected=client_configuration.get("selected_options") or {},
+            variant_options=variant_options,
+        )
         resolved_attributes = setup_resolution.get("resolved_variant_attributes") or {}
         for attribute, value in resolved_attributes.items():
             if attribute not in variant_options or str(value) != str(variant_options.get(attribute)):
@@ -774,6 +778,46 @@ def _assert_client_options_match_variant(
                 _("Tiny snag: this cart item's saved options do not match the selected item. Please choose the options again."),
                 frappe.ValidationError,
             )
+
+
+def _assert_selected_options_match_allowed_variant_axes(
+    *,
+    selected: Any,
+    variant_options: dict[str, str],
+) -> None:
+    if not isinstance(selected, dict):
+        frappe.throw(
+            _("Tiny snag: this cart item's selected options are not readable. Please choose the options again."),
+            frappe.ValidationError,
+        )
+
+    allowed_values: dict[str, str] = {}
+    for attribute, value in variant_options.items():
+        allowed_values[str(attribute)] = str(value)
+        allowed_values[_selection_axis_slug(attribute)] = str(value)
+
+    for attribute, value in selected.items():
+        key = str(attribute)
+        slug = _selection_axis_slug(key)
+        matched_value = allowed_values.get(key) or allowed_values.get(slug)
+        if matched_value is None:
+            frappe.throw(
+                _(
+                    "Tiny snag: this cart item's saved options no longer match this item. "
+                    "Please choose the options again."
+                ),
+                frappe.ValidationError,
+            )
+        if str(value) != matched_value:
+            frappe.throw(
+                _("Tiny snag: this cart item's saved options do not match the selected item. Please choose the options again."),
+                frappe.ValidationError,
+            )
+
+
+def _selection_axis_slug(value: Any) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", str(value or "").strip().lower()).strip("-")
+    return slug or "selection"
 
 
 def _validated_checkout_add_ons(

@@ -11,9 +11,14 @@ payment settings, live, DNS, Search Console, live Stripe, or production data.
 
 Verified local result after implementation:
 
-- Local ERPNext published `Website Item` count: `51`.
+- Local ERPNext published `Website Item` count after the 2026-06-21 requested
+  product retirement: `47`.
+- Retired/unpublished `Website Item` count: `4`
+  (`large-garland`, `mothers-day-bouquet`, `large-organic-column`,
+  `pride-progress-rainbow-balloon-arch`).
 - Visible primary `Item Group` children of `Shop Items`: `8`.
-- Secondary `Website Item Group` rows: `51`.
+- Secondary `Website Item Group` rows: `51` total, `47` attached to currently
+  published products.
 - Secondary categories live under hidden parent group `Shop Occasions`.
 - Product names remain unchanged.
 
@@ -105,14 +110,11 @@ not belong in the two-level category model.
 | `graduation-grab-n-go` | Graduation Grab n Go | Grab & Go | Garlands | Graduation |
 | `halloween-arch` | Halloween arch | Arches | Arches | Holiday |
 | `holy-cow-bouquet` | Holy COW!! Bouquet | Bouquets | Bouquets | Birthday |
-| `large-garland` | Large Garland | Garlands | Garlands | Any Occasion |
 | `large-head-missionary` | Large head Missionary | Bouquets | Bouquets | Religious |
-| `large-organic-column` | Large Organic Column | Columns | Columns | Any Occasion |
 | `logo-3-layered-bouquet` | Logo 3 layered bouquet | Bouquets | Bouquets | Corporate |
 | `marble-table-decor` | Marble table decor | Table Decor | Table Decor | Any Occasion |
 | `mickey-mouse-bouquet` | Mickey Mouse Bouquet | Bouquets | Bouquets | Birthday |
 | `minion-bouquet` | Minion Bouquet | Bouquets | Bouquets | Birthday |
-| `mothers-day-bouquet` | Mother's Day Bouquet | Bouquets | Bouquets | Holiday |
 | `mothers-day-front-yard-7-column` | Mother's day front yard 7' Column | Columns | Columns | Holiday |
 | `number-balloon-columns` | Number Balloon Columns | Columns | Columns | Birthday |
 | `organic-grab-n-go` | Organic Grab n' Go | Grab & Go | Garlands | Any Occasion |
@@ -121,7 +123,6 @@ not belong in the two-level category model.
 | `pemium-organic-column` | Pemium Organic Column | Columns | Columns | Any Occasion |
 | `premium-organic-arch` | Premium Organic Arch | Arches | Arches | Any Occasion |
 | `premium-organic-garland` | Premium Organic Garland | Garlands | Garlands | Any Occasion |
-| `pride-progress-rainbow-balloon-arch` | Pride progress Rainbow Balloon Arch | Arches | Arches | Holiday |
 | `shooting-star-get-well-bouquet-latex-free` | Shooting star "GET WELL" Bouquet (Latex free) | Get-Well Bouquets | Bouquets | Get Well |
 | `sleepy-baby-column` | Sleepy Baby Column | Columns | Columns | Baby Shower |
 | `soccer-bouquet` | Soccer Bouquet | Bouquets | Bouquets | Sports |

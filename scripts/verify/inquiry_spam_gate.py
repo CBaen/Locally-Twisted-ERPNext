@@ -14,8 +14,6 @@ import re
 import time
 from html import unescape
 
-import requests
-
 from smoke_forms import cleanup_record_in_backend_frappe
 
 
@@ -75,6 +73,8 @@ def main() -> int:
 
 
 def fetch_form_token(base_url: str, failures: list[str]) -> str:
+    import requests
+
     response = requests.get(f"{base_url}/contact", timeout=30)
     response.raise_for_status()
     body = response.text
@@ -90,7 +90,9 @@ def fetch_form_token(base_url: str, failures: list[str]) -> str:
     return token
 
 
-def submit(base_url: str, marker: str, extra: dict[str, str]) -> requests.Response:
+def submit(base_url: str, marker: str, extra: dict[str, str]):
+    import requests
+
     data = {
         "contact_name": marker,
         "email_from": "spam-gate-test@example.invalid",

@@ -16,7 +16,7 @@ METHOD = "locally_twisted.verify.checkout_product_family_contract.run"
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS = {
     "6-graduation-stands",
-    "7-butterfly-column",
+    "baby-table-decor",
     "easter-balloon-cups",
     "elsa-bouquet",
     "encanto-bouquet",
@@ -26,7 +26,6 @@ EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS = {
     "holy-cow-bouquet",
     "mickey-mouse-bouquet",
     "minion-bouquet",
-    "mothers-day-bouquet",
     "over-the-hill-bouquet",
     "paw-patrol-bouquet",
     "soccer-bouquet",
@@ -139,10 +138,9 @@ def _covered_website_items(result: dict[str, Any]) -> set[str]:
         if row.get("website_item_code")
     }
     for key in (
-        "mothers_day",
         "easter_balloon_cups",
         "graduation_stands",
-        "butterfly_column",
+        "baby_table_decor",
         "graduation_grab_n_go",
     ):
         row = result.get(key) or {}

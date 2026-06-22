@@ -32,7 +32,6 @@ CHECKOUT_READY_AFTER_SMALL_FIX = (
     "elsa-bouquet",
     "holy-cow-bouquet",
     "easter-balloon-cups",
-    "mothers-day-bouquet",
     "graduation-grab-n-go",
     "6-graduation-stands",
 )
@@ -41,7 +40,6 @@ CONFIGURABLE_CHECKOUT = (
     "basketball-arch",
     "easter-balloon-arch-bunny-ear",
     "large-head-missionary",
-    "pride-progress-rainbow-balloon-arch",
     "star-column",
     "baby-table-decor",
     "6-color-rainbow-arch",
@@ -73,11 +71,14 @@ QUOTE_FIRST = (
     "sleepy-baby-column",
     "logo-3-layered-bouquet",
     "classic-organic-for-easel",
-    "large-garland",
-    "large-organic-column",
 )
 
-HIDE_OR_NEEDS_REVIEW = ()
+HIDE_OR_NEEDS_REVIEW = (
+    "large-garland",
+    "mothers-day-bouquet",
+    "large-organic-column",
+    "pride-progress-rainbow-balloon-arch",
+)
 
 DESIRED_BY_LANE: dict[str, dict[str, str]] = {
     "checkout_ready_after_small_fix": {
@@ -100,10 +101,10 @@ DESIRED_BY_LANE: dict[str, dict[str, str]] = {
 
 EXPECTED_TOTAL = 51
 EXPECTED_COUNTS = {
-    "checkout_ready_after_small_fix": 17,
-    "configurable_checkout": 13,
-    "quote_first": 21,
-    "hide_or_needs_review": 0,
+    "checkout_ready_after_small_fix": 16,
+    "configurable_checkout": 12,
+    "quote_first": 19,
+    "hide_or_needs_review": 4,
 }
 ONLY_MUTATED_FIELDS = (WEBSITE_ITEM_PAGE_TYPE_FIELD, WEBSITE_ITEM_COMMERCE_LANE_FIELD)
 

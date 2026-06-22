@@ -164,14 +164,11 @@ PRODUCT_TAXONOMY: dict[str, dict[str, str]] = {
     "graduation-grab-n-go": {"primary": "Garlands", "secondary": "Graduation"},
     "halloween-arch": {"primary": "Arches", "secondary": "Holiday"},
     "holy-cow-bouquet": {"primary": "Bouquets", "secondary": "Birthday"},
-    "large-garland": {"primary": "Garlands", "secondary": "Any Occasion"},
     "large-head-missionary": {"primary": "Bouquets", "secondary": "Religious"},
-    "large-organic-column": {"primary": "Columns", "secondary": "Any Occasion"},
     "logo-3-layered-bouquet": {"primary": "Bouquets", "secondary": "Corporate"},
     "marble-table-decor": {"primary": "Table Decor", "secondary": "Any Occasion"},
     "mickey-mouse-bouquet": {"primary": "Bouquets", "secondary": "Birthday"},
     "minion-bouquet": {"primary": "Bouquets", "secondary": "Birthday"},
-    "mothers-day-bouquet": {"primary": "Bouquets", "secondary": "Holiday"},
     "mothers-day-front-yard-7-column": {"primary": "Columns", "secondary": "Holiday"},
     "number-balloon-columns": {"primary": "Columns", "secondary": "Birthday"},
     "organic-grab-n-go": {"primary": "Garlands", "secondary": "Any Occasion"},
@@ -188,6 +185,13 @@ PRODUCT_TAXONOMY: dict[str, dict[str, str]] = {
     "stitch-bouquet": {"primary": "Bouquets", "secondary": "Birthday"},
     "unicorn-bouquet": {"primary": "Bouquets", "secondary": "Birthday"},
 }
+
+RETIRED_PRODUCT_CODES = (
+    "large-garland",
+    "mothers-day-bouquet",
+    "large-organic-column",
+    "pride-progress-rainbow-balloon-arch",
+)
 
 PRIMARY_CATEGORY_NAMES = tuple(spec.name for spec in PRIMARY_CATEGORY_SPECS)
 SECONDARY_CATEGORY_NAMES = tuple(spec.name for spec in SECONDARY_CATEGORY_SPECS)

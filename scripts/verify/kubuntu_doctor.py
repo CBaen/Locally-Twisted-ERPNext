@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import shutil
 import subprocess
 import sys
@@ -54,6 +55,9 @@ def http_status(url: str) -> int | None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args()
+
     print("[LT KUBUNTU DOCTOR] read-only")
 
     code, branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"])

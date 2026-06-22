@@ -15,9 +15,6 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from PIL import Image
-
-
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_IMAGE_DIR = ROOT / "_resources" / "catalog-source" / "images"
 SLUG_TO_GROUP = ROOT / "_resources" / "catalog-source" / "slug_to_group.json"
@@ -54,7 +51,6 @@ PREFERRED_PRODUCT_SLUGS = {
     "Columns": {"classic-column", "classic-organic-columns"},
     "Bouquets": {
         "birthday-deliveries",
-        "mothers-day-bouquet",
         "unicorn-bouquet",
         "bandage-get-well-bouquet-latex-free",
         "butterfly-get-well-bouquet-latex-free",
@@ -234,6 +230,8 @@ def _images_for_slug(slug: str) -> list[Path]:
 
 
 def _image_info(path: Path) -> dict:
+    from PIL import Image
+
     try:
         with Image.open(path) as image:
             return {

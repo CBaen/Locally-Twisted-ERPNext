@@ -8,7 +8,7 @@ import time
 import frappe
 
 
-ITEM_CODE = "mothers-day-bouquet"
+ITEM_CODE = "unicorn-bouquet-SMA"
 DELIVERY_ONLY_ITEM_CODE = "graduation-grab-n-go-BYU"
 
 

@@ -187,7 +187,7 @@ html body :is(
 }
 
 html body .lt-hero__image {
-  background-image: var(--lt-photo-hero-mobile);
+  background-image: var(--lt-slide-hero-mobile, var(--lt-photo-hero-mobile));
   background-position: var(--lt-photo-hero-position);
   background-repeat: no-repeat;
   background-size: cover;
@@ -265,7 +265,7 @@ html body .lt-shop__hero-lede a {
     .lt-shop__hero
   )::before,
   html body .lt-hero__image {
-    background-image: var(--lt-photo-hero-tablet);
+    background-image: var(--lt-slide-hero-tablet, var(--lt-photo-hero-tablet));
   }
 }
 
@@ -281,7 +281,7 @@ html body .lt-shop__hero-lede a {
     .lt-shop__hero
   )::before,
   html body .lt-hero__image {
-    background-image: var(--lt-photo-hero-desktop);
+    background-image: var(--lt-slide-hero-desktop, var(--lt-photo-hero-desktop));
   }
 }
 

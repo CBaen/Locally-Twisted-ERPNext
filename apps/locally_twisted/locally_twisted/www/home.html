@@ -11,7 +11,9 @@
 <section class="lt-hero lt-fullbleed" aria-labelledby="lt-page-heading" aria-describedby="lt-hero-tagline">
     {% for slide in home_hero_slides %}
     <article class="lt-hero__slide{% if loop.first %} lt-hero__slide--active{% endif %}" aria-hidden="{{ 'false' if loop.first else 'true' }}"{% if not loop.first %} inert{% endif %}>
-        <div class="lt-hero__image" style="background-image: url('{{ slide.image }}');" aria-hidden="true"></div>
+        <div class="lt-hero__image"
+             style="--lt-slide-hero-mobile: url('{{ slide.image_mobile or slide.image }}'); --lt-slide-hero-tablet: url('{{ slide.image_tablet or slide.image }}'); --lt-slide-hero-desktop: url('{{ slide.image }}');"
+             aria-hidden="true"></div>
         <div class="lt-hero__content">
             <p class="lt-hero__eyebrow">{{ slide.kicker }}</p>
 

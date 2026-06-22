@@ -55,7 +55,6 @@ ASSIGNMENTS = {
     "butterfly-get-well-bouquet-latex-free": "Bouquets",
     "bandage-get-well-bouquet-latex-free": "Bouquets",
     "shooting-star-get-well-bouquet-latex-free": "Bouquets",
-    "mothers-day-bouquet": "Bouquets",
 
     # ── Columns (themed or event-specific) ────────────────────────────
     "number-balloon-columns": "Columns",
@@ -72,7 +71,6 @@ ASSIGNMENTS = {
     # ── Event Decor (consultative — unpublished from shop) ────────────
     "classic-organic-columns": "Event Decor",
     "pemium-organic-column": "Event Decor",
-    "large-organic-column": "Event Decor",
     "classic-organic-for-easel": "Event Decor",
     "baby-shower-garland": "Event Decor",
     "logo-3-layered-bouquet": "Event Decor",

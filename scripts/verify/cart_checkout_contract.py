@@ -43,7 +43,8 @@ CHECKOUT_CONFIG_TEMPLATE = "6-graduation-stands"
 CHECKOUT_CONFIG_ITEM = "6-graduation-stands-CON-BYU"
 QUOTE_FIRST_TEMPLATE = "7-butterfly-column"
 QUOTE_FIRST_ITEM = "7-butterfly-column-REF"
-SINGLE_SKU_ITEM = "mothers-day-bouquet"
+RETAIL_NO_ADDON_ITEM = "easter-balloon-cups-BUN"
+RETAIL_NO_ADDON_WEBSITE_ITEM = "easter-balloon-cups"
 MAX_QTY_PER_LINE = 99
 CONFIG_VERSION = "lt-product-config-v1"
 FOIL_NUMBER_ADD_ON_ITEM = "ADDON-FOIL-NUMBER"
@@ -161,13 +162,13 @@ def check_backend_product_classification_examples() -> None:
 def check_cart_api_routes_sellable_legacy_source_products() -> None:
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
-        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, CHECKOUT_CONFIG_ITEM, SINGLE_SKU_ITEM, COMPLEX_VARIANT_TEMPLATE]},
+        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, CHECKOUT_CONFIG_ITEM, RETAIL_NO_ADDON_ITEM, COMPLEX_VARIANT_TEMPLATE]},
     )
 
     items = by_item_code(data.get("items") or [])
     missing = {row["item_code"]: row.get("reason") for row in data.get("missing") or []}
 
-    assert_true(SINGLE_SKU_ITEM in items, f"{SINGLE_SKU_ITEM} should still resolve as a cart item")
+    assert_true(RETAIL_NO_ADDON_ITEM in items, f"{RETAIL_NO_ADDON_ITEM} should still resolve as a cart item")
     assert_true(RETAIL_VARIANT_ITEM in items, f"{RETAIL_VARIANT_ITEM} should resolve as a retail variant cart item")
     assert_true(
         COMPLEX_VARIANT_TEMPLATE in missing,
@@ -178,10 +179,10 @@ def check_cart_api_routes_sellable_legacy_source_products() -> None:
         f"{CHECKOUT_CONFIG_ITEM} should resolve as a sellable checkout product variant, missing reason {missing.get(CHECKOUT_CONFIG_ITEM)!r}",
     )
 
-    single = items[SINGLE_SKU_ITEM]
+    single = items[RETAIL_NO_ADDON_ITEM]
     assert_true(
         single.get("checkout_lane") == "retail_checkout",
-        f"{SINGLE_SKU_ITEM} should stay in retail checkout lane, found {single.get('checkout_lane')!r}",
+        f"{RETAIL_NO_ADDON_ITEM} should stay in retail checkout lane, found {single.get('checkout_lane')!r}",
     )
 
     variant = items[RETAIL_VARIANT_ITEM]
@@ -246,8 +247,8 @@ def _foil_number_configuration(value: str) -> dict[str, Any]:
 def _ineligible_foil_number_configuration(value: str) -> dict[str, Any]:
     return {
         "schema_version": CONFIG_VERSION,
-        "item_code": SINGLE_SKU_ITEM,
-        "website_item_code": SINGLE_SKU_ITEM,
+        "item_code": RETAIL_NO_ADDON_ITEM,
+        "website_item_code": RETAIL_NO_ADDON_WEBSITE_ITEM,
         "selected_options": {},
         "add_ons": [
             {
@@ -601,7 +602,7 @@ def check_add_on_eligibility_rejects_unapproved_product() -> None:
         kwargs={
             "cart_items": [
                 {
-                    "item_code": SINGLE_SKU_ITEM,
+                    "item_code": RETAIL_NO_ADDON_ITEM,
                     "qty": 1,
                     "configuration": _ineligible_foil_number_configuration("7"),
                 }
@@ -632,7 +633,7 @@ def check_checkout_rejects_over_limit_quantities() -> None:
     expected = f"Tiny snag: one cart line has more than {MAX_QTY_PER_LINE} items."
     bench_execute_expect_error(
         "locally_twisted.www.checkout._resolve_cart_items",
-        kwargs={"item_code": SINGLE_SKU_ITEM, "qty": MAX_QTY_PER_LINE + 1, "items_json": ""},
+        kwargs={"item_code": RETAIL_NO_ADDON_ITEM, "qty": MAX_QTY_PER_LINE + 1, "items_json": ""},
         expected=expected,
     )
     bench_execute_expect_error(
@@ -640,7 +641,7 @@ def check_checkout_rejects_over_limit_quantities() -> None:
         kwargs={
             "item_code": "",
             "qty": 1,
-            "items_json": json.dumps([{"item_code": SINGLE_SKU_ITEM, "qty": MAX_QTY_PER_LINE + 1}]),
+            "items_json": json.dumps([{"item_code": RETAIL_NO_ADDON_ITEM, "qty": MAX_QTY_PER_LINE + 1}]),
         },
         expected=expected,
     )
@@ -661,10 +662,6 @@ def check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates() ->
     assert_true(
         f'data-item-code="{COMPLEX_SINGLE_SKU_ITEM}"' in html,
         f"/shop should keep priced single-SKU product {COMPLEX_SINGLE_SKU_ITEM} cartable",
-    )
-    assert_true(
-        f'data-item-code="{SINGLE_SKU_ITEM}"' in html,
-        f"/shop should keep add-to-cart available for single SKU {SINGLE_SKU_ITEM}",
     )
 
 

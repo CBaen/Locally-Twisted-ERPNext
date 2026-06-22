@@ -1,0 +1,19 @@
+{
+  "asset": "july-4-home-hero",
+  "created": "2026-06-18 MDT",
+  "source": "_resources/generated-hero-sources/2026-06-18/july-4-home-hero-source.png",
+  "public_assets": [
+    "apps/locally_twisted/locally_twisted/public/images/heroes/july-4-home-hero-desktop.webp",
+    "apps/locally_twisted/locally_twisted/public/images/heroes/july-4-home-hero-tablet.webp",
+    "apps/locally_twisted/locally_twisted/public/images/heroes/july-4-home-hero-mobile.webp"
+  ],
+  "intent": "Original bitmap homepage hero background for July 4th quote-first event decor. No product/SKU implication and no text in image.",
+  "colors": [
+    "red",
+    "white",
+    "blue",
+    "navy",
+    "summer green",
+    "neutral plaza"
+  ]
+}

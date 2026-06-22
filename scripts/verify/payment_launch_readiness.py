@@ -7,6 +7,10 @@ Stripe, submit a card, or print secret values.
 Run:
   python scripts/verify/payment_launch_readiness.py
   python scripts/verify/payment_launch_readiness.py --mode live
+
+Local mode is expected to use Stripe test records. Live payment status must be
+proved against the Frappe Cloud production site/config, not inferred from this
+local development database.
 """
 from __future__ import annotations
 

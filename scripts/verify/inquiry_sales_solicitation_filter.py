@@ -7,8 +7,6 @@ import re
 import time
 from html import unescape
 
-import requests
-
 from smoke_forms import cleanup_record_in_backend_frappe
 
 
@@ -95,6 +93,8 @@ def submit(
     service: str,
     company: str,
 ) -> dict:
+    import requests
+
     token = fetch_form_token(base_url)
     time.sleep(2.1)
     response = requests.post(
@@ -122,6 +122,8 @@ def submit(
 
 
 def fetch_form_token(base_url: str) -> str:
+    import requests
+
     response = requests.get(f"{base_url}/contact", timeout=30)
     response.raise_for_status()
     match = TOKEN_RE.search(response.text)

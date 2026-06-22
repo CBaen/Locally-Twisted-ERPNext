@@ -133,7 +133,7 @@ def _check_tax_rates(rules) -> list[str]:
 def _check_taxable_item_rules(rules) -> list[str]:
     failures = []
     cases = [
-        ("mothers-day-bouquet", "Bouquets", True),
+        ("unicorn-bouquet-SMA", "Bouquets", True),
         ("unicorn-bouquet-SMA", "Bouquets", True),
         ("DELIVERY-STANDARD", "Services", False),
         ("DELIVERY-PARK-CITY", "Services", False),

@@ -1,7 +1,8 @@
 """Payment configuration helpers for Locally Twisted.
 
-Local dev still defaults to the current Stripe test setup. Production can
-override these values in site_config.json without changing checkout code.
+Local dev defaults to Stripe test records so verification cannot charge real
+cards. The live Frappe Cloud site owns production Stripe values through
+site_config.json overrides; do not infer live payment status from local config.
 """
 from __future__ import annotations
 

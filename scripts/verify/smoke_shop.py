@@ -89,7 +89,7 @@ PRODUCT_VARIANT_URL = f"{BASE}/shop-items/bouquets/unicorn-bouquet"
 PRODUCT_VARIANT_EXPECTED_ATTRS = ["Bouquet Size"]
 PRODUCT_PROGRESSIVE_URL = PRODUCT_VARIANT_URL
 PRODUCT_CART_VARIANT_URL = PRODUCT_VARIANT_URL
-PRODUCT_SINGLE_URL = f"{BASE}/shop-items/bouquets/mothers-day-bouquet"
+PRODUCT_SINGLE_URL = f"{BASE}/shop-items/columns/mothers-day-front-yard-7-column"
 SHOP_CATEGORY_SHOWCASE_URL = f"{BASE}/shop-items/arches"
 PRODUCT_DETAIL_SHOWCASE_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
 VARIANT_STARTING_PRICE_URL = f"{BASE}/shop-items/columns/classic-column"
@@ -989,7 +989,7 @@ def check_product_single_page(page):
         print(f"  skipped (HTTP {resp.status})")
         return
     body = page.content()
-    assert_("Item Code: mothers-day-bouquet" not in body, "Single SKU still leaks Item Code jargon")
+    assert_("Item Code: mothers-day-front-yard-7-column" not in body, "Single SKU still leaks Item Code jargon")
     assert_(page.locator(".btn-add-to-cart").count() >= 1, "Retail single-SKU page missing add-to-cart button")
     print("  OK retail single SKU page clean with add-to-cart")
 

@@ -20,8 +20,6 @@ import time
 from html import unescape
 import urllib.parse
 
-import requests
-
 PNG_1X1 = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII="
 )
@@ -32,6 +30,8 @@ TOKEN_RE = re.compile(
 
 
 def submit(base_url: str, email: str, label: str) -> dict:
+    import requests
+
     files = [
         ("ufile", (f"inspiration-{idx}.png", PNG_1X1, "image/png"))
         for idx in range(1, 6)
@@ -72,6 +72,8 @@ def submit(base_url: str, email: str, label: str) -> dict:
 
 
 def fetch_form_token(base_url: str) -> str:
+    import requests
+
     response = requests.get(f"{base_url.rstrip('/')}/contact", timeout=30)
     response.raise_for_status()
     match = TOKEN_RE.search(response.text)

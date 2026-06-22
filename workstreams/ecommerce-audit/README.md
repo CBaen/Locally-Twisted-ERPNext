@@ -127,11 +127,10 @@ Ready-to-Order/search rendered proof, final post-import checkout proof, the
 all-priced-page frontend audit, Classic Arch's current internal hold state, the
 legacy lane correction, and the complex-product UI checklist.
 
-Current storefront evidence: 53 published priced product routes rendered; 18
-direct-checkout pages passed option selection, `data-item-code`, add-to-cart,
-cart-line configuration, and checkout summary preservation; 35 priced pages are
-currently blocked at the first rendered layer by legacy internal hold or
-needs-review state. `quote_first` is an old safety flag, not a business product
+Current storefront evidence is superseded by the 2026-06-21 retirement update:
+47 product routes are currently published, 28 are checkout products, 19 are
+quote-first products, and 4 requested products are hidden as needs-review.
+Older 53-route evidence remains historical proof only. `quote_first` is an old safety flag, not a business product
 category. Moving any held product into checkout still needs backend-truth UI for
 multi-color recipes, add-ons, conditional pricing, image updates, and
 cart/checkout/receipt summary parity.
@@ -188,10 +187,11 @@ setup closeout. Completed lanes:
 2026-05-18 school/seasonal color-preset follow-up:
 `school-seasonal-color-preset-product-logic-2026-05-18.md` converted the two
 graduation checkout products to college preset variants and moved
-hyperspecialized 50+ color products to quote request. Current local counts:
-53 published Website Items, 10,686 Items, 49 templates, 10,629 variants,
-10,186 active variants, 443 disabled variants, 10,668 Item Prices,
-30 Item Attributes, and 32,049 Item Variant Attribute rows.
+hyperspecialized 50+ color products to quote request. Current local counts
+after the 2026-06-21 requested product retirement: 51 total Website Items, 47
+published Website Items, 4 retired/unpublished Website Items, 10,685 Items, 49
+templates, 10,629 variants, 10,186 active variants, 443 disabled variants,
+10,666 Item Prices, 30 Item Attributes, and 32,049 Item Variant Attribute rows.
 
 ## 2026-05-14 Product Blueprint Authoring
 
@@ -320,7 +320,7 @@ behavior, owner approval, or staging/live exposure.
 | Phase 5 delivery/payment/operator packet | `phase-5-delivery-payment-operator-packet-2026-05-10.md` | Present, parent-verified / local proof | Proves delivery fee mapping, pickup, tax boundaries, payment backend config, mocked webhook, paid cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, local launch readiness, and pause-state safety. |
 | Product import hardening gate | `product-import-hardening-gate-2026-05-11.md` + `../../scripts/verify/product_import_readiness_gate.py` | Present, backend-owned / read-only gate | Minimum real-catalog import readiness gate for peer GPT agents: source packets, approvals, fail-loud import fields, dry-run/destructive/backup guards, snapshot and rollback plan. Expected current result is blocked until hardening and approvals are complete. |
 | Payment portal live cutover checklist | `../payment-portal-live-cutover-checklist-2026-05-11.md` | Present, backend-owned / checklist | Moves passing local/test payment contracts into staging/live cutover steps for Frappe v15.106.0 / ERPNext v15.105.0, Frappe Cloud site config, Stripe webhook/policy setup, and one approved low-risk live payment test. |
-| Sellable product reimport | `legacy_source-sellable-product-reimport-2026-05-17.md` + `../../scripts/verify/v1_legacy_source_erpnext_import_manifest.py` + `../../scripts/verify/product_import_readiness_gate.py` + `../../scripts/verify/post_import_checkout_proof.js` | Historical, local-only full import/proof closeout | Superseded for category/count truth by the 2026-05-24 taxonomy proof: 51 published products, 30 checkout, 21 quote-first, and 2 duplicate source slugs excluded. |
+| Sellable product reimport | `legacy_source-sellable-product-reimport-2026-05-17.md` + `../../scripts/verify/v1_legacy_source_erpnext_import_manifest.py` + `../../scripts/verify/product_import_readiness_gate.py` + `../../scripts/verify/post_import_checkout_proof.js` | Historical, local-only full import/proof closeout | Superseded for category/count truth by the 2026-06-21 product-retirement proof: 47 published products, 28 checkout, 19 quote-first, 4 retired/unpublished needs-review products, and 2 duplicate source slugs excluded. |
 | Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Historical, superseded by 2026-05-17 full import closeout | Older 48 kept / 5 Classic-excluded proof packet; use only for history. |
 | Storefront proof and complex UI handoff | `storefront-proof-and-complex-ui-handoff-2026-05-11.md` | Present, rendered storefront proof / frontend-owned handoff | Captures Ready-to-Order/search proof, final post-import checkout proof, all-priced-page audit, Classic Arch proof, quote-first lane correction, complex UI requirements, and regression proof ladder. |
 | Ready-to-Order nav/search backend gate | `ready-to-order-nav-search-backend-gate-2026-05-12.md` | Present, review-closeout / local DB + rendered proof | Captures owner-include-as-allowlist rule, backend `simple_product|checkout` requirement, hidden-vs-removed search quick-link assertion, mobile drawer label correction, and nav/search verifier receipts. |
@@ -355,9 +355,10 @@ dependency/add-on/pricing/media services, fail-loud verifiers, and scoped
 import guards. As of the 2026-05-17 closeout, local backend wiring,
 catalog/import/pricing, media primary-image readiness, storefront product UX,
 cart/checkout preview, and runner wrapper lanes were green for the then-current
-sellable import. The 2026-05-24 taxonomy proof is now the current count source:
-51 published products, 30 checkout, 21 quote-first, and 2 duplicate source
-slugs excluded. The staff blueprint slice still lets
+sellable import. The 2026-06-21 retirement update is now the current count
+source: 47 published products, 28 checkout, 19 quote-first, 4
+retired/unpublished needs-review products, and 2 duplicate source slugs
+excluded. The staff blueprint slice still lets
 employees define new customizable products in ERPNext locally, preview/apply
 them unpublished, and prove fixed-price blueprint add-on cascades. This is
 local ecommerce architecture/import/authoring proof, not final live cutover
@@ -393,7 +394,7 @@ Current durable JSON evidence remains only under this workstream directory. Igno
 6. Run Lane F/final synthesis only after version mismatches and final launch gates are either resolved or explicitly labeled.
 7. Do not delete/reimport products, click admin-like legacy_source mutation paths, or mutate authenticated systems for this audit without a fresh rollback/preflight.
 8. Do not use the May 10 candidate/cut-plan artifacts as the final product model. Use the 2026-05-17 reimport handoff, `product-source-repair-map-2026-05-17.md`, and the 2026-05-24 taxonomy proof together for current product-scope work.
-9. Count precisely: the current taxonomy proof is 51 published Website Items, 30 checkout, 21 quote-first, and 2 duplicate source slugs excluded. Older 53-page, 15-family/47-SKU, and 18-family tranche counts are historical.
+9. Count precisely: the current taxonomy proof is 47 published Website Items, 28 checkout, 19 quote-first, 4 retired/unpublished needs-review products, and 2 duplicate source slugs excluded. Older 53-page, 51-published, 30-checkout, 21-quote-first, 15-family/47-SKU, and 18-family tranche counts are historical.
 10. Treat the focused customer-note verifier as Phase 1 complete: `customer_note_checkout_preservation_contract.py` now passes in rollback-safe mode.
 11. Use `ready-to-order-ecommerce-plan-deepen-2026-05-10.md`, `ready-to-order-ecommerce-goal-progress-2026-05-10.md`, `phase-5-delivery-payment-operator-packet-2026-05-10.md`, `product-import-hardening-gate-2026-05-11.md`, and `../payment-portal-live-cutover-checklist-2026-05-11.md` as active sequencing gates: Phases 1-5 are locally verifier-backed; import and live payment are the remaining backend cutover gates.
 12. Treat `ready-to-order-product-cut-plan-2026-05-10.md` as historical launch-shelf evidence, not the business catalog model. There are no business quote-first products; complex/event/custom products are blocked or hidden only until source-backed purchasable behavior is implemented and verified.
