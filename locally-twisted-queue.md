@@ -10,6 +10,19 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 capability context gate and product/hero release aftercare (2026-06-22):**
+The capability gate is implemented and locally verified; handoff:
+`workstreams/capability-context-gate-2026-06-22.md`; recipe:
+`capabilities/recipes/mandatory-capability-context-gate.md`; failure note:
+`capabilities/failures/capability-context-gate-bypass-drift.md`. Future LT
+edits must run `/home/guidingl/codex-framework/tools/capability_context_gate.py`
+with `capabilities/INDEX.md` and a task-relevant recipe/failure/skill. The
+2026-06 product/hero code was source-pushed in `4427e70` and app-mirror-pushed
+in `96be0c5`, but live was still stale during this guardrail slice. Next safe
+step if GL returns to the site fix is not another local rewrite: load the LT
+release capability path, update the Frappe Cloud site/app, clear cache, and
+prove live homepage/product-route behavior.
+
 **P1 Kubuntu recovery aftercare (2026-06-16):** Source cleanup after the
 Windows-to-Kubuntu move is reconciled, rebased on remote `5dafae7`, and
 archived to GitHub. GitHub auth was repaired with `gh auth login` plus

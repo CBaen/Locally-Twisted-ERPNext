@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-22 - LT capability context gate is mandatory before edits and release claims
+
+**Decision:** LT agents must run the executable capability context gate before
+LT edits or release actions. The gate must load the nearest local
+`capabilities/INDEX.md` and, for high-risk work, a task-relevant recipe,
+failure note, gate, or skill. `capabilities/INDEX.md` alone is not enough for
+public-site, catalog, checkout, payment, Frappe Cloud, Cloudflare, Stripe,
+provider, live-release, form, customer-message, document, backend automation,
+customer-data, or product-count/parity work.
+
+**Reasoning:** The 2026-06 product/hero request was narrow, but the session
+expanded because capability resources were treated as optional context instead
+of required operating infrastructure. Prose reminders did not stop the failure
+mode. The rule now needs an executable nonzero gate plus AI-facing handoff,
+queue, lesson, and capability docs.
+
+**Implementation boundary:** Added LT AGENTS language, a feature handoff,
+recipe, failure note, and links to the machine-level gate. This did not perform
+a Frappe Cloud site update, live deploy, provider dashboard mutation, Stripe
+change, DNS change, ERPNext data mutation, or customer communication.
+
+**Receipts:** `workstreams/capability-context-gate-2026-06-22.md`;
+`capabilities/recipes/mandatory-capability-context-gate.md`;
+`capabilities/failures/capability-context-gate-bypass-drift.md`;
+`/home/guidingl/codex-framework/tools/capability_context_gate.py`. Witness
+review found and resolved gaps in product/public-site vocabulary, nearest-index
+selection, and unrelated-capability bypass behavior.
+
+**Decided by:** Guiding Light explicit correction and approval on 2026-06-22;
+Codex implementation and witness review.
+
+---
+
 ## 2026-06-16 - Kubuntu doctor is local runtime preflight only
 
 **Decision:** LT now carries a repo-local read-only Kubuntu doctor at

@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Capability context gate closeout as of 2026-06-22 MDT: GL explicitly approved
+turning the capability-framework miss into an enforceable guardrail. The LT
+entrypoint now requires the mandatory capability context gate before LT edits
+or release actions. New handoff:
+`workstreams/capability-context-gate-2026-06-22.md`; new recipe:
+`capabilities/recipes/mandatory-capability-context-gate.md`; new failure note:
+`capabilities/failures/capability-context-gate-bypass-drift.md`. The executable
+gate lives at `/home/guidingl/codex-framework/tools/capability_context_gate.py`
+and now proves: nearest local capability index is required; high-risk work
+needs a task-relevant recipe/failure/skill; unrelated capability files do not
+satisfy product/catalog work; nested roots use the nearest index; git-backed
+projects without a local capability index fail. Witness review found two gaps
+and both were patched; final witness status had no remaining blocker. The
+2026-06 product/hero source slice remains source-pushed (`4427e70`) and
+app-mirror-pushed (`96be0c5`), but live `locallytwisted.com` was not updated in
+this guardrail slice. Do not claim those product/hero changes are live until a
+Frappe Cloud site update/migration/cache/live-route proof path actually passes.
+
 Kubuntu doctor/security-doc closeout as of 2026-06-16 MDT: after the
 Wardenclyffe software review, Codex added
 `scripts/verify/kubuntu_doctor.py` and registered it in

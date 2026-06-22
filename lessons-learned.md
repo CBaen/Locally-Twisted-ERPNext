@@ -6,6 +6,24 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-22 - Capability routing must fail loudly, not rely on agent memory
+
+The product/hero release slice showed that a repo can have good capabilities,
+skills, and recipes while an agent still skips them under pressure. Once that
+happens, the work broadens, source/live boundaries blur, and GL has to spend
+energy re-scoping the agent instead of getting the client fix.
+
+**Counter-move:** use the mandatory capability context gate before LT edits or
+release actions. Load `capabilities/INDEX.md` plus the task-relevant
+recipe/failure/skill. If the gate fails, stop before editing, publishing,
+logging into providers, or claiming readiness. For product/catalog work, use a
+catalog/product capability; for live/Frappe Cloud work, use the Frappe Cloud
+launch gate and relevant failure notes. Do not satisfy the gate with an
+unrelated capability file.
+
+Feature handoff:
+`workstreams/capability-context-gate-2026-06-22.md`.
+
 ## 2026-06-16 - A local doctor catches host drift before bigger LT claims
 
 The Kubuntu review showed LT's real app/runtime state was strong, but future

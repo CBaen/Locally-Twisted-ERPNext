@@ -109,6 +109,7 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-simplified-role-verification](recipes/erpnext-simplified-role-verification.md) - verify a simplified ERPNext backend role from login through workspace, shortcuts, permissions, and real records.
 - [external-design-reference-translation](recipes/external-design-reference-translation.md) - translate Claude/designer/prototype reference code into Frappe-owned production files without silently changing the approved visual contract.
 - [fail-loud-operating-law](recipes/fail-loud-operating-law.md) - make forms, automations, documents, containers, and agent claims block false success with actionable failures and verifier evidence.
+- [mandatory-capability-context-gate](recipes/mandatory-capability-context-gate.md) - force LT agents to load the nearest capability index and a task-relevant recipe/failure/skill before edits, high-risk work, release action, or readiness claims.
 - [lt-balloon-color-generated-hero-contract](recipes/lt-balloon-color-generated-hero-contract.md) - generate or revise LT balloon/category hero images from owner-approved color names and swatches, with hex values treated only as matching approximations.
 - [lt-frappe-erpnext-quirks-library](recipes/lt-frappe-erpnext-quirks-library.md) - candidate triage card for LT stack quirks (status, symptom, cause, guardrail, verifier) to check before repeating old framework mistakes.
 - [large-source-document-intake](recipes/large-source-document-intake.md) - chunk and source-map large LT reference documents before using them for catalog, policy, checkout, or migration claims.
@@ -200,6 +201,7 @@ pattern that feels familiar.
 - [ecommerce-variant-price-source-drift](failures/ecommerce-variant-price-source-drift.md) - prevents variant shape, price existence, or Stripe/ERPNext agreement from being mistaken for source-correct ecommerce pricing.
 - [webshop-guest-party-cleanup-regression](failures/webshop-guest-party-cleanup-regression.md) - prevents fake-data cleanup from deleting the `Guest` anonymous Webshop Customer/Portal User/Contact chain and breaking public product pricing/variant calls.
 - [product-fulfillment-copy-lane-drift](failures/product-fulfillment-copy-lane-drift.md) - prevents product-page pickup/delivery copy from using category fallback when the Website Item runtime lane is quote-first or needs-review.
+- [capability-context-gate-bypass-drift](failures/capability-context-gate-bypass-drift.md) - prevents agents from skipping capabilities, loading unrelated capability files, broadening scope, or treating source/app-mirror/local proof as live proof.
 - [ready-order-menu-product-dump](failures/ready-order-menu-product-dump.md) - prevents the public Ready-to-Order menu/search/drawer from drifting back to product lists or ERPNext/backend copy instead of Item Group category discovery.
 - [frappe-password-reset-silent-generic-drift](failures/frappe-password-reset-silent-generic-drift.md) - prevents known-account reset work from being reported from public UI success or generic Frappe copy instead of branded, current Email Queue proof.
 

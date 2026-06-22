@@ -6,6 +6,42 @@ This project inherits the machine-wide Guiding Light communication protocol from
 
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
+## Mandatory LT Capability Gate
+
+Before any LT edit or release action, run the capability context gate from this
+repo root and load the project capability index:
+
+```bash
+python /home/guidingl/codex-framework/tools/capability_context_gate.py \
+  --cwd "$PWD" \
+  --task "<plain-English LT task>" \
+  --loaded "capabilities/INDEX.md" \
+  --loaded "<specific LT recipe/failure/skill used for this task>"
+```
+
+This is not optional for public-site, catalog, checkout, payment, Frappe Cloud,
+Cloudflare, Stripe, provider, live-release, form, customer-message, document,
+or backend automation work. For those tasks, `capabilities/INDEX.md` alone is
+not enough; load the specific recipe, failure note, gate, or skill that governs
+the path before editing or claiming readiness.
+
+Required LT release/provider resources:
+
+- Live/Frappe Cloud/Cloudflare/Stripe/DNS/provider work must load
+  `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`.
+- Before changing the release path or app mirror path, load the relevant failure
+  notes, including
+  `capabilities/failures/frappe-cloud-release-site-migration-drift.md` and
+  `capabilities/failures/frappe-cloud-app-mirror-release-scope-drift.md` when
+  they apply.
+- Source push and app-mirror push are not live proof. Live proof requires the
+  loaded release capability path plus a successful Frappe Cloud/site update and
+  fresh public-route verification.
+
+If the gate fails, stop before editing or publishing. Fix the missing capability
+context first or state the blocker plainly. Status and closeout must include
+`Capability gate: PASS` and the loaded resources.
+
 ## Coordination Safety Pilot
 
 This repo is the protected clean child/client pilot for the neutral multi-agent
@@ -198,7 +234,8 @@ This project supports multi-agent / multi-handoff work. Active handoffs should b
 
 Project-level shared capability docs live at `capabilities/INDEX.md`.
 
-Read the index when a task depends on local tools, reusable workflows, project-specific operating knowledge, or prior lessons. Then open only the specific capability files needed for the current task.
+Read the index through the mandatory LT capability gate above. Then open only
+the specific capability files needed for the current task.
 
 Treat `last_verified` dates older than about 90 days as stale until rechecked.
 
