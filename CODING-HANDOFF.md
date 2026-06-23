@@ -1,5 +1,29 @@
 # Locally Twisted - Coding Handoff
 
+Live Stripe promotion-code/gift-card checkout closeout as of 2026-06-23:
+five one-time `$100.00 USD` Stripe promotion-code gift cards exist under
+coupon `LT 100 Gift Cards - June 2026`, and live `locallytwisted.com` checkout
+now reaches Stripe Checkout with the `Add code` control visible. Exact code
+values are intentionally not committed because they are live stored-value
+instruments; recover/verify them in Stripe Dashboard or the operator gift-card
+sheet. Source commits are `9d89c34 Enable Stripe promo codes in checkout` and
+`3498fef Fix Stripe promo checkout session params`. App mirror `main` is at
+`7e3ab00`; the Frappe Cloud tracked live branch
+`live-shop-discovery-20260529` is at `5d7c952`. Frappe Cloud pipelines
+`64v1t42tmv` and `3e3e0b8she` both succeeded, with final app state:
+`Locally Twisted`, branch `live-shop-discovery-20260529`, version `5d7c952`,
+`Latest Version`. Live proof: `/api/method/frappe.ping` returned `pong` from
+Frappe Cloud, homepage returned HTTP 200, and a live Encanto checkout
+redirected to `checkout.stripe.com` showing `Pay Locally Twisted`, `$52.61`,
+and `Add code`. No one-time code was redeemed. Critical guard: keep
+`allow_promotion_codes: True` and do not set `payment_method_collection` for
+one-time `mode: "payment"` Sessions; live Stripe rejected that parameter with
+`You can only set payment_method_collection if there are recurring prices.`
+Handoff: `workstreams/ecommerce-audit/stripe-promo-codes-live-2026-06-23.md`.
+Decision packet: `decisions/2026-06-23-stripe-promo-codes-live.md`. Failure
+recipe:
+`capabilities/failures/stripe-checkout-one-time-promo-param-drift.md`.
+
 Capability context gate closeout as of 2026-06-22 MDT: GL explicitly approved
 turning the capability-framework miss into an enforceable guardrail. The LT
 entrypoint now requires the mandatory capability context gate before LT edits

@@ -33,6 +33,13 @@ For the current LT contract:
 - Out-of-area delivery requires a quote, even if the typed city name resembles a standard service city.
 - Out-of-area delivery redirects the customer to `/contact` with the checkout/customer/cart context prefilled as an interested-item quote request.
 - Checkout must not create duplicate Lead records for the out-of-area delivery fallback before the customer reaches `/contact`.
+- Stripe promotion codes are the current fast-path gift-card mechanism for the
+  June 2026 five-code `$100.00 USD` set. They discount Stripe Checkout before
+  payment; they are not formal ERPNext gift-card liability records.
+- For one-time LT product checkout, Stripe Sessions must set
+  `allow_promotion_codes=True` when gift-card/promo codes are enabled and must
+  not set `payment_method_collection`. Live Stripe rejected
+  `payment_method_collection="if_required"` for this one-time payment path.
 
 ## Source Files
 
@@ -93,3 +100,6 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 - `/contact` loses the customer's checkout contact details, delivery location, notes, or interested item after the delivery-quote redirect.
 - Public policy copy says tax/legal/payment terms are final before GL/legal/accountant approval.
 - A checkout test checks preview totals only and never checks the submitted Sales Order tax rows.
+- A checkout test proves local kwargs only and never reaches live
+  `checkout.stripe.com` after a Stripe parameter change.
+- A one-time Stripe gift-card code is redeemed just to prove the field exists.

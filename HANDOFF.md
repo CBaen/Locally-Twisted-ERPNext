@@ -2,13 +2,37 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-13 (Hermes - ENB builder access and branded reset email closeout)
+**Last updated:** 2026-06-23 (Codex - live Stripe promotion-code gift-card checkout closeout)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-06-23 - live Stripe promotion-code gift-card checkout):**
+- Active closeout handoff:
+  `workstreams/ecommerce-audit/stripe-promo-codes-live-2026-06-23.md`.
+- Five one-time `$100.00 USD` Stripe promotion-code gift cards were created
+  under coupon `LT 100 Gift Cards - June 2026`. Do not commit the raw code
+  values; they are live stored-value instruments. Recover/verify exact values
+  in Stripe Dashboard or the operator gift-card sheet.
+- Live checkout now reaches Stripe Checkout and displays the promo-code control
+  as `Add code`. No one-time code was redeemed during proof.
+- Source commits: `9d89c34` and `3498fef`. App mirror `main`: `7e3ab00`.
+  Frappe Cloud tracked branch `live-shop-discovery-20260529`: `5d7c952`.
+- Frappe Cloud pipelines `64v1t42tmv` and `3e3e0b8she` both succeeded; final
+  app tab shows `Locally Twisted` at `5d7c952`, `Latest Version`.
+- Public live proof: `frappe.ping` returned `pong`, homepage returned HTTP
+  `200` from Frappe Cloud, and an Encanto delivery checkout redirected to
+  `checkout.stripe.com` with `Pay Locally Twisted`, `$52.61`, and `Add code`.
+- Critical Stripe guard: for LT one-time product checkout, keep
+  `allow_promotion_codes: True` and do not set `payment_method_collection`.
+  Live Stripe rejected `payment_method_collection: "if_required"` with
+  `You can only set payment_method_collection if there are recurring prices.`
+- Frappe Cloud account association was confirmed from internal and live
+  provider evidence as `locallytwisted@gmail.com`, not only from a Google login
+  chooser.
 
 **Current-session delta (2026-06-13 - ENB access/reset closeout):**
 - Active closeout handoff:

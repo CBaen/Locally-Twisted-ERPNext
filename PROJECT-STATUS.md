@@ -1,5 +1,17 @@
 # Locally Twisted — Project Status
 
+> **Live Stripe promotion-code correction, 2026-06-23:** live
+> `locallytwisted.com` checkout now opens Stripe Checkout with the `Add code`
+> promotion-code control visible. Five one-time `$100.00 USD` Stripe
+> promotion-code gift cards exist under coupon `LT 100 Gift Cards - June
+> 2026`. Exact code values are not stored in git because they are live
+> stored-value instruments. Final full repo commit `3498fef`, app mirror
+> `main` commit `7e3ab00`, Frappe Cloud tracked branch
+> `live-shop-discovery-20260529` at `5d7c952`, Frappe Cloud pipelines
+> `64v1t42tmv` and `3e3e0b8she` succeeded, and live proof reached
+> `checkout.stripe.com` showing `Add code` without redeeming a code. Use
+> `workstreams/ecommerce-audit/stripe-promo-codes-live-2026-06-23.md`.
+
 > **Live ENB access/reset correction, 2026-06-13:** Controlled external marketing builder access and one branded Locally Twisted password-reset email for `marketing@exploringnotboring.com` are complete on live. Source commit `456c9a3`, app mirror commit `8b10a92`, Frappe Cloud patch pipeline `eutojcn0ei`, active bench `bench-40102-000037-f4v`, Email Queue `e4aqh31606` `Sent`. This proves ERPNext sent the reset email and the reset page responds without consuming the token; it is not inbox-visible proof and does not authorize more ENB access, ad/budget changes, or another reset send. See `workstreams/external-marketing-builder-access-reset-2026-06-13.md`.
 
 > **Legacy status map as of 2026-05-02.** This file is no longer the active whole-project source of truth. It contains useful current-state summaries mixed with historical receipts and stale project details. For current coordination, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific state, `locally-twisted-decisions.md` for durable reasoning, and `CODING-HANDOFF.md` for compact technical startup. Do not update this file just to chase full parity across active workstreams.

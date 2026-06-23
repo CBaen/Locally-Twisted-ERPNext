@@ -59,6 +59,14 @@ Default public launch posture:
   advertise the public domain, not the Frappe Cloud vanity host. As of
   2026-05-19, source guard work exists but live reindex work remains blocked
   until the fix is released and verified.
+- As of 2026-06-23, live Stripe Checkout promotion codes are enabled for the
+  current five one-time `$100.00 USD` gift-card codes. The live app is
+  `Locally Twisted` branch `live-shop-discovery-20260529` at `5d7c952`.
+  Frappe Cloud pipelines `64v1t42tmv` and `3e3e0b8she` succeeded, live
+  `frappe.ping` returned `pong`, homepage returned HTTP `200`, and live
+  Checkout reached `checkout.stripe.com` with `Add code` visible. No one-time
+  code was redeemed. For this one-time payment path, keep
+  `allow_promotion_codes=True` and do not set `payment_method_collection`.
 
 ## Human Access Boundary
 
@@ -136,6 +144,10 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
 - Opening checkout because local fake-data contracts pass, without live
   HTTPS host, explicit live Stripe config, webhook secret, policy URLs, and one
   low-risk real payment test.
+- Reintroducing `payment_method_collection` on one-time Stripe Checkout
+  Sessions because a no-cost/subscription pattern looked applicable.
+- Redeeming a one-time gift-card/promo code merely to prove that Stripe renders
+  the promotion-code field.
 - Treating a source/app mirror push for form-photo delivery as live proof
   before bench deploy, site update/migration, and live verifier proof of CRM
   photo rows plus owner Email Queue attachment refs.
@@ -216,3 +228,21 @@ On 2026-05-24:
 - Final payment handoff remained blocked by staging payment-secret drift:
   `Stripe Settings.Test.secret_key` could not be decrypted. Failure recipe:
   `capabilities/failures/frappe-cloud-staging-stripe-secret-drift.md`.
+
+On 2026-06-23:
+
+- Five one-time `$100.00 USD` live Stripe promotion-code gift cards were
+  created under coupon `LT 100 Gift Cards - June 2026`.
+- Full repo source commits `9d89c34` and `3498fef` were pushed to `main`.
+- App mirror `main` reached `7e3ab00`; Frappe Cloud tracked branch
+  `live-shop-discovery-20260529` reached `5d7c952`.
+- Frappe Cloud pipeline `64v1t42tmv` succeeded for `4c5fe7c`; pipeline
+  `3e3e0b8she` succeeded for `5d7c952`.
+- Frappe Cloud Apps tab showed `Locally Twisted` at branch
+  `live-shop-discovery-20260529`, version `5d7c952`, `Latest Version`.
+- `https://locallytwisted.com/api/method/frappe.ping` returned `pong`; the
+  homepage returned HTTP `200` from Frappe Cloud.
+- A live Encanto delivery checkout redirected to `checkout.stripe.com` and
+  showed `Add code`. No one-time code was redeemed.
+- Failure recipe added:
+  `capabilities/failures/stripe-checkout-one-time-promo-param-drift.md`.

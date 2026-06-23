@@ -8,6 +8,42 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-23 - Stripe promotion codes are the current gift-card mechanism
+
+**Decision:** Use Stripe coupon/promotion codes for the current five one-time
+`$100.00 USD` gift cards and enable Stripe Checkout's promotion-code field with
+`allow_promotion_codes: True`. Do not build an ERPNext gift-card liability
+ledger for this urgent need, and do not describe these as formal ERPNext
+gift-card balances.
+
+**Reasoning:** GL needed usable one-time gift-card/coupon codes now. Stripe
+already owns the hosted payment page and redemption flow, so the safest fast
+path is to let Stripe discount before payment. ERPNext gift-card accounting can
+be designed separately later if LT needs balance tracking, liability reports,
+or accountant-facing workflows.
+
+**Implementation boundary:** Five live promotion codes were created under
+coupon `LT 100 Gift Cards - June 2026`. Exact values are not committed because
+they are stored-value instruments. Source commits `9d89c34` and `3498fef`
+enabled and fixed the Checkout Session path. App mirror `main` reached
+`7e3ab00`; Frappe Cloud tracked branch `live-shop-discovery-20260529` reached
+`5d7c952`; pipelines `64v1t42tmv` and `3e3e0b8she` succeeded; live checkout
+showed Stripe's `Add code` control. No one-time code was redeemed.
+
+**Guard:** For LT one-time `mode: "payment"` Checkout Sessions, keep
+`allow_promotion_codes: True` and do not set `payment_method_collection`.
+Live Stripe rejected `payment_method_collection: "if_required"` with
+`You can only set payment_method_collection if there are recurring prices.`
+
+**Receipts:** `decisions/2026-06-23-stripe-promo-codes-live.md`;
+`workstreams/ecommerce-audit/stripe-promo-codes-live-2026-06-23.md`;
+`capabilities/failures/stripe-checkout-one-time-promo-param-drift.md`.
+
+**Decided by:** Guiding Light urgent gift-card request; Codex implementation
+and live verification on 2026-06-23.
+
+---
+
 ## 2026-06-22 - LT capability context gate is mandatory before edits and release claims
 
 **Decision:** LT agents must run the executable capability context gate before

@@ -10,18 +10,31 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P0 capability context gate and product/hero release aftercare (2026-06-22):**
-The capability gate is implemented and locally verified; handoff:
+**P1 live Stripe promotion-code gift-card aftercare (2026-06-23):** Live
+checkout now reaches Stripe with the `Add code` promo-code control visible.
+Handoff:
+`workstreams/ecommerce-audit/stripe-promo-codes-live-2026-06-23.md`; decision:
+`decisions/2026-06-23-stripe-promo-codes-live.md`; failure note:
+`capabilities/failures/stripe-checkout-one-time-promo-param-drift.md`. Five
+one-time `$100.00 USD` Stripe promotion-code gift cards exist under coupon
+`LT 100 Gift Cards - June 2026`; do not commit raw code values or burn a code
+for proof without GL approval. Follow-up, if needed: verify a specific code
+application only with explicit approval to consume one redemption or with a
+new throwaway test code. Formal ERPNext gift-card liability/accounting remains
+unbuilt and should be a separate finance design lane if LT needs it.
+
+**P1 capability context gate aftercare (2026-06-22):** The capability gate is
+implemented and locally verified; handoff:
 `workstreams/capability-context-gate-2026-06-22.md`; recipe:
 `capabilities/recipes/mandatory-capability-context-gate.md`; failure note:
 `capabilities/failures/capability-context-gate-bypass-drift.md`. Future LT
 edits must run `/home/guidingl/codex-framework/tools/capability_context_gate.py`
 with `capabilities/INDEX.md` and a task-relevant recipe/failure/skill. The
-2026-06 product/hero code was source-pushed in `4427e70` and app-mirror-pushed
-in `96be0c5`, but live was still stale during this guardrail slice. Next safe
-step if GL returns to the site fix is not another local rewrite: load the LT
-release capability path, update the Frappe Cloud site/app, clear cache, and
-prove live homepage/product-route behavior.
+2026-06 product/hero code that had been stale during the guardrail slice is now
+included in the live Frappe Cloud app ancestry through final live app
+`5d7c952`. Do not use that as specific product/hero visual proof; if GL returns
+to that site fix, run the relevant product/homepage live route proof instead
+of doing another local rewrite.
 
 **P1 Kubuntu recovery aftercare (2026-06-16):** Source cleanup after the
 Windows-to-Kubuntu move is reconciled, rebased on remote `5dafae7`, and

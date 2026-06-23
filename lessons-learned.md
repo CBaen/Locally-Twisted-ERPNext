@@ -6,6 +6,24 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-23 - Live Stripe accepts the final Checkout parameters, not the local kwargs story
+
+The promotion-code gift-card release first looked locally correct:
+`allow_promotion_codes` was present in the Checkout Session kwargs. Live Stripe
+still rejected the Session because `payment_method_collection: "if_required"`
+is invalid for this one-time `mode: "payment"` path. Local contract capture was
+necessary but not sufficient.
+
+**Counter-move:** for live payment-surface changes, prove the real provider
+accepts the final request shape. In this path, `allow_promotion_codes: True` is
+required and `payment_method_collection` must be absent. The proof can stop at
+Stripe's hosted page showing `Add code`; do not redeem a one-time code unless
+GL explicitly approves consuming it. Use
+`capabilities/failures/stripe-checkout-one-time-promo-param-drift.md` and
+`workstreams/ecommerce-audit/stripe-promo-codes-live-2026-06-23.md`.
+
+---
+
 ## 2026-06-22 - Capability routing must fail loudly, not rely on agent memory
 
 The product/hero release slice showed that a repo can have good capabilities,
