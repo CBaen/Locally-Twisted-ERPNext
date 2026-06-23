@@ -107,8 +107,8 @@ def run() -> dict[str, object]:
     evidence["payment_method_collection"] = promo_session_kwargs.get("payment_method_collection")
     if promo_session_kwargs.get("allow_promotion_codes") is not True:
         failures.append("Stripe Checkout Session must enable allow_promotion_codes for live gift-card codes")
-    if promo_session_kwargs.get("payment_method_collection") != "if_required":
-        failures.append("Stripe Checkout Session must use payment_method_collection=if_required for fully discounted gift-card orders")
+    if "payment_method_collection" in promo_session_kwargs:
+        failures.append("Stripe Checkout Session must not set payment_method_collection for one-time payment gift-card orders")
 
     return {
         "ok": not failures,

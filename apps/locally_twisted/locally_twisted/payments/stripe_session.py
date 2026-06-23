@@ -167,7 +167,6 @@ def create_session_for_sales_order(
         "success_url": success_url,
         "cancel_url": cancel_url,
         "allow_promotion_codes": True,
-        "payment_method_collection": "if_required",
         "customer_email": customer_email,
         "client_reference_id": so.name,
         "metadata": metadata,
