@@ -188,8 +188,8 @@ def _reconcile_paid_order(result: dict):
     try:
         payment_success._mark_payment_request_paid = lambda payment_request: None
         payment_success._ensure_sales_invoice = lambda so_name: f"STUB-SI-{so_name}"
-        payment_success._send_receipt_email = lambda so_name: None
-        payment_success._send_operator_notification = lambda so_name: None
+        payment_success._send_receipt_email = lambda so_name, stripe_payment=None: None
+        payment_success._send_operator_notification = lambda so_name, stripe_payment=None: None
         payment_success._send_welcome_email_if_first_order = lambda so_name: None
         return payment_success.reconcile_paid_sales_order(
             result.get("sales_order"),

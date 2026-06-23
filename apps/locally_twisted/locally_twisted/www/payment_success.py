@@ -4,9 +4,11 @@ Two paths supported:
 
 1. PRIMARY — Stripe Checkout Session redirect (current flow):
    Stripe's success_url comes back as `/payment-success?session_id=cs_test_...`.
-   We retrieve the session, verify payment_status == "paid", read
+   We retrieve the session, verify Stripe considers it complete, read
    client_reference_id (= Sales Order name), and redirect to
-   /thank-you?order=<so_name>.
+   /thank-you?order=<so_name>. Discounted promotion-code sessions are
+   complete when Stripe reports "paid" or a fully discounted
+   "no_payment_required" session.
 
 2. LEGACY — Frappe payments redirect (kept for any in-flight charges):
    The bundled payments app builds a redirect URL like
@@ -60,6 +62,7 @@ from locally_twisted.product_page_runtime import (
 no_cache = 1
 sitemap = 0
 PAYMENT_CHECK_ROUTE = "/thank-you?status=payment-check"
+COMPLETE_STRIPE_PAYMENT_STATUSES = {"paid", "no_payment_required"}
 
 
 def get_context(context):
@@ -92,7 +95,7 @@ def get_context(context):
 def _handle_stripe_session(session_id):
     """Resolve a Stripe Checkout Session → mark PR paid → redirect.
 
-    Verifies payment_status == 'paid' via the Stripe API before exposing
+    Verifies Stripe's payment status via the Stripe API before exposing
     the order. Then marks the linked Payment Request paid synchronously
     here (the webhook handler in payments/stripe_webhook.py would do the
     same thing async — both paths are idempotent, so whichever fires
@@ -110,7 +113,7 @@ def _handle_stripe_session(session_id):
         frappe.log_error(frappe.get_traceback(), "Stripe session retrieval failed")
         _redirect(PAYMENT_CHECK_ROUTE)
 
-    if (session.get("payment_status") or "").lower() != "paid":
+    if not is_complete_stripe_payment_session(session):
         _redirect(PAYMENT_CHECK_ROUTE)
 
     try:
@@ -122,6 +125,7 @@ def _handle_stripe_session(session_id):
     result = reconcile_paid_sales_order(
         verified["sales_order"],
         payment_request=verified["payment_request"],
+        stripe_payment=verified,
         source="payment_success",
         raise_on_error=False,
     )
@@ -140,11 +144,23 @@ class StripePaymentVerificationError(Exception):
     """Raised when a paid Stripe event does not match ERPNext payment records."""
 
 
+def is_complete_stripe_payment_session(session) -> bool:
+    """Return True when Stripe says checkout is complete for fulfillment."""
+    return _stripe_session_payment_status(session) in COMPLETE_STRIPE_PAYMENT_STATUSES
+
+
+def _stripe_session_payment_status(session) -> str:
+    return (session.get("payment_status") or "").lower()
+
+
 def verify_paid_stripe_session(session, *, source="stripe"):
-    """Verify a paid Checkout Session against the ERPNext order and PR."""
+    """Verify a completed Checkout Session against the ERPNext order and PR."""
     metadata = session.get("metadata") or {}
-    if (session.get("payment_status") or "").lower() != "paid":
-        raise StripePaymentVerificationError("Stripe session is not paid")
+    payment_status = _stripe_session_payment_status(session)
+    if payment_status not in COMPLETE_STRIPE_PAYMENT_STATUSES:
+        raise StripePaymentVerificationError(
+            f"Stripe session payment_status {payment_status or 'unknown'} is not complete"
+        )
 
     sales_order = session.get("client_reference_id") or metadata.get("sales_order")
     metadata_sales_order = metadata.get("sales_order")
@@ -163,7 +179,7 @@ def verify_paid_stripe_session(session, *, source="stripe"):
         raise StripePaymentVerificationError("Stripe session missing payment_request metadata")
 
     _verify_payment_request_matches_sales_order(payment_request, sales_order)
-    _verify_stripe_amount_and_currency(session, sales_order)
+    stripe_payment = _verify_stripe_amount_and_currency(session, sales_order)
     expected_cents = _sales_order_total_cents(sales_order)
     metadata_expected_cents = metadata.get("amount_expected_cents")
     if metadata_expected_cents and int(metadata_expected_cents) != expected_cents:
@@ -171,13 +187,25 @@ def verify_paid_stripe_session(session, *, source="stripe"):
             f"Stripe metadata amount_expected_cents {metadata_expected_cents} does not match Sales Order {sales_order} total {expected_cents}"
         )
 
-    return {"sales_order": sales_order, "payment_request": payment_request, "source": source}
+    if payment_status == "no_payment_required" and stripe_payment.get("amount_total_cents") != 0:
+        raise StripePaymentVerificationError(
+            "Stripe session is no_payment_required but amount_total is not zero"
+        )
+
+    return {
+        "sales_order": sales_order,
+        "payment_request": payment_request,
+        "source": source,
+        "stripe_payment_status": payment_status,
+        **stripe_payment,
+    }
 
 
 def reconcile_paid_sales_order(
     so_name=None,
     *,
     payment_request=None,
+    stripe_payment=None,
     source="paid_order",
     raise_on_error=False,
 ):
@@ -218,6 +246,14 @@ def reconcile_paid_sales_order(
                 "payment_request": payment_request,
                 "errors": errors,
             }
+        if so_name and _stripe_payment_discount_cents(stripe_payment) > 0:
+            run(
+                "Stripe promotion discount note",
+                _record_stripe_checkout_discount_note,
+                so_name,
+                payment_request,
+                stripe_payment,
+            )
         run("marking Payment Request paid", _mark_payment_request_paid, payment_request)
 
     if not so_name:
@@ -225,8 +261,8 @@ def reconcile_paid_sales_order(
     else:
         run("Lead conversion", _convert_checkout_leads_after_payment, so_name)
         run("Sales Invoice creation", _ensure_sales_invoice, so_name)
-        run("receipt email", _send_receipt_email, so_name)
-        run("operator notification", _send_operator_notification, so_name)
+        run("receipt email", _send_receipt_email, so_name, stripe_payment)
+        run("operator notification", _send_operator_notification, so_name, stripe_payment)
         run("welcome email", _send_welcome_email_if_first_order, so_name)
 
     if errors and raise_on_error:
@@ -291,18 +327,47 @@ def _verify_stripe_amount_and_currency(session, sales_order):
     amount_total = session.get("amount_total")
     currency = session.get("currency")
     if amount_total is None and not currency:
-        return
+        return {"amount_total_cents": None, "amount_discount_cents": 0}
 
     expected_cents = _sales_order_total_cents(sales_order)
     expected_currency = _sales_order_currency(sales_order).lower()
-    if amount_total is not None and int(amount_total) != expected_cents:
-        raise StripePaymentVerificationError(
-            f"Stripe amount_total {amount_total} does not match Sales Order {sales_order} total {expected_cents}"
-        )
+    amount_total_cents = int(amount_total) if amount_total is not None else None
+    discount_cents = _stripe_session_discount_cents(session)
+
+    if amount_total_cents is not None:
+        if amount_total_cents < 0:
+            raise StripePaymentVerificationError(
+                f"Stripe amount_total {amount_total} is negative for Sales Order {sales_order}"
+            )
+        if amount_total_cents > expected_cents:
+            raise StripePaymentVerificationError(
+                f"Stripe amount_total {amount_total} exceeds Sales Order {sales_order} total {expected_cents}"
+            )
+        if amount_total_cents < expected_cents:
+            if discount_cents <= 0:
+                raise StripePaymentVerificationError(
+                    f"Stripe amount_total {amount_total} is below Sales Order {sales_order} total {expected_cents} without a Stripe discount"
+                )
+            if amount_total_cents + discount_cents != expected_cents:
+                raise StripePaymentVerificationError(
+                    f"Stripe amount_total {amount_total} plus discount {discount_cents} does not match Sales Order {sales_order} total {expected_cents}"
+                )
     if currency and str(currency).lower() != expected_currency:
         raise StripePaymentVerificationError(
             f"Stripe currency {currency} does not match Sales Order {sales_order} currency {expected_currency}"
         )
+    return {
+        "amount_total_cents": amount_total_cents,
+        "amount_discount_cents": discount_cents,
+        "expected_amount_cents": expected_cents,
+        "currency": expected_currency,
+    }
+
+
+def _stripe_session_discount_cents(session):
+    total_details = session.get("total_details") or {}
+    amount_discount = total_details.get("amount_discount") if hasattr(total_details, "get") else 0
+    return int(amount_discount or 0)
 
 
 def _sales_order_total_cents(sales_order):
@@ -392,6 +457,65 @@ def _lead_names_for_customer(customer_name):
         limit_page_length=100,
     )
     return sorted({row["link_name"] for row in lead_links if row.get("link_name")})
+
+
+def _record_stripe_checkout_discount_note(so_name, payment_request, stripe_payment):
+    discount_cents = _stripe_payment_discount_cents(stripe_payment)
+    if discount_cents <= 0:
+        return
+
+    subject = f"Stripe promotion discount - {so_name}"
+    already_recorded = frappe.get_all(
+        "Communication",
+        filters={
+            "reference_doctype": "Sales Order",
+            "reference_name": so_name,
+            "subject": subject,
+        },
+        limit=1,
+    )
+    if already_recorded:
+        return
+
+    expected_cents = int(stripe_payment.get("expected_amount_cents") or 0)
+    paid_cents = stripe_payment.get("amount_total_cents")
+    paid_cents = int(paid_cents or 0)
+    content = "\n".join(
+        [
+            "Stripe promotion code discount was applied at Checkout.",
+            f"Payment Request: {payment_request}",
+            f"Order total before Stripe promotion: {_format_money_cents(expected_cents)}",
+            f"Stripe promotion discount: -{_format_money_cents(discount_cents)}",
+            f"Stripe amount collected: {_format_money_cents(paid_cents)}",
+            f"Stripe payment status: {stripe_payment.get('stripe_payment_status') or 'unknown'}",
+        ]
+    )
+    # Permission bypass is guarded by verified Stripe completion for this Sales Order.
+    frappe.get_doc(
+        {
+            "doctype": "Communication",
+            "communication_type": "Communication",
+            "communication_medium": "Other",
+            "sent_or_received": "Received",
+            "reference_doctype": "Sales Order",
+            "reference_name": so_name,
+            "sender": "Stripe Checkout",
+            "subject": subject,
+            "content": escape_html(content),
+            "status": "Open",
+        }
+    ).insert(ignore_permissions=True)
+    frappe.db.commit()
+
+
+def _stripe_payment_discount_cents(stripe_payment):
+    if not stripe_payment:
+        return 0
+    return int(stripe_payment.get("amount_discount_cents") or 0)
+
+
+def _format_money_cents(cents, currency="USD"):
+    return f"${(int(cents or 0) / 100):,.2f} {currency}"
 
 
 def _mark_payment_request_paid(pr_name):
@@ -533,7 +657,7 @@ def _ensure_sales_invoice(so_name):
     return si.name
 
 
-def _send_receipt_email(so_name):
+def _send_receipt_email(so_name, stripe_payment=None):
     """Send a transactional confirmation email to the customer.
 
     CAN-SPAM safe: this is a transactional receipt for a completed order,
@@ -615,6 +739,7 @@ def _send_receipt_email(so_name):
             f'</td>'
             f'</tr>'
         )
+    stripe_discount_rows = _stripe_discount_email_rows(stripe_payment, so.currency or "USD")
 
     body_content = f"""
 <p style="margin:0 0 10px;">
@@ -636,6 +761,7 @@ def _send_receipt_email(so_name):
         ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}
       </td>
     </tr>
+    {stripe_discount_rows}
   </table>
 </div>
 {policy_documents.customer_policy_block([policy_documents.LANE_READY_TO_ORDER], include_privacy=True)}
@@ -677,6 +803,47 @@ def _absolute_image_url(image):
     return get_url(image)
 
 
+def _stripe_discount_email_rows(stripe_payment, currency):
+    discount_cents = _stripe_payment_discount_cents(stripe_payment)
+    if discount_cents <= 0:
+        return ""
+
+    paid_cents = stripe_payment.get("amount_total_cents")
+    paid_cents = int(paid_cents or 0)
+    currency = escape_html(currency or "USD")
+    return f"""
+    <tr>
+      <td style="padding:6px 0 0;color:#38615C;">Stripe promotion code</td>
+      <td style="padding:6px 0 0;text-align:right;color:#38615C;">
+        -{escape_html(_format_money_cents(discount_cents, currency))}
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:6px 0 0;font-weight:700;color:#0A0A0B;">Paid through Stripe</td>
+      <td style="padding:6px 0 0;text-align:right;font-weight:700;color:#0A0A0B;">
+        {escape_html(_format_money_cents(paid_cents, currency))}
+      </td>
+    </tr>
+    """.rstrip()
+
+
+def _stripe_discount_operator_summary(stripe_payment, currency):
+    discount_cents = _stripe_payment_discount_cents(stripe_payment)
+    if discount_cents <= 0:
+        return ""
+
+    paid_cents = stripe_payment.get("amount_total_cents")
+    paid_cents = int(paid_cents or 0)
+    return (
+        '<p style="margin:0 0 10px;color:#38615C;">'
+        "<strong>Stripe promotion code:</strong> "
+        f"-{escape_html(_format_money_cents(discount_cents, currency))}; "
+        "<strong>paid through Stripe:</strong> "
+        f"{escape_html(_format_money_cents(paid_cents, currency))}."
+        "</p>"
+    )
+
+
 OPERATOR_EMAIL = DEFAULT_OPERATOR_EMAIL
 # Jeff's operator inbox. Update via site_config.json
 # (`bench --site frontend set-config lt_operator_email <addr>`) when LT
@@ -684,7 +851,7 @@ OPERATOR_EMAIL = DEFAULT_OPERATOR_EMAIL
 # this constant if no override is set.
 
 
-def _send_operator_notification(so_name):
+def _send_operator_notification(so_name, stripe_payment=None):
     """Email Jeff (or whoever owns the operator inbox) when a new paid
     order lands. Plain HTML body — no PDF attachment (wkhtmltopdf trap).
     Idempotent: looks for an existing Communication or Email Queue row with
@@ -751,10 +918,12 @@ def _send_operator_notification(so_name):
     site_url = frappe.utils.get_url().rstrip("/")
     desk_link = f"{site_url}/app/sales-order/{so.name}"
     order_notes = _get_customer_order_notes_html(so.name)
+    stripe_discount_summary = _stripe_discount_operator_summary(stripe_payment, so.currency or "USD")
 
     body_content = f"""
   <p style="margin:0 0 10px;"><strong>Order:</strong> {escape_html(so.name)}<br>
   <strong>Total:</strong> ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}</p>
+  {stripe_discount_summary}
   <table style="width:100%; border-collapse:collapse; font-size:14px; margin:0 0 16px;">
     <thead>
       <tr style="border-bottom:1px solid #ddd;">

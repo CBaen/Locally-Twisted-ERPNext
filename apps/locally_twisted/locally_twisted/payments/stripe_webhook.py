@@ -1,8 +1,8 @@
 """Stripe webhook receiver for guest checkout completion.
 
-Stripe POSTs events to this endpoint. We reconcile paid orders on
-`checkout.session.completed` only when payment_status is paid, and on
-`checkout.session.async_payment_succeeded` for delayed payment methods.
+Stripe POSTs events to this endpoint. We reconcile completed orders on
+`checkout.session.completed` when payment_status is paid or no_payment_required,
+and on `checkout.session.async_payment_succeeded` for delayed payment methods.
 Those are our cues to mark the linked Payment Request paid, create/submit
 the Sales Invoice, and queue the paid-order emails. This mirrors the browser
 `/payment-success` path so the order still reconciles if the customer closes
@@ -73,7 +73,9 @@ def stripe_webhook():
     origin = metadata.get("lt_origin")
     payment_status = (session.get("payment_status") or "").lower()
 
-    if payment_status != "paid":
+    from locally_twisted.www.payment_success import is_complete_stripe_payment_session
+
+    if not is_complete_stripe_payment_session(session):
         return {
             "ok": True,
             "skipped": f"payment_status {payment_status or 'unknown'}",
@@ -108,6 +110,7 @@ def stripe_webhook():
         result = reconcile_paid_sales_order(
             verified["sales_order"],
             payment_request=verified["payment_request"],
+            stripe_payment=verified,
             source="stripe_webhook",
             raise_on_error=True,
         )

@@ -96,6 +96,20 @@ def run() -> dict[str, object]:
     if not negative_adjustment_rejected:
         failures.append("Stripe helper should reject item totals greater than ERPNext grand_total")
 
+    promo_session_kwargs = _capture_checkout_session_kwargs(
+        _fake_sales_order(
+            name="SO-PROMO-CODE-CONTRACT",
+            grand_total=125.00,
+            items=[{"item_code": "promo-test", "item_name": "Promo Test", "rate": 125.00, "qty": 1}],
+        )
+    )
+    evidence["allow_promotion_codes"] = promo_session_kwargs.get("allow_promotion_codes")
+    evidence["payment_method_collection"] = promo_session_kwargs.get("payment_method_collection")
+    if promo_session_kwargs.get("allow_promotion_codes") is not True:
+        failures.append("Stripe Checkout Session must enable allow_promotion_codes for live gift-card codes")
+    if promo_session_kwargs.get("payment_method_collection") != "if_required":
+        failures.append("Stripe Checkout Session must use payment_method_collection=if_required for fully discounted gift-card orders")
+
     return {
         "ok": not failures,
         "failures": failures,
@@ -103,9 +117,73 @@ def run() -> dict[str, object]:
     }
 
 
-def _fake_sales_order(*, grand_total: float, items: list[dict[str, object]]):
+def _fake_sales_order(*, grand_total: float, items: list[dict[str, object]], name: str = "SO-CONTRACT"):
     return SimpleNamespace(
+        name=name,
         currency="USD",
         grand_total=grand_total,
         items=[frappe._dict(item) for item in items],
     )
+
+
+def _capture_checkout_session_kwargs(sales_order):
+    import stripe
+
+    import locally_twisted.payments.stripe_session as stripe_session
+
+    original_get_doc = frappe.get_doc
+    original_get_url = stripe_session.get_url
+    original_get_stripe_settings = stripe_session.get_stripe_settings
+    original_get_payment_method_configuration = stripe_session.get_stripe_payment_method_configuration
+    original_create = stripe.checkout.Session.create
+    captured = {}
+
+    class FakeStripeSettings:
+        def get_password(self, fieldname, raise_exception=False):
+            if fieldname != "secret_key":
+                raise AssertionError(f"unexpected Stripe settings field: {fieldname}")
+            return "sk_test_contract"
+
+    class FakeSession:
+        url = "https://checkout.stripe.example.invalid/session"
+
+    def fake_get_doc(doctype, name=None, *args, **kwargs):
+        if doctype == "Sales Order" and name == sales_order.name:
+            return sales_order
+        return original_get_doc(doctype, name, *args, **kwargs)
+
+    def fake_get_url(path=None):
+        base = "https://locallytwisted.example"
+        if not path:
+            return base
+        path = str(path)
+        if path.startswith(("http://", "https://")):
+            return path
+        if not path.startswith("/"):
+            path = f"/{path}"
+        return f"{base}{path}"
+
+    def fake_create(api_key=None, **kwargs):
+        captured.update(kwargs)
+        captured["api_key"] = api_key
+        return FakeSession()
+
+    try:
+        frappe.get_doc = fake_get_doc
+        stripe_session.get_url = fake_get_url
+        stripe_session.get_stripe_settings = lambda: FakeStripeSettings()
+        stripe_session.get_stripe_payment_method_configuration = lambda: "pmc_test_contract"
+        stripe.checkout.Session.create = fake_create
+        stripe_session.create_session_for_sales_order(
+            sales_order.name,
+            "PR-PROMO-CODE-CONTRACT",
+            "/checkout",
+            "lt-promo-contract@example.invalid",
+        )
+        return captured
+    finally:
+        frappe.get_doc = original_get_doc
+        stripe_session.get_url = original_get_url
+        stripe_session.get_stripe_settings = original_get_stripe_settings
+        stripe_session.get_stripe_payment_method_configuration = original_get_payment_method_configuration
+        stripe.checkout.Session.create = original_create

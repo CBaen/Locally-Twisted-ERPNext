@@ -92,6 +92,7 @@ def run() -> dict[str, object]:
         lede = context.get("thank_you_lede") or ""
         if "final receipt" not in lede.lower() and "paperwork" not in lede.lower():
             failures.append(f"thank-you pending lede does not explain receipt/paperwork state: {lede!r}")
+        failures.extend(_discounted_session_verification_failures(payment_success, original_verify))
 
         if failures:
             raise ContractFail("; ".join(failures))
@@ -122,3 +123,99 @@ def run() -> dict[str, object]:
                 pass
         else:
             frappe.local.flags.redirect_location = original_redirect
+
+
+def _discounted_session_verification_failures(payment_success, verify_paid_stripe_session):
+    failures = []
+    original_exists = frappe.db.exists
+    original_get_value = frappe.db.get_value
+
+    sales_order = "SO-DISCOUNT-CONTRACT"
+    payment_request = "PR-DISCOUNT-CONTRACT"
+    expected_cents = 12500
+
+    def fake_exists(doctype, name=None, *args, **kwargs):
+        if doctype == "Payment Request" and name == payment_request:
+            return True
+        if doctype == "Sales Order" and name == sales_order:
+            return True
+        return original_exists(doctype, name, *args, **kwargs)
+
+    def fake_get_value(doctype, name=None, fieldname=None, *args, **kwargs):
+        as_dict = kwargs.get("as_dict")
+        if doctype == "Payment Request" and name == payment_request:
+            value = {
+                "reference_doctype": "Sales Order",
+                "reference_name": sales_order,
+                "grand_total": expected_cents / 100,
+                "currency": "USD",
+                "outstanding_amount": expected_cents / 100,
+            }
+            if as_dict:
+                return frappe._dict(value)
+            if isinstance(fieldname, (list, tuple)):
+                return [value.get(field) for field in fieldname]
+            return value.get(fieldname)
+        if doctype == "Sales Order" and name == sales_order:
+            value = {"grand_total": expected_cents / 100, "currency": "USD"}
+            if as_dict:
+                return frappe._dict(value)
+            if isinstance(fieldname, (list, tuple)):
+                return [value.get(field) for field in fieldname]
+            return value.get(fieldname)
+        return original_get_value(doctype, name, fieldname, *args, **kwargs)
+
+    def session(**overrides):
+        data = {
+            "payment_status": "paid",
+            "client_reference_id": sales_order,
+            "amount_total": 2500,
+            "currency": "usd",
+            "total_details": {"amount_discount": 10000},
+            "metadata": {
+                "lt_origin": "guest_checkout",
+                "sales_order": sales_order,
+                "payment_request": payment_request,
+                "amount_expected_cents": str(expected_cents),
+            },
+        }
+        data.update(overrides)
+        return data
+
+    try:
+        frappe.db.exists = fake_exists
+        frappe.db.get_value = fake_get_value
+
+        discounted = verify_paid_stripe_session(
+            session(),
+            source="payment_success_reconciliation_contract",
+        )
+        if discounted.get("amount_discount_cents") != 10000:
+            failures.append(f"discounted Stripe session did not report 10000 discount cents: {discounted}")
+        if discounted.get("amount_total_cents") != 2500:
+            failures.append(f"discounted Stripe session did not report 2500 amount_total cents: {discounted}")
+
+        fully_discounted = verify_paid_stripe_session(
+            session(
+                payment_status="no_payment_required",
+                amount_total=0,
+                total_details={"amount_discount": expected_cents},
+            ),
+            source="payment_success_reconciliation_contract",
+        )
+        if fully_discounted.get("amount_total_cents") != 0:
+            failures.append(f"fully discounted Stripe session did not report zero total: {fully_discounted}")
+
+        try:
+            verify_paid_stripe_session(
+                session(amount_total=2500, total_details={"amount_discount": 0}),
+                source="payment_success_reconciliation_contract",
+            )
+            failures.append("underpaid Stripe session without a discount was accepted")
+        except payment_success.StripePaymentVerificationError:
+            pass
+    finally:
+        frappe.db.exists = original_exists
+        frappe.db.get_value = original_get_value
+
+    return failures

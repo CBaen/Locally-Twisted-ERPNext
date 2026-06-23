@@ -70,6 +70,34 @@ def _run_contract():
             f"async_payment_succeeded should reconcile once, reconciled {len(async_success_calls)} times"
         )
 
+    fully_discounted_calls = []
+    fully_discounted = _invoke_webhook(
+        {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "id": "cs_probe_no_payment_required",
+                    "payment_status": "no_payment_required",
+                    "client_reference_id": "SO-PROBE-FULLY-DISCOUNTED",
+                    "metadata": {
+                        "lt_origin": "guest_checkout",
+                        "payment_request": "PR-PROBE-FULLY-DISCOUNTED",
+                        "sales_order": "SO-PROBE-FULLY-DISCOUNTED",
+                    },
+                }
+            },
+        },
+        reconcile_calls=fully_discounted_calls,
+    )
+    if fully_discounted["status_code"] >= 500:
+        failures.append(
+            f"no_payment_required checkout.session.completed returned HTTP {fully_discounted['status_code']}: {fully_discounted['result']}"
+        )
+    if len(fully_discounted_calls) != 1:
+        failures.append(
+            f"no_payment_required checkout.session.completed should reconcile once, reconciled {len(fully_discounted_calls)} times"
+        )
+
     ignored = _invoke_webhook({"type": "payment_intent.succeeded", "data": {"object": {}}})
     if ignored["result"].get("ignored") != "payment_intent.succeeded":
         failures.append(f"unexpected event was not ignored cleanly: {ignored['result']}")
@@ -117,6 +145,7 @@ def _run_contract():
         "ok": True,
         "unpaid_completed": unpaid["result"],
         "async_payment_succeeded_calls": len(async_success_calls),
+        "fully_discounted_completed_calls": len(fully_discounted_calls),
         "ignored_event": ignored["result"].get("ignored"),
         "non_lt_checkout": non_lt_checkout["result"],
         "missing_payment_request_status_code": missing_pr["status_code"],

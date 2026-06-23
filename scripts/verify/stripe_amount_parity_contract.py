@@ -61,6 +61,8 @@ def main() -> int:
     print(f"  taxable_stripe_cents: {evidence.get('taxable_stripe_cents')}")
     print(f"  nontaxable_order_cents: {evidence.get('nontaxable_order_cents')}")
     print(f"  negative_adjustment_rejected: {evidence.get('negative_adjustment_rejected')}")
+    print(f"  allow_promotion_codes: {evidence.get('allow_promotion_codes')}")
+    print(f"  payment_method_collection: {evidence.get('payment_method_collection')}")
     return 0
 
 
