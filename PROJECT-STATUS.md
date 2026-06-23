@@ -1,5 +1,14 @@
 # Locally Twisted — Project Status
 
+> **Live product visibility correction, 2026-06-23:** the four documented
+> retired products are now disabled/hidden on live `locallytwisted.com`:
+> `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and
+> `pride-progress-rainbow-balloon-arch`. Root/template Items and child variants
+> are disabled where present; Website Items remain unpublished and
+> `needs_review|needs_review`; target product routes return `404`; `/shop`
+> omits the slugs. Use
+> `workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`.
+
 > **Live Stripe promotion-code correction, 2026-06-23:** live
 > `locallytwisted.com` checkout now opens Stripe Checkout with the `Add code`
 > promotion-code control visible. Five one-time `$100.00 USD` Stripe
@@ -18,7 +27,7 @@
 >
 > **Current shop routing correction, 2026-05-02:** `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` now send broad browse traffic to `/shop`; individual category pages stay at `/shop-items/<group>`. The primary nav label is now `Balloon Decor`. Older lines below that say `Shop Balloon Decor` or that broad browse routes alias to `/shop-by-category` are historical receipts, not current routing.
 
-> **Public ecommerce correction, 2026-05-17; taxonomy refreshed 2026-06-21:** Local ecommerce may be temporarily opened for proof runs, but local dev uses Stripe test records and is not live-payment proof. Production checkout/Stripe lives on the Frappe Cloud site. Current local category/count proof is 47 published products, 4 requested products retired/unpublished, 8 active primary categories, and 9 hidden secondary occasion categories; those changes still require release to live before they affect `locallytwisted.com`.
+> **Public ecommerce correction, 2026-05-17; taxonomy refreshed 2026-06-21; live product hide verified 2026-06-23:** Local ecommerce may be temporarily opened for proof runs, but local dev uses Stripe test records and is not live-payment proof. Production checkout/Stripe lives on the Frappe Cloud site. Current category/count proof is 47 published products, 4 requested products retired/unpublished, 8 active primary categories, and 9 hidden secondary occasion categories. The four retired product hides are live as of 2026-06-23; broader taxonomy/category changes still need their own release and live proof before being claimed on `locallytwisted.com`.
 
 > **Domain/reindex correction, 2026-05-19:** Public pages/forms now serve through Cloudflare DNS and Frappe Cloud. Current chain is GoDaddy registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe. Hetzner/legacy_source is old reference/decommission scope. Reindex work is blocked until the live sitemap/canonical fix is released because current live discovery URLs still advertise `locallytwisted.v.frappe.cloud`. Use `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
 

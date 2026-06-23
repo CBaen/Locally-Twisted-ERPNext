@@ -36,6 +36,14 @@ Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
   `/shop-items/arches/pride-arch` returned `404`. The 2026-06-21 requested
   product retirement supersedes the old Pride Progress route proof; that
   product must stay unpublished unless GL explicitly re-approves it.
+- Live product visibility disable on 2026-06-23 completed for the four
+  documented retired products: `large-garland`, `mothers-day-bouquet`,
+  `large-organic-column`, and `pride-progress-rainbow-balloon-arch`. On live,
+  target Items/templates and child variants are disabled, Website Items are
+  unpublished and held at `needs_review|needs_review`, product routes return
+  `404`, and `/shop` omits the slugs. Handoff:
+  `workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`; decision:
+  `decisions/2026-06-23-live-product-visibility-disable.md`.
 - Hosted Stripe test-mode checkout proof on 2026-05-24 created and paid
   staging Sales Order `SAL-ORD-2026-00024`, Payment Request
   `ACC-PRQ-2026-00021`, and Sales Invoice `ACC-SINV-2026-00004` with grand
@@ -103,8 +111,9 @@ Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
   `Website Slideshow`, and renders in the product gallery rail. Variant media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
-- Current local shop taxonomy proof covers `51` published products. Two
-  duplicate source slugs are explicitly excluded from the import subset.
+- Current local shop taxonomy proof covers `47` published products and `4`
+  retired/unpublished needs-review products. Two duplicate source slugs are
+  explicitly excluded from the import subset.
   Direct checkout is bounded for high-complexity color products: the two
   graduation products use college color preset checkout variants, while
   hyperspecialized 50+ color products route to quote request until their UI/UX,

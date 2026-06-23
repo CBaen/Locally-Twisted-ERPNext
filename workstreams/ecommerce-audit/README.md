@@ -18,6 +18,29 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-06-23 Live Product Visibility Disable
+
+Use `live-product-disable-2026-06-23.md` as the front-door handoff for the live
+disable of the four documented retired products:
+
+- `large-garland`
+- `mothers-day-bouquet`
+- `large-organic-column`
+- `pride-progress-rainbow-balloon-arch`
+
+Live result: root/template Items are disabled, child variants are disabled
+where present, Website Items are unpublished, and Website Item page/lane fields
+remain `needs_review|needs_review`. Public proof after the write showed all
+four product routes returning `404`, and `/shop` returning `200` without the
+four slugs.
+
+Important process note: the normal Item form save was blocked by LT's custom
+`Protected Owner Catalog Guard`. That is project catalog protection, not an
+external cybersecurity issue. Future live product visibility retirements should
+use `../../capabilities/recipes/erpnext-live-product-visibility-retirement.md`
+after exact GL approval, and should not disable or weaken the owner catalog
+guard.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door
@@ -320,7 +343,8 @@ behavior, owner approval, or staging/live exposure.
 | Phase 5 delivery/payment/operator packet | `phase-5-delivery-payment-operator-packet-2026-05-10.md` | Present, parent-verified / local proof | Proves delivery fee mapping, pickup, tax boundaries, payment backend config, mocked webhook, paid cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, local launch readiness, and pause-state safety. |
 | Product import hardening gate | `product-import-hardening-gate-2026-05-11.md` + `../../scripts/verify/product_import_readiness_gate.py` | Present, backend-owned / read-only gate | Minimum real-catalog import readiness gate for peer GPT agents: source packets, approvals, fail-loud import fields, dry-run/destructive/backup guards, snapshot and rollback plan. Expected current result is blocked until hardening and approvals are complete. |
 | Payment portal live cutover checklist | `../payment-portal-live-cutover-checklist-2026-05-11.md` | Present, backend-owned / checklist | Moves passing local/test payment contracts into staging/live cutover steps for Frappe v15.106.0 / ERPNext v15.105.0, Frappe Cloud site config, Stripe webhook/policy setup, and one approved low-risk live payment test. |
-| Sellable product reimport | `legacy_source-sellable-product-reimport-2026-05-17.md` + `../../scripts/verify/v1_legacy_source_erpnext_import_manifest.py` + `../../scripts/verify/product_import_readiness_gate.py` + `../../scripts/verify/post_import_checkout_proof.js` | Historical, local-only full import/proof closeout | Superseded for category/count truth by the 2026-06-21 product-retirement proof: 47 published products, 28 checkout, 19 quote-first, 4 retired/unpublished needs-review products, and 2 duplicate source slugs excluded. |
+| Live product visibility disable | `live-product-disable-2026-06-23.md` + `../../decisions/2026-06-23-live-product-visibility-disable.md` | Present, live Desk/System Console closeout | Four documented retired products are disabled/hidden on live: root/template Items disabled, variants disabled where present, Website Items unpublished and held at `needs_review|needs_review`; product routes return `404`, and `/shop` omits the slugs. |
+| Sellable product reimport | `legacy_source-sellable-product-reimport-2026-05-17.md` + `../../scripts/verify/v1_legacy_source_erpnext_import_manifest.py` + `../../scripts/verify/product_import_readiness_gate.py` + `../../scripts/verify/post_import_checkout_proof.js` | Historical, local-only full import/proof closeout | Superseded for category/count truth by the 2026-06-21 product-retirement proof and the 2026-06-23 live disable: 47 published products, 28 checkout, 19 quote-first, 4 retired/unpublished needs-review products, and 2 duplicate source slugs excluded. |
 | Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Historical, superseded by 2026-05-17 full import closeout | Older 48 kept / 5 Classic-excluded proof packet; use only for history. |
 | Storefront proof and complex UI handoff | `storefront-proof-and-complex-ui-handoff-2026-05-11.md` | Present, rendered storefront proof / frontend-owned handoff | Captures Ready-to-Order/search proof, final post-import checkout proof, all-priced-page audit, Classic Arch proof, quote-first lane correction, complex UI requirements, and regression proof ladder. |
 | Ready-to-Order nav/search backend gate | `ready-to-order-nav-search-backend-gate-2026-05-12.md` | Present, review-closeout / local DB + rendered proof | Captures owner-include-as-allowlist rule, backend `simple_product|checkout` requirement, hidden-vs-removed search quick-link assertion, mobile drawer label correction, and nav/search verifier receipts. |

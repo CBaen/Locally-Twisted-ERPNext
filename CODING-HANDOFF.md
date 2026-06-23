@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Live product visibility disable closeout as of 2026-06-23:
+the four documented retired products are hidden on live
+`https://locallytwisted.com` at both the Website Item and Item layers.
+Targets: `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and
+`pride-progress-rainbow-balloon-arch`. Each root/template Item is disabled;
+variants are disabled where present; Website Items are unpublished and held at
+`needs_review|needs_review`. Normal Item form save and System Console document
+save were blocked by LT's custom `Protected Owner Catalog Guard`; that guard is
+project catalog protection, not an external cybersecurity issue. The final live
+operation used scoped Desk System Console `frappe.db.set_value` writes for only
+the approved fields. Public proof: all four product routes returned `404`, and
+`/shop` returned `200` without the four slugs. Handoff:
+`workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`. Decision
+packet: `decisions/2026-06-23-live-product-visibility-disable.md`. Recipe:
+`capabilities/recipes/erpnext-live-product-visibility-retirement.md`. Failure
+recipe:
+`capabilities/failures/owner-catalog-guard-live-disable-drift.md`.
+
 Live Stripe promotion-code/gift-card checkout closeout as of 2026-06-23:
 five one-time `$100.00 USD` Stripe promotion-code gift cards exist under
 coupon `LT 100 Gift Cards - June 2026`, and live `locallytwisted.com` checkout

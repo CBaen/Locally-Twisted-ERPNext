@@ -80,9 +80,10 @@ combination.
 
 Workflows. Multi-step. Clear start and finish.
 
-- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing or exposing legacy_source-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, live-exposure safety lock separation, and the current all-53 legacy_source sellable product local proof.
+- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing or exposing legacy_source-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, live-exposure safety lock separation, and current product-scope proof.
 - [erpnext-webshop-guest-party-contract](recipes/erpnext-webshop-guest-party-contract.md) - preserve and verify the `Guest` User/Customer/Portal User/Contact infrastructure that anonymous Webshop product pricing, variants, cart, and cleanup safety depend on.
 - [erpnext-product-blueprint-authoring](recipes/erpnext-product-blueprint-authoring.md) - add staff-authored, local-only ERPNext product blueprints for highly customizable products, with validation, dry-run preview, guarded unpublished local apply, and fixed-price add-on runtime cascade proof.
+- [erpnext-live-product-visibility-retirement](recipes/erpnext-live-product-visibility-retirement.md) - retire exact approved products from live visibility by disabling target Items/variants, keeping Website Items unpublished as `needs_review`, and proving route and `/shop` absence without weakening owner catalog guards.
 
 - Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
 - [ad-account-takeover-provider-control](recipes/ad-account-takeover-provider-control.md) - take control of Google Ads and Meta/Facebook/Instagram accounts from authenticated provider dashboards, keeping Gmail/Drive/report evidence as support only.
@@ -203,6 +204,7 @@ pattern that feels familiar.
 - [webshop-guest-party-cleanup-regression](failures/webshop-guest-party-cleanup-regression.md) - prevents fake-data cleanup from deleting the `Guest` anonymous Webshop Customer/Portal User/Contact chain and breaking public product pricing/variant calls.
 - [product-fulfillment-copy-lane-drift](failures/product-fulfillment-copy-lane-drift.md) - prevents product-page pickup/delivery copy from using category fallback when the Website Item runtime lane is quote-first or needs-review.
 - [capability-context-gate-bypass-drift](failures/capability-context-gate-bypass-drift.md) - prevents agents from skipping capabilities, loading unrelated capability files, broadening scope, or treating source/app-mirror/local proof as live proof.
+- [owner-catalog-guard-live-disable-drift](failures/owner-catalog-guard-live-disable-drift.md) - prevents approved live product hide/disable work from being mislabeled as external cybersecurity or from weakening the owner catalog guard.
 - [ready-order-menu-product-dump](failures/ready-order-menu-product-dump.md) - prevents the public Ready-to-Order menu/search/drawer from drifting back to product lists or ERPNext/backend copy instead of Item Group category discovery.
 - [frappe-password-reset-silent-generic-drift](failures/frappe-password-reset-silent-generic-drift.md) - prevents known-account reset work from being reported from public UI success or generic Frappe copy instead of branded, current Email Queue proof.
 

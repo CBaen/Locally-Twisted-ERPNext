@@ -2,13 +2,36 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-23 (Codex - live Stripe promotion-code gift-card checkout closeout)
+**Last updated:** 2026-06-23 (Codex - live product visibility disable closeout)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-06-23 - live product visibility disable):**
+- Active closeout handoff:
+  `workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`.
+- Four documented retired products are now hidden on live
+  `https://locallytwisted.com` at both layers: underlying Item/template and
+  variants disabled, Website Item unpublished, and Website Item fields held at
+  `needs_review|needs_review`.
+- Target products: `large-garland`, `mothers-day-bouquet`,
+  `large-organic-column`, and `pride-progress-rainbow-balloon-arch`.
+- Normal Item form save and System Console document save were blocked by LT's
+  custom `Protected Owner Catalog Guard`. That is project catalog protection,
+  not an external cybersecurity issue. The final live write used scoped
+  `frappe.db.set_value` from Desk System Console for only the approved fields.
+- Live proof after the write: each target route returned `404`, and `/shop`
+  returned `200` without any of the four slugs.
+- Decision packet:
+  `decisions/2026-06-23-live-product-visibility-disable.md`; recipe:
+  `capabilities/recipes/erpnext-live-product-visibility-retirement.md`;
+  failure note:
+  `capabilities/failures/owner-catalog-guard-live-disable-drift.md`.
+- Re-enable only with fresh GL approval. Product Setup alone is not enough to
+  claim public hide/publish behavior for this release.
 
 **Current-session delta (2026-06-23 - live Stripe promotion-code gift-card checkout):**
 - Active closeout handoff:

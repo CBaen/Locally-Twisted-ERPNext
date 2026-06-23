@@ -6,6 +6,25 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-23 - Owner catalog guard is a business safety guard, not the end of the task
+
+The live product-disable request hit `Protected Owner Catalog Guard` when saving
+from the normal Item form and again when trying to save the document through
+System Console. That was not an external cybersecurity problem. It was LT's own
+guard correctly blocking owner-like raw catalog edits.
+
+**Counter-move:** identify the guard, preserve it, and move to a scoped admin
+maintenance path only when GL has approved the exact product list. For live
+visibility retirements, change only `Item.disabled` on the target
+template/single Item and variants plus the target Website Item hide/review
+fields, then prove root Item, variants, Website Item, product routes, and
+`/shop` state. Use
+`capabilities/recipes/erpnext-live-product-visibility-retirement.md`,
+`capabilities/failures/owner-catalog-guard-live-disable-drift.md`, and
+`workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`.
+
+---
+
 ## 2026-06-23 - Live Stripe accepts the final Checkout parameters, not the local kwargs story
 
 The promotion-code gift-card release first looked locally correct:

@@ -84,6 +84,13 @@ OpenClaw cockpit witness:
   during local apply, and local apply cannot publish, hide, or reroute existing
   Website Items. Handoff:
   `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
+- 2026-06-23 live product visibility disable: for exact GL-approved retired
+  products, Product Setup alone is not the public hide/publish mechanism. The
+  live state must be disabled target Items/variants plus unpublished Website
+  Items held at `needs_review|needs_review`, with route and `/shop` proof. The
+  normal Item form may be blocked by `Protected Owner Catalog Guard`; keep the
+  guard intact and use the scoped admin maintenance recipe:
+  `capabilities/recipes/erpnext-live-product-visibility-retirement.md`.
 - 2026-05-17 browser proof route authority: use the import manifest for
   included-product authority and the clean Website Item snapshot for public
   route authority. Planned import routes can drift from current Website Item

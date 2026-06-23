@@ -8,6 +8,42 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-23 - Retired products require live Item disable plus Website Item hide
+
+**Decision:** The four documented retired products must remain hidden on live
+`locallytwisted.com` as disabled Items/variants plus unpublished Website Items
+held at `needs_review|needs_review`: `large-garland`,
+`mothers-day-bouquet`, `large-organic-column`, and
+`pride-progress-rainbow-balloon-arch`.
+
+**Reasoning:** The products were already documented as retired/unpublished, but
+live visibility safety also required disabling the underlying template/single
+Items and child variants. The normal Item form and System Console document-save
+paths were blocked by LT's custom `Protected Owner Catalog Guard`. That guard
+is correct project catalog protection, not an external cybersecurity issue.
+For this exact approved business change, the safe path was a scoped admin
+maintenance write that touched only `Item.disabled` and the existing Website
+Item hide/needs-review fields.
+
+**Implementation boundary:** No prices, orders, customers, payment settings,
+Stripe records, DNS, Frappe Cloud release settings, or unrelated catalog
+records changed. Public proof after the write showed all four product routes
+returning `404`, and `/shop` returning `200` without the four slugs.
+
+**Guard:** Future visibility retirements must use
+`capabilities/recipes/erpnext-live-product-visibility-retirement.md`. Do not
+disable the owner catalog guard. Do not re-enable or publish these products
+without fresh GL approval.
+
+**Receipts:** `decisions/2026-06-23-live-product-visibility-disable.md`;
+`workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`;
+`capabilities/failures/owner-catalog-guard-live-disable-drift.md`.
+
+**Decided by:** Guiding Light requested the live product removals; Codex
+implemented and verified the scoped live disable on 2026-06-23.
+
+---
+
 ## 2026-06-23 - Stripe promotion codes are the current gift-card mechanism
 
 **Decision:** Use Stripe coupon/promotion codes for the current five one-time
