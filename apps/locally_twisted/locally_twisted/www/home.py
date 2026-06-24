@@ -5,8 +5,10 @@ wide installed-work proof photos, full-stage client proof crawl,
 a contact CTA, and secondary twisting/face-painting support.
 """
 import frappe
+from frappe.utils import strip_html
 from urllib.parse import quote
 
+from locally_twisted.product_options import get_variant_starting_price
 from locally_twisted.seo import business_graph
 
 no_cache = 1
@@ -40,6 +42,14 @@ LANDING_PHOTO_BASE = "/assets/locally_twisted/images/landing-page-pics/landing-p
 
 def _landing_photo(filename: str) -> str:
     return quote(f"{LANDING_PHOTO_BASE}/{filename}", safe="/:%")
+
+
+CUSTOMER_FAVORITE_ROUTES = [
+    "shop-items/bouquets/birthday-deliveries",
+    "shop-items/bouquets/large-head-missionary",
+    "shop-items/bouquets/minion-bouquet",
+    "shop-items/bouquets/bandage-get-well-bouquet-latex-free",
+]
 
 
 # One of a Kind Designs uses the landing-page photo packet directly.
@@ -248,7 +258,7 @@ REVIEW_QUOTES = [
 PAGE_CSS = """
 /* ======================================================================
  * Launch homepage - proof-first event decor shape
- * BEM blocks: lt-hero, lt-authority, lt-featured, lt-reviews-block,
+ * BEM blocks: lt-hero, lt-favorites, lt-featured, lt-reviews-block,
  *             lt-crawl, lt-cta, lt-twisting-spotlight
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)
  * ====================================================================== */
@@ -271,7 +281,7 @@ PAGE_CSS = """
 /* The shared page shell wraps content in a max-width .container.
  * Sections that should read as full-width horizontal bands need to
  * break out via this technique. Used on hero, reviews, featured, crawl,
- * twisting spotlight, and the closing CTA. */
+ * customer favorites, twisting spotlight, and the closing CTA. */
 .lt-fullbleed {
     width: 100vw;
     position: relative;
@@ -731,6 +741,142 @@ PAGE_CSS = """
     }
 }
 
+/* --- Customer Favorites --------------------------------------------- */
+.lt-favorites {
+    background-color: var(--lt-white);
+    padding: 2.65rem 1rem 3rem;
+}
+.lt-favorites__inner {
+    max-width: 1160px;
+    margin: 0 auto;
+}
+.lt-favorites__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    line-height: 1.12;
+    text-align: center;
+    color: var(--lt-near-black);
+    margin: 0;
+}
+.lt-favorites__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 1.45rem;
+}
+.lt-favorites__card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 100%;
+    overflow: hidden;
+    background-color: var(--lt-white);
+    border: 1px solid rgba(14, 34, 64, 0.14);
+    border-radius: 0.5rem;
+    color: var(--lt-near-black);
+    text-decoration: none;
+    box-shadow: 0 10px 28px rgba(10, 10, 11, 0.06);
+    transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.lt-favorites__card:hover,
+.lt-favorites__card:focus-visible {
+    color: var(--lt-near-black);
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: rgba(184, 154, 91, 0.58);
+    box-shadow: 0 16px 34px rgba(10, 10, 11, 0.1);
+    outline: none;
+}
+.lt-favorites__card:focus-visible {
+    outline: 2px solid var(--lt-brass);
+    outline-offset: 3px;
+}
+.lt-favorites__image-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background-color: var(--lt-stone-tint);
+}
+.lt-favorites__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.lt-favorites__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: 0.35rem;
+    padding: 0.85rem 0.8rem 0.95rem;
+}
+.lt-favorites__title {
+    font-family: var(--lt-font-heading);
+    font-size: clamp(1rem, 5vw, 1.18rem);
+    line-height: 1.12;
+    color: var(--lt-near-black);
+    margin: 0;
+    text-wrap: balance;
+}
+.lt-favorites__price {
+    font-family: var(--lt-font-body);
+    font-size: 0.92rem;
+    line-height: 1.25;
+    color: var(--lt-crimson);
+    font-weight: 800;
+    margin: 0;
+}
+.lt-favorites__cta {
+    font-family: var(--lt-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--lt-soft-gray);
+    margin-top: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+@media (min-width: 768px) {
+    .lt-favorites {
+        padding: 3rem 1.5rem 3.35rem;
+    }
+    .lt-favorites__heading {
+        font-size: 2.35rem;
+    }
+    .lt-favorites__grid {
+        gap: 1rem;
+    }
+    .lt-favorites__body {
+        padding: 1rem 1rem 1.1rem;
+    }
+}
+@media (min-width: 992px) {
+    .lt-favorites__grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .lt-favorites__title {
+        font-size: 1.14rem;
+    }
+}
+@media (max-width: 360px) {
+    .lt-favorites__grid {
+        gap: 0.65rem;
+    }
+    .lt-favorites__body {
+        padding-inline: 0.65rem;
+    }
+    .lt-favorites__title {
+        font-size: 0.96rem;
+    }
+    .lt-favorites__price {
+        font-size: 0.84rem;
+    }
+    .lt-favorites__cta {
+        font-size: 0.68rem;
+    }
+}
+
 /* --- Featured Work (One of a Kind Designs) - full-width proof band --- */
 .lt-featured {
     background-color: var(--lt-near-white);
@@ -999,6 +1145,70 @@ def _abbreviate_name(name):
     return f"{first} {initial}."
 
 
+def _normalize_route(route):
+    return str(route or "").strip("/")
+
+
+def _summary(value):
+    return " ".join(strip_html(str(value or "")).split())
+
+
+def _favorite_starting_price(item_code):
+    price = get_variant_starting_price(item_code)
+    if not price:
+        return ""
+
+    rate = price.get("price_list_rate")
+    if price.get("currency") == "USD" and rate is not None:
+        return f"From ${float(rate):,.2f}"
+
+    formatted = str(price.get("formatted_price") or "").replace("$ ", "$").strip()
+    return f"From {formatted}" if formatted else ""
+
+
+def _customer_favorites():
+    rows = frappe.db.get_all(
+        "Website Item",
+        filters={"route": ["in", CUSTOMER_FAVORITE_ROUTES], "published": 1},
+        fields=["item_code", "web_item_name", "route", "website_image", "short_description"],
+    )
+    by_route = {_normalize_route(row.get("route")): row for row in rows}
+    favorites = []
+    missing_routes = []
+    missing_prices = []
+
+    for route in CUSTOMER_FAVORITE_ROUTES:
+        row = by_route.get(route)
+        if not row:
+            missing_routes.append(route)
+            continue
+
+        price = _favorite_starting_price(row.get("item_code"))
+        if not price:
+            missing_prices.append(row.get("item_code") or route)
+
+        favorites.append(
+            {
+                "title": row.get("web_item_name") or row.get("item_code"),
+                "url": f"/{route}",
+                "image": row.get("website_image") or "/assets/locally_twisted/images/heroes/bouquets-category-generated-hero-desktop.webp",
+                "price": price,
+                "summary": _summary(row.get("short_description")),
+            }
+        )
+
+    if missing_routes or missing_prices:
+        frappe.log_error(
+            title="LT homepage customer favorites",
+            message=(
+                f"Missing favorite routes: {missing_routes or 'none'}\n"
+                f"Missing favorite starting prices: {missing_prices or 'none'}"
+            ),
+        )
+
+    return favorites
+
+
 def get_context(context):
     context.title = "Locally Twisted - Utah Balloon Event Decor & Installations"
     context.metatags = {
@@ -1012,6 +1222,7 @@ def get_context(context):
     }
     context.client_crawl = CLIENT_CRAWL
     context.featured_work = FEATURED_WORK
+    context.customer_favorites = _customer_favorites()
     context.home_hero_slides = HOME_HERO_SLIDES
     context.structured_data = [business_graph("/")]
     # Compute display_name at request time so the source list keeps full

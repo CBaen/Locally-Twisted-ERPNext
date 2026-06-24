@@ -15,7 +15,7 @@ class CategorySpec:
     show_in_website: int
     is_group: int = 0
     icon: str = "balloon-pair"
-    summary: str = "Browse ready-to-order balloon decor by category."
+    summary: str = "Browse pickup and delivery balloon decor by category."
 
 
 SHOP_ROOT = "Shop Items"

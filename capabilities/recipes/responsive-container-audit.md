@@ -174,3 +174,10 @@ section feeling too tall because the document still fit. The fix added 320px
 header control-budget assertions and a mobile review proof contract for block
 height, card dimensions, badge height, and inherited padding. Focused
 interactive checks passed 8/8, and targeted home layout-fit passed 3/3.
+
+On 2026-06-24, the homepage Customer Favorites row added a merchandising-row
+responsive contract: four cards across on desktop and 2x2 on mobile, with
+stable image dimensions, no overflowing titles/prices, and section order guarded
+between Reviews and Live Entertainment. Full `npm run test:interactive-layout`
+passed 159/159 with one skipped, and full `npm run test:layout-fit` passed
+312/312.

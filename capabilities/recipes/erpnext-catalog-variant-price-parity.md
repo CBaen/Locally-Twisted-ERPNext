@@ -181,6 +181,14 @@ local import/runtime contract. Staging/live still require target-site source
 price proof after deploy/import, GL local acceptance, and separate payment
 cutover approval.
 
+Homepage/product merchandising note: if a public card uses a `From $XX.XX`
+claim, it must derive from the same product-page/source-backed starting-price
+path or record an explicit GL exception. The 2026-06-24 Customer Favorites
+homepage row uses `get_variant_starting_price` for the four approved Website
+Item routes instead of hand-typed prices, and Classic Arch was replaced because
+it was quote-first and lacked the required visible/source-backed starting
+price.
+
 ## Receipt
 
 On 2026-05-08, GL flagged that Unicorn Bouquet variants were still the same

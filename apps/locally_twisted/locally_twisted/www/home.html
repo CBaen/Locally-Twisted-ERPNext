@@ -152,53 +152,32 @@
     </div>
 </section>
 
-{# --- 3. One of a Kind Designs: installed-work proof after reviews --- #}
-<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
-    <div class="lt-featured__inner">
-        <h2 id="lt-featured-heading" class="lt-featured__heading">One of a Kind Designs</h2>
-        <div class="lt-featured__grid">
-            {% for piece in featured_work %}
-            <figure class="lt-featured__photo{% if loop.first %} lt-featured__photo--lead{% endif %}">
-                <img class="lt-featured__image" src="{{ piece.image }}" alt="{{ piece.alt }}" loading="lazy">
-            </figure>
+{# --- 3. Customer Favorites: product merchandising row --- #}
+{% if customer_favorites %}
+<section class="lt-favorites lt-fullbleed" aria-labelledby="lt-favorites-heading">
+    <div class="lt-favorites__inner">
+        <h2 id="lt-favorites-heading" class="lt-favorites__heading">Customer Favorites</h2>
+        <div class="lt-favorites__grid">
+            {% for item in customer_favorites %}
+            <a class="lt-favorites__card" href="{{ item.url }}">
+                <span class="lt-favorites__image-wrap" aria-hidden="true">
+                    <img class="lt-favorites__image" src="{{ item.image }}" alt="" loading="lazy">
+                </span>
+                <span class="lt-favorites__body">
+                    <span class="lt-favorites__title">{{ item.title }}</span>
+                    {% if item.price %}
+                    <span class="lt-favorites__price">{{ item.price }}</span>
+                    {% endif %}
+                    <span class="lt-favorites__cta">View details</span>
+                </span>
+            </a>
             {% endfor %}
         </div>
     </div>
 </section>
+{% endif %}
 
-{# --- 8. Client Logo Crawl --- #}
-<section class="lt-crawl lt-fullbleed" aria-labelledby="lt-crawl-heading">
-    <h2 id="lt-crawl-heading" class="lt-crawl__heading">Trusted by Utah's Best Since 1998</h2>
-    <div class="lt-crawl__viewport" role="presentation">
-        <div class="lt-crawl__track">
-            {% for client in client_crawl %}
-            <span class="lt-crawl__item">{{ client }}</span>
-            {% endfor %}
-            <div aria-hidden="true" style="display: contents;">
-                {% for client in client_crawl %}
-                <span class="lt-crawl__item">{{ client }}</span>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</section>
-
-{# --- 9. Closing CTA --- #}
-<section class="lt-cta lt-fullbleed" aria-labelledby="lt-cta-heading">
-    <div class="lt-cta__inner">
-        <h2 id="lt-cta-heading" class="lt-cta__heading">Help your event feel finished.</h2>
-        <p class="lt-cta__body">
-            From corporate, school, civic, and community events to polished private celebrations,
-            Locally Twisted helps Utah gatherings look planned, welcoming, and ready.
-        </p>
-        <a href="/contact" class="lt-cta__button">
-            Tell us about your event
-            <span aria-hidden="true">&rarr;</span>
-        </a>
-    </div>
-</section>
-
-{# --- 10. Twisting & Face Painting spotlight - secondary support path --- #}
+{# --- 4. Twisting & Face Painting spotlight - live entertainment path --- #}
 <section class="lt-twisting-spotlight lt-fullbleed" aria-labelledby="lt-twisting-heading">
     <div class="lt-twisting-spotlight__inner">
         <div class="lt-twisting-spotlight__image"
@@ -221,6 +200,52 @@
                 Ask about live services
             </a>
         </div>
+    </div>
+</section>
+
+{# --- 5. One of a Kind Designs: installed-work proof --- #}
+<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
+    <div class="lt-featured__inner">
+        <h2 id="lt-featured-heading" class="lt-featured__heading">One of a Kind Designs</h2>
+        <div class="lt-featured__grid">
+            {% for piece in featured_work %}
+            <figure class="lt-featured__photo{% if loop.first %} lt-featured__photo--lead{% endif %}">
+                <img class="lt-featured__image" src="{{ piece.image }}" alt="{{ piece.alt }}" loading="lazy">
+            </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 6. Client Logo Crawl --- #}
+<section class="lt-crawl lt-fullbleed" aria-labelledby="lt-crawl-heading">
+    <h2 id="lt-crawl-heading" class="lt-crawl__heading">Trusted by Utah's Best Since 1998</h2>
+    <div class="lt-crawl__viewport" role="presentation">
+        <div class="lt-crawl__track">
+            {% for client in client_crawl %}
+            <span class="lt-crawl__item">{{ client }}</span>
+            {% endfor %}
+            <div aria-hidden="true" style="display: contents;">
+                {% for client in client_crawl %}
+                <span class="lt-crawl__item">{{ client }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# --- 7. Closing CTA --- #}
+<section class="lt-cta lt-fullbleed" aria-labelledby="lt-cta-heading">
+    <div class="lt-cta__inner">
+        <h2 id="lt-cta-heading" class="lt-cta__heading">Help your event feel finished.</h2>
+        <p class="lt-cta__body">
+            From corporate, school, civic, and community events to polished private celebrations,
+            Locally Twisted helps Utah gatherings look planned, welcoming, and ready.
+        </p>
+        <a href="/contact" class="lt-cta__button">
+            Tell us about your event
+            <span aria-hidden="true">&rarr;</span>
+        </a>
     </div>
 </section>
 

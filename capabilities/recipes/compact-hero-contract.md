@@ -43,10 +43,12 @@ proof take over.
 
 - If a route has a hero, it uses the same standard height as other heroes in
   that viewport family.
-- Public page heroes use generated lifestyle photo layers with
+- Public page heroes normally use generated lifestyle photo layers with
   breakpoint-specific WebP crops: `*-mobile.webp`, `*-tablet.webp`, and
-  `*-desktop.webp`. Do not source hero crops from the reserved real
-  work/proof photo library.
+  `*-desktop.webp`. A homepage seasonal hero may use a real balloon-decor
+  source photo only when GL's feedback explicitly requires realism over
+  generated/cartoon-looking art; retain the source in `_resources/` and strip
+  private EXIF/GPS/device metadata before commit.
 - Keep source generations, prompts, and review sheets in `_resources/`; the
   public hero asset folder should contain only the breakpoint-ready crops.
 - Hero text sits above a black landing-page-style readability overlay. Do not

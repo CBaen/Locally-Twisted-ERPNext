@@ -1114,6 +1114,8 @@ test.describe("Locally Twisted interactive layout states", () => {
 			const hero = document.querySelector(".lt-hero");
 			const featured = document.querySelector(".lt-featured");
 			const reviews = document.querySelector(".lt-reviews-block");
+			const favorites = document.querySelector(".lt-favorites");
+			const twisting = document.querySelector(".lt-twisting-spotlight");
 			let heroNext = hero ? hero.nextElementSibling : null;
 			while (heroNext && ["SCRIPT", "STYLE", "TEMPLATE"].includes(heroNext.tagName)) {
 				heroNext = heroNext.nextElementSibling;
@@ -1127,6 +1129,8 @@ test.describe("Locally Twisted interactive layout states", () => {
 				heroBottom: hero.getBoundingClientRect().bottom + window.scrollY,
 				featuredTop: featured.getBoundingClientRect().top + window.scrollY,
 				reviewsTop: reviews.getBoundingClientRect().top + window.scrollY,
+				favoritesTop: favorites.getBoundingClientRect().top + window.scrollY,
+				twistingTop: twisting.getBoundingClientRect().top + window.scrollY,
 				heroNextIsReviews: heroNext ? heroNext.classList.contains("lt-reviews-block") : false,
 				authorityCount,
 				authorityIconCount,
@@ -1140,7 +1144,9 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 		expect(result.heroNextIsReviews, "review proof should be the first homepage band after the hero").toBe(true);
 		expect(result.reviewsTop, "review proof should start after the hero").toBeGreaterThanOrEqual(result.heroBottom - 1);
-		expect(result.reviewsTop, "review proof should appear before the installed-work proof band").toBeLessThan(result.featuredTop);
+		expect(result.reviewsTop, "review proof should appear before customer favorites").toBeLessThan(result.favoritesTop);
+		expect(result.favoritesTop, "customer favorites should appear before live entertainment").toBeLessThan(result.twistingTop);
+		expect(result.twistingTop, "live entertainment should appear before installed-work proof").toBeLessThan(result.featuredTop);
 		expect(result.authorityCount, "homepage should not render a trust/authority bar right now").toBe(0);
 		expect(result.authorityIconCount, "trust bar icons should stay as assets, not render as a homepage bar").toBe(0);
 		expect(result.hasCustomEventDecor, "homepage should not render the Custom Event Decor category block").toBe(false);
@@ -1151,6 +1157,77 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(result.platformLabels.join(" "), "accessibility labels should not expose counts or rating totals").not.toMatch(/(\d|percent)/i);
 		expect(result.ctaText, "closing CTA should lead with corporate, school, civic, and community work").toMatch(/corporate, school, civic, and community/i);
 		expect(result.ctaText, "closing CTA should keep private celebrations secondary").toMatch(/private celebrations/i);
+	});
+
+	test("homepage customer favorites row renders four catalog-backed product cards", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const cards = Array.from(document.querySelectorAll(".lt-favorites__card"));
+			const images = Array.from(document.querySelectorAll(".lt-favorites__image"));
+			const grid = document.querySelector(".lt-favorites__grid");
+			const gridStyle = grid ? window.getComputedStyle(grid) : null;
+			const leftColumns = Array.from(new Set(cards.map((card) => Math.round(card.getBoundingClientRect().left))));
+			return {
+				heading: document.querySelector(".lt-favorites__heading")?.textContent?.trim() || "",
+				cardCount: cards.length,
+				hrefs: cards.map((card) => card.getAttribute("href") || ""),
+				titles: cards.map((card) => card.querySelector(".lt-favorites__title")?.textContent?.trim() || ""),
+				prices: cards.map((card) => card.querySelector(".lt-favorites__price")?.textContent?.trim() || ""),
+				imageCount: images.length,
+				imageSources: images.map((image) => image.getAttribute("src") || ""),
+				distinctColumns: leftColumns.length,
+				templateColumns: gridStyle ? gridStyle.gridTemplateColumns.split(" ").length : 0,
+				documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+			};
+		});
+
+		expect(result.heading).toBe("Customer Favorites");
+		expect(result.cardCount, "customer favorites should render exactly four cards").toBe(4);
+		expect(result.hrefs).toEqual([
+			"/shop-items/bouquets/birthday-deliveries",
+			"/shop-items/bouquets/large-head-missionary",
+			"/shop-items/bouquets/minion-bouquet",
+			"/shop-items/bouquets/bandage-get-well-bouquet-latex-free",
+		]);
+		expect(result.titles.join(" "), "favorites should include the approved product set").toMatch(/Birthday Deliveries.*Large head Missionary.*Minion Bouquet.*Bandage.*GET WELL/s);
+		expect(result.prices, "favorites should show source-backed starting prices").toEqual(["From $90.00", "From $175.00", "From $35.00", "From $35.00"]);
+		expect(result.imageCount, "favorites should render one image per card").toBe(4);
+		expect(result.imageSources.every(Boolean), "favorites should use Website Item images").toBe(true);
+		expect(result.distinctColumns, "desktop favorites should be four across").toBe(4);
+		expect(result.templateColumns, "desktop favorites CSS grid should expose four columns").toBe(4);
+		expect(Math.abs(result.documentOverflow), "favorites should not create document overflow").toBeLessThanOrEqual(1);
+	});
+
+	test("mobile customer favorites row keeps a stable two-by-two grid", async ({ page }) => {
+		await page.setViewportSize({ width: 390, height: 900 });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const cards = Array.from(document.querySelectorAll(".lt-favorites__card"));
+			const grid = document.querySelector(".lt-favorites__grid");
+			const rowTops = Array.from(new Set(cards.map((card) => Math.round(card.getBoundingClientRect().top))));
+			const colLefts = Array.from(new Set(cards.map((card) => Math.round(card.getBoundingClientRect().left))));
+			const gridStyle = grid ? window.getComputedStyle(grid) : null;
+			return {
+				cardCount: cards.length,
+				rows: rowTops.length,
+				columns: colLefts.length,
+				templateColumns: gridStyle ? gridStyle.gridTemplateColumns.split(" ").length : 0,
+				minCardWidth: Math.min(...cards.map((card) => card.getBoundingClientRect().width)),
+				documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+			};
+		});
+
+		expect(result.cardCount).toBe(4);
+		expect(result.rows, "mobile favorites should form two rows").toBe(2);
+		expect(result.columns, "mobile favorites should form two columns").toBe(2);
+		expect(result.templateColumns, "mobile favorites CSS grid should expose two columns").toBe(2);
+		expect(result.minCardWidth, "mobile cards should keep usable tap targets").toBeGreaterThan(145);
+		expect(Math.abs(result.documentOverflow), "mobile favorites should not create document overflow").toBeLessThanOrEqual(1);
 	});
 
 	test("homepage installed-work proof uses a wide custom-install gallery", async ({ page }) => {

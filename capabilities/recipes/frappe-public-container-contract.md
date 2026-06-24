@@ -187,3 +187,11 @@ surfaces. A stale homepage hide-switch briefly removed the Custom Event Decor
 section while the route contract still required it; restoring the section made
 the page and contract agree again. The current container gate passes 75/75
 checks across the launch route list at 320px, 820px, and 1366px.
+
+On 2026-06-24, the homepage Customer Favorites row proved that new
+merchandising bands must be added to the executable container map before
+closeout. The first red run caught `.lt-favorites__inner` exceeding the
+declared max width because shared full-bleed containment CSS overrode the
+route-local max width. The repair registered `.lt-favorites__inner` in
+`lt-page-containment.css` and `layout_helpers.js`; final `npm run
+test:container-contract` passed 72/72.

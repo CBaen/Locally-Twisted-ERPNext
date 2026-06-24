@@ -109,7 +109,7 @@ def get_context(context):
     context.current_shop_category = "all"
     context.total_items = len(items)
     context.search_query = search_query
-    context.title = "Ready-to-Order Balloon Decor"
+    context.title = "Pickups & Deliveries Balloon Decor"
     context.page_css = PAGE_CSS
 
     return context

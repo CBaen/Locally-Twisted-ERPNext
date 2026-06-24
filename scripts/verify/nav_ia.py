@@ -49,7 +49,7 @@ def test_desktop_nav_order(navbar: str) -> None:
         "data-lt-megamenu-trigger=\"lt-mega-events\"",
         "Event Decor",
         "data-lt-megamenu-trigger=\"lt-mega-products\"",
-        "Balloons-to-Order",
+        "Pickups &amp; Deliveries",
         'lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting"',
         "<span>Twisting &amp;</span>",
         "<span>Face Painting</span>",
@@ -59,7 +59,7 @@ def test_desktop_nav_order(navbar: str) -> None:
     positions = [_line_index(primary_nav, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Primary nav order must be Event Decor, Balloons-to-Order, Twisting & Face Painting, "
+            "Primary nav order must be Event Decor, Pickups & Deliveries, Twisting & Face Painting, "
             "Portfolio, About Us, with deliberate mega-menu triggers"
         )
 
@@ -103,7 +103,7 @@ def test_top_banner_links_are_owner_approved(navbar: str) -> None:
         'href="/contact">Free Event Quote</a>',
     )
     forbidden = (
-        'href="/shop">Balloons-to-Order</a>',
+        'href="/shop">Pickups &amp; Deliveries</a>',
         'href="/cart">Cart</a>',
         'href="/portfolio">Recent Work</a>',
         "Prepared design, clean installs, and invoiced event support across Utah.",
@@ -305,7 +305,7 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
         'data-lt-drawer-accordion-trigger="lt-mobile-events"',
         "Event Decor",
         'data-lt-drawer-accordion-trigger="lt-mobile-products"',
-        "Balloons-to-Order",
+        "Pickups &amp; Deliveries",
         'class="lt-mega-drawer__single lt-mega-drawer__single--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting',
         'href="/portfolio"',
         'href="/about"',
@@ -316,7 +316,7 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
     if positions != sorted(positions):
         raise AssertionError(
             "Mobile drawer must follow desktop primary order: Event Decor, "
-            "Balloons-to-Order, Twisting & Face Painting, Portfolio, About Us, Contact Us, Search"
+            "Pickups & Deliveries, Twisting & Face Painting, Portfolio, About Us, Contact Us, Search"
         )
     if 'href="/search"' in drawer:
         raise AssertionError("Mobile drawer must not expose the retired /search page")
@@ -332,7 +332,7 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
     combined = f"{navbar}\n{footer}"
     required = (
         "{% if not ecommerce_paused %}",
-        "Balloons-to-Order",
+        "Pickups &amp; Deliveries",
         'href="/shop"',
         "data-lt-search-ready-order-entry",
         'href="/cart"',

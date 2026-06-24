@@ -1,22 +1,31 @@
 # Locally Twisted - Coding Handoff
 
-Homepage July Favorites / Pickups & Deliveries planning closeout as of
-2026-06-24: implementation has not started. Use
-`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md` as the parent
-plan before touching source. The release splits into four child features:
-realistic Fourth of July hero image replacement, Customer Favorites row,
-homepage section reorder, and public supermenu rename from
-`Balloons-to-Order` to `Pickups & Deliveries`. User-confirmed requirements:
-show favorite prices as `From $XX.XX`, use these four products
-(`birthday-deliveries`, `large-head-missionary`, `minion-bouquet`, and
-`bandage-get-well-bouquet-latex-free`), place the row after Reviews, and make
-the relevant order Reviews -> Customer Favorites -> Live Entertainment -> One
-of a Kind Designs, with the client crawl/CTA after that sequence. GL replaced
-Classic Arch with Minion Bouquet so the row uses four products with visible
-live starting prices. Capability gate
-passed for planning with homepage, nav, shop symmetry, and browser-verification
-recipes loaded. No source, ERPNext data, Frappe Cloud, cache, DNS, Stripe, or
-live behavior changed in this planning slice.
+Homepage July Favorites / Pickups & Deliveries source closeout as of
+2026-06-24: local source is implemented and verified; live release has not
+started. Parent handoff:
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`. The homepage now
+uses a real balloon-decor Fourth of July hero crop set from stripped local
+source `_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`,
+adds `Customer Favorites` immediately after Reviews, moves Live Entertainment
+before One of a Kind Designs, and keeps the client crawl/CTA after that proof
+sequence. Favorites are data-backed from published `Website Item` routes and
+use `get_variant_starting_price` for `From $XX.XX`: Birthday Deliveries
+`$90.00`, Large head Missionary `$175.00`, Minion Bouquet `$35.00`, and Bandage
+`"GET WELL"` Bouquet (Latex free) `$35.00`. Public shop-category chrome now
+uses `Pickups & Deliveries` / `All Pickups & Deliveries` across desktop nav,
+mobile drawer, search quick links, footer, shop rail/select, `/shop` copy, and
+verifiers while preserving Item Group category discovery. Local proof passed
+py_compile, `npm run test:nav-ia`, `npm run test:ecommerce-pause`,
+`npm run test:search-contract`, `npm run test:container-contract` `72 passed`,
+`npm run test:interactive-layout` `159 passed, 1 skipped`,
+`npm run test:layout-fit` `312 passed`, `.venv/bin/python
+scripts/verify/smoke_shop.py`, and `npm run test:public-assets` for `31`
+routes / `362` assets. Screenshots/metrics are local ignored artifacts under
+`output/homepage-july-favorites-nav/screenshots/`. Capability gate passed with
+homepage, nav, shop symmetry, browser, container, responsive, compact-hero,
+hero-image, and catalog-price recipes loaded. No ERPNext data, Frappe Cloud,
+live cache, DNS, Stripe, provider, customer communication, or live
+`https://locallytwisted.com/` behavior changed in this source slice.
 
 Live product visibility disable closeout as of 2026-06-23:
 the four documented retired products are hidden on live
@@ -1250,12 +1259,12 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Checkout commerce rules are now coordinated with fulfillment, tax, and inquiry lanes. Ready-to-order goods can check out; custom/quote-required products and out-of-area delivery stay in the quote/Lead path. Standard local delivery is `$15`, Park City delivery is `$50`, and past fulfillment dates are rejected server-side.
 - Checkout tax now separates jurisdiction from taxable base. ZIP/city selects the Utah rate, but only goods are taxable. Services, face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable. The local stack has a 0 percent `LT Non-Taxable Sales` Item Tax Template; delivery fee lines and `Services` item-group lines use that non-taxable override in Sales Orders.
 - Contact/Lead intake now records service payment guidance fields: payment timing, deposit due, balance timing, and payment notes. Artist services use `$50 per artist` deposit guidance; mixed artist + decor/event inquiries preserve that deposit note and include the full-before-prep guidance for quoted work. This is guidance only, not an automatic service/deposit finance record.
-- Header/menu uses the deliberate premium two-level mega-menu: full-height Locally Twisted logo image, a non-link `Event Balloons` audience dropdown, `Twisting & Face Painting`, `Portfolio`, `About Us`, `FAQ`, top utility row, search overlay, and `Contact Us` CTA in the current pages/forms-first launch posture with `lt_ecommerce_paused=1`. `Ready-to-Order` and cart are preserved behind the config gate and return when `lt_ecommerce_paused=0`; `/shop`, `/cart`, and `/checkout` redirect to the branded quote fallback while paused. `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`; the event dropdown links only to `/civic-community`, `/corporate-events`, `/schools-campuses`, and `/private-celebrations`; `Contact Us` points to `/contact`; top-banner `Free Event Quote` points to `/contact` and the account link remains. The short-notice copy `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the old `Prepared design, clean installs, and invoiced event support across Utah.` proof copy and delivery/truck icon are removed. Menu coordination lives at `workstreams/menu-content-coordination.md`; route removal handoff is `workstreams/event-balloons-route-removal-2026-05-11.md`; the active service-removal guard handoff is `workstreams/nav-service-removal-guard.md`; the older BTFP/Process correction handoff remains historical context at `workstreams/nav-btfp-process-correction.md`.
+- Header/menu uses the deliberate premium two-level mega-menu: full-height Locally Twisted logo image, a non-link `Event Balloons` audience dropdown, `Twisting & Face Painting`, `Pickups & Deliveries`, `Portfolio`, `About Us`, `FAQ`, top utility row, search overlay, and `Contact Us` CTA in the current pages/forms-first launch posture with `lt_ecommerce_paused=1`. `Pickups & Deliveries` and cart are preserved behind the config gate and return when `lt_ecommerce_paused=0`; `/shop`, `/cart`, and `/checkout` redirect to the branded quote fallback while paused. `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`; the event dropdown links only to `/civic-community`, `/corporate-events`, `/schools-campuses`, and `/private-celebrations`; `Contact Us` points to `/contact`; top-banner `Free Event Quote` points to `/contact` and the account link remains. The short-notice copy `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the old `Prepared design, clean installs, and invoiced event support across Utah.` proof copy and delivery/truck icon are removed. Menu coordination lives at `workstreams/menu-content-coordination.md`; route removal handoff is `workstreams/event-balloons-route-removal-2026-05-11.md`; the active service-removal guard handoff is `workstreams/nav-service-removal-guard.md`; the older BTFP/Process correction handoff remains historical context at `workstreams/nav-btfp-process-correction.md`.
 - Mobile header compactness is now part of the nav contract: in hidden-ecommerce launch mode the header row carries logo and menu, with shop/cart chrome removed. Search lives as a bottom drawer button when ecommerce is open, opens the overlay, closes the drawer first, and submits to `/shop`; `/search` is kept as a no-cache 404 fallback, not a public page.
 - Header color repair completed 2026-05-06 after GL flagged the all-black chrome as off-style and was corrected again 2026-05-11 after the short-notice banner regressed to brass/gold. The mega-menu contract stayed intact, but `lt-mega-menu.css` now uses a style-guide split: deep-navy desktop/mobile short-notice strips, warm-white text, warm-white mobile header/drawer surfaces, berry CTA, and brass accents. `hooks.py` cache-bust is `lt-mega-menu.css?v=20260511-blue-banner-2`, and `interactive_layout.spec.js`, `nav_ia.py`, and `smoke_shop.py` guard against regressing the short-notice strips away from navy.
 - `/portfolio` and `/balloon-twisting-and-face-painting` are real public routes and return 200 locally. `/event-balloons` and `/event_balloons` are intentionally removed and return 404 with no redirect. `/process` was unapproved and has been removed from the customer-facing site contract. `/portfolio` now keeps only the approved collage-of-imagery and movement behavior from the external prototype: native LT shell/global typography, branded compact portfolio hero, 1.5x larger desktop installed-work images, frequent center-column photos, optimized WebP derivatives, no cropped cards, no captions, no visible frame wrappers, no route-specific Inquire/Studio/Index footer block, actual image dimensions, mobile full-width slide-in reveal, and click-to-front interaction. Do not reintroduce the copied prototype hero, portfolio-specific font imports, custom cursor, fake internal nav/shell, static mobile stacking, photo captions, frame/card wrappers, forced design-slot aspect ratios that create letterbox stripes, route-local portfolio contact/index/footer sections, or full Claude/designer page styling. Category/event query links still filter the photo payload server-side. The research folder remains critique input only; the Frappe implementation, optimized assets, and verifier are the kept production source.
 - The mega-menu source contract is active: `navbar_context.py`, `templates/includes/navbar/navbar.html`, `public/css/lt-mega-menu.css`, and `public/js/lt-megamenu.js` must stay in parity with `hooks.py`, `nav_ia.py`, and `smoke_shop.py`.
-- Footer no longer exposes `What We Make` or `Book an Event`; `All Ready-to-Order` is config-gated and hidden in the current pages/forms-first launch posture, and `Twisting & Face Painting` remains visible as a service lane.
+- Footer no longer exposes `What We Make` or `Book an Event`; `All Pickups & Deliveries` is config-gated and hidden in the current pages/forms-first launch posture, and `Twisting & Face Painting` remains visible as a service lane.
 - Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
 - `/shop` is the customer-facing all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; individual category pages remain at `/shop-items/<group>`.

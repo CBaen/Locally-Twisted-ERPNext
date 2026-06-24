@@ -56,7 +56,7 @@ def _group_icon(item_group: str | None) -> str:
 def _category_summary(label: str) -> str:
     return CATEGORY_SUMMARY_BY_NAME.get(
         label,
-        "Browse ready-to-order balloon decor by category.",
+        "Browse pickup and delivery balloon decor by category.",
     )
 
 

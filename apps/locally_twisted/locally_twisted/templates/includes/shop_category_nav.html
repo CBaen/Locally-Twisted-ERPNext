@@ -4,11 +4,11 @@
   {% set lt_current_category = item_group_name|default("") %}
 {% endif %}
 
-<div class="lt-shop__category-rail" aria-label="Ready-to-order categories">
+<div class="lt-shop__category-rail" aria-label="Pickup and delivery categories">
   <div class="lt-shop__category-mobile">
     <label class="lt-shop__category-select-label" for="lt-shop-category-select">Browse category</label>
-    <select class="lt-shop__category-select" id="lt-shop-category-select" aria-label="Browse ready-to-order category">
-      <option value="/shop" {% if lt_current_category in ("", "all") %}selected{% endif %}>All Ready-to-Order</option>
+    <select class="lt-shop__category-select" id="lt-shop-category-select" aria-label="Browse pickup and delivery category">
+      <option value="/shop" {% if lt_current_category in ("", "all") %}selected{% endif %}>All Pickups &amp; Deliveries</option>
       {% for cat in shop_categories %}
       {% set cat_name = cat.item_group_name or cat.name %}
       <option value="/{{ cat.route }}" {% if cat_name == lt_current_category %}selected{% endif %}>{{ cat_name }}</option>
@@ -17,17 +17,17 @@
   </div>
 
   <div class="lt-shop__category-rail-head">
-    <p class="lt-shop__category-kicker">Ready-to-order</p>
+    <p class="lt-shop__category-kicker">Pickup &amp; delivery</p>
     <h2 class="lt-shop__category-title">Browse by category</h2>
   </div>
 
-  <nav aria-label="Ready-to-order category list">
+  <nav aria-label="Pickup and delivery category list">
     <ul class="lt-shop__category-list">
       <li class="lt-shop__category-item">
         <a href="/shop"
            class="lt-shop__category-link{% if lt_current_category in ('', 'all') %} is-active{% endif %}"
            {% if lt_current_category in ("", "all") %}aria-current="page"{% endif %}>
-          All Ready-to-Order
+          All Pickups &amp; Deliveries
         </a>
       </li>
       {% for cat in shop_categories %}

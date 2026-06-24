@@ -37,12 +37,14 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 
 - The hero uses one visible stable H1, not hidden page-title plus rotating
   headings.
-- The hero image is a generated lifestyle hero photo made through the project
-  image-generation API and cropped per breakpoint:
-  `/assets/locally_twisted/images/heroes/home-generated-lifestyle-*.webp`.
-  Existing real/proof photos stay reserved for the proof bands and portfolio
-  surfaces below the hero. Generation source files and prompts live in
-  `_resources/generated-hero-sources/2026-05-10/`.
+- Public heroes normally use generated lifestyle hero photos made through the
+  project image-generation API and cropped per breakpoint. A seasonal homepage
+  hero may use a real, source-recorded balloon-decor photo only when GL's
+  approval/rejection is explicitly about realism and the source/crops are
+  retained with private metadata stripped. The current 2026-06-24 Fourth of
+  July first-slide crop set uses
+  `/assets/locally_twisted/images/heroes/july-4-home-hero-*.webp`, sourced from
+  `_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`.
 - The first viewport must leave a hint of the next band visible on desktop and
   small mobile widths.
 - The hero must obey the compact hero contract: 220px mobile, 250px tablet, and
@@ -70,9 +72,13 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   not be a fixed overlay covering CTAs there, and it must not sit between the
   hero and the Google review proof band. Other pages may still use the fixed
   banner.
-- `One of a Kind Designs` appears after Google reviews as a wide installed-work
-  proof band. Real custom installation proof is still important, but the launch
-  homepage now leads with social proof under the hero.
+- `Customer Favorites` appears after Google reviews and before Live
+  Entertainment. It must use approved Website Item routes and source-backed
+  `From` prices, with four cards across on desktop and 2x2 on mobile.
+- `One of a Kind Designs` appears after Live Entertainment as a wide
+  installed-work proof band. Real custom installation proof is still important,
+  but the launch homepage now leads with social proof, product favorites, and
+  live-service cross-sell before custom-install proof.
 - Custom Event Decor is hidden from the current homepage behind
   `show_custom_event_decor = False`. The block's recovery archive is
   `_resources/homepage-custom-event-decor-2026-05-11/`, including the before-hide
@@ -244,19 +250,32 @@ The graduation hero secondary CTA no longer points to `/event-balloons`, and
 the hidden Custom Event Decor heading no longer links there. The removed route
 is documented at `workstreams/event-balloons-route-removal-2026-05-11.md`.
 
-## 2026-06-24 homepage July favorites and nav planning
+## 2026-06-24 homepage July favorites and nav source implementation
 
 GL rejected the current Fourth of July hero image as too cartoony and confirmed
-that the replacement must look like real balloon decor. The seasonal copy is
-already July-focused; the image realism is the planned repair. The same parent
-plan adds a Customer Favorites row between Reviews and Live Entertainment, then
-moves Live Entertainment before One of a Kind Designs. The protected homepage
-rule still holds: Reviews remain the first post-hero proof band.
+that the replacement must look like real balloon decor. The source
+implementation replaced the first-slide crop set with a real red/white/blue
+balloon-decor photo source, stripped EXIF/GPS/device metadata from source and
+crops, and kept the compact hero/image-overlay contract. The same parent
+implementation adds a Customer Favorites row between Reviews and Live
+Entertainment, then moves Live Entertainment before One of a Kind Designs. The
+protected homepage rule still holds: Reviews remain the first post-hero proof
+band.
 
-Customer Favorites pricing must use product-page/source truth. The planned row
-was revised on 2026-06-24 to replace quote-first Classic Arch with Minion
-Bouquet after live proof showed Minion Bouquet returns HTTP 200 and exposes
-`from $ 35.00`. Future swaps must keep the same price-parity guard.
+Customer Favorites pricing must use product-page/source truth. The row was
+revised on 2026-06-24 to replace quote-first Classic Arch with Minion Bouquet
+after live proof showed Minion Bouquet returns HTTP 200 and exposes `from $
+35.00`. The local implementation queries published Website Items by approved
+route and formats `get_variant_starting_price` as `From $XX.XX`. Future swaps
+must keep the same price-parity guard.
 
-Planning handoff:
+Source verification passed py_compile, `npm run test:nav-ia`, `npm run
+test:ecommerce-pause`, `npm run test:search-contract`, `npm run
+test:container-contract` `72 passed`, `npm run test:interactive-layout` `159
+passed, 1 skipped`, `npm run test:layout-fit` `312 passed`, `.venv/bin/python
+scripts/verify/smoke_shop.py`, `npm run test:public-assets`, and
+desktop/mobile screenshot inspection. This is source/local proof only; live
+`https://locallytwisted.com/` needs a separate release and route-proof path.
+
+Implementation handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

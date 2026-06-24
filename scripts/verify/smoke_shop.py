@@ -254,9 +254,9 @@ def check_homepage(page):
     product_trigger = page.locator("[data-lt-megamenu-trigger='lt-mega-products']")
     assert_(event_trigger.count() == 1, "Desktop header missing Event Decor mega trigger")
     if PUBLIC_ECOMMERCE_PAUSED:
-        assert_(product_trigger.count() == 0, "Paused desktop header must not expose Balloons-to-Order mega trigger")
+        assert_(product_trigger.count() == 0, "Paused desktop header must not expose Pickups & Deliveries mega trigger")
     else:
-        assert_(product_trigger.count() == 1, "Desktop header missing Balloons-to-Order mega trigger")
+        assert_(product_trigger.count() == 1, "Desktop header missing Pickups & Deliveries mega trigger")
 
     nav_links = page.locator(".lt-mega-nav__link, .lt-mega-nav__button")
     nav_text = [
@@ -277,13 +277,13 @@ def check_homepage(page):
     about_index = nav_index("About Us")
     assert_("FAQ" not in nav_text, f"Primary nav must not include FAQ; got {nav_text}")
     if PUBLIC_ECOMMERCE_PAUSED:
-        assert_("Balloons-to-Order" not in nav_text, f"Paused primary nav must hide Balloons-to-Order, got {nav_text}")
+        assert_("Pickups & Deliveries" not in nav_text, f"Paused primary nav must hide Pickups & Deliveries, got {nav_text}")
         assert_(
             btfp_index < portfolio_index < about_index,
             f"Paused primary nav should place BTFP, Portfolio, About Us in order; got {nav_text}",
         )
     else:
-        ready_index = nav_index("Balloons-to-Order")
+        ready_index = nav_index("Pickups & Deliveries")
         assert_(
             ready_index < btfp_index < portfolio_index < about_index,
             f"Open-commerce primary nav order is wrong, got {nav_text}",
@@ -366,23 +366,23 @@ def check_homepage(page):
     assert_(page.locator("#lt-mega-events .lt-megamenu__card[href='/portfolio']").count() == 0, "Corporate event mega card must not link to /portfolio")
     if not PUBLIC_ECOMMERCE_PAUSED:
         product_trigger.click()
-        assert_(page.locator("#lt-mega-products").is_visible(), "Balloons-to-Order mega menu did not open")
+        assert_(page.locator("#lt-mega-products").is_visible(), "Pickups & Deliveries mega menu did not open")
         panel_text = page.locator("#lt-mega-products").inner_text()
-        assert_("Browse ready-to-order by category." in panel_text, "Balloons-to-Order mega menu should frame category browsing")
-        assert_("ERPNext" not in panel_text, "Balloons-to-Order mega menu must not expose internal ERPNext wording")
-        assert_("Website Item" not in panel_text, "Balloons-to-Order mega menu must not expose backend data model wording")
-        assert_("Backend-approved" not in panel_text, "Balloons-to-Order mega menu must not expose backend approval wording")
+        assert_("Browse pickups and deliveries by category." in panel_text, "Pickups & Deliveries mega menu should frame category browsing")
+        assert_("ERPNext" not in panel_text, "Pickups & Deliveries mega menu must not expose internal ERPNext wording")
+        assert_("Website Item" not in panel_text, "Pickups & Deliveries mega menu must not expose backend data model wording")
+        assert_("Backend-approved" not in panel_text, "Pickups & Deliveries mega menu must not expose backend approval wording")
         assert_(
             page.locator("#lt-mega-products a[href='/shop-items/arches']").count() >= 1,
-            "Balloons-to-Order mega menu should link to the Arches category",
+            "Pickups & Deliveries mega menu should link to the Arches category",
         )
         assert_(
             page.locator("#lt-mega-products a[href='/shop-items/bouquets']").count() >= 1,
-            "Balloons-to-Order mega menu should link to the Bouquets category",
+            "Pickups & Deliveries mega menu should link to the Bouquets category",
         )
         assert_(
             page.locator("#lt-mega-products a[href='/shop-items/balloon-drops']").count() >= 1,
-            "Balloons-to-Order mega menu should link to the Balloon Drops category",
+            "Pickups & Deliveries mega menu should link to the Balloon Drops category",
         )
         for product_href in (
             "/shop-items/bouquets/unicorn-bouquet",
@@ -392,18 +392,18 @@ def check_homepage(page):
         ):
             assert_(
                 page.locator(f"#lt-mega-products a[href='{product_href}']").count() == 0,
-                f"Balloons-to-Order mega menu must not expose product link {product_href}",
+                f"Pickups & Deliveries mega menu must not expose product link {product_href}",
             )
 
     quote_cta = page.locator(".lt-mega-header__cta", has_text="Contact Us")
     assert_(quote_cta.count() == 1, "Desktop header missing Contact Us CTA")
     assert_(quote_cta.first.get_attribute("href") == "/contact", "Contact Us CTA must link to /contact")
-    footer_all_decor = page.locator("footer .lt-footer__col-link", has_text="All Ready-to-Order")
+    footer_all_decor = page.locator("footer .lt-footer__col-link", has_text="All Pickups & Deliveries")
     if PUBLIC_ECOMMERCE_PAUSED:
-        assert_(footer_all_decor.count() == 0, "Paused footer must hide All Ready-to-Order link")
+        assert_(footer_all_decor.count() == 0, "Paused footer must hide All Pickups & Deliveries link")
     else:
-        assert_(footer_all_decor.count() == 1, "Footer missing All Ready-to-Order link")
-        assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Ready-to-Order link must use /shop")
+        assert_(footer_all_decor.count() == 1, "Footer missing All Pickups & Deliveries link")
+        assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Pickups & Deliveries link must use /shop")
     print("  OK mode-aware mega navigation, service lane, /contact CTA, and footer commerce state")
 
 
@@ -1022,7 +1022,7 @@ def check_mobile_drawer(p):
     else:
         assert_(
             page.locator("[data-lt-drawer-accordion-trigger='lt-mobile-products']").count() == 0,
-            "Paused mobile drawer must not expose Balloons-to-Order accordion",
+            "Paused mobile drawer must not expose Pickups & Deliveries accordion",
         )
 
     for panel_id in panel_ids:
@@ -1036,7 +1036,7 @@ def check_mobile_drawer(p):
         "Contact Us": "/contact",
     }
     if not PUBLIC_ECOMMERCE_PAUSED:
-        expected_links["All Balloons-to-Order"] = "/shop"
+        expected_links["All Pickups & Deliveries"] = "/shop"
     for label, href in expected_links.items():
         link = page.locator("#lt-mobile-nav a", has_text=label).first
         assert_(link.count() == 1, f"Mobile drawer missing {label}")

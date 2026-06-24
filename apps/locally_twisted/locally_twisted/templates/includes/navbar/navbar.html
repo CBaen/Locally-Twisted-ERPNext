@@ -6,7 +6,7 @@
    - #lt-mobile-backdrop and #lt-mobile-close close the drawer.
    - [data-lt-drawer-accordion-trigger] toggles same-id drawer panels.
    - [data-lt-search-toggle] opens #lt-site-search-panel without leaving the page.
-   - Balloons-to-Order category surfaces are hidden while the online shop is paused.
+   - Pickups & Deliveries category surfaces are hidden while the online shop is paused.
 #}
 
 {% set event_links = lt_nav_event_links or [
@@ -92,13 +92,13 @@
                                     type="button"
                                     data-lt-megamenu-trigger="lt-mega-products"
                                     aria-expanded="false">
-                                Balloons-to-Order
+                                Pickups &amp; Deliveries
                                 <span class="lt-mega-nav__chevron" aria-hidden="true"></span>
                             </button>
 
                             <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
-                                <p class="lt-megamenu__eyebrow">Ready-to-order</p>
-                                <h2 class="lt-megamenu__title">Browse ready-to-order by category.</h2>
+                                <p class="lt-megamenu__eyebrow">Pickup &amp; delivery</p>
+                                <h2 class="lt-megamenu__title">Browse pickups and deliveries by category.</h2>
                                 <p class="lt-megamenu__summary">Start with the type of decor you need, then choose the piece that fits your event.</p>
 
                                 <div class="lt-megamenu__grid">
@@ -197,8 +197,8 @@
         <div class="lt-site-search-panel__quick" data-lt-search-list>
             {% if not ecommerce_paused %}
                 <a href="/shop" data-lt-search-entry data-lt-search-ready-order-entry data-lt-search-keywords="ready order shop all categories pickup checkout balloon decor">
-                    <strong>All Balloons-to-Order</strong>
-                    <span>Browse every ready-to-order category in one place.</span>
+                    <strong>All Pickups &amp; Deliveries</strong>
+                    <span>Browse every pickup and delivery category in one place.</span>
                 </a>
                 {% for item in lt_nav_search_ready_to_order_links or [] %}
                     <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-ready-order-entry data-lt-search-keywords="{{ item.keywords | e }}">
@@ -282,11 +282,11 @@
                         data-lt-drawer-accordion-trigger="lt-mobile-products"
                         aria-controls="lt-mobile-products"
                         aria-expanded="false">
-                    Balloons-to-Order
+                    Pickups &amp; Deliveries
                     <span aria-hidden="true">+</span>
                 </button>
                 <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
-                    <a href="/shop">All Balloons-to-Order</a>
+                    <a href="/shop">All Pickups &amp; Deliveries</a>
                     {% for item in ready_to_order_links %}
                         <a href="/{{ item.route }}">{{ item.label }}</a>
                     {% endfor %}

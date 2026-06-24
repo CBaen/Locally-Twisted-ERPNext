@@ -121,9 +121,12 @@ also verified no `.lt-shop__chip` controls on `/shop`, no old
 desktop category rail, one 12-option mobile category select, and paired Arches
 product rows; transient screenshot folders were not kept as source.
 
-On 2026-06-24, the planned homepage Customer Favorites row added a related
-symmetry rule: 4 curated product cards across on desktop and 2x2 on mobile,
-with `From` prices only when the product-page/source truth supports them.
-GL replaced Classic Arch with Minion Bouquet so the current planned row uses
-four products with visible live starting prices. Planning handoff:
+On 2026-06-24, the homepage Customer Favorites row added a related symmetry
+rule: 4 curated product cards across on desktop and 2x2 on mobile, with
+`From` prices only when the product-page/source truth supports them. GL
+replaced Classic Arch with Minion Bouquet so the implemented row uses four
+products with visible/source-backed starting prices. Codex implemented the
+row in local source and added browser guards for exact card count, route hrefs,
+titles, image presence, `From` prices, desktop 4-across layout, and mobile 2x2
+layout. Implementation handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

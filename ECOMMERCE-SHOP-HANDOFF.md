@@ -1,13 +1,17 @@
 # Ecommerce Shop Handoff
 
-Status addendum as of 2026-06-24: a homepage `Customer Favorites` row is
-planned but not implemented. The approved product targets are Birthday
+Status addendum as of 2026-06-24: the homepage `Customer Favorites` row is
+implemented in local source and verified locally. Product targets are Birthday
 Deliveries, Large head Missionary, Minion Bouquet, and Bandage "GET WELL"
-Bouquet (Latex free). Future favorite-card prices must come from current
-product-page/source truth and display as `From $XX.XX`. Minion Bouquet replaced
-Classic Arch after live verification showed Minion Bouquet returns HTTP 200 and
-exposes `from $ 35.00`. Parent plan:
-`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+Bouquet (Latex free). Favorite-card prices are sourced from the same
+product/variant starting-price helper used by product pages and display as
+`From $XX.XX`: `$90.00`, `$175.00`, `$35.00`, and `$35.00` respectively.
+Classic Arch remains out of this row because it is quote-first. The public
+shop-category menu label is now `Pickups & Deliveries`, but the menu remains
+category discovery from Item Group children under `Shop Items`; it is not a
+product quick-link menu. Parent handoff:
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`. This is
+local/source only; no live Frappe Cloud or production catalog data changed.
 
 Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
 

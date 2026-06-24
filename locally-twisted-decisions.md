@@ -8,6 +8,53 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-24 - Homepage July favorites and Pickups & Deliveries are source-implemented, not live-released
+
+**Decision:** The approved homepage July/Favorites/navigation packet is now
+implemented in local source, with live release kept as a separate approval and
+proof path.
+
+**Reasoning:** The work touches public brand quality, product-price claims,
+homepage proof order, nav/search/mobile/footer language, and route verifiers.
+Local source proof is necessary but not the same thing as production parity on
+`https://locallytwisted.com/`.
+
+**Implementation boundary:** Source now uses a realistic red/white/blue
+balloon-decor hero crop set for the Fourth of July first slide, with stripped
+source image retained at
+`_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`.
+The homepage renders Reviews, Customer Favorites, Live Entertainment, One of a
+Kind Designs, trusted-client crawl, and closing CTA in that order. Customer
+Favorites are data-backed from published Website Item routes and
+`get_variant_starting_price`: Birthday Deliveries `From $90.00`, Large head
+Missionary `From $175.00`, Minion Bouquet `From $35.00`, and Bandage `"GET
+WELL"` Bouquet (Latex free) `From $35.00`. Public shop-category chrome now
+uses `Pickups & Deliveries` / `All Pickups & Deliveries` across desktop nav,
+mobile drawer, search quick links, footer, shop rail/select, `/shop` copy, and
+verifiers. Category discovery remains Item Group based; this did not become a
+product quick-link menu.
+
+**Guard:** Do not claim live parity from this source commit. A future
+production release must run the Frappe Cloud/site update path and prove live
+homepage/nav behavior on `https://locallytwisted.com/`. Future favorite swaps
+must keep product-page/source price parity or record an explicit GL exception.
+Future seasonal hero changes must pass visual realism review when the request
+is image-quality driven.
+
+**Receipts:** `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`;
+local verification passed py_compile, `npm run test:nav-ia`, `npm run
+test:ecommerce-pause`, `npm run test:search-contract`, `npm run
+test:container-contract` `72 passed`, `npm run test:interactive-layout` `159
+passed, 1 skipped`, `npm run test:layout-fit` `312 passed`, `.venv/bin/python
+scripts/verify/smoke_shop.py`, `npm run test:public-assets` for `31` routes /
+`362` assets, and desktop/mobile screenshot inspection under ignored
+`output/homepage-july-favorites-nav/screenshots/`.
+
+**Decided by:** Guiding Light supplied the business direction and product swap;
+Codex implemented and locally verified the source slice on 2026-06-24.
+
+---
+
 ## 2026-06-24 - Homepage July merchandising and Pickups & Deliveries nav must ship as child features
 
 **Decision:** The Fourth of July homepage refresh, Customer Favorites row,

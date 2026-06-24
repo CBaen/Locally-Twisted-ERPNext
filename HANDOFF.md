@@ -2,7 +2,7 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-24 (Codex - homepage July favorites/nav planning)
+**Last updated:** 2026-06-24 (Codex - homepage July favorites/nav source implementation)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
@@ -10,25 +10,38 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## State of the world (the load-bearing facts)
 
-**Current-session delta (2026-06-24 - homepage July favorites/nav planning):**
-- Planning is complete; implementation has not started.
+**Current-session delta (2026-06-24 - homepage July favorites/nav source implementation):**
+- Source implementation is complete and locally verified; live release has not
+  started.
 - Parent workstream:
   `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
 - Decision packet:
   `decisions/2026-06-24-homepage-july-favorites-nav-plan.md`.
-- Planned child features: realistic Fourth of July hero image replacement,
+- Implemented child features: realistic Fourth of July hero image replacement,
   Customer Favorites product row, homepage section reorder, and public
   supermenu rename from `Balloons-to-Order` to `Pickups & Deliveries`.
-- GL confirmed favorite-card price format should be `From $XX.XX`, and the
-  hero image must look like real balloon decor, not cartoon art.
-- Product targets: `birthday-deliveries`, `large-head-missionary`,
-  `minion-bouquet`, and `bandage-get-well-bouquet-latex-free`.
-- GL replaced Classic Arch with Minion Bouquet so all four planned favorites
-  have live product-page starting prices. Minion Bouquet route proof returned
-  HTTP 200 and `from $ 35.00`.
-- Capability gate passed for planning with homepage, nav, shop symmetry, and
-  browser-verification recipes loaded. No source, ERPNext data, Frappe Cloud,
-  cache, DNS, Stripe, or live behavior changed.
+- Hero crops now use a real balloon-decor source photo stored at
+  `_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`;
+  EXIF/GPS/device metadata was stripped from the source copy and public WebP
+  crops before commit.
+- Customer Favorites renders after Reviews and before Live Entertainment with
+  four data-backed Website Item cards: Birthday Deliveries `From $90.00`,
+  Large head Missionary `From $175.00`, Minion Bouquet `From $35.00`, and
+  Bandage `"GET WELL"` Bouquet (Latex free) `From $35.00`.
+- Homepage order is now Reviews, Customer Favorites, Live Entertainment, One
+  of a Kind Designs, trusted-client crawl, and closing CTA.
+- Public shop-category chrome now uses `Pickups & Deliveries` / `All Pickups &
+  Deliveries` across desktop nav, mobile drawer, search, footer, shop category
+  rail/select, `/shop` copy, and verifiers while preserving category discovery.
+- Local verification passed py_compile, nav IA, ecommerce pause, search
+  contract, container contract `72 passed`, interactive layout `159 passed, 1
+  skipped`, layout-fit `312 passed`, shop smoke through `.venv`, and public
+  asset integrity for `31` routes / `362` assets.
+- Capability gate passed with homepage, nav, shop symmetry, browser,
+  container, responsive, compact-hero, hero-image, and catalog-price recipes
+  loaded. No ERPNext data, Frappe Cloud, live cache, DNS, Stripe, provider,
+  customer communication, or live `https://locallytwisted.com/` behavior
+  changed.
 
 **Current-session delta (2026-06-23 - live product visibility disable):**
 - Active closeout handoff:

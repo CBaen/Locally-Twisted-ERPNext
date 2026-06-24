@@ -83,6 +83,10 @@ npm run test:layout-fit -- --grep "seasonal-category|shop"
 
 - This recipe does not approve ERPNext Item Group `image` fields. Use
   `erpnext-category-media-approval` for DB category images.
+- If GL rejects a generated/AI-looking seasonal homepage hero as cartoony, use
+  the homepage/compact-hero contracts for the real-photo exception instead of
+  forcing this generated-image recipe. Real photo sources must be retained in
+  `_resources/` with EXIF/GPS/device metadata stripped.
 - Do not use proof/portfolio photos as generic hero art unless the route is
   explicitly a proof surface.
 - Do not leave generated fake words, labels, logos, signage, posters, or

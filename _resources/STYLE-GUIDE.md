@@ -1,7 +1,7 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.7
-**Last Updated:** 2026-05-22
+**Version:** 4.8
+**Last Updated:** 2026-06-24
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
@@ -20,12 +20,17 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.7 keeps the
+icons, or briefing GPT/Codex-style coding agents. Version 4.8 keeps the
 non-negotiable compact hero contract and adds the shared generated-photo hero
 rule: public heroes use breakpoint-specific lifestyle crops made through the
 project image-generation API under the black landing-page readability overlay.
 Existing real/proof photos are reserved for portfolio, product, and proof
-surfaces. It also keeps the portfolio correction:
+surfaces unless GL explicitly rejects a seasonal homepage hero for lacking
+realism; in that case, a real balloon-decor source photo may be used for the
+seasonal homepage slot when source provenance is retained and private EXIF/GPS
+metadata is stripped. Version 4.8 also records the `Pickups & Deliveries`
+shop-category label and the Customer Favorites homepage row. It keeps the
+portfolio correction:
 portfolio photos carry the proof alone, without captions or visible frame
 wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
 It also adds the balloon color addendum as the source for owner-approved swatches,
@@ -182,7 +187,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Mobile header/drawer | `navbar.html` | Fast browse and cart access | Large logo, 44px controls, plain nav labels, dark/warm surfaces, no cramped menu text, no mystery icons. |
 | Footer/newsletter | `templates/includes/footer/footer.html` | Closing brand trust and legal wayfinding | Deep navy/ink ground, warm text, brass labels, clean newsletter states, legal links visible. Use the logo/approved wordmark, not a random font fallback. |
 | Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, GigSalad/Google/Facebook review proof immediately after the hero, no homepage trust bar unless GL reopens it, large recent-work photos after reviews, custom decor discovery hidden for current launch, client proof, closing CTA. |
-| Shop landing | `/shop`, `www/shop.html` | Ready-to-order retail lane | Still premium but more practical. Keep filters, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
+| Shop landing | `/shop`, `www/shop.html` | Pickups & Deliveries retail lane | Still premium but more practical. Keep category navigation, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
 | Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, and product color as the visual accent. |
 | Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Fixed-price products stay cartable; product group alone must not create a quote-only failure. Out-of-area delivery redirects to a prefilled `/contact` quote path. Do not render generic Additional Info, Reviews, or Recommended Items panels unless GL explicitly reopens that ecommerce decision. Product option controls must be clear, not boxed; pickup/delivery is the approved framed product-detail exception. |
 | Cart | `/cart` -> `www/lt_cart.html` | Review before checkout | Quiet transactional page with order-summary hierarchy, stable quantity controls, clear empty/error/loading states, and contact fallback. |
@@ -202,8 +207,8 @@ component is added, append it here before a broad implementation swarm begins.
 and should redirect to `/contact?intent=quick` unless a later route decision
 changes that. Customer CTAs should normally point to `/contact`, not `/book`.
 Current primary navigation includes a non-link `Event Balloons` audience
-dropdown, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`,
-`FAQ`, and `Contact Us`, with top-banner `Free Event Quote` pointing to
+dropdown, `Pickups & Deliveries`, `Twisting & Face Painting`, `Portfolio`,
+`About Us`, `FAQ`, and `Contact Us`, with top-banner `Free Event Quote` pointing to
 `/contact`. The event dropdown links only to the four audience pages. Do not add
 standalone `/process` or `/event-balloons` pages or links unless GL explicitly
 approves them.
@@ -213,7 +218,7 @@ approves them.
 | Element | Exists as | Required treatment |
 |---|---|---|
 | Premium proof bar | Future trust/value bars | Dark ink/navy/slate band, brass line icons, short uppercase Lato titles, compact proof text. Use the Image #3 icon standard, but do not render a homepage trust bar in the current launch layout. |
-| Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio__hero`, page intros | Cormorant headings, Lato labels, generated lifestyle photo crops per breakpoint, and the black landing-page readability overlay. Do not use reserved real/proof photos for hero crops. Dark authority feel stays consistent across public heroes; product/legal page warmth belongs below the hero unless a documented exception is approved. |
+| Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio__hero`, page intros | Cormorant headings, Lato labels, breakpoint-specific photo crops, and the black landing-page readability overlay. Generated lifestyle crops are the normal path. A seasonal homepage slot may use a real balloon-decor source photo only when GL explicitly rejects generated/cartoon realism, and source metadata must be stripped before commit. Dark authority feel stays consistent across public heroes; product/legal page warmth belongs below the hero unless a documented exception is approved. |
 | Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, natural image ratios, and movement where the route contract calls for it. Portfolio photos are not caption cards; use the image itself with no visible frame wrapper. Hidden/offscreen moving items must not be keyboard focusable. |
 | Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, and restrained selected/hover states. |
 | Forms | Contact/book form, checkout, newsletter | Lato labels, white form surface, warm/stone inputs, visible Deep Navy/Brass focus, clear required text, loud Berry error state, no placeholder-only labels, no duplicate page-specific form systems. |
@@ -532,7 +537,7 @@ Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 - Desktop navigation can be one or two rows, but spacing must feel intentional. Avoid boxed/floating row fragments, cramped 12px nav labels, and disconnected rules.
 - Primary nav order is currently:
   - Event Balloons audience dropdown
-  - Ready-to-Order when ecommerce is open
+  - Pickups & Deliveries when ecommerce is open
   - Twisting & Face Painting
   - Portfolio
   - About Us

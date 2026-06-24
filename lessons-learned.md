@@ -6,6 +6,34 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Real photo hero sources need metadata stripping before commit
+
+The Fourth of July hero replacement used a real balloon-decor source photo
+because the previous seasonal image read as cartoon art. The copied source
+image carried iPhone EXIF/GPS/device metadata, and the derived WebP crops also
+retained metadata until the closeout pass caught it.
+
+**Counter-move:** before committing any real-photo source or public crop, run a
+metadata check and strip GPS/device/time data. For this slice,
+`exiftool -overwrite_original -all=` was used on the source JPEG and the three
+public WebP crops, then `npm run test:public-assets` was rerun. Keep the visual
+source in `_resources/` for provenance, but do not archive private capture
+metadata.
+
+## 2026-06-24 - Homepage merchandising needs executable layout proof, not just good source data
+
+The Customer Favorites row was correctly data-backed, but the first containment
+run caught `.lt-favorites__inner` exceeding the allowed public-section width
+because shared full-bleed containment CSS overrode the route-local max width.
+The visual looked plausible, but the executable container contract found the
+real cross-route rule violation.
+
+**Counter-move:** new homepage merchandising bands must be added to
+`layout_helpers.js` / `container_contract.spec.js` and need desktop/mobile
+interactive checks for order, link targets, prices, images, and grid shape.
+For this row, the kept contract is 4-across desktop and 2x2 mobile, with
+`From` prices derived from product-page/source truth.
+
 ## 2026-06-24 - Homepage merchandising cannot outrun product-page truth
 
 The Customer Favorites plan exposed a pricing parity trap before

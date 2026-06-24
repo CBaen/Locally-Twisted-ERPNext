@@ -2,38 +2,38 @@
 
 Date: 2026-06-24
 Owner: Codex technical lead
-Status: planning complete, implementation not started
+Status: source implemented and locally verified; live release not started
 
 ## Route Record
 
-Mode: plan-brief plus plan-deepen with real multi-agent triad review.
-Decision needed: approve the implementation packet after reviewing the final image direction.
+Mode: plan-brief plus plan-deepen with real multi-agent triad review, followed by local source implementation.
+Decision needed: approve any staging/live release after reviewing the final image direction.
 Scope owner: Locally Twisted public site source and live release lane.
 System/project/runtime classification: single project, public site, client production surface.
-Allowed actions in this slice: create planning, plan-deepen, triad, queue, handoff, capability, lesson, and decision documentation.
-Forbidden actions in this slice: source implementation, ERPNext data mutation, Frappe Cloud deploy, live cache clear, provider changes, payment changes, product visibility changes, and customer communication.
+Allowed actions in this source slice: homepage/nav source implementation, local Frappe cache clear/restart, local verification, queue/handoff/capability/lesson/decision documentation, commit, and push.
+Forbidden actions in this source slice: ERPNext catalog data mutation, Frappe Cloud deploy, live cache clear, provider changes, payment changes, product visibility changes, and customer communication.
 Evidence bar: current repo files, current live public pages, capability recipes, and user-confirmed business direction.
-Stop condition: stop before implementation if product route/price proof, image approval, or live release permission is unclear.
+Stop condition: stop before staging/live release because GL has not approved a release path in this source slice.
 
 ## Outcome
 
-Prepare the implementation-ready plan for a coordinated homepage and navigation update:
+Implemented the coordinated local source update:
 
 1. Replace the current weak Fourth of July hero image with realistic balloon decor.
 2. Add a professional `Customer Favorites` product row between Reviews and Live Entertainment.
 3. Reorder the relevant homepage bands to Reviews, Customer Favorites, Live Entertainment, then One of a Kind Designs.
 4. Rename the public shop-category supermenu label from `Balloons-to-Order` to `Pickups & Deliveries`.
 
-Implementation is intentionally separate from this planning slice.
+This is source/local proof only. It has not been released to Frappe Cloud or verified on live `https://locallytwisted.com/`.
 
 ## Current Verified State
 
 - Live homepage already uses Fourth of July copy on the first hero slide.
 - Live homepage still exposes `Balloons-to-Order` and `All Balloons-to-Order` in desktop, search, and mobile navigation surfaces.
 - Live homepage currently renders the relevant order as Reviews, One of a Kind Designs, trusted-client crawl, closing CTA, then Live Entertainment.
-- Local source stores the Fourth of July first-slide copy and asset paths in `HOME_HERO_SLIDES[0]` in `apps/locally_twisted/locally_twisted/www/home.py`.
-- Local homepage template renders One of a Kind Designs before the client crawl, CTA, and Live Entertainment in `apps/locally_twisted/locally_twisted/www/home.html`.
-- Local navigation labels and verifier expectations still include `Balloons-to-Order`, `All Balloons-to-Order`, and `All Ready-to-Order`.
+- Local source now stores the Fourth of July first-slide copy and realistic balloon-decor asset paths in `HOME_HERO_SLIDES[0]` in `apps/locally_twisted/locally_twisted/www/home.py`.
+- Local homepage template now renders Reviews, Customer Favorites, Live Entertainment, One of a Kind Designs, trusted-client crawl, and closing CTA in that order.
+- Local navigation labels and verifier expectations now use `Pickups & Deliveries` / `All Pickups & Deliveries` for the public shop-category menu.
 - All four current Customer Favorites product URLs return HTTP 200 on live `locallytwisted.com`.
 - All four current Customer Favorites expose visible starting prices on the live product page:
   - Birthday Deliveries: `from $ 90.00`
@@ -58,6 +58,52 @@ Implementation is intentionally separate from this planning slice.
   - `https://locallytwisted.com/shop-items/bouquets/large-head-missionary`
   - `https://locallytwisted.com/shop-items/bouquets/minion-bouquet`
   - `https://locallytwisted.com/shop-items/bouquets/bandage-get-well-bouquet-latex-free`
+
+## Source Implementation Closeout
+
+Implemented locally on 2026-06-24:
+
+- Replaced the Fourth of July first-slide hero crop set with a real red/white/blue balloon-decor photo source copied to `_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`.
+- Stripped EXIF/GPS/device metadata from the source copy and the three public WebP crops before commit.
+- Rebuilt the desktop/tablet/mobile public hero crops at:
+  - `apps/locally_twisted/locally_twisted/public/images/heroes/july-4-home-hero-desktop.webp`
+  - `apps/locally_twisted/locally_twisted/public/images/heroes/july-4-home-hero-tablet.webp`
+  - `apps/locally_twisted/locally_twisted/public/images/heroes/july-4-home-hero-mobile.webp`
+- Added `CUSTOMER_FAVORITE_ROUTES` and `customer_favorites` in `home.py`.
+- Favorite cards query published `Website Item` records by approved route and derive `From $XX.XX` through `get_variant_starting_price`.
+- Added the `Customer Favorites` section in `home.html` after Reviews and before Live Entertainment.
+- Added the section to the executable container contract and the interactive desktop/mobile layout contract.
+- Renamed active customer-facing shop-category chrome to `Pickups & Deliveries` across desktop nav, mobile drawer, search quick links, footer, shop category rail/select, `/shop` copy, and source verifiers.
+- Preserved category discovery; the public shop menu still comes from visible Item Group children under `Shop Items`, not product quick links.
+
+Rendered local proof on `http://localhost:8081/`:
+
+- Hero asset resolves to `july-4-home-hero-desktop.webp` on desktop and `july-4-home-hero-mobile.webp` on mobile.
+- Section order metrics: Reviews before Customer Favorites, then Live Entertainment, then One of a Kind Designs.
+- Favorite row cards:
+  - Birthday Deliveries - `/shop-items/bouquets/birthday-deliveries` - `From $90.00`
+  - Large head Missionary - `/shop-items/bouquets/large-head-missionary` - `From $175.00`
+  - Minion Bouquet - `/shop-items/bouquets/minion-bouquet` - `From $35.00`
+  - Bandage "GET WELL" Bouquet (Latex free) - `/shop-items/bouquets/bandage-get-well-bouquet-latex-free` - `From $35.00`
+- Grid proof: 4 cards across on 1366px desktop; 2x2 on 390px mobile.
+- Screenshot artifacts are local/ignored only at `output/homepage-july-favorites-nav/screenshots/`.
+
+Local verification receipts:
+
+- `python -m py_compile apps/locally_twisted/locally_twisted/www/home.py apps/locally_twisted/locally_twisted/www/shop.py apps/locally_twisted/locally_twisted/navbar_context.py apps/locally_twisted/locally_twisted/shop_taxonomy.py scripts/verify/nav_ia.py scripts/verify/ecommerce_pause_contract.py scripts/verify/smoke_shop.py`
+- `npm run test:nav-ia`
+- `npm run test:ecommerce-pause`
+- `npm run test:search-contract`
+- `npm run test:container-contract` -> `72 passed`
+- `npm run test:interactive-layout` -> `159 passed, 1 skipped`
+- `npm run test:layout-fit` -> `312 passed`
+- `.venv/bin/python scripts/verify/smoke_shop.py`
+- `npm run test:public-assets` -> `PASS (31 routes, 362 unique local asset URLs)`
+
+Live release boundary:
+
+- No Frappe Cloud app mirror push, Frappe Cloud deploy, site update/migration, live cache clear, provider change, payment change, or live route verification was performed in this source slice.
+- Live `https://locallytwisted.com/` remains on the previous production state until an explicit release path is approved and completed.
 
 ## Scope And Ownership
 
@@ -330,7 +376,7 @@ Planning acceptance for this slice:
 - Queue, handoff, decisions, lessons, and capability docs point future agents here.
 - Real triad findings are integrated before final commit.
 
-Implementation acceptance for the future build:
+Implementation acceptance for the local source build:
 
 - Homepage first slide uses realistic Fourth of July balloon decor, not a cartoon/illustration.
 - Customer Favorites renders four cards with stable image sizes, professional spacing, working links, and 4-across desktop / 2x2 mobile layout.
@@ -346,16 +392,10 @@ Implementation acceptance for the future build:
 
 - Assumption: mobile Customer Favorites should be 2x2 for readability and professional tap targets.
 - Assumption: derivative labels should use `All Pickups & Deliveries`.
-- Open question: final hero image should be reviewed by GL before live publication because the rejection was visual-quality based.
+- Open question: GL should review the final local hero image before live publication because the rejection was visual-quality based.
 
 ## Next Safe Step
 
-After this plan is accepted, implement child features in this order:
-
-1. Fourth of July hero image asset replacement.
-2. Customer Favorites data/source/card section for Birthday Deliveries, Large head Missionary, Minion Bouquet, and Bandage "GET WELL" Bouquet (Latex free).
-3. Homepage flow reorder.
-4. Pickups & Deliveries nav contract rename.
-5. Focused local verification and screenshots.
-6. Documentation closeout.
-7. Separate release path only after explicit live/staging approval.
+1. GL reviews the local `http://localhost:8081/` hero image and homepage flow if visual approval is needed before release.
+2. Open a separate staging/live release path only after explicit approval.
+3. On release, rerun the Frappe Cloud/site update gate and prove `https://locallytwisted.com/` renders the same hero, favorites, section order, and `Pickups & Deliveries` chrome.
