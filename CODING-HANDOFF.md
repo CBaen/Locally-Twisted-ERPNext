@@ -13,11 +13,18 @@ py_compile, JS checks, JSON manifest validation, Wardenclyffe/Banebook
 Playwright smoke, cache clear, interactive homepage/compact-hero `62 passed`,
 home layout-fit `13 passed`, home container contract `3 passed`, and public
 asset integrity `31 routes / 362 assets`. Screenshot artifacts are in
-`output/playwright/homepage-hero-july-removal-20260624/`. Remaining blocker:
-the built-in image generation tool did not expose a local image file, and
-`OPENAI_API_KEY` was absent for the CLI fallback. Do not claim the Civic,
-Schools, or Private hero replacements are ready until 3 or 4 photoreal options
-per lane are stored under
+`output/playwright/homepage-hero-july-removal-20260624/`. Image-output follow-up:
+normal built-in Codex image generation is OAuth/session backed and does not
+need `OPENAI_API_KEY`. On Wardenclyffe the generated bitmap may land in the
+Codex session JSONL as `image_generation_call.result` instead of as a normal
+file; use `python scripts/dev/save_latest_codex_image.py --out <path>` to
+extract it into the repo. A local convenience command also exists at
+`/home/guidingl/.local/bin/codex-save-latest-image`. The prior API-key CLI
+experiment reached OpenAI but hit account billing limits, and GL rejected that
+path as unnecessary for subscription-backed Codex image generation; `.env`
+has `OPENAI_API_KEY=` blanked. Do not claim the Civic, Schools, or Private
+hero replacements are ready until 3 or 4 photoreal options per lane are stored
+under
 `_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
 obvious AI/physics failures are rejected, and GL selects final options. No
 Frappe Cloud/app mirror/live release was performed for this follow-up.

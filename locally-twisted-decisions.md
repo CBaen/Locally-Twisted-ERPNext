@@ -8,6 +8,50 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-24 - Built-in Codex image generation is the normal fileable path, not API-key CLI billing
+
+**Decision:** For LT generated homepage hero work, use Codex's built-in
+OAuth/session-backed `image_gen` tool as the normal generation surface. When
+the generated bitmap does not appear as a standalone file, extract it from the
+Codex session JSONL with `python scripts/dev/save_latest_codex_image.py --out
+<path>`. Do not treat the API-key CLI fallback as the default path for normal
+Codex subscription image generation.
+
+**Reasoning:** GL clarified that Codex image generation has historically worked
+without providing an API key and should remain part of the subscription/OAuth
+workflow. The local API-key CLI test proved the SDK/key path could reach
+OpenAI, but it hit provider-side billing limits and would charge through the
+OpenAI Platform API lane. That is the wrong default for this project. Current
+verification showed built-in image generation works in-session and stores the
+bitmap as `image_generation_call.result` base64 inside Codex session logs.
+
+**Implementation boundary:** Added tracked helper
+`scripts/dev/save_latest_codex_image.py` and local convenience command
+`/home/guidingl/.local/bin/codex-save-latest-image`. The helper reads Codex
+session JSONL, extracts only built-in `image_generation_call.result` payloads,
+and writes normal PNG/JPG/WebP files. It does not call the OpenAI API, read
+`.env`, or need `OPENAI_API_KEY`. The local LT `.env` has
+`OPENAI_API_KEY=` blanked so accidental API fallback is less likely.
+
+**Guard:** Use the API-key CLI only when GL explicitly approves an API-backed
+fallback or a CLI-only feature is genuinely required. For homepage hero option
+sets, generate one option with built-in `image_gen`, immediately save it into
+the dated `_resources/generated-hero-sources/...` folder with the helper, then
+inspect/reject before moving to the next option.
+
+**Proof:** Built-in `image_gen` produced a red-balloon test image. No normal
+file appeared under `$CODEX_HOME/generated_images`, `/tmp`, Downloads,
+Pictures, or the project. The helper extracted the session payload to
+`output/imagegen/builtin-helper-smoke-20260624.png`, and local inspection
+verified a valid `1254x1254` RGB PNG. `codex-save-latest-image --list` also
+found the earlier Civic hero generation payload from this session.
+
+**Decided by:** Guiding Light rejected API-key billing as unnecessary for
+Codex subscription image generation; Codex verified and implemented the
+session-output extraction path on 2026-06-24.
+
+---
+
 ## 2026-06-24 - Rejected Fourth of July hero is removed, replacement images require GL-selected photoreal options
 
 **Decision:** Remove the Fourth of July homepage hero slide from local source
@@ -18,10 +62,12 @@ sets are generated, reviewed, and GL selects options.
 
 **Reasoning:** GL rejected the Fourth of July hero as visually unacceptable and
 asked to remove it. GL also requested 3 or 4 generated photoreal options for
-each remaining image lane before final selection. The current built-in image
-tool did not expose local image files, and `OPENAI_API_KEY` was absent for the
-CLI fallback, so there is no stored generated option set to review or wire.
-Publishing guessed replacements would repeat the same quality failure.
+each remaining image lane before final selection. At the time of the source
+removal, no stored generated option set existed to review or wire. Later on
+2026-06-24 the built-in Codex image output extraction path was repaired, but
+the Civic/Schools/Private option sets still need to be generated, saved,
+reviewed, and selected. Publishing guessed replacements would repeat the same
+quality failure.
 
 **Implementation boundary:** Local source removed the July slide from
 `HOME_HERO_SLIDES`, reduced the carousel timing from 40 seconds/five slides to

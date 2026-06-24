@@ -2,9 +2,17 @@
   "project": "Locally Twisted",
   "asset_set": "homepage photoreal balloon hero options",
   "created_on": "2026-06-24",
-  "status": "blocked_no_filesystem_artifacts",
-  "generation_mode": "built_in_image_gen_attempted",
-  "blocked_reason": "The built-in image generation tool returned no discoverable image file under /home/guidingl/.codex, /tmp, /mnt, Downloads, Pictures, or the project workspace. OPENAI_API_KEY was not present, so the CLI fallback could not be used. No generated option can be considered stored or reviewable from this manifest alone.",
+  "status": "generation_surface_fixed_options_pending",
+  "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
+  "blocked_reason": "Resolved on 2026-06-24: built-in Codex image generation works through the OAuth/session path and does not require OPENAI_API_KEY. On Wardenclyffe the image bytes may be stored in Codex session JSONL as image_generation_call.result instead of as a standalone generated_images file. Use scripts/dev/save_latest_codex_image.py to extract each built-in image into this folder. The remaining blocker is not file export; it is that the requested 3-option photoreal sets still need to be generated, reviewed, and selected by GL.",
+  "storage_extraction": {
+    "repo_helper": "scripts/dev/save_latest_codex_image.py",
+    "local_convenience_command": "/home/guidingl/.local/bin/codex-save-latest-image",
+    "uses_openai_api": false,
+    "requires_openai_api_key": false,
+    "tested_output": "output/imagegen/builtin-helper-smoke-20260624.png",
+    "tested_output_sha256": "ae8780ae0bbda102454e6a2c135c414aa53293a1b64de95f6f0a382950fc9f12"
+  },
   "storage_contract": {
     "source_directory": "_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/",
     "candidate_filename_pattern": "<lane-slug>-option-0N-<scene-slug>-source.webp",
@@ -20,7 +28,7 @@
     "lane": "civic-community",
     "option": 1,
     "scene_slug": "city-park-festival-anchored-arch",
-    "result": "tool_returned_no_saved_file",
+    "result": "built_in_session_payload_found_but_not_saved_as_candidate",
     "prompt_summary": "Photoreal Utah civic outdoor festival with red, white, navy, and gold organic balloon arch anchored to visible weighted bases, no readable signs, no fake logos, wide hero composition."
   },
   "planned_options": [
@@ -89,8 +97,8 @@
     }
   ],
   "next_unblock": [
-    "Expose the built-in image generation output as local files, or provide an OPENAI_API_KEY for the project-approved CLI fallback.",
-    "Generate 3 or 4 distinct options per lane into this folder using the filename pattern above.",
+    "Generate 3 or 4 distinct options per lane with the built-in Codex image_gen tool.",
+    "Immediately extract each generated output into this folder using scripts/dev/save_latest_codex_image.py and the filename pattern above.",
     "Inspect each option and reject AI-looking or physically impossible installs before GL review.",
     "Only after GL selects options, produce the desktop/tablet/mobile public WebP crops and wire homepage references."
   ]

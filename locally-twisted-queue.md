@@ -15,12 +15,14 @@ removes the rejected Fourth of July homepage hero slide; the homepage carousel
 has four audience slides and local rendered proof shows no Fourth of July body
 copy. Handoff:
 `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`. New capability:
-`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`. The
-remaining image replacements for Civic & Community, Schools & Campuses, and
-Private Celebrations are blocked until generated image outputs are available
-as local files or an approved API-backed generator is available. Do not wire or
-publish replacement hero images until 3 or 4 physically plausible photoreal
-options per lane are stored under
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
+Built-in Codex image output extraction is repaired through
+`scripts/dev/save_latest_codex_image.py`; normal Codex image generation is
+OAuth/session backed and does not require `OPENAI_API_KEY`. The remaining work
+is to generate and review replacement image sets for Civic & Community,
+Schools & Campuses, and Private Celebrations. Do not wire or publish
+replacement hero images until 3 or 4 physically plausible photoreal options
+per lane are stored under
 `_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
 obvious AI/cartoon/physics failures are rejected, and GL selects the final
 options. No live release has been performed for this follow-up.

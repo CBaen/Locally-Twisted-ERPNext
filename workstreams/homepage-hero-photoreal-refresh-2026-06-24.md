@@ -1,7 +1,7 @@
 # Homepage Hero Photoreal Refresh Follow-Up
 
 Date: 2026-06-24
-Status: local source/browser proof complete; generated image option set blocked
+Status: local source/browser proof complete; built-in image file extraction repaired; generated option sets pending
 Owner: Codex technical lead
 Scope: Locally Twisted homepage hero carousel, photoreal balloon image option process, and browser screenshot runtime
 
@@ -55,10 +55,11 @@ Manifest:
 _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json
 ```
 
-## Current Image Generation Blocker
+## Built-In Codex Image Output Fix
 
 The built-in `image_gen` tool was used once for the first Civic & Community
-candidate prompt. It returned no discoverable local image artifact under:
+candidate prompt. The first troubleshooting pass found no normal local image
+artifact under:
 
 - `/home/guidingl/.codex`
 - `/tmp`
@@ -67,23 +68,61 @@ candidate prompt. It returned no discoverable local image artifact under:
 - `/home/guidingl/Pictures`
 - this project workspace
 
-`OPENAI_API_KEY` was absent, so the CLI fallback at
-`/home/guidingl/.codex/skills/.system/imagegen/scripts/image_gen.py` could not
-be used.
+That was not an image-generation availability failure. GL clarified that normal
+Codex image generation is subscription/OAuth backed and should not require an
+API key. A follow-up test proved built-in `image_gen` works in-session and that
+the image bytes are stored in Codex session JSONL as an
+`image_generation_call.result` base64 payload.
 
-No generated hero option can be treated as stored, reviewable, or project-bound
-from this session. The manifest records the attempted prompt and the planned
-3-option scene set for each of:
+Tracked extraction helper:
+
+```text
+scripts/dev/save_latest_codex_image.py
+```
+
+Local convenience command installed on Wardenclyffe:
+
+```text
+/home/guidingl/.local/bin/codex-save-latest-image
+```
+
+Use:
+
+```bash
+python scripts/dev/save_latest_codex_image.py --list
+python scripts/dev/save_latest_codex_image.py --out _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/<candidate-name>.png
+```
+
+This helper does not call the OpenAI API, does not read `.env`, and does not
+need `OPENAI_API_KEY`.
+
+The API-key CLI fallback was briefly tested after GL placed a key in `.env`.
+The local SDK/key path reached OpenAI, but the provider returned
+`billing_hard_limit_reached`. GL then clarified that API-key billing is not the
+desired path because Codex image generation is expected to work through the
+subscription/OAuth session. `.env` was blanked back to:
+
+```text
+OPENAI_API_KEY=
+```
+
+No API-generated images were produced.
+
+Current remaining work: generate the requested option sets with built-in
+`image_gen`, immediately extract each output into the dated option folder,
+inspect/reject failures, and present remaining options to GL. The manifest
+records the earlier attempted prompt and the planned 3-option scene set for
+each of:
 
 - Civic & Community
 - Schools & Campuses
 - Private Celebrations
 
-Next unblock:
+Next steps:
 
-1. Expose built-in image generation outputs as local files, or provide an
-   approved API-backed image generation path.
-2. Generate 3 or 4 distinct options per lane into the dated option folder.
+1. Generate 3 or 4 distinct options per lane with built-in Codex `image_gen`.
+2. Save each output with `scripts/dev/save_latest_codex_image.py` into the
+   dated option folder using the manifest filename pattern.
 3. Visually reject AI-looking or physically impossible options before GL
    review.
 4. Present remaining options for GL selection.
@@ -144,6 +183,8 @@ python -m py_compile apps/locally_twisted/locally_twisted/www/home.py scripts/ve
 node --check playwright.config.js
 node --check scripts/verify/interactive_layout.spec.js
 python -m json.tool _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json
+python scripts/dev/save_latest_codex_image.py --list
+python scripts/dev/save_latest_codex_image.py --out output/imagegen/builtin-helper-smoke-20260624.png
 npx playwright --version
 node Playwright managed Chromium smoke
 ssh banebook Playwright managed Chromium smoke
@@ -182,6 +223,7 @@ separate release path is approved and completed.
 ## Deferred Items
 
 - Replace Civic & Community, Schools & Campuses, and Private Celebrations hero
-  images after usable generated files exist and GL selects options.
+  images after built-in Codex image options are generated, extracted, reviewed,
+  and GL selects options.
 - Review the unrelated unstaged `AGENTS.md` local Docker runtime note later.
   It was intentionally not included in this feature slice.

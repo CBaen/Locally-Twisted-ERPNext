@@ -82,6 +82,30 @@ be distant background scale only when useful, but the decor must be the subject.
 For a homepage hero refresh, create 3 or 4 distinct options per requested lane.
 Each option must have a different scene concept, not just a color variation.
 
+## Generation Surface Standard
+
+Use Codex's built-in `image_gen` tool first. For LT homepage hero option work,
+normal Codex image generation is OAuth/session backed and does not require
+`OPENAI_API_KEY`.
+
+On Wardenclyffe, built-in image outputs may appear only in the Codex session
+JSONL as an `image_generation_call.result` base64 payload. If no normal file
+appears under `$CODEX_HOME/generated_images/`, extract the latest built-in
+output with:
+
+```bash
+python scripts/dev/save_latest_codex_image.py --out <workspace-image-path>
+```
+
+The local convenience command `/home/guidingl/.local/bin/codex-save-latest-image`
+may also exist on Wardenclyffe, but the repo-tracked helper above is the source
+to cite in LT docs.
+
+Do not default to the API-key CLI fallback for ordinary LT hero images. The CLI
+path calls the OpenAI API directly, can hit platform billing limits, and should
+be used only when GL explicitly approves API-backed generation or a CLI-only
+feature is genuinely required.
+
 Store candidate sources under:
 
 ```text

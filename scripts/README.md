@@ -55,6 +55,7 @@ should not be used as launch proof.
 |--------|---------|----------|
 | `clear_website_cache.py` | Clears Frappe site + website cache so edited Jinja templates / CSS / Web Page records take effect on the next request. Optional `--restart` for `hooks.py` changes. | After editing Jinja templates, SCSS/CSS, Web Page records, or hooks |
 | `build_webshop_assets.py` | Rebuilds Webshop bundles safely with `--durable-rebuild` by rebuilding the custom image and recreating the stack, then verifies manifest CSS and JS through nginx. `--runtime-only` is emergency local repair only because those bundles live in a container writable layer. | After Webshop asset drift or before testing Webshop bundle changes locally |
+| `save_latest_codex_image.py` | Extracts the latest OAuth-backed built-in Codex image generation from Codex session JSONL into a normal file. This does not call the OpenAI API and does not need `OPENAI_API_KEY`. | After using the built-in `image_gen` tool for project-bound images when no file appears under `$CODEX_HOME/generated_images/` |
 | `public_asset_integrity.py` | Verifies public pages do not reference missing CSS/JS/image assets or wrong MIME types. Fails on raw spaces in asset URLs and checks CSS `url(...)` dependencies. | Before declaring public storefront/browser work clean |
 
 ## fix/

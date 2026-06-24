@@ -6,20 +6,39 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Built-in Codex images may live in session JSONL, not generated_images
+
+The first troubleshooting pass looked for built-in image outputs only as
+normal files under `$CODEX_HOME/generated_images`, `/tmp`, Downloads, Pictures,
+and the project workspace. Built-in Codex image generation was actually
+working through the subscription/OAuth session, but the bitmap was stored as a
+base64 `image_generation_call.result` payload in the Codex session JSONL. The
+API-key CLI path reached OpenAI but hit billing limits and is not the right
+default for GL's subscription-backed Codex image workflow.
+
+**Counter-move:** for project-bound Codex-generated images, use built-in
+`image_gen` first. If no file appears, run
+`python scripts/dev/save_latest_codex_image.py --out <workspace-path>` to
+extract the latest built-in image payload into a normal file. Do not ask GL for
+an API key or move to the API-billing CLI path unless GL explicitly approves an
+API-backed fallback. Save generated candidates immediately under the dated
+`_resources/generated-hero-sources/` folder before review or finishing.
+
 ## 2026-06-24 - Generated images are not project assets until a file exists in the repo
 
-The built-in image generation tool was invoked for a Civic & Community hero
-candidate, but no image file appeared under the expected Codex cache, `/tmp`,
-`/mnt`, Downloads, Pictures, or the project workspace. The CLI fallback also
-could not run because `OPENAI_API_KEY` was absent. That means the session had
-no reviewable or storable generated image option, even though image generation
-was attempted.
+The initial finding was correct for the first pass: the image was not usable as
+a project asset until it existed as a normal file. Later the same day, Codex
+proved the built-in image payload was recoverable from session JSONL with
+`scripts/dev/save_latest_codex_image.py`. The durable lesson is narrower and
+stronger: no generated image is a project asset until it has a workspace file
+path, regardless of where the image tool preview appears.
 
-**Counter-move:** for project-bound generated images, require a discoverable
-file path before calling an image generated, reviewable, or stored. Put
-candidate sources and a manifest under `_resources/generated-hero-sources/`.
-If the tool only returns an inline preview or no artifact, stop and document the
-blocker instead of creating placeholder docs or wiring public assets. Use
+**Counter-move:** require a workspace file path before calling an image
+generated, reviewable, or stored. If built-in Codex image generation shows only
+inline/chat output, extract it from the session JSONL with
+`scripts/dev/save_latest_codex_image.py`; do not default to API-key CLI
+billing. Put candidate sources and a manifest under
+`_resources/generated-hero-sources/`. Use
 `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
 
 ## 2026-06-24 - Ubuntu browser proof depends on both Playwright version and browser availability

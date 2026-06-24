@@ -1,6 +1,6 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.9
+**Version:** 4.10
 **Last Updated:** 2026-06-24
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
@@ -20,10 +20,13 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.9 keeps the
+icons, or briefing GPT/Codex-style coding agents. Version 4.10 keeps the
 non-negotiable compact hero contract and adds the shared generated-photo hero
 rule: public heroes use breakpoint-specific lifestyle crops made through the
-project image-generation API under the black landing-page readability overlay.
+project's built-in Codex image-generation flow under the black landing-page
+readability overlay. If the built-in image appears only in the Codex session
+instead of as a normal file, extract it with
+`scripts/dev/save_latest_codex_image.py`; do not default to API-key CLI billing.
 Existing real/proof photos are reserved for portfolio, product, and proof
 surfaces unless GL explicitly rejects a seasonal homepage hero for lacking
 realism; in that case, a real balloon-decor source photo may be used for the

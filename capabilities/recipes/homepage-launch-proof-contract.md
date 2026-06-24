@@ -293,13 +293,15 @@ GL rejected the live Fourth of July hero and asked to remove it, then requested
 selection. Local source removes the July slide and updates the carousel to four
 audience slides. Browser screenshot proof is repaired through Playwright
 1.61.1 and Brave/Chromium/Chrome fallback, with managed Chromium verified on
-Wardenclyffe and Banebook. The generated option set is blocked because the
-built-in image tool did not expose local files and the CLI fallback lacks
-`OPENAI_API_KEY`.
+Wardenclyffe and Banebook. Built-in Codex image output extraction is repaired:
+normal image generation is OAuth/session backed, and
+`scripts/dev/save_latest_codex_image.py` extracts
+`image_generation_call.result` session payloads into normal project files
+without `OPENAI_API_KEY`.
 
 Do not wire replacement images for Civic & Community, Schools & Campuses, or
 Private Celebrations until
 `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md` is used
-to generate stored options, reject AI-looking/physics failures, and record GL's
-selection. Follow-up handoff:
+to generate stored options through built-in Codex image generation, reject
+AI-looking/physics failures, and record GL's selection. Follow-up handoff:
 `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`.
