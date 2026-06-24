@@ -8,6 +8,45 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-24 - Homepage hero image selections can be partial, but public wiring must wait for the full set
+
+**Decision:** Record GL's partial homepage hero selections now, but do not
+create final public crops or wire homepage image references until Civic &
+Community also has an approved option. Schools & Campuses option 03 and
+Private Celebrations option 02 are selected. Civic & Community options 01-03
+are rejected, and Civic redo options 04-07 are pending GL review.
+
+**Reasoning:** GL approved two lanes and explicitly rejected the first Civic
+set. The homepage carousel is a grouped public first-impression surface; wiring
+only selected lanes while Civic remains unresolved would create mixed old/new
+quality and invite another partial visual failure. Recording partial decisions
+preserves momentum without pretending the full homepage image set is approved.
+
+**Implementation boundary:** Updated the manifest under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/` so
+the selected, rejected, and pending redo states are machine-readable. Generated
+four Civic redo options with source WebPs, desktop/tablet/mobile previews,
+`review-sheet-civic-community-redo.webp`, and current-review desktop/mobile
+contact sheets. No public files under
+`apps/locally_twisted/locally_twisted/public/images/heroes/` were created or
+changed in this step, and no homepage source references were changed.
+
+**Guard:** When GL selects a Civic redo option, create final breakpoint crops
+for Civic, Schools, and Private together, wire the homepage carousel as one
+approved set, then run the homepage browser/layout proof gates before release.
+Do not interpret `owner_approved_for_public_use=true` on the Schools/Private
+manifest entries as permission to ship those two lanes alone.
+
+**Receipts:** `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`;
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json`;
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-sheet-civic-community-redo.webp`.
+
+**Decided by:** Guiding Light selected Schools option 03, selected Private
+option 02, and rejected the first Civic set on 2026-06-24; Codex generated and
+recorded the Civic redo set.
+
+---
+
 ## 2026-06-24 - Built-in Codex image generation is the normal fileable path, not API-key CLI billing
 
 **Decision:** For LT generated homepage hero work, use Codex's built-in

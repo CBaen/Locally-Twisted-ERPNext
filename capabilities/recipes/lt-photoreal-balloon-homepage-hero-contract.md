@@ -9,7 +9,7 @@ currently_true: local_only
 verification_level: 2
 last_verified: 2026-06-24
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -137,6 +137,15 @@ Celebrations. The pack includes source WebPs, desktop/tablet/mobile previews,
 per-lane review sheets, and a manifest under
 `_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`.
 No public references were changed because GL selection is still required.
+
+2026-06-24 follow-up evidence: GL selected Schools & Campuses option 03 and
+Private Celebrations option 02, rejected Civic & Community options 01-03, and
+requested a Civic redo. This recipe then produced 4 new Civic redo options
+04-07 with source WebPs, desktop/tablet/mobile previews,
+`review-sheet-civic-community-redo.webp`, current-review desktop/mobile contact
+sheets, and a manifest decision log. Public homepage references still did not
+change because Civic selection remains pending and the grouped homepage hero
+set must ship together after full approval.
 
 ## Final Crop Standard
 

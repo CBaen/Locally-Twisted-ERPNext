@@ -1,7 +1,7 @@
 # Homepage Hero Photoreal Refresh Follow-Up
 
 Date: 2026-06-24
-Status: local source/browser proof complete; generated option pack stored; GL selection pending
+Status: local source/browser proof complete; Schools/Private selection recorded; Civic redo options 04-07 pending GL review
 Owner: Codex technical lead
 Scope: Locally Twisted homepage hero carousel, photoreal balloon image option process, and browser screenshot runtime
 
@@ -27,8 +27,11 @@ The old July WebP assets were left in the repo as historical/recoverable
 assets, but they are no longer referenced by the local homepage source.
 
 Follow-up in this same slice generated a stored review pack for the requested
-replacement image lanes. No homepage image references were changed; the
-generated pack is for GL review and selection only.
+replacement image lanes. GL selected Schools & Campuses option 03 and Private
+Celebrations option 02, then rejected all first Civic & Community options and
+requested a civic redo. No homepage image references were changed; the
+generated pack remains for GL review and selection only until the Civic lane is
+approved.
 
 ## Image Option Process
 
@@ -69,7 +72,8 @@ _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-s
 
 Pack contents:
 
-- Civic & Community: 3 generated photoreal options.
+- Civic & Community: 3 original generated photoreal options, now rejected by
+  GL, plus 4 redo options pending review.
 - Schools & Campuses: 3 generated photoreal options.
 - Private Celebrations: 3 generated photoreal options.
 - Source WebPs, desktop/tablet/mobile preview crops, per-lane review sheets,
@@ -77,6 +81,21 @@ Pack contents:
 - Raw extraction PNGs were used only as conversion intermediates, then omitted
   from the durable pack to avoid redundant repository weight.
 - No public homepage hero references were changed.
+
+Current GL selection state:
+
+- Schools & Campuses: option 03 selected by GL on 2026-06-24.
+- Private Celebrations: option 02 selected by GL on 2026-06-24.
+- Civic & Community: options 01-03 rejected by GL on 2026-06-24; redo options
+  04-07 generated and pending GL review.
+
+Current review sheets:
+
+```text
+_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-sheet-civic-community-redo.webp
+_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-options-current-review-desktop-contact-sheet.webp
+_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-options-current-review-mobile-contact-sheet.webp
+```
 
 ## Built-In Codex Image Output Fix
 
@@ -141,11 +160,11 @@ lane.
 
 Next steps:
 
-1. GL reviews the per-lane sheets and selects one option for each requested
-   lane, or requests regeneration for a lane.
-2. Only after GL selection, create final desktop/tablet/mobile public WebP
-   crops.
-3. Wire homepage slide image references.
+1. GL reviews Civic & Community redo options 04-07 and selects one option or
+   requests another redo.
+2. Only after Civic selection, create final desktop/tablet/mobile public WebP
+   crops for the selected Civic, Schools, and Private options together.
+3. Wire homepage slide image references as one complete approved image set.
 4. Verify rendered desktop/tablet/mobile screenshots and the homepage layout
    gates before any release.
 
@@ -207,6 +226,7 @@ python scripts/dev/save_latest_codex_image.py --list
 python scripts/dev/save_latest_codex_image.py --out output/imagegen/builtin-helper-smoke-20260624.png
 codex-save-latest-image --list
 Pillow processing for source WebPs, desktop/tablet/mobile previews, and review sheets
+Pillow processing for Civic & Community redo options 04-07, current-review desktop/mobile contact sheets, and manifest selection/rejection state
 npx playwright --version
 node Playwright managed Chromium smoke
 ssh banebook Playwright managed Chromium smoke

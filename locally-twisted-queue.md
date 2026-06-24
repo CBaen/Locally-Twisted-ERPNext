@@ -20,14 +20,18 @@ Built-in Codex image output extraction is repaired through
 `scripts/dev/save_latest_codex_image.py`; normal Codex image generation is
 OAuth/session backed and does not require `OPENAI_API_KEY`. Generated review
 sets now exist for Civic & Community, Schools & Campuses, and Private
-Celebrations: 3 options per lane with source WebPs, preview crops, per-lane
-review sheets, and manifest prompts/hashes/dimensions under
-`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
-with preliminary AI/cartoon/physics screening complete. The remaining work is
-GL selection, then final public desktop/tablet/mobile crops, homepage wiring,
-browser/layout proof, and release approval. Do not wire or publish replacement
-hero images until GL selects the final options. No live release has been
-performed for this follow-up.
+Celebrations under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`.
+GL selected Schools & Campuses option 03 and Private Celebrations option 02 on
+2026-06-24. GL rejected Civic & Community options 01-03, so Civic redo options
+04-07 were generated with source WebPs, desktop/tablet/mobile previews,
+`review-sheet-civic-community-redo.webp`, current-review desktop/mobile contact
+sheets, and updated manifest prompts/hashes/dimensions. The remaining work is
+GL selecting a Civic & Community redo option, then final public
+desktop/tablet/mobile crops for all three selected lanes, homepage wiring,
+browser/layout proof, and release approval. Do not wire partial replacement
+hero images just because Schools and Private are selected. No live release has
+been performed for this follow-up.
 
 **P2 AGENTS.md local Docker runtime note review (deferred 2026-06-24):** The
 main checkout still has an unrelated unstaged `AGENTS.md` local Docker runtime

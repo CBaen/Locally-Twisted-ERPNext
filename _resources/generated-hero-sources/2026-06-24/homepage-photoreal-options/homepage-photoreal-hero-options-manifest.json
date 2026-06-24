@@ -2,8 +2,8 @@
   "project": "Locally Twisted",
   "asset_set": "homepage photoreal balloon hero options",
   "created_on": "2026-06-24",
-  "updated_on": "2026-06-24T07:55:24Z",
-  "status": "generated_pending_gl_review",
+  "updated_on": "2026-06-24T09:06:46Z",
+  "status": "partial_gl_selection_civic_redo_pending_review",
   "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
   "uses_openai_api": false,
   "requires_openai_api_key": false,
@@ -29,8 +29,10 @@
   },
   "quality_contract": "capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md",
   "contact_sheets": {
-    "desktop": "homepage-photoreal-options-desktop-contact-sheet.webp",
-    "mobile": "homepage-photoreal-options-mobile-contact-sheet.webp"
+    "initial_desktop": "homepage-photoreal-options-desktop-contact-sheet.webp",
+    "initial_mobile": "homepage-photoreal-options-mobile-contact-sheet.webp",
+    "current_review_desktop": "homepage-photoreal-options-current-review-desktop-contact-sheet.webp",
+    "current_review_mobile": "homepage-photoreal-options-current-review-mobile-contact-sheet.webp"
   },
   "summary": {
     "lanes": [
@@ -38,8 +40,30 @@
       "schools-campuses",
       "private-celebrations"
     ],
-    "options_per_lane": 3,
-    "total_options": 9,
+    "total_options": 13,
+    "options_by_lane": {
+      "civic-community": 7,
+      "schools-campuses": 3,
+      "private-celebrations": 3
+    },
+    "civic_redo_options_pending_review": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "selected_options": {
+      "schools-campuses": 3,
+      "private-celebrations": 2,
+      "civic-community": null
+    },
+    "rejected_options": {
+      "civic-community": [
+        1,
+        2,
+        3
+      ]
+    },
     "public_references_changed": false,
     "gl_selection_required": true
   },
@@ -50,8 +74,8 @@
       "option": 1,
       "scene_slug": "city-park-festival-anchored-arch",
       "prompt_summary": "Outdoor civic park festival entrance with red, white, navy, and gold organic balloon arch anchored at both ends on weighted base plates.",
-      "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "status": "rejected_by_gl",
+      "review_status": "rejected_by_gl_initial_civic_set",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -64,7 +88,7 @@
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "GL rejected all first Civic & Community options on 2026-06-24 and requested a redo set. Preserved for audit trail only; do not wire publicly.",
       "extracted_raw_sha256": "746796409a0f353eb20e90f557811416fe05cbf6486259f709c2465cd221ef4a",
       "source_dimensions": {
         "width": 1822,
@@ -77,8 +101,8 @@
       "option": 2,
       "scene_slug": "community-fair-stage-columns",
       "prompt_summary": "Community fair stage with two stable balloon columns on weighted bases framing a small platform, public-event scale, no fake signage.",
-      "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "status": "rejected_by_gl",
+      "review_status": "rejected_by_gl_initial_civic_set",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -91,7 +115,7 @@
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "GL rejected all first Civic & Community options on 2026-06-24 and requested a redo set. Preserved for audit trail only; do not wire publicly.",
       "extracted_raw_sha256": "bcd01d904e019716292fb98577e8de23bd34523e6d8129f19f6f79a99db42bfd",
       "source_dimensions": {
         "width": 1779,
@@ -104,8 +128,8 @@
       "option": 3,
       "scene_slug": "downtown-plaza-photo-moment",
       "prompt_summary": "Downtown plaza photo moment with organic garland attached to a freestanding backdrop frame, clear walking path, civic but logo-free.",
-      "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "status": "rejected_by_gl",
+      "review_status": "rejected_by_gl_initial_civic_set",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -118,7 +142,7 @@
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "GL rejected all first Civic & Community options on 2026-06-24 and requested a redo set. Preserved for audit trail only; do not wire publicly.",
       "extracted_raw_sha256": "031ef21108c301e98311d0f1fc43bc9fd0fc6c3d1f2cca9b99456d6f43c6ff16",
       "source_dimensions": {
         "width": 1718,
@@ -126,84 +150,111 @@
       }
     },
     {
-      "lane": "schools-campuses",
-      "lane_label": "Schools & Campuses",
-      "option": 1,
-      "scene_slug": "school-gym-graduation-stage",
-      "prompt_summary": "School gym graduation stage with realistic balloon garland attached to a backdrop frame and weighted columns, no school names or mascots.",
+      "lane": "civic-community",
+      "lane_label": "Civic & Community",
+      "option": 4,
+      "scene_slug": "community-center-open-house-frame",
+      "prompt_summary": "Community center or public library plaza open-house photo backdrop with a freestanding framed organic balloon garland and visible weighted feet.",
       "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "review_status": "redo_pending_gl_review",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
-      "source_file": "schools-campuses-option-01-school-gym-graduation-stage-source.webp",
-      "desktop_preview": "previews/schools-campuses-option-01-school-gym-graduation-stage-desktop-preview.webp",
-      "tablet_preview": "previews/schools-campuses-option-01-school-gym-graduation-stage-tablet-preview.webp",
-      "mobile_preview": "previews/schools-campuses-option-01-school-gym-graduation-stage-mobile-preview.webp",
-      "source_sha256": "005695512c1d48133cd7a3e77c80add222670b7f679a5234b0e2a8a55f0a82a5",
-      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a school graduation stage.\nScene/backdrop: School gym or auditorium stage prepared for graduation, clean wood floor, rows of chairs blurred in the distance, no readable banners, no school name, no mascot.\nSubject: A realistic balloon garland attached to a freestanding backdrop frame behind a podium area, with two shorter balloon columns on weighted bases. Palette: royal blue, white, silver, and warm yellow accent. Balloons vary in plausible sizes with real latex highlights and shadows.\nStyle/medium: High-end event photography, real lens perspective, natural indoor lighting, not rendered.\nComposition/framing: Wide horizontal hero composition, decor centered enough for mobile crop but weighted center-right for left text overlay. Leave walkways clear and keep stage usable. No black borders.\nLighting/mood: Bright, celebratory, professional school-event atmosphere.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school names, logos, mascots, diplomas with text, close faces, or readable signage. Frames, bases, and attachment points must make the installation physically plausible.\nAvoid: cartoon, illustration, CGI, toy render, impossible floating balloons, distorted gym architecture, malformed people, blur, low quality, watermarks, black edges.",
+      "source_file": "civic-community-option-04-community-center-open-house-frame-source.webp",
+      "desktop_preview": "previews/civic-community-option-04-community-center-open-house-frame-desktop-preview.webp",
+      "tablet_preview": "previews/civic-community-option-04-community-center-open-house-frame-tablet-preview.webp",
+      "mobile_preview": "previews/civic-community-option-04-community-center-open-house-frame-mobile-preview.webp",
+      "source_sha256": "8b5531fbd22f1c28f4223f7e96e8b8599756f18d596f2dd7673a53d90fed4a15",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Civic & Community, redo option 04\nPrimary request: Create a photoreal professional event photograph of realistic installed balloon decor for a civic/community open house.\nScene/backdrop: Outdoor community recreation center courtyard or public library plaza during a local open house, clean modern brick and glass architecture softly in the background, planters and benches, no readable signs, no city seals, no logos, no banners.\nSubject: A freestanding rectangular metal photo backdrop frame with an organic balloon garland attached across the top and right side, visibly secured to the frame with weighted base feet. Palette: deep navy, warm white, berry red, soft sky blue, and muted brass/gold accents. Balloons have realistic latex surfaces, varied sizes, knots, shadows, and depth.\nStyle/medium: high-end real event photography, natural lens perspective, realistic latex and mylar surfaces, indistinguishable from a real event photo, not rendered.\nComposition/framing: wide horizontal website hero composition, 21:9 feel, installation strongest center-right but centered enough to survive mobile cover crop; calm open courtyard space on the left for a dark text overlay. No black borders, no letterboxing, no distorted edges.\nLighting/mood: soft late-afternoon natural light, polished community celebration, welcoming and professional.\nText: no readable text anywhere.\nConstraints: representative marketing image only; no fake municipal seals, no fake sponsor logos, no readable posters, no flags as main subject, no close faces. Show plausible construction with frame attachment, weighted base feet, and open walking paths.\nAvoid: cartoon, illustration, CGI, plastic 3D render, toy balloons, impossible floating garlands, malformed people, distorted architecture, blurry low-quality image, watermark, black edges.",
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
-      "extracted_raw_sha256": "158225d651e9928b4ef93d9600ca2c9bab8ee3914fda25335a89de4f6bbd10ad",
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "extracted_raw_sha256": "00d4d2cacce1776cf453d0a92fcaefd2a565fe3333ccfe11d933018de3362d07",
       "source_dimensions": {
-        "width": 1840,
-        "height": 855
+        "width": 1915,
+        "height": 821
       }
     },
     {
-      "lane": "schools-campuses",
-      "lane_label": "Schools & Campuses",
-      "option": 2,
-      "scene_slug": "campus-welcome-walkway-arch",
-      "prompt_summary": "Campus welcome walkway with school-color balloon arch anchored at both ends, backpacks and distant students only as scale, no readable text.",
+      "lane": "civic-community",
+      "lane_label": "Civic & Community",
+      "option": 5,
+      "scene_slug": "park-pavilion-community-garland",
+      "prompt_summary": "Neighborhood block-party or community fundraiser pavilion with balloon garland attached to posts and supported by weighted bases.",
       "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "review_status": "redo_pending_gl_review",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
-      "source_file": "schools-campuses-option-02-campus-welcome-walkway-arch-source.webp",
-      "desktop_preview": "previews/schools-campuses-option-02-campus-welcome-walkway-arch-desktop-preview.webp",
-      "tablet_preview": "previews/schools-campuses-option-02-campus-welcome-walkway-arch-tablet-preview.webp",
-      "mobile_preview": "previews/schools-campuses-option-02-campus-welcome-walkway-arch-mobile-preview.webp",
-      "source_sha256": "bcbd050b0e5b486b913dbb144beb289516b35f9652926ba64c6837c2f1837838",
-      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a campus welcome walkway.\nScene/backdrop: Outdoor school or college campus walkway, brick building and trees softly blurred, bright morning welcome-event feel, no readable building names or banners.\nSubject: A school-spirit balloon arch in navy, white, gold, and light blue, anchored at both ends with visible weighted base plates and a slim internal arch frame. A few backpacks and distant students only as scale cues, no close faces.\nStyle/medium: Professional event photography, realistic latex and mylar balloon surfaces, natural lens perspective.\nComposition/framing: Wide horizontal website hero, arch center-right with clear left-side space for overlay copy; enough arch remains centered for mobile crop. No black borders.\nLighting/mood: Fresh, upbeat, clean campus energy.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school name, no mascot, no logos, no readable signage, no close faces. Keep the walkway open and the arch structurally plausible.\nAvoid: cartoon, illustration, CGI, toy render, floating unsupported arch, distorted architecture, malformed people, blur, low quality, watermarks, black edges.",
+      "source_file": "civic-community-option-05-park-pavilion-community-garland-source.webp",
+      "desktop_preview": "previews/civic-community-option-05-park-pavilion-community-garland-desktop-preview.webp",
+      "tablet_preview": "previews/civic-community-option-05-park-pavilion-community-garland-tablet-preview.webp",
+      "mobile_preview": "previews/civic-community-option-05-park-pavilion-community-garland-mobile-preview.webp",
+      "source_sha256": "e9fb2ca94faa6d2d29ff9cbe3662e2a055851b4187c5b0377d8418dd8c6e4270",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Civic & Community, redo option 05\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a neighborhood community celebration.\nScene/backdrop: A public park pavilion set for a neighborhood block party or community fundraiser, with a pavilion roof, picnic tables set back from the main install, trees and lawn in the background, no readable signs, no banners, no sponsor logos, no municipal emblems.\nSubject: A grounded organic balloon garland installed along two pavilion posts and across a short entrance span, visibly attached to the posts with balloon tape/clear rigging and supported by weighted base plates at both lower ends. Palette: forest green, cream, deep navy, berry, and warm yellow-gold, tasteful and civic without looking patriotic novelty. Realistic latex balloons with varied sizes, natural reflections, knots, and depth.\nStyle/medium: professional real event photography, high-end but believable, realistic materials and construction, not an illustration or render.\nComposition/framing: wide horizontal hero image with decor center-right and pavilion depth behind it; left third stays calmer for homepage copy overlay. Keep the walkway open and usable. No black borders, no letterboxing.\nLighting/mood: warm clean outdoor daylight, organized local celebration, approachable and premium.\nText: no readable text anywhere.\nConstraints: representative marketing image only; no fake logos, no fake event name, no readable placards, no close faces, no malformed anatomy. The balloon structure must have visible attachment to pavilion posts and stable weighted bases.\nAvoid: cartoon, CGI, toy render, impossible floating balloon masses, distorted pavilion geometry, crowded people, blur, low resolution, watermark, black edges.",
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
-      "extracted_raw_sha256": "f30d2fe4e8d1712e5a30f961d1ad72e6641b7663da2f0752fe7d5fc656180627",
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "extracted_raw_sha256": "3f8f108a1c76c6bfa800f2f7c289427d1da63e094286573bdc22bac5a20ddb85",
       "source_dimensions": {
-        "width": 1719,
-        "height": 915
+        "width": 1915,
+        "height": 821
       }
     },
     {
-      "lane": "schools-campuses",
-      "lane_label": "Schools & Campuses",
-      "option": 3,
-      "scene_slug": "auditorium-senior-night-columns",
-      "prompt_summary": "Auditorium or field-house senior night entrance with paired balloon columns on base plates and a clear entry path, realistic event lighting.",
+      "lane": "civic-community",
+      "lane_label": "Civic & Community",
+      "option": 6,
+      "scene_slug": "market-plaza-arch-frame",
+      "prompt_summary": "Community farmers market or maker fair plaza with a freestanding arched frame, asymmetrical balloon garland, and visible base plates.",
       "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "review_status": "redo_pending_gl_review",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
-      "source_file": "schools-campuses-option-03-auditorium-senior-night-columns-source.webp",
-      "desktop_preview": "previews/schools-campuses-option-03-auditorium-senior-night-columns-desktop-preview.webp",
-      "tablet_preview": "previews/schools-campuses-option-03-auditorium-senior-night-columns-tablet-preview.webp",
-      "mobile_preview": "previews/schools-campuses-option-03-auditorium-senior-night-columns-mobile-preview.webp",
-      "source_sha256": "87f16ae3a3efc1e23a9ed272609f5fc04d778361c73e854dad1d4db4fff6899e",
-      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a school senior night or athletics entrance.\nScene/backdrop: Indoor field house or auditorium lobby entrance before a school event, polished floor, open double-door entry path, distant bleachers or wall padding softly blurred, no readable banners or names.\nSubject: Paired balloon columns on visible weighted base plates with a grounded low organic garland attached to a freestanding truss/backdrop frame near the entry. Palette: deep green, white, black, and metallic silver accents. Balloons are realistic, varied, and physically supported.\nStyle/medium: High-end event photography, believable camera lens and natural indoor event lighting.\nComposition/framing: Wide horizontal hero, decor and doorway center-right, left side calmer for overlay copy, no black borders or letterboxing.\nLighting/mood: Polished, energetic, school-spirit event without fake branding.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school names, no mascots, no logos, no close faces, no readable signage. Keep doors/walk paths usable and show base/anchor logic.\nAvoid: cartoon, illustration, CGI, toy render, unsupported columns, distorted architecture, malformed people, blur, low quality, watermarks, black edges.",
+      "source_file": "civic-community-option-06-market-plaza-arch-frame-source.webp",
+      "desktop_preview": "previews/civic-community-option-06-market-plaza-arch-frame-desktop-preview.webp",
+      "tablet_preview": "previews/civic-community-option-06-market-plaza-arch-frame-tablet-preview.webp",
+      "mobile_preview": "previews/civic-community-option-06-market-plaza-arch-frame-mobile-preview.webp",
+      "source_sha256": "a369205b5fa2751e86d8366facad55fb172c6c2390d56e5593bb0130690d4553",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Civic & Community, redo option 06\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a community farmers market or local maker fair photo spot.\nScene/backdrop: Outdoor town plaza or farmers market walkway on a clear day, with a few vendor tents softly blurred far in the background, planters, pavement, and open pedestrian space. No readable signs, no price boards, no logos, no city seals, no banners.\nSubject: A freestanding arched metal frame with an asymmetrical organic balloon garland wrapping the upper right and lower left, clearly attached to the frame and stabilized with visible weighted base plates. Palette: sage green, cranberry red, ivory, sky blue, and muted gold. Balloons are real-looking latex with varied diameters, slight imperfections, natural highlights, knots, and shadows.\nStyle/medium: high-end documentary event photography, realistic camera lens, photoreal materials, indistinguishable from a real installed balloon decor photo.\nComposition/framing: wide horizontal homepage hero, 21:9 feel, installation center-right with usable open space on the left for overlay text; subject remains visible in desktop/tablet/mobile cover crops. No black edges, no frame border, no letterboxing.\nLighting/mood: bright but soft daylight, fresh community-market energy, professional and clean.\nText: no readable text anywhere.\nConstraints: representative marketing image only; no fake sponsor marks, no readable vendor signs, no close faces, no flags as main subject. The frame, anchor points, and bases must make the install physically plausible while leaving the walkway open.\nAvoid: cartoon, illustration, CGI, toy-like balloons, unsupported floating arches, distorted tents, malformed people, heavy blur, low quality, watermark, black borders.",
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
-      "extracted_raw_sha256": "7cb2f46a05137d17803625e5cadbdf47240af5376a1d3a6d9eef0e3a19ff978e",
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "extracted_raw_sha256": "e0bedacbedf33af9bd38a8593546e1ed141153a27d82c6d30e93413931878f61",
       "source_dimensions": {
-        "width": 1821,
-        "height": 864
+        "width": 1915,
+        "height": 821
+      }
+    },
+    {
+      "lane": "civic-community",
+      "lane_label": "Civic & Community",
+      "option": 7,
+      "scene_slug": "plaza-stage-recognition-columns",
+      "prompt_summary": "Community recognition night or public arts plaza setup with weighted balloon columns and a rail/truss-attached low garland.",
+      "status": "generated_pending_gl_review",
+      "review_status": "redo_pending_gl_review",
+      "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
+      "uses_openai_api": false,
+      "requires_openai_api_key": false,
+      "source_file": "civic-community-option-07-plaza-stage-recognition-columns-source.webp",
+      "desktop_preview": "previews/civic-community-option-07-plaza-stage-recognition-columns-desktop-preview.webp",
+      "tablet_preview": "previews/civic-community-option-07-plaza-stage-recognition-columns-tablet-preview.webp",
+      "mobile_preview": "previews/civic-community-option-07-plaza-stage-recognition-columns-mobile-preview.webp",
+      "source_sha256": "5ce5ab80d93b395193952307b89b847455d39d38f995175e1c814a8356b8d03e",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Civic & Community, redo option 07\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a community recognition night or public arts celebration.\nScene/backdrop: Outdoor civic plaza or small amphitheater before guests arrive, simple raised platform, stone steps, planters, and warm architectural lighting in the background. No readable signs, no banners, no city seals, no sponsor logos, no flags as the main subject.\nSubject: Two balloon columns on visible weighted base plates flanking the side of the platform, plus a low organic balloon garland attached to the front rail and one freestanding truss post. Palette: charcoal navy, ivory, brass gold, dusty rose, and soft blue. Balloons have realistic latex sheen, varied sizes, depth, knots, and believable rigging.\nStyle/medium: premium real event photography, natural lens perspective, realistic installed balloon decor, not an illustration, not a CGI render.\nComposition/framing: wide horizontal website hero, decor center-right with the platform receding behind it; left side has calm darker architecture for copy overlay. Keep walkways and steps unobstructed. No black borders or letterboxing.\nLighting/mood: early evening golden-hour-to-blue-hour event lighting, polished civic gathering, inviting and professional.\nText: no readable text anywhere.\nConstraints: representative marketing image only; no fake awards text, no fake municipal branding, no readable posters, no close faces, no malformed people. Columns and garland must show plausible bases/rail/truss attachment and not float.\nAvoid: cartoon, illustration, CGI, toy balloons, impossible unsupported structures, distorted steps or railings, heavy blur, low-quality artifacts, watermark, black edges.",
+      "owner_approved_for_public_use": false,
+      "public_assets_created": false,
+      "public_references_changed": false,
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "extracted_raw_sha256": "3bc329ff603ca1378c989a5afae6fa08fe5530c2fa8d05ab7a983d8108fd19b4",
+      "source_dimensions": {
+        "width": 1915,
+        "height": 821
       }
     },
     {
@@ -212,8 +263,8 @@
       "option": 1,
       "scene_slug": "backyard-birthday-garland",
       "prompt_summary": "Warm residential backyard birthday setup with organic balloon garland attached to a freestanding backdrop frame, relaxed private-party setting.",
-      "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -239,8 +290,8 @@
       "option": 2,
       "scene_slug": "home-shower-dessert-wall",
       "prompt_summary": "Private baby or bridal shower dessert-wall scene inside a home or patio, balloon garland attached to a wall/backdrop with realistic balloons.",
-      "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "status": "selected_by_gl_pending_final_crops",
+      "review_status": "selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -250,10 +301,10 @@
       "mobile_preview": "previews/private-celebrations-option-02-home-shower-dessert-wall-mobile-preview.webp",
       "source_sha256": "26d5d437b071e18211d7f979ef090de0a61dd010b76ab5fd07de7736bbef3736",
       "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Private Celebrations\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a private baby shower or bridal shower dessert-wall scene.\nScene/backdrop: Bright home dining room or covered patio shower setup, simple dessert table, linen tablecloth, soft natural light, warm family-gathering feel, not a corporate event space.\nSubject: Organic balloon garland attached to a wall-mounted or freestanding backdrop frame around a dessert table. Palette: blush pink, ivory, sage green, champagne, and soft white. Realistic latex balloon surfaces, varied sizes, natural shadows, clear attachment points.\nStyle/medium: Professional event photography, real camera perspective, photoreal interior/patio decor.\nComposition/framing: Wide horizontal website hero composition; decor center-right with enough calm left space for overlay copy and enough subject centered for mobile. No black borders or letterboxing.\nLighting/mood: Soft, elegant, intimate private celebration.\nText: no readable text.\nConstraints: Representative marketing image only; no fake names, no readable signs, no logo wall, no close faces, no corporate ballroom or conference tables. Garland must have visible wall/backdrop/frame attachment logic.\nAvoid: cartoon, illustration, CGI, toy render, impossible floating garland, distorted furniture, malformed people, blur, low quality, watermarks, black edges.",
-      "owner_approved_for_public_use": false,
+      "owner_approved_for_public_use": true,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "GL selected Private Celebrations option 02 on 2026-06-24. Create final public crops only after Civic & Community also has an approved selection, then wire the full homepage set together.",
       "extracted_raw_sha256": "bab422f71742eb351a02bed02b64c99fa36140644816d6c8dedc8e46b1d0278c",
       "source_dimensions": {
         "width": 1798,
@@ -266,8 +317,8 @@
       "option": 3,
       "scene_slug": "family-milestone-patio-arch",
       "prompt_summary": "Polished family milestone celebration on a patio with a compact anchored balloon arch and table decor, clearly not corporate.",
-      "status": "generated_pending_gl_review",
-      "review_status": "preliminarily_acceptable_pending_visual_contact_sheet_review",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -286,16 +337,131 @@
         "width": 1779,
         "height": 884
       }
+    },
+    {
+      "lane": "schools-campuses",
+      "lane_label": "Schools & Campuses",
+      "option": 1,
+      "scene_slug": "school-gym-graduation-stage",
+      "prompt_summary": "School gym graduation stage with realistic balloon garland attached to a backdrop frame and weighted columns, no school names or mascots.",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
+      "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
+      "uses_openai_api": false,
+      "requires_openai_api_key": false,
+      "source_file": "schools-campuses-option-01-school-gym-graduation-stage-source.webp",
+      "desktop_preview": "previews/schools-campuses-option-01-school-gym-graduation-stage-desktop-preview.webp",
+      "tablet_preview": "previews/schools-campuses-option-01-school-gym-graduation-stage-tablet-preview.webp",
+      "mobile_preview": "previews/schools-campuses-option-01-school-gym-graduation-stage-mobile-preview.webp",
+      "source_sha256": "005695512c1d48133cd7a3e77c80add222670b7f679a5234b0e2a8a55f0a82a5",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a school graduation stage.\nScene/backdrop: School gym or auditorium stage prepared for graduation, clean wood floor, rows of chairs blurred in the distance, no readable banners, no school name, no mascot.\nSubject: A realistic balloon garland attached to a freestanding backdrop frame behind a podium area, with two shorter balloon columns on weighted bases. Palette: royal blue, white, silver, and warm yellow accent. Balloons vary in plausible sizes with real latex highlights and shadows.\nStyle/medium: High-end event photography, real lens perspective, natural indoor lighting, not rendered.\nComposition/framing: Wide horizontal hero composition, decor centered enough for mobile crop but weighted center-right for left text overlay. Leave walkways clear and keep stage usable. No black borders.\nLighting/mood: Bright, celebratory, professional school-event atmosphere.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school names, logos, mascots, diplomas with text, close faces, or readable signage. Frames, bases, and attachment points must make the installation physically plausible.\nAvoid: cartoon, illustration, CGI, toy render, impossible floating balloons, distorted gym architecture, malformed people, blur, low quality, watermarks, black edges.",
+      "owner_approved_for_public_use": false,
+      "public_assets_created": false,
+      "public_references_changed": false,
+      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "extracted_raw_sha256": "158225d651e9928b4ef93d9600ca2c9bab8ee3914fda25335a89de4f6bbd10ad",
+      "source_dimensions": {
+        "width": 1840,
+        "height": 855
+      }
+    },
+    {
+      "lane": "schools-campuses",
+      "lane_label": "Schools & Campuses",
+      "option": 2,
+      "scene_slug": "campus-welcome-walkway-arch",
+      "prompt_summary": "Campus welcome walkway with school-color balloon arch anchored at both ends, backpacks and distant students only as scale, no readable text.",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
+      "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
+      "uses_openai_api": false,
+      "requires_openai_api_key": false,
+      "source_file": "schools-campuses-option-02-campus-welcome-walkway-arch-source.webp",
+      "desktop_preview": "previews/schools-campuses-option-02-campus-welcome-walkway-arch-desktop-preview.webp",
+      "tablet_preview": "previews/schools-campuses-option-02-campus-welcome-walkway-arch-tablet-preview.webp",
+      "mobile_preview": "previews/schools-campuses-option-02-campus-welcome-walkway-arch-mobile-preview.webp",
+      "source_sha256": "bcbd050b0e5b486b913dbb144beb289516b35f9652926ba64c6837c2f1837838",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a campus welcome walkway.\nScene/backdrop: Outdoor school or college campus walkway, brick building and trees softly blurred, bright morning welcome-event feel, no readable building names or banners.\nSubject: A school-spirit balloon arch in navy, white, gold, and light blue, anchored at both ends with visible weighted base plates and a slim internal arch frame. A few backpacks and distant students only as scale cues, no close faces.\nStyle/medium: Professional event photography, realistic latex and mylar balloon surfaces, natural lens perspective.\nComposition/framing: Wide horizontal website hero, arch center-right with clear left-side space for overlay copy; enough arch remains centered for mobile crop. No black borders.\nLighting/mood: Fresh, upbeat, clean campus energy.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school name, no mascot, no logos, no readable signage, no close faces. Keep the walkway open and the arch structurally plausible.\nAvoid: cartoon, illustration, CGI, toy render, floating unsupported arch, distorted architecture, malformed people, blur, low quality, watermarks, black edges.",
+      "owner_approved_for_public_use": false,
+      "public_assets_created": false,
+      "public_references_changed": false,
+      "notes": "Generated as representative marketing imagery. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "extracted_raw_sha256": "f30d2fe4e8d1712e5a30f961d1ad72e6641b7663da2f0752fe7d5fc656180627",
+      "source_dimensions": {
+        "width": 1719,
+        "height": 915
+      }
+    },
+    {
+      "lane": "schools-campuses",
+      "lane_label": "Schools & Campuses",
+      "option": 3,
+      "scene_slug": "auditorium-senior-night-columns",
+      "prompt_summary": "Auditorium or field-house senior night entrance with paired balloon columns on base plates and a clear entry path, realistic event lighting.",
+      "status": "selected_by_gl_pending_final_crops",
+      "review_status": "selected_by_gl",
+      "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
+      "uses_openai_api": false,
+      "requires_openai_api_key": false,
+      "source_file": "schools-campuses-option-03-auditorium-senior-night-columns-source.webp",
+      "desktop_preview": "previews/schools-campuses-option-03-auditorium-senior-night-columns-desktop-preview.webp",
+      "tablet_preview": "previews/schools-campuses-option-03-auditorium-senior-night-columns-tablet-preview.webp",
+      "mobile_preview": "previews/schools-campuses-option-03-auditorium-senior-night-columns-mobile-preview.webp",
+      "source_sha256": "87f16ae3a3efc1e23a9ed272609f5fc04d778361c73e854dad1d4db4fff6899e",
+      "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a school senior night or athletics entrance.\nScene/backdrop: Indoor field house or auditorium lobby entrance before a school event, polished floor, open double-door entry path, distant bleachers or wall padding softly blurred, no readable banners or names.\nSubject: Paired balloon columns on visible weighted base plates with a grounded low organic garland attached to a freestanding truss/backdrop frame near the entry. Palette: deep green, white, black, and metallic silver accents. Balloons are realistic, varied, and physically supported.\nStyle/medium: High-end event photography, believable camera lens and natural indoor event lighting.\nComposition/framing: Wide horizontal hero, decor and doorway center-right, left side calmer for overlay copy, no black borders or letterboxing.\nLighting/mood: Polished, energetic, school-spirit event without fake branding.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school names, no mascots, no logos, no close faces, no readable signage. Keep doors/walk paths usable and show base/anchor logic.\nAvoid: cartoon, illustration, CGI, toy render, unsupported columns, distorted architecture, malformed people, blur, low quality, watermarks, black edges.",
+      "owner_approved_for_public_use": true,
+      "public_assets_created": false,
+      "public_references_changed": false,
+      "notes": "GL selected Schools & Campuses option 03 on 2026-06-24. Create final public crops only after Civic & Community also has an approved selection, then wire the full homepage set together.",
+      "extracted_raw_sha256": "7cb2f46a05137d17803625e5cadbdf47240af5376a1d3a6d9eef0e3a19ff978e",
+      "source_dimensions": {
+        "width": 1821,
+        "height": 864
+      }
     }
   ],
   "next_steps": [
-    "GL reviews desktop and mobile contact sheets and selects one option per lane, or requests regeneration for a lane.",
-    "Only selected options are converted into final public hero desktop/tablet/mobile WebP assets.",
-    "After selection, wire homepage slide image references and verify desktop/tablet/mobile screenshots before live release."
+    "GL reviews Civic & Community redo options 04-07 and selects one option or requests another redo.",
+    "After Civic & Community selection, create final desktop/tablet/mobile public WebP crops for the selected Civic, Schools, and Private options together.",
+    "Wire homepage slide image references only after the full approved set exists.",
+    "Verify rendered desktop/tablet/mobile screenshots and required homepage layout gates before release."
   ],
   "review_sheets": {
-    "civic-community": "review-sheet-civic-community.webp",
+    "civic-community-initial-rejected": "review-sheet-civic-community.webp",
+    "civic-community-redo-current": "review-sheet-civic-community-redo.webp",
     "schools-campuses": "review-sheet-schools-campuses.webp",
     "private-celebrations": "review-sheet-private-celebrations.webp"
+  },
+  "decision_log": [
+    {
+      "date": "2026-06-24",
+      "actor": "GL",
+      "decision": "Selected Schools & Campuses option 03 and Private Celebrations option 02; rejected all first Civic & Community options and requested a civic redo."
+    }
+  ],
+  "gl_selections": {
+    "schools-campuses": {
+      "option": 3,
+      "source_file": "schools-campuses-option-03-auditorium-senior-night-columns-source.webp",
+      "selected_on": "2026-06-24",
+      "final_public_crops_created": false,
+      "public_references_changed": false
+    },
+    "private-celebrations": {
+      "option": 2,
+      "source_file": "private-celebrations-option-02-home-shower-dessert-wall-source.webp",
+      "selected_on": "2026-06-24",
+      "final_public_crops_created": false,
+      "public_references_changed": false
+    },
+    "civic-community": {
+      "option": null,
+      "status": "redo_options_04_07_pending_gl_review",
+      "initial_options_rejected": [
+        1,
+        2,
+        3
+      ]
+    }
   }
 }

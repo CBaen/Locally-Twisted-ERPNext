@@ -22,19 +22,26 @@ extract it into the repo. A local convenience command also exists at
 `/home/guidingl/.local/bin/codex-save-latest-image`. The prior API-key CLI
 experiment reached OpenAI but hit account billing limits, and GL rejected that
 path as unnecessary for subscription-backed Codex image generation; `.env`
-has `OPENAI_API_KEY=` blanked. Generated option pack follow-up: 9 photoreal
+has `OPENAI_API_KEY=` blanked. Generated option pack follow-up: 13 photoreal
 homepage hero options are now stored under
 `_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`
-with 3 options each for Civic & Community, Schools & Campuses, and Private
-Celebrations. Review sheets:
+with 3 original options each for Civic & Community, Schools & Campuses, and
+Private Celebrations, plus 4 Civic & Community redo options. GL selected
+Schools & Campuses option 03 and Private Celebrations option 02 on
+2026-06-24; GL rejected Civic & Community options 01-03 and requested the redo
+set. Review sheets:
 `review-sheet-civic-community.webp`,
+`review-sheet-civic-community-redo.webp`,
 `review-sheet-schools-campuses.webp`, and
-`review-sheet-private-celebrations.webp`. Manifest:
+`review-sheet-private-celebrations.webp`. Current-review contact sheets:
+`homepage-photoreal-options-current-review-desktop-contact-sheet.webp` and
+`homepage-photoreal-options-current-review-mobile-contact-sheet.webp`. Manifest:
 `homepage-photoreal-hero-options-manifest.json`. Preliminary visual screen
-found the pack reviewable; no public hero references were changed. GL selection
-is still required before final desktop/tablet/mobile public crops are created,
-wired, browser-proved, and released. No Frappe Cloud/app mirror/live release
-was performed for this follow-up.
+found the Civic redo pack reviewable; no public hero references were changed.
+The remaining blocker is GL selecting a Civic & Community redo option. Do not
+create final public crops or wire homepage references until the selected Civic,
+Schools, and Private images can ship as one approved set. No Frappe Cloud/app
+mirror/live release was performed for this follow-up.
 
 Homepage July Favorites / Pickups & Deliveries live closeout as of
 2026-06-24: source commit `3b5c64a` is live on `https://locallytwisted.com/`.

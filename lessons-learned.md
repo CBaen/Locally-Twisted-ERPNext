@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Partial image approval is not partial ship approval
+
+GL can approve some generated homepage hero lanes while rejecting another.
+That is useful selection information, but it is not approval to ship a mixed
+homepage image set. In the photoreal hero follow-up, GL selected Schools &
+Campuses option 03 and Private Celebrations option 02, then rejected all first
+Civic & Community options and asked for a redo.
+
+**Counter-move:** record partial selections immediately in the manifest and
+handoff, preserve rejected options for the audit trail, regenerate only the
+failed lane, and keep public wiring blocked until the full required image set
+has approval. For grouped first-impression surfaces such as the homepage hero
+carousel, final crops and homepage references should move together after the
+last unresolved lane is selected.
+
 ## 2026-06-24 - Generated image packs need review sheets, not just source files
 
 The homepage hero follow-up produced usable source files, but individual image
