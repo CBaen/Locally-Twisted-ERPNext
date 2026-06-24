@@ -4,7 +4,7 @@ type: failure
 failure_kind: recurring_pattern
 schema_version: 0.1
 date_discovered: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-06-24
 status: guarded
 scope: project
 owner_context: Locally Twisted ERPNext ecommerce
@@ -12,6 +12,7 @@ related_capabilities:
   - erpnext-ecommerce-receiving-architecture
 related_failures:
   - variant-media-overgating-regression
+  - product-primary-media-attachment-drift
 tags:
   - ecommerce
   - media
@@ -43,6 +44,7 @@ image or only selected-variant image behavior.
 | Date | Project | Surface | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|
 | 2026-05-22 | Locally Twisted | Product pages | DB/source gallery media existed in parts of the system, but product pages did not consistently render additional-photo thumbnails | `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`; `scripts/verify/product_gallery_projection_contract.py`; `scripts/verify/product_gallery_experience.spec.js` | source/Product Setup/slideshow/render guards added | guarded |
+| 2026-06-24 | Locally Twisted | Birthday Deliveries | Gallery/slideshow rows already looked clean, but the public main image stayed stale because Website Item, Item, Product Blueprint primary fields and File attachment were separate | `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`; `capabilities/failures/product-primary-media-attachment-drift.md` | separate primary-media attachment guard added | guarded |
 
 ## Root Pattern
 
@@ -66,6 +68,12 @@ Current guards:
 - `python scripts/verify/product_page_media_visibility_contract.py`
 - `python scripts/verify/product_setup_catalog_coverage.py`
 
+Primary-image work has a separate guard. If the task is "make this the main
+photo" or "remove this photo from the product page/homepage," also load
+`capabilities/failures/product-primary-media-attachment-drift.md` and check
+Website Item, Item, Product Blueprint, File attachment, product-page metadata,
+and homepage/card references.
+
 ## What Not To Do
 
 - Do not restore galleries by hardcoding product-page images.
@@ -79,6 +87,7 @@ Current guards:
 - Related handoff: `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`
 - Related capability: `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
 - Related failure: `capabilities/failures/variant-media-overgating-regression.md`
+- Related failure: `capabilities/failures/product-primary-media-attachment-drift.md`
 - Related decision: `locally-twisted-decisions.md`
 - Related lesson: `lessons-learned.md`
 

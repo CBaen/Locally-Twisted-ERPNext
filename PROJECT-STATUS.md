@@ -1,16 +1,18 @@
 # Locally Twisted — Project Status
 
-> **Local homepage photoreal hero source follow-up, 2026-06-24:** local source
-> now removes the rejected Fourth of July homepage hero slide and wires the
-> GL-selected replacement crop set for Civic & Community option 05, Schools &
-> Campuses option 03, and Private Celebrations option 02. Local proof passed
-> rendered filename checks, all nine selected hero asset `200 image/webp`
-> probes, desktop/tablet/mobile/320 screenshot inspection, focused interactive
-> layout `62/62`, home layout-fit `13/13`, home container contract `3/3`, and
-> public asset integrity for `31` routes / `362` assets. This is not live on
-> `locallytwisted.com` until a separate Frappe Cloud/app-mirror release is
-> explicitly approved and proved. Use
-> `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`.
+> **Live homepage and Birthday Deliveries media repair, 2026-06-24:** current
+> `https://locallytwisted.com/` returns `200` with `x-page-name: home`,
+> `x-from-cache: False`, and `Server: Frappe Cloud`; the root is the landing
+> page, not a login page and not a required `/home` URL. The GL-selected
+> photoreal homepage hero set is live: Civic & Community first, then Corporate
+> Events, Schools & Campuses, and Private Celebrations. Birthday Deliveries now
+> uses `/files/birthday-deliveries--extra-12.webp` as the product-page main
+> image, SEO/Open Graph/Twitter image, runtime Product Setup primary image, and
+> homepage Customer Favorites image. The old
+> `/files/birthday-deliveries.png` is no longer referenced by the public
+> product page or homepage, but the uploaded file still exists and should not
+> be globally deleted without explicit GL approval. Use
+> `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`.
 
 > **Live homepage July favorites/nav correction, 2026-06-24:** the approved
 > Fourth of July hero, Customer Favorites row, homepage proof order, and

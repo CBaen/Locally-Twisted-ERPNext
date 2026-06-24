@@ -10,26 +10,22 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P1 homepage photoreal hero live-release approval (2026-06-24):** Local
-source removes the rejected Fourth of July homepage hero slide and now wires
-the full GL-selected replacement image set: Civic & Community redo option 05,
-Schools & Campuses option 03, and Private Celebrations option 02. Handoff:
-`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`; capability:
-`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
-Candidate sources, review sheets, final crop sheet, and manifest live under
-`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`.
-Final public desktop/tablet/mobile WebPs are wired in
-`apps/locally_twisted/locally_twisted/www/home.py` and stored in
-`apps/locally_twisted/locally_twisted/public/images/heroes/`. Local proof
-passed rendered filename checks, all nine selected asset `200 image/webp`
-probes, desktop/tablet/mobile/320 screenshot inspection, interactive
-homepage/compact-hero `62 passed`, home layout-fit `13 passed`, home
-container contract `3 passed`, and public asset integrity for `31 routes /
-362 assets`. Built-in Codex image output extraction is repaired through
-`scripts/dev/save_latest_codex_image.py`; normal Codex image generation is
-OAuth/session backed and does not require `OPENAI_API_KEY`. Remaining work is
-only an explicit live-release decision plus the Frappe Cloud/app-mirror/live
-route proof gate. No live release has been performed for this follow-up.
+**P1 live homepage/Birthday Deliveries media aftercare (2026-06-24):** The
+homepage hero follow-up and Birthday Deliveries main-image repair are live on
+`https://locallytwisted.com/`. Current root proof returns `x-page-name: home`
+and the customer URL is `/`, not `/home` and not the login page. Birthday
+Deliveries now uses `/files/birthday-deliveries--extra-12.webp` on the live
+product page and homepage Customer Favorites card; public HTML has zero
+`/files/birthday-deliveries.png` references. Handoff:
+`workstreams/live-homepage-birthday-media-repair-2026-06-24.md`; decision:
+`decisions/2026-06-24-live-homepage-birthday-media-repair.md`; failure note:
+`capabilities/failures/product-primary-media-attachment-drift.md`. Aftercare
+only: do not re-open this as a local-only hero release. The old uploaded PNG
+still returns `200` as a global file, but it is no longer page-referenced; do
+not globally delete uploaded files unless GL explicitly approves file
+destruction. Future Birthday Deliveries media changes must update Website
+Item, Item, LT Product Blueprint primary fields, required File attachment
+rows, and public homepage/product HTML proof together.
 
 **P2 AGENTS.md local Docker runtime note review (deferred 2026-06-24):** The
 main checkout still has an unrelated unstaged `AGENTS.md` local Docker runtime
@@ -526,7 +522,7 @@ proven fixture isolation. Handoff:
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
 
 **Done / current launch proof state:**
-- Slice 3 — Homepage (launch proof shape, repaired 2026-05-07; featured-work band updated 2026-05-08; mobile review compactness updated 2026-05-08; seasonal carousel update 2026-05-10; Custom Event Decor hidden 2026-05-11; review platform proof and `/event-balloons` route cleanup updated 2026-05-11; Fourth of July first slide updated 2026-06-21, realistic hero/favorites/nav source update completed 2026-06-24, rejected July slide removed from local source in the 2026-06-24 follow-up, and selected Civic/Schools/Private photoreal crops wired locally on 2026-06-24). The local source hero is now a four-slide quote-led carousel: Civic & Community first, then Corporate Events, Schools & Campuses, and Private Celebrations. The first slide owns the only page-level H1; subsequent slides use H2s. Civic uses GL-selected redo option 05; Schools uses option 03; Private uses option 02. GigSalad, Google, and Facebook review proof sits immediately after the hero as unboxed platform logos with no visible counts and no visible `reviews` label; compact mobile review proof remains active. Inline cookie band stays after reviews, homepage trust/authority bar remains removed for now, Customer Favorites follows reviews, Live Entertainment follows Customer Favorites, `One of a Kind Designs` follows Live Entertainment as a wide custom-install proof band, review and client crawls move left-to-right at matched visible speed, Custom Event Decor is hidden behind `show_custom_event_decor = False`, and the closing CTA stays corporate/school/civic/community-first. Recovery assets for the hidden block live at `_resources/homepage-custom-event-decor-2026-05-11/`. Feature handoffs: `workstreams/landing-page-repair.md`, `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`, `workstreams/homepage-review-platform-proof-2026-05-11.md`, `workstreams/event-balloons-route-removal-2026-05-11.md`, `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`, and `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`; mobile compactness handoff: `workstreams/mobile-nav-review-compactness.md`; capability contracts: `capabilities/recipes/homepage-launch-proof-contract.md` and `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
+- Slice 3 — Homepage (launch proof shape, repaired 2026-05-07; featured-work band updated 2026-05-08; mobile review compactness updated 2026-05-08; seasonal carousel update 2026-05-10; Custom Event Decor hidden 2026-05-11; review platform proof and `/event-balloons` route cleanup updated 2026-05-11; Fourth of July first slide updated 2026-06-21, realistic hero/favorites/nav source update completed and released 2026-06-24, rejected July slide removed in the 2026-06-24 follow-up, and selected Civic/Schools/Private photoreal crops live-verified on 2026-06-24). The live homepage hero is now a four-slide quote-led carousel: Civic & Community first, then Corporate Events, Schools & Campuses, and Private Celebrations. The first slide owns the only page-level H1; subsequent slides use H2s. Civic uses GL-selected redo option 05; Schools uses option 03; Private uses option 02. GigSalad, Google, and Facebook review proof sits immediately after the hero as unboxed platform logos with no visible counts and no visible `reviews` label; compact mobile review proof remains active. Inline cookie band stays after reviews, homepage trust/authority bar remains removed for now, Customer Favorites follows reviews, Live Entertainment follows Customer Favorites, `One of a Kind Designs` follows Live Entertainment as a wide custom-install proof band, review and client crawls move left-to-right at matched visible speed, Custom Event Decor is hidden behind `show_custom_event_decor = False`, and the closing CTA stays corporate/school/civic/community-first. Recovery assets for the hidden block live at `_resources/homepage-custom-event-decor-2026-05-11/`. Feature handoffs: `workstreams/landing-page-repair.md`, `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`, `workstreams/homepage-review-platform-proof-2026-05-11.md`, `workstreams/event-balloons-route-removal-2026-05-11.md`, `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`, `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`, and `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`; mobile compactness handoff: `workstreams/mobile-nav-review-compactness.md`; capability contracts: `capabilities/recipes/homepage-launch-proof-contract.md` and `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
 - Site shape decision: lookbook-forward + small shop sidebar, with future "Design Studio" interactive experience for arches/columns/garlands/backdrops/drops/bouquets categories (captures customer vision → routes to inquiry, NOT a checkout). See `.planning/decisions/site-shape.md`.
 
 **Already DONE in prior sessions:**

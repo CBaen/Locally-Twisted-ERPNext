@@ -67,6 +67,12 @@ Default public launch posture:
   Checkout reached `checkout.stripe.com` with `Add code` visible. No one-time
   code was redeemed. For this one-time payment path, keep
   `allow_promotion_codes=True` and do not set `payment_method_collection`.
+- As of 2026-06-24, the homepage root and Birthday Deliveries media repair is
+  live on `locallytwisted.com`: `/` returns `x-page-name: home`, and the live
+  Birthday Deliveries product/homepage card references
+  `/files/birthday-deliveries--extra-12.webp` instead of the old PNG. Earlier
+  in that repair, Frappe Cloud deploy/update state was not sufficient proof;
+  the accepted proof was fresh public-route and public-HTML verification.
 
 ## Human Access Boundary
 
@@ -246,3 +252,17 @@ On 2026-06-23:
   showed `Add code`. No one-time code was redeemed.
 - Failure recipe added:
   `capabilities/failures/stripe-checkout-one-time-promo-param-drift.md`.
+
+On 2026-06-24:
+
+- Source commit `92db004 Repair homepage route and birthday deliveries media`
+  added an idempotent patch for homepage routing and Birthday Deliveries
+  primary media.
+- The live proof that mattered was public-route proof: `/` returned
+  `x-page-name: home`, and fresh public product/homepage HTML referenced
+  `/files/birthday-deliveries--extra-12.webp` with no
+  `/files/birthday-deliveries.png` references.
+- The product-media repair required scoped live ERPNext data writes because
+  direct owner API saves hit CSRF, missing File attachment validation, and the
+  protected owner catalog guard. The relevant product failure recipe is
+  `capabilities/failures/product-primary-media-attachment-drift.md`.

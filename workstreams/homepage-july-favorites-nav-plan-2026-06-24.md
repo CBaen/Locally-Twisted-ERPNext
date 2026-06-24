@@ -72,12 +72,20 @@ Unavailable proof:
 
 ## Current Verified State
 
-- Live homepage already uses Fourth of July copy on the first hero slide.
-- Live homepage still exposes `Balloons-to-Order` and `All Balloons-to-Order` in desktop, search, and mobile navigation surfaces.
-- Live homepage currently renders the relevant order as Reviews, One of a Kind Designs, trusted-client crawl, closing CTA, then Live Entertainment.
-- Local source now stores the Fourth of July first-slide copy and realistic balloon-decor asset paths in `HOME_HERO_SLIDES[0]` in `apps/locally_twisted/locally_twisted/www/home.py`.
-- Local homepage template now renders Reviews, Customer Favorites, Live Entertainment, One of a Kind Designs, trusted-client crawl, and closing CTA in that order.
-- Local navigation labels and verifier expectations now use `Pickups & Deliveries` / `All Pickups & Deliveries` for the public shop-category menu.
+- Live homepage no longer uses the rejected Fourth of July hero slide. The
+  later photoreal repair has the homepage opening with Civic & Community,
+  followed by Corporate Events, Schools & Campuses, and Private Celebrations.
+- Live homepage uses `Pickups & Deliveries` / `All Pickups & Deliveries` for
+  the public shop-category menu. `Balloons-to-Order` is absent from the fresh
+  live homepage proof.
+- Live homepage renders Reviews, Customer Favorites, Live Entertainment, One
+  of a Kind Designs, trusted-client crawl, and closing CTA in that order.
+- Live Birthday Deliveries Customer Favorites image was later repaired to
+  `/files/birthday-deliveries--extra-12.webp`; see
+  `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`.
+- Source stores the current homepage carousel and public nav labels in
+  `apps/locally_twisted/locally_twisted/www/home.py` and related nav/shop
+  context files.
 - All four current Customer Favorites product URLs return HTTP 200 on live `locallytwisted.com`.
 - All four current Customer Favorites expose visible starting prices on the live product page:
   - Birthday Deliveries: `from $ 90.00`
@@ -144,10 +152,13 @@ Local verification receipts:
 - `.venv/bin/python scripts/verify/smoke_shop.py`
 - `npm run test:public-assets` -> `PASS (31 routes, 362 unique local asset URLs)`
 
-Live release boundary:
+Historical source-slice boundary:
 
-- No Frappe Cloud app mirror push, Frappe Cloud deploy, site update/migration, live cache clear, provider change, payment change, or live route verification was performed in this source slice.
-- Live `https://locallytwisted.com/` remains on the previous production state until an explicit release path is approved and completed.
+- The first source implementation did not itself change live production.
+  Live release happened later through the Frappe Cloud/app-mirror path and is
+  recorded in the Live Release Closeout above.
+- Do not use this historical source-boundary note to claim the current live
+  site is stale; always recheck `https://locallytwisted.com/` directly.
 
 ## Scope And Ownership
 

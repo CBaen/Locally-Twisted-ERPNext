@@ -15,6 +15,16 @@ used Frappe app mirror branch `live-shop-discovery-20260529` commit `8d8d205`
 with `press-deploy-bench-40102`. No production catalog data, product
 visibility, Stripe, DNS, or payment settings changed.
 
+Birthday Deliveries media addendum as of 2026-06-24: the live product page and
+homepage Customer Favorites card now use
+`/files/birthday-deliveries--extra-12.webp` as the approved main image, and
+fresh public HTML has zero `/files/birthday-deliveries.png` references. This
+was not a normal gallery-only fix: Website Item `WEB-ITM-0047`, Item
+`birthday-deliveries`, LT Product Blueprint `birthday-deliveries`, and File
+attachment state all had to align. Handoff:
+`workstreams/live-homepage-birthday-media-repair-2026-06-24.md`; failure note:
+`capabilities/failures/product-primary-media-attachment-drift.md`.
+
 Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State

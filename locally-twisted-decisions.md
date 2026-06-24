@@ -8,7 +8,57 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
-## 2026-06-24 - Homepage photoreal hero set is selected and wired locally, live release remains separate
+## 2026-06-24 - Live root stays `/` and Birthday Deliveries main image is the approved WebP
+
+**Decision:** `https://locallytwisted.com/` is the canonical live landing page
+URL and must serve the homepage directly, not the login page and not a
+required `/home` URL. Birthday Deliveries uses
+`/files/birthday-deliveries--extra-12.webp` as the approved live main image on
+the product page and homepage Customer Favorites card. The old
+`/files/birthday-deliveries.png` must not be referenced by those public pages.
+
+**Reasoning:** GL's issue was public-site reality, so source/local proof was
+not enough. Fresh live proof showed the root now returns `x-page-name: home`.
+For Birthday Deliveries, manual backend gallery deletion did not change the
+actual public main image because `Website Item.website_image`,
+`Item.image`, `LT Product Blueprint.primary_image`, and the required `File`
+attachment were separate authorities.
+
+**Implementation boundary:** Source commit `92db004 Repair homepage route and
+birthday deliveries media` added an idempotent patch for homepage routing and
+Birthday Deliveries primary media. The live data repair used scoped Desk
+System Console `frappe.db` writes after direct `frappe.client.set_value` was
+blocked by CSRF, missing WebP `File` attachment validation, and LT's protected
+owner catalog guard. The successful live write created File `12519ab9bb` for
+`/files/birthday-deliveries--extra-12.webp`, attached it to Website Item
+`WEB-ITM-0047`, and set Website Item, Item, and LT Product Blueprint primary
+image fields to the WebP. No DNS, Stripe, payment, product visibility,
+customer communication, or broad catalog mutation was approved in this slice.
+
+**Proof:** Live root returned `200`, `x-page-name: home`, `x-from-cache:
+False`, and `Server: Frappe Cloud`. Live product-page HTML references the WebP
+in metadata, Open Graph/Twitter image metadata, main image markup, and runtime
+Product Setup JSON, with zero old-PNG references. Live homepage HTML
+references the WebP for the Birthday Deliveries Customer Favorites card, with
+zero old-PNG references. The live WebP hash matches GL's supplied local file:
+`cbcd2e5e72e1db4fa981f9094878f1e6baea60967a171bf675564d8af90bdcbd`.
+
+**Guard:** Future primary-media changes must update Website Item, Item, LT
+Product Blueprint, required File attachment, product page HTML/metadata, and
+homepage merchandising references together. Do not weaken the owner catalog
+guard. Do not globally delete uploaded files unless GL explicitly approves
+file destruction; page removal and storage deletion are separate decisions.
+
+**Receipts:** `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`;
+`decisions/2026-06-24-live-homepage-birthday-media-repair.md`;
+`capabilities/failures/product-primary-media-attachment-drift.md`.
+
+**Decided by:** Guiding Light supplied the approved image and public behavior
+requirements; Codex executed and live-verified the repair on 2026-06-24.
+
+---
+
+## 2026-06-24 - Historical source step: homepage photoreal hero set selected before live release
 
 **Decision:** The homepage photoreal replacement set is now complete in local
 source: Civic & Community redo option 05, Schools & Campuses option 03, and
@@ -20,9 +70,9 @@ approval boundary below.
 **Reasoning:** GL's final Civic selection resolved the only remaining human
 approval blocker. The earlier constraint still matters: partial lane approval
 was not enough to ship, but once Civic option 05 was selected the homepage
-image set could move together. The implementation still remains source/local
-proof only until the Frappe Cloud/app-mirror/live route release path is opened
-and verified.
+image set could move together. At this point in the same-day sequence, the
+implementation remained source/local proof only until the later Frappe
+Cloud/app-mirror/live route repair was opened and verified.
 
 **Implementation boundary:** Final breakpoint crops were created under
 `apps/locally_twisted/locally_twisted/public/images/heroes/` for all three
@@ -44,8 +94,9 @@ for `31` routes / `362` assets. Fresh desktop/tablet/mobile/320 screenshots
 were captured under
 `output/playwright/homepage-hero-selected-final-20260624/`.
 
-**Guard:** Do not claim this is live on `locallytwisted.com` from the source
-push. Live release requires explicit GL approval plus the Frappe Cloud/app
+**Guard:** This entry records the source-state boundary before the later live
+repair above. Do not claim any future source push is live from source alone;
+live release requires explicit GL approval plus the Frappe Cloud/app
 mirror/live route proof path loaded through the release capability gate.
 
 **Receipts:** `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`;

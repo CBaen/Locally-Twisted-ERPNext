@@ -1,14 +1,14 @@
 # Homepage Hero Photoreal Refresh Follow-Up
 
 Date: 2026-06-24
-Status: local source/browser proof complete; full GL-selected crop set wired; pending explicit live release approval
+Status: live verified on `https://locallytwisted.com/`; full GL-selected crop set wired
 Owner: Codex technical lead
 Scope: Locally Twisted homepage hero carousel, photoreal balloon image option process, and browser screenshot runtime
 
 ## Current Outcome
 
 GL rejected the live Fourth of July homepage hero image and asked to remove the
-Fourth of July hero entirely. Local source now removes that slide from
+Fourth of July hero entirely. Current live source removes that slide from
 `HOME_HERO_SLIDES`, so the homepage carousel has four slides:
 
 1. Civic & Community
@@ -24,7 +24,8 @@ Balloon moments for public events and community gatherings.
 ```
 
 The old July WebP assets were left in the repo as historical/recoverable
-assets, but they are no longer referenced by the local homepage source.
+assets, but they are no longer referenced by the live homepage source or fresh
+public homepage HTML.
 
 Follow-up in this same slice generated a stored review pack for the requested
 replacement image lanes. GL selected Schools & Campuses option 03 and Private
@@ -278,18 +279,24 @@ Rendered facts from the screenshot run:
   tablet/mobile public crops at smaller viewports
 - final public crops use `1920x560`, `1400x560`, and `900x660`
 
-## Live Boundary
+## Live Closeout
 
-No Frappe Cloud app mirror push, live site update, live cache clear, DNS,
-Stripe, Search Console, ERPNext data mutation, product visibility change, or
-customer communication was performed in this follow-up slice.
+The selected hero set is now live on `https://locallytwisted.com/`. Fresh
+public proof on 2026-06-24 showed the root route returning `x-page-name:
+home`, the homepage HTML referencing `homepage-civic-community-hero-*`, and no
+homepage reference to the old July hero. This live closeout was later bundled
+with the Birthday Deliveries media repair in:
 
-Live `https://locallytwisted.com/` remains on the prior released state until a
-separate release path is approved and completed.
+```text
+workstreams/live-homepage-birthday-media-repair-2026-06-24.md
+```
+
+No DNS, Stripe, payment, product visibility, customer communication, or broad
+catalog mutation was part of the hero follow-up.
 
 ## Deferred Items
 
-- Run Frappe Cloud/app-mirror/live route proof only after explicit live release
-  approval for this source slice.
+- For future homepage hero changes, still run the Frappe
+  Cloud/app-mirror/live route proof after any approved source release.
 - Review the unrelated unstaged `AGENTS.md` local Docker runtime note later.
   It was intentionally not included in this feature slice.

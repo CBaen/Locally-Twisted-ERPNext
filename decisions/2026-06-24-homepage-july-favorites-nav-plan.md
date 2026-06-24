@@ -10,9 +10,10 @@ release with four separately planned child features:
 3. Homepage flow reorder.
 4. `Balloons-to-Order` to `Pickups & Deliveries` navigation contract rename.
 
-Implementation is now complete in local source, but this packet remains the
-planning/decision record for why the work was split this way. Live release is
-not complete.
+Implementation and live release are complete, but this packet remains the
+planning/decision record for why the work was split this way. The later
+same-day live Birthday Deliveries media repair is tracked separately in
+`2026-06-24-live-homepage-birthday-media-repair.md`.
 
 ## Reasoning
 
@@ -43,11 +44,11 @@ simple text edit.
 
 The planning packet itself did not change source templates, assets, CSS,
 product records, ERPNext data, Frappe Cloud, cache, DNS, Stripe, or live site
-behavior. The follow-up source implementation on 2026-06-24 changed local app
-source, public hero assets, verifiers, and AI-facing docs only. It still did
-not mutate ERPNext catalog data, Frappe Cloud, live cache, DNS, Stripe,
-provider state, customer communication, or live `https://locallytwisted.com/`
-behavior.
+behavior. The follow-up source implementation on 2026-06-24 changed app
+source, public hero assets, verifiers, and AI-facing docs, then a separate
+Frappe Cloud/app-mirror release made the homepage/favorites/nav slice live.
+The later Birthday Deliveries primary-media repair used scoped live ERPNext
+data writes and is governed by the separate decision packet linked above.
 
 ## Product Revision
 

@@ -299,9 +299,31 @@ normal image generation is OAuth/session backed, and
 `image_generation_call.result` session payloads into normal project files
 without `OPENAI_API_KEY`.
 
-Do not wire replacement images for Civic & Community, Schools & Campuses, or
-Private Celebrations until
-`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md` is used
-to generate stored options through built-in Codex image generation, reject
-AI-looking/physics failures, and record GL's selection. Follow-up handoff:
+GL later selected Civic & Community redo option 05, Schools & Campuses option
+03, and Private Celebrations option 02, and those selected crops are now live.
+For future replacements, still use
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md` to
+generate stored options through built-in Codex image generation, reject
+AI-looking/physics failures, and record GL's selection before wiring public
+crops. Follow-up handoff:
 `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`.
+
+## 2026-06-24 live root and Birthday Deliveries media repair
+
+Current live proof after the later same-day repair: `https://locallytwisted.com/`
+returns `x-page-name: home`, not the login page, and the public root is the
+canonical homepage URL. The homepage hero set now uses the GL-selected
+photoreal Civic & Community, Corporate Events, Schools & Campuses, and Private
+Celebrations carousel. The Birthday Deliveries Customer Favorites card uses
+`/files/birthday-deliveries--extra-12.webp`; `/files/birthday-deliveries.png`
+is absent from fresh homepage HTML.
+
+For future homepage merchandising/product-card image work, homepage proof must
+check both the homepage card reference and the product page's primary-media
+authority chain. The 2026-06-24 repair showed that Product Setup gallery rows
+can be clean while `Website Item.website_image`, `Item.image`,
+`LT Product Blueprint.primary_image`, and File attachment state still leave an
+old main image live. Load
+`capabilities/failures/product-primary-media-attachment-drift.md` for that
+case. Handoff:
+`workstreams/live-homepage-birthday-media-repair-2026-06-24.md`.

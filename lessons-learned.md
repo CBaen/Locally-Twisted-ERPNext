@@ -6,6 +6,37 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Product gallery deletion is not primary media repair
+
+The Birthday Deliveries repair proved that deleting or cleaning a visible
+backend gallery row can leave the public main image unchanged. GL deleted a
+Birthday Deliveries photo through the backend, but the product page and
+homepage still referenced the old PNG because `Website Item.website_image`,
+`Item.image`, `LT Product Blueprint.primary_image`, and the WebP `File`
+attachment were separate authorities.
+
+**Counter-move:** for ERPNext product primary-image work, check the Website
+Item, Item, Product Blueprint, File attachment, gallery/slideshow rows, public
+product page metadata/main image/runtime JSON, and homepage merchandising
+card together. Do not assume Product Setup gallery rows or Website Slideshow
+rows own the main image. If the owner catalog guard blocks raw saves, preserve
+the guard and use a scoped source patch or approved admin maintenance path.
+Removing a photo from a page and globally deleting an uploaded File are
+separate decisions.
+
+## 2026-06-24 - Root-route proof must be live-route proof
+
+The homepage frustration was caused by the gap between intended source state,
+stale docs, and what GL saw at `https://locallytwisted.com/`. A claim that the
+homepage is fixed is not meaningful unless the public root route proves it.
+
+**Counter-move:** for public homepage work, verify `https://locallytwisted.com/`
+directly and capture route headers/content facts. The useful 2026-06-24 proof
+was `200`, `x-page-name: home`, `x-from-cache: False`, Frappe Cloud server
+headers, current hero asset references, and absence of the stale login/old
+asset references. Do not answer a public-root complaint with local source proof
+alone.
+
 ## 2026-06-24 - Final image selection must close the partial-approval loop everywhere
 
 After GL selected Civic & Community redo option 05, the source work was no

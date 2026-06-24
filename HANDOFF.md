@@ -2,13 +2,33 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-24 (Codex - homepage July favorites/nav live release)
+**Last updated:** 2026-06-24 (Codex - live homepage/Birthday Deliveries media repair)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-06-24 - live homepage/Birthday Deliveries media repair):**
+- Active closeout handoff:
+  `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`.
+- `https://locallytwisted.com/` now returns the landing page directly:
+  HTTP `200`, `x-page-name: home`, `x-from-cache: False`, and `Server: Frappe
+  Cloud`. It should not require `/home` and should not render the login page.
+- The GL-selected homepage hero set is live: Civic & Community, Corporate
+  Events, Schools & Campuses, and Private Celebrations. The rejected July hero
+  is not referenced by fresh live homepage HTML.
+- Birthday Deliveries now uses `/files/birthday-deliveries--extra-12.webp` as
+  the live product main image and homepage Customer Favorites image. Fresh
+  product/homepage HTML has zero `/files/birthday-deliveries.png` references.
+- The backend cause was primary-media/attachment drift, not only gallery drift:
+  `Website Item.website_image`, `Item.image`,
+  `LT Product Blueprint.primary_image`, and File attachment state all had to
+  align. Failure note:
+  `capabilities/failures/product-primary-media-attachment-drift.md`.
+- The old uploaded PNG still returns `200` as a stored file. Do not globally
+  delete uploaded files unless GL explicitly approves file destruction.
 
 **Current-session delta (2026-06-24 - homepage July favorites/nav live release):**
 - Source implementation is complete, pushed to full repo `main` at `3b5c64a`,

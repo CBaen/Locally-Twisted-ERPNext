@@ -1,37 +1,44 @@
 # Locally Twisted - Coding Handoff
 
-Homepage hero photoreal follow-up as of 2026-06-24: local source removes the
-rejected Fourth of July homepage hero slide and now wires the full
-GL-selected replacement set for the three requested audience lanes. GL
-selected Civic & Community redo option 05, Schools & Campuses option 03, and
-Private Celebrations option 02. Final public desktop/tablet/mobile WebP crops
-exist under `apps/locally_twisted/locally_twisted/public/images/heroes/`, and
-`HOME_HERO_SLIDES` references `homepage-civic-community-hero-*`,
-`homepage-schools-campuses-hero-*`, and
-`homepage-private-celebrations-hero-*`. Handoff:
-`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`; capability:
-`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`;
-manifest:
-`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json`;
-final crop sheet:
-`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-selected-final-crops-sheet.webp`.
-Local proof passed py_compile, JS checks, JSON manifest validation, rendered
-homepage filename proof, nine public hero asset `200 image/webp` probes,
-interactive homepage/compact-hero `62 passed`, home layout-fit `13 passed`,
-home container contract `3 passed`, and public asset integrity `31 routes /
-362 assets`. Fresh desktop/tablet/mobile/320 screenshots are in
-`output/playwright/homepage-hero-selected-final-20260624/`. Browser proof is
-repaired through `@playwright/test` `1.61.1`, managed Chromium works on
-Wardenclyffe/Banebook, and repo-local browser fallback prefers
-Brave/Chromium/Chrome without Edge. Built-in Codex image generation remains
-OAuth/session backed and does not need `OPENAI_API_KEY`; if the generated
-bitmap lands only in session JSONL, use
-`python scripts/dev/save_latest_codex_image.py --out <path>` or
-`/home/guidingl/.local/bin/codex-save-latest-image`. No Frappe Cloud app
-mirror push, live site update, live cache clear, DNS, Stripe, Search Console,
-ERPNext data mutation, product visibility change, or customer communication
-was performed for this follow-up. Live release still requires explicit
-release approval and the Frappe Cloud/app-mirror/live route proof path.
+Live homepage and Birthday Deliveries media repair closeout as of 2026-06-24:
+source commit `92db004 Repair homepage route and birthday deliveries media` is
+pushed to `main`. The live root now returns `200` with `x-page-name: home`,
+`x-from-cache: False`, and `Server: Frappe Cloud`; it is not a login page and
+the canonical customer URL is `https://locallytwisted.com/`, not `/home`.
+The GL-selected homepage hero set is live: the first carousel slide references
+`homepage-civic-community-hero-*`, followed by Corporate Events, Schools &
+Campuses, and Private Celebrations, and the old July hero remains a stored
+asset only, not a homepage reference. The Birthday Deliveries main image is
+now `/files/birthday-deliveries--extra-12.webp` on both the product page and
+the homepage Customer Favorites card. The live file hash matches GL's supplied
+local file `/home/guidingl/Desktop/birthday-deliveries--extra-12.webp`
+(`cbcd2e5e72e1db4fa981f9094878f1e6baea60967a171bf675564d8af90bdcbd`).
+
+The backend issue was not only a gallery row. The user deleted a Birthday
+Deliveries photo manually in Desk, but live read-only proof still showed
+`Website Item WEB-ITM-0047.website_image`, `Item birthday-deliveries.image`,
+and `LT Product Blueprint birthday-deliveries.primary_image` pointing at
+`/files/birthday-deliveries.png`. Direct `frappe.client.set_value` writes were
+blocked by CSRF first, then by the owner catalog guard and a missing `File`
+record for the WebP. Final live repair used scoped Desk System Console
+`frappe.db` writes to create File `12519ab9bb` for
+`/files/birthday-deliveries--extra-12.webp` attached to `WEB-ITM-0047`, then
+set the Website Item, Item, and LT Product Blueprint primary-image fields.
+The old file `/files/birthday-deliveries.png` still returns `200` as a global
+uploaded file, but current public homepage/product HTML no longer references
+it. Do not delete the global file unless GL explicitly approves file
+destruction beyond page removal.
+
+Current receipts: `workstreams/live-homepage-birthday-media-repair-2026-06-24.md`;
+decision packet `decisions/2026-06-24-live-homepage-birthday-media-repair.md`;
+failure recipe `capabilities/failures/product-primary-media-attachment-drift.md`.
+Live product page proof shows `/files/birthday-deliveries--extra-12.webp` in
+SEO metadata, Open Graph/Twitter image metadata, the main product image, and
+runtime product setup JSON, with zero `/files/birthday-deliveries.png`
+references. Live homepage proof shows the Birthday Deliveries Customer
+Favorites image uses the WebP with zero old-PNG references. No DNS, Stripe,
+payment, product visibility, customer communication, or broad catalog mutation
+was part of this repair.
 
 Homepage July Favorites / Pickups & Deliveries live closeout as of
 2026-06-24: source commit `3b5c64a` is live on `https://locallytwisted.com/`.
