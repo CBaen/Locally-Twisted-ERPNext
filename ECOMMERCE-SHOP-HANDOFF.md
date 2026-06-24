@@ -1,7 +1,7 @@
 # Ecommerce Shop Handoff
 
 Status addendum as of 2026-06-24: the homepage `Customer Favorites` row is
-implemented in local source and verified locally. Product targets are Birthday
+implemented and live on `https://locallytwisted.com/`. Product targets are Birthday
 Deliveries, Large head Missionary, Minion Bouquet, and Bandage "GET WELL"
 Bouquet (Latex free). Favorite-card prices are sourced from the same
 product/variant starting-price helper used by product pages and display as
@@ -10,8 +10,10 @@ Classic Arch remains out of this row because it is quote-first. The public
 shop-category menu label is now `Pickups & Deliveries`, but the menu remains
 category discovery from Item Group children under `Shop Items`; it is not a
 product quick-link menu. Parent handoff:
-`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`. This is
-local/source only; no live Frappe Cloud or production catalog data changed.
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`. Live release
+used Frappe app mirror branch `live-shop-discovery-20260529` commit `8d8d205`
+with `press-deploy-bench-40102`. No production catalog data, product
+visibility, Stripe, DNS, or payment settings changed.
 
 Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
 

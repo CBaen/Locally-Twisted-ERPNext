@@ -1,5 +1,19 @@
 # Locally Twisted — Project Status
 
+> **Live homepage July favorites/nav correction, 2026-06-24:** the approved
+> Fourth of July hero, Customer Favorites row, homepage proof order, and
+> `Pickups & Deliveries` public shop-category chrome are live on
+> `locallytwisted.com`. Full repo source is `3b5c64a`; Frappe app mirror tracked
+> branch `live-shop-discovery-20260529` is `8d8d205` with
+> `press-deploy-bench-40102`. Live proof: `/`, `/shop`, `/contact`, BTFP, and
+> all four favorite product routes returned `200`; homepage renders Customer
+> Favorites with Birthday Deliveries `From $90.00`, Large head Missionary
+> `From $175.00`, Minion Bouquet `From $35.00`, and Bandage `"GET WELL"`
+> Bouquet (Latex free) `From $35.00`; section order is Reviews, Favorites,
+> Twisting, One of a Kind, crawl, CTA; old `Balloons-to-Order` copy is absent;
+> Cloudflare live gate and live SEO contract passed. Use
+> `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+
 > **Live product visibility correction, 2026-06-23:** the four documented
 > retired products are now disabled/hidden on live `locallytwisted.com`:
 > `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and
@@ -25,7 +39,7 @@
 
 > **Legacy status map as of 2026-05-02.** This file is no longer the active whole-project source of truth. It contains useful current-state summaries mixed with historical receipts and stale project details. For current coordination, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific state, `locally-twisted-decisions.md` for durable reasoning, and `CODING-HANDOFF.md` for compact technical startup. Do not update this file just to chase full parity across active workstreams.
 >
-> **Current shop routing correction, 2026-05-02:** `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` now send broad browse traffic to `/shop`; individual category pages stay at `/shop-items/<group>`. The primary nav label is now `Balloon Decor`. Older lines below that say `Shop Balloon Decor` or that broad browse routes alias to `/shop-by-category` are historical receipts, not current routing.
+> **Current shop routing correction, 2026-05-02; label refreshed 2026-06-24:** `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` now send broad browse traffic to `/shop`; individual category pages stay at `/shop-items/<group>`. The current public shop-category nav label is `Pickups & Deliveries`. Older lines below that say `Shop Balloon Decor`, `Balloon Decor`, `Ready-to-Order`, `Balloons-to-Order`, or that broad browse routes alias to `/shop-by-category` are historical receipts, not current routing.
 
 > **Public ecommerce correction, 2026-05-17; taxonomy refreshed 2026-06-21; live product hide verified 2026-06-23:** Local ecommerce may be temporarily opened for proof runs, but local dev uses Stripe test records and is not live-payment proof. Production checkout/Stripe lives on the Frappe Cloud site. Current category/count proof is 47 published products, 4 requested products retired/unpublished, 8 active primary categories, and 9 hidden secondary occasion categories. The four retired product hides are live as of 2026-06-23; broader taxonomy/category changes still need their own release and live proof before being claimed on `locallytwisted.com`.
 

@@ -8,11 +8,59 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
-## 2026-06-24 - Homepage July favorites and Pickups & Deliveries are source-implemented, not live-released
+## 2026-06-24 - Homepage July favorites and Pickups & Deliveries are live
 
-**Decision:** The approved homepage July/Favorites/navigation packet is now
+**Decision:** The previously approved homepage July/Favorites/navigation packet
+is released to live `https://locallytwisted.com/`.
+
+**Reasoning:** GL approved moving forward after the source implementation was
+complete and asked whether it was ready to push live. The release had to prove
+the actual Frappe Cloud/app-mirror path, not only the source commit. The app
+mirror `main` branch and the Frappe Cloud tracked live branch were diverged, so
+the release used tracked branch `live-shop-discovery-20260529` directly.
+
+**Implementation boundary:** Full repo `main` remains at source commit
+`3b5c64a`. The Frappe app mirror tracked branch advanced from `5d7c952` to
+`8d8d205` with marker commit `Update homepage favorites and pickup delivery nav
+press-deploy-bench-40102`. The mirror update was deliberately selective: a
+full app-root sync dry run showed unrelated seed/image additions, so only the
+13 approved app files from `3498fef..3b5c64a` were mirrored. No ERPNext data,
+DNS, Stripe, payment, product visibility, customer communication, or provider
+cleanup state changed.
+
+**Proof:** Live snapshot after release returned HTTP `200` for `/`, `/shop`,
+`/contact`, `/balloon-twisting-and-face-painting`, and all four favorite
+product routes. Live homepage renders `Customer Favorites` with Birthday
+Deliveries `From $90.00`, Large head Missionary `From $175.00`, Minion Bouquet
+`From $35.00`, and Bandage `"GET WELL"` Bouquet (Latex free) `From $35.00`.
+Stable section IDs prove Reviews, Favorites, Twisting, One of a Kind, crawl,
+CTA order. Old `Balloons-to-Order` copy is absent. `/shop` title is `Pickups &
+Deliveries Balloon Decor`. The three July hero WebP assets return
+`200 image/webp`. Cloudflare live route gate passed 10 checks with 0 blockers
+and 0 warnings. Live SEO contract passed 13/13. Before/after release snapshot
+comparison had `critical_changes: []`.
+
+**Guard:** Future Frappe Cloud releases must continue comparing previous live
+app hash to target app mirror commit. Do not full-sync the app root when the
+tracked branch is intentionally narrower than full source; prepare a scoped
+mirror commit when release approval is scoped.
+
+**Receipts:** `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`;
+`.tmp/release-snapshots/live-before-homepage-july-favorites-nav.json`;
+`.tmp/release-snapshots/live-after-homepage-july-favorites-nav.json`;
+`.tmp/release-snapshots/live-before-vs-after-homepage-july-favorites-nav.json`.
+
+**Decided by:** Guiding Light approved moving forward; Codex executed and
+verified the live release on 2026-06-24.
+
+---
+
+## 2026-06-24 - Homepage July favorites and Pickups & Deliveries source implementation preceded the live release
+
+**Decision:** The approved homepage July/Favorites/navigation packet was first
 implemented in local source, with live release kept as a separate approval and
-proof path.
+proof path. This was superseded later the same day by the live-release decision
+above.
 
 **Reasoning:** The work touches public brand quality, product-price claims,
 homepage proof order, nav/search/mobile/footer language, and route verifiers.

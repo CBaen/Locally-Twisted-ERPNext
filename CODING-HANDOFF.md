@@ -1,8 +1,8 @@
 # Locally Twisted - Coding Handoff
 
-Homepage July Favorites / Pickups & Deliveries source closeout as of
-2026-06-24: local source is implemented and verified; live release has not
-started. Parent handoff:
+Homepage July Favorites / Pickups & Deliveries live closeout as of
+2026-06-24: source commit `3b5c64a` is live on `https://locallytwisted.com/`.
+Parent handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`. The homepage now
 uses a real balloon-decor Fourth of July hero crop set from stripped local
 source `_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`,
@@ -23,9 +23,21 @@ scripts/verify/smoke_shop.py`, and `npm run test:public-assets` for `31`
 routes / `362` assets. Screenshots/metrics are local ignored artifacts under
 `output/homepage-july-favorites-nav/screenshots/`. Capability gate passed with
 homepage, nav, shop symmetry, browser, container, responsive, compact-hero,
-hero-image, and catalog-price recipes loaded. No ERPNext data, Frappe Cloud,
-live cache, DNS, Stripe, provider, customer communication, or live
-`https://locallytwisted.com/` behavior changed in this source slice.
+hero-image, and catalog-price recipes loaded. Live release used app mirror
+branch `live-shop-discovery-20260529`, advancing from `5d7c952` to `8d8d205`
+with marker commit `Update homepage favorites and pickup delivery nav
+press-deploy-bench-40102`. Do not full-sync the app mirror for this release:
+the dry run showed unrelated seed/image additions, so the live commit mirrors
+only the 13 approved app files from `3498fef..3b5c64a`. Live proof passed:
+route snapshot for `/`, `/shop`, `/contact`, BTFP, and all four favorites
+returned `200`; homepage HTML renders Customer Favorites and all four `From`
+prices; section IDs prove Reviews, Favorites, Twisting, One of a Kind, crawl,
+CTA order; `Balloons-to-Order` is absent; `/shop` title is `Pickups &
+Deliveries Balloon Decor`; Cloudflare route gate passed 10/10; live SEO
+contract passed 13/13; targeted July hero assets return `200 image/webp`.
+Snapshot receipts live under `.tmp/release-snapshots/`. No ERPNext data, DNS,
+Stripe, payment, product visibility, customer communication, or provider
+cleanup state changed.
 
 Live product visibility disable closeout as of 2026-06-23:
 the four documented retired products are hidden on live

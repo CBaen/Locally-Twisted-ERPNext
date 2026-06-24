@@ -250,7 +250,7 @@ The graduation hero secondary CTA no longer points to `/event-balloons`, and
 the hidden Custom Event Decor heading no longer links there. The removed route
 is documented at `workstreams/event-balloons-route-removal-2026-05-11.md`.
 
-## 2026-06-24 homepage July favorites and nav source implementation
+## 2026-06-24 homepage July favorites and nav live release
 
 GL rejected the current Fourth of July hero image as too cartoony and confirmed
 that the replacement must look like real balloon decor. The source
@@ -274,8 +274,13 @@ test:ecommerce-pause`, `npm run test:search-contract`, `npm run
 test:container-contract` `72 passed`, `npm run test:interactive-layout` `159
 passed, 1 skipped`, `npm run test:layout-fit` `312 passed`, `.venv/bin/python
 scripts/verify/smoke_shop.py`, `npm run test:public-assets`, and
-desktop/mobile screenshot inspection. This is source/local proof only; live
-`https://locallytwisted.com/` needs a separate release and route-proof path.
+desktop/mobile screenshot inspection. Live release then advanced app mirror
+tracked branch `live-shop-discovery-20260529` from `5d7c952` to `8d8d205` with
+`press-deploy-bench-40102`. Live route/content proof passed on
+`https://locallytwisted.com/`: Customer Favorites renders with all four prices,
+section IDs prove the requested order, old `Balloons-to-Order` copy is absent,
+Cloudflare route gate passed, live SEO contract passed, and targeted July hero
+WebP assets return `200 image/webp`.
 
 Implementation handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

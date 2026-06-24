@@ -2,18 +2,18 @@
 
 Date: 2026-06-24
 Owner: Codex technical lead
-Status: source implemented and locally verified; live release not started
+Status: live verified on `https://locallytwisted.com/`
 
 ## Route Record
 
 Mode: plan-brief plus plan-deepen with real multi-agent triad review, followed by local source implementation.
-Decision needed: approve any staging/live release after reviewing the final image direction.
+Decision needed: none for this release; GL approved moving forward on 2026-06-24.
 Scope owner: Locally Twisted public site source and live release lane.
 System/project/runtime classification: single project, public site, client production surface.
-Allowed actions in this source slice: homepage/nav source implementation, local Frappe cache clear/restart, local verification, queue/handoff/capability/lesson/decision documentation, commit, and push.
-Forbidden actions in this source slice: ERPNext catalog data mutation, Frappe Cloud deploy, live cache clear, provider changes, payment changes, product visibility changes, and customer communication.
+Initial source-slice allowed actions: homepage/nav source implementation, local Frappe cache clear/restart, local verification, queue/handoff/capability/lesson/decision documentation, commit, and push.
+Initial source-slice forbidden actions: ERPNext catalog data mutation, Frappe Cloud deploy, live cache clear, provider changes, payment changes, product visibility changes, and customer communication.
 Evidence bar: current repo files, current live public pages, capability recipes, and user-confirmed business direction.
-Stop condition: stop before staging/live release because GL has not approved a release path in this source slice.
+Stop condition: do not perform additional provider, catalog, DNS, Stripe, or payment changes from this release.
 
 ## Outcome
 
@@ -24,7 +24,51 @@ Implemented the coordinated local source update:
 3. Reorder the relevant homepage bands to Reviews, Customer Favorites, Live Entertainment, then One of a Kind Designs.
 4. Rename the public shop-category supermenu label from `Balloons-to-Order` to `Pickups & Deliveries`.
 
-This is source/local proof only. It has not been released to Frappe Cloud or verified on live `https://locallytwisted.com/`.
+This is live on `https://locallytwisted.com/` as of 2026-06-24.
+
+## Live Release Closeout
+
+Live release executed on 2026-06-24 after GL approved moving forward.
+
+- Full source repo: `3b5c64a feat: update homepage favorites and pickup delivery nav`.
+- Previous tracked live app mirror: `5d7c952 Fix Stripe promo checkout session params`.
+- New tracked live app mirror: `8d8d205 Update homepage favorites and pickup delivery nav press-deploy-bench-40102`.
+- Frappe Cloud tracked branch: `live-shop-discovery-20260529`.
+- App mirror scope: 13 approved app files from `3498fef..3b5c64a`. A full
+  app-root sync dry run showed unrelated seed/image additions and was rejected
+  for this scoped release.
+- Poll result: public site flipped between `2026-06-24T04:45:22Z` and
+  `2026-06-24T04:46:25Z`; final poll had `favorites=yes`, `pickups=yes`,
+  `old_label=no`, `minion=yes`.
+
+Live proof:
+
+- Snapshot `live-after-homepage-july-favorites-nav` returned HTTP `200` for
+  `/`, `/shop`, `/contact`, `/balloon-twisting-and-face-painting`, and all four
+  favorite product routes.
+- Live homepage renders Customer Favorites, the four favorite product titles,
+  and `From $90.00`, `From $175.00`, `From $35.00`, `From $35.00`.
+- Stable section IDs prove Reviews, Customer Favorites, Twisting, One of a Kind
+  Designs, client crawl, and CTA order.
+- Old `Balloons-to-Order` / `All Balloons-to-Order` copy is absent from the
+  fresh live homepage.
+- `/shop` title is `Pickups & Deliveries Balloon Decor`.
+- The three July hero WebP assets return `200 image/webp`.
+- `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com`
+  passed 10 checks with 0 blockers and 0 warnings.
+- `LT_BASE_URL=https://locallytwisted.com npm run test:seo-contract` passed
+  13/13.
+- Before/after snapshot comparison:
+  `.tmp/release-snapshots/live-before-vs-after-homepage-july-favorites-nav.json`
+  with `critical_changes: []`.
+
+Unavailable proof:
+
+- Browser screenshots could not be captured on Wardenclyffe because no system
+  Chromium was installed and Playwright refused the browser download for
+  `ubuntu26.04-x64`.
+- Broad live `public_asset_integrity.py` was stopped after hanging in DNS
+  resolution; targeted updated hero asset GET checks passed.
 
 ## Current Verified State
 
@@ -396,6 +440,6 @@ Implementation acceptance for the local source build:
 
 ## Next Safe Step
 
-1. GL reviews the local `http://localhost:8081/` hero image and homepage flow if visual approval is needed before release.
-2. Open a separate staging/live release path only after explicit approval.
-3. On release, rerun the Frappe Cloud/site update gate and prove `https://locallytwisted.com/` renders the same hero, favorites, section order, and `Pickups & Deliveries` chrome.
+This release is complete. Future changes should be opened as a new scoped
+feature: either another seasonal hero/favorites change, a separate product
+merchandising update, or a separate Frappe Cloud/provider release.

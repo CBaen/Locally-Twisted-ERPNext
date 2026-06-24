@@ -10,21 +10,6 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**P1 homepage July favorites and Pickups & Deliveries release review (2026-06-24):**
-Local source implementation is complete and verified. Parent workstream:
-`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`; decision:
-`decisions/2026-06-24-homepage-july-favorites-nav-plan.md`. Implemented
-features: realistic Fourth of July hero image, Customer Favorites product row,
-homepage flow reorder, and `Balloons-to-Order` to `Pickups & Deliveries` nav
-contract rename. Favorite targets are Birthday Deliveries, Large head
-Missionary, Minion Bouquet, and Bandage "GET WELL" Bouquet (Latex free), with
-source-backed `From` prices. Local verification passed nav IA, ecommerce pause,
-search contract, container contract, interactive layout, layout-fit, shop
-smoke, public asset integrity, screenshots, and EXIF/GPS stripping on the hero
-source/crops. Remaining queue work is not another local rewrite: GL may review
-the local hero image, then a separate approved Frappe Cloud/site update path
-must prove live `https://locallytwisted.com/` parity before production claims.
-
 **P1 live product visibility aftercare (2026-06-23):** Four documented
 retired products are now disabled/hidden on live `locallytwisted.com`:
 `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and

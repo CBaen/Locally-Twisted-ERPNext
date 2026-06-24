@@ -44,8 +44,8 @@ For the current LT site:
 - Current launch desktop primary header labels include a non-link
   `Event Balloons` audience dropdown, `Twisting & Face Painting`, the public
   shop category dropdown, `Portfolio`, `About Us`, `FAQ`, and `Contact Us`
-  when ecommerce is open for testing. Source now exposes the shop category
-  dropdown as `Pickups & Deliveries`. Older docs may still say
+  when ecommerce is open for testing. Source and live now expose the shop
+  category dropdown as `Pickups & Deliveries`. Older docs may still say
   `Ready-to-Order` or `Balloons-to-Order`; treat those as historical shorthand
   unless source and live proof say otherwise. The event dropdown links only to
   `/civic-community`, `/corporate-events`, `/schools-campuses`, and
@@ -210,13 +210,17 @@ cache, and `python scripts/verify/smoke_shop.py` passed with all shop smoke
 checks.
 
 On 2026-06-24, GL confirmed the next customer-facing label for this category
-menu should be `Pickups & Deliveries`. Codex implemented the rename in local
+menu should be `Pickups & Deliveries`. Codex implemented the rename in
 source across desktop nav, mobile drawer, search quick links, footer language,
 shop category rail/select, `/shop` copy, paused-shop negative checks,
 nav/smoke/ecommerce verifiers, and current docs. Preserve the 2026-05-21
 category-discovery rule; do not turn this menu into product merchandising while
 renaming it. Local verification passed nav IA, ecommerce pause, search
 contract, shop smoke, interactive layout, layout-fit, and container contract.
-This is source/local proof only until a separate Frappe Cloud/live release and
-public route proof passes. Implementation handoff:
+Live release then advanced app mirror tracked branch
+`live-shop-discovery-20260529` to `8d8d205` with `press-deploy-bench-40102`.
+Fresh live proof on `https://locallytwisted.com/` shows `Pickups & Deliveries`
+and `All Pickups & Deliveries`, no `Balloons-to-Order`, `/shop` title
+`Pickups & Deliveries Balloon Decor`, Cloudflare route gate pass, and live SEO
+contract pass. Implementation handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - App-mirror live branch scope can be narrower than full source
+
+The homepage July/Favorites release looked like a normal app-root mirror sync
+at first, but the app mirror `main` branch and Frappe Cloud tracked live branch
+`live-shop-discovery-20260529` were diverged. A full app-root sync dry run
+against the live branch would have pulled in unrelated seed-data and image
+files that were not part of the approved homepage/nav release.
+
+**Counter-move:** before any Frappe Cloud live promotion, identify the tracked
+provider branch and compare previous live app hash to the target mirror commit.
+If full app-root sync includes unapproved categories, prepare a scoped mirror
+commit from the approved full-repo source diff instead. For this release, the
+safe mirror target was exactly the 13 app files from `3498fef..3b5c64a`, pushed
+as app mirror commit `8d8d205` with `press-deploy-bench-40102`.
+
+---
+
 ## 2026-06-24 - Real photo hero sources need metadata stripping before commit
 
 The Fourth of July hero replacement used a real balloon-decor source photo

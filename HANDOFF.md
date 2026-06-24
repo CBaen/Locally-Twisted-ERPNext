@@ -2,7 +2,7 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-24 (Codex - homepage July favorites/nav source implementation)
+**Last updated:** 2026-06-24 (Codex - homepage July favorites/nav live release)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
@@ -10,9 +10,9 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## State of the world (the load-bearing facts)
 
-**Current-session delta (2026-06-24 - homepage July favorites/nav source implementation):**
-- Source implementation is complete and locally verified; live release has not
-  started.
+**Current-session delta (2026-06-24 - homepage July favorites/nav live release):**
+- Source implementation is complete, pushed to full repo `main` at `3b5c64a`,
+  and live on `https://locallytwisted.com/`.
 - Parent workstream:
   `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
 - Decision packet:
@@ -33,15 +33,38 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - Public shop-category chrome now uses `Pickups & Deliveries` / `All Pickups &
   Deliveries` across desktop nav, mobile drawer, search, footer, shop category
   rail/select, `/shop` copy, and verifiers while preserving category discovery.
+- Live Frappe app mirror tracked branch `live-shop-discovery-20260529` was
+  advanced from `5d7c952` to `8d8d205` with commit
+  `Update homepage favorites and pickup delivery nav press-deploy-bench-40102`.
+  The release was deliberately selective: a full app-root sync dry run showed
+  unrelated seed/image additions, so only the 13 approved app files from
+  `3498fef..3b5c64a` were mirrored.
+- Live proof passed after the Frappe Cloud marker release settled: `/`,
+  `/shop`, `/contact`, BTFP, and all four favorite product routes returned
+  HTTP `200`; live `/` renders Customer Favorites and the four favorite titles
+  with `From` prices; stable section IDs prove Reviews, Favorites, Twisting,
+  One of a Kind, crawl, CTA order; `Balloons-to-Order` is absent; `/shop`
+  title is `Pickups & Deliveries Balloon Decor`; the three July hero WebP
+  assets return `200 image/webp`.
 - Local verification passed py_compile, nav IA, ecommerce pause, search
   contract, container contract `72 passed`, interactive layout `159 passed, 1
   skipped`, layout-fit `312 passed`, shop smoke through `.venv`, and public
   asset integrity for `31` routes / `362` assets.
+- Post-live checks passed `python scripts/verify/cloudflare_launch_readiness.py
+  --base-url https://locallytwisted.com`, `LT_BASE_URL=https://locallytwisted.com
+  npm run test:seo-contract` (`13 passed`), and release snapshots
+  `.tmp/release-snapshots/live-before-homepage-july-favorites-nav.json`,
+  `.tmp/release-snapshots/live-after-homepage-july-favorites-nav.json`, and
+  `.tmp/release-snapshots/live-before-vs-after-homepage-july-favorites-nav.json`
+  (`critical_changes: []`). Broad live public-asset scan was stopped after it
+  hung in DNS resolution; targeted updated hero assets passed direct GET proof.
 - Capability gate passed with homepage, nav, shop symmetry, browser,
   container, responsive, compact-hero, hero-image, and catalog-price recipes
-  loaded. No ERPNext data, Frappe Cloud, live cache, DNS, Stripe, provider,
-  customer communication, or live `https://locallytwisted.com/` behavior
-  changed.
+  loaded for the source build. The live release gate later passed with
+  Frappe Cloud launch, site-migration drift, app-mirror scope drift, homepage,
+  nav, browser, container, and responsive recipes/failure notes loaded. No
+  ERPNext data, DNS, Stripe, payment, product visibility, customer
+  communication, or provider cleanup state changed.
 
 **Current-session delta (2026-06-23 - live product visibility disable):**
 - Active closeout handoff:
