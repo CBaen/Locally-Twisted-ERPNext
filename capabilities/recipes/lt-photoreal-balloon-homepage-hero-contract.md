@@ -9,7 +9,7 @@ currently_true: local_only
 verification_level: 2
 last_verified: 2026-06-24
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -143,9 +143,19 @@ Private Celebrations option 02, rejected Civic & Community options 01-03, and
 requested a Civic redo. This recipe then produced 4 new Civic redo options
 04-07 with source WebPs, desktop/tablet/mobile previews,
 `review-sheet-civic-community-redo.webp`, current-review desktop/mobile contact
-sheets, and a manifest decision log. Public homepage references still did not
-change because Civic selection remains pending and the grouped homepage hero
-set must ship together after full approval.
+sheets, and a manifest decision log. At that stage, public homepage references
+still did not change because Civic selection was pending and the grouped
+homepage hero set had to ship together after full approval.
+
+2026-06-24 final-source evidence: GL selected Civic & Community redo option
+05, completing the grouped homepage replacement set with Schools option 03 and
+Private option 02. This recipe then created final public desktop/tablet/mobile
+WebP crops for all three selected lanes, wired `HOME_HERO_SLIDES` to the new
+public assets, updated the manifest, and passed local rendered filename proof,
+all-nine selected asset `200 image/webp` probes, desktop/tablet/mobile/320
+screenshot inspection, focused interactive layout `62/62`, home layout-fit
+`13/13`, home container contract `3/3`, and public asset integrity for `31`
+routes / `362` assets. No live release was performed.
 
 ## Final Crop Standard
 

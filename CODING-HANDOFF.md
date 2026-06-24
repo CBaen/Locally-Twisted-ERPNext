@@ -1,47 +1,37 @@
 # Locally Twisted - Coding Handoff
 
 Homepage hero photoreal follow-up as of 2026-06-24: local source removes the
-rejected Fourth of July homepage hero slide. The homepage carousel now has four
-audience slides and local rendered proof shows Civic & Community as the single
-page-level H1, four slides total, and no `Fourth of July` body copy. Handoff:
-`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`. New capability:
-`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`. Browser
-proof is repaired: `@playwright/test` is `1.61.1`, managed Chromium installs
-and launches on Wardenclyffe and Banebook, and repo-local browser fallback now
-prefers Brave/Chromium/Chrome without Edge. Focused local proof passed
-py_compile, JS checks, JSON manifest validation, Wardenclyffe/Banebook
-Playwright smoke, cache clear, interactive homepage/compact-hero `62 passed`,
-home layout-fit `13 passed`, home container contract `3 passed`, and public
-asset integrity `31 routes / 362 assets`. Screenshot artifacts are in
-`output/playwright/homepage-hero-july-removal-20260624/`. Image-output follow-up:
-normal built-in Codex image generation is OAuth/session backed and does not
-need `OPENAI_API_KEY`. On Wardenclyffe the generated bitmap may land in the
-Codex session JSONL as `image_generation_call.result` instead of as a normal
-file; use `python scripts/dev/save_latest_codex_image.py --out <path>` to
-extract it into the repo. A local convenience command also exists at
-`/home/guidingl/.local/bin/codex-save-latest-image`. The prior API-key CLI
-experiment reached OpenAI but hit account billing limits, and GL rejected that
-path as unnecessary for subscription-backed Codex image generation; `.env`
-has `OPENAI_API_KEY=` blanked. Generated option pack follow-up: 13 photoreal
-homepage hero options are now stored under
-`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`
-with 3 original options each for Civic & Community, Schools & Campuses, and
-Private Celebrations, plus 4 Civic & Community redo options. GL selected
-Schools & Campuses option 03 and Private Celebrations option 02 on
-2026-06-24; GL rejected Civic & Community options 01-03 and requested the redo
-set. Review sheets:
-`review-sheet-civic-community.webp`,
-`review-sheet-civic-community-redo.webp`,
-`review-sheet-schools-campuses.webp`, and
-`review-sheet-private-celebrations.webp`. Current-review contact sheets:
-`homepage-photoreal-options-current-review-desktop-contact-sheet.webp` and
-`homepage-photoreal-options-current-review-mobile-contact-sheet.webp`. Manifest:
-`homepage-photoreal-hero-options-manifest.json`. Preliminary visual screen
-found the Civic redo pack reviewable; no public hero references were changed.
-The remaining blocker is GL selecting a Civic & Community redo option. Do not
-create final public crops or wire homepage references until the selected Civic,
-Schools, and Private images can ship as one approved set. No Frappe Cloud/app
-mirror/live release was performed for this follow-up.
+rejected Fourth of July homepage hero slide and now wires the full
+GL-selected replacement set for the three requested audience lanes. GL
+selected Civic & Community redo option 05, Schools & Campuses option 03, and
+Private Celebrations option 02. Final public desktop/tablet/mobile WebP crops
+exist under `apps/locally_twisted/locally_twisted/public/images/heroes/`, and
+`HOME_HERO_SLIDES` references `homepage-civic-community-hero-*`,
+`homepage-schools-campuses-hero-*`, and
+`homepage-private-celebrations-hero-*`. Handoff:
+`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`; capability:
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`;
+manifest:
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json`;
+final crop sheet:
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-selected-final-crops-sheet.webp`.
+Local proof passed py_compile, JS checks, JSON manifest validation, rendered
+homepage filename proof, nine public hero asset `200 image/webp` probes,
+interactive homepage/compact-hero `62 passed`, home layout-fit `13 passed`,
+home container contract `3 passed`, and public asset integrity `31 routes /
+362 assets`. Fresh desktop/tablet/mobile/320 screenshots are in
+`output/playwright/homepage-hero-selected-final-20260624/`. Browser proof is
+repaired through `@playwright/test` `1.61.1`, managed Chromium works on
+Wardenclyffe/Banebook, and repo-local browser fallback prefers
+Brave/Chromium/Chrome without Edge. Built-in Codex image generation remains
+OAuth/session backed and does not need `OPENAI_API_KEY`; if the generated
+bitmap lands only in session JSONL, use
+`python scripts/dev/save_latest_codex_image.py --out <path>` or
+`/home/guidingl/.local/bin/codex-save-latest-image`. No Frappe Cloud app
+mirror push, live site update, live cache clear, DNS, Stripe, Search Console,
+ERPNext data mutation, product visibility change, or customer communication
+was performed for this follow-up. Live release still requires explicit
+release approval and the Frappe Cloud/app-mirror/live route proof path.
 
 Homepage July Favorites / Pickups & Deliveries live closeout as of
 2026-06-24: source commit `3b5c64a` is live on `https://locallytwisted.com/`.

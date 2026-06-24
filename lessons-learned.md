@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Final image selection must close the partial-approval loop everywhere
+
+After GL selected Civic & Community redo option 05, the source work was no
+longer in the same state as the earlier handoff: the final grouped image set
+was approved and wired locally. Leaving the queue, manifest notes, or handoff
+in "Civic pending" mode would send the next agent back through already-settled
+approval work.
+
+**Counter-move:** when a final human selection resolves a partial approval
+blocker, update the machine-readable manifest, active workstream, compact
+handoff, queue, decisions, capability evidence, and verifier expectations in
+the same closeout. Preserve the earlier partial-approval decision as history,
+but add a newer decision that supersedes it and names the live-release
+boundary.
+
 ## 2026-06-24 - Partial image approval is not partial ship approval
 
 GL can approve some generated homepage hero lanes while rejecting another.

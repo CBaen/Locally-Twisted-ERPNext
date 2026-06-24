@@ -8,6 +8,56 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-24 - Homepage photoreal hero set is selected and wired locally, live release remains separate
+
+**Decision:** The homepage photoreal replacement set is now complete in local
+source: Civic & Community redo option 05, Schools & Campuses option 03, and
+Private Celebrations option 02 are the GL-selected public crop set. It is
+acceptable to wire the grouped homepage hero images now because every requested
+lane has a selected option. This supersedes the earlier same-day partial
+approval boundary below.
+
+**Reasoning:** GL's final Civic selection resolved the only remaining human
+approval blocker. The earlier constraint still matters: partial lane approval
+was not enough to ship, but once Civic option 05 was selected the homepage
+image set could move together. The implementation still remains source/local
+proof only until the Frappe Cloud/app-mirror/live route release path is opened
+and verified.
+
+**Implementation boundary:** Final breakpoint crops were created under
+`apps/locally_twisted/locally_twisted/public/images/heroes/` for all three
+selected lanes, `HOME_HERO_SLIDES` was updated in
+`apps/locally_twisted/locally_twisted/www/home.py`, and
+`scripts/verify/interactive_layout.spec.js` now expects
+`homepage-civic-community-hero-desktop.webp` for the opening homepage hero.
+The manifest now records selected options, public crop assets, local browser
+proof, and the pending-live-release boundary. Civic options 01-03 remain
+rejected, and redo options 04, 06, and 07 remain preserved as not selected.
+
+**Proof:** Local rendered homepage includes the new Civic, Schools, and Private
+desktop filenames and excludes `seasonal-pride-columns.webp`,
+`school-back-to-school-stage.webp`, `wedding-floral-half-arch.webp`, and
+`Fourth of July`. All nine selected public WebPs returned `200 image/webp`.
+Focused proof passed interactive homepage/compact-hero `62/62`, home
+layout-fit `13/13`, home container contract `3/3`, and public asset integrity
+for `31` routes / `362` assets. Fresh desktop/tablet/mobile/320 screenshots
+were captured under
+`output/playwright/homepage-hero-selected-final-20260624/`.
+
+**Guard:** Do not claim this is live on `locallytwisted.com` from the source
+push. Live release requires explicit GL approval plus the Frappe Cloud/app
+mirror/live route proof path loaded through the release capability gate.
+
+**Receipts:** `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`;
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json`;
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-selected-final-crops-sheet.webp`.
+
+**Decided by:** Guiding Light selected Civic option 05 after previously
+selecting Schools option 03 and Private option 02; Codex implemented and
+locally verified the grouped source wiring on 2026-06-24.
+
+---
+
 ## 2026-06-24 - Homepage hero image selections can be partial, but public wiring must wait for the full set
 
 **Decision:** Record GL's partial homepage hero selections now, but do not

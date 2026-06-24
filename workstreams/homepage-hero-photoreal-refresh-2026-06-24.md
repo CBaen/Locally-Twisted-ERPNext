@@ -1,7 +1,7 @@
 # Homepage Hero Photoreal Refresh Follow-Up
 
 Date: 2026-06-24
-Status: local source/browser proof complete; Schools/Private selection recorded; Civic redo options 04-07 pending GL review
+Status: local source/browser proof complete; full GL-selected crop set wired; pending explicit live release approval
 Owner: Codex technical lead
 Scope: Locally Twisted homepage hero carousel, photoreal balloon image option process, and browser screenshot runtime
 
@@ -29,9 +29,24 @@ assets, but they are no longer referenced by the local homepage source.
 Follow-up in this same slice generated a stored review pack for the requested
 replacement image lanes. GL selected Schools & Campuses option 03 and Private
 Celebrations option 02, then rejected all first Civic & Community options and
-requested a civic redo. No homepage image references were changed; the
-generated pack remains for GL review and selection only until the Civic lane is
-approved.
+requested a civic redo. GL later selected Civic & Community redo option 05.
+Codex then created the final public crops for Civic option 05, Schools option
+03, and Private option 02 as one grouped set and wired the homepage carousel to
+those selected files.
+
+Current selected public crops:
+
+```text
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-desktop.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-tablet.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-mobile.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-desktop.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-tablet.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-mobile.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-desktop.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-tablet.webp
+apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-mobile.webp
+```
 
 ## Image Option Process
 
@@ -72,22 +87,24 @@ _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-s
 
 Pack contents:
 
-- Civic & Community: 3 original generated photoreal options, now rejected by
-  GL, plus 4 redo options pending review.
+- Civic & Community: 3 original generated photoreal options rejected by GL,
+  plus 4 redo options. GL selected redo option 05.
 - Schools & Campuses: 3 generated photoreal options.
 - Private Celebrations: 3 generated photoreal options.
 - Source WebPs, desktop/tablet/mobile preview crops, per-lane review sheets,
   and manifest prompts/hashes/dimensions are stored in the dated folder.
 - Raw extraction PNGs were used only as conversion intermediates, then omitted
   from the durable pack to avoid redundant repository weight.
-- No public homepage hero references were changed.
+- Public homepage hero references were changed only after all three requested
+  lanes had a GL-selected option.
 
 Current GL selection state:
 
 - Schools & Campuses: option 03 selected by GL on 2026-06-24.
 - Private Celebrations: option 02 selected by GL on 2026-06-24.
-- Civic & Community: options 01-03 rejected by GL on 2026-06-24; redo options
-  04-07 generated and pending GL review.
+- Civic & Community: options 01-03 rejected by GL on 2026-06-24; redo option
+  05 selected by GL on 2026-06-24. Redo options 04, 06, and 07 remain
+  preserved as not-selected review artifacts.
 
 Current review sheets:
 
@@ -158,15 +175,15 @@ found no obvious cartoon/CGI output, fake readable logos/signage, impossible
 floating installs, or corporate-event mismatch in the Private Celebrations
 lane.
 
-Next steps:
+Completed follow-up:
 
-1. GL reviews Civic & Community redo options 04-07 and selects one option or
-   requests another redo.
-2. Only after Civic selection, create final desktop/tablet/mobile public WebP
-   crops for the selected Civic, Schools, and Private options together.
-3. Wire homepage slide image references as one complete approved image set.
-4. Verify rendered desktop/tablet/mobile screenshots and the homepage layout
-   gates before any release.
+1. GL selected Civic & Community redo option 05.
+2. Codex created final desktop/tablet/mobile public WebP crops for selected
+   Civic, Schools, and Private options together.
+3. Homepage slide image references were wired as one complete approved image
+   set.
+4. Rendered desktop/tablet/mobile/320 screenshots and the homepage layout gates
+   passed locally.
 
 ## Browser Screenshot Runtime Fix
 
@@ -235,6 +252,8 @@ npm run test:interactive-layout -- --grep "homepage hero uses one visible stable
 npm run test:layout-fit -- --grep "home fits" -> 13 passed
 npm run test:container-contract -- --grep "home" -> 3 passed
 npm run test:public-assets -> PASS (31 routes, 362 unique local asset URLs)
+rendered homepage filename proof -> new Civic/Schools/Private filenames present; old `seasonal-pride-columns.webp`, `school-back-to-school-stage.webp`, `wedding-floral-half-arch.webp`, and `Fourth of July` absent
+public hero asset HEAD probes -> all nine selected WebPs returned `200 image/webp`
 ```
 
 Fresh screenshot artifacts:
@@ -243,6 +262,10 @@ Fresh screenshot artifacts:
 output/playwright/homepage-hero-july-removal-20260624/desktop-home.png
 output/playwright/homepage-hero-july-removal-20260624/mobile-home-375.png
 output/playwright/homepage-hero-july-removal-20260624/mobile-home-320.png
+output/playwright/homepage-hero-selected-final-20260624/desktop-home.png
+output/playwright/homepage-hero-selected-final-20260624/tablet-home.png
+output/playwright/homepage-hero-selected-final-20260624/mobile-home-375.png
+output/playwright/homepage-hero-selected-final-20260624/mobile-home-320.png
 ```
 
 Rendered facts from the screenshot run:
@@ -250,8 +273,10 @@ Rendered facts from the screenshot run:
 - `slides = 4`
 - first H1 is Civic & Community
 - homepage body does not contain `Fourth of July`
-- first image is still the existing Civic source
-  `seasonal-pride-columns.webp`
+- first image is now
+  `homepage-civic-community-hero-desktop.webp` at desktop and the matching
+  tablet/mobile public crops at smaller viewports
+- final public crops use `1920x560`, `1400x560`, and `900x660`
 
 ## Live Boundary
 
@@ -264,10 +289,7 @@ separate release path is approved and completed.
 
 ## Deferred Items
 
-- Replace Civic & Community, Schools & Campuses, and Private Celebrations hero
-  images after GL selects options from the stored review sheets.
-- Create final public desktop/tablet/mobile WebP crops for only the selected
-  options, wire homepage references, then rerun browser/layout proof before any
-  live release.
+- Run Frappe Cloud/app-mirror/live route proof only after explicit live release
+  approval for this source slice.
 - Review the unrelated unstaged `AGENTS.md` local Docker runtime note later.
   It was intentionally not included in this feature slice.

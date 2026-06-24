@@ -2,8 +2,8 @@
   "project": "Locally Twisted",
   "asset_set": "homepage photoreal balloon hero options",
   "created_on": "2026-06-24",
-  "updated_on": "2026-06-24T09:06:46Z",
-  "status": "partial_gl_selection_civic_redo_pending_review",
+  "updated_on": "2026-06-24T09:33:30Z",
+  "status": "all_gl_selected_public_crops_wired_local_browser_proof_passed_pending_live_release_approval",
   "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
   "uses_openai_api": false,
   "requires_openai_api_key": false,
@@ -46,16 +46,11 @@
       "schools-campuses": 3,
       "private-celebrations": 3
     },
-    "civic_redo_options_pending_review": [
-      4,
-      5,
-      6,
-      7
-    ],
+    "civic_redo_options_pending_review": [],
     "selected_options": {
+      "civic-community": 5,
       "schools-campuses": 3,
-      "private-celebrations": 2,
-      "civic-community": null
+      "private-celebrations": 2
     },
     "rejected_options": {
       "civic-community": [
@@ -64,8 +59,13 @@
         3
       ]
     },
-    "public_references_changed": false,
-    "gl_selection_required": true
+    "public_references_changed": true,
+    "gl_selection_required": false,
+    "final_public_crops_created": true,
+    "homepage_references_wired": true,
+    "local_browser_proof_passed": true,
+    "live_release_performed": false,
+    "live_release_requires_explicit_approval": true
   },
   "options": [
     {
@@ -155,8 +155,8 @@
       "option": 4,
       "scene_slug": "community-center-open-house-frame",
       "prompt_summary": "Community center or public library plaza open-house photo backdrop with a freestanding framed organic balloon garland and visible weighted feet.",
-      "status": "generated_pending_gl_review",
-      "review_status": "redo_pending_gl_review",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -169,7 +169,7 @@
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. GL selected option 05 instead; preserve this option as not selected, not public proof, and not wired.",
       "extracted_raw_sha256": "00d4d2cacce1776cf453d0a92fcaefd2a565fe3333ccfe11d933018de3362d07",
       "source_dimensions": {
         "width": 1915,
@@ -182,8 +182,8 @@
       "option": 5,
       "scene_slug": "park-pavilion-community-garland",
       "prompt_summary": "Neighborhood block-party or community fundraiser pavilion with balloon garland attached to posts and supported by weighted bases.",
-      "status": "generated_pending_gl_review",
-      "review_status": "redo_pending_gl_review",
+      "status": "selected_by_gl_final_crops_created_homepage_wired",
+      "review_status": "selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -193,14 +193,43 @@
       "mobile_preview": "previews/civic-community-option-05-park-pavilion-community-garland-mobile-preview.webp",
       "source_sha256": "e9fb2ca94faa6d2d29ff9cbe3662e2a055851b4187c5b0377d8418dd8c6e4270",
       "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Civic & Community, redo option 05\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a neighborhood community celebration.\nScene/backdrop: A public park pavilion set for a neighborhood block party or community fundraiser, with a pavilion roof, picnic tables set back from the main install, trees and lawn in the background, no readable signs, no banners, no sponsor logos, no municipal emblems.\nSubject: A grounded organic balloon garland installed along two pavilion posts and across a short entrance span, visibly attached to the posts with balloon tape/clear rigging and supported by weighted base plates at both lower ends. Palette: forest green, cream, deep navy, berry, and warm yellow-gold, tasteful and civic without looking patriotic novelty. Realistic latex balloons with varied sizes, natural reflections, knots, and depth.\nStyle/medium: professional real event photography, high-end but believable, realistic materials and construction, not an illustration or render.\nComposition/framing: wide horizontal hero image with decor center-right and pavilion depth behind it; left third stays calmer for homepage copy overlay. Keep the walkway open and usable. No black borders, no letterboxing.\nLighting/mood: warm clean outdoor daylight, organized local celebration, approachable and premium.\nText: no readable text anywhere.\nConstraints: representative marketing image only; no fake logos, no fake event name, no readable placards, no close faces, no malformed anatomy. The balloon structure must have visible attachment to pavilion posts and stable weighted bases.\nAvoid: cartoon, CGI, toy render, impossible floating balloon masses, distorted pavilion geometry, crowded people, blur, low resolution, watermark, black edges.",
-      "owner_approved_for_public_use": false,
-      "public_assets_created": false,
-      "public_references_changed": false,
-      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "owner_approved_for_public_use": true,
+      "public_assets_created": true,
+      "public_references_changed": true,
+      "notes": "GL selected Civic & Community redo option 05 on 2026-06-24. Final public crops created, homepage references wired, and local browser proof passed.",
       "extracted_raw_sha256": "3f8f108a1c76c6bfa800f2f7c289427d1da63e094286573bdc22bac5a20ddb85",
       "source_dimensions": {
         "width": 1915,
         "height": 821
+      },
+      "public_assets": {
+        "desktop": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-desktop.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-desktop.webp",
+          "sha256": "df950fe98a9d814b1b3a36232b9e122ce2fb65ab060817f671efdcd813623e6a",
+          "dimensions": {
+            "width": 1920,
+            "height": 560
+          }
+        },
+        "tablet": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-tablet.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-tablet.webp",
+          "sha256": "5f7330d71a56c46191d68181dae53c30fed61e88f28f62495c647726497dce97",
+          "dimensions": {
+            "width": 1400,
+            "height": 560
+          }
+        },
+        "mobile": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-mobile.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-mobile.webp",
+          "sha256": "13e28f19d58f886ebb53aef7dfb07666d6906b3adc3771fe3f69e95a88342903",
+          "dimensions": {
+            "width": 900,
+            "height": 660
+          }
+        }
       }
     },
     {
@@ -209,8 +238,8 @@
       "option": 6,
       "scene_slug": "market-plaza-arch-frame",
       "prompt_summary": "Community farmers market or maker fair plaza with a freestanding arched frame, asymmetrical balloon garland, and visible base plates.",
-      "status": "generated_pending_gl_review",
-      "review_status": "redo_pending_gl_review",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -223,7 +252,7 @@
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. GL selected option 05 instead; preserve this option as not selected, not public proof, and not wired.",
       "extracted_raw_sha256": "e0bedacbedf33af9bd38a8593546e1ed141153a27d82c6d30e93413931878f61",
       "source_dimensions": {
         "width": 1915,
@@ -236,8 +265,8 @@
       "option": 7,
       "scene_slug": "plaza-stage-recognition-columns",
       "prompt_summary": "Community recognition night or public arts plaza setup with weighted balloon columns and a rail/truss-attached low garland.",
-      "status": "generated_pending_gl_review",
-      "review_status": "redo_pending_gl_review",
+      "status": "not_selected_by_gl",
+      "review_status": "not_selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
       "requires_openai_api_key": false,
@@ -250,7 +279,7 @@
       "owner_approved_for_public_use": false,
       "public_assets_created": false,
       "public_references_changed": false,
-      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. Not a portfolio/proof photo. Requires GL selection before public hero replacement.",
+      "notes": "Generated as Civic & Community redo representative marketing imagery after GL rejected options 1-3. GL selected option 05 instead; preserve this option as not selected, not public proof, and not wired.",
       "extracted_raw_sha256": "3bc329ff603ca1378c989a5afae6fa08fe5530c2fa8d05ab7a983d8108fd19b4",
       "source_dimensions": {
         "width": 1915,
@@ -290,7 +319,7 @@
       "option": 2,
       "scene_slug": "home-shower-dessert-wall",
       "prompt_summary": "Private baby or bridal shower dessert-wall scene inside a home or patio, balloon garland attached to a wall/backdrop with realistic balloons.",
-      "status": "selected_by_gl_pending_final_crops",
+      "status": "selected_by_gl_final_crops_created_homepage_wired",
       "review_status": "selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
@@ -302,13 +331,42 @@
       "source_sha256": "26d5d437b071e18211d7f979ef090de0a61dd010b76ab5fd07de7736bbef3736",
       "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Private Celebrations\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a private baby shower or bridal shower dessert-wall scene.\nScene/backdrop: Bright home dining room or covered patio shower setup, simple dessert table, linen tablecloth, soft natural light, warm family-gathering feel, not a corporate event space.\nSubject: Organic balloon garland attached to a wall-mounted or freestanding backdrop frame around a dessert table. Palette: blush pink, ivory, sage green, champagne, and soft white. Realistic latex balloon surfaces, varied sizes, natural shadows, clear attachment points.\nStyle/medium: Professional event photography, real camera perspective, photoreal interior/patio decor.\nComposition/framing: Wide horizontal website hero composition; decor center-right with enough calm left space for overlay copy and enough subject centered for mobile. No black borders or letterboxing.\nLighting/mood: Soft, elegant, intimate private celebration.\nText: no readable text.\nConstraints: Representative marketing image only; no fake names, no readable signs, no logo wall, no close faces, no corporate ballroom or conference tables. Garland must have visible wall/backdrop/frame attachment logic.\nAvoid: cartoon, illustration, CGI, toy render, impossible floating garland, distorted furniture, malformed people, blur, low quality, watermarks, black edges.",
       "owner_approved_for_public_use": true,
-      "public_assets_created": false,
-      "public_references_changed": false,
-      "notes": "GL selected Private Celebrations option 02 on 2026-06-24. Create final public crops only after Civic & Community also has an approved selection, then wire the full homepage set together.",
+      "public_assets_created": true,
+      "public_references_changed": true,
+      "notes": "GL selected Private Celebrations option 02 on 2026-06-24. Final public crops created, homepage references wired, and local browser proof passed.",
       "extracted_raw_sha256": "bab422f71742eb351a02bed02b64c99fa36140644816d6c8dedc8e46b1d0278c",
       "source_dimensions": {
         "width": 1798,
         "height": 875
+      },
+      "public_assets": {
+        "desktop": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-desktop.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-desktop.webp",
+          "sha256": "7e6657ad529ffe7e141abb360763836c07689e88b6836a768fe311f83c6b6483",
+          "dimensions": {
+            "width": 1920,
+            "height": 560
+          }
+        },
+        "tablet": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-tablet.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-tablet.webp",
+          "sha256": "f0ae6771491e2d6715810ac3989c6815e28c2b04f5ab83704a49e0e529a8ac61",
+          "dimensions": {
+            "width": 1400,
+            "height": 560
+          }
+        },
+        "mobile": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-mobile.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-mobile.webp",
+          "sha256": "87b3a7dcf9b9fb28233edfb313e5f28d061cc0ea0cc519776d5d2504a2aad5ce",
+          "dimensions": {
+            "width": 900,
+            "height": 660
+          }
+        }
       }
     },
     {
@@ -398,7 +456,7 @@
       "option": 3,
       "scene_slug": "auditorium-senior-night-columns",
       "prompt_summary": "Auditorium or field-house senior night entrance with paired balloon columns on base plates and a clear entry path, realistic event lighting.",
-      "status": "selected_by_gl_pending_final_crops",
+      "status": "selected_by_gl_final_crops_created_homepage_wired",
       "review_status": "selected_by_gl",
       "generation_mode": "built_in_codex_oauth_image_gen_with_session_extraction",
       "uses_openai_api": false,
@@ -410,21 +468,48 @@
       "source_sha256": "87f16ae3a3efc1e23a9ed272609f5fc04d778361c73e854dad1d4db4fff6899e",
       "prompt": "Use case: photorealistic-natural\nAsset type: Locally Twisted homepage hero candidate for Schools & Campuses\nPrimary request: Create a photoreal professional event photograph of realistic balloon decor for a school senior night or athletics entrance.\nScene/backdrop: Indoor field house or auditorium lobby entrance before a school event, polished floor, open double-door entry path, distant bleachers or wall padding softly blurred, no readable banners or names.\nSubject: Paired balloon columns on visible weighted base plates with a grounded low organic garland attached to a freestanding truss/backdrop frame near the entry. Palette: deep green, white, black, and metallic silver accents. Balloons are realistic, varied, and physically supported.\nStyle/medium: High-end event photography, believable camera lens and natural indoor event lighting.\nComposition/framing: Wide horizontal hero, decor and doorway center-right, left side calmer for overlay copy, no black borders or letterboxing.\nLighting/mood: Polished, energetic, school-spirit event without fake branding.\nText: no readable text.\nConstraints: Representative marketing image only; no fake school names, no mascots, no logos, no close faces, no readable signage. Keep doors/walk paths usable and show base/anchor logic.\nAvoid: cartoon, illustration, CGI, toy render, unsupported columns, distorted architecture, malformed people, blur, low quality, watermarks, black edges.",
       "owner_approved_for_public_use": true,
-      "public_assets_created": false,
-      "public_references_changed": false,
-      "notes": "GL selected Schools & Campuses option 03 on 2026-06-24. Create final public crops only after Civic & Community also has an approved selection, then wire the full homepage set together.",
+      "public_assets_created": true,
+      "public_references_changed": true,
+      "notes": "GL selected Schools & Campuses option 03 on 2026-06-24. Final public crops created, homepage references wired, and local browser proof passed.",
       "extracted_raw_sha256": "7cb2f46a05137d17803625e5cadbdf47240af5376a1d3a6d9eef0e3a19ff978e",
       "source_dimensions": {
         "width": 1821,
         "height": 864
+      },
+      "public_assets": {
+        "desktop": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-desktop.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-desktop.webp",
+          "sha256": "0cead5443f2577204b24993c0be82f01d5429bf3c0d4003756176dc2f219a81a",
+          "dimensions": {
+            "width": 1920,
+            "height": 560
+          }
+        },
+        "tablet": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-tablet.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-tablet.webp",
+          "sha256": "b77bd13cd7e9e2db672ae9d082653cb16dbf218dfa5c2ddf67b5db5b955eee66",
+          "dimensions": {
+            "width": 1400,
+            "height": 560
+          }
+        },
+        "mobile": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-mobile.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-mobile.webp",
+          "sha256": "71352b40f31addc637caea3945ebe59c2a137ceb92d2cdfca2986bba8d6b0746",
+          "dimensions": {
+            "width": 900,
+            "height": 660
+          }
+        }
       }
     }
   ],
   "next_steps": [
-    "GL reviews Civic & Community redo options 04-07 and selects one option or requests another redo.",
-    "After Civic & Community selection, create final desktop/tablet/mobile public WebP crops for the selected Civic, Schools, and Private options together.",
-    "Wire homepage slide image references only after the full approved set exists.",
-    "Verify rendered desktop/tablet/mobile screenshots and required homepage layout gates before release."
+    "Commit and push the locally verified source/documentation slice to origin/main.",
+    "Run the Frappe Cloud/app-mirror live release gate only after explicit live release approval."
   ],
   "review_sheets": {
     "civic-community-initial-rejected": "review-sheet-civic-community.webp",
@@ -437,31 +522,221 @@
       "date": "2026-06-24",
       "actor": "GL",
       "decision": "Selected Schools & Campuses option 03 and Private Celebrations option 02; rejected all first Civic & Community options and requested a civic redo."
+    },
+    {
+      "date": "2026-06-24",
+      "actor": "GL",
+      "decision": "Selected Civic & Community redo option 05. This completes the GL-selected homepage replacement image set: Civic option 05, Schools option 03, Private option 02."
+    },
+    {
+      "date": "2026-06-24",
+      "actor": "Codex",
+      "decision": "Created final public desktop/tablet/mobile crops for Civic option 05, Schools option 03, and Private option 02; wired homepage carousel source references to the selected crops."
+    },
+    {
+      "date": "2026-06-24",
+      "actor": "Codex",
+      "decision": "Local verification passed for the wired selected hero crops: rendered homepage references only the new Civic/Schools/Private filenames, all nine public WebPs return 200 image/webp, desktop/tablet/mobile/320px screenshots were captured and inspected, focused interactive layout passed 62/62, layout-fit passed 13/13, container contract home passed 3/3, and public asset integrity passed."
     }
   ],
   "gl_selections": {
+    "civic-community": {
+      "option": 5,
+      "source_file": "civic-community-option-05-park-pavilion-community-garland-source.webp",
+      "selected_on": "2026-06-24",
+      "final_public_crops_created": true,
+      "public_references_changed": true,
+      "public_assets": {
+        "desktop": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-desktop.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-desktop.webp",
+          "sha256": "df950fe98a9d814b1b3a36232b9e122ce2fb65ab060817f671efdcd813623e6a",
+          "dimensions": {
+            "width": 1920,
+            "height": 560
+          }
+        },
+        "tablet": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-tablet.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-tablet.webp",
+          "sha256": "5f7330d71a56c46191d68181dae53c30fed61e88f28f62495c647726497dce97",
+          "dimensions": {
+            "width": 1400,
+            "height": 560
+          }
+        },
+        "mobile": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-mobile.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-mobile.webp",
+          "sha256": "13e28f19d58f886ebb53aef7dfb07666d6906b3adc3771fe3f69e95a88342903",
+          "dimensions": {
+            "width": 900,
+            "height": 660
+          }
+        }
+      }
+    },
     "schools-campuses": {
       "option": 3,
       "source_file": "schools-campuses-option-03-auditorium-senior-night-columns-source.webp",
       "selected_on": "2026-06-24",
-      "final_public_crops_created": false,
-      "public_references_changed": false
+      "final_public_crops_created": true,
+      "public_references_changed": true,
+      "public_assets": {
+        "desktop": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-desktop.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-desktop.webp",
+          "sha256": "0cead5443f2577204b24993c0be82f01d5429bf3c0d4003756176dc2f219a81a",
+          "dimensions": {
+            "width": 1920,
+            "height": 560
+          }
+        },
+        "tablet": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-tablet.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-tablet.webp",
+          "sha256": "b77bd13cd7e9e2db672ae9d082653cb16dbf218dfa5c2ddf67b5db5b955eee66",
+          "dimensions": {
+            "width": 1400,
+            "height": 560
+          }
+        },
+        "mobile": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-mobile.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-mobile.webp",
+          "sha256": "71352b40f31addc637caea3945ebe59c2a137ceb92d2cdfca2986bba8d6b0746",
+          "dimensions": {
+            "width": 900,
+            "height": 660
+          }
+        }
+      }
     },
     "private-celebrations": {
       "option": 2,
       "source_file": "private-celebrations-option-02-home-shower-dessert-wall-source.webp",
       "selected_on": "2026-06-24",
-      "final_public_crops_created": false,
-      "public_references_changed": false
-    },
+      "final_public_crops_created": true,
+      "public_references_changed": true,
+      "public_assets": {
+        "desktop": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-desktop.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-desktop.webp",
+          "sha256": "7e6657ad529ffe7e141abb360763836c07689e88b6836a768fe311f83c6b6483",
+          "dimensions": {
+            "width": 1920,
+            "height": 560
+          }
+        },
+        "tablet": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-tablet.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-tablet.webp",
+          "sha256": "f0ae6771491e2d6715810ac3989c6815e28c2b04f5ab83704a49e0e529a8ac61",
+          "dimensions": {
+            "width": 1400,
+            "height": 560
+          }
+        },
+        "mobile": {
+          "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-mobile.webp",
+          "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-mobile.webp",
+          "sha256": "87b3a7dcf9b9fb28233edfb313e5f28d061cc0ea0cc519776d5d2504a2aad5ce",
+          "dimensions": {
+            "width": 900,
+            "height": 660
+          }
+        }
+      }
+    }
+  },
+  "selected_final_crops_sheet": "homepage-photoreal-selected-final-crops-sheet.webp",
+  "public_assets": {
     "civic-community": {
-      "option": null,
-      "status": "redo_options_04_07_pending_gl_review",
-      "initial_options_rejected": [
-        1,
-        2,
-        3
-      ]
+      "desktop": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-desktop.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-desktop.webp",
+        "sha256": "df950fe98a9d814b1b3a36232b9e122ce2fb65ab060817f671efdcd813623e6a",
+        "dimensions": {
+          "width": 1920,
+          "height": 560
+        }
+      },
+      "tablet": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-tablet.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-tablet.webp",
+        "sha256": "5f7330d71a56c46191d68181dae53c30fed61e88f28f62495c647726497dce97",
+        "dimensions": {
+          "width": 1400,
+          "height": 560
+        }
+      },
+      "mobile": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-civic-community-hero-mobile.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-civic-community-hero-mobile.webp",
+        "sha256": "13e28f19d58f886ebb53aef7dfb07666d6906b3adc3771fe3f69e95a88342903",
+        "dimensions": {
+          "width": 900,
+          "height": 660
+        }
+      }
+    },
+    "schools-campuses": {
+      "desktop": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-desktop.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-desktop.webp",
+        "sha256": "0cead5443f2577204b24993c0be82f01d5429bf3c0d4003756176dc2f219a81a",
+        "dimensions": {
+          "width": 1920,
+          "height": 560
+        }
+      },
+      "tablet": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-tablet.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-tablet.webp",
+        "sha256": "b77bd13cd7e9e2db672ae9d082653cb16dbf218dfa5c2ddf67b5db5b955eee66",
+        "dimensions": {
+          "width": 1400,
+          "height": 560
+        }
+      },
+      "mobile": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-schools-campuses-hero-mobile.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-schools-campuses-hero-mobile.webp",
+        "sha256": "71352b40f31addc637caea3945ebe59c2a137ceb92d2cdfca2986bba8d6b0746",
+        "dimensions": {
+          "width": 900,
+          "height": 660
+        }
+      }
+    },
+    "private-celebrations": {
+      "desktop": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-desktop.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-desktop.webp",
+        "sha256": "7e6657ad529ffe7e141abb360763836c07689e88b6836a768fe311f83c6b6483",
+        "dimensions": {
+          "width": 1920,
+          "height": 560
+        }
+      },
+      "tablet": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-tablet.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-tablet.webp",
+        "sha256": "f0ae6771491e2d6715810ac3989c6815e28c2b04f5ab83704a49e0e529a8ac61",
+        "dimensions": {
+          "width": 1400,
+          "height": 560
+        }
+      },
+      "mobile": {
+        "path": "apps/locally_twisted/locally_twisted/public/images/heroes/homepage-private-celebrations-hero-mobile.webp",
+        "asset_url": "/assets/locally_twisted/images/heroes/homepage-private-celebrations-hero-mobile.webp",
+        "sha256": "87b3a7dcf9b9fb28233edfb313e5f28d061cc0ea0cc519776d5d2504a2aad5ce",
+        "dimensions": {
+          "width": 900,
+          "height": 660
+        }
+      }
     }
   }
 }

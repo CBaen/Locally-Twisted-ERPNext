@@ -1416,7 +1416,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(result.h1Text[0], "homepage H1 should be the visible hero headline").toBe(result.heroTitleText);
 		expect(result.titleVisible, "homepage H1 should be visible, not screen-reader-only").toBe(true);
 		expect(result.animationName, "homepage H1 should not rotate or fade").toBe("none");
-		expect(result.heroImage, "homepage hero carousel should open with the Civic & Community image after the July slide removal").toContain("seasonal-pride-columns.webp");
+		expect(result.heroImage, "homepage hero carousel should open with the GL-selected Civic & Community image").toContain("homepage-civic-community-hero-desktop.webp");
 		expect(result.cyclingCount, "homepage should not render hidden rotating H2/H1 headline copies").toBe(0);
 		expect(result.nextBandTop, "desktop first viewport should show the next band below the hero").toBeLessThan(result.viewportHeight - 16);
 	});
