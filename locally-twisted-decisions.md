@@ -64,17 +64,21 @@ sets are generated, reviewed, and GL selects options.
 asked to remove it. GL also requested 3 or 4 generated photoreal options for
 each remaining image lane before final selection. At the time of the source
 removal, no stored generated option set existed to review or wire. Later on
-2026-06-24 the built-in Codex image output extraction path was repaired, but
-the Civic/Schools/Private option sets still need to be generated, saved,
-reviewed, and selected. Publishing guessed replacements would repeat the same
-quality failure.
+2026-06-24 the built-in Codex image output extraction path was repaired and 9
+review options were generated, saved, preview-cropped, and sheeted for GL:
+3 each for Civic & Community, Schools & Campuses, and Private Celebrations.
+Publishing guessed replacements would repeat the same quality failure, so
+selection remains a human approval gate.
 
 **Implementation boundary:** Local source removed the July slide from
 `HOME_HERO_SLIDES`, reduced the carousel timing from 40 seconds/five slides to
 32 seconds/four slides, and updated the focused homepage verifier expectation.
 The existing July WebP assets remain in source as historical/recoverable
-assets but are unused by the homepage. No public replacement images were wired
-for Civic & Community, Schools & Campuses, or Private Celebrations.
+assets but are unused by the homepage. Generated candidate sources and review
+sheets now exist under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`.
+No public replacement images were wired for Civic & Community, Schools &
+Campuses, or Private Celebrations.
 
 **Guard:** Future generated homepage hero work must use
 `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`. Store 3

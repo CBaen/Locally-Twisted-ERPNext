@@ -1,7 +1,7 @@
 # Homepage Hero Photoreal Refresh Follow-Up
 
 Date: 2026-06-24
-Status: local source/browser proof complete; built-in image file extraction repaired; generated option sets pending
+Status: local source/browser proof complete; generated option pack stored; GL selection pending
 Owner: Codex technical lead
 Scope: Locally Twisted homepage hero carousel, photoreal balloon image option process, and browser screenshot runtime
 
@@ -25,6 +25,10 @@ Balloon moments for public events and community gatherings.
 
 The old July WebP assets were left in the repo as historical/recoverable
 assets, but they are no longer referenced by the local homepage source.
+
+Follow-up in this same slice generated a stored review pack for the requested
+replacement image lanes. No homepage image references were changed; the
+generated pack is for GL review and selection only.
 
 ## Image Option Process
 
@@ -54,6 +58,25 @@ Manifest:
 ```text
 _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json
 ```
+
+Generated review sheets:
+
+```text
+_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-sheet-civic-community.webp
+_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-sheet-schools-campuses.webp
+_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/review-sheet-private-celebrations.webp
+```
+
+Pack contents:
+
+- Civic & Community: 3 generated photoreal options.
+- Schools & Campuses: 3 generated photoreal options.
+- Private Celebrations: 3 generated photoreal options.
+- Source WebPs, desktop/tablet/mobile preview crops, per-lane review sheets,
+  and manifest prompts/hashes/dimensions are stored in the dated folder.
+- Raw extraction PNGs were used only as conversion intermediates, then omitted
+  from the durable pack to avoid redundant repository weight.
+- No public homepage hero references were changed.
 
 ## Built-In Codex Image Output Fix
 
@@ -108,26 +131,23 @@ OPENAI_API_KEY=
 
 No API-generated images were produced.
 
-Current remaining work: generate the requested option sets with built-in
-`image_gen`, immediately extract each output into the dated option folder,
-inspect/reject failures, and present remaining options to GL. The manifest
-records the earlier attempted prompt and the planned 3-option scene set for
-each of:
-
-- Civic & Community
-- Schools & Campuses
-- Private Celebrations
+Completed image-generation work: generated the requested option sets with
+built-in `image_gen`, immediately extracted each output into the dated option
+folder, converted source WebPs, created desktop/tablet/mobile previews, created
+per-lane review sheets, and updated the manifest. Preliminary visual review
+found no obvious cartoon/CGI output, fake readable logos/signage, impossible
+floating installs, or corporate-event mismatch in the Private Celebrations
+lane.
 
 Next steps:
 
-1. Generate 3 or 4 distinct options per lane with built-in Codex `image_gen`.
-2. Save each output with `scripts/dev/save_latest_codex_image.py` into the
-   dated option folder using the manifest filename pattern.
-3. Visually reject AI-looking or physically impossible options before GL
-   review.
-4. Present remaining options for GL selection.
-5. Only after GL selection, create final desktop/tablet/mobile WebP crops and
-   wire homepage references.
+1. GL reviews the per-lane sheets and selects one option for each requested
+   lane, or requests regeneration for a lane.
+2. Only after GL selection, create final desktop/tablet/mobile public WebP
+   crops.
+3. Wire homepage slide image references.
+4. Verify rendered desktop/tablet/mobile screenshots and the homepage layout
+   gates before any release.
 
 ## Browser Screenshot Runtime Fix
 
@@ -185,6 +205,8 @@ node --check scripts/verify/interactive_layout.spec.js
 python -m json.tool _resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json
 python scripts/dev/save_latest_codex_image.py --list
 python scripts/dev/save_latest_codex_image.py --out output/imagegen/builtin-helper-smoke-20260624.png
+codex-save-latest-image --list
+Pillow processing for source WebPs, desktop/tablet/mobile previews, and review sheets
 npx playwright --version
 node Playwright managed Chromium smoke
 ssh banebook Playwright managed Chromium smoke
@@ -223,7 +245,9 @@ separate release path is approved and completed.
 ## Deferred Items
 
 - Replace Civic & Community, Schools & Campuses, and Private Celebrations hero
-  images after built-in Codex image options are generated, extracted, reviewed,
-  and GL selects options.
+  images after GL selects options from the stored review sheets.
+- Create final public desktop/tablet/mobile WebP crops for only the selected
+  options, wire homepage references, then rerun browser/layout proof before any
+  live release.
 - Review the unrelated unstaged `AGENTS.md` local Docker runtime note later.
   It was intentionally not included in this feature slice.

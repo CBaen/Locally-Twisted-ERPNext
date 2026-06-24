@@ -22,12 +22,19 @@ extract it into the repo. A local convenience command also exists at
 `/home/guidingl/.local/bin/codex-save-latest-image`. The prior API-key CLI
 experiment reached OpenAI but hit account billing limits, and GL rejected that
 path as unnecessary for subscription-backed Codex image generation; `.env`
-has `OPENAI_API_KEY=` blanked. Do not claim the Civic, Schools, or Private
-hero replacements are ready until 3 or 4 photoreal options per lane are stored
-under
-`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
-obvious AI/physics failures are rejected, and GL selects final options. No
-Frappe Cloud/app mirror/live release was performed for this follow-up.
+has `OPENAI_API_KEY=` blanked. Generated option pack follow-up: 9 photoreal
+homepage hero options are now stored under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`
+with 3 options each for Civic & Community, Schools & Campuses, and Private
+Celebrations. Review sheets:
+`review-sheet-civic-community.webp`,
+`review-sheet-schools-campuses.webp`, and
+`review-sheet-private-celebrations.webp`. Manifest:
+`homepage-photoreal-hero-options-manifest.json`. Preliminary visual screen
+found the pack reviewable; no public hero references were changed. GL selection
+is still required before final desktop/tablet/mobile public crops are created,
+wired, browser-proved, and released. No Frappe Cloud/app mirror/live release
+was performed for this follow-up.
 
 Homepage July Favorites / Pickups & Deliveries live closeout as of
 2026-06-24: source commit `3b5c64a` is live on `https://locallytwisted.com/`.

@@ -18,14 +18,16 @@ copy. Handoff:
 `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
 Built-in Codex image output extraction is repaired through
 `scripts/dev/save_latest_codex_image.py`; normal Codex image generation is
-OAuth/session backed and does not require `OPENAI_API_KEY`. The remaining work
-is to generate and review replacement image sets for Civic & Community,
-Schools & Campuses, and Private Celebrations. Do not wire or publish
-replacement hero images until 3 or 4 physically plausible photoreal options
-per lane are stored under
+OAuth/session backed and does not require `OPENAI_API_KEY`. Generated review
+sets now exist for Civic & Community, Schools & Campuses, and Private
+Celebrations: 3 options per lane with source WebPs, preview crops, per-lane
+review sheets, and manifest prompts/hashes/dimensions under
 `_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
-obvious AI/cartoon/physics failures are rejected, and GL selects the final
-options. No live release has been performed for this follow-up.
+with preliminary AI/cartoon/physics screening complete. The remaining work is
+GL selection, then final public desktop/tablet/mobile crops, homepage wiring,
+browser/layout proof, and release approval. Do not wire or publish replacement
+hero images until GL selects the final options. No live release has been
+performed for this follow-up.
 
 **P2 AGENTS.md local Docker runtime note review (deferred 2026-06-24):** The
 main checkout still has an unrelated unstaged `AGENTS.md` local Docker runtime

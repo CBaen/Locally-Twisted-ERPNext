@@ -9,7 +9,7 @@ currently_true: local_only
 verification_level: 2
 last_verified: 2026-06-24
 evidence_quality: direct
-successful_uses: 0
+successful_uses: 1
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -130,6 +130,13 @@ homepage-photoreal-hero-options-manifest.json
 The manifest records lane, option number, scene slug, prompt, generation mode,
 review status, rejection notes, source filename, and whether the option has
 been owner-approved for final crops.
+
+2026-06-24 evidence: this recipe produced a stored homepage review pack with
+3 options each for Civic & Community, Schools & Campuses, and Private
+Celebrations. The pack includes source WebPs, desktop/tablet/mobile previews,
+per-lane review sheets, and a manifest under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`.
+No public references were changed because GL selection is still required.
 
 ## Final Crop Standard
 

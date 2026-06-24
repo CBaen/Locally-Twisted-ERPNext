@@ -6,6 +6,18 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Generated image packs need review sheets, not just source files
+
+The homepage hero follow-up produced usable source files, but individual image
+paths alone are not enough for owner approval. GL needs to compare options by
+lane and see whether the image survives the actual desktop/mobile hero crop.
+
+**Counter-move:** for multi-option generated images, store source WebPs,
+desktop/tablet/mobile previews, per-lane review sheets, and a manifest with
+prompts, hashes, dimensions, generated/proof-photo status, and approval flags.
+Do not wire public assets from a generated pack until GL selects the option and
+the final rendered route is browser-proved.
+
 ## 2026-06-24 - Built-in Codex images may live in session JSONL, not generated_images
 
 The first troubleshooting pass looked for built-in image outputs only as
