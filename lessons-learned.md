@@ -6,6 +6,50 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Generated images are not project assets until a file exists in the repo
+
+The built-in image generation tool was invoked for a Civic & Community hero
+candidate, but no image file appeared under the expected Codex cache, `/tmp`,
+`/mnt`, Downloads, Pictures, or the project workspace. The CLI fallback also
+could not run because `OPENAI_API_KEY` was absent. That means the session had
+no reviewable or storable generated image option, even though image generation
+was attempted.
+
+**Counter-move:** for project-bound generated images, require a discoverable
+file path before calling an image generated, reviewable, or stored. Put
+candidate sources and a manifest under `_resources/generated-hero-sources/`.
+If the tool only returns an inline preview or no artifact, stop and document the
+blocker instead of creating placeholder docs or wiring public assets. Use
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
+
+## 2026-06-24 - Ubuntu browser proof depends on both Playwright version and browser availability
+
+The previous homepage live closeout could not capture screenshots because
+Playwright 1.59.1 refused managed Chromium on `ubuntu26.04-x64`. By the time of
+the follow-up, both Wardenclyffe and Banebook had Brave available, but the repo
+still needed a Playwright version that can install managed Chromium for a
+portable fallback.
+
+**Counter-move:** keep LT's browser proof repo-local and current enough for the
+host OS. Playwright 1.61.1 installed managed Chromium successfully on
+Wardenclyffe and Banebook. Prefer Brave, Chromium, Chromium Browser, then
+Google Chrome locally; do not include Edge as a normal fallback when GL wants
+to avoid it and the Brave/Chromium path passes.
+
+## 2026-06-24 - Photoreal balloon heroes need construction review, not just prettier prompts
+
+GL's issue with the homepage hero images was not only the theme or crop. The
+images need to look like real balloon decor installed by professionals. A
+generated image can look polished while still failing because arches float,
+garlands attach to nothing, columns lack bases, text/logos are fake, or the
+scene reads as the wrong event type.
+
+**Counter-move:** prompt and review for physical install logic: frames,
+anchors, weighted bases, wall/backdrop attachment, clear walk paths, plausible
+cluster sizes, and no fake text/logos/signage. Store 3 or 4 distinct scenes per
+lane, reject AI/cartoon/physics failures before GL review, and only create
+public breakpoint crops after GL selects an option.
+
 ## 2026-06-24 - App-mirror live branch scope can be narrower than full source
 
 The homepage July/Favorites release looked like a normal app-root mirror sync

@@ -1,6 +1,6 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.8
+**Version:** 4.9
 **Last Updated:** 2026-06-24
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
@@ -20,7 +20,7 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.8 keeps the
+icons, or briefing GPT/Codex-style coding agents. Version 4.9 keeps the
 non-negotiable compact hero contract and adds the shared generated-photo hero
 rule: public heroes use breakpoint-specific lifestyle crops made through the
 project image-generation API under the black landing-page readability overlay.
@@ -28,8 +28,12 @@ Existing real/proof photos are reserved for portfolio, product, and proof
 surfaces unless GL explicitly rejects a seasonal homepage hero for lacking
 realism; in that case, a real balloon-decor source photo may be used for the
 seasonal homepage slot when source provenance is retained and private EXIF/GPS
-metadata is stripped. Version 4.8 also records the `Pickups & Deliveries`
-shop-category label and the Customer Favorites homepage row. It keeps the
+metadata is stripped. The rejected Fourth of July homepage slide was removed on
+2026-06-24; future homepage hero replacements must follow
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md` with
+stored option sets and GL selection before public crops are wired. Version 4.8
+also recorded the `Pickups & Deliveries` shop-category label and the Customer
+Favorites homepage row. It keeps the
 portfolio correction:
 portfolio photos carry the proof alone, without captions or visible frame
 wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
@@ -126,6 +130,11 @@ Expectations:
 - The current generated hero sources, prompts, and contact sheet live in
   `_resources/generated-hero-sources/2026-05-10/`; only breakpoint-ready crops
   belong under the public `images/heroes/` asset path.
+- Homepage photoreal replacement options now use the stricter source folder
+  pattern under `_resources/generated-hero-sources/YYYY-MM-DD/homepage-photoreal-options/`.
+  Store 3 or 4 distinct options per lane, reject AI-looking or physically
+  impossible balloon installations, and wire public crops only after GL selects
+  the option.
 - Hero text must sit above the same black readability overlay pattern used by
   the landing page. Do not put hero text directly on a bare image.
 - A hero may include an eyebrow, one H1, and one short lede at most.

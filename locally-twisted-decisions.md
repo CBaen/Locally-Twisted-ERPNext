@@ -8,6 +8,74 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-24 - Rejected Fourth of July hero is removed, replacement images require GL-selected photoreal options
+
+**Decision:** Remove the Fourth of July homepage hero slide from local source
+instead of attempting another immediate seasonal replacement. Keep Civic &
+Community, Corporate Events, Schools & Campuses, and Private Celebrations as
+the four homepage carousel lanes until the three requested replacement image
+sets are generated, reviewed, and GL selects options.
+
+**Reasoning:** GL rejected the Fourth of July hero as visually unacceptable and
+asked to remove it. GL also requested 3 or 4 generated photoreal options for
+each remaining image lane before final selection. The current built-in image
+tool did not expose local image files, and `OPENAI_API_KEY` was absent for the
+CLI fallback, so there is no stored generated option set to review or wire.
+Publishing guessed replacements would repeat the same quality failure.
+
+**Implementation boundary:** Local source removed the July slide from
+`HOME_HERO_SLIDES`, reduced the carousel timing from 40 seconds/five slides to
+32 seconds/four slides, and updated the focused homepage verifier expectation.
+The existing July WebP assets remain in source as historical/recoverable
+assets but are unused by the homepage. No public replacement images were wired
+for Civic & Community, Schools & Campuses, or Private Celebrations.
+
+**Guard:** Future generated homepage hero work must use
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`. Store 3
+or 4 distinct options per lane under
+`_resources/generated-hero-sources/YYYY-MM-DD/homepage-photoreal-options/`,
+reject cartoon/CGI/physics failures before GL review, and wire public
+desktop/tablet/mobile WebP crops only after GL selection. Do not claim the
+current Civic/Schools/Private images are final.
+
+**Receipts:** `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`;
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/homepage-photoreal-hero-options-manifest.json`.
+
+**Decided by:** Guiding Light requested removal and option-review; Codex
+implemented the source removal and recorded the generation blocker on
+2026-06-24.
+
+---
+
+## 2026-06-24 - LT browser proof standard uses Playwright 1.61.1 with Brave/Chromium/Chrome, not Edge
+
+**Decision:** Update LT's repo-local Playwright runtime from `@playwright/test`
+`1.59.1` to `1.61.1`, install managed Chromium for the current Ubuntu 26.04
+runtime, and prefer local Brave/Chromium/Chrome paths without Edge fallbacks.
+
+**Reasoning:** The prior homepage live closeout could not capture browser
+screenshots because Playwright 1.59.1 refused the managed Chromium download on
+`ubuntu26.04-x64`. GL approved fixing the browser screenshot path on both
+Wardenclyffe and Banebook and said not to use Edge if possible. Both machines
+currently have Brave available; Banebook also has Chromium. Playwright 1.61.1
+successfully installed and launched managed Chromium on both machines, so Edge
+is unnecessary for this repo.
+
+**Implementation boundary:** Updated `package.json`, `package-lock.json`,
+`playwright.config.js`, `scripts/verify/browser_runtime.py`, and
+`scripts/verify/smoke_shop.py`. No operating-system browser install was needed,
+and no Edge install was used.
+
+**Proof:** Wardenclyffe `npx playwright --version` returned `Version 1.61.1`;
+Wardenclyffe managed Chromium rendered a smoke page; Banebook managed Chromium
+rendered a smoke page over SSH from a temporary directory; local homepage
+screenshots were captured with the fixed browser path.
+
+**Decided by:** Guiding Light approved the browser screenshot fix; Codex
+implemented and verified it on 2026-06-24.
+
+---
+
 ## 2026-06-24 - Homepage July favorites and Pickups & Deliveries are live
 
 **Decision:** The previously approved homepage July/Favorites/navigation packet

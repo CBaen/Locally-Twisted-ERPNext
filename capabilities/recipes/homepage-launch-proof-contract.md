@@ -41,10 +41,11 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   project image-generation API and cropped per breakpoint. A seasonal homepage
   hero may use a real, source-recorded balloon-decor photo only when GL's
   approval/rejection is explicitly about realism and the source/crops are
-  retained with private metadata stripped. The current 2026-06-24 Fourth of
-  July first-slide crop set uses
-  `/assets/locally_twisted/images/heroes/july-4-home-hero-*.webp`, sourced from
-  `_resources/generated-hero-sources/2026-06-24/july-4-home-hero-source-IMG_4341.jpeg`.
+  retained with private metadata stripped. As of the 2026-06-24 follow-up, the
+  rejected Fourth of July slide is removed from local source; the old
+  `/assets/locally_twisted/images/heroes/july-4-home-hero-*.webp` crop set is
+  retained only as historical/recoverable source and is no longer referenced by
+  the homepage.
 - The first viewport must leave a hint of the next band visible on desktop and
   small mobile widths.
 - The hero must obey the compact hero contract: 220px mobile, 250px tablet, and
@@ -227,7 +228,7 @@ cards; focused review tests passed 5/5 and homepage layout-fit passed 13/13.
 
 ## 2026-05-10 seasonal-carousel override
 
-GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. The current first slide was updated on 2026-06-21 to a Fourth of July seasonal hero, followed by the four event audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.
+GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. The first slide was updated on 2026-06-21 to a Fourth of July seasonal hero, followed by the four event audience lanes. On 2026-06-24 GL rejected that hero image and asked to remove the Fourth of July hero entirely; local source now opens with Civic & Community and has four total audience slides. The old "one stable generated lifestyle hero image" verifier expectation remains obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoffs: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md` and `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`.
 
 ## 2026-05-11 Custom Event Decor hide
 
@@ -284,3 +285,21 @@ WebP assets return `200 image/webp`.
 
 Implementation handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+
+## 2026-06-24 homepage hero photoreal follow-up
+
+GL rejected the live Fourth of July hero and asked to remove it, then requested
+3 or 4 generated photoreal options for each replacement lane before final image
+selection. Local source removes the July slide and updates the carousel to four
+audience slides. Browser screenshot proof is repaired through Playwright
+1.61.1 and Brave/Chromium/Chrome fallback, with managed Chromium verified on
+Wardenclyffe and Banebook. The generated option set is blocked because the
+built-in image tool did not expose local files and the CLI fallback lacks
+`OPENAI_API_KEY`.
+
+Do not wire replacement images for Civic & Community, Schools & Campuses, or
+Private Celebrations until
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md` is used
+to generate stored options, reject AI-looking/physics failures, and record GL's
+selection. Follow-up handoff:
+`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`.

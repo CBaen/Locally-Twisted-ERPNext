@@ -97,6 +97,24 @@ Status:
 
 ## Session Notes
 
+### 2026-06-24 - Codex homepage hero photoreal follow-up
+Lane: Homepage hero image quality and browser screenshot runtime.
+Files: `www/home.py`, `interactive_layout.spec.js`, Playwright/browser config,
+new photoreal hero capability, generated-option manifest, and AI-facing docs.
+Intent: Remove the rejected Fourth of July homepage hero slide, define a
+stricter photoreal balloon hero option process, and repair browser screenshot
+proof on Wardenclyffe and Banebook without using Edge.
+Conflicts: Do not wire replacement Civic/Schools/Private hero images until
+stored generated options exist and GL selects final options. Do not bundle the
+unrelated unstaged `AGENTS.md` change.
+Verification: Capability gate PASS; py_compile, JS checks, JSON manifest
+validation, Wardenclyffe/Banebook Playwright 1.61.1 smoke checks, cache clear,
+focused interactive homepage/compact-hero 62/62, home layout-fit 13/13, home
+container 3/3, public assets PASS, and fresh desktop/mobile screenshots.
+Status: Local source/browser proof complete; generated image option set blocked
+because built-in image generation exposed no local file and API fallback lacked
+`OPENAI_API_KEY`; no live release performed.
+
 ### 2026-06-24 - Codex homepage July favorites and Pickups & Deliveries source update
 Lane: Homepage hero/favorites/order plus public shop-category label rename.
 Files: `www/home.*`, hero assets, `navbar.html`, `footer.html`,

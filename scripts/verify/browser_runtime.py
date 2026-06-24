@@ -15,7 +15,6 @@ LINUX_BROWSER_CANDIDATES = [
     "/usr/bin/chromium",
     "/usr/bin/chromium-browser",
     "/usr/bin/google-chrome",
-    "/usr/bin/microsoft-edge",
 ]
 
 

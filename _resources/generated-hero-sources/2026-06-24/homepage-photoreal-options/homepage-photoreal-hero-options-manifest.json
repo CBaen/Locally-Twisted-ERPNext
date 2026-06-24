@@ -1,0 +1,97 @@
+{
+  "project": "Locally Twisted",
+  "asset_set": "homepage photoreal balloon hero options",
+  "created_on": "2026-06-24",
+  "status": "blocked_no_filesystem_artifacts",
+  "generation_mode": "built_in_image_gen_attempted",
+  "blocked_reason": "The built-in image generation tool returned no discoverable image file under /home/guidingl/.codex, /tmp, /mnt, Downloads, Pictures, or the project workspace. OPENAI_API_KEY was not present, so the CLI fallback could not be used. No generated option can be considered stored or reviewable from this manifest alone.",
+  "storage_contract": {
+    "source_directory": "_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/",
+    "candidate_filename_pattern": "<lane-slug>-option-0N-<scene-slug>-source.webp",
+    "final_public_filename_pattern": "homepage-<lane-slug>-hero-<desktop|tablet|mobile>.webp",
+    "final_crop_sizes": {
+      "desktop": "1920x560",
+      "tablet": "1400x560",
+      "mobile": "900x660"
+    }
+  },
+  "quality_contract": "capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md",
+  "attempted_generation": {
+    "lane": "civic-community",
+    "option": 1,
+    "scene_slug": "city-park-festival-anchored-arch",
+    "result": "tool_returned_no_saved_file",
+    "prompt_summary": "Photoreal Utah civic outdoor festival with red, white, navy, and gold organic balloon arch anchored to visible weighted bases, no readable signs, no fake logos, wide hero composition."
+  },
+  "planned_options": [
+    {
+      "lane": "civic-community",
+      "option": 1,
+      "scene_slug": "city-park-festival-anchored-arch",
+      "status": "not_generated",
+      "prompt_summary": "Outdoor civic park festival entrance with a red, white, navy, and gold organic balloon arch anchored at both ends on weighted base plates."
+    },
+    {
+      "lane": "civic-community",
+      "option": 2,
+      "scene_slug": "community-fair-stage-columns",
+      "status": "not_generated",
+      "prompt_summary": "Community fair stage with two stable balloon columns on weighted bases framing a small platform, public-event scale, no fake signage."
+    },
+    {
+      "lane": "civic-community",
+      "option": 3,
+      "scene_slug": "downtown-plaza-photo-moment",
+      "status": "not_generated",
+      "prompt_summary": "Downtown plaza photo moment with organic garland attached to a freestanding backdrop frame, clear walking path, civic but logo-free."
+    },
+    {
+      "lane": "schools-campuses",
+      "option": 1,
+      "scene_slug": "school-gym-graduation-stage",
+      "status": "not_generated",
+      "prompt_summary": "School gym graduation stage with realistic balloon garland attached to a backdrop frame and weighted columns, no school names or mascots."
+    },
+    {
+      "lane": "schools-campuses",
+      "option": 2,
+      "scene_slug": "campus-welcome-walkway-arch",
+      "status": "not_generated",
+      "prompt_summary": "Campus welcome walkway with school-color balloon arch anchored at both ends, backpacks and distant students only as scale, no readable text."
+    },
+    {
+      "lane": "schools-campuses",
+      "option": 3,
+      "scene_slug": "auditorium-senior-night-columns",
+      "status": "not_generated",
+      "prompt_summary": "Auditorium or field-house senior night entrance with paired balloon columns on base plates and a clear entry path, realistic event lighting."
+    },
+    {
+      "lane": "private-celebrations",
+      "option": 1,
+      "scene_slug": "backyard-birthday-garland",
+      "status": "not_generated",
+      "prompt_summary": "Warm residential backyard birthday setup with organic balloon garland attached to a freestanding backdrop frame, relaxed private-party setting."
+    },
+    {
+      "lane": "private-celebrations",
+      "option": 2,
+      "scene_slug": "home-shower-dessert-wall",
+      "status": "not_generated",
+      "prompt_summary": "Private baby or bridal shower dessert-wall scene inside a home or patio, balloon garland attached to a wall/backdrop with realistic balloons."
+    },
+    {
+      "lane": "private-celebrations",
+      "option": 3,
+      "scene_slug": "family-milestone-patio-arch",
+      "status": "not_generated",
+      "prompt_summary": "Polished family milestone celebration on a patio with a compact anchored balloon arch and table decor, clearly not corporate."
+    }
+  ],
+  "next_unblock": [
+    "Expose the built-in image generation output as local files, or provide an OPENAI_API_KEY for the project-approved CLI fallback.",
+    "Generate 3 or 4 distinct options per lane into this folder using the filename pattern above.",
+    "Inspect each option and reject AI-looking or physically impossible installs before GL review.",
+    "Only after GL selects options, produce the desktop/tablet/mobile public WebP crops and wire homepage references."
+  ]
+}

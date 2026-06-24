@@ -95,19 +95,6 @@ FEATURED_WORK = [
 
 HOME_HERO_SLIDES = [
     {
-        "kicker": "Fourth of July events",
-        "title": "Fourth of July balloon decor for Utah celebrations.",
-        "proofline": "Red, white, and blue installs for parties, parades, venues, and community events.",
-        "body": "Tell us about the space, timing, and colors; we will shape the decor around your celebration and keep custom details in the quote path.",
-        "image": "/assets/locally_twisted/images/heroes/july-4-home-hero-desktop.webp",
-        "image_tablet": "/assets/locally_twisted/images/heroes/july-4-home-hero-tablet.webp",
-        "image_mobile": "/assets/locally_twisted/images/heroes/july-4-home-hero-mobile.webp",
-        "primary_label": "Plan July 4 decor",
-        "primary_url": "/contact?intent=quote&source=home-hero-july-4",
-        "secondary_label": "Start a quote",
-        "secondary_url": "/contact?intent=quote&source=home-hero-july-4-secondary",
-    },
-    {
         "kicker": "Civic & community",
         "title": "Balloon moments for public events and community gatherings.",
         "proofline": "Parades, city events, Pride, fairs, and public celebrations.",
@@ -307,13 +294,12 @@ PAGE_CSS = """
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    animation: lt-home-hero-carousel 40s infinite;
+    animation: lt-home-hero-carousel 32s infinite;
 }
 .lt-hero__slide:nth-child(1) { animation-delay: 0s; }
 .lt-hero__slide:nth-child(2) { animation-delay: 8s; }
 .lt-hero__slide:nth-child(3) { animation-delay: 16s; }
 .lt-hero__slide:nth-child(4) { animation-delay: 24s; }
-.lt-hero__slide:nth-child(5) { animation-delay: 32s; }
 .lt-hero__slide--active,
 .lt-hero__slide:focus-within {
     pointer-events: auto;
@@ -355,9 +341,9 @@ PAGE_CSS = """
 }
 @keyframes lt-home-hero-carousel {
     0% { opacity: 0; }
-    2.5% { opacity: 1; pointer-events: auto; }
-    17.5% { opacity: 1; pointer-events: auto; }
-    20% { opacity: 0; }
+    3% { opacity: 1; pointer-events: auto; }
+    22% { opacity: 1; pointer-events: auto; }
+    25% { opacity: 0; }
     100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -47,7 +47,6 @@ LINUX_BROWSER_CANDIDATES = [
     "/usr/bin/chromium",
     "/usr/bin/chromium-browser",
     "/usr/bin/google-chrome",
-    "/usr/bin/microsoft-edge",
 ]
 BROWSER_EXECUTABLE = os.environ.get("PLAYWRIGHT_CHROME_PATH") or next(
     (candidate for candidate in LINUX_BROWSER_CANDIDATES if Path(candidate).exists()),

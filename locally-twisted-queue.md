@@ -10,6 +10,29 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P1 homepage photoreal hero image follow-up (2026-06-24):** Local source now
+removes the rejected Fourth of July homepage hero slide; the homepage carousel
+has four audience slides and local rendered proof shows no Fourth of July body
+copy. Handoff:
+`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`. New capability:
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`. The
+remaining image replacements for Civic & Community, Schools & Campuses, and
+Private Celebrations are blocked until generated image outputs are available
+as local files or an approved API-backed generator is available. Do not wire or
+publish replacement hero images until 3 or 4 physically plausible photoreal
+options per lane are stored under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
+obvious AI/cartoon/physics failures are rejected, and GL selects the final
+options. No live release has been performed for this follow-up.
+
+**P2 AGENTS.md local Docker runtime note review (deferred 2026-06-24):** The
+main checkout still has an unrelated unstaged `AGENTS.md` local Docker runtime
+posture change. GL asked to leave the AGENTS fix in the queue instead of
+bundling it with the homepage/image slice. Next safe action is a separate
+review: decide whether to commit that posture note, revise it, or revert only
+that unrelated change. Do not stage `AGENTS.md` with homepage hero/browser
+work.
+
 **P1 live product visibility aftercare (2026-06-23):** Four documented
 retired products are now disabled/hidden on live `locallytwisted.com`:
 `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and
@@ -497,7 +520,7 @@ proven fixture isolation. Handoff:
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
 
 **Done / current launch proof state:**
-- Slice 3 — Homepage (launch proof shape, repaired 2026-05-07; featured-work band updated 2026-05-08; mobile review compactness updated 2026-05-08; seasonal carousel update 2026-05-10; Custom Event Decor hidden 2026-05-11; review platform proof and `/event-balloons` route cleanup updated 2026-05-11; Fourth of July first slide updated 2026-06-21 and realistic hero/favorites/nav source update completed 2026-06-24). The hero is now a five-slide quote-led carousel: Fourth of July first, then the four event audience lanes. The first slide owns the only page-level H1; subsequent slides use H2s. GigSalad, Google, and Facebook review proof sits immediately after the hero as unboxed platform logos with no visible counts and no visible `reviews` label; compact mobile review proof remains active. Inline cookie band stays after reviews, homepage trust/authority bar remains removed for now, Customer Favorites follows reviews, Live Entertainment follows Customer Favorites, `One of a Kind Designs` follows Live Entertainment as a wide custom-install proof band, review and client crawls move left-to-right at matched visible speed, Custom Event Decor is hidden behind `show_custom_event_decor = False`, and the closing CTA stays corporate/school/civic/community-first. Recovery assets for the hidden block live at `_resources/homepage-custom-event-decor-2026-05-11/`. Feature handoffs: `workstreams/landing-page-repair.md`, `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`, `workstreams/homepage-review-platform-proof-2026-05-11.md`, `workstreams/event-balloons-route-removal-2026-05-11.md`, and `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`; mobile compactness handoff: `workstreams/mobile-nav-review-compactness.md`; capability contract: `capabilities/recipes/homepage-launch-proof-contract.md`.
+- Slice 3 — Homepage (launch proof shape, repaired 2026-05-07; featured-work band updated 2026-05-08; mobile review compactness updated 2026-05-08; seasonal carousel update 2026-05-10; Custom Event Decor hidden 2026-05-11; review platform proof and `/event-balloons` route cleanup updated 2026-05-11; Fourth of July first slide updated 2026-06-21, realistic hero/favorites/nav source update completed 2026-06-24, and rejected July slide removed from local source in the 2026-06-24 follow-up). The local source hero is now a four-slide quote-led carousel: Civic & Community first, then Corporate Events, Schools & Campuses, and Private Celebrations. The first slide owns the only page-level H1; subsequent slides use H2s. Replacement images for Civic, Schools, and Private are blocked until stored photoreal option sets exist and GL selects options. GigSalad, Google, and Facebook review proof sits immediately after the hero as unboxed platform logos with no visible counts and no visible `reviews` label; compact mobile review proof remains active. Inline cookie band stays after reviews, homepage trust/authority bar remains removed for now, Customer Favorites follows reviews, Live Entertainment follows Customer Favorites, `One of a Kind Designs` follows Live Entertainment as a wide custom-install proof band, review and client crawls move left-to-right at matched visible speed, Custom Event Decor is hidden behind `show_custom_event_decor = False`, and the closing CTA stays corporate/school/civic/community-first. Recovery assets for the hidden block live at `_resources/homepage-custom-event-decor-2026-05-11/`. Feature handoffs: `workstreams/landing-page-repair.md`, `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`, `workstreams/homepage-review-platform-proof-2026-05-11.md`, `workstreams/event-balloons-route-removal-2026-05-11.md`, `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`, and `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`; mobile compactness handoff: `workstreams/mobile-nav-review-compactness.md`; capability contracts: `capabilities/recipes/homepage-launch-proof-contract.md` and `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
 - Site shape decision: lookbook-forward + small shop sidebar, with future "Design Studio" interactive experience for arches/columns/garlands/backdrops/drops/bouquets categories (captures customer vision → routes to inquiry, NOT a checkout). See `.planning/decisions/site-shape.md`.
 
 **Already DONE in prior sessions:**

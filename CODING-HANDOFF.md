@@ -1,5 +1,27 @@
 # Locally Twisted - Coding Handoff
 
+Homepage hero photoreal follow-up as of 2026-06-24: local source removes the
+rejected Fourth of July homepage hero slide. The homepage carousel now has four
+audience slides and local rendered proof shows Civic & Community as the single
+page-level H1, four slides total, and no `Fourth of July` body copy. Handoff:
+`workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`. New capability:
+`capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`. Browser
+proof is repaired: `@playwright/test` is `1.61.1`, managed Chromium installs
+and launches on Wardenclyffe and Banebook, and repo-local browser fallback now
+prefers Brave/Chromium/Chrome without Edge. Focused local proof passed
+py_compile, JS checks, JSON manifest validation, Wardenclyffe/Banebook
+Playwright smoke, cache clear, interactive homepage/compact-hero `62 passed`,
+home layout-fit `13 passed`, home container contract `3 passed`, and public
+asset integrity `31 routes / 362 assets`. Screenshot artifacts are in
+`output/playwright/homepage-hero-july-removal-20260624/`. Remaining blocker:
+the built-in image generation tool did not expose a local image file, and
+`OPENAI_API_KEY` was absent for the CLI fallback. Do not claim the Civic,
+Schools, or Private hero replacements are ready until 3 or 4 photoreal options
+per lane are stored under
+`_resources/generated-hero-sources/2026-06-24/homepage-photoreal-options/`,
+obvious AI/physics failures are rejected, and GL selects final options. No
+Frappe Cloud/app mirror/live release was performed for this follow-up.
+
 Homepage July Favorites / Pickups & Deliveries live closeout as of
 2026-06-24: source commit `3b5c64a` is live on `https://locallytwisted.com/`.
 Parent handoff:
@@ -1028,7 +1050,7 @@ business/service structured data, and BTFP image alt text. Feature handoff:
 
 OpenClaw/Moji update on 2026-05-10: `/balloon-twisting-and-face-painting` was corrected against GL's exact localhost feedback. The embedded inquiry form now starts with no artist-service checkbox selected; repeat inquiries from the same email are allowed through durable `CRM Settings.allow_lead_duplication_based_on_emails` configuration; and the form's advertised five-photo upload path is guarded by `scripts/verify/book_form_repeat_email_photos.py`. The two service-card photos are now explicit 10-image carousels with prev/next controls and visible status. Source handoff: `workstreams/btfp-service-page.md`; capability: `capabilities/recipes/btfp-live-service-page-contract.md`.
 
-Codex update on 2026-06-21: the homepage hero now leads with a Fourth of July seasonal slide, followed by Civic & community, Corporate events, Schools & campuses, and Private celebrations audience slides. Source handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`; capability: `capabilities/recipes/homepage-launch-proof-contract.md`.
+Codex update on 2026-06-24: GL rejected the Fourth of July homepage hero image, so local source now removes that slide and opens with the Civic & Community audience slide, followed by Corporate Events, Schools & Campuses, and Private Celebrations. Replacement images for Civic, Schools, and Private require stored photoreal option sets and GL selection before public crops are wired. Source handoffs: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md` and `workstreams/homepage-hero-photoreal-refresh-2026-06-24.md`; capabilities: `capabilities/recipes/homepage-launch-proof-contract.md` and `capabilities/recipes/lt-photoreal-balloon-homepage-hero-contract.md`.
 
 Codex update on 2026-05-10: public inquiry acknowledgments now use the branded
 LT email shell with the LT logo, mirrored red balloon-dog footer mark, no
