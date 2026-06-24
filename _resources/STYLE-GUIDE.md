@@ -48,7 +48,7 @@ supplier-style color names, drawer grouping, and best web-match hex values.
 11. **Fail loudly. Always.** Forms, automations, documents, customer messages, route contracts, containers, and agent claims must block false success and leave actionable evidence.
 12. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
 13. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
-14. **Heroes are compact, photographic, and standardized.** A hero labels the page; it is not the page. Use the hero height contract below, use a generated lifestyle photo under the black landing-page readability overlay, and do not add page-local hero padding or giant title clamps without a documented exception.
+14. **Heroes are compact, photographic, and standardized.** A hero labels the page; it is not the page. Use the hero height contract below, use a generated lifestyle photo under the black landing-page readability overlay, and do not add page-local hero padding or giant title clamps without a documented exception. Seasonal hero images must read as realistic balloon decor, not cartoon art, flat illustration, or generic holiday graphics.
 15. **Balloon color names and swatches outrank hex.** Use `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md` when briefing generated images or matching customer colors. Hex values are best web approximations only.
 
 ---

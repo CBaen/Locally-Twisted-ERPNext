@@ -6,6 +6,36 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-24 - Homepage merchandising cannot outrun product-page truth
+
+The Customer Favorites plan exposed a pricing parity trap before
+implementation. Three requested products display visible starting prices on
+their live product pages, but Classic Arch is quote-first and does not expose a
+visible starting price. A homepage card that says `From $XX.XX` while the
+product page says only `Request a quote` would teach customers the wrong
+contract.
+
+**Counter-move:** product merchandising rows must derive price labels from the
+same source truth the product page uses, or explicitly block before launch.
+For quote-first products, either add product-page parity for the starting price
+or get explicit GL approval for the exception with the amount and reason
+recorded. Do not hand-type a homepage price because the card layout wants
+symmetry. Use
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+
+## 2026-06-24 - Seasonal hero approval includes realism, not only correct copy
+
+The homepage already had Fourth of July copy, but GL rejected the image because
+it looked cartoony. That means the business failure was not the seasonal topic;
+it was visual quality and realism.
+
+**Counter-move:** seasonal hero work needs image acceptance criteria before
+implementation: realistic balloon decor, plausible event context and lighting,
+no embedded text, no cartoon/illustration style, no generic patriotic graphic,
+and breakpoint crops that still read as real decor under the hero overlay.
+Treat GL image review as a real approval gate before live publication when the
+rejection is visual-quality based.
+
 ## 2026-06-23 - Owner catalog guard is a business safety guard, not the end of the task
 
 The live product-disable request hit `Protected Owner Catalog Guard` when saving

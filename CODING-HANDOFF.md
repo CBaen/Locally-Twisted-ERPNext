@@ -1,5 +1,25 @@
 # Locally Twisted - Coding Handoff
 
+Homepage July Favorites / Pickups & Deliveries planning closeout as of
+2026-06-24: implementation has not started. Use
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md` as the parent
+plan before touching source. The release splits into four child features:
+realistic Fourth of July hero image replacement, Customer Favorites row,
+homepage section reorder, and public supermenu rename from
+`Balloons-to-Order` to `Pickups & Deliveries`. User-confirmed requirements:
+show favorite prices as `From $XX.XX`, use these four products
+(`birthday-deliveries`, `large-head-missionary`, `classic-arch`, and
+`bandage-get-well-bouquet-latex-free`), place the row after Reviews, and make
+the relevant order Reviews -> Customer Favorites -> Live Entertainment -> One
+of a Kind Designs, with the client crawl/CTA after that sequence. Hard stop:
+live Classic Arch is quote-first and does not visibly expose a starting price;
+the recommended path is product-page/source parity first. A homepage-only
+Classic Arch `From` price requires explicit GL exception approval with the
+amount and reason recorded. Capability gate
+passed for planning with homepage, nav, shop symmetry, and browser-verification
+recipes loaded. No source, ERPNext data, Frappe Cloud, cache, DNS, Stripe, or
+live behavior changed in this planning slice.
+
 Live product visibility disable closeout as of 2026-06-23:
 the four documented retired products are hidden on live
 `https://locallytwisted.com` at both the Website Item and Item layers.

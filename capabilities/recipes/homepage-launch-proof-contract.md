@@ -161,6 +161,10 @@ before marking the homepage ready for GL review.
   launch hero without a fresh GL decision.
 - The homepage uses reserved real/proof photos as hero crops instead of the
   generated lifestyle hero asset.
+- A seasonal hero uses cartoon, flat illustration, novelty patriotic art, or a
+  generic background when GL requested realistic balloon decor.
+- A homepage product-merchandising row shows a `From` price that does not match
+  product-page/source truth.
 
 ## LT Receipt
 
@@ -239,3 +243,21 @@ Feature handoff: `workstreams/homepage-review-platform-proof-2026-05-11.md`.
 The graduation hero secondary CTA no longer points to `/event-balloons`, and
 the hidden Custom Event Decor heading no longer links there. The removed route
 is documented at `workstreams/event-balloons-route-removal-2026-05-11.md`.
+
+## 2026-06-24 homepage July favorites and nav planning
+
+GL rejected the current Fourth of July hero image as too cartoony and confirmed
+that the replacement must look like real balloon decor. The seasonal copy is
+already July-focused; the image realism is the planned repair. The same parent
+plan adds a Customer Favorites row between Reviews and Live Entertainment, then
+moves Live Entertainment before One of a Kind Designs. The protected homepage
+rule still holds: Reviews remain the first post-hero proof band.
+
+Customer Favorites pricing must use product-page/source truth. Three approved
+favorites currently expose visible live starting prices, while Classic Arch is
+quote-first and does not expose a visible starting price. Product-page parity
+is the recommended path. A homepage-only Classic Arch `From` price requires
+explicit GL exception approval with the amount and reason recorded.
+
+Planning handoff:
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

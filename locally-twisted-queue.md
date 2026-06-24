@@ -10,6 +10,21 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 homepage July favorites and Pickups & Deliveries plan (2026-06-24):**
+Planning is complete for the coordinated homepage/nav release, but
+implementation has not started. Parent workstream:
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`; decision:
+`decisions/2026-06-24-homepage-july-favorites-nav-plan.md`. Child features:
+realistic Fourth of July hero image, Customer Favorites product row, homepage
+flow reorder, and `Balloons-to-Order` to `Pickups & Deliveries` nav contract
+rename. Hard stop: Classic Arch is quote-first and currently has no visible
+starting price on the live product page, so the recommended path is
+product-page/source parity first. A homepage-only `From` price requires
+explicit GL exception approval with the amount and reason recorded.
+Future implementation must run the homepage/nav/shop/browser capability gate,
+keep the work local until release approval, and verify active customer-facing
+surfaces no longer show `Balloons-to-Order` after the rename.
+
 **P1 live product visibility aftercare (2026-06-23):** Four documented
 retired products are now disabled/hidden on live `locallytwisted.com`:
 `large-garland`, `mothers-day-bouquet`, `large-organic-column`, and

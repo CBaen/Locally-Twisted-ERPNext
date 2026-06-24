@@ -56,6 +56,12 @@ leaving a lone orphan card or a ragged chip row.
   orphan card where the rendered count makes a balanced row possible. If a
   3-up grid would end with one card and the count is even, switch that visible
   grid to 2-up rows.
+- Homepage product merchandising rows must follow the same showroom symmetry
+  principle. Four curated products should be 4-across on desktop and 2x2 on
+  mobile unless GL explicitly accepts cramped phone cards.
+- Product-card price labels must stay in parity with the product page/source.
+  Do not show a `From` price for a quote-first product unless that price is
+  also source-backed and product-page clear.
 
 ## Implementation Pattern
 
@@ -114,3 +120,12 @@ also verified no `.lt-shop__chip` controls on `/shop`, no old
 `.lt-shop__toolbar--categories` button wall on category pages, one 12-link
 desktop category rail, one 12-option mobile category select, and paired Arches
 product rows; transient screenshot folders were not kept as source.
+
+On 2026-06-24, the planned homepage Customer Favorites row added a related
+symmetry rule: 4 curated product cards across on desktop and 2x2 on mobile,
+with `From` prices only when the product-page/source truth supports them.
+Classic Arch is a planned hard stop because the live page is quote-first and
+does not expose a visible starting price. Product-page parity is the
+recommended path; a homepage-only price requires explicit GL exception
+approval with the amount and reason recorded. Planning handoff:
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

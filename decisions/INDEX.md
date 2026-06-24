@@ -8,3 +8,4 @@ packets small, dated, backlink-rich, and source-backed.
 - [2026-05-25 delivery-only line fulfillment](2026-05-25-delivery-only-line-fulfillment.md)
 - [2026-06-23 live product visibility disable](2026-06-23-live-product-visibility-disable.md)
 - [2026-06-23 Stripe promo codes live](2026-06-23-stripe-promo-codes-live.md)
+- [2026-06-24 homepage July favorites and pickups navigation plan](2026-06-24-homepage-july-favorites-nav-plan.md)

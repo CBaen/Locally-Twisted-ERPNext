@@ -8,6 +8,41 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-24 - Homepage July merchandising and Pickups & Deliveries nav must ship as child features
+
+**Decision:** The Fourth of July homepage refresh, Customer Favorites row,
+homepage section reorder, and `Pickups & Deliveries` supermenu rename are one
+coordinated parent release, but they must be planned and verified as separate
+child features.
+
+**Reasoning:** The request touches the homepage hero, product merchandising,
+product-price claims, homepage proof order, desktop nav, mobile drawer, search
+quick links, footer language, verifier expectations, and AI-facing docs. A
+single text/image edit would miss contract surfaces.
+
+**Implementation boundary:** This decision is planning-only. No templates,
+assets, CSS, ERPNext product records, Frappe Cloud state, live cache, DNS,
+Stripe settings, or public routes changed. Future implementation must resolve
+the Classic Arch price hard stop before showing a homepage `From $XX.XX`
+claim for that quote-first product. Product-page/source parity is the
+recommended path; a homepage-only price requires explicit GL exception
+approval with the amount and reason recorded.
+
+**Guard:** Use
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md` before building.
+Customer Favorites prices must come from product-page/source truth. The hero
+image must look like realistic balloon decor, not a cartoon or generic
+patriotic graphic. The nav rename must preserve category discovery and must not
+become a product dump.
+
+**Receipts:** `decisions/2026-06-24-homepage-july-favorites-nav-plan.md`;
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+
+**Decided by:** Guiding Light business direction and Codex technical-lead
+planning on 2026-06-24.
+
+---
+
 ## 2026-06-23 - Retired products require live Item disable plus Website Item hide
 
 **Decision:** The four documented retired products must remain hidden on live

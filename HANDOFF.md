@@ -2,13 +2,34 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-23 (Codex - live product visibility disable closeout)
+**Last updated:** 2026-06-24 (Codex - homepage July favorites/nav planning)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-06-24 - homepage July favorites/nav planning):**
+- Planning is complete; implementation has not started.
+- Parent workstream:
+  `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+- Decision packet:
+  `decisions/2026-06-24-homepage-july-favorites-nav-plan.md`.
+- Planned child features: realistic Fourth of July hero image replacement,
+  Customer Favorites product row, homepage section reorder, and public
+  supermenu rename from `Balloons-to-Order` to `Pickups & Deliveries`.
+- GL confirmed favorite-card price format should be `From $XX.XX`, and the
+  hero image must look like real balloon decor, not cartoon art.
+- Product targets: `birthday-deliveries`, `large-head-missionary`,
+  `classic-arch`, and `bandage-get-well-bouquet-latex-free`.
+- Hard stop: live Classic Arch is quote-first and does not visibly expose a
+  starting price. Product-page/source parity is the recommended path. A
+  homepage-only `From` price requires explicit GL exception approval with the
+  amount and reason recorded.
+- Capability gate passed for planning with homepage, nav, shop symmetry, and
+  browser-verification recipes loaded. No source, ERPNext data, Frappe Cloud,
+  cache, DNS, Stripe, or live behavior changed.
 
 **Current-session delta (2026-06-23 - live product visibility disable):**
 - Active closeout handoff:

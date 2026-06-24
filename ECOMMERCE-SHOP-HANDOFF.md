@@ -1,5 +1,16 @@
 # Ecommerce Shop Handoff
 
+Status addendum as of 2026-06-24: a homepage `Customer Favorites` row is
+planned but not implemented. The approved product targets are Birthday
+Deliveries, Large head Missionary, Classic Arch, and Bandage "GET WELL"
+Bouquet (Latex free). Future favorite-card prices must come from current
+product-page/source truth and display as `From $XX.XX`. Classic Arch is a
+hard stop for implementation because the live product page is quote-first and
+does not expose a visible starting price; do not invent a homepage `From`
+price without product-page parity. A homepage-only price requires explicit GL
+exception approval with the amount and reason recorded. Parent plan:
+`workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
+
 Status as of 2026-05-25 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
