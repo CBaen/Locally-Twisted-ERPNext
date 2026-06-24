@@ -7,13 +7,13 @@ Status: planning complete, implementation not started
 ## Route Record
 
 Mode: plan-brief plus plan-deepen with real multi-agent triad review.
-Decision needed: approve the implementation packet after reviewing the Classic Arch price hard stop and final image direction.
+Decision needed: approve the implementation packet after reviewing the final image direction.
 Scope owner: Locally Twisted public site source and live release lane.
 System/project/runtime classification: single project, public site, client production surface.
 Allowed actions in this slice: create planning, plan-deepen, triad, queue, handoff, capability, lesson, and decision documentation.
 Forbidden actions in this slice: source implementation, ERPNext data mutation, Frappe Cloud deploy, live cache clear, provider changes, payment changes, product visibility changes, and customer communication.
 Evidence bar: current repo files, current live public pages, capability recipes, and user-confirmed business direction.
-Stop condition: stop before implementation if pricing, image approval, live release permission, or product-page parity is unclear.
+Stop condition: stop before implementation if product route/price proof, image approval, or live release permission is unclear.
 
 ## Outcome
 
@@ -34,12 +34,13 @@ Implementation is intentionally separate from this planning slice.
 - Local source stores the Fourth of July first-slide copy and asset paths in `HOME_HERO_SLIDES[0]` in `apps/locally_twisted/locally_twisted/www/home.py`.
 - Local homepage template renders One of a Kind Designs before the client crawl, CTA, and Live Entertainment in `apps/locally_twisted/locally_twisted/www/home.html`.
 - Local navigation labels and verifier expectations still include `Balloons-to-Order`, `All Balloons-to-Order`, and `All Ready-to-Order`.
-- All four requested product URLs return HTTP 200 on live `locallytwisted.com`.
-- Three requested products expose visible starting prices on the live product page:
+- All four current Customer Favorites product URLs return HTTP 200 on live `locallytwisted.com`.
+- All four current Customer Favorites expose visible starting prices on the live product page:
   - Birthday Deliveries: `from $ 90.00`
   - Large head Missionary: `from $ 175.00`
+  - Minion Bouquet: `from $ 35.00`
   - Bandage "GET WELL" Bouquet (Latex free): `from $ 35.00`
-- Classic Arch returns HTTP 200, but the live product page is quote-first and does not expose a visible starting price. It says the design needs a quick quote before checkout.
+- Classic Arch was removed from the planned Customer Favorites row after GL requested Minion Bouquet instead, so the prior Classic Arch price hard stop no longer blocks this plan.
 - Capability gate passed for this public-site planning lane with:
   - `capabilities/INDEX.md`
   - `capabilities/recipes/homepage-launch-proof-contract.md`
@@ -55,7 +56,7 @@ Implementation is intentionally separate from this planning slice.
 - The four Customer Favorites targets are:
   - `https://locallytwisted.com/shop-items/bouquets/birthday-deliveries`
   - `https://locallytwisted.com/shop-items/bouquets/large-head-missionary`
-  - `https://locallytwisted.com/shop-items/arches/classic-arch`
+  - `https://locallytwisted.com/shop-items/bouquets/minion-bouquet`
   - `https://locallytwisted.com/shop-items/bouquets/bandage-get-well-bouquet-latex-free`
 
 ## Scope And Ownership
@@ -92,19 +93,17 @@ Implementation shape:
 - Use four product cards in the approved order:
   1. Birthday Deliveries
   2. Large head Missionary
-  3. Classic Arch
+  3. Minion Bouquet
   4. Bandage "GET WELL" Bouquet (Latex free)
 - Desktop: 4 cards across.
 - Mobile: 2x2 grid. This is the technical recommendation because 4-across on phone widths would make text, images, and tap targets cramped.
-- Cards should use product image, name, short category or product-type label, `From $XX.XX` when product-page parity exists, and a direct link to the product page.
+- Cards should use product image, name, short category or product-type label, `From $XX.XX` from product-page/source truth, and a direct link to the product page.
 - Price source should come from the same product/variant starting-price logic that product pages use, not a separately hand-typed value.
 - If a curated literal is temporarily needed for launch, it must be backed by current product-page/ERPNext evidence and documented as a temporary implementation choice.
 
-Hard stop:
+Guard:
 
-- Classic Arch currently has no visible product-page starting price. Product-page/source parity is the recommended path. Do not show a homepage `From $XX.XX` for Classic Arch until either:
-  - the product page also exposes a verified starting price, or
-  - GL explicitly approves a homepage-only exception with the amount and reason recorded.
+- The current four favorites all have visible live starting prices. If a future favorite is swapped in and lacks a product-page/source-backed starting price, block the homepage `From` price until parity exists or GL explicitly approves an exception with the amount and reason recorded.
 
 ### Child Feature 3: Homepage Flow Reorder
 
@@ -201,9 +200,9 @@ to Locally Twisted public homepage/navigation behavior.
 ### Product Data And Pricing
 
 - Evidence checked: live product route status and live product-page price text.
-- Risks found: Classic Arch is quote-first and currently does not expose a visible starting price, while the user request asks for `From $XX.XX` prices.
-- Plan adjustment: derive favorite-card prices from product-page/ERPNext starting-price truth. Block Classic Arch price display until product-page parity exists or GL explicitly approves a homepage-only exception.
-- Open question or escalation: GL approval is required only if implementation cannot make Classic Arch price/page parity true but still wants a homepage `From` price; the amount and reason must be recorded.
+- Risks found: the original Classic Arch target was quote-first and lacked a visible starting price. GL replaced it with Minion Bouquet, which returns HTTP 200 and exposes `from $ 35.00` on the live product page.
+- Plan adjustment: use Minion Bouquet as the third Customer Favorite and derive favorite-card prices from product-page/ERPNext starting-price truth.
+- Open question or escalation: none for the current four-product row. If a future product lacks product-page/source price parity, block or record an explicit GL exception.
 
 ### Visual And Image Quality
 
@@ -238,6 +237,16 @@ Real multi-agent triad was requested and tool support exists. Three read-only la
 
 The synthesis must be updated with returned findings before implementation starts.
 
+### Post-Triad Product Revision
+
+After the triad returned, GL replaced Classic Arch with Minion Bouquet so the
+Customer Favorites row fits the other three ready-to-order products. Live route
+proof found `https://locallytwisted.com/shop-items/bouquets/minion-bouquet`
+returns HTTP 200 and exposes `from $ 35.00`. The triad's Classic Arch hard
+stop is superseded for this plan, but its broader price-parity guard remains:
+do not show homepage `From` prices that are not backed by product-page/source
+truth.
+
 ### Lens Findings
 
 Design/CRO/customer lens:
@@ -248,7 +257,8 @@ Design/CRO/customer lens:
   sequence. They should sit after One of a Kind Designs unless GL changes the
   flow.
 - Mobile Customer Favorites should be 2x2, not 4-across.
-- Classic Arch needs either an approved starting price or a non-price treatment.
+- The original Classic Arch price concern is resolved by the Minion Bouquet
+  replacement.
 
 Frappe source/test lens:
 
@@ -267,11 +277,9 @@ Frappe source/test lens:
 
 Risk/verification/docs lens:
 
-- Classic Arch is the hard stop. It is quote-first and does not expose a live
-  visible starting price, while the other three products do.
-- Homepage-only Classic Arch pricing is not a normal implementation branch. The
-  safer path is product-page parity first; a homepage-only price requires an
-  explicit exception with the approved amount and reason recorded.
+- The original Classic Arch target was the hard stop because it was quote-first
+  and did not expose a live visible starting price. Minion Bouquet supersedes
+  that target for the current plan.
 - Final hero image review is a brand-quality gate before live publication.
 - Source push, app mirror push, local proof, and live proof are separate states.
 
@@ -285,28 +293,24 @@ Risk/verification/docs lens:
 - Preserve category-discovery behavior while renaming the public menu to
   `Pickups & Deliveries`.
 - Treat realistic hero imagery as required, not cosmetic polish.
-- Treat Classic Arch price parity as the only current business-data blocker.
+- Treat product-page/source price parity as a standing guard. There is no
+  current product-price blocker after the Minion Bouquet swap.
 
 ### Disagreement Or Dissent
 
-The only meaningful dissent is about Classic Arch pricing. The planning
-baseline allowed product-page parity or explicit GL approval. The risk lane
-strengthened this: product-page parity is the recommended default, and
-homepage-only pricing should be treated as an exception, not the normal path.
+The original dissent around Classic Arch pricing is resolved by the GL-approved
+Minion Bouquet replacement. The standing dissent remains process-level: a
+homepage-only `From` price should be treated as an explicit exception, not a
+normal merchandising shortcut.
 
 ### Recommended Path
 
-Resolve Classic Arch before implementation by either:
+Use these four Customer Favorites in order:
 
-1. adding a source-backed starting price that is also clear on the Classic Arch
-   product page, then using the same `From $XX.XX` on the homepage card; or
-2. getting explicit GL approval for a homepage-only `From` price and recording
-   the approved amount; or
-3. changing that one card to a quote-forward treatment, such as `Request a
-   quote`, if GL approves deviating from the all-price row.
-
-Option 1 is the technical recommendation because it keeps the homepage and
-product page honest.
+1. Birthday Deliveries - `From $90.00`
+2. Large head Missionary - `From $175.00`
+3. Minion Bouquet - `From $35.00`
+4. Bandage "GET WELL" Bouquet (Latex free) - `From $35.00`
 
 ### Remaining Risk
 
@@ -321,7 +325,7 @@ product page honest.
 Planning acceptance for this slice:
 
 - Parent plan exists in this workstream.
-- Child features and hard stops are explicit.
+- Child features and guards are explicit.
 - Capability gate is recorded.
 - Queue, handoff, decisions, lessons, and capability docs point future agents here.
 - Real triad findings are integrated before final commit.
@@ -331,7 +335,7 @@ Implementation acceptance for the future build:
 - Homepage first slide uses realistic Fourth of July balloon decor, not a cartoon/illustration.
 - Customer Favorites renders four cards with stable image sizes, professional spacing, working links, and 4-across desktop / 2x2 mobile layout.
 - Favorite prices match product-page/source truth and use `From $XX.XX`.
-- Classic Arch price treatment has product-page parity or explicit GL exception approval with the amount and reason recorded.
+- Current Customer Favorites are Birthday Deliveries, Large head Missionary, Minion Bouquet, and Bandage "GET WELL" Bouquet (Latex free).
 - Relevant homepage order is Reviews, Customer Favorites, Live Entertainment, One of a Kind Designs.
 - Active customer-facing nav/search/mobile/footer surfaces say `Pickups & Deliveries`, not `Balloons-to-Order`.
 - Existing shop category discovery stays category-based, not product-list-based.
@@ -342,7 +346,6 @@ Implementation acceptance for the future build:
 
 - Assumption: mobile Customer Favorites should be 2x2 for readability and professional tap targets.
 - Assumption: derivative labels should use `All Pickups & Deliveries`.
-- Open question: Classic Arch homepage card price cannot safely be finalized until product-page price parity exists or GL explicitly approves a homepage-only exception with the amount and reason recorded.
 - Open question: final hero image should be reviewed by GL before live publication because the rejection was visual-quality based.
 
 ## Next Safe Step
@@ -350,12 +353,9 @@ Implementation acceptance for the future build:
 After this plan is accepted, implement child features in this order:
 
 1. Fourth of July hero image asset replacement.
-2. Customer Favorites data/source/card section, with Classic Arch price hard stop resolved.
+2. Customer Favorites data/source/card section for Birthday Deliveries, Large head Missionary, Minion Bouquet, and Bandage "GET WELL" Bouquet (Latex free).
 3. Homepage flow reorder.
 4. Pickups & Deliveries nav contract rename.
 5. Focused local verification and screenshots.
 6. Documentation closeout.
 7. Separate release path only after explicit live/staging approval.
-
-Before implementation starts, resolve Classic Arch pricing treatment or accept
-that the first implementation pass will stop at that hard stop.

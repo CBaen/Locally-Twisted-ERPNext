@@ -124,8 +124,6 @@ product rows; transient screenshot folders were not kept as source.
 On 2026-06-24, the planned homepage Customer Favorites row added a related
 symmetry rule: 4 curated product cards across on desktop and 2x2 on mobile,
 with `From` prices only when the product-page/source truth supports them.
-Classic Arch is a planned hard stop because the live page is quote-first and
-does not expose a visible starting price. Product-page parity is the
-recommended path; a homepage-only price requires explicit GL exception
-approval with the amount and reason recorded. Planning handoff:
+GL replaced Classic Arch with Minion Bouquet so the current planned row uses
+four products with visible live starting prices. Planning handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

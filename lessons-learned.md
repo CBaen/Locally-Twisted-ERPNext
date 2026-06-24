@@ -9,18 +9,17 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 ## 2026-06-24 - Homepage merchandising cannot outrun product-page truth
 
 The Customer Favorites plan exposed a pricing parity trap before
-implementation. Three requested products display visible starting prices on
-their live product pages, but Classic Arch is quote-first and does not expose a
-visible starting price. A homepage card that says `From $XX.XX` while the
-product page says only `Request a quote` would teach customers the wrong
-contract.
+implementation. The original row included Classic Arch, which is quote-first
+and does not expose a visible starting price. GL replaced it with Minion
+Bouquet so the planned row uses four products with live product-page starting
+prices.
 
 **Counter-move:** product merchandising rows must derive price labels from the
 same source truth the product page uses, or explicitly block before launch.
-For quote-first products, either add product-page parity for the starting price
-or get explicit GL approval for the exception with the amount and reason
-recorded. Do not hand-type a homepage price because the card layout wants
-symmetry. Use
+For quote-first products, either add product-page parity for the starting price,
+replace the product with one that already fits, or get explicit GL approval for
+the exception with the amount and reason recorded. Do not hand-type a homepage
+price because the card layout wants symmetry. Use
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.
 
 ## 2026-06-24 - Seasonal hero approval includes realism, not only correct copy

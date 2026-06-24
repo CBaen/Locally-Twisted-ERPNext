@@ -22,11 +22,10 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - GL confirmed favorite-card price format should be `From $XX.XX`, and the
   hero image must look like real balloon decor, not cartoon art.
 - Product targets: `birthday-deliveries`, `large-head-missionary`,
-  `classic-arch`, and `bandage-get-well-bouquet-latex-free`.
-- Hard stop: live Classic Arch is quote-first and does not visibly expose a
-  starting price. Product-page/source parity is the recommended path. A
-  homepage-only `From` price requires explicit GL exception approval with the
-  amount and reason recorded.
+  `minion-bouquet`, and `bandage-get-well-bouquet-latex-free`.
+- GL replaced Classic Arch with Minion Bouquet so all four planned favorites
+  have live product-page starting prices. Minion Bouquet route proof returned
+  HTTP 200 and `from $ 35.00`.
 - Capability gate passed for planning with homepage, nav, shop symmetry, and
   browser-verification recipes loaded. No source, ERPNext data, Frappe Cloud,
   cache, DNS, Stripe, or live behavior changed.

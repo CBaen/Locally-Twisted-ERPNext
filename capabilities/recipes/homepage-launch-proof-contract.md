@@ -253,11 +253,10 @@ plan adds a Customer Favorites row between Reviews and Live Entertainment, then
 moves Live Entertainment before One of a Kind Designs. The protected homepage
 rule still holds: Reviews remain the first post-hero proof band.
 
-Customer Favorites pricing must use product-page/source truth. Three approved
-favorites currently expose visible live starting prices, while Classic Arch is
-quote-first and does not expose a visible starting price. Product-page parity
-is the recommended path. A homepage-only Classic Arch `From` price requires
-explicit GL exception approval with the amount and reason recorded.
+Customer Favorites pricing must use product-page/source truth. The planned row
+was revised on 2026-06-24 to replace quote-first Classic Arch with Minion
+Bouquet after live proof showed Minion Bouquet returns HTTP 200 and exposes
+`from $ 35.00`. Future swaps must keep the same price-parity guard.
 
 Planning handoff:
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md`.

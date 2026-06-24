@@ -29,7 +29,8 @@ simple text edit.
 ## User Direction Captured
 
 - Use `Pickups & Deliveries` as the customer-facing supermenu label.
-- Add Customer Favorites with the four user-provided products.
+- Add Customer Favorites with the four user-provided products, revised on
+  2026-06-24 to replace Classic Arch with Minion Bouquet.
 - Show prices as `From $XX.XX` because the full product-page configuration
   still owns option/add-on clarity.
 - Replace the weak/cartoony Fourth of July image with realistic balloon decor.
@@ -42,13 +43,17 @@ This decision packet is planning only. It did not change source templates,
 assets, CSS, product records, ERPNext data, Frappe Cloud, cache, DNS, Stripe,
 or live site behavior.
 
-## Hard Stop
+## Product Revision
 
-Classic Arch is currently quote-first on the live product page and does not
-expose a visible starting price. The recommended path is product-page/source
-parity first. Do not show a homepage `From $XX.XX` for Classic Arch unless
-product-page/source parity exists or GL explicitly approves a homepage-only
-exception with the amount and reason recorded.
+Classic Arch was removed from the Customer Favorites plan because it is
+quote-first and does not expose a visible starting price. GL replaced it with
+Minion Bouquet, which returns HTTP 200 on live
+`https://locallytwisted.com/shop-items/bouquets/minion-bouquet` and exposes
+`from $ 35.00`.
+
+The current approved row is Birthday Deliveries, Large head Missionary, Minion
+Bouquet, and Bandage "GET WELL" Bouquet (Latex free). Future swaps must still
+use product-page/source price truth for `From $XX.XX` labels.
 
 ## Receipts
 
@@ -64,5 +69,5 @@ exception with the amount and reason recorded.
 ## Decided By
 
 Guiding Light supplied and confirmed the business direction. Codex technical
-lead split the work into child features, added hard stops, and prepared the
-implementation plan on 2026-06-24.
+lead split the work into child features, added the product-price guard, and
+prepared the implementation plan on 2026-06-24.

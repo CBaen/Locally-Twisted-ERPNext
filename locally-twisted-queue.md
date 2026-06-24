@@ -17,10 +17,10 @@ implementation has not started. Parent workstream:
 `decisions/2026-06-24-homepage-july-favorites-nav-plan.md`. Child features:
 realistic Fourth of July hero image, Customer Favorites product row, homepage
 flow reorder, and `Balloons-to-Order` to `Pickups & Deliveries` nav contract
-rename. Hard stop: Classic Arch is quote-first and currently has no visible
-starting price on the live product page, so the recommended path is
-product-page/source parity first. A homepage-only `From` price requires
-explicit GL exception approval with the amount and reason recorded.
+rename. GL replaced Classic Arch with Minion Bouquet so the four planned
+favorites all have visible live starting prices. Current favorite targets:
+Birthday Deliveries, Large head Missionary, Minion Bouquet, and Bandage
+"GET WELL" Bouquet (Latex free).
 Future implementation must run the homepage/nav/shop/browser capability gate,
 keep the work local until release approval, and verify active customer-facing
 surfaces no longer show `Balloons-to-Order` after the rename.

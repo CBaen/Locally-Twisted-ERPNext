@@ -22,11 +22,10 @@ single text/image edit would miss contract surfaces.
 
 **Implementation boundary:** This decision is planning-only. No templates,
 assets, CSS, ERPNext product records, Frappe Cloud state, live cache, DNS,
-Stripe settings, or public routes changed. Future implementation must resolve
-the Classic Arch price hard stop before showing a homepage `From $XX.XX`
-claim for that quote-first product. Product-page/source parity is the
-recommended path; a homepage-only price requires explicit GL exception
-approval with the amount and reason recorded.
+Stripe settings, or public routes changed. GL revised the Customer Favorites
+row on 2026-06-24 by replacing Classic Arch with Minion Bouquet so the row uses
+four products with visible live starting prices. Minion Bouquet route proof
+returned HTTP 200 and `from $ 35.00`.
 
 **Guard:** Use
 `workstreams/homepage-july-favorites-nav-plan-2026-06-24.md` before building.
