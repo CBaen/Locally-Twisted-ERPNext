@@ -72,7 +72,7 @@
    "label": "Meta Tracking"
   },
   {
-   "description": "Meta Pixel ID. Direct Meta loading is not enabled by default; use GTM or a later approved Meta gate.",
+   "description": "Meta Pixel ID. Direct Meta loading only runs after optional tracking consent and exact approval to configure this field.",
    "fieldname": "meta_pixel_id",
    "fieldtype": "Data",
    "label": "Meta Pixel ID",

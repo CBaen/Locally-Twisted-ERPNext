@@ -4,6 +4,7 @@
   var DEFAULT_GA4_MEASUREMENT_ID = "G-0Z0WY5XQRB";
   var GTAG_SCRIPT_ID = "lt-gtag-measurement";
   var GTM_SCRIPT_ID = "lt-gtm-measurement";
+  var META_PIXEL_SCRIPT_ID = "lt-meta-pixel-measurement";
   var loaded = false;
 
   function readConfig() {
@@ -36,6 +37,10 @@
 
   function gtmContainerId() {
     return cleanId(config.gtm_container_id);
+  }
+
+  function metaPixelId() {
+    return cleanId(config.meta_pixel_id);
   }
 
   function consentAccepted() {
@@ -101,12 +106,47 @@
     return true;
   }
 
+  function initMetaPixelQueue() {
+    if (window.fbq) return;
+
+    var fbq = function () {
+      if (fbq.callMethod) {
+        fbq.callMethod.apply(fbq, arguments);
+        return;
+      }
+      fbq.queue.push(arguments);
+    };
+    if (!window._fbq) {
+      window._fbq = fbq;
+    }
+    fbq.push = fbq;
+    fbq.loaded = true;
+    fbq.version = "2.0";
+    fbq.queue = [];
+    window.fbq = fbq;
+  }
+
+  function loadMetaPixel() {
+    var pixelId = metaPixelId();
+    if (!pixelId) return false;
+
+    initMetaPixelQueue();
+    window.fbq("init", pixelId);
+    window.fbq("track", "PageView");
+    loadExternalScript(
+      META_PIXEL_SCRIPT_ID,
+      "https://connect.facebook.net/en_US/fbevents.js"
+    );
+    return true;
+  }
+
   function loadMarketingMeasurement() {
     if (loaded || !trackingEnabled() || !consentAccepted()) return false;
     loaded = true;
     var loadedGtag = loadGtag();
     var loadedTagManager = loadGTM();
-    return loadedGtag || loadedTagManager;
+    var loadedMetaPixel = loadMetaPixel();
+    return loadedGtag || loadedTagManager || loadedMetaPixel;
   }
 
   function onConsent(event) {
@@ -121,6 +161,7 @@
     ga4MeasurementId: ga4MeasurementId(),
     gtmContainerId: gtmContainerId(),
     googleAdsConversionId: googleAdsConversionId(),
+    metaPixelId: metaPixelId(),
     loadGA4: loadMarketingMeasurement,
     loadMarketingMeasurement: loadMarketingMeasurement,
     isLoaded: function () { return loaded; }

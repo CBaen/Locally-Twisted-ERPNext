@@ -20,6 +20,19 @@ The API inventory can read the ad account's pixels and custom conversions. It
 saw two pixels and zero custom conversions. The last-7-day insights endpoint
 returned zero rows.
 
+On 2026-06-28, read-only API proof found:
+
+- Pixel `1079085392230103`, named `locally twisted`, created 2018-05-05,
+  last fired 2026-05-31. This is the preferred Locally Twisted Pixel candidate.
+- Pixel `149178523772697`, named `Ads Pixel for Shopify Facebook Ad`, created
+  2021-03-28, last fired 2021-07-21. Treat as historical unless GL approves a
+  reason to reuse it.
+- Custom conversions: `0`.
+- Source support for browser Meta Pixel PageView tracking exists in
+  `lt-marketing-measurement.js`, but it is disabled until a Pixel ID is
+  configured in tracking settings, optional tracking consent is accepted, and
+  the approved release path is used.
+
 ## Rules
 
 - Do not install, activate, replace, share, delete, or rename pixels/datasets
@@ -46,6 +59,11 @@ returned zero rows.
 - Conversions API or webhook setup.
 - Offline conversion upload.
 - Any customer-data-based audience or event sync.
+
+Exact approval packet for the current Pixel activation:
+
+> Approve configuring LT Meta Pixel `1079085392230103` for Locally Twisted
+> PageView tracking on the approved site.
 
 ## Revalidation
 

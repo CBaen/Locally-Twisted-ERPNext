@@ -152,3 +152,92 @@ Next safe steps:
    lead-record retrieval.
 3. Use the paid-ads lane for campaign planning: inventory, draft brief,
    approval packet, then only approved live changes.
+
+## 2026-06-28 Meta Pixel Source Support
+
+Source support for direct Meta Pixel loading now exists in
+`lt-marketing-measurement.js`. It remains disabled by default because the
+public tracking config still has a blank `meta_pixel_id` unless a System
+Manager or approved marketing operator configures it.
+
+Guardrails:
+
+- The Pixel ID is not hard-coded in source.
+- The browser loader only runs after
+  `window.LT_COOKIE_CONSENT.hasAcceptedOptional()` returns true.
+- The default site state does not activate Meta Pixel, create custom
+  conversions, send Conversions API events, upload offline events, or change
+  Meta provider state.
+- Recommended Pixel candidate from read-only API inventory is
+  `1079085392230103` (`locally twisted`), because it is owned by business
+  `1327185764080942` and last fired in 2026. The older Shopify-named Pixel
+  `149178523772697` last fired in 2021 and should not be used without a
+  separate reason.
+- Live activation still needs exact GL approval for the Pixel ID, target
+  environment, release path, and post-change Events Manager proof.
+
+Local source proof:
+
+```bash
+python scripts/verify/marketing_measurement_bridge_contract.py
+node --check apps/locally_twisted/locally_twisted/public/js/lt-marketing-measurement.js
+python -m py_compile scripts/verify/marketing_measurement_bridge_contract.py
+```
+
+Activation approval packet:
+
+```text
+Platform: Meta / Locally Twisted website
+Object: Meta Pixel `1079085392230103` (`locally twisted`)
+Current state: Pixel is owned by Business `1327185764080942`, source support
+  exists, public config remains blank by default, and no custom conversions
+  exist.
+Proposed change: configure `LT Marketing Tracking Settings.meta_pixel_id` to
+  `1079085392230103` on the approved target site, release the source support,
+  accept optional tracking consent in a test browser, and verify PageView in
+  Meta Events Manager.
+Business reason: measure Meta ad traffic on the Frappe-owned LT site before
+  drafting or relaunching campaigns.
+Data touched: browser PageView event after optional consent; no lead records,
+  customer lists, offline events, messages, or CAPI payloads in this step.
+Spend/billing impact: none.
+Customer-visible impact: cookie/tracking consent banner already discloses
+  advertising and marketing measurement.
+Rollback: clear `meta_pixel_id`, redeploy/reload, and verify no
+  `connect.facebook.net/en_US/fbevents.js` request after consent.
+Exact approval needed: "Approve configuring LT Meta Pixel `1079085392230103`
+  for Locally Twisted PageView tracking on the approved site."
+```
+
+## 2026-06-28 Paid Ads Starting Point
+
+The API connection gives enough control surface to start supervised paid-ads
+work, but the account should be treated as a cleanup-and-rebuild lane before
+new spend decisions. Read-only inspection found 72 campaigns, 73 ad sets, 85
+ads, 0 custom conversions, and no insight rows for today, yesterday, last 7
+days, last 14 days, last 30 days, or last 90 days.
+
+Status snapshot from read-only inspection:
+
+- Campaigns: 70 active, 2 paused.
+- Ad sets: 58 active, 8 paused, 5 with issues, 2 campaign-paused.
+- Ads: 50 active, 9 paused, 10 disapproved, 8 with issues, 6 ad-set-paused,
+  2 campaign-paused.
+- Sample final URL hosts include `locallytwisted.com`,
+  `www.locallytwisted.com`, and `www.facebook.com`; several examples use older
+  URLs such as `/products/adopt-a-grandma`.
+
+First ads work packets:
+
+1. Current-account cleanup brief: identify active objects, issue/disapproval
+   causes, old final URLs, and anything that should be paused, archived, or
+   rebuilt after GL approval.
+2. Measurement brief: activate the preferred Pixel only after approval, then
+   define event names and any custom conversions before campaign launch.
+3. Campaign brief: draft offer, audience, creative, landing page, budget,
+   tracking, and verification plan before creating or editing campaigns.
+4. Page-token lane: add read-only Page-token proof for Page posts, lead-form
+   metadata, and engagement workflows; do not read messages or export lead
+   records without separate approval.
+
+No live paid-ads mutation is approved by this document.

@@ -81,10 +81,15 @@ def check_ga4_loader_source() -> None:
     assert_true("lt-marketing-tracking-config" in source, "GA4 loader should read field-based tracking config")
     assert_true("gtmContainerId" in source, "measurement loader should support GTM container IDs")
     assert_true("googleAdsConversionId" in source, "measurement loader should support Google Ads conversion IDs")
+    assert_true("metaPixelId" in source, "measurement loader should expose configured Meta Pixel ID")
     assert_true("hasAcceptedOptional" in source, "GA4 loader must honor optional cookie/tracking consent")
     assert_true("lt-cookie-consent" in source, "GA4 loader must react when a visitor accepts tracking")
     assert_true("send_page_view" in source, "GA4 loader should send a page view after consent")
-    assert_true("fbq(" not in source, "measurement loader must not include direct Meta Pixel before Meta is approved")
+    assert_true("window.fbq" in source, "measurement loader should initialize Meta Pixel only after consent")
+    assert_true("connect.facebook.net/en_US/fbevents.js" in source, "measurement loader should load Meta Pixel script")
+    assert_true('fbq("track", "PageView")' in source, "Meta Pixel loader should send PageView after consent")
+    assert_true("1079085392230103" not in source, "Meta Pixel ID must not be hard-coded in source")
+    assert_true("149178523772697" not in source, "legacy Shopify Meta Pixel ID must not be hard-coded in source")
 
 
 def check_contact_submit_integration() -> None:
