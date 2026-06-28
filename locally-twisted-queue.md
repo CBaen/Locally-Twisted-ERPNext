@@ -10,6 +10,22 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 Meta/Facebook/Instagram operations aftercare (2026-06-28):** The Meta app
+and system-user API path are now working for supervised LT operations.
+Handoff: `workstreams/meta-ads-connection-2026-06-26.md`; decision:
+`decisions/2026-06-28-meta-operations-supervised-access.md`; capability family:
+`capabilities/recipes/meta-operations/INDEX.md`; verifier:
+`scripts/verify/meta_operations_inventory.py`; manifest bundle:
+`lt-meta-operations-readonly-inventory`. Read-only API proof sees Business
+`1327185764080942`, ad account `act_27813262`, Page `110889248970340`, 72
+campaigns, 73 ad sets, 85 ads, 2 pixels, 2 system users, 0 custom conversions,
+and 0 last-7-day insight rows. Next safe step is the Page Access Token lane
+for Page post metadata, Page/IG engagement, and lead-form metadata, followed by
+a read-only Page-token verifier before any publishing, messaging, or lead
+record access. Do not change ENB access, billing, spend, campaigns, ads, posts,
+messages, leads, pixels, datasets, customer data, or partner/access state
+without exact current GL approval for that object and action.
+
 **P1 live homepage/Birthday Deliveries media aftercare (2026-06-24):** The
 homepage hero follow-up and Birthday Deliveries main-image repair are live on
 `https://locallytwisted.com/`. Current root proof returns `x-page-name: home`
@@ -104,7 +120,11 @@ External Marketing Builder` lane; and the actual branded reset email was sent to
 `marketing@exploringnotboring.com` with Email Queue `e4aqh31606` `Sent`. Do not
 mutate ad spend, budgets, billing, conversion actions, Google Ads/Meta access,
 customer-data exports, ENB access, production ERPNext data, or send another
-reset email without explicit approval.
+reset email without explicit approval. 2026-06-28 update: Meta API inventory is
+no longer blocked by password recovery for the ads/system-user lane; see the
+Meta operations aftercare item above. Page tokens, lead routing,
+customer-message handling, billing ownership, and ENB/HighLevel dependency
+mapping remain separate approval-gated lanes.
 
 **P0 owner staging review and change intake (2026-05-25):** Active handoff is
 `workstreams/frappe-cloud-staging-owner-review-2026-05-24.md`, with checkout
@@ -180,15 +200,19 @@ LT Gmail/Drive identifies Google Ads account `Locally Twisted` / customer ID
 `124-663-1239`, ENB admin-user evidence for `tosh@exploringnotboring.com`, and
 current policy issue on campaign `22063769748`
 (`ENB_Sales_Search_Custom Balloon Arches + Delivery - $5/day | 12.27.24`) for
-HTTP `404` destination failure. Meta evidence is not dashboard-complete: there
-is Facebook Business Manager email evidence and ENB/HighLevel
-`Facebook Painting Leads` evidence, but no verified Meta ad account ID,
-campaign export, pixel/dataset, lead-form, partner, or billing inventory yet.
+HTTP `404` destination failure. Meta API evidence is now partially complete as
+of 2026-06-28: app `Locally Twisted API` can read Business
+`1327185764080942`, ad account `act_27813262`, Page `110889248970340`, 72
+campaigns, 73 ad sets, 85 ads, 2 pixels, 2 system users, and 0 custom
+conversions. It is not dashboard-complete for people/partners/ENB access,
+billing/payment ownership, Page-token post/lead endpoints, customer messages,
+or HighLevel lead-routing dependencies.
 2026-06-10 launch update: GL reports Google-side tools are logged in for the
-reindex/ads/analytics push, but Meta Business Manager is not available because
-the Facebook/Meta password still needs recovery. Keep Meta Business inventory
-queued and blocked until credential recovery; do not search saved password
-stores or treat old Gmail/Drive evidence as dashboard proof. Live crawl
+reindex/ads/analytics push. The older Meta Business password blocker is
+superseded for the 2026-06-28 system-user API inventory lane only; do not treat
+that as Page-token, billing, partner/people, messaging, lead-record, or
+dashboard proof. Do not search saved password stores or treat old Gmail/Drive
+evidence as dashboard proof. Live crawl
 readiness is green: production robots/sitemap respond on `locallytwisted.com`,
 `www` redirects to the canonical host, live SEO contract passed 13/13, live
 search contract passed 4/4, and the sitemap currently lists 26 canonical public
@@ -197,12 +221,15 @@ from the logged-in dashboard; sitemap submission completed successfully on
 2026-06-10. Google Ads/Analytics inventory can proceed, but
 live campaign spend, budget, conversion, tag, billing, or access mutations still
 need explicit action approval.
-Next safe step is authenticated provider-dashboard inventory using
-`capabilities/recipes/ad-account-takeover-provider-control.md`; do not remove
-ENB/agency access, billing, pixels/tags, lead forms, tracking phone numbers, or
-manager links until dashboard exports and HighLevel/lead-routing dependencies
-are captured. No live-site deploy, ad mutation, billing mutation, or access
-mutation was performed.
+Next safe steps are: use `capabilities/recipes/meta-operations/INDEX.md` for
+the supervised Meta operating lanes, complete Page Access Token setup with a
+read-only verifier, and still run authenticated provider-dashboard inventory
+using `capabilities/recipes/ad-account-takeover-provider-control.md` for
+people/partners/billing/ENB dependency proof. Do not remove ENB/agency access,
+billing, pixels/tags, lead forms, tracking phone numbers, or manager links
+until dashboard exports and HighLevel/lead-routing dependencies are captured.
+No live-site deploy, ad mutation, billing mutation, or access mutation was
+performed.
 
 
 **Ecommerce launch execution posture (2026-05-11 GL/Leader correction):** The

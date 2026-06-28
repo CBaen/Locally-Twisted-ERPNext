@@ -1,7 +1,7 @@
 {
   "schema_version": "verifier-manifest/v1",
   "project": "Locally Twisted",
-  "updated": "2026-05-29",
+  "updated": "2026-06-28",
   "run_policy": "manual_only",
   "policy": {
     "purpose": "Classify the main LT verifier bundles without running them automatically.",
@@ -193,6 +193,42 @@
         "local Kubuntu runtime preconditions are present for further verification"
       ],
       "what_it_does_not_prove": "It does not prove layout quality, form persistence, checkout behavior, provider readiness, or live launch approval."
+    },
+    {
+      "id": "lt-meta-operations-readonly-inventory",
+      "tier": "tier_4_live_or_external",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python scripts/verify/meta_operations_inventory.py",
+      "cwd": ".",
+      "scope": "read-only Meta Business, ad account, Page identity, campaigns, ad sets, ads, pixels, system users, insights endpoint, and Page-token lane blockers",
+      "environment": "live Meta Graph API using local uncommitted token from .env or shell environment",
+      "mutation": "none; GET-only API calls",
+      "approval_required": "yes, because this touches a live external social/ad provider account even when read-only",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/meta-ads-connection-2026-06-26.md",
+      "capability_refs": [
+        "capabilities/recipes/meta-operations/INDEX.md",
+        "capabilities/recipes/meta-operations/access-governance.md",
+        "capabilities/recipes/meta-operations/ads-operations.md",
+        "capabilities/recipes/ad-account-takeover-provider-control.md"
+      ],
+      "risk_triggers": [
+        "running against a different business or ad account",
+        "requesting lead records",
+        "reading customer messages",
+        "adding write or POST/DELETE calls",
+        "printing or committing tokens",
+        "changing ENB access",
+        "changing campaigns, spend, billing, pixels, datasets, posts, or Page settings"
+      ],
+      "proves": [
+        "the local token can perform the named read-only Meta inventory checks at the time it runs",
+        "required ad-account inventory access is present",
+        "Page post and lead-form lanes still need Page-token handling when blocked"
+      ],
+      "what_it_does_not_prove": "It does not approve or perform live changes, prove billing ownership, export leads, read messages, publish posts, create campaigns, change spend, alter ENB access, or prove future token validity."
     }
   ]
 }

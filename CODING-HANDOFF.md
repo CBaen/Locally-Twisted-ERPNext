@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Meta/Facebook/Instagram operations closeout as of 2026-06-28: GL explicitly
+approved broad supervised LT operating access for Meta surfaces, including
+ads, posting, customer replies, leads, and measurement, with GL remaining the
+human approver for live actions. The app `Locally Twisted API` app ID
+`1924409031609353` has a valid `SYSTEM_USER` token stored outside Git in
+`.env`; do not print it, commit it, or copy it into docs. Read-only API proof
+via `python scripts/verify/meta_operations_inventory.py` sees Business
+`1327185764080942` / `Jeffery Kimber`, ad account `act_27813262` / `27813262`,
+Page `110889248970340`, 72 campaigns, 73 ad sets, 85 ads, 2 pixels, 2 system
+users, 0 custom conversions, and 0 last-7-day insight rows. Page post and
+lead-form endpoints still require a separate Page Access Token lane; that is
+not an ads inventory blocker. No ENB access, campaign, spend, billing, post,
+message, lead, pixel, dataset, customer data, staging, live, or provider state
+was changed. Current receipts:
+`workstreams/meta-ads-connection-2026-06-26.md`;
+`capabilities/recipes/meta-operations/INDEX.md`;
+`decisions/2026-06-28-meta-operations-supervised-access.md`.
+
 Live homepage and Birthday Deliveries media repair closeout as of 2026-06-24:
 source commit `92db004 Repair homepage route and birthday deliveries media` is
 pushed to `main`. The live root now returns `200` with `x-page-name: home`,

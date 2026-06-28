@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-28 - Broad Meta access needs operating lanes, not access anxiety
+
+The Meta API setup exposed a framing failure. GL intentionally granted broad
+Facebook/Instagram access because BBC/LT is expected to operate ads, posts,
+customer replies, leads, reporting, and measurement. Treating broad access as
+inherently suspicious or saying "still blocked" after a Page-token-only failure
+misrepresents the business need.
+
+**Counter-move:** separate breadth from supervision. Broad access is acceptable
+when the owner wants us to operate the surface; live writes still need exact
+approval by lane. Use `capabilities/recipes/meta-operations/INDEX.md`.
+System-user ads access can prove ad account, campaigns, ad sets, ads, pixels,
+and insights. Page posts, lead forms, and messaging need the Page-token /
+customer-data lanes. Never change ENB access, spend, billing, campaigns, posts,
+messages, leads, pixels, datasets, or customer data because a token is broad.
+
 ## 2026-06-24 - Product gallery deletion is not primary media repair
 
 The Birthday Deliveries repair proved that deleting or cleaning a visible

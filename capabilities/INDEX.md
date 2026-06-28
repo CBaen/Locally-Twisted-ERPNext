@@ -87,6 +87,7 @@ Workflows. Multi-step. Clear start and finish.
 
 - Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
 - [ad-account-takeover-provider-control](recipes/ad-account-takeover-provider-control.md) - take control of Google Ads and Meta/Facebook/Instagram accounts from authenticated provider dashboards, keeping Gmail/Drive/report evidence as support only.
+- [meta-operations](recipes/meta-operations/INDEX.md) - supervised Facebook/Instagram operating framework for broad LT Meta ownership: ads, organic posts, messaging, leads, measurement, governance, and approval evidence.
 - [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.
 - [codex-browser-verification-surface](recipes/codex-browser-verification-surface.md) - choose between public web lookup, silent Playwright render proof, LT route-contract verifiers, and headed browser checks without mixing evidence types.
 - [btfp-live-service-page-contract](recipes/btfp-live-service-page-contract.md) - keep the Twisting & Face Painting route, shared inquiry form, and per-artist pricing calculator aligned with the approved business lane.
