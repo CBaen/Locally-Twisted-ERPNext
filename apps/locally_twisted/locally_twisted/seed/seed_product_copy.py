@@ -178,8 +178,8 @@ COPY = {
         "details": "<ul><li>One full-span Halloween arch</li><li>Standard palette is orange, black, purple — swap or add colors as you like</li><li>Indoor and outdoor capable</li><li>Setup and teardown included</li></ul>",
     },
     "WEB-ITM-0039": {  # Large Head Missionary — Bouquets
-        "brand": "<p>A bouquet for the day someone leaves on a mission — a foil head with the colors and details that match where they're going. A send-off they'll see in every picture.</p>",
-        "details": "<ul><li>Hand-tied missionary send-off bouquet with a large foil head topper</li><li>Customize the palette and accents to match the mission</li><li>Pickup or local delivery available through checkout</li></ul>",
+        "brand": "<p>A larger-than-life missionary balloon gift for the moments everyone photographs: the mission calling, the SLC airport return, the welcome-home porch, the open house, or the farewell party before they go.</p>",
+        "details": "<ul><li>Personalized large-head missionary balloon gift</li><li>Built for mission call celebrations, homecomings, SLC airport pickups, open houses, and farewell events</li><li>Choose Elder or Sister, skin tone, hair color, and accents</li><li>Pickup or local delivery available through checkout on this product page</li></ul>",
     },
     "WEB-ITM-0040": {  # Premium Organic Garland — Garlands
         "brand": "<p>Balloons up to 24 inches — bolder, more dramatic. The scale creates depth and dimension that a standard garland can't.</p>",
