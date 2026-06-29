@@ -98,6 +98,8 @@ website_route_rules = [
      "to_route": "event_playground"},
     {"from_route": "/balloon-twisting-and-face-painting",
      "to_route": "balloon_twisting_and_face_painting"},
+    {"from_route": "/missionary-balloon-gift",
+     "to_route": "missionary_balloon_gift"},
     {"from_route": "/refund-policy",
      "to_route": "refund_policy"},
     {"from_route": "/terms-of-service",

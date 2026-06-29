@@ -195,6 +195,38 @@
       "what_it_does_not_prove": "It does not prove layout quality, form persistence, checkout behavior, provider readiness, or live launch approval."
     },
     {
+      "id": "lt-meta-bouquet-ad-landing-static",
+      "tier": "tier_0_static",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "npm run test:meta-bouquet-ad-landing",
+      "cwd": ".",
+      "scope": "source-only contract for the two Locally Twisted Meta bouquet ad landing pages, final URLs, UTM shape, route wiring, SEO wiring, layout-helper registration, and no direct ad-platform event sends in the shared template",
+      "environment": "local source files only",
+      "mutation": "none",
+      "approval_required": "no, local read-only source check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "terminal output or the active Meta bouquet ad workstream",
+      "capability_refs": [
+        "capabilities/recipes/meta-operations/ads-operations.md",
+        "capabilities/recipes/meta-operations/measurement-and-assets.md",
+        "capabilities/recipes/frappe-public-container-contract.md"
+      ],
+      "risk_triggers": [
+        "deploying the routes",
+        "running browser tests against staging or live",
+        "creating campaigns, ad sets, ads, budgets, audiences, custom conversions, pixels, or datasets",
+        "changing tracking events beyond the approved PageView lane"
+      ],
+      "proves": [
+        "the two ad landing-page source records expose stable Meta UTM final URLs",
+        "the dashed Frappe routes, SEO maps, shared template, and layout-helper route list are wired",
+        "the shared landing template does not directly fire Meta, Google, or GTM events"
+      ],
+      "what_it_does_not_prove": "It does not prove rendered browser layout, Frappe Cloud deployment, live route availability, Meta campaign setup, ad delivery, conversion tracking beyond the existing PageView bridge, or sales impact."
+    },
+    {
       "id": "lt-meta-operations-readonly-inventory",
       "tier": "tier_4_live_or_external",
       "graduation_stage": "verifier_backed",
@@ -229,6 +261,37 @@
         "Page post and lead-form lanes still need Page-token handling when blocked"
       ],
       "what_it_does_not_prove": "It does not approve or perform live changes, prove billing ownership, export leads, read messages, publish posts, create campaigns, change spend, alter ENB access, or prove future token validity."
+    },
+    {
+      "id": "lt-meta-targeting-readonly-probe",
+      "tier": "tier_4_live_or_external",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python scripts/verify/meta_targeting_probe.py",
+      "cwd": ".",
+      "scope": "read-only Meta targeting search for missionary-ad planning terms and non-sensitive product/event alternatives",
+      "environment": "live Meta Graph API using local uncommitted token from .env or shell environment",
+      "mutation": "none; GET-only API calls",
+      "approval_required": "yes, because this touches a live external social/ad provider account even when read-only",
+      "requires_explicit_approval": true,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/meta-bouquet-ad-test-2026-06-28.md",
+      "capability_refs": [
+        "capabilities/recipes/meta-operations/ads-operations.md",
+        "capabilities/recipes/meta-operations/approval-and-evidence.md"
+      ],
+      "risk_triggers": [
+        "running against a different business or ad account",
+        "printing or committing tokens",
+        "adding write or POST/DELETE calls",
+        "creating campaigns, ad sets, ads, budgets, audiences, custom audiences, or lookalikes",
+        "using returned sensitive terms without policy review and exact approval"
+      ],
+      "proves": [
+        "the current token can run the named targeting-search queries at the time it runs",
+        "the returned targeting terms for the missionary ad idea are recorded without mutating Meta objects"
+      ],
+      "what_it_does_not_prove": "It does not approve targeting use, prove Ads Manager UI setup, create audiences, launch ads, or prove future targeting availability."
     }
   ]
 }

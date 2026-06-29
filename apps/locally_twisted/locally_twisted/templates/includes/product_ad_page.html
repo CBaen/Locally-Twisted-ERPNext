@@ -1,0 +1,130 @@
+{% set page = product_ad_page %}
+
+<style>{{ page_css }}</style>
+
+<div class="lt-product-ad-page {{ page.root_class }}" data-lt-ad-landing="{{ page.slug }}" data-lt-product-item="{{ page.item_code }}">
+    <section class="lt-ad-hero lt-fullbleed" aria-labelledby="{{ page.slug }}-title">
+        <div class="lt-ad-hero__inner">
+            <div class="lt-ad-hero__content">
+                <p class="lt-ad-eyebrow">{{ page.eyebrow }}</p>
+                <h1 id="{{ page.slug }}-title">{{ page.title }}</h1>
+                <p class="lt-ad-hero__lede">{{ page.lede }}</p>
+                <div class="lt-ad-actions">
+                    <a class="lt-ad-button lt-ad-button--primary" data-lt-ad-primary-cta data-lt-preserve-attribution href="{{ page.product_url }}">{{ page.primary_label }}</a>
+                    <a class="lt-ad-button lt-ad-button--secondary" data-lt-preserve-attribution href="{{ page.contact_url }}">{{ page.secondary_label }}</a>
+                </div>
+            </div>
+            <figure class="lt-ad-hero__media">
+                <img src="{{ page.hero_image }}" alt="{{ page.hero_alt }}">
+                <figcaption>{{ page.hero_caption }}</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section class="lt-ad-proof lt-fullbleed" aria-label="{{ page.eyebrow }} quick facts">
+        <div class="lt-ad-proof__inner">
+            {% for label, text in page.proof %}
+            <div class="lt-ad-proof__item">
+                <span class="lt-ad-proof__label">{{ label }}</span>
+                <span class="lt-ad-proof__text">{{ text }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="lt-ad-section lt-ad-section--warm" aria-labelledby="{{ page.slug }}-use-title">
+        <div class="lt-ad-section__inner">
+            <div class="lt-ad-section__heading">
+                <p class="lt-ad-kicker">Use cases</p>
+                <h2 id="{{ page.slug }}-use-title">{{ page.use_heading }}</h2>
+                <p class="lt-ad-section__lede">{{ page.use_lede }}</p>
+            </div>
+            <div class="lt-ad-grid">
+                {% for item in page.use_cases %}
+                <article class="lt-ad-card">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="lt-ad-gallery lt-fullbleed" aria-labelledby="{{ page.slug }}-gallery-title">
+        <div class="lt-ad-gallery__inner">
+            <div class="lt-ad-gallery__heading">
+                <p class="lt-ad-kicker">Product look</p>
+                <h2 id="{{ page.slug }}-gallery-title">{{ page.gallery_heading }}</h2>
+                <p class="lt-ad-gallery__lede">{{ page.gallery_lede }}</p>
+            </div>
+            <div class="lt-ad-gallery__grid">
+                {% for item in page.gallery %}
+                <figure class="lt-ad-gallery__item{% if item.wide %} lt-ad-gallery__item--wide{% endif %}">
+                    <img src="{{ item.image }}" alt="{{ item.alt }}" loading="lazy">
+                </figure>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="lt-ad-section lt-ad-section--white" aria-labelledby="{{ page.slug }}-steps-title">
+        <div class="lt-ad-section__inner">
+            <div class="lt-ad-section__heading">
+                <p class="lt-ad-kicker">Order path</p>
+                <h2 id="{{ page.slug }}-steps-title">{{ page.steps_heading }}</h2>
+            </div>
+            <div class="lt-ad-step-grid">
+                {% for item in page.steps %}
+                <article class="lt-ad-step">
+                    <span class="lt-ad-step__number">Step {{ loop.index }}</span>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="lt-ad-cta lt-fullbleed" aria-labelledby="{{ page.slug }}-cta-title">
+        <div class="lt-ad-cta__inner">
+            <h2 id="{{ page.slug }}-cta-title">{{ page.cta_title }}</h2>
+            <p>{{ page.cta_body }}</p>
+            <div class="lt-ad-actions">
+                <a class="lt-ad-button lt-ad-button--primary" data-lt-ad-primary-cta data-lt-preserve-attribution href="{{ page.product_url }}">{{ page.primary_label }}</a>
+                <a class="lt-ad-button lt-ad-button--secondary" data-lt-preserve-attribution href="{{ page.contact_url }}">{{ page.secondary_label }}</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var allowed = [
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_term",
+    "utm_content",
+    "fbclid"
+  ];
+  var source = new URLSearchParams(window.location.search || "");
+  var carried = new URLSearchParams();
+  allowed.forEach(function (key) {
+    var value = source.get(key);
+    if (value) carried.set(key, value);
+  });
+  if (!carried.toString()) return;
+  document.querySelectorAll("[data-lt-preserve-attribution]").forEach(function (link) {
+    try {
+      var url = new URL(link.getAttribute("href"), window.location.origin);
+      allowed.forEach(function (key) {
+        if (carried.has(key) && !url.searchParams.has(key)) {
+          url.searchParams.set(key, carried.get(key));
+        }
+      });
+      link.setAttribute("href", url.pathname + "?" + url.searchParams.toString() + url.hash);
+    } catch (error) {}
+  });
+})();
+</script>

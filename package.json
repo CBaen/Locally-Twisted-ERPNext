@@ -4,6 +4,8 @@
   "scripts": {
     "test:verifier-cli": "python scripts/verify/verifier_cli_contract.py",
     "test:source-label-gate": "python scripts/verify/forbidden_source_label_gate.py",
+    "test:meta-bouquet-ad-landing": "python scripts/verify/meta_bouquet_ad_landing_pages.py",
+    "test:meta-targeting-probe": "python scripts/verify/meta_targeting_probe.py",
     "test:a11y": "node scripts/verify/a11y_audit.js",
     "test:a11y-manual": "node scripts/verify/manual_a11y_probe.js",
     "test:nav-ia": "python scripts/verify/nav_ia.py",
