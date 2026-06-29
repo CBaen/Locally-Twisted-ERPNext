@@ -2,6 +2,7 @@
 """Verify the LT missionary Meta ad landing-page source contract."""
 from __future__ import annotations
 
+import argparse
 import importlib
 import sys
 from pathlib import Path
@@ -145,6 +146,9 @@ def check_stale_checkout_pause_copy() -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args()
+
     checks = [
         check_page_data,
         check_missionary_product_source_copy,

@@ -25,7 +25,7 @@ Submit flow:
 
 Loud-failure compliance (per project CLAUDE.md + global loud-failure rule):
   - User: visible error banner with retry; never blank page on failure
-  - Developer: frappe.log_error on every uncaught exception with payload
+  - Developer: frappe.log_error on every uncaught exception with sanitized context
   - Monitor: scripts/verify/smoke_forms.py covers /contact on every deploy
 """
 import copy
@@ -33,6 +33,7 @@ import hashlib
 import hmac
 import json
 import time
+from urllib.parse import urlsplit
 
 import frappe
 from frappe import _
@@ -351,22 +352,22 @@ def submit_book_inquiry():
     try:
         lead = _insert_lead_with_retry(lead_doc, defer_customer_ack=True, customer_email=email)
     except Exception as e:
-        # Loud-failure: log dev-channel detail before re-raising so the
+        # Loud-failure: log dev-channel context before re-raising so the
         # framework error handler surfaces the user-facing error banner.
+        # Do not write raw inquiry values into Error Log.
         try:
-            payload = json.dumps(
-                {k: v for k, v in (frappe.form_dict or {}).items() if k != "cmd"},
+            safe_context = json.dumps(
+                _safe_lead_creation_failure_context(frappe.form_dict),
                 default=str,
+                sort_keys=True,
             )[:2000]
         except Exception:
-            payload = "<payload serialization failed>"
+            safe_context = "<safe context serialization failed>"
         frappe.log_error(
             title="/book Lead creation failed",
             message=(
                 f"{type(e).__name__}: {e}\n"
-                f"form_url: {getattr(getattr(frappe.local, 'request', None), 'url', 'unknown')}\n"
-                f"remote_ip: {getattr(frappe.local, 'request_ip', 'unknown')}\n"
-                f"payload: {payload}"
+                f"safe_context: {safe_context}"
             ),
         )
         raise
@@ -480,6 +481,74 @@ def _validate_required_email(email):
             frappe.ValidationError,
         )
     return validated
+
+
+def _safe_lead_creation_failure_context(fd):
+    """Return Lead-creation failure evidence without raw customer PII."""
+    fd = fd or {}
+    excluded_fields = {
+        "cmd",
+        INQUIRY_SPAM_TOKEN_FIELD,
+        INQUIRY_HONEYPOT_FIELD,
+        marketing_measurement.ATTRIBUTION_FORM_FIELD,
+    }
+    field_names = sorted(str(key) for key in fd if str(key) not in excluded_fields)
+    required_fields = (
+        "contact_name",
+        "email_from",
+        "phone",
+        "preferred_contact_method",
+        "x_event_date",
+        "x_event_location",
+    )
+    selected_services = [
+        service for service in _parse_multivalue(fd.get("x_services"))
+        if service in SERVICE_VALUES
+    ]
+    selected_package_items = [
+        item for item in _parse_multivalue(fd.get("x_package_items"))
+        if item in PACKAGE_ITEM_OPTIONS
+    ]
+    occasion = (fd.get("x_occasion_type") or "").strip()
+    if occasion not in dict(OCCASION_OPTIONS):
+        occasion = ""
+    requested_item_code = (fd.get("lt_requested_item_code") or "").strip()
+    return {
+        "schema": "lt_safe_inquiry_failure_context_v1",
+        "request_path": _safe_request_path(),
+        "present_fields": field_names,
+        "required_field_present": {
+            field: bool(str(fd.get(field) or "").strip())
+            for field in required_fields
+        },
+        "selected_services": selected_services,
+        "selected_package_items": selected_package_items,
+        "occasion": occasion,
+        "preferred_contact_method": _normalize_preferred_contact_method(
+            fd.get("preferred_contact_method")
+        ),
+        "requested_item_code": requested_item_code,
+        "has_product_quote_payload": bool((fd.get("lt_product_quote_payload") or "").strip()),
+        "uploaded_file_count": _safe_uploaded_file_count("ufile"),
+    }
+
+
+def _safe_request_path():
+    request = getattr(getattr(frappe, "local", None), "request", None) or getattr(frappe, "request", None)
+    path = getattr(request, "path", None)
+    if path:
+        return path
+    url = getattr(request, "url", "") or ""
+    if url:
+        return urlsplit(str(url)).path or "/"
+    return "unknown"
+
+
+def _safe_uploaded_file_count(field_name):
+    try:
+        return len(_files_from_request(field_name))
+    except Exception:
+        return "unknown"
 
 
 def _normalize_preferred_contact_method(value):
