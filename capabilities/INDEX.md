@@ -197,6 +197,7 @@ pattern that feels familiar.
 - [stale-provider-surface-poison](failures/stale-provider-surface-poison.md) - prevents stale Frappe Cloud benches, staging labels, app mirrors, temp clones, and old runbook blockers from being treated as current truth or deleted by label.
 - [public-header-contrast-safe-area-regression](failures/public-header-contrast-safe-area-regression.md) - prevents deep-navy header banner color, hover/focus contrast, and mobile safe-area side-order regressions.
 - [public-form-stale-email-queue-idempotency](failures/public-form-stale-email-queue-idempotency.md) - prevents old Lead-reference Email Queue or Communication rows from suppressing current public-form confirmations.
+- [public-form-raw-payload-log-pii-drift](failures/public-form-raw-payload-log-pii-drift.md) - prevents public inquiry failure paths from logging raw customer form submissions into Frappe Error Log before paid traffic.
 - [public-form-repeat-email-lead-conflict](failures/public-form-repeat-email-lead-conflict.md) - prevents ERPNext Email Address uniqueness from turning legitimate repeat same-email public inquiries into 409 failures.
 - [public-form-photo-storage-owner-attachment-gap](failures/public-form-photo-storage-owner-attachment-gap.md) - prevents private Lead File uploads from being mistaken for CRM photo storage or owner Email Queue attachment delivery.
 - [playwright-in-file-parallel-fixture-race](failures/playwright-in-file-parallel-fixture-race.md) - keeps LT Playwright specs serial by default unless backend fixture isolation is proven.
