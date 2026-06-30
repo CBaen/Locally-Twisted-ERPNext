@@ -106,7 +106,7 @@ This phase does not fix or prove:
 Continue Phase 1 source authority controls:
 
 - make runtime Product Setup lookup brand-aware before cross-brand same-slug active setups are allowed;
-- add owner-visible blocker reporting using the same blocker categories;
+- add the then-missing Desk blocker reporting using the same blocker categories;
 - start variant-axis classification on Birthday Deliveries before any variant-collapse or price repair write.
 
 Completed follow-up:

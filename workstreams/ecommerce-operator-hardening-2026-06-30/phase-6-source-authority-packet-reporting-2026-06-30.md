@@ -90,7 +90,7 @@ This phase does not fix or prove:
 ## Next Safe Work
 
 - Make runtime Product Setup lookup brand-aware before cross-brand same-slug active setups are allowed.
-- Add owner-visible blocker reporting using the same blocker categories.
+- Add the then-missing Desk blocker reporting using the same blocker categories.
 - Start variant-axis classification on Birthday Deliveries before any variant-collapse or price repair write.
 - Build row-level rollback packet capture before any repair mutation.
 

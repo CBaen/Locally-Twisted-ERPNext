@@ -139,6 +139,36 @@
   planning, starting with Birthday Deliveries, plus row-level rollback target
   capture before any catalog mutation. Do not deploy, mutate live ERPNext
   records, clear cache, or touch provider/payment/DNS/customer-message paths.
+- Variant-axis classification continuation verification completed:
+  - Intent/risk witness `019f1868-6a43-7df1-b3f2-b43c677d1ed3` confirmed
+    Phase 9 must remain source-only planning evidence, Birthday Deliveries must
+    stay blocked for mutation, and collapse plans must preserve cart/order/
+    document/payment identity before any future write.
+  - Technical witness `019f1868-78e8-7bc1-9bb4-6e9b24731379` identified the
+    existing authority packet, projection preview, runtime schema, apply-plan,
+    validation, and source-era axis projection code as the right support
+    surfaces. It also flagged that `Add Bouquet` should not remain SKU-defining
+    by default merely because it changes price; it needs a clear add-on/runtime
+    pricing decision before mutation.
+  - Implemented `lt_product_setup_variant_axis_classification_report.py` and
+    `product_setup_variant_axis_classification_contract.py`.
+  - Saved Birthday Deliveries artifact result: current 2,430 variants / 2,430
+    Item Prices; candidate no-write model has 3 SKU variants from `Delivery
+    Size`, `Delivery themes` as configuration payload, and `Add Foil Number` /
+    `Add Bouquet` as paid add-on candidates.
+  - The report intentionally exits nonzero with
+    `current_sku_axes_need_reclassification` and
+    `variant_explosion_requires_no_write_plan`.
+  - `python -m py_compile scripts/dev/lt_product_setup_variant_axis_classification_report.py scripts/verify/product_setup_variant_axis_classification_contract.py`
+  - `python scripts/verify/product_setup_variant_axis_classification_contract.py`
+    passed 2 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 9 variant-axis classification is complete
+  locally. Next safe slice is Birthday Deliveries dependency/rollback target
+  capture and no-write replacement model design. Do not deploy, mutate live
+  ERPNext records, clear cache, touch provider/payment/DNS/customer-message
+  paths, or disable/delete/rename/collapse current variants from Phase 9 output
+  alone.
 
 ## Route Record
 

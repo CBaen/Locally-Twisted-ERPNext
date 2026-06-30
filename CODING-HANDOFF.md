@@ -86,11 +86,23 @@ brand/state other than the Product Setup's source-declared brand, or disagrees
 on target Item/Website Item identity. Drafts and new preview plans with no
 existing Website Item are not blocked by this guard. Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`.
-Next safe action is starting variant-axis classification/collapse planning
-with Birthday Deliveries, capturing row-level rollback targets, and designing
-publish/apply before any repair mutation. Do not hand-patch only this product,
-treat a defaulted `operating_brand` as proved live brand lane, or weaken the
-owner catalog guard.
+Phase 9 added offline variant-axis classification tooling and ran it against
+the saved Birthday Deliveries artifact. Current Birthday Deliveries shape is
+2,430 variants / 2,430 Item Prices from four current SKU-defining axes. The
+candidate no-write model keeps only `Delivery Size` as a SKU-defining axis,
+reducing candidate SKU count to 3, and treats `Delivery themes` as
+configuration payload while `Add Foil Number` and `Add Bouquet` are paid
+add-on candidates. `Add Bouquet` affects saved price, so exact prices cannot be
+trusted after collapse until add-on/runtime pricing and cart/order/document
+labels exist. The report intentionally remains blocked for mutation with
+`current_sku_axes_need_reclassification` and
+`variant_explosion_requires_no_write_plan`. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`.
+Next safe action is dependency/rollback target capture and no-write replacement
+model design for Birthday Deliveries before any catalog mutation. Do not
+hand-patch only this product, treat a defaulted `operating_brand` as proved live
+brand lane, weaken the owner catalog guard, or delete/disable/rename/collapse
+current variants from Phase 9 output alone.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

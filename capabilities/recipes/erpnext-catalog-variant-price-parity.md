@@ -227,3 +227,15 @@ remained `175.0`. That incident is tracked by
 `capabilities/failures/product-setup-projection-authority-drift.md`. For owner
 save incidents, load that failure recipe in addition to this price parity
 recipe.
+
+On 2026-06-30, Phase 9 added
+`scripts/dev/lt_product_setup_variant_axis_classification_report.py` for
+offline saved-artifact variant-axis classification. Against the saved Birthday
+Deliveries artifact, the report showed the current 2,430-variant shape could
+be planned as a blocked 3-SKU candidate model: `Delivery Size` as the only
+candidate SKU-defining axis, `Delivery themes` as configuration payload, and
+`Add Foil Number` plus `Add Bouquet` as paid add-on candidates. `Add Bouquet`
+affects saved price, so a collapse design still needs add-on/runtime pricing
+proof and cart/order/document labels. This is classification evidence only. It
+does not approve mutation, add-on behavior, historical reference migration,
+live repair, or public checkout changes.

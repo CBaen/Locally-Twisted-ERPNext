@@ -73,12 +73,21 @@ brand fields are missing, mismatched, not source-declared, or target identity
 disagrees. Drafts/new preview plans without existing Website Items are not
 blocked by this guard. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`.
-Next safe work is variant-axis classification/collapse planning starting with
-Birthday Deliveries, rollback target capture, and then owner-visible
-publish/apply or field-level runtime-authority design. Do not patch only this
-product, clear cache, write live records, deploy, treat defaulted
-operating-brand values as live proof, or weaken owner catalog guards from this
-queue item alone.
+2026-06-30 Phase 9 added offline variant-axis classification tooling and ran it
+against the saved Birthday Deliveries artifact. Current Birthday Deliveries
+shape is 2,430 variants / 2,430 Item Prices; candidate no-write model keeps
+`Delivery Size` as the only SKU-defining axis for 3 candidate SKUs, moves
+`Delivery themes` to configuration payload, and treats `Add Foil Number` plus
+`Add Bouquet` as paid add-on candidates. `Add Bouquet` affects price and needs
+add-on/runtime pricing plus cart/order/document labels before any collapse
+could work. The report is intentionally blocked for mutation. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`.
+Next safe work is dependency/rollback target capture for Birthday Deliveries,
+then no-write replacement model design, then owner-visible publish/apply or
+field-level runtime-authority design. Do not patch only this product, clear
+cache, write live records, deploy, treat defaulted operating-brand values as
+live proof, weaken owner catalog guards, or delete/disable/rename/collapse
+current variants from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

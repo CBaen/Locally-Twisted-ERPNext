@@ -18,6 +18,15 @@ Verifier requirement: prove at least one high-cardinality product has bounded se
 
 Safety requirement: no existing variant, Item Price, Website Item, order, invoice, payment, or customer-message-linked record may be deleted, renamed, disabled, collapsed, or repurposed until dry-run dependency, replacement, historical-reference, rollback, and owner-scope approval pass.
 
+2026-06-30 Phase 9 progress: offline variant-axis classification tooling now
+reports Birthday Deliveries as a blocked planning case. Current saved shape is
+2,430 variants / 2,430 Item Prices from four current SKU-defining axes. The
+candidate model keeps `Delivery Size` as one SKU-defining axis for 3 candidate
+SKUs, moves `Delivery themes` to configuration payload, and treats
+`Add Foil Number` plus `Add Bouquet` as paid add-on candidates. No mutation,
+collapse, historical-reference migration, add-on behavior, or owner approval is
+claimed.
+
 ## SCR-002 - Product Setup Becomes Owner Source Of Truth
 
 Current state: Product Setup exists and can preview/local-apply, but live publish/hide/reroute and existing-product changes are not a complete owner-run workflow. Live proof on 2026-06-30 showed `large-head-missionary` Product Setup saved price rows at `125.0` while customer-facing Item Prices/public price stayed at `175.0`.

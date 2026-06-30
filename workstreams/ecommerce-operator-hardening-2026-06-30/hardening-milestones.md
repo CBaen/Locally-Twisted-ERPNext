@@ -127,6 +127,13 @@ identity disagrees. This satisfies the first owner-visible runtime-authority
 blocker slice; it does not satisfy live projection, publish/apply, catalog-wide
 dashboard, or database-level uniqueness.
 
+2026-06-30 Phase 9 source progress: offline variant-axis classification now
+exists for saved artifacts. Birthday Deliveries currently has 2,430 variants;
+the blocked candidate model has 3 SKU variants from `Delivery Size`, with
+`Delivery themes` as configuration payload and `Add Foil Number` / `Add Bouquet`
+as paid add-on candidates. The next Phase 1/6 slice is dependency and rollback
+target capture before any replacement model or mutation packet.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

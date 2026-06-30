@@ -125,6 +125,17 @@ Required fix:
 - Product Setup add-on rows must require checkout approval packets.
 - Verifier must prove add-on UI, cart line, checkout totals, Sales Order line, payment line, invoice line, and receipt/customer message.
 
+2026-06-30 Phase 9 status:
+
+- Offline classification tooling now identifies Birthday Deliveries current
+  SKU-defining axes that should be reclassified before mutation.
+- Saved artifact result: `Delivery Size` is the only candidate SKU-defining
+  axis; `Delivery themes` is a configuration payload candidate; `Add Foil
+  Number` and `Add Bouquet` are paid add-on candidates.
+- Still open: paid add-on Items/Prices, cart expansion, checkout summary,
+  Sales Order/Invoice/payment/receipt labels, historical references, rollback,
+  and owner approval.
+
 ## B007 - Conditional Pricing Is Captured But Not A Complete Owner Price Engine
 
 Severity: P1

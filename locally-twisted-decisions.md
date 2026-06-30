@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Variant collapse must start as classification-only proof
+
+**Decision:** Variant-explosion repair must begin with offline axis
+classification from saved artifacts. It must not delete, disable, rename,
+repurpose, collapse, or overwrite existing Item, variant Item, Item Price,
+Website Item, Product Setup, order, invoice, payment, file, or customer-message
+references until dependency mapping, replacement design, rollback snapshots,
+and owner-scope approval exist.
+
+**Reasoning:** Birthday Deliveries shows the architectural problem clearly:
+2,430 variants and Item Prices are generated from choices that are not all
+true SKU identity. The safer candidate model keeps `Delivery Size` as a
+SKU-defining axis, treats `Delivery themes` as configuration payload, and holds
+`Add Foil Number` plus `Add Bouquet` as paid add-on candidates. That is a
+planning result, not mutation approval.
+
+**Guard:** Price invariance is not business invariance. A non-price-changing
+axis may still affect labor, media, availability, customer expectations, cart
+line identity, document labels, payment labels, or historical references. Paid
+add-on candidates require enabled Items, Standard Selling Item Prices, cart
+expansion, order/invoice/payment/receipt labels, and proof before they become
+customer-visible add-ons.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`;
+`scripts/dev/lt_product_setup_variant_axis_classification_report.py`;
+`scripts/verify/product_setup_variant_axis_classification_contract.py`.
+
+**Decided by:** Codex with real witness/triad review on 2026-06-30, under
+GL's standing approval for stronger protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Active Product Setup saves must surface runtime authority blockers in Desk
 
 **Decision:** Product Setup validation must block active authority states when
