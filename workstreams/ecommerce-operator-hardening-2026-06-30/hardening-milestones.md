@@ -67,6 +67,10 @@ Exit criteria:
 Exit status: met for incident proof, not for repair. Move next to no-write
 preview and projection design; do not repair live rows from Phase 0 alone.
 
+2026-06-30 continuation: no-write projection preview and parity tooling now
+exist and fail on the known drift artifact as expected. See
+`phase-2-projection-preview-parity-2026-06-30.md`.
+
 ## Phase 1 - Canonical Product Authority Map
 
 Outcome: every product datum has one owner authority and named projections.
@@ -85,6 +89,9 @@ Exit criteria:
 - Product Setup has a documented authority matrix.
 - Owner cannot save a misleading active product setup when required public projections are missing.
 - Authority packet exists before any migration or repair design.
+
+Current blocker: the preview artifact explicitly records that brand-lane proof
+and active Product Setup uniqueness are not yet proven by the saved audit input.
 
 ## Phase 2 - Owner Product Setup UX
 

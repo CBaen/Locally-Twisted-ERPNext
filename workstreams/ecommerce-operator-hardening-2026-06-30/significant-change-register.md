@@ -114,6 +114,10 @@ Verifier requirement: catalog-wide report shows product authority packet for eve
 
 Safety requirement: first catalog-wide output is a report, not a write. Any write requires a pre-mutation release packet and rollback contract.
 
+2026-06-30 progress: offline artifact-backed report scaffolding now exists at
+`scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. It is not
+catalog-wide until fed one saved audit/projection artifact per relevant product.
+
 ## SCR-010 - External Research Translation Gate
 
 Current state: prior ERP research and other ecommerce platform lessons are useful but scattered and sometimes forbidden to name/copy.
@@ -159,3 +163,8 @@ Affected surfaces: Product Setup apply workflow, migration scripts, staging/live
 Verifier requirement: a planned product write cannot run unless the packet names environment, branch/hash, target products/routes, actor, row-level diff, snapshot method, rollback command/procedure, cache plan, verifier list, brand-lane proof, payment/document proof mode, no-downtime/customer-impact section, stop condition, and approvals. Frappe Cloud app releases must also include old live app hash, target app-mirror branch/commit, old-live-to-target diff, deploy pipeline status, dirty-overlap audit, site update result, and migrate result where applicable.
 
 Safety requirement: if rollback cannot be defined and re-proved publicly, mutation is blocked.
+
+2026-06-30 progress: `scripts/dev/lt_product_setup_projection_preview.py`
+creates field-level proposed changes and rollback targets from saved live-audit
+artifacts. Its rollback targets are preview evidence only; full row snapshots
+remain required before mutation.

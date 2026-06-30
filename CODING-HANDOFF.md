@@ -15,9 +15,18 @@ decision `decisions/2026-06-30-product-setup-live-authority.md`; failure
 recipe `capabilities/failures/product-setup-projection-authority-drift.md`;
 helper `scripts/dev/lt_live_readonly_product_api_audit.py`. No deploy, cache
 clear, ERPNext write, provider/payment/DNS action, or customer message was
-performed. Next safe action is a no-write Product Setup projection preview,
-row-level rollback capture, and parity verifier before any repair mutation.
-Do not hand-patch only this product or weaken the owner catalog guard.
+performed. Continuation on 2026-06-30 added offline no-write tooling:
+`scripts/dev/lt_product_setup_projection_preview.py`,
+`scripts/verify/product_setup_authority_parity_contract.py`, and
+`scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. Against the
+saved live audit artifact, projection preview reports 30 proposed Item Price
+changes from `175.0` to `125.0`, two Website Item copy suggestions, 30 rollback
+targets, and five limitations; parity fails on both the audit and projection
+artifacts; blast-radius reporting marks the product risky. Next safe action is
+full published-catalog saved read-only artifacts, row-level rollback capture,
+brand-lane/active-Product-Setup uniqueness proof, and publish/apply design
+before any repair mutation. Do not hand-patch only this product or weaken the
+owner catalog guard.
 
 Meta/Facebook/Instagram operations closeout as of 2026-06-28: GL explicitly
 approved broad supervised LT operating access for Meta surfaces, including

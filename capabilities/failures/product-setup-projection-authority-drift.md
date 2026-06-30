@@ -156,11 +156,31 @@ Minimum guard for price/copy:
 
 ## Current Required Next Work
 
-- Build a no-write Product Setup projection preview for existing products.
-- Add a parity verifier that fails when Product Setup active price/copy differs
-  from public/sellable authority.
+- Extend the no-write Product Setup projection preview from the incident
+  product to a full-catalog saved-artifact set.
+- Run the parity verifier across saved audit/projection artifacts; it must fail
+  when Product Setup active price/copy differs from public/sellable authority.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
   Setup-vs-runtime price, copy, media, option, add-on, and cart eligibility
   status.
+
+## 2026-06-30 No-Write Tooling
+
+Initial offline tools exist:
+
+- `scripts/dev/lt_product_setup_projection_preview.py`
+- `scripts/verify/product_setup_authority_parity_contract.py`
+- `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`
+
+Against the saved live audit artifact for `large-head-missionary`, the
+projection preview reports 30 Item Price changes from `175.0` to `125.0`, two
+Website Item copy suggestions, rollback targets for the current Item Price
+rows, and limitations for brand lane, active Product Setup uniqueness, rollback
+snapshot completeness, and business copy approval. The parity verifier fails
+on both the audit and projection artifacts. The blast-radius helper marks the
+product risky from saved artifacts only.
+
+These tools are proof and planning surfaces. They are not repair approval,
+cache approval, deploy approval, or live mutation approval.

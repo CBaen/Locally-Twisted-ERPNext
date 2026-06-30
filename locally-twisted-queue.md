@@ -20,11 +20,18 @@ fields, not Product Setup top-level copy. Workstream:
 `workstreams/ecommerce-operator-hardening-2026-06-30/`; decision:
 `decisions/2026-06-30-product-setup-live-authority.md`; failure note:
 `capabilities/failures/product-setup-projection-authority-drift.md`; helper:
-`scripts/dev/lt_live_readonly_product_api_audit.py`. Next safe work is no-write
-preview, rollback target capture, Product Setup-vs-runtime parity verifier, and
-owner-visible publish/apply or direct runtime-authority design. Do not patch
-only this product, clear cache, write live records, deploy, or weaken owner
-catalog guards from this queue item alone.
+`scripts/dev/lt_live_readonly_product_api_audit.py`. 2026-06-30 continuation
+added offline no-write helpers:
+`scripts/dev/lt_product_setup_projection_preview.py`,
+`scripts/verify/product_setup_authority_parity_contract.py`, and
+`scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. These prove the
+known product has 30 proposed Item Price changes, two copy suggestions, and
+preview limitations; they do not approve repair. Next safe work is full
+published-catalog saved read-only artifacts, rollback target capture,
+brand-lane/active-Product-Setup uniqueness proof, and owner-visible
+publish/apply or field-level runtime-authority design. Do not patch only this
+product, clear cache, write live records, deploy, or weaken owner catalog guards
+from this queue item alone.
 
 **P0 Meta/Facebook/Instagram operations aftercare (2026-06-28):** The Meta app
 and system-user API path are now working for supervised LT operations.

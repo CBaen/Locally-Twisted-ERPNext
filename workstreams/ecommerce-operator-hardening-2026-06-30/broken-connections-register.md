@@ -242,8 +242,11 @@ Required fix:
 
 - Do not repeat this as an access problem; live API proof exists in
   `live-readonly-api-audit-large-head-missionary-2026-06-30.md`.
-- Build Product Setup projection preview and parity verifier for existing
-  products.
+- Use Product Setup projection preview and parity verifier for existing
+  products. Initial offline tools now exist:
+  `scripts/dev/lt_product_setup_projection_preview.py`,
+  `scripts/verify/product_setup_authority_parity_contract.py`, and
+  `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`.
 - Decide direct runtime authority vs explicit publish/apply authority per
   field.
 - Capture rollback target before mutation.

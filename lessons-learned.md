@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-30 - Evidence collection PASS is not authority parity PASS
+
+The live Product Setup audit helper can complete successfully while proving a
+business failure: Product Setup and customer-facing authority disagree. If a
+future agent treats the audit helper's transport/data PASS as product parity,
+the system can again report false confidence while customers see stale prices
+or copy.
+
+**Counter-move:** keep evidence collectors, projection previews, and parity
+verifiers separate. Use saved-artifact tools before repair:
+`scripts/dev/lt_product_setup_projection_preview.py`,
+`scripts/verify/product_setup_authority_parity_contract.py`, and
+`scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. A projection
+preview can show what would change, but it is still not approval to write live
+rows.
+
 ## 2026-06-30 - Product Setup save success can still be public failure
 
 The Large head Missionary incident proved that the owner can save a Product

@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Product authority proof tools are required before repair
+
+**Decision:** Product Setup repair work must go through saved-artifact
+projection preview and parity proof before any product row mutation. The live
+audit helper proves evidence collection; it is not parity proof.
+
+**Reasoning:** The first no-write continuation after the
+`large-head-missionary` incident produced tooling that fails on the known drift
+without touching live data. The projection preview shows the row-level effect
+that a Product Setup-to-runtime apply would have, while the parity verifier
+separately fails when Product Setup and runtime/public authority disagree.
+Keeping these separate prevents a dangerous false PASS where "audit collected"
+is confused with "product authority is clean."
+
+**Guard:** Projection preview is not mutation approval. Repair still requires
+business price/copy approval, brand-lane proof, active Product Setup uniqueness
+proof, rollback snapshots, cart/checkout proof where relevant, and a
+pre-mutation release packet for any write path.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-2-projection-preview-parity-2026-06-30.md`;
+`scripts/dev/lt_product_setup_projection_preview.py`;
+`scripts/verify/product_setup_authority_parity_contract.py`;
+`scripts/dev/lt_product_setup_catalog_blast_radius_report.py`.
+
+**Decided by:** Codex with real triad review on 2026-06-30, under GL's
+standing approval for stronger protective contracts and no-write progress.
+
+---
+
 ## 2026-06-30 - Product Setup save is not live public authority without projection proof
 
 **Decision:** A normal Product Setup/`LT Product Blueprint` save is not proof

@@ -72,9 +72,22 @@ Required proof for existing-product price/copy changes:
 - Modified timestamps and modified_by for every authority row.
 - Rollback target before mutation.
 
+## 2026-06-30 No-Write Tooling Follow-Up
+
+The first saved-artifact tools now exist:
+
+- `scripts/dev/lt_product_setup_projection_preview.py`
+- `scripts/verify/product_setup_authority_parity_contract.py`
+- `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`
+
+They intentionally fail on the saved `large-head-missionary` live
+audit/projection artifacts. They do not approve mutation; they create the
+evidence needed before repair planning.
+
 ## Receipts
 
 - `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-2-projection-preview-parity-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-0-incident-audit-large-head-missionary-2026-06-30.md`
 - `capabilities/failures/product-setup-projection-authority-drift.md`
 
