@@ -35,9 +35,11 @@ Safety requirement: Product Setup must enforce one active authority per target i
 propagation. Follow-up source validation blocks active same-brand Product Setup
 duplicates for the same slug, target Item, or target Website Item, and runtime
 active lookup fails closed when duplicates match a runtime key. This does not
-close SCR-002 because saved-artifact authority packets, brand-aware runtime
-lookup, owner-visible blockers, publish/apply workflow, live projection proof,
-and database-level uniqueness are still unbuilt.
+close SCR-002 because brand-aware runtime lookup, owner-visible blockers,
+publish/apply workflow, live projection proof, and database-level uniqueness
+are still unbuilt. Phase 6 added saved-artifact `source_authority` packet
+reporting so source-declared brand and same-brand source uniqueness are visible
+without being treated as live proof.
 
 ## SCR-003 - Immediate Public Projection For Approved Product Changes
 
@@ -169,6 +171,12 @@ Setup duplicates for the same slug, target Item, or target Website Item. Live
 proof, cross-brand runtime lookup, public projection, payment/document
 identity, media/file ownership, portal/automation behavior, and release packet
 proof remain separate blockers.
+
+2026-06-30 Phase 6 progress: saved-artifact authority packets now expose
+`source_authority.operating_brand` and
+`source_authority.same_brand_source_uniqueness`. These are source-only planning
+signals; they do not prove live/public brand lane, release readiness, payment
+or document identity, or customer-facing route truth.
 
 ## SCR-013 - Pre-Mutation Release Packet And Rollback Contract
 

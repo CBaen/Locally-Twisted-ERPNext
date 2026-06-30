@@ -178,6 +178,8 @@ Required fix:
 
 - Source-level `operating_brand` exists and is guarded by
   `scripts/verify/product_blueprint_contract.py`.
+- Saved-artifact authority packets now report `source_authority.operating_brand`
+  separately from live proof.
 - Live proof, cross-brand runtime lookup, projection, and payment/document/media
   inheritance proof are still open blockers.
 
@@ -204,9 +206,10 @@ Required fix:
   claim the same slug, target Item, or target Website Item.
 - Runtime active lookup now logs ambiguity and returns no setup when duplicate
   active records match the same runtime key.
-- Still open: saved-artifact authority reporting, brand-aware runtime lookup,
-  route-level uniqueness after route authority is modeled, and database-level
-  uniqueness.
+- Saved-artifact authority packets now report same-brand source uniqueness
+  separately from live proof.
+- Still open: brand-aware runtime lookup, route-level uniqueness after route
+  authority is modeled, and database-level uniqueness.
 
 ## B010 - `/shop` May Show A Card That Cart Later Rejects
 

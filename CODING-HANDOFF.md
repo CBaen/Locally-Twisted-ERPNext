@@ -55,10 +55,17 @@ target Website Item. Runtime active lookup also fails closed instead of picking
 the newest duplicate by modified time. This is source-authoring protection, not
 live/global uniqueness proof. Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
-Next safe action is updating saved-artifact authority packets so
-`source_declared` and same-brand source uniqueness are reported separately from
-live proof, making runtime lookup brand-aware before cross-brand same-slug
-active setups are allowed, adding owner-visible blockers, starting
+Phase 6 updated offline authority packet reporting so future saved artifacts
+carry Product Setup `operating_brand`, packet output has a first-class
+`source_authority` section, same-brand source uniqueness is reported separately
+from live proof, and packet-aware parity verification fails if source-declared
+brand is treated as live proof or if packet blockers remain. Old saved
+catalog artifacts remain blocked: the full `/tmp` saved catalog report exits
+`1` with 47 blocked products and 265 blockers, and the old
+`large-head-missionary` packet exits `1` with seven blockers. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`.
+Next safe action is making runtime lookup brand-aware before cross-brand
+same-slug active setups are allowed, adding owner-visible blockers, starting
 variant-axis classification/collapse planning with Birthday Deliveries,
 capturing row-level rollback targets, and designing publish/apply before any
 repair mutation. Do not hand-patch only this product, treat a defaulted

@@ -127,6 +127,10 @@ verifier work. For local build work, name the actual blocker.
   into the Website Item, Item Price, media, cart, and checkout authorities
   through an explicit publish/apply step with no-write preview and rollback
   proof.
+- Offline authority packets expose `source_authority` separately from live
+  proof. `source_declared` operating brand and same-brand source uniqueness do
+  not set active authority, mutation approval, deploy approval, cache approval,
+  public route proof, payment/document identity, or release readiness.
 
 ## Workflow
 
@@ -233,6 +237,12 @@ same-brand duplicates for the same slug, target Item, or target Website Item,
 and runtime active lookup logs ambiguity and returns no setup when more than
 one active record matches a runtime key. This keeps ambiguity loud without
 claiming live repair, cross-brand route proof, or database-level uniqueness.
+
+2026-06-30 Phase 6 update: offline authority packet reporting now carries
+`source_authority.operating_brand` and
+`source_authority.same_brand_source_uniqueness`, and the parity verifier can
+consume packet reports. Old saved catalog artifacts remain blocked; the packet
+contract only makes source evidence visible.
 
 Backlinks:
 

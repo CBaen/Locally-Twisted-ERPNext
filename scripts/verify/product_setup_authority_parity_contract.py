@@ -55,6 +55,8 @@ def main(argv: list[str] | None = None) -> int:
         detected_type = detect_input_type(payload, args.input_type)
         if detected_type == "projection":
             report = report_from_projection(payload, args)
+        elif detected_type == "packet":
+            report = report_from_packet(payload, args)
         else:
             report = report_from_audit(payload, args)
     except ContractError as exc:
@@ -78,10 +80,10 @@ def main(argv: list[str] | None = None) -> int:
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--input", required=True, help="Saved audit or projection JSON artifact.")
+    parser.add_argument("--input", required=True, help="Saved audit, projection, or authority packet JSON artifact.")
     parser.add_argument(
         "--input-type",
-        choices=("auto", "audit", "projection"),
+        choices=("auto", "audit", "projection", "packet"),
         default="auto",
         help="Artifact type. Default: auto.",
     )
@@ -111,11 +113,14 @@ def detect_input_type(payload: Any, requested: str) -> str:
         raise ContractError("input JSON must be an object")
     if any(key in payload for key in ("drift_summary", "proposed_changes", "projection_summary")):
         return "projection"
+    if "packets" in payload or "source_authority" in payload:
+        return "packet"
     if any(key in payload for key in ("price_summary", "content_summary", "blueprint_summary", "website_item_summary")):
         return "audit"
     raise ContractError(
         "could not auto-detect input type; expected live audit keys "
-        "(price_summary/content_summary) or projection keys (drift_summary/proposed_changes)"
+        "(price_summary/content_summary), projection keys (drift_summary/proposed_changes), "
+        "or packet keys (packets/source_authority)"
     )
 
 
@@ -270,6 +275,67 @@ def report_from_audit(payload: dict[str, Any], args: argparse.Namespace) -> dict
         allow_price_drift=args.allow_price_drift,
         allow_copy_drift=args.allow_copy_drift,
     )
+
+
+def report_from_packet(payload: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+    blockers: list[Any] = []
+    packets = payload.get("packets") if isinstance(payload.get("packets"), list) else [payload]
+    if not packets:
+        blockers.append("authority packet report has no packets")
+
+    for index, packet in enumerate(packets, start=1):
+        if not isinstance(packet, dict):
+            blockers.append(f"packet {index} is not an object")
+            continue
+        source_authority = packet.get("source_authority") if isinstance(packet.get("source_authority"), dict) else {}
+        operating_brand = (
+            source_authority.get("operating_brand")
+            if isinstance(source_authority.get("operating_brand"), dict)
+            else {}
+        )
+        source_uniqueness = (
+            source_authority.get("same_brand_source_uniqueness")
+            if isinstance(source_authority.get("same_brand_source_uniqueness"), dict)
+            else {}
+        )
+        product_setup = packet.get("product_setup") if isinstance(packet.get("product_setup"), dict) else {}
+        release = packet.get("release_readiness") if isinstance(packet.get("release_readiness"), dict) else {}
+        prefix = packet_label(index, packet)
+
+        for blocker in as_list(packet.get("blockers")):
+            blockers.append({prefix: safe_json_value(blocker)})
+        if not operating_brand:
+            blockers.append(f"{prefix}: missing source_authority.operating_brand")
+        if operating_brand.get("authority_state") not in {"source_declared", "missing", "invalid", "proved", "verified", "resolved"}:
+            blockers.append(f"{prefix}: invalid operating_brand authority_state")
+        if operating_brand.get("authority_state") == "source_declared" and operating_brand.get("live_brand_lane_proved"):
+            blockers.append(f"{prefix}: source_declared operating brand is incorrectly marked as live proved")
+        if product_setup.get("active_authority") and not product_setup.get("brand_lane_proved"):
+            blockers.append(f"{prefix}: active_authority is true without live brand-lane proof")
+        if not source_uniqueness:
+            blockers.append(f"{prefix}: missing source_authority.same_brand_source_uniqueness")
+        elif not source_uniqueness.get("status"):
+            blockers.append(f"{prefix}: missing same-brand source uniqueness status")
+        if release.get("mutation_approved") or release.get("deploy_approved") or release.get("cache_clear_approved"):
+            blockers.append(f"{prefix}: authority packet report must not approve mutation, deploy, or cache clear")
+
+    return finalize_report(
+        drift=[],
+        blockers=dedupe_blockers(blockers),
+        input_summary={
+            "path": str(Path(args.input)),
+            "requested_type": args.input_type,
+            "detected_type": "packet",
+            "packet_count": len(packets),
+        },
+        allow_price_drift=args.allow_price_drift,
+        allow_copy_drift=args.allow_copy_drift,
+    )
+
+
+def packet_label(index: int, packet: dict[str, Any]) -> str:
+    identifier = packet.get("product_identifier") if isinstance(packet.get("product_identifier"), dict) else {}
+    return str(identifier.get("product_setup") or identifier.get("item_code") or f"packet {index}")
 
 
 def inspect_audit_price(payload: dict[str, Any], drift: list[dict[str, Any]], blockers: list[Any]) -> None:

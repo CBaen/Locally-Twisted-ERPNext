@@ -60,6 +60,7 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-3-catalog-authority-audit-2026-06-30.md](phase-3-catalog-authority-audit-2026-06-30.md): live read-only full published-catalog authority artifact collection, catalog-wide blocker counts, and next resolver/packet work.
 - [phase-4-authority-packet-resolver-2026-06-30.md](phase-4-authority-packet-resolver-2026-06-30.md): offline blocker/resolver report over saved catalog artifacts, 284 blocker breakdown, and first variant-explosion targets.
 - [phase-5-operating-brand-source-contract-2026-06-30.md](phase-5-operating-brand-source-contract-2026-06-30.md): source-only Product Setup `operating_brand` field, validation contract, same-brand active uniqueness save guard, runtime duplicate fail-closed behavior, runtime schema propagation, and verifier proof.
+- [phase-6-source-authority-packet-reporting-2026-06-30.md](phase-6-source-authority-packet-reporting-2026-06-30.md): offline authority packet reporting for `source_declared` operating brand and same-brand source uniqueness without treating either as live/public proof.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -72,7 +73,8 @@ Read-only helper scripts:
 - `scripts/dev/lt_live_readonly_catalog_authority_audit.py`: live read-only published-catalog authority artifact collector using Frappe Cloud site login plus live ERPNext GET requests.
 - `scripts/dev/lt_product_setup_authority_packet_report.py`: offline blocker/resolver report from saved catalog authority artifacts.
 - `scripts/dev/lt_product_setup_projection_preview.py`: offline no-write Product Setup -> runtime row-diff preview from a saved audit artifact.
-- `scripts/verify/product_setup_authority_parity_contract.py`: offline fail-loud parity verifier for saved audit/projection artifacts.
+- `scripts/verify/product_setup_authority_parity_contract.py`: offline fail-loud parity verifier for saved audit/projection/authority-packet artifacts.
+- `scripts/verify/product_setup_authority_packet_contract.py`: offline synthetic contract verifier for source-declared brand and same-brand source uniqueness packet boundaries.
 - `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`: offline product-by-product risk report from saved audit/projection artifacts.
 
 ## Primary Local Evidence

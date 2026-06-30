@@ -31,6 +31,16 @@ ACTIVE_PRODUCT_SETUP_STATUSES = {
     "Quote Only",
     "Paused",
 }
+SOURCE_UNIQUENESS_STATUSES = {
+    "Local Preview Ready",
+    "Staging Ready",
+    "Approved For Live",
+}
+ALLOWED_OPERATING_BRANDS = {
+    "locally_twisted",
+    "commercial_balloon_decor",
+    "memorial_balloons",
+}
 SKIP_DIRECTORY_JSON = {
     "index.json",
     "blast-radius.json",
@@ -129,6 +139,7 @@ def build_packet(path: Path, payload: dict[str, Any]) -> dict[str, Any]:
     add_existing_failures(blockers, payload.get("failures"))
 
     product_setup = product_setup_section(payload, product, blockers)
+    source_authority = source_authority_section(product_setup)
     price = price_section(payload, blockers)
     copy = copy_section(payload)
     variant = variant_section(payload, blockers)
@@ -168,6 +179,7 @@ def build_packet(path: Path, payload: dict[str, Any]) -> dict[str, Any]:
         "variant": variant,
         "option": option,
         "product_setup": product_setup,
+        "source_authority": source_authority,
         "release_readiness": release_readiness,
         "next_action": next_action(blockers, price, copy, variant, product_setup),
     }
@@ -177,14 +189,16 @@ def product_identifier(payload: dict[str, Any]) -> dict[str, Any]:
     identifier = payload.get("product_identifier") if isinstance(payload.get("product_identifier"), dict) else {}
     website = payload.get("website_item_summary") if isinstance(payload.get("website_item_summary"), dict) else {}
     blueprint = payload.get("blueprint_summary") if isinstance(payload.get("blueprint_summary"), dict) else {}
+    source_brand = first_present(identifier, "brand_lane") or blueprint.get("operating_brand")
+    source_brand_state = brand_lane_state(source_brand, identifier.get("brand_lane_status"))
     return {
         "website_item": first_present(identifier, "website_item") or website.get("name"),
         "item_code": first_present(identifier, "item_code") or website.get("item_code") or blueprint.get("target_item_code"),
         "route": first_present(identifier, "route") or website.get("route"),
         "product_setup": first_present(identifier, "product_setup") or blueprint.get("name"),
         "product_name": first_present(identifier, "product_name") or blueprint.get("product_name") or website.get("web_item_name"),
-        "brand_lane": identifier.get("brand_lane"),
-        "brand_lane_status": identifier.get("brand_lane_status") or "not_proved",
+        "brand_lane": source_brand,
+        "brand_lane_status": source_brand_state,
     }
 
 
@@ -198,16 +212,29 @@ def product_setup_section(
     status = str(blueprint.get("publish_status") or "").strip()
     match_status = match.get("blueprint_match_status") or ("matched" if blueprint else "missing")
     brand_lane_status = str(product.get("brand_lane_status") or "").strip()
+    operating_brand = str(product.get("brand_lane") or "").strip()
+    operating_brand_state = brand_lane_state(operating_brand, brand_lane_status)
     active_status = status in ACTIVE_PRODUCT_SETUP_STATUSES
     brand_lane_proved = bool(product.get("brand_lane")) and brand_lane_status in {"proved", "verified", "resolved"}
+    source_uniqueness = source_uniqueness_result(
+        status=status,
+        match_status=match_status,
+        operating_brand=operating_brand,
+        operating_brand_state=operating_brand_state,
+        candidates=as_list(match.get("candidate_blueprints")),
+    )
     active_authority = bool(match_status == "matched" and active_status and brand_lane_proved)
 
     if not product.get("brand_lane") or not brand_lane_proved:
         add_blocker(
             blockers,
             "brand_lane_unproved",
-            "Brand lane is missing or unproved, so product authority and active uniqueness cannot be trusted.",
-            {"brand_lane": product.get("brand_lane"), "brand_lane_status": brand_lane_status or None},
+            "Brand lane is missing or not live-proved, so product authority cannot be approved for mutation.",
+            {
+                "brand_lane": product.get("brand_lane"),
+                "brand_lane_status": brand_lane_status or None,
+                "operating_brand_authority_state": operating_brand_state,
+            },
         )
     if match_status != "matched":
         add_blocker(
@@ -223,12 +250,12 @@ def product_setup_section(
             "Product Setup is draft, inactive, or missing active authority status.",
             {"publish_status": status or None, "product_setup": product.get("product_setup")},
         )
-    if not brand_lane_proved:
+    if source_uniqueness["required"] and not source_uniqueness["proved"]:
         add_blocker(
             blockers,
             "active_uniqueness_unproved",
-            "Active uniqueness by brand lane is not proved until brand lane is resolved.",
-            {"product_setup": product.get("product_setup"), "candidate_count": len(as_list(match.get("candidate_blueprints")))},
+            "Same-brand source active uniqueness is not proved from the saved artifact.",
+            source_uniqueness["evidence"],
         )
 
     return {
@@ -239,6 +266,43 @@ def product_setup_section(
         "candidates": as_list(match.get("candidate_blueprints")),
         "active_status": active_status,
         "brand_lane_proved": brand_lane_proved,
+        "operating_brand": operating_brand or None,
+        "operating_brand_authority_state": operating_brand_state,
+        "source_active_uniqueness_required": source_uniqueness["required"],
+        "source_active_uniqueness_proved": source_uniqueness["proved"],
+        "source_active_uniqueness_status": source_uniqueness["status"],
+        "source_active_uniqueness_evidence": source_uniqueness["evidence"],
+    }
+
+
+def source_authority_section(product_setup: dict[str, Any]) -> dict[str, Any]:
+    uniqueness_evidence = (
+        product_setup.get("source_active_uniqueness_evidence")
+        if isinstance(product_setup.get("source_active_uniqueness_evidence"), dict)
+        else {}
+    )
+    status = product_setup.get("source_active_uniqueness_status")
+    conflicts = []
+    if status == "unproved_duplicate_same_brand":
+        conflicts = uniqueness_evidence.get("same_brand_active_source_candidates") or []
+    return {
+        "operating_brand": {
+            "value": product_setup.get("operating_brand"),
+            "authority_state": product_setup.get("operating_brand_authority_state"),
+            "evidence_source": "LT Product Blueprint.operating_brand",
+            "proof_scope": "source_only"
+            if product_setup.get("operating_brand_authority_state") == "source_declared"
+            else "none",
+            "live_brand_lane_proved": bool(product_setup.get("brand_lane_proved")),
+        },
+        "same_brand_source_uniqueness": {
+            "status": status,
+            "basis": ["operating_brand", "product_slug", "target_item_code", "target_website_item"],
+            "proof_scope": "source_only" if product_setup.get("source_active_uniqueness_proved") else "none",
+            "proved": bool(product_setup.get("source_active_uniqueness_proved")),
+            "conflicts": conflicts,
+            "evidence": uniqueness_evidence,
+        },
     }
 
 
@@ -517,6 +581,73 @@ def add_existing_failures(blockers: list[dict[str, Any]], failures: Any) -> None
         else:
             code = "collector_failure"
         add_blocker(blockers, code, text, {"source": "artifact.failures"})
+
+
+def brand_lane_state(value: Any, explicit_status: Any = None) -> str:
+    status = str(explicit_status or "").strip()
+    if status in {"proved", "verified", "resolved"}:
+        return status
+    brand = str(value or "").strip()
+    if not brand:
+        return "missing"
+    if brand not in ALLOWED_OPERATING_BRANDS:
+        return "invalid"
+    return "source_declared"
+
+
+def source_uniqueness_result(
+    *,
+    status: str,
+    match_status: str,
+    operating_brand: str,
+    operating_brand_state: str,
+    candidates: list[Any],
+) -> dict[str, Any]:
+    required = status in SOURCE_UNIQUENESS_STATUSES
+    evidence: dict[str, Any] = {
+        "publish_status": status or None,
+        "operating_brand": operating_brand or None,
+        "operating_brand_authority_state": operating_brand_state,
+        "candidate_count": len(candidates),
+    }
+    if not required:
+        return {"required": False, "proved": False, "status": "not_required", "evidence": evidence}
+    if match_status != "matched":
+        evidence["match_status"] = match_status
+        return {"required": True, "proved": False, "status": "unproved_match_not_resolved", "evidence": evidence}
+    if operating_brand_state != "source_declared":
+        return {"required": True, "proved": False, "status": "unproved_operating_brand_not_source_declared", "evidence": evidence}
+    if not candidates:
+        return {"required": True, "proved": False, "status": "unproved_missing_candidate_evidence", "evidence": evidence}
+
+    active_candidates = [candidate for candidate in candidates if candidate_active_for_source_uniqueness(candidate)]
+    unknown_brand_candidates = [
+        candidate for candidate in active_candidates if brand_lane_state(candidate.get("operating_brand")) in {"missing", "invalid"}
+    ]
+    same_brand_candidates = [
+        candidate
+        for candidate in active_candidates
+        if str(candidate.get("operating_brand") or "").strip() == operating_brand
+    ]
+    evidence.update(
+        {
+            "active_source_candidate_count": len(active_candidates),
+            "same_brand_active_source_candidate_count": len(same_brand_candidates),
+            "unknown_brand_active_source_candidate_count": len(unknown_brand_candidates),
+            "same_brand_active_source_candidates": [candidate.get("name") for candidate in same_brand_candidates if candidate.get("name")],
+        }
+    )
+    if unknown_brand_candidates:
+        return {"required": True, "proved": False, "status": "unproved_candidate_brand_missing", "evidence": evidence}
+    if len(same_brand_candidates) > 1:
+        return {"required": True, "proved": False, "status": "unproved_duplicate_same_brand", "evidence": evidence}
+    if len(same_brand_candidates) == 1:
+        return {"required": True, "proved": True, "status": "source_declared_unique", "evidence": evidence}
+    return {"required": True, "proved": False, "status": "unproved_current_candidate_missing_source_brand", "evidence": evidence}
+
+
+def candidate_active_for_source_uniqueness(candidate: Any) -> bool:
+    return isinstance(candidate, dict) and str(candidate.get("publish_status") or "").strip() in SOURCE_UNIQUENESS_STATUSES
 
 
 def price_next_action(drift_status: str, missing_runtime: list[str], setup_values: list[str], item_price_values: list[str]) -> str:

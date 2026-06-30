@@ -182,6 +182,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
                 "name",
                 "product_name",
                 "product_slug",
+                "operating_brand",
                 "base_price",
                 "publish_status",
                 "shop_visibility",

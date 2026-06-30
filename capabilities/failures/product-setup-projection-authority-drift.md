@@ -171,6 +171,11 @@ Minimum guard for price/copy:
   operating brand, and runtime active lookup fails closed on duplicates instead
   of selecting the newest row. This still does not prove live route authority,
   cross-brand runtime lookup, or database-level uniqueness.
+- Authority packet reports must expose source evidence separately. A
+  `source_authority` section may report source-declared operating brand and
+  same-brand source uniqueness, but those fields must not set live brand proof,
+  active authority, mutation approval, deploy approval, cache approval, payment
+  or document proof, or release readiness.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
@@ -228,3 +233,9 @@ for Product Setups in active authority statuses and changed runtime lookup to
 return no setup when duplicate active records match the same runtime key. This
 prevents modified-time selection from hiding ambiguity, but it is not a live
 repair or release proof.
+
+Phase 6 updated the offline authority packet report and parity verifier so
+future saved artifacts can report source-declared brand and same-brand source
+uniqueness separately from live proof. Old saved catalog artifacts remain
+blocked. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`.

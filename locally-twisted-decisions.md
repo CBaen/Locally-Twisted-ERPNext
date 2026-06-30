@@ -8,6 +8,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Source-declared product authority must stay separate inside repair packets
+
+**Decision:** Offline Product Setup authority packets may report
+`operating_brand` and same-brand active uniqueness as source-only evidence, but
+that evidence must live in a separate `source_authority` section and must not
+flip live/public brand proof, active authority, mutation approval, deploy
+approval, cache approval, route proof, payment/document identity, or release
+readiness.
+
+**Reasoning:** Phase 5 added source-declared brand and source save guards.
+Without a packet-level separation, later tooling could accidentally treat the
+new source field as live proof. That would recreate the original failure mode:
+a backend/source record looks successful while customer-facing authority still
+comes from another path.
+
+**Guard:** `source_declared` means source-only. Same-brand source uniqueness
+means no conflict in collected/source records for the guarded keys. Neither
+one proves live route authority, cross-brand runtime lookup, database-level
+uniqueness, public projection, rollback readiness, checkout/payment/document
+truth, provider state, or customer-facing readiness.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`;
+`scripts/dev/lt_product_setup_authority_packet_report.py`;
+`scripts/verify/product_setup_authority_packet_contract.py`;
+`scripts/verify/product_setup_authority_parity_contract.py`.
+
+**Decided by:** Codex with witness review on 2026-06-30, under GL's standing
+approval for stronger protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Product Setup operating brand is required source authority, not live proof
 
 **Decision:** `LT Product Blueprint` / Product Setup must declare one allowed

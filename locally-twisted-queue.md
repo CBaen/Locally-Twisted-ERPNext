@@ -52,15 +52,20 @@ blocks active same-brand Product Setup duplicates for the same slug, target
 Item, or target Website Item, and runtime active lookup now fails closed
 instead of selecting the newest duplicate by modified time. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
-Next safe work is saved-artifact packet reporting that separates
-`source_declared` and same-brand source uniqueness from live proof, brand-aware
-runtime lookup before cross-brand same-slug active setups are allowed,
-owner-visible blocker reporting, variant-axis classification/collapse planning
-starting with Birthday Deliveries, rollback target capture, and then
-owner-visible publish/apply or field-level runtime-authority design. Do not
-patch only this product, clear cache, write live records, deploy, treat
-defaulted operating-brand values as live proof, or weaken owner catalog guards
-from this queue item alone.
+2026-06-30 Phase 6 updated saved-artifact packet reporting:
+future collectors preserve `operating_brand`, packet output includes
+`source_authority.operating_brand` and
+`source_authority.same_brand_source_uniqueness`, and packet-aware parity
+verification fails if source-declared brand is treated as live proof or if
+packet blockers remain. Old saved artifacts remain blocked. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`.
+Next safe work is brand-aware runtime lookup before cross-brand same-slug
+active setups are allowed, owner-visible blocker reporting, variant-axis
+classification/collapse planning starting with Birthday Deliveries, rollback
+target capture, and then owner-visible publish/apply or field-level
+runtime-authority design. Do not patch only this product, clear cache, write
+live records, deploy, treat defaulted operating-brand values as live proof, or
+weaken owner catalog guards from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

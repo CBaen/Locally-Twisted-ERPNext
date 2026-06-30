@@ -5,6 +5,7 @@
 - Main goal: Add source-level Product Setup operating-brand authority controls so catalog automation can prove brand lane before mutation or repair.
 - Trigger: Income-critical ecommerce architecture hardening after live Product Setup edits did not project to the customer-facing product page.
 - Current stage: `follow-up-source-uniqueness`
+- Current continuation: `source-authority-packet-reporting`
 - Main agent owns: final source edits, verification, docs, scoped commit/push, and synthesis.
 - Witness lanes:
   - Intent Witness: confirm this solves a real owner-management authority gap without pretending to fix live projection immediately.
@@ -51,6 +52,10 @@
     Website Item, and runtime lookup fails closed on duplicate active matches.
   - Do not claim live/global active authority proof, route migration proof,
     cross-brand runtime lookup, or database-level uniqueness from this guard.
+  - Add first-class offline `source_authority` packet reporting for
+    source-declared operating brand and same-brand source uniqueness.
+  - Keep packet live proof, mutation approval, deploy approval, cache approval,
+    and release readiness blocked unless a separate proof path exists.
   - Do not import untracked brand-boundary files from the shared checkout into this phase.
 - Files/systems touched:
   - `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.json`
@@ -78,16 +83,25 @@
   - `python -m py_compile apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py apps/locally_twisted/locally_twisted/product_setup_runtime.py scripts/verify/product_blueprint_contract.py`
   - `python scripts/verify/product_blueprint_contract.py` passed 25 tests.
   - `git diff --check`
+- Source-authority packet continuation verification completed:
+  - `python -m py_compile scripts/dev/lt_product_setup_authority_packet_report.py scripts/dev/lt_live_readonly_catalog_authority_audit.py scripts/dev/lt_live_readonly_product_api_audit.py scripts/verify/product_setup_authority_packet_contract.py scripts/verify/product_setup_authority_parity_contract.py`
+  - `python scripts/verify/product_setup_authority_packet_contract.py` passed 5 tests.
+  - Full old saved catalog authority packet report exited `1` with 47 blocked products and 265 blockers.
+  - Old `large-head-missionary` authority packet report exited `1` with seven blockers.
+  - Packet-aware parity verifier failed the old `large-head-missionary` packet with seven blockers.
 - Active agent/session ids:
   - Intent witness `019f180a-6e44-7d51-b350-3354cb6ff506`
   - Technical witness `019f180a-abc9-7fa1-94b6-62653aa2a432`
   - Critical witness `019f180b-33eb-7a01-bd30-c45154a30c1c`
   - Follow-up technical witness `019f1813-71ad-7352-b769-a1979c926884`
   - Follow-up critical witness `019f1813-8da4-7211-8e14-f25f58c908c0`
+  - Source packet technical witness `019f1820-6823-7292-911d-fb58b7240be3`
+  - Source packet critical witness `019f1820-7fdc-7e70-8541-dc1b4fe9f3b9`
 - Cleanup needed: close spawned agents; run process hygiene before final.
 - Cleanup status: follow-up technical and critical witnesses were closed after
   reporting. Earlier Phase 5 witness IDs from the pre-follow-up packet were
-  already unavailable in the current runtime when close was attempted.
+  already unavailable in the current runtime when close was attempted. Source
+  packet technical and critical witnesses were closed after reporting.
 - Resume instruction: Continue source-only Phase 5 in the isolated worktree; do not deploy, mutate live ERPNext records, clear cache, or touch provider/payment/DNS/customer-message paths.
 
 ## Route Record
