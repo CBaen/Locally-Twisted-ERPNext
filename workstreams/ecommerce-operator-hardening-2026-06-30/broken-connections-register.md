@@ -139,6 +139,40 @@ Failure mode:
 
 - Owner enters pricing rules that do not become public/cart/checkout price behavior.
 
+## B008 - Product Brand Lane Was Not A First-Class Product Setup Authority
+
+Severity: P0
+
+Evidence:
+
+- Phase 4 authority packet report blocked all 47 published products on
+  `brand_lane_unproved`.
+- Active uniqueness cannot be safely evaluated when product authority is not
+  scoped by operating brand.
+- Product changes can imply public route, file/media, document, payment,
+  portal, automation, and customer-message identity.
+
+Failure mode:
+
+- A future repair or publish packet could project the right product data into
+  the wrong brand lane, or treat a guessed/default route namespace as business
+  identity proof.
+
+Required fix:
+
+- Product Setup must declare `operating_brand`.
+- Saved artifacts and runtime authority packets must distinguish
+  `source_declared` from `proved`.
+- Active uniqueness, projection, payment/document identity, media/file
+  ownership, portal/automation behavior, and public-route proof must remain
+  blocked until the brand lane is proved for the target packet.
+
+2026-06-30 status:
+
+- Source-level `operating_brand` exists and is guarded by
+  `scripts/verify/product_blueprint_contract.py`.
+- Live proof and active uniqueness are still open blockers.
+
 Required fix:
 
 - Decide which pricing patterns are SKU prices, add-on prices, fulfillment charges, quote-only rules, or dynamic runtime rules.

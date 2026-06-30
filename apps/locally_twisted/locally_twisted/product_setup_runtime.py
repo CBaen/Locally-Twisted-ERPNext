@@ -17,6 +17,12 @@ from typing import Any
 SCHEMA_VERSION = "lt-product-setup-runtime-v1"
 CONFIG_VERSION = "lt-product-config-v1"
 
+OPERATING_BRAND_OPTIONS = {
+    "locally_twisted",
+    "commercial_balloon_decor",
+    "memorial_balloons",
+}
+
 BEHAVIOR_SKU = "SKU-defining variant"
 BEHAVIOR_CONFIGURATION = "Configuration only"
 BEHAVIOR_ADD_ON = "Add-on"
@@ -122,6 +128,7 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
     """Return a backend-owned, product-agnostic setup schema."""
     product_slug = _text(data.get("product_slug"))
     product_name = _text(data.get("product_name"))
+    operating_brand = _text(data.get("operating_brand"))
     buying_path = _text(data.get("buying_path")) or "Needs review"
     page_template = _text(data.get("page_template")) or "Configurable product page"
     publish_status = _text(data.get("publish_status")) or "Draft"
@@ -140,6 +147,8 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
         "product": {
             "product_slug": product_slug,
             "product_name": product_name,
+            "operating_brand": operating_brand,
+            "operating_brand_authority_state": operating_brand_authority_state(operating_brand),
             "item_group": _text(data.get("item_group")),
             "page_template": page_template,
             "buying_path": buying_path,
@@ -165,6 +174,15 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
         },
         "source": "lt_product_setup",
     }
+
+
+def operating_brand_authority_state(operating_brand: str) -> str:
+    operating_brand = _text(operating_brand)
+    if not operating_brand:
+        return "missing"
+    if operating_brand not in OPERATING_BRAND_OPTIONS:
+        return "invalid"
+    return "source_declared"
 
 
 def resolve_product_setup_configuration(

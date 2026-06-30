@@ -10,7 +10,12 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from locally_twisted.product_setup_runtime import BEHAVIOR_TO_PAYLOAD_TARGET, ROLE_TO_BEHAVIOR
+from locally_twisted.product_setup_runtime import (
+    BEHAVIOR_TO_PAYLOAD_TARGET,
+    OPERATING_BRAND_OPTIONS,
+    ROLE_TO_BEHAVIOR,
+    operating_brand_authority_state,
+)
 
 
 SCHEMA_VERSION = "lt-product-blueprint-v1"
@@ -65,6 +70,7 @@ def blueprint_doc_to_dict(doc: Any) -> dict[str, Any]:
     return {
         "product_name": _text(getattr(doc, "product_name", "")),
         "product_slug": _text(getattr(doc, "product_slug", "")),
+        "operating_brand": _text(getattr(doc, "operating_brand", "")),
         "item_group": _text(getattr(doc, "item_group", "")),
         "page_template": _text(getattr(doc, "page_template", "")),
         "buying_path": _text(getattr(doc, "buying_path", "")),
@@ -97,6 +103,7 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
 
     product_name = _text(data.get("product_name"))
     slug = _text(data.get("product_slug"))
+    operating_brand = _text(data.get("operating_brand"))
     item_group = _text(data.get("item_group"))
     page_template = _text(data.get("page_template"))
     buying_path = _text(data.get("buying_path"))
@@ -111,6 +118,14 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
         blockers.append("Product slug is required.")
     elif not SLUG_PATTERN.match(slug):
         blockers.append("Product slug must use lowercase letters, numbers, and single hyphens only.")
+    if not operating_brand:
+        blockers.append("Operating Brand is required so Product Setup has source brand-lane authority.")
+    elif operating_brand not in OPERATING_BRAND_OPTIONS:
+        blockers.append(
+            "Operating Brand must be one of: "
+            + ", ".join(sorted(OPERATING_BRAND_OPTIONS))
+            + "."
+        )
     if not item_group:
         blockers.append("Item Group is required so ERPNext knows where the product belongs.")
     if page_template not in PAGE_TEMPLATE_TO_CONTRACT:
@@ -184,6 +199,8 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
         "save_blockers": save_blockers,
         "ready_for_live": False,
         "contract": {
+            "operating_brand": operating_brand,
+            "operating_brand_authority_state": operating_brand_authority_state(operating_brand),
             "product_page_type": product_page_type,
             "commerce_lane": commerce_lane,
             "base_price": base_price,

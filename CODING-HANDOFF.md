@@ -39,11 +39,21 @@ Setups, 19 missing setup price values, 19 ambiguous base-price-to-many-variant
 mappings, six variant-explosion products, and the known `large-head-missionary`
 price/copy drift. Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
-Next safe action is source-level Product Setup authority controls with explicit
-brand-lane source/resolver, active-Product-Setup uniqueness proof, owner-visible
-blockers, variant-axis classification/collapse planning, row-level rollback
-capture, and publish/apply design before any repair mutation. Do not hand-patch
-only this product or weaken the owner catalog guard.
+Phase 5 added source-level Product Setup operating-brand authority controls:
+`LT Product Blueprint` now has a required `operating_brand` Select field with
+allowed lanes `locally_twisted`, `commercial_balloon_decor`, and
+`memorial_balloons`. Validation fails closed when the field is missing or
+invalid, and validation/apply-plan/runtime schema output marks valid values as
+`source_declared`, not live proof. `scripts/verify/product_blueprint_contract.py`
+guards the field, validation behavior, dry-run propagation, and runtime schema
+propagation. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
+Next safe action is active Product Setup uniqueness proof by target item,
+Website Item/route, slug, and operating brand, plus owner-visible blockers,
+variant-axis classification/collapse planning, row-level rollback capture, and
+publish/apply design before any repair mutation. Do not hand-patch only this
+product, treat a defaulted `operating_brand` as proved live brand lane, or
+weaken the owner catalog guard.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

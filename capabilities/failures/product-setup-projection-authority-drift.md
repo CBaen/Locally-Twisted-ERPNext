@@ -161,6 +161,10 @@ Minimum guard for price/copy:
 - Run the parity verifier across saved audit/projection artifacts; it must fail
   when Product Setup active price/copy differs from public/sellable authority
   or when brand lane / active authority proof is missing.
+- Treat Product Setup `operating_brand` as a required source authority
+  prerequisite. A valid value is `source_declared`, not live proof; saved
+  artifacts or runtime authority packets still need to prove brand lane before
+  mutation.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
@@ -203,3 +207,12 @@ pre-mutation rollback packet, media-role proof gaps, inactive Product Setup
 authority, ambiguous base-price-to-many-variant mapping, and variant explosion.
 See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
+
+Phase 5 added source-level `operating_brand` authority to Product Setup and
+guards it through `scripts/verify/product_blueprint_contract.py`. Allowed lanes
+are `locally_twisted`, `commercial_balloon_decor`, and `memorial_balloons`.
+This removes the "missing source field" ambiguity but not the live-proof
+blocker: a defaulted or saved `operating_brand` value is only
+`source_declared` until a saved artifact or runtime authority packet proves
+the brand lane. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.

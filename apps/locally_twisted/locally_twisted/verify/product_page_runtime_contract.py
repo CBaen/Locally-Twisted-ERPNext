@@ -316,6 +316,7 @@ def _assert_generic_product_setup_configuration_preserved() -> None:
             "doctype": "LT Product Blueprint",
             "product_name": "LT Runtime Generic Proof",
             "product_slug": blueprint_name,
+            "operating_brand": "locally_twisted",
             "item_group": "Bouquets",
             "page_template": "Ready-to-order page",
             "buying_path": "Direct checkout",

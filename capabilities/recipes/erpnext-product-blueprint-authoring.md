@@ -71,6 +71,11 @@ verifier work. For local build work, name the actual blocker.
 
 - Employees create a Desk `LT Product Blueprint` record with product basics,
   options, color recipes, add-ons, and conditional pricing rows.
+- Product Setup requires `operating_brand` with one of
+  `locally_twisted`, `commercial_balloon_decor`, or `memorial_balloons`.
+  Validation marks valid values as `source_declared`; this is not live proof
+  and does not approve mutation, public projection, payment/document identity,
+  or provider/customer action.
 - Validation maps employee labels to the architecture contract:
   `simple_product`, `complex_custom_product`, `checkout`, `quote_first`,
   `needs_review`, `selected_options`, `color_recipes`, `add_ons`, and
@@ -188,6 +193,9 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
 - Fresh import safety evidence before any staging/live product release.
 - No-write Product Setup projection preview and parity verifier for existing
   live products, starting with `large-head-missionary`.
+- Active Product Setup uniqueness by target item, Website Item/route, slug,
+  and operating brand. Do not treat defaulted `operating_brand` values as
+  proved live brand lane.
 
 2026-06-30 update: the first offline no-write tools are available:
 `scripts/dev/lt_live_readonly_catalog_authority_audit.py`,
@@ -205,6 +213,15 @@ Draft/inactive Product Setup authorities, and one product with 2,430 variants
 47 blocked product packets and 284 explicit blockers. These tools do not
 replace the future owner publish/apply workflow.
 
+2026-06-30 Phase 5 update: Product Setup now has a source-level
+`operating_brand` contract guarded by `scripts/verify/product_blueprint_contract.py`.
+The field is required in the DocType, pure validation fails closed on
+missing/invalid values, dry-run apply-plan output and runtime Product Setup
+schema carry the source value, and generated catalog-sync Product Setups
+default to `locally_twisted` as `source_declared`. This does not prove live
+brand lane or repair public projection. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -212,6 +229,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

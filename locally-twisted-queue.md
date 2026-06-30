@@ -44,13 +44,18 @@ Product Setups, 19 missing setup price values, 19 ambiguous base-price-to-many
 variant mappings, 6 variant-explosion products, and the known
 `large-head-missionary` price/copy drift. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
-Next safe work is source-level Product Setup authority controls: explicit
-brand-lane source/resolver, active Product Setup uniqueness by target
-item/route/brand lane, owner-visible blocker report, variant-axis
-classification/collapse plan starting with Birthday Deliveries, rollback target
-capture, and then owner-visible publish/apply or field-level runtime-authority
-design. Do not patch only this product, clear cache, write live records,
-deploy, or weaken owner catalog guards from this queue item alone.
+2026-06-30 Phase 5 added source-level Product Setup operating-brand authority:
+`LT Product Blueprint` requires `operating_brand`, validation fails closed on
+missing/invalid values, and validation/apply-plan/runtime schema output marks
+valid lanes as `source_declared`, not live proof. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
+Next safe work is active Product Setup uniqueness by target item, Website
+Item/route, slug, and operating brand; owner-visible blocker report;
+variant-axis classification/collapse plan starting with Birthday Deliveries;
+rollback target capture; and then owner-visible publish/apply or field-level
+runtime-authority design. Do not patch only this product, clear cache, write
+live records, deploy, treat defaulted operating-brand values as live proof, or
+weaken owner catalog guards from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

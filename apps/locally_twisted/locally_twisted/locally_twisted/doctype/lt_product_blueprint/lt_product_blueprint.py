@@ -93,6 +93,7 @@ def _doc_to_validation_payload(doc) -> dict:
     return {
         "product_name": doc.product_name,
         "product_slug": doc.product_slug,
+        "operating_brand": doc.operating_brand,
         "item_group": doc.item_group,
         "page_template": doc.page_template,
         "buying_path": doc.buying_path,

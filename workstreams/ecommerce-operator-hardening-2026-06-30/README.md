@@ -59,6 +59,8 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-2-projection-preview-parity-2026-06-30.md](phase-2-projection-preview-parity-2026-06-30.md): no-write projection preview, parity verifier, and offline blast-radius report tooling closeout.
 - [phase-3-catalog-authority-audit-2026-06-30.md](phase-3-catalog-authority-audit-2026-06-30.md): live read-only full published-catalog authority artifact collection, catalog-wide blocker counts, and next resolver/packet work.
 - [phase-4-authority-packet-resolver-2026-06-30.md](phase-4-authority-packet-resolver-2026-06-30.md): offline blocker/resolver report over saved catalog artifacts, 284 blocker breakdown, and first variant-explosion targets.
+- [phase-5-operating-brand-source-contract-2026-06-30.md](phase-5-operating-brand-source-contract-2026-06-30.md): source-only Product Setup `operating_brand` field, validation contract, runtime schema propagation, and verifier proof.
+- [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
 

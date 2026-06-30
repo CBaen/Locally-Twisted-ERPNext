@@ -121,6 +121,7 @@ def _create_blueprint(slug: str, image_urls: dict[str, str]):
             "doctype": "LT Product Blueprint",
             "product_name": "Release Proof Complex Product",
             "product_slug": slug,
+            "operating_brand": "locally_twisted",
             "item_group": _first_leaf_item_group(),
             "page_template": "Ready-to-order page",
             "buying_path": "Direct checkout",

@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Product Setup operating brand is required source authority, not live proof
+
+**Decision:** `LT Product Blueprint` / Product Setup must declare one allowed
+`operating_brand` before later catalog repair, projection, public route,
+payment, document, file/media, portal, automation, or release logic can treat
+the product as authority-resolved. Allowed source lanes are
+`locally_twisted`, `commercial_balloon_decor`, and `memorial_balloons`.
+
+**Reasoning:** Phase 4 proved every published product lacked brand-lane proof,
+and the authority packet model blocks active uniqueness until brand lane is
+resolved. Phase 5 adds the source field and validation contract so future
+automation can stop guessing. Critical witness review emphasized that a
+populated source field is not the same thing as live proof.
+
+**Guard:** A valid `operating_brand` is `source_declared` only. It does not
+prove live migration, active Product Setup uniqueness, public projection,
+Item Price parity, copy/media authority, rollback packet completeness,
+cart/checkout/payment/document identity, provider state, or customer-facing
+route truth. Existing defaults must not be used as mutation approval.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`;
+`scripts/verify/product_blueprint_contract.py`;
+`apps/locally_twisted/locally_twisted/product_setup_runtime.py`.
+
+**Decided by:** Codex with real witness/triad review on 2026-06-30, under GL's
+standing approval for stronger protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Product authority proof tools are required before repair
 
 **Decision:** Product Setup repair work must go through saved-artifact

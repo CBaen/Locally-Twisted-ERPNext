@@ -30,6 +30,12 @@ Verifier requirement: non-developer owner-profile test can create a draft produc
 
 Safety requirement: Product Setup must enforce one active authority per target item, slug/route, and brand lane before runtime reliance on active Product Setup records.
 
+2026-06-30 Phase 5 progress: `LT Product Blueprint` now has required
+`operating_brand` source authority and validation/apply-plan/runtime schema
+propagation. This does not close SCR-002 because active uniqueness,
+owner-visible blockers, publish/apply workflow, and live projection proof are
+still unbuilt.
+
 ## SCR-003 - Immediate Public Projection For Approved Product Changes
 
 Current state: a backend save can update a field that public pages do not read, leaving live content unchanged.
@@ -151,6 +157,13 @@ Affected surfaces: Product Setup, public routes, Website Item, files/media, invo
 Verifier requirement: each product-change packet records brand lane, route namespace/public route, customer-facing copy surface, invoice/document identity, payment/customer-message identity, file/media ownership, portal/automation behavior, inheritance proof through those surfaces, and fail-closed behavior when unclear.
 
 Safety requirement: ambiguous brand lane blocks mutation.
+
+2026-06-30 Phase 5 progress: Product Setup source records now require
+`operating_brand` with allowed lanes `locally_twisted`,
+`commercial_balloon_decor`, and `memorial_balloons`. Valid values are
+`source_declared` only; live proof, active uniqueness, public projection,
+payment/document identity, media/file ownership, portal/automation behavior,
+and release packet proof remain separate blockers.
 
 ## SCR-013 - Pre-Mutation Release Packet And Rollback Contract
 

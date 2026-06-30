@@ -100,6 +100,14 @@ blocker. Brand lane is unproved for all 47, and 19 matched Product Setups are
 in Draft/inactive authority status. The next Phase 1 implementation slice is
 therefore a catalog authority resolver/packet layer, not a live repair.
 
+2026-06-30 Phase 5 source progress: Product Setup now requires
+`operating_brand` and carries it through validation, dry-run apply-plan output,
+and runtime Product Setup schema as `source_declared`. This reduces one source
+ambiguity but does not prove live brand lane. The next Phase 1 build slice is
+active Product Setup uniqueness by target item, Website Item/route, slug, and
+operating brand, plus authority packet logic that keeps `source_declared`
+separate from `proved`.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

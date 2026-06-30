@@ -121,6 +121,7 @@ def _blueprint_spec(
     return {
         "product_name": row.get("web_item_name") or item.item_name or item_code,
         "product_slug": item_code,
+        "operating_brand": "locally_twisted",
         "item_group": row.get("item_group") or item.item_group,
         "page_template": _page_template(row.get("lt_product_page_type")),
         "buying_path": _buying_path(row.get("lt_commerce_lane")),
@@ -217,6 +218,7 @@ def _base_fields(spec: dict[str, Any]) -> dict[str, Any]:
     return {
         "product_name": spec["product_name"],
         "product_slug": spec["product_slug"],
+        "operating_brand": spec["operating_brand"],
         "item_group": spec["item_group"],
         "page_template": spec["page_template"],
         "buying_path": spec["buying_path"],

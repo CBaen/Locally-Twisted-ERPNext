@@ -33,6 +33,8 @@ def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
     contract = validation.get("contract") or {}
     product_page_type = contract.get("product_page_type")
     commerce_lane = contract.get("commerce_lane")
+    operating_brand = _text(contract.get("operating_brand"))
+    operating_brand_authority_state = _text(contract.get("operating_brand_authority_state")) or "missing"
     slug = _text(data.get("product_slug"))
     product_name = _text(data.get("product_name"))
     item_group = _text(data.get("item_group"))
@@ -63,6 +65,8 @@ def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
         item_group=item_group,
         product_page_type=product_page_type,
         commerce_lane=commerce_lane,
+        operating_brand=operating_brand,
+        operating_brand_authority_state=operating_brand_authority_state,
         base_price=base_price,
         shop_visibility=shop_visibility,
         exact_price_rows=exact_price_rows,
@@ -96,6 +100,8 @@ def _planned_records(
     item_group: str,
     product_page_type: str | None,
     commerce_lane: str | None,
+    operating_brand: str,
+    operating_brand_authority_state: str,
     base_price: float,
     shop_visibility: str,
     exact_price_rows: list[dict[str, Any]],
@@ -111,6 +117,8 @@ def _planned_records(
         "item_code": slug,
         "item_name": product_name,
         "item_group": item_group,
+        "operating_brand": operating_brand,
+        "operating_brand_authority_state": operating_brand_authority_state,
         "has_variants": 1 if has_variants else 0,
         "published": 0,
     }
@@ -123,6 +131,8 @@ def _planned_records(
         "published": 0,
         "requested_shop_visibility": shop_visibility,
         "shop_visibility": "local_preview_unpublished",
+        "operating_brand": operating_brand,
+        "operating_brand_authority_state": operating_brand_authority_state,
         "lt_product_page_type": product_page_type,
         "lt_commerce_lane": commerce_lane,
     }

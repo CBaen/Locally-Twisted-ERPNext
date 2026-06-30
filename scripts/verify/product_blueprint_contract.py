@@ -26,6 +26,7 @@ from locally_twisted.product_blueprint_local_apply import (  # noqa: E402
     validate_local_apply_request,
 )
 from locally_twisted.product_setup_runtime import (  # noqa: E402
+    OPERATING_BRAND_OPTIONS,
     build_product_setup_schema,
     resolve_product_setup_configuration,
 )
@@ -57,6 +58,8 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertEqual(result["validation_status"], "Ready For Local Preview")
         self.assertEqual(result["contract"]["product_page_type"], "simple_product")
         self.assertEqual(result["contract"]["commerce_lane"], "checkout")
+        self.assertEqual(result["contract"]["operating_brand"], "locally_twisted")
+        self.assertEqual(result["contract"]["operating_brand_authority_state"], "source_declared")
         self.assertEqual(result["contract"]["payload_target_counts"]["selected_options"], 1)
         self.assertEqual(result["contract"]["payload_target_counts"]["add_ons"], 1)
         self.assertFalse(result["contract"]["product_generation_enabled"])
@@ -78,9 +81,33 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertFalse(result["live_publish_enabled"])
         self.assertEqual(result["planned_records"]["base_item"]["item_code"], "proof-product")
         self.assertEqual(result["planned_records"]["website_item"]["published"], 0)
+        self.assertEqual(result["planned_records"]["base_item"]["operating_brand"], "locally_twisted")
+        self.assertEqual(result["planned_records"]["website_item"]["operating_brand"], "locally_twisted")
+        self.assertEqual(result["planned_records"]["website_item"]["operating_brand_authority_state"], "source_declared")
         self.assertEqual(len(result["planned_records"]["item_variants"]), 2)
         self.assertEqual(len(result["planned_records"]["item_prices"]), 2)
         self.assertEqual(result["next_required_gate"], "guarded_local_apply")
+
+    def test_operating_brand_is_required_source_authority_not_live_proof(self) -> None:
+        missing = validate_blueprint(_blueprint(operating_brand=""))
+        self.assertFalse(missing["ok"])
+        self.assertTrue(any("Operating Brand is required" in row for row in missing["blockers"]))
+        self.assertEqual(missing["contract"]["operating_brand_authority_state"], "missing")
+
+        unknown = validate_blueprint(_blueprint(operating_brand="unknown_brand"))
+        self.assertFalse(unknown["ok"])
+        self.assertTrue(any("Operating Brand must be one of" in row for row in unknown["blockers"]))
+        self.assertEqual(unknown["contract"]["operating_brand_authority_state"], "invalid")
+
+        valid = validate_blueprint(_blueprint(operating_brand="commercial_balloon_decor"))
+        self.assertTrue(valid["ok"], valid)
+        self.assertEqual(valid["contract"]["operating_brand"], "commercial_balloon_decor")
+        self.assertEqual(valid["contract"]["operating_brand_authority_state"], "source_declared")
+        self.assertFalse(valid["ready_for_live"])
+
+        schema = build_product_setup_schema(_blueprint(operating_brand="memorial_balloons"))
+        self.assertEqual(schema["product"]["operating_brand"], "memorial_balloons")
+        self.assertEqual(schema["product"]["operating_brand_authority_state"], "source_declared")
 
     def test_local_apply_preview_names_writes_without_enabling_them(self) -> None:
         result = build_local_apply_preview(
@@ -247,6 +274,10 @@ class ProductBlueprintContractTest(unittest.TestCase):
         product = _doctype("lt_product_blueprint", "lt_product_blueprint.json")
         self.assertEqual(product["actions"], [])
         fields = {field["fieldname"]: field for field in product["fields"]}
+        self.assertEqual(fields["operating_brand"]["fieldtype"], "Select")
+        self.assertTrue(fields["operating_brand"].get("reqd"))
+        self.assertEqual(fields["operating_brand"].get("default"), "locally_twisted")
+        self.assertEqual(set(fields["operating_brand"].get("options", "").splitlines()), OPERATING_BRAND_OPTIONS)
         self.assertTrue(fields["ready_for_live"].get("read_only"))
         self.assertTrue(fields["target_item_code"].get("read_only"))
         self.assertTrue(fields["target_website_item"].get("read_only"))
@@ -501,6 +532,7 @@ def _blueprint(**overrides):
     data = {
         "product_name": "Proof Product",
         "product_slug": "proof-product",
+        "operating_brand": "locally_twisted",
         "item_group": "Bouquets",
         "page_template": "Configurable product page",
         "buying_path": "Quote first",
