@@ -2,7 +2,7 @@
 
 Date: 2026-06-30
 
-Status: source-only Product Setup brand-lane authority contract implemented and verified. No deploy, cache clear, live ERPNext mutation, provider/payment/DNS/Frappe Cloud change, customer message, or product-scope decision occurred.
+Status: source-only Product Setup brand-lane authority contract implemented and verified, with follow-up source guard for same-brand active Product Setup ambiguity. No deploy, cache clear, live ERPNext mutation, provider/payment/DNS/Frappe Cloud change, customer message, or product-scope decision occurred.
 
 ## Purpose
 
@@ -26,6 +26,10 @@ Decision:
 - Allowed values are `locally_twisted`, `commercial_balloon_decor`, and `memorial_balloons`.
 - Contract state is `source_declared` for valid source values, `missing` when absent, and `invalid` when outside the allowed list.
 - Do not add or imply `brand_lane_proved`, live projection approval, active uniqueness proof, or repair readiness from this field alone.
+- Follow-up witness review approved a source-only active uniqueness guard for
+  active statuses only. It blocks same-brand active Product Setups that claim
+  the same source slug, target Item, or target Website Item. This is not global
+  live active-authority proof.
 
 ## Source Changes
 
@@ -44,6 +48,9 @@ Decision:
   - Carries operating brand authority into dry-run planned Item and Website Item metadata.
 - `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py`
   - Includes operating brand in Desk preview payloads.
+  - Blocks saving active Product Setup authority when another active Product Setup in the same source-declared operating brand already claims the same slug, target Item, or target Website Item.
+- `apps/locally_twisted/locally_twisted/product_setup_runtime.py`
+  - Runtime active lookup no longer silently picks the most recently modified Product Setup when multiple active records match the same runtime key; it logs the ambiguity and returns no setup.
 - `apps/locally_twisted/locally_twisted/seed/sync_product_blueprints_from_catalog.py`
   - Adds source-declared `locally_twisted` for generated Product Setup records from current LT catalog sync.
 - `scripts/verify/product_blueprint_contract.py`
@@ -63,7 +70,7 @@ python scripts/verify/product_blueprint_contract.py
 git diff --check
 ```
 
-`product_blueprint_contract.py` ran 24 tests and passed.
+`product_blueprint_contract.py` ran 25 tests and passed.
 Changed-file forbidden-term scan returned no matches.
 
 Capability gate: PASS.
@@ -85,7 +92,9 @@ This phase does not fix or prove:
 - owner Desk rendering after migration;
 - public product-page price/copy/media projection;
 - cache behavior;
-- active Product Setup uniqueness by target item/route/brand lane;
+- live/global active Product Setup uniqueness by target item/route/brand lane;
+- runtime brand-aware lookup;
+- database-level uniqueness constraints;
 - rollback packet completeness;
 - Item Price mutation or parity;
 - cart/checkout/payment/document identity;
@@ -96,7 +105,7 @@ This phase does not fix or prove:
 
 Continue Phase 1 source authority controls:
 
-- enforce one active Product Setup per target Item, Website Item/route, slug, and operating brand;
-- update saved-artifact authority packet logic so `source_declared` remains distinct from `proved`;
+- update saved-artifact authority packet logic so `source_declared` operating brand and same-brand source uniqueness are reported separately from live proof;
+- make runtime Product Setup lookup brand-aware before cross-brand same-slug active setups are allowed;
 - add owner-visible blocker reporting using the same blocker categories;
 - start variant-axis classification on Birthday Deliveries before any variant-collapse or price repair write.

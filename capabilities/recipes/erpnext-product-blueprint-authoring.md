@@ -76,6 +76,10 @@ verifier work. For local build work, name the actual blocker.
   Validation marks valid values as `source_declared`; this is not live proof
   and does not approve mutation, public projection, payment/document identity,
   or provider/customer action.
+- Product Setups in active source authority statuses (`Local Preview Ready`,
+  `Staging Ready`, or `Approved For Live`) must be unique per source-declared
+  operating brand for the same slug, target Item, or target Website Item. This
+  is a source save guard, not live/global uniqueness proof.
 - Validation maps employee labels to the architecture contract:
   `simple_product`, `complex_custom_product`, `checkout`, `quote_first`,
   `needs_review`, `selected_options`, `color_recipes`, `add_ons`, and
@@ -193,9 +197,11 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
 - Fresh import safety evidence before any staging/live product release.
 - No-write Product Setup projection preview and parity verifier for existing
   live products, starting with `large-head-missionary`.
-- Active Product Setup uniqueness by target item, Website Item/route, slug,
-  and operating brand. Do not treat defaulted `operating_brand` values as
-  proved live brand lane.
+- Saved-artifact authority packets must report source-declared operating brand
+  and same-brand source uniqueness separately from live brand/route proof.
+- Runtime Product Setup lookup still needs brand-aware resolution before
+  cross-brand same-slug active setups are allowed. Do not treat defaulted
+  `operating_brand` values as proved live brand lane.
 
 2026-06-30 update: the first offline no-write tools are available:
 `scripts/dev/lt_live_readonly_catalog_authority_audit.py`,
@@ -221,6 +227,12 @@ schema carry the source value, and generated catalog-sync Product Setups
 default to `locally_twisted` as `source_declared`. This does not prove live
 brand lane or repair public projection. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
+
+2026-06-30 Phase 5 follow-up: Product Setup source validation now blocks active
+same-brand duplicates for the same slug, target Item, or target Website Item,
+and runtime active lookup logs ambiguity and returns no setup when more than
+one active record matches a runtime key. This keeps ambiguity loud without
+claiming live repair, cross-brand route proof, or database-level uniqueness.
 
 Backlinks:
 

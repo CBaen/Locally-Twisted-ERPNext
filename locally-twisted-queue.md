@@ -47,15 +47,20 @@ variant mappings, 6 variant-explosion products, and the known
 2026-06-30 Phase 5 added source-level Product Setup operating-brand authority:
 `LT Product Blueprint` requires `operating_brand`, validation fails closed on
 missing/invalid values, and validation/apply-plan/runtime schema output marks
-valid lanes as `source_declared`, not live proof. See
+valid lanes as `source_declared`, not live proof. The follow-up source guard
+blocks active same-brand Product Setup duplicates for the same slug, target
+Item, or target Website Item, and runtime active lookup now fails closed
+instead of selecting the newest duplicate by modified time. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
-Next safe work is active Product Setup uniqueness by target item, Website
-Item/route, slug, and operating brand; owner-visible blocker report;
-variant-axis classification/collapse plan starting with Birthday Deliveries;
-rollback target capture; and then owner-visible publish/apply or field-level
-runtime-authority design. Do not patch only this product, clear cache, write
-live records, deploy, treat defaulted operating-brand values as live proof, or
-weaken owner catalog guards from this queue item alone.
+Next safe work is saved-artifact packet reporting that separates
+`source_declared` and same-brand source uniqueness from live proof, brand-aware
+runtime lookup before cross-brand same-slug active setups are allowed,
+owner-visible blocker reporting, variant-axis classification/collapse planning
+starting with Birthday Deliveries, rollback target capture, and then
+owner-visible publish/apply or field-level runtime-authority design. Do not
+patch only this product, clear cache, write live records, deploy, treat
+defaulted operating-brand values as live proof, or weaken owner catalog guards
+from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

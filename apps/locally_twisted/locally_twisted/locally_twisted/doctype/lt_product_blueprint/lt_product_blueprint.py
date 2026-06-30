@@ -16,12 +16,23 @@ from locally_twisted.product_blueprint_local_apply import (
     apply_blueprint_locally,
     build_local_apply_preview,
 )
-from locally_twisted.product_blueprint_validation import validate_blueprint_doc
+from locally_twisted.product_blueprint_validation import BLOCKED, validate_blueprint_doc
+from locally_twisted.product_setup_runtime import ACTIVE_SETUP_STATUSES
 
 
 class LTProductBlueprint(Document):
     def validate(self):
         result = validate_blueprint_doc(self)
+        active_uniqueness_blockers = _active_uniqueness_save_blockers(self)
+        if active_uniqueness_blockers:
+            result["ok"] = False
+            result["validation_status"] = BLOCKED
+            result["blockers"].extend(active_uniqueness_blockers)
+            result["save_blockers"].extend(active_uniqueness_blockers)
+            result["summary"] = (
+                "Blocked: active Product Setup authority must be unique before preview, "
+                "staging, live approval, or local apply."
+            )
 
         for row, normalized in zip(self.option_rows or [], result["contract"]["option_rows"]):
             row.payload_target = normalized.get("payload_target")
@@ -37,6 +48,48 @@ class LTProductBlueprint(Document):
 
         if result["save_blockers"]:
             frappe.throw("<br>".join(result["save_blockers"]))
+
+
+def _active_uniqueness_save_blockers(doc: Document) -> list[str]:
+    if _text(getattr(doc, "publish_status", "")) not in ACTIVE_SETUP_STATUSES:
+        return []
+    operating_brand = _text(getattr(doc, "operating_brand", ""))
+    if not operating_brand:
+        return []
+
+    or_filters = []
+    for fieldname in ("product_slug", "target_item_code", "target_website_item"):
+        value = _text(getattr(doc, fieldname, ""))
+        if value:
+            or_filters.append([fieldname, "=", value])
+    if not or_filters:
+        return []
+
+    rows = frappe.get_all(
+        "LT Product Blueprint",
+        filters={
+            "operating_brand": operating_brand,
+            "publish_status": ["in", sorted(ACTIVE_SETUP_STATUSES)],
+        },
+        or_filters=or_filters,
+        fields=["name", "product_slug", "target_item_code", "target_website_item", "publish_status"],
+        order_by="modified desc",
+        limit_page_length=10,
+    )
+    conflicts = [row for row in rows if _text(row.get("name")) != _text(getattr(doc, "name", ""))]
+    if not conflicts:
+        return []
+
+    labels = ", ".join(
+        f"{row.get('name')} ({row.get('publish_status')})"
+        for row in conflicts[:5]
+        if row.get("name")
+    )
+    return [
+        "Active Product Setup authority conflict for operating brand "
+        f"{operating_brand}: {labels or 'another active Product Setup'}. "
+        "Only one active Product Setup may target the same slug, Item, or Website Item per operating brand."
+    ]
 
 
 @frappe.whitelist()
@@ -121,3 +174,7 @@ def _truthy(value) -> bool:
     if isinstance(value, bool):
         return value
     return str(value or "").strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _text(value) -> str:
+    return str(value or "").strip()

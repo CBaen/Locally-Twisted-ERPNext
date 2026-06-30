@@ -302,6 +302,23 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertIn("Preview Local Apply", client)
         self.assertNotIn(LOCAL_APPLY_CONFIRMATION, client)
 
+    def test_active_product_setup_uniqueness_fails_closed_in_source(self) -> None:
+        controller = _read_doctype_file("lt_product_blueprint", "lt_product_blueprint.py")
+        runtime = (ROOT / "apps" / "locally_twisted" / "locally_twisted" / "product_setup_runtime.py").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("ACTIVE_SETUP_STATUSES", controller)
+        self.assertIn("_active_uniqueness_save_blockers", controller)
+        self.assertIn("operating_brand", controller)
+        self.assertIn("product_slug", controller)
+        self.assertIn("target_item_code", controller)
+        self.assertIn("target_website_item", controller)
+        self.assertIn("or_filters", controller)
+        self.assertIn("Only one active Product Setup may target the same slug, Item, or Website Item per operating brand.", controller)
+        self.assertIn("limit_page_length=2", runtime)
+        self.assertIn("Ambiguous active Product Setup authority", runtime)
+
     def test_child_doctypes_are_child_tables(self) -> None:
         for folder, filename in (
             ("lt_product_blueprint_option", "lt_product_blueprint_option.json"),

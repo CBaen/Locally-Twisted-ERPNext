@@ -4,7 +4,7 @@
 - Repo/path: `/home/guidingl/agent-worktrees/builtbycameron-lt/codex-20260630-lt-product-setup-brand-authority__phase5`
 - Main goal: Add source-level Product Setup operating-brand authority controls so catalog automation can prove brand lane before mutation or repair.
 - Trigger: Income-critical ecommerce architecture hardening after live Product Setup edits did not project to the customer-facing product page.
-- Current stage: `branch-proof`
+- Current stage: `follow-up-source-uniqueness`
 - Main agent owns: final source edits, verification, docs, scoped commit/push, and synthesis.
 - Witness lanes:
   - Intent Witness: confirm this solves a real owner-management authority gap without pretending to fix live projection immediately.
@@ -46,6 +46,11 @@
 - Open disagreements: critical witness warned that a source default can become fake evidence if future tools treat it as proved brand lane. Mitigation implemented: contract state is `source_declared`, not live proof.
 - Decisions made:
   - Implement a source-level `operating_brand` field and validation contract first.
+  - Add source-only active uniqueness guard for active statuses only. It blocks
+    same-brand Product Setups that claim the same slug, target Item, or target
+    Website Item, and runtime lookup fails closed on duplicate active matches.
+  - Do not claim live/global active authority proof, route migration proof,
+    cross-brand runtime lookup, or database-level uniqueness from this guard.
   - Do not import untracked brand-boundary files from the shared checkout into this phase.
 - Files/systems touched:
   - `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.json`
@@ -69,11 +74,20 @@
   - `python scripts/verify/product_blueprint_contract.py` passed 24 tests.
   - `git diff --check`
   - Changed-file forbidden-term scan returned no matches.
+- Follow-up verification completed:
+  - `python -m py_compile apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py apps/locally_twisted/locally_twisted/product_setup_runtime.py scripts/verify/product_blueprint_contract.py`
+  - `python scripts/verify/product_blueprint_contract.py` passed 25 tests.
+  - `git diff --check`
 - Active agent/session ids:
   - Intent witness `019f180a-6e44-7d51-b350-3354cb6ff506`
   - Technical witness `019f180a-abc9-7fa1-94b6-62653aa2a432`
   - Critical witness `019f180b-33eb-7a01-bd30-c45154a30c1c`
+  - Follow-up technical witness `019f1813-71ad-7352-b769-a1979c926884`
+  - Follow-up critical witness `019f1813-8da4-7211-8e14-f25f58c908c0`
 - Cleanup needed: close spawned agents; run process hygiene before final.
+- Cleanup status: follow-up technical and critical witnesses were closed after
+  reporting. Earlier Phase 5 witness IDs from the pre-follow-up packet were
+  already unavailable in the current runtime when close was attempted.
 - Resume instruction: Continue source-only Phase 5 in the isolated worktree; do not deploy, mutate live ERPNext records, clear cache, or touch provider/payment/DNS/customer-message paths.
 
 ## Route Record

@@ -139,6 +139,13 @@ Failure mode:
 
 - Owner enters pricing rules that do not become public/cart/checkout price behavior.
 
+Required fix:
+
+- Decide which pricing patterns are SKU prices, add-on prices, fulfillment
+  charges, quote-only rules, or dynamic runtime rules.
+- Each category needs a verifier and loud owner-facing unsupported-state
+  message.
+
 ## B008 - Product Brand Lane Was Not A First-Class Product Setup Authority
 
 Severity: P0
@@ -171,14 +178,10 @@ Required fix:
 
 - Source-level `operating_brand` exists and is guarded by
   `scripts/verify/product_blueprint_contract.py`.
-- Live proof and active uniqueness are still open blockers.
+- Live proof, cross-brand runtime lookup, projection, and payment/document/media
+  inheritance proof are still open blockers.
 
-Required fix:
-
-- Decide which pricing patterns are SKU prices, add-on prices, fulfillment charges, quote-only rules, or dynamic runtime rules.
-- Each category needs a verifier and loud owner-facing unsupported-state message.
-
-## B008 - Duplicate Active Product Setup Records Can Win By Modified Time
+## B009 - Duplicate Active Product Setup Records Can Win By Modified Time
 
 Severity: P0
 
@@ -195,7 +198,17 @@ Required fix:
 - Enforce one active Product Setup per target item/slug per brand lane.
 - Add a verifier and Desk validation blocker for duplicates.
 
-## B009 - `/shop` May Show A Card That Cart Later Rejects
+2026-06-30 status:
+
+- Source validation now blocks active same-brand Product Setup records that
+  claim the same slug, target Item, or target Website Item.
+- Runtime active lookup now logs ambiguity and returns no setup when duplicate
+  active records match the same runtime key.
+- Still open: saved-artifact authority reporting, brand-aware runtime lookup,
+  route-level uniqueness after route authority is modeled, and database-level
+  uniqueness.
+
+## B010 - `/shop` May Show A Card That Cart Later Rejects
 
 Severity: P0
 

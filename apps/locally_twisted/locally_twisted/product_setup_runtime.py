@@ -119,8 +119,18 @@ def _active_product_setup_name(frappe_module: Any, fieldname: str, value: str) -
         filters={fieldname: value, "publish_status": ["in", sorted(ACTIVE_SETUP_STATUSES)]},
         pluck="name",
         order_by="modified desc",
-        limit_page_length=1,
+        limit_page_length=2,
     )
+    if len(rows) > 1:
+        try:
+            frappe_module.log_error(
+                "Ambiguous active Product Setup authority for "
+                f"{fieldname}={value}: {', '.join(str(row) for row in rows)}",
+                title="LT Product Setup active authority conflict",
+            )
+        except Exception:
+            pass
+        return None
     return rows[0] if rows else None
 
 

@@ -32,9 +32,12 @@ Safety requirement: Product Setup must enforce one active authority per target i
 
 2026-06-30 Phase 5 progress: `LT Product Blueprint` now has required
 `operating_brand` source authority and validation/apply-plan/runtime schema
-propagation. This does not close SCR-002 because active uniqueness,
-owner-visible blockers, publish/apply workflow, and live projection proof are
-still unbuilt.
+propagation. Follow-up source validation blocks active same-brand Product Setup
+duplicates for the same slug, target Item, or target Website Item, and runtime
+active lookup fails closed when duplicates match a runtime key. This does not
+close SCR-002 because saved-artifact authority packets, brand-aware runtime
+lookup, owner-visible blockers, publish/apply workflow, live projection proof,
+and database-level uniqueness are still unbuilt.
 
 ## SCR-003 - Immediate Public Projection For Approved Product Changes
 
@@ -161,9 +164,11 @@ Safety requirement: ambiguous brand lane blocks mutation.
 2026-06-30 Phase 5 progress: Product Setup source records now require
 `operating_brand` with allowed lanes `locally_twisted`,
 `commercial_balloon_decor`, and `memorial_balloons`. Valid values are
-`source_declared` only; live proof, active uniqueness, public projection,
-payment/document identity, media/file ownership, portal/automation behavior,
-and release packet proof remain separate blockers.
+`source_declared` only. Source validation now blocks active same-brand Product
+Setup duplicates for the same slug, target Item, or target Website Item. Live
+proof, cross-brand runtime lookup, public projection, payment/document
+identity, media/file ownership, portal/automation behavior, and release packet
+proof remain separate blockers.
 
 ## SCR-013 - Pre-Mutation Release Packet And Rollback Contract
 

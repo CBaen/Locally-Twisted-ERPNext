@@ -165,6 +165,12 @@ Minimum guard for price/copy:
   prerequisite. A valid value is `source_declared`, not live proof; saved
   artifacts or runtime authority packets still need to prove brand lane before
   mutation.
+- Treat source-level same-brand active uniqueness as necessary but not
+  sufficient. Product Setup now blocks active source records that claim the
+  same slug, target Item, or target Website Item in the same source-declared
+  operating brand, and runtime active lookup fails closed on duplicates instead
+  of selecting the newest row. This still does not prove live route authority,
+  cross-brand runtime lookup, or database-level uniqueness.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
@@ -216,3 +222,9 @@ blocker: a defaulted or saved `operating_brand` value is only
 `source_declared` until a saved artifact or runtime authority packet proves
 the brand lane. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`.
+
+The same Phase 5 follow-up added a source-only active uniqueness save blocker
+for Product Setups in active authority statuses and changed runtime lookup to
+return no setup when duplicate active records match the same runtime key. This
+prevents modified-time selection from hiding ambiguity, but it is not a live
+repair or release proof.

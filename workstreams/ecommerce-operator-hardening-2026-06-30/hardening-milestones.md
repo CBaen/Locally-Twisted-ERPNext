@@ -103,10 +103,13 @@ therefore a catalog authority resolver/packet layer, not a live repair.
 2026-06-30 Phase 5 source progress: Product Setup now requires
 `operating_brand` and carries it through validation, dry-run apply-plan output,
 and runtime Product Setup schema as `source_declared`. This reduces one source
-ambiguity but does not prove live brand lane. The next Phase 1 build slice is
-active Product Setup uniqueness by target item, Website Item/route, slug, and
-operating brand, plus authority packet logic that keeps `source_declared`
-separate from `proved`.
+ambiguity but does not prove live brand lane. Source validation also blocks
+active same-brand Product Setup duplicates for the same slug, target Item, or
+target Website Item, and runtime active lookup fails closed on duplicate
+matches instead of selecting by modified time. The next Phase 1 build slice is
+saved-artifact authority packet logic that keeps `source_declared` and
+same-brand source uniqueness separate from live proof, plus brand-aware runtime
+lookup before cross-brand same-slug active setups are allowed.
 
 ## Phase 2 - Owner Product Setup UX
 

@@ -15,6 +15,10 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 payment, document, file/media, portal, automation, or release logic can treat
 the product as authority-resolved. Allowed source lanes are
 `locally_twisted`, `commercial_balloon_decor`, and `memorial_balloons`.
+Product Setups in active source authority statuses (`Local Preview Ready`,
+`Staging Ready`, or `Approved For Live`) must also be unique per
+source-declared operating brand for the same slug, target Item, or target
+Website Item.
 
 **Reasoning:** Phase 4 proved every published product lacked brand-lane proof,
 and the authority packet model blocks active uniqueness until brand lane is
@@ -23,10 +27,12 @@ automation can stop guessing. Critical witness review emphasized that a
 populated source field is not the same thing as live proof.
 
 **Guard:** A valid `operating_brand` is `source_declared` only. It does not
-prove live migration, active Product Setup uniqueness, public projection,
-Item Price parity, copy/media authority, rollback packet completeness,
-cart/checkout/payment/document identity, provider state, or customer-facing
-route truth. Existing defaults must not be used as mutation approval.
+prove live migration, public projection, Item Price parity, copy/media
+authority, rollback packet completeness, cart/checkout/payment/document
+identity, provider state, or customer-facing route truth. The active uniqueness
+guard is source-authoring protection only; it does not prove live/global active
+authority, route migration, cross-brand runtime lookup, or database-level
+atomic uniqueness. Existing defaults must not be used as mutation approval.
 
 **Receipts:**
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`;
