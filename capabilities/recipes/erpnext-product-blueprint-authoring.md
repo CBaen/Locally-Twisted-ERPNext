@@ -131,6 +131,11 @@ verifier work. For local build work, name the actual blocker.
   proof. `source_declared` operating brand and same-brand source uniqueness do
   not set active authority, mutation approval, deploy approval, cache approval,
   public route proof, payment/document identity, or release readiness.
+- Runtime Product Setup lookup is brand-aware source/runtime protection:
+  schema/API/gallery resolution requires explicit or source-declared
+  `operating_brand`, checks target Item, target Website Item, and slug inside
+  that brand, and fails closed on missing/invalid brand or active ambiguity
+  instead of selecting by modified time.
 
 ## Workflow
 
@@ -203,9 +208,9 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
   live products, starting with `large-head-missionary`.
 - Saved-artifact authority packets must report source-declared operating brand
   and same-brand source uniqueness separately from live brand/route proof.
-- Runtime Product Setup lookup still needs brand-aware resolution before
-  cross-brand same-slug active setups are allowed. Do not treat defaulted
-  `operating_brand` values as proved live brand lane.
+- Owner-visible Product Setup blockers still need to surface runtime authority
+  conflicts in Desk. Do not treat defaulted `operating_brand` values as proved
+  live brand lane.
 
 2026-06-30 update: the first offline no-write tools are available:
 `scripts/dev/lt_live_readonly_catalog_authority_audit.py`,
@@ -244,6 +249,14 @@ claiming live repair, cross-brand route proof, or database-level uniqueness.
 consume packet reports. Old saved catalog artifacts remain blocked; the packet
 contract only makes source evidence visible.
 
+2026-06-30 Phase 7 update: runtime Product Setup lookup now uses explicit or
+source-declared operating brand for schema/API/gallery resolution and fails
+closed on missing/invalid brand, same-brand duplicates, invalid active Product
+Setup brand, or target-item ambiguity. Website Item operating-brand custom
+fields are seeded by `sync_commerce_rules` and registered for existing sites
+through `sync_product_setup_brand_runtime_fields_20260630`. This does not
+repair live public projection or prove live brand lane.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -252,6 +265,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

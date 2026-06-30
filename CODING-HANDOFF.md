@@ -64,12 +64,26 @@ catalog artifacts remain blocked: the full `/tmp` saved catalog report exits
 `1` with 47 blocked products and 265 blockers, and the old
 `large-head-missionary` packet exits `1` with seven blockers. Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`.
-Next safe action is making runtime lookup brand-aware before cross-brand
-same-slug active setups are allowed, adding owner-visible blockers, starting
-variant-axis classification/collapse planning with Birthday Deliveries,
-capturing row-level rollback targets, and designing publish/apply before any
-repair mutation. Do not hand-patch only this product, treat a defaulted
-`operating_brand` as proved live brand lane, or weaken the owner catalog guard.
+Phase 7 made the source runtime lookup brand-aware without deploying or
+mutating data. `product_setup_schema_for_website_item` and
+`active_product_setup_name_for_website_item` now resolve active Product Setup
+authority by explicit/source-declared `operating_brand` plus target Item,
+target Website Item, or slug. Missing/invalid brand, invalid active Product
+Setup brand, same-brand duplicate active authority, or target-item ambiguity
+returns no setup and logs an operator-visible conflict instead of falling
+through to another key or selecting the newest modified record. Product Setup
+API endpoints accept optional `operating_brand`, product-page JSON can pass
+Website Item brand metadata, the gallery/media shortcut now uses the same
+resolver, and `sync_commerce_rules` plus patch
+`sync_product_setup_brand_runtime_fields_20260630` install Website Item brand
+metadata fields.
+Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`.
+Next safe action is adding owner-visible blockers, starting variant-axis
+classification/collapse planning with Birthday Deliveries, capturing row-level
+rollback targets, and designing publish/apply before any repair mutation. Do
+not hand-patch only this product, treat a defaulted `operating_brand` as proved
+live brand lane, or weaken the owner catalog guard.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

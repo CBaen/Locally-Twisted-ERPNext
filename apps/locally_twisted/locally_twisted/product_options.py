@@ -26,7 +26,10 @@ from locally_twisted.product_page_runtime import (
     checkout_add_on_contracts_for_item,
     product_page_contract_for_website_item,
 )
-from locally_twisted.product_setup_runtime import get_product_setup_schema_json
+from locally_twisted.product_setup_runtime import (
+    active_product_setup_name_for_website_item,
+    get_product_setup_schema_json,
+)
 from webshop.webshop.variant_selector.utils import get_attributes_and_values
 
 
@@ -247,7 +250,7 @@ def get_product_gallery_slides(
                     row.get("heading") or row.get("description") or website_item.get("web_item_name") or "Product photo",
                 )
 
-    blueprint_name = _product_setup_name_for_item(item_code)
+    blueprint_name = active_product_setup_name_for_website_item(item_code)
     if blueprint_name:
         rows = frappe.get_all(
             "LT Product Blueprint Media Rule",
@@ -266,17 +269,6 @@ def get_product_gallery_slides(
             )
             add_slide(row.get("image"), heading)
     return slides
-
-
-def _product_setup_name_for_item(item_code: str) -> str:
-    """Return the Product Setup record that owns public media for an item."""
-    if not frappe.db.exists("DocType", "LT Product Blueprint"):
-        return ""
-    return (
-        frappe.db.get_value("LT Product Blueprint", {"target_item_code": item_code}, "name")
-        or frappe.db.get_value("LT Product Blueprint", {"product_slug": item_code}, "name")
-        or ""
-    )
 
 
 @lru_cache(maxsize=1024)

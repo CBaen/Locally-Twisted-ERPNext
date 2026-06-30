@@ -26,6 +26,7 @@ from locally_twisted.product_page_runtime import (
     LINE_FIELDNAMES,
     PRODUCT_PAGE_TYPE_OPTIONS,
 )
+from locally_twisted.product_setup_runtime import OPERATING_BRAND_OPTIONS
 from locally_twisted.product_quote_runtime import (
     PRODUCT_QUOTE_REVIEW_ITEM_CONTRACT,
     QUOTATION_FIELDNAMES,
@@ -162,6 +163,27 @@ PRODUCT_PAGE_FIELDS = [
         "insert_after": "lt_product_page_type",
         "default": "needs_review",
         "description": "Controls whether this page can enter checkout, quote-first, hybrid, or needs review.",
+    },
+    {
+        "dt": "Website Item",
+        "fieldname": "operating_brand",
+        "label": "Operating Brand",
+        "fieldtype": "Select",
+        "options": "\n".join(sorted(OPERATING_BRAND_OPTIONS)),
+        "insert_after": "lt_commerce_lane",
+        "default": "locally_twisted",
+        "description": "Source-declared customer-facing operating brand lane projected from Product Setup.",
+    },
+    {
+        "dt": "Website Item",
+        "fieldname": "operating_brand_authority_state",
+        "label": "Operating Brand Authority State",
+        "fieldtype": "Select",
+        "options": "missing\ninvalid\nsource_declared",
+        "insert_after": "operating_brand",
+        "default": "missing",
+        "read_only": 1,
+        "description": "Source authority state for the Website Item operating brand; not live brand-lane proof.",
     },
 ]
 

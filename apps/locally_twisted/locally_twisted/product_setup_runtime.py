@@ -86,6 +86,7 @@ ACTIVE_SETUP_STATUSES = {
     "Staging Ready",
     "Approved For Live",
 }
+_LOOKUP_CONFLICT = object()
 
 
 def build_product_setup_schema_doc(doc: Any) -> dict[str, Any]:
@@ -95,43 +96,170 @@ def build_product_setup_schema_doc(doc: Any) -> dict[str, Any]:
     return build_product_setup_schema(blueprint_doc_to_dict(doc))
 
 
-def product_setup_schema_for_website_item(website_item_code: str | None) -> dict[str, Any] | None:
+def product_setup_schema_for_website_item(
+    website_item_code: str | None,
+    *,
+    operating_brand: str | None = None,
+) -> dict[str, Any] | None:
     """Return the Product Setup schema linked to a Website Item/Item code, if any."""
-    website_item_code = _text(website_item_code)
-    if not website_item_code:
+    name = active_product_setup_name_for_website_item(website_item_code, operating_brand=operating_brand)
+    if not name:
         return None
 
     import frappe
 
-    if not frappe.db.exists("DocType", "LT Product Blueprint"):
-        return None
-    name = _active_product_setup_name(frappe, "target_item_code", website_item_code)
-    if not name:
-        name = _active_product_setup_name(frappe, "product_slug", website_item_code)
-    if not name:
-        return None
     return build_product_setup_schema_doc(frappe.get_doc("LT Product Blueprint", name))
 
 
-def _active_product_setup_name(frappe_module: Any, fieldname: str, value: str) -> str | None:
+def active_product_setup_name_for_website_item(
+    website_item_code: str | None,
+    *,
+    operating_brand: str | None = None,
+) -> str:
+    """Return the active Product Setup name for a brand-scoped Website Item code."""
+    website_item_code = _text(website_item_code)
+    if not website_item_code:
+        return ""
+
+    import frappe
+
+    if not frappe.db.exists("DocType", "LT Product Blueprint"):
+        return ""
+    context = _website_item_lookup_context(frappe, website_item_code)
+    lookup_brand = (
+        _lookup_operating_brand(frappe, operating_brand)
+        if operating_brand not in (None, "")
+        else _lookup_operating_brand(frappe, context.get("operating_brand"))
+    )
+    if lookup_brand is None:
+        return ""
+
+    for fieldname, value in (
+        ("target_item_code", website_item_code),
+        ("target_website_item", context.get("website_item_name")),
+        ("product_slug", website_item_code),
+    ):
+        name = _active_product_setup_name(
+            frappe,
+            fieldname,
+            value,
+            operating_brand=lookup_brand,
+        )
+        if name is _LOOKUP_CONFLICT:
+            return ""
+        if name:
+            return str(name)
+    return ""
+
+
+def _active_product_setup_name(
+    frappe_module: Any,
+    fieldname: str,
+    value: str | None,
+    *,
+    operating_brand: str = "",
+) -> str | object | None:
+    value = _text(value)
+    if not value:
+        return None
+    filters: dict[str, Any] = {
+        fieldname: value,
+        "publish_status": ["in", sorted(ACTIVE_SETUP_STATUSES)],
+    }
+    if operating_brand:
+        filters["operating_brand"] = operating_brand
     rows = frappe_module.get_all(
         "LT Product Blueprint",
-        filters={fieldname: value, "publish_status": ["in", sorted(ACTIVE_SETUP_STATUSES)]},
-        pluck="name",
+        filters=filters,
+        fields=["name", "operating_brand"],
         order_by="modified desc",
         limit_page_length=2,
     )
+    normalized_rows = [
+        {
+            "name": _row_value(row, "name"),
+            "operating_brand": _row_value(row, "operating_brand"),
+        }
+        for row in rows
+    ]
+    invalid_brand_rows = [
+        row
+        for row in normalized_rows
+        if _text(row.get("operating_brand")) not in OPERATING_BRAND_OPTIONS
+    ]
+    if invalid_brand_rows:
+        _log_product_setup_lookup_error(
+            frappe_module,
+            "Active Product Setup authority has missing or invalid operating_brand for "
+            f"{fieldname}={value}: {_row_names(invalid_brand_rows)}",
+        )
+        return _LOOKUP_CONFLICT
     if len(rows) > 1:
-        try:
-            frappe_module.log_error(
-                "Ambiguous active Product Setup authority for "
-                f"{fieldname}={value}: {', '.join(str(row) for row in rows)}",
-                title="LT Product Setup active authority conflict",
-            )
-        except Exception:
-            pass
+        brand_clause = f" operating_brand={operating_brand}" if operating_brand else ""
+        _log_product_setup_lookup_error(
+            frappe_module,
+            "Ambiguous active Product Setup authority for "
+            f"{fieldname}={value}{brand_clause}: {_row_names(normalized_rows)}",
+        )
+        return _LOOKUP_CONFLICT
+    return normalized_rows[0]["name"] if normalized_rows else None
+
+
+def _lookup_operating_brand(frappe_module: Any, operating_brand: str | None) -> str | None:
+    operating_brand = _text(operating_brand)
+    if operating_brand in OPERATING_BRAND_OPTIONS:
+        return operating_brand
+    if not operating_brand:
+        _log_product_setup_lookup_error(
+            frappe_module,
+            "Missing Product Setup operating_brand lookup value.",
+        )
         return None
-    return rows[0] if rows else None
+    _log_product_setup_lookup_error(
+        frappe_module,
+        f"Invalid Product Setup operating_brand lookup value: {operating_brand}",
+    )
+    return None
+
+
+def _website_item_lookup_context(frappe_module: Any, website_item_code: str) -> dict[str, str]:
+    try:
+        meta = frappe_module.get_meta("Website Item")
+    except Exception:
+        return {}
+    fields = ["name"]
+    if meta.has_field("operating_brand"):
+        fields.append("operating_brand")
+    if meta.has_field("operating_brand_authority_state"):
+        fields.append("operating_brand_authority_state")
+    row = frappe_module.db.get_value(
+        "Website Item",
+        {"item_code": website_item_code},
+        fields,
+        as_dict=True,
+    ) or {}
+    result = {"website_item_name": _text(row.get("name"))}
+    if _text(row.get("operating_brand_authority_state")) not in {"", "source_declared"}:
+        return result
+    result["operating_brand"] = _text(row.get("operating_brand"))
+    return result
+
+
+def _log_product_setup_lookup_error(frappe_module: Any, message: str) -> None:
+    try:
+        frappe_module.log_error(message, title="LT Product Setup active authority conflict")
+    except Exception:
+        pass
+
+
+def _row_value(row: Any, fieldname: str) -> str:
+    if isinstance(row, dict):
+        return _text(row.get(fieldname))
+    return _text(getattr(row, fieldname, ""))
+
+
+def _row_names(rows: list[dict[str, str]]) -> str:
+    return ", ".join(row.get("name") or "[unnamed]" for row in rows)
 
 
 def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
@@ -366,9 +494,9 @@ def resolve_product_setup_content(
     return candidates[0][1]
 
 
-def get_product_setup_schema_json(item_code: str | None) -> str:
+def get_product_setup_schema_json(item_code: str | None, operating_brand: str | None = None) -> str:
     """Return HTML-safe Product Setup schema JSON for product templates."""
-    schema = product_setup_schema_for_website_item(item_code) or {
+    schema = product_setup_schema_for_website_item(item_code, operating_brand=operating_brand) or {
         "schema_version": SCHEMA_VERSION,
         "config_version": CONFIG_VERSION,
         "product": {"product_slug": _text(item_code)},

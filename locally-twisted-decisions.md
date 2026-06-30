@@ -8,6 +8,37 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Runtime Product Setup lookup must be brand-scoped and fail closed
+
+**Decision:** Customer-facing/runtime Product Setup lookup must resolve active
+authority by source-declared or explicitly supplied `operating_brand` plus the
+runtime key. It may check target Item, target Website Item, and slug inside
+that brand, but it must not fall through after an ambiguity and must not pick
+the newest modified Product Setup as a winner.
+
+**Reasoning:** Source-level brand authority is not enough if runtime lookup can
+still resolve by item/slug alone. Cross-brand same-slug products need to be
+possible later, but wrong-brand copy, media, price rules, add-ons, or checkout
+behavior would be a customer-facing brand-boundary failure. Failing closed is
+better than silently rendering the wrong setup.
+
+**Guard:** Missing or invalid lookup brand returns no setup. Same-brand
+duplicate active Product Setups return no setup and log the conflict. Target
+Item ambiguity blocks fallback to target Website Item or slug. Website Item
+`operating_brand` is source-declared metadata, not live brand-lane proof.
+This decision does not prove live public projection, owner publish/apply,
+Item Price parity, cart/checkout/payment/document truth, or release readiness.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`;
+`apps/locally_twisted/locally_twisted/product_setup_runtime.py`;
+`scripts/verify/product_blueprint_contract.py`.
+
+**Decided by:** Codex with real witness/triad review on 2026-06-30, under
+GL's standing approval for stronger protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Source-declared product authority must stay separate inside repair packets
 
 **Decision:** Offline Product Setup authority packets may report
@@ -25,7 +56,7 @@ comes from another path.
 
 **Guard:** `source_declared` means source-only. Same-brand source uniqueness
 means no conflict in collected/source records for the guarded keys. Neither
-one proves live route authority, cross-brand runtime lookup, database-level
+one proves live route authority, live/public brand-lane proof, database-level
 uniqueness, public projection, rollback readiness, checkout/payment/document
 truth, provider state, or customer-facing readiness.
 
@@ -63,7 +94,7 @@ prove live migration, public projection, Item Price parity, copy/media
 authority, rollback packet completeness, cart/checkout/payment/document
 identity, provider state, or customer-facing route truth. The active uniqueness
 guard is source-authoring protection only; it does not prove live/global active
-authority, route migration, cross-brand runtime lookup, or database-level
+authority, route migration, live/public brand-lane proof, or database-level
 atomic uniqueness. Existing defaults must not be used as mutation approval.
 
 **Receipts:**

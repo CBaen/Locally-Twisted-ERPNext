@@ -106,11 +106,18 @@ and runtime Product Setup schema as `source_declared`. This reduces one source
 ambiguity but does not prove live brand lane. Source validation also blocks
 active same-brand Product Setup duplicates for the same slug, target Item, or
 target Website Item, and runtime active lookup fails closed on duplicate
-matches instead of selecting by modified time. The next Phase 1 build slice is
-brand-aware runtime lookup before cross-brand same-slug active setups are
-allowed. Saved-artifact packet logic now keeps `source_declared` and
+matches instead of selecting by modified time. Saved-artifact packet logic now
+keeps `source_declared` and
 same-brand source uniqueness separate from live proof through the
 `source_authority` packet section and packet-aware parity verifier.
+
+2026-06-30 Phase 7 source progress: runtime Product Setup lookup is now
+brand-aware before cross-brand same-slug active setups are allowed. Product
+schema/API/gallery resolution requires explicit or source-declared
+`operating_brand`, checks target Item, target Website Item, and slug within
+that brand, and fails closed on missing/invalid brand or active ambiguity. The
+next Phase 1 build slice is owner-visible blocker reporting for these
+conflicts.
 
 ## Phase 2 - Owner Product Setup UX
 

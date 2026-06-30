@@ -170,12 +170,17 @@ Minimum guard for price/copy:
   same slug, target Item, or target Website Item in the same source-declared
   operating brand, and runtime active lookup fails closed on duplicates instead
   of selecting the newest row. This still does not prove live route authority,
-  cross-brand runtime lookup, or database-level uniqueness.
+  live/public brand-lane proof, or database-level uniqueness.
 - Authority packet reports must expose source evidence separately. A
   `source_authority` section may report source-declared operating brand and
   same-brand source uniqueness, but those fields must not set live brand proof,
   active authority, mutation approval, deploy approval, cache approval, payment
   or document proof, or release readiness.
+- Runtime Product Setup lookup must be brand-scoped before cross-brand
+  same-slug active setups are allowed. Missing/invalid brand, invalid active
+  Product Setup brand, same-brand duplicate active records, or target-item
+  ambiguity must return no setup and log a conflict instead of falling through
+  or selecting the newest modified record.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
@@ -239,3 +244,10 @@ future saved artifacts can report source-declared brand and same-brand source
 uniqueness separately from live proof. Old saved catalog artifacts remain
 blocked. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`.
+
+Phase 7 made source runtime lookup brand-aware. Product Setup schema/API and
+gallery/media lookup now use explicit or source-declared Website Item
+`operating_brand`, check target Item, target Website Item, and slug within that
+brand, and fail closed on ambiguity. This is still source/runtime protection,
+not live projection repair. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`.

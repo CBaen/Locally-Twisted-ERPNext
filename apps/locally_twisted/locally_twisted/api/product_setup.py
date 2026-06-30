@@ -14,9 +14,9 @@ from locally_twisted.product_setup_runtime import (
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET", "POST"])
-def get_product_setup_schema(item_code: str) -> dict[str, Any]:
+def get_product_setup_schema(item_code: str, operating_brand: str | None = None) -> dict[str, Any]:
     """Return the backend-owned Product Setup schema for a product page."""
-    schema = product_setup_schema_for_website_item(item_code)
+    schema = product_setup_schema_for_website_item(item_code, operating_brand=operating_brand)
     if not schema:
         frappe.throw(
             _("Tiny snag: this product setup is not ready yet. Please ask the team for help."),
@@ -26,9 +26,13 @@ def get_product_setup_schema(item_code: str) -> dict[str, Any]:
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
-def resolve_product_setup(item_code: str, configuration: Any = None) -> dict[str, Any]:
+def resolve_product_setup(
+    item_code: str,
+    configuration: Any = None,
+    operating_brand: str | None = None,
+) -> dict[str, Any]:
     """Validate a browser configuration against Product Setup before commerce."""
-    schema = product_setup_schema_for_website_item(item_code)
+    schema = product_setup_schema_for_website_item(item_code, operating_brand=operating_brand)
     if not schema:
         frappe.throw(
             _("Tiny snag: this product setup is not ready yet. Please ask the team for help."),

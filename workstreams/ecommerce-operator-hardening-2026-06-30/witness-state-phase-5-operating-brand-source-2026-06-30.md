@@ -51,7 +51,7 @@
     same-brand Product Setups that claim the same slug, target Item, or target
     Website Item, and runtime lookup fails closed on duplicate active matches.
   - Do not claim live/global active authority proof, route migration proof,
-    cross-brand runtime lookup, or database-level uniqueness from this guard.
+    live/public brand-lane proof, or database-level uniqueness from this guard.
   - Add first-class offline `source_authority` packet reporting for
     source-declared operating brand and same-brand source uniqueness.
   - Keep packet live proof, mutation approval, deploy approval, cache approval,
@@ -102,7 +102,26 @@
   reporting. Earlier Phase 5 witness IDs from the pre-follow-up packet were
   already unavailable in the current runtime when close was attempted. Source
   packet technical and critical witnesses were closed after reporting.
-- Resume instruction: Continue source-only Phase 5 in the isolated worktree; do not deploy, mutate live ERPNext records, clear cache, or touch provider/payment/DNS/customer-message paths.
+- Runtime brand-aware lookup continuation verification completed:
+  - Intent/risk witness `019f1855-f451-7da0-8cd7-f2909370d142`
+    confirmed the phase must block wrong-brand runtime authority and must not
+    claim live projection repair.
+  - Technical witness `019f1856-0905-7d61-9095-bea6df278dfd` identified
+    Product Setup resolver call sites, the old gallery/media shortcut, and the
+    target-item ambiguity fallthrough risk.
+  - Implemented source-only runtime lookup using explicit or source-declared
+    Website Item `operating_brand`.
+  - Added Website Item `operating_brand` and
+    `operating_brand_authority_state` fields to `sync_commerce_rules` and
+    registered patch `sync_product_setup_brand_runtime_fields_20260630`.
+  - `python -m py_compile apps/locally_twisted/locally_twisted/product_setup_runtime.py apps/locally_twisted/locally_twisted/api/product_setup.py apps/locally_twisted/locally_twisted/product_options.py apps/locally_twisted/locally_twisted/seed/sync_commerce_rules.py apps/locally_twisted/locally_twisted/patches/sync_product_setup_brand_runtime_fields_20260630.py scripts/verify/product_blueprint_contract.py`
+  - `python scripts/verify/product_blueprint_contract.py` passed 26 tests.
+  - `git diff --check`
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 7 runtime brand-aware lookup is complete. Next
+  safe slice is owner-visible blocker reporting or variant-axis
+  classification/collapse planning. Do not deploy, mutate live ERPNext records,
+  clear cache, or touch provider/payment/DNS/customer-message paths.
 
 ## Route Record
 

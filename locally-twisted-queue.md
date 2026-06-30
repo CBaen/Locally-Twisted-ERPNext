@@ -59,8 +59,15 @@ future collectors preserve `operating_brand`, packet output includes
 verification fails if source-declared brand is treated as live proof or if
 packet blockers remain. Old saved artifacts remain blocked. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-6-source-authority-packet-reporting-2026-06-30.md`.
-Next safe work is brand-aware runtime lookup before cross-brand same-slug
-active setups are allowed, owner-visible blocker reporting, variant-axis
+2026-06-30 Phase 7 made source runtime Product Setup lookup brand-aware:
+runtime schema/API/gallery lookup now requires explicit or source-declared
+`operating_brand`, checks target Item, target Website Item, and slug within
+that brand, and fails closed on missing/invalid brand, same-brand duplicates,
+or target-item ambiguity instead of falling through or selecting newest
+modified. Website Item brand metadata fields were added to the existing
+commerce custom-field seed and a new migration patch. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`.
+Next safe work is owner-visible blocker reporting, variant-axis
 classification/collapse planning starting with Birthday Deliveries, rollback
 target capture, and then owner-visible publish/apply or field-level
 runtime-authority design. Do not patch only this product, clear cache, write

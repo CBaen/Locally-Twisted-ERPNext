@@ -178,10 +178,15 @@ Required fix:
 
 - Source-level `operating_brand` exists and is guarded by
   `scripts/verify/product_blueprint_contract.py`.
+- Runtime Product Setup lookup is now brand-aware in source and fails closed
+  on missing/invalid brand or active ambiguity.
+- Still open: live brand-lane proof, owner-visible blockers, public projection
+  repair, payment/document identity, media/file ownership, and release packet
+  proof.
 - Saved-artifact authority packets now report `source_authority.operating_brand`
   separately from live proof.
-- Live proof, cross-brand runtime lookup, projection, and payment/document/media
-  inheritance proof are still open blockers.
+- Live proof, projection, and payment/document/media inheritance proof are
+  still open blockers.
 
 ## B009 - Duplicate Active Product Setup Records Can Win By Modified Time
 

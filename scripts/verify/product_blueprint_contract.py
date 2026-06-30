@@ -27,6 +27,7 @@ from locally_twisted.product_blueprint_local_apply import (  # noqa: E402
 )
 from locally_twisted.product_setup_runtime import (  # noqa: E402
     OPERATING_BRAND_OPTIONS,
+    active_product_setup_name_for_website_item,
     build_product_setup_schema,
     resolve_product_setup_configuration,
 )
@@ -318,6 +319,109 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertIn("Only one active Product Setup may target the same slug, Item, or Website Item per operating brand.", controller)
         self.assertIn("limit_page_length=2", runtime)
         self.assertIn("Ambiguous active Product Setup authority", runtime)
+        commerce_seed = (
+            ROOT / "apps" / "locally_twisted" / "locally_twisted" / "seed" / "sync_commerce_rules.py"
+        ).read_text(encoding="utf-8")
+        patches = (ROOT / "apps" / "locally_twisted" / "locally_twisted" / "patches.txt").read_text(encoding="utf-8")
+        self.assertIn('"fieldname": "operating_brand"', commerce_seed)
+        self.assertIn('"fieldname": "operating_brand_authority_state"', commerce_seed)
+        self.assertIn("sync_product_setup_brand_runtime_fields_20260630", patches)
+
+    def test_runtime_product_setup_lookup_is_brand_scoped_and_fail_closed(self) -> None:
+        rows = [
+            {
+                "name": "setup-local",
+                "target_item_code": "same-slug",
+                "target_website_item": "WEB-LOCAL",
+                "product_slug": "same-slug",
+                "operating_brand": "locally_twisted",
+                "publish_status": "Local Preview Ready",
+                "modified": 3,
+            },
+            {
+                "name": "setup-commercial",
+                "target_item_code": "same-slug",
+                "target_website_item": "WEB-CBD",
+                "product_slug": "same-slug",
+                "operating_brand": "commercial_balloon_decor",
+                "publish_status": "Local Preview Ready",
+                "modified": 4,
+            },
+        ]
+        fake = _FakeFrappe(
+            rows,
+            website_item={
+                "name": "WEB-LOCAL",
+                "operating_brand": "locally_twisted",
+                "operating_brand_authority_state": "source_declared",
+            },
+        )
+
+        with _patched_frappe(fake):
+            self.assertEqual(
+                active_product_setup_name_for_website_item("same-slug", operating_brand="commercial_balloon_decor"),
+                "setup-commercial",
+            )
+            self.assertEqual(active_product_setup_name_for_website_item("same-slug"), "setup-local")
+
+        missing_brand_fake = _FakeFrappe(rows, website_item={"name": "WEB-LOCAL"})
+        with _patched_frappe(missing_brand_fake):
+            self.assertEqual(active_product_setup_name_for_website_item("same-slug"), "")
+        self.assertTrue(any("Missing Product Setup operating_brand" in row for row in missing_brand_fake.errors))
+
+        duplicate_same_brand = _FakeFrappe(
+            rows
+            + [
+                {
+                    "name": "setup-local-newer",
+                    "target_item_code": "same-slug",
+                    "target_website_item": "WEB-LOCAL-2",
+                    "product_slug": "same-slug",
+                    "operating_brand": "locally_twisted",
+                    "publish_status": "Staging Ready",
+                    "modified": 5,
+                }
+            ],
+            website_item={
+                "name": "WEB-LOCAL",
+                "operating_brand": "locally_twisted",
+                "operating_brand_authority_state": "source_declared",
+            },
+        )
+        with _patched_frappe(duplicate_same_brand):
+            self.assertEqual(active_product_setup_name_for_website_item("same-slug"), "")
+        self.assertTrue(any("Ambiguous active Product Setup authority" in row for row in duplicate_same_brand.errors))
+
+        target_item_conflict = _FakeFrappe(
+            [
+                {
+                    "name": "target-conflict-old",
+                    "target_item_code": "target-conflict",
+                    "target_website_item": "WEB-OLD",
+                    "product_slug": "old-slug",
+                    "operating_brand": "locally_twisted",
+                    "publish_status": "Local Preview Ready",
+                    "modified": 1,
+                },
+                {
+                    "name": "target-conflict-new",
+                    "target_item_code": "target-conflict",
+                    "target_website_item": "WEB-NEW",
+                    "product_slug": "target-conflict",
+                    "operating_brand": "locally_twisted",
+                    "publish_status": "Local Preview Ready",
+                    "modified": 2,
+                },
+            ],
+            website_item={
+                "name": "WEB-NEW",
+                "operating_brand": "locally_twisted",
+                "operating_brand_authority_state": "source_declared",
+            },
+        )
+        with _patched_frappe(target_item_conflict):
+            self.assertEqual(active_product_setup_name_for_website_item("target-conflict"), "")
+        self.assertTrue(any("target_item_code=target-conflict" in row for row in target_item_conflict.errors))
 
     def test_child_doctypes_are_child_tables(self) -> None:
         for folder, filename in (
@@ -570,6 +674,93 @@ def _doctype(folder: str, filename: str) -> dict:
 
 def _read_doctype_file(folder: str, filename: str) -> str:
     return (DOCTYPE_ROOT / folder / filename).read_text(encoding="utf-8")
+
+
+class _PatchedFrappe:
+    def __init__(self, fake):
+        self.fake = fake
+        self.previous = None
+
+    def __enter__(self):
+        self.previous = sys.modules.get("frappe")
+        sys.modules["frappe"] = self.fake
+        return self.fake
+
+    def __exit__(self, exc_type, exc, tb):
+        if self.previous is None:
+            sys.modules.pop("frappe", None)
+        else:
+            sys.modules["frappe"] = self.previous
+
+
+def _patched_frappe(fake):
+    return _PatchedFrappe(fake)
+
+
+class _FakeMeta:
+    def __init__(self, fields: set[str]):
+        self.fields = fields
+
+    def has_field(self, fieldname: str) -> bool:
+        return fieldname in self.fields
+
+
+class _FakeDb:
+    def __init__(self, parent):
+        self.parent = parent
+
+    def exists(self, doctype: str, name: str) -> bool:
+        return doctype == "DocType" and name == "LT Product Blueprint"
+
+    def get_value(self, doctype: str, filters: dict, fields, as_dict: bool = False):
+        if doctype != "Website Item":
+            return None
+        if not filters.get("item_code") or not self.parent.website_item:
+            return None
+        if as_dict:
+            return dict(self.parent.website_item)
+        if isinstance(fields, list):
+            return [self.parent.website_item.get(field) for field in fields]
+        return self.parent.website_item.get(fields)
+
+
+class _FakeFrappe:
+    def __init__(self, rows: list[dict], *, website_item: dict | None = None):
+        self.rows = rows
+        self.website_item = website_item or {}
+        self.db = _FakeDb(self)
+        self.errors: list[str] = []
+
+    def get_meta(self, doctype: str):
+        if doctype != "Website Item":
+            return _FakeMeta(set())
+        return _FakeMeta(set(self.website_item.keys()))
+
+    def get_all(self, doctype: str, filters: dict, fields: list[str], order_by: str, limit_page_length: int):
+        if doctype != "LT Product Blueprint":
+            return []
+        matches = []
+        for row in self.rows:
+            if not _row_matches_filters(row, filters):
+                continue
+            matches.append(row)
+        matches.sort(key=lambda row: row.get("modified") or 0, reverse=True)
+        return [{field: row.get(field) for field in fields} for row in matches[:limit_page_length]]
+
+    def log_error(self, message: str, title: str | None = None):
+        self.errors.append(message)
+
+
+def _row_matches_filters(row: dict, filters: dict) -> bool:
+    for fieldname, expected in filters.items():
+        actual = row.get(fieldname)
+        if isinstance(expected, list) and len(expected) == 2 and expected[0] == "in":
+            if actual not in expected[1]:
+                return False
+            continue
+        if actual != expected:
+            return False
+    return True
 
 
 def main() -> int:

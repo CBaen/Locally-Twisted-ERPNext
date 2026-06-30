@@ -35,11 +35,17 @@ Safety requirement: Product Setup must enforce one active authority per target i
 propagation. Follow-up source validation blocks active same-brand Product Setup
 duplicates for the same slug, target Item, or target Website Item, and runtime
 active lookup fails closed when duplicates match a runtime key. This does not
-close SCR-002 because brand-aware runtime lookup, owner-visible blockers,
-publish/apply workflow, live projection proof, and database-level uniqueness
-are still unbuilt. Phase 6 added saved-artifact `source_authority` packet
+close SCR-002 because owner-visible blockers, publish/apply workflow, live
+projection proof, and database-level uniqueness are still unbuilt. Phase 6
+added saved-artifact `source_authority` packet
 reporting so source-declared brand and same-brand source uniqueness are visible
 without being treated as live proof.
+
+2026-06-30 Phase 7 progress: runtime Product Setup schema/API/gallery lookup
+is now brand-aware. It requires explicit or source-declared `operating_brand`,
+checks target Item, target Website Item, and slug within that brand, and fails
+closed on missing/invalid brand, same-brand duplicate active records, invalid
+active Product Setup brand, or target-item ambiguity.
 
 ## SCR-003 - Immediate Public Projection For Approved Product Changes
 
@@ -168,15 +174,19 @@ Safety requirement: ambiguous brand lane blocks mutation.
 `commercial_balloon_decor`, and `memorial_balloons`. Valid values are
 `source_declared` only. Source validation now blocks active same-brand Product
 Setup duplicates for the same slug, target Item, or target Website Item. Live
-proof, cross-brand runtime lookup, public projection, payment/document
-identity, media/file ownership, portal/automation behavior, and release packet
-proof remain separate blockers.
+proof, public projection, payment/document identity, media/file ownership,
+portal/automation behavior, and release packet proof remain separate blockers.
 
 2026-06-30 Phase 6 progress: saved-artifact authority packets now expose
 `source_authority.operating_brand` and
 `source_authority.same_brand_source_uniqueness`. These are source-only planning
 signals; they do not prove live/public brand lane, release readiness, payment
 or document identity, or customer-facing route truth.
+
+2026-06-30 Phase 7 progress: runtime lookup now enforces brand-scoped Product
+Setup authority for schema/API/gallery resolution. Website Item brand metadata
+fields are seeded as source-declared projection fields, but live public
+brand-lane proof remains a separate release/authority-packet requirement.
 
 ## SCR-013 - Pre-Mutation Release Packet And Rollback Contract
 
