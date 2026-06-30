@@ -26,12 +26,30 @@ added offline no-write helpers:
 `scripts/verify/product_setup_authority_parity_contract.py`, and
 `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. These prove the
 known product has 30 proposed Item Price changes, two copy suggestions, and
-preview limitations; they do not approve repair. Next safe work is full
-published-catalog saved read-only artifacts, rollback target capture,
-brand-lane/active-Product-Setup uniqueness proof, and owner-visible
+preview limitations; they do not approve repair. 2026-06-30 Phase 3 added
+`scripts/dev/lt_live_readonly_catalog_authority_audit.py` and ran a full live
+read-only published-catalog collection into local `/tmp` artifacts: 47
+published Website Items processed, 47 Product Setup matches, 47 products with
+blockers, 66 total failures, 47 unproved brand lanes, 19 matched Product
+Setups in Draft/inactive authority status, and one product with 2,430 variants
+/ 2,430 Item Prices. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.
+Next safe work is a catalog authority resolver/packet layer: brand-lane proof,
+active Product Setup uniqueness by target item/route/brand lane, variant-axis
+classification/collapse plan, rollback target capture, and then owner-visible
 publish/apply or field-level runtime-authority design. Do not patch only this
-product, clear cache, write live records, deploy, or weaken owner catalog guards
-from this queue item alone.
+product, clear cache, write live records, deploy, or weaken owner catalog
+guards from this queue item alone.
+
+**P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
+truth is one Locally Twisted accounting/ERPNext operating company with three
+protected brand lanes: Locally Twisted, Commercial Balloon Decor, and Memorial
+Balloons. Guard docs are installed at `BRAND-BOUNDARY.md`,
+`capabilities/recipes/three-brand-dba-boundary-contract.md`, and
+`workstreams/three-brand-dba-boundary-2026-06-28.md`. Next safe engineering
+step is a static operating-brand exposure verifier that scans hard-coded brand
+literals and customer-facing/public/accounting/portal/Meta surfaces before any
+runtime multi-brand routing work. No fourth brand is in scope.
 
 **P0 Meta/Facebook/Instagram operations aftercare (2026-06-28):** The Meta app
 and system-user API path are now working for supervised LT operations.

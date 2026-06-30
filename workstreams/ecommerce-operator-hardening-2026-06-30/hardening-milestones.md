@@ -93,6 +93,13 @@ Exit criteria:
 Current blocker: the preview artifact explicitly records that brand-lane proof
 and active Product Setup uniqueness are not yet proven by the saved audit input.
 
+2026-06-30 catalog continuation: live read-only collection now has saved
+artifacts for all 47 published Website Items. Every published Website Item
+matched a Product Setup record, but every product still has at least one
+blocker. Brand lane is unproved for all 47, and 19 matched Product Setups are
+in Draft/inactive authority status. The next Phase 1 implementation slice is
+therefore a catalog authority resolver/packet layer, not a live repair.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

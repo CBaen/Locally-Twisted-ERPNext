@@ -71,6 +71,38 @@ confirmed the live authority split and recorded the decision on 2026-06-30.
 
 ---
 
+## 2026-06-28 - One accounting operation with three protected DBA brand lanes
+
+**Decision:** Current scope is one Locally Twisted accounting/ERPNext operating
+company with three separate customer-facing DBA/service brand lanes: Locally
+Twisted, Commercial Balloon Decor, and Memorial Balloons. The fourth possible
+brand is not in current scope.
+
+**Reasoning:** GL clarified that the brands serve different markets but run
+through the same real-world accounting process. The risk is accidental
+authority: future agents can read an old launch-cleanup note, style guide,
+Meta handoff, portal plan, invoice template, or sibling repo and incorrectly
+make that single lane global truth. The guard has to exist in arrival docs,
+capabilities, workstreams, and sibling roots.
+
+**Implementation boundary:** This is a source-of-truth and guardrail decision,
+not proof that runtime ERPNext multi-brand routing is already implemented.
+Future implementation needs an explicit `operating_brand` registry/resolver
+and fail-closed propagation through Lead, Quote, Sales Order, Sales Invoice,
+Payment Request, Stripe/payment metadata, customer portal files, outbound
+emails/documents, Meta/tracking, and public routes.
+
+**Guard:** Do not create a separate ERPNext system/company, collapse brand
+copy/assets, reuse one brand's Meta/ad or customer-data assumptions, add a
+fourth brand lane, or make live provider/customer/accounting changes from this
+decision alone. Read `BRAND-BOUNDARY.md` and
+`capabilities/recipes/three-brand-dba-boundary-contract.md`.
+
+**Decided by:** Guiding Light on 2026-06-28; Codex installed guard docs after a
+triad exposure audit.
+
+---
+
 ## 2026-06-24 - Live root stays `/` and Birthday Deliveries main image is the approved WebP
 
 **Decision:** `https://locallytwisted.com/` is the canonical live landing page
@@ -2434,6 +2466,12 @@ cutover gates.
 ## 2026-05-10 - Launch repo cleanup keeps production source, not local debris
 
 **Decision:** The LT launch repo should keep production source, executable verifiers, active source evidence, and feature handoffs. It should not retain raw local drops, generated verifier output, stale mirrors, stale app clones, or old contest/research output after their useful claims have moved into production files or durable docs. Memorial Balloons is a separate side business and is not part of the LT launch repo or launch proof.
+
+**2026-06-28 clarification:** The Memorial sentence above remains true only as
+a 2026-05 launch-cleanup boundary. It is not current authority that Memorial
+Balloons is outside the Locally Twisted accounting operation. Current scope is
+one LT accounting/ERPNext operating company with three protected brand lanes:
+Locally Twisted, Commercial Balloon Decor, and Memorial Balloons.
 
 **Reasoning:** GL wants clients shielded from weird research data and stale files. Keeping every local artifact in the launch repo makes future agents treat old experiments as current source and makes client handoff harder to trust. Git history is the archive for tracked experiments; local holding folders outside the repo are acceptable for raw assets that might still be useful but are not source.
 
@@ -5906,3 +5944,32 @@ neutral coordination hub.
 
 **Decided by:** Codex worktree failure evidence during the GL-approved
 multi-agent workflow, 2026-05-21.
+## 2026-06-30 - Catalog product repair requires full read-only authority artifacts first
+
+**Decision:** Product Setup repairs for existing live products must start from
+saved read-only catalog authority artifacts before any write, cache clear, or
+deploy. A clean Product Setup match is not enough; the packet must also prove
+brand lane, active Product Setup authority, Item/variant/Item Price rows, and
+rollback targets.
+
+**Reasoning:** The first full live read-only catalog collector processed 47
+published Website Items and matched all 47 to Product Setup records, but every
+product still had at least one blocker. Brand lane was unproved for all 47,
+and 19 matched Product Setups were in Draft/inactive authority status. One
+published product had 2,430 variants and 2,430 Item Price rows, confirming the
+variant-axis problem is catalog-scale.
+
+**Implementation boundary:** Do not hand-patch `large-head-missionary` or any
+single product as the architecture fix. Do not clear cache, write live catalog
+rows, deploy, or weaken owner catalog guards from this evidence alone. Build a
+catalog authority resolver/packet layer first, then design the approved
+publish/apply or direct-runtime-authority path.
+
+**Receipts:** `scripts/dev/lt_live_readonly_catalog_authority_audit.py`;
+`scripts/dev/lt_product_setup_catalog_blast_radius_report.py`;
+`scripts/verify/product_setup_authority_parity_contract.py`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.
+
+**Decided by:** live read-only catalog proof and triad review, 2026-06-30.
+
+---

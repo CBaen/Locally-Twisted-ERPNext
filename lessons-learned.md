@@ -38,6 +38,21 @@ cart/checkout where relevant, and rollback target. Use
 owner-save repair. Keep the owner catalog guard; build the missing
 publish/apply or runtime-authority contract.
 
+## 2026-06-28 - Shared accounting does not mean shared brand truth
+
+The three-brand DBA clarification exposed a documentation hazard: an older
+single-brand file can look like the nearest source of truth and cause an agent
+to collapse Locally Twisted, Commercial Balloon Decor, and Memorial Balloons
+into one public brand, or overcorrect by treating Memorial/CBD as outside the
+LT accounting operation.
+
+**Counter-move:** state the operating brand before touching public routes,
+portals, invoices, customer emails, payment/checkout, Meta/tracking, files, or
+ERPNext records. Use `BRAND-BOUNDARY.md` and
+`capabilities/recipes/three-brand-dba-boundary-contract.md`. Old launch notes
+and stale sibling worktrees are evidence only unless current guard docs confirm
+them.
+
 ## 2026-06-28 - Broad Meta access needs operating lanes, not access anxiety
 
 The Meta API setup exposed a framing failure. GL intentionally granted broad
@@ -3813,3 +3828,26 @@ document the payload source.
 **Avoid:** creating false `417` conclusions from malformed test payloads or
 debugging the wrong layer because a shortcut request did not match browser
 behavior.
+
+---
+
+## 2026-06-30 - Catalog authority matching is not catalog authority proof
+
+**Lesson:** A published Website Item can match a Product Setup record and still
+be unsafe to repair or publish.
+
+**What happened:** The full live read-only catalog authority collector matched
+all 47 published Website Items to Product Setup records, but every product had
+at least one blocker. Brand lane was unproved for all 47, and 19 matched
+Product Setups were still Draft/inactive authority. The original
+`large-head-missionary` product still had 30 Product Setup price rows at
+`125.0` while 30 live Item Prices stayed at `175.0`.
+
+**Do this next time:** Treat matching as only the first step. Before mutation,
+prove brand lane, active authority uniqueness, target Item/route, variant
+rows, Item Prices, copy/media authorities, and rollback snapshots. Use the
+catalog authority collector and saved-artifact verifiers before any write.
+
+**Avoid:** saying the catalog is wired because a Product Setup row exists,
+using newest-modified Product Setup as authority, or patching one product
+without the catalog resolver/packet layer.

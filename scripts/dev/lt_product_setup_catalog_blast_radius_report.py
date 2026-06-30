@@ -65,7 +65,13 @@ def collect_paths(inputs: list[str]) -> list[Path]:
         if not path.exists():
             raise BlastRadiusBlocked(f"input does not exist: {path}")
         if path.is_dir():
-            paths.extend(sorted(child for child in path.glob("*.json") if child.is_file()))
+            paths.extend(
+                sorted(
+                    child
+                    for child in path.glob("*.json")
+                    if child.is_file() and child.name not in {"index.json", "blast-radius.json"}
+                )
+            )
         elif path.suffix.lower() == ".json":
             paths.append(path)
         else:

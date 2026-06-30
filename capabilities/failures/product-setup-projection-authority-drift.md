@@ -156,10 +156,11 @@ Minimum guard for price/copy:
 
 ## Current Required Next Work
 
-- Extend the no-write Product Setup projection preview from the incident
-  product to a full-catalog saved-artifact set.
+- Build a catalog authority resolver/packet layer on top of the full-catalog
+  saved-artifact set.
 - Run the parity verifier across saved audit/projection artifacts; it must fail
-  when Product Setup active price/copy differs from public/sellable authority.
+  when Product Setup active price/copy differs from public/sellable authority
+  or when brand lane / active authority proof is missing.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
@@ -170,6 +171,7 @@ Minimum guard for price/copy:
 
 Initial offline tools exist:
 
+- `scripts/dev/lt_live_readonly_catalog_authority_audit.py`
 - `scripts/dev/lt_product_setup_projection_preview.py`
 - `scripts/verify/product_setup_authority_parity_contract.py`
 - `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`
@@ -184,3 +186,11 @@ product risky from saved artifacts only.
 
 These tools are proof and planning surfaces. They are not repair approval,
 cache approval, deploy approval, or live mutation approval.
+
+The first full live read-only published-catalog collection on 2026-06-30 wrote
+47 saved product artifacts and intentionally failed loudly: all 47 published
+Website Items matched Product Setup records, but all 47 products had blockers.
+Brand lane was unproved for 47 products, and 19 matched Product Setups were in
+Draft/inactive authority status. One product had 2,430 variants and 2,430 Item
+Price rows, proving that the variant-explosion issue is catalog-scale. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.

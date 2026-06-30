@@ -230,10 +230,14 @@ def drift_flag_is_present(value: Any) -> bool:
     if isinstance(value, (list, tuple, set)):
         return len(value) > 0
     if isinstance(value, dict):
-        signal_keys = [key for key in ("count", "drift_count", "total", "has_drift", "exists") if key in value]
+        signal_keys = [
+            key
+            for key in ("drift_detected", "count", "drift_count", "total", "has_drift", "exists")
+            if key in value
+        ]
         if signal_keys:
             return any(drift_flag_is_present(value[key]) for key in signal_keys)
-        for key in ("count", "drift_count", "total", "has_drift", "exists"):
+        for key in ("drift_detected", "count", "drift_count", "total", "has_drift", "exists"):
             if key in value and drift_flag_is_present(value[key]):
                 return True
         return bool(value)

@@ -23,10 +23,29 @@ saved live audit artifact, projection preview reports 30 proposed Item Price
 changes from `175.0` to `125.0`, two Website Item copy suggestions, 30 rollback
 targets, and five limitations; parity fails on both the audit and projection
 artifacts; blast-radius reporting marks the product risky. Next safe action is
-full published-catalog saved read-only artifacts, row-level rollback capture,
-brand-lane/active-Product-Setup uniqueness proof, and publish/apply design
-before any repair mutation. Do not hand-patch only this product or weaken the
-owner catalog guard.
+no longer "collect one product." Phase 3 added
+`scripts/dev/lt_live_readonly_catalog_authority_audit.py` and collected the
+full published catalog into local `/tmp` artifacts: 47 published Website Items,
+47 Product Setup matches, 47 products with blockers, 66 total failures, 47
+unproved brand lanes, 19 Draft/inactive Product Setup authorities, and one
+product with 2,430 variants / 2,430 Item Prices. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.
+Next safe action is a catalog authority resolver/packet layer with row-level
+rollback capture, brand-lane proof, active-Product-Setup uniqueness proof,
+variant-axis classification/collapse planning, and publish/apply design before
+any repair mutation. Do not hand-patch only this product or weaken the owner
+catalog guard.
+
+Three-brand DBA boundary as of 2026-06-28: LT is the existing
+accounting/ERPNext operating company for three separate customer-facing brand
+lanes: Locally Twisted, Commercial Balloon Decor, and Memorial Balloons. Keep
+brand lanes separate for websites, styling, copy, portals, invoices, Meta/ad
+work, automation, files, and customer-facing claims. Do not use old launch
+cleanup notes saying Memorial is "separate" as authority that it is outside LT
+accounting; those notes only meant Memorial was not part of that LT launch
+slice. Source contract: `BRAND-BOUNDARY.md`,
+`capabilities/recipes/three-brand-dba-boundary-contract.md`, and
+`workstreams/three-brand-dba-boundary-2026-06-28.md`.
 
 Meta/Facebook/Instagram operations closeout as of 2026-06-28: GL explicitly
 approved broad supervised LT operating access for Meta surfaces, including
@@ -1040,6 +1059,9 @@ slice. Raw local photo drops were moved out of the repo to
 stale generated/mirror/research debris was removed, old audience-page contest
 output is Git-history-only, and `.gitignore` blocks those drop paths from
 returning. Memorial Balloons is separate and not part of this LT launch repo.
+2026-06-28 clarification: that sentence is only a launch-cleanup boundary; it
+is not current authority that Memorial Balloons is outside the Locally Twisted
+accounting operation or the three-brand DBA shape.
 Feature handoff: `workstreams/launch-repo-cleanup-2026-05-10.md`; capability:
 `capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
 

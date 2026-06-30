@@ -190,17 +190,25 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
   live products, starting with `large-head-missionary`.
 
 2026-06-30 update: the first offline no-write tools are available:
+`scripts/dev/lt_live_readonly_catalog_authority_audit.py`,
 `scripts/dev/lt_product_setup_projection_preview.py`,
 `scripts/verify/product_setup_authority_parity_contract.py`, and
 `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. They consume
-saved audit/projection JSON only and intentionally fail on the known live drift
-artifact. They do not replace the future owner publish/apply workflow.
+saved audit/projection JSON and intentionally fail on the known live drift
+artifact. The catalog collector performs live read-only GETs to create saved
+artifacts; the projection/parity/blast-radius tools remain offline. The first
+full published-catalog collection processed 47 Website Items and found 47
+Product Setup matches, 47 products with blockers, 47 unproved brand lanes, 19
+Draft/inactive Product Setup authorities, and one product with 2,430 variants
+/ 2,430 Item Prices. These tools do not replace the future owner publish/apply
+workflow.
 
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
 - `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`
