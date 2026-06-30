@@ -146,6 +146,12 @@ OpenClaw cockpit witness:
   storage/contract values, not operator-facing labels.
 - Native ERPNext/Webshop ecommerce is insufficient and may need custom DocTypes, child tables, custom fields, APIs, template overrides, pricing services, and verifiers.
 - Frontend must render backend truth. Missing backend field/logic cannot be hidden by polished UI.
+- 2026-06-30 owner-authority correction: an owner-facing Product Setup save is
+  backend truth only for the Product Setup record until projection/runtime proof
+  says otherwise. Existing live products must prove the chain from Product
+  Setup to Website Item, Item Price, media, cart, checkout, document, and
+  payment surfaces before any public-change claim. Related failure:
+  `capabilities/failures/product-setup-projection-authority-drift.md`.
 - Variant images are conditional: only flag missing image mapping when the source says a variant has or should expose an image. Not every variant requires its own image.
 - Simple checkout variant `Item.image` is customer-facing selected media when
   the variant belongs to a `simple_product|checkout` Website Item and the image

@@ -4,7 +4,7 @@ type: failure
 failure_kind: recurring_pattern
 schema_version: 0.1
 date_discovered: 2026-05-19
-last_updated: 2026-05-19
+last_updated: 2026-06-30
 status: guarded
 scope: project
 owner_context: Locally Twisted ERPNext/Frappe ecommerce catalog
@@ -14,6 +14,7 @@ related_capabilities:
   - erpnext-checkout-commerce-rules
 related_failures:
   - variant-media-overgating-regression
+  - product-setup-projection-authority-drift
 tags:
   - ERPNext
   - ecommerce
@@ -51,12 +52,18 @@ amount.
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-04-30 to 2026-05-19 | Locally Twisted | legacy_source-to-ERPNext catalog import and Webshop product pages | Importing legacy_source catalog into ERPNext Items, variants, and Item Prices | Non-bouquet variant families flattened many active variant `Item Price` rows to base price; Easter Bunny Ear Arch `25ft` showed `$375` instead of `$440` | `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; `workstreams/catalog-variant-price-recovery.md`; `9aa117f`; local `product_price_modifier_contract.py` repair evidence | added | guarded-local |
+| 2026-06-30 | Locally Twisted | live Product Setup to public runtime authority | Owner changed `large-head-missionary` Product Setup prices from `175` to `125` and saved successfully | Product Setup base/exact prices were `125.0`, but live sellable `Item Price` rows and public price stayed `175.0` | `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`; `capabilities/failures/product-setup-projection-authority-drift.md` | needs new projection guard | active |
 
 ## Root pattern
 
 The system proved identity shape and downstream consistency before proving
 source price truth. Once ERPNext `Item Price` was wrong, every properly designed
 downstream layer preserved that wrong value.
+
+The 2026-06-30 live Product Setup incident is adjacent but distinct: source or
+owner intent reached Product Setup, but Product Setup did not project to the
+sellable `Item Price` rows that the public page, cart, checkout, and documents
+trust.
 
 ## Why it seemed reasonable at the time
 
@@ -117,6 +124,9 @@ ERPNext/Stripe parity can mean anything.
 - Do not treat a source page base price as the variant matrix.
 - Do not fix only the product GL noticed and leave the import path unguarded.
 - Do not downgrade this to a cosmetic product-page bug.
+- Do not treat Product Setup price save success as Item Price/public runtime
+  proof. Load `product-setup-projection-authority-drift` for owner-save
+  incidents.
 
 ## Cross-links
 

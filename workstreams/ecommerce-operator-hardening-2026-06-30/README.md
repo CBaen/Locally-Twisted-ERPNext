@@ -1,0 +1,145 @@
+# Ecommerce Operator Hardening - Red Alarm Index
+
+Date: 2026-06-30
+
+Status: incident mapping and project start. This is not a live fix, not a publish approval, and not a claim that the live database is healthy.
+
+## Why This Exists
+
+The owner-facing expectation is simple: when a business owner changes a product's price, description, photos, options, add-ons, or visibility in the backend, the customer-facing shop should reflect the approved change quickly and consistently.
+
+The current system does not provide that simple owner contract. A public product page can read one set of fields while the owner edits another. Variant selection, cart, checkout, Sales Order lines, invoice fields, gallery projection, and payment labels each re-resolve product data through separate paths. Some of those paths are deliberate safety gates. Some are incomplete owner workflow. Some are stale architecture scaffolding.
+
+That is a red alarm because it can make the backend appear editable while the live site continues showing old customer-facing truth.
+
+## Current Evidence Snapshot
+
+Live public route checked:
+
+- `https://locallytwisted.com/shop-items/bouquets/large-head-missionary`
+- Response showed Frappe Cloud and `x-from-cache: False`.
+- Public page rendered `Large head Missionary`.
+- Public page rendered custom LT story/details fields, not the standard ERPNext description fallback.
+- Product setup JSON embedded on the page showed `base_price: 125.0`.
+- Visible page and variant API showed a starting/sellable price of `$175.00`.
+
+That specific product proves a split authority: Product Setup/base-price data can differ from the public sellable-price path, and public copy can differ from whichever backend field a human thought they edited.
+
+The local LT Docker runtime was started for a bounded read-only proof, produced `/tmp/lt-large-head-missionary-db-snapshot.json`, and was stopped afterward. The local snapshot showed Product Setup, Product Setup exact prices, and Item Prices internally consistent at `175.0`.
+
+Authenticated live read-only API proof later confirmed the owner save worked: live Product Setup base price and 30 Product Setup price rows changed to `125.0` at `2026-06-30 01:43:01.382176` by `locallytwisted@gmail.com`. The live sellable Item Price rows stayed at `175.0`, and the public customer page still rendered `from $ 175.00`. The live copy mismatch is the same authority split: public copy renders from Website Item fields, not top-level Product Setup story/details fields.
+
+## Packet Files
+
+- [lane-charter.md](lane-charter.md): feature-lane scope, route record, evidence rules, and operating assumptions.
+- [significant-change-register.md](significant-change-register.md): high-impact architecture changes this lane must plan, build, and verify.
+- [research-map.md](research-map.md): local prior-research roots, external/official research sources, expedition lanes, and research questions.
+- [operating-brief.md](operating-brief.md): sanitized owner intent, hard constraints, safe-proceed rules, and default approach.
+- [plan-deepen-notes.md](plan-deepen-notes.md): stress review of the approach with adjusted plan, risks, and gates.
+- [owner-workflow-map.md](owner-workflow-map.md): what a business owner can and cannot do today.
+- [public-runtime-flow-map.md](public-runtime-flow-map.md): where public shop, product page, cart, checkout, payment, and documents read product data.
+- [broken-connections-register.md](broken-connections-register.md): concrete disconnects and red-alarm risks.
+- [hardening-milestones.md](hardening-milestones.md): rebuild plan for making ecommerce owner-operable.
+- [triad-critique-plan-brief.md](triad-critique-plan-brief.md): briefing packet used for the focused triad critique of the tightened plan.
+- [triad-critique-2026-06-30.md](triad-critique-2026-06-30.md): real multi-agent triad synthesis and required plan adjustments before build.
+- [construction-build-brief-2026-06-30.md](construction-build-brief-2026-06-30.md): build brief for the first protective-contract implementation slice.
+- [protective-contracts.md](protective-contracts.md): controlling safety and owner-workflow contracts for later implementation.
+- [construction-review-2026-06-30.md](construction-review-2026-06-30.md): real multi-agent construction review and second-pass acceptance for the protective contracts.
+- [phase-0-1-build-brief-2026-06-30.md](phase-0-1-build-brief-2026-06-30.md): implementation-ready brief for the approved read-only Phase 0/1 incident and authority-matrix slice.
+- [phase-0-public-evidence-large-head-missionary.md](phase-0-public-evidence-large-head-missionary.md): GET-only public evidence note and safe audit helper usage.
+- [phase-0-incident-audit-large-head-missionary-2026-06-30.md](phase-0-incident-audit-large-head-missionary-2026-06-30.md): partial incident audit from public/source evidence with DB proof gaps.
+- [phase-0-1-progress-2026-06-30.md](phase-0-1-progress-2026-06-30.md): completed Phase 0/1 non-deploy progress, verification results, and next safe action.
+- [phase-0-local-runtime-proof-2026-06-30.md](phase-0-local-runtime-proof-2026-06-30.md): local stack/manual-start proof and local read-only DB snapshot result.
+- [phase-0-db-snapshot-integration-plan.md](phase-0-db-snapshot-integration-plan.md): how to integrate local DB snapshot evidence without treating it as live proof.
+- [phase-0-local-db-snapshot-analysis-2026-06-30.md](phase-0-local-db-snapshot-analysis-2026-06-30.md): local-only row analysis showing local price authority is internally consistent at `175.0` while live public Product Setup still reports `125.0`.
+- [triad-control-phase-0-1-continuation-2026-06-30.md](triad-control-phase-0-1-continuation-2026-06-30.md): triad lane control record for the local-runtime continuation.
+- [phase-0-1-continuation-progress-2026-06-30.md](phase-0-1-continuation-progress-2026-06-30.md): continuation closeout showing triad lanes used, local runtime proof, snapshot result, and the former live read-only blocker before it was closed by the later live API audit.
+- [live-api-audit-control-2026-06-30.md](live-api-audit-control-2026-06-30.md): live read-only API safety/control record.
+- [live-readonly-api-audit-large-head-missionary-2026-06-30.md](live-readonly-api-audit-large-head-missionary-2026-06-30.md): authenticated live read-only finding showing Product Setup saved at `125.0` while sellable Item Prices/public customer price stayed at `175.0`, and public copy renders from Website Item fields.
+- [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
+- [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
+
+Read-only helper scripts:
+
+- `scripts/dev/lt_readonly_product_audit.py`: public GET-only product evidence collector.
+- `scripts/dev/lt_readonly_product_db_snapshot.py`: local-container read-only row snapshot helper for the product authority packet.
+- `scripts/dev/lt_live_readonly_product_api_audit.py`: live read-only API product authority collector using Frappe Cloud site login plus live ERPNext GET requests.
+
+## Primary Local Evidence
+
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.json`
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.js`
+- `apps/locally_twisted/locally_twisted/product_blueprint_validation.py`
+- `apps/locally_twisted/locally_twisted/product_blueprint_apply_plan.py`
+- `apps/locally_twisted/locally_twisted/product_blueprint_local_apply.py`
+- `apps/locally_twisted/locally_twisted/owner_catalog_guard.py`
+- `apps/locally_twisted/locally_twisted/www/shop.py`
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_details.html`
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html`
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_image.html`
+- `apps/locally_twisted/locally_twisted/product_options.py`
+- `apps/locally_twisted/locally_twisted/product_page_runtime.py`
+- `apps/locally_twisted/locally_twisted/product_setup_runtime.py`
+- `apps/locally_twisted/locally_twisted/api/cart.py`
+- `apps/locally_twisted/locally_twisted/www/checkout.py`
+- `apps/locally_twisted/locally_twisted/payments/stripe_session.py`
+- `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
+- `capabilities/recipes/erpnext-product-blueprint-authoring.md`
+- `capabilities/recipes/erpnext-catalog-variant-price-parity.md`
+- `capabilities/recipes/erpnext-webshop-guest-party-contract.md`
+- `capabilities/failures/ecommerce-variant-price-source-drift.md`
+- `capabilities/failures/product-gallery-projection-regression.md`
+- `capabilities/failures/product-primary-media-attachment-drift.md`
+- `capabilities/failures/product-setup-projection-authority-drift.md`
+
+## Official Baseline References
+
+ERPNext's native ecommerce model uses Website Items, Item Prices, Price Lists, Item Variants, and E Commerce/Webshop settings. LT has built custom operator, runtime, cart, and checkout logic on top of that model.
+
+- ERPNext Website Item docs: https://docs.frappe.io/erpnext/website_item
+- ERPNext Item Price docs: https://docs.frappe.io/erpnext/item-price
+- ERPNext Price Lists docs: https://docs.frappe.io/erpnext/price-lists
+- ERPNext Item Variants docs: https://docs.frappe.io/erpnext/item-variants
+- ERPNext E Commerce Settings docs: https://docs.frappe.io/erpnext/e_commerce_settings
+- Frappe cache commands: https://docs.frappe.io/framework/user/en/bench/frappe-commands
+- Frappe hooks: https://docs.frappe.io/framework/user/en/python-api/hooks
+- Prior ERP variant docs: official vendor documentation, URL intentionally omitted from tracked LT docs because the platform name is restricted.
+- Saleor product configuration docs: https://docs.saleor.io/developer/products/configuration
+- commercetools product modeling docs: https://docs.commercetools.com/learning-model-your-product-catalog/product-modeling/products
+- Medusa Admin variant/media docs: https://docs.medusajs.com/user-guide/products/variants
+
+## Triad / Expedition Record
+
+Route record:
+
+```markdown
+Mode: real multi-agent triad plus expedition synthesis
+Decision needed: how to turn LT ecommerce from developer-operated scaffold into owner-operated shop infrastructure
+Scope owner: Locally Twisted ecommerce feature lane
+System/project/runtime classification: single project + client/production surface + external research
+Allowed actions: repo reads, public/official docs research, local evidence mapping, lane documentation
+Forbidden actions: live provider mutation, logged-in account changes, product writes, deploys, payment changes, secret reads
+Evidence bar: source-separated local code proof, prior-research evidence, official docs, and live public-route proof where available
+Stop condition: stop before implementation or live changes until a scoped build packet and approval exist
+```
+
+Triad lanes used:
+
+- LT ground-truth lane: current Product Setup, pricing, media, add-on, public projection, cart/checkout/document/payment surfaces.
+- Prior-research lane: local historical ecommerce architecture research and prior ERP backend lessons, sanitized into architecture-neutral findings.
+- External comparison lane: official/primary docs for ecommerce variant, option, media, pricing, and publishing patterns.
+
+## Capability Gate
+
+Capability gate: PASS.
+
+Loaded resources:
+
+- `capabilities/INDEX.md`
+- `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
+- `capabilities/recipes/erpnext-product-blueprint-authoring.md`
+- `capabilities/recipes/erpnext-catalog-variant-price-parity.md`
+- `capabilities/recipes/erpnext-webshop-guest-party-contract.md`
+- `capabilities/failures/ecommerce-variant-price-source-drift.md`
+- `capabilities/failures/product-gallery-projection-regression.md`
+- `capabilities/failures/product-primary-media-attachment-drift.md`

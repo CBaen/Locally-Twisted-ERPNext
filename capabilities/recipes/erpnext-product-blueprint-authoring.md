@@ -7,11 +7,11 @@ maturity: candidate
 scope: Locally Twisted ERPNext staff-authored product setup for highly customizable ecommerce products
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-22
+last_verified: 2026-06-30
 evidence_quality: direct
 successful_uses: 4
-failed_uses: 0
-regressions: 0
+failed_uses: 1
+regressions: 1
 used_by:
   - Codex
   - OpenClaw
@@ -32,6 +32,27 @@ tags:
 
 Use this when adding or changing Locally Twisted products that need employee
 authoring in ERPNext instead of developer-coded product packets.
+
+## 2026-06-30 Live Authority Correction
+
+Product Setup save success is not public product-change proof.
+
+Live `large-head-missionary` proof showed the owner save worked:
+`LT Product Blueprint` modified at `2026-06-30 01:43:01.382176` by
+`locallytwisted@gmail.com`, Product Setup base price `125.0`, and all 30
+Product Setup price rows `125.0`. The customer-facing price still rendered
+`from $ 175.00` because the active `Standard Selling` Item Price rows stayed
+`175.0`. Public copy rendered from Website Item custom fields, not Product
+Setup top-level story/details fields.
+
+Until a publish/apply contract or direct Product Setup runtime authority is
+implemented, agents must treat Product Setup as an authoring surface with
+incomplete live projection. Do not tell GL or the owner that a Product Setup
+save changed the live shop unless Website Item, Item, Item Price, public route,
+cart/checkout, and rollback proof support that claim.
+
+Failure recipe:
+`capabilities/failures/product-setup-projection-authority-drift.md`.
 
 ## Rule
 
@@ -92,6 +113,11 @@ verifier work. For local build work, name the actual blocker.
   target Item or variants. Cross-product Item Price targets are save blockers.
 - Backfilled Product Setup records stay Draft until reviewed so they do not
   silently take over runtime checkout behavior.
+- For existing live products, Product Setup price/copy/media saves are not
+  enough. The workflow must either directly power runtime fields or project
+  into the Website Item, Item Price, media, cart, and checkout authorities
+  through an explicit publish/apply step with no-write preview and rollback
+  proof.
 
 ## Workflow
 
@@ -160,11 +186,14 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
   product families beyond the local proof product.
 - Owner/GL local workflow testing before staging.
 - Fresh import safety evidence before any staging/live product release.
+- No-write Product Setup projection preview and parity verifier for existing
+  live products, starting with `large-head-missionary`.
 
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
 - `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Product Setup save is not live public authority without projection proof
+
+**Decision:** A normal Product Setup/`LT Product Blueprint` save is not proof
+that the public shop changed. For each ecommerce product field, LT must either
+make Product Setup the direct runtime authority or implement an explicit
+publish/apply contract that projects Product Setup into Website Item, Item,
+Item Price, media, cart, checkout, document, and payment authorities with
+proof.
+
+**Reasoning:** Live authenticated read-only API proof for
+`large-head-missionary` showed the owner save succeeded at
+`2026-06-30 01:43:01.382176` by `locallytwisted@gmail.com`: Product Setup base
+price and 30 Product Setup price rows were `125.0`. The public page still
+rendered `from $ 175.00` because the 30 live `Standard Selling` Item Price rows
+were still `175.0`. Public copy also rendered from Website Item fields, not
+Product Setup top-level story/details fields.
+
+**Guard:** Do not hand-patch one product and call this fixed. Do not weaken
+the owner catalog guard. Before repair, build no-write preview, row-level
+rollback target, Product Setup-vs-runtime parity verifier, and an owner-visible
+state/publish contract. A product is not live because Product Setup saved or
+shows `Approved For Live`; live requires target-site/public route/API/cart
+proof where relevant.
+
+**Receipts:** `decisions/2026-06-30-product-setup-live-authority.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`;
+`capabilities/failures/product-setup-projection-authority-drift.md`.
+
+**Decided by:** Guiding Light approved stronger protective contracts; Codex
+confirmed the live authority split and recorded the decision on 2026-06-30.
+
+---
+
 ## 2026-06-24 - Live root stays `/` and Birthday Deliveries main image is the approved WebP
 
 **Decision:** `https://locallytwisted.com/` is the canonical live landing page

@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-06-30 - Product Setup save success can still be public failure
+
+The Large head Missionary incident proved that the owner can save a Product
+Setup change successfully while the public shop continues to show old customer
+truth. Live Product Setup had `125.0` after the owner save, but live sellable
+Item Prices and the public route stayed at `175.0`. Public copy also came from
+Website Item fields instead of the Product Setup top-level copy the owner saw.
+
+**Counter-move:** never equate Desk save success with live product-change
+success. For product price/copy/media/options/add-ons, prove the full
+authority chain: Product Setup, Website Item, Item, Item Price, public route,
+cart/checkout where relevant, and rollback target. Use
+`capabilities/failures/product-setup-projection-authority-drift.md` before any
+owner-save repair. Keep the owner catalog guard; build the missing
+publish/apply or runtime-authority contract.
+
 ## 2026-06-28 - Broad Meta access needs operating lanes, not access anxiety
 
 The Meta API setup exposed a framing failure. GL intentionally granted broad

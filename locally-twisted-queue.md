@@ -10,6 +10,22 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 ecommerce Product Setup projection authority hardening (2026-06-30):**
+Live read-only API proof confirmed a successful owner save for
+`large-head-missionary` did not update customer-facing authority. Product Setup
+base/exact prices changed to `125.0` at `2026-06-30 01:43:01.382176` by
+`locallytwisted@gmail.com`, while 30 live `Standard Selling` Item Prices and
+the public route stayed at `175.0`; public copy renders from Website Item
+fields, not Product Setup top-level copy. Workstream:
+`workstreams/ecommerce-operator-hardening-2026-06-30/`; decision:
+`decisions/2026-06-30-product-setup-live-authority.md`; failure note:
+`capabilities/failures/product-setup-projection-authority-drift.md`; helper:
+`scripts/dev/lt_live_readonly_product_api_audit.py`. Next safe work is no-write
+preview, rollback target capture, Product Setup-vs-runtime parity verifier, and
+owner-visible publish/apply or direct runtime-authority design. Do not patch
+only this product, clear cache, write live records, deploy, or weaken owner
+catalog guards from this queue item alone.
+
 **P0 Meta/Facebook/Instagram operations aftercare (2026-06-28):** The Meta app
 and system-user API path are now working for supervised LT operations.
 Handoff: `workstreams/meta-ads-connection-2026-06-26.md`; decision:

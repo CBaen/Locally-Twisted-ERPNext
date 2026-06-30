@@ -1,5 +1,24 @@
 # Locally Twisted - Coding Handoff
 
+Ecommerce Product Setup authority incident closeout as of 2026-06-30: live
+read-only API proof confirmed GL's owner-save report for
+`large-head-missionary`. The owner save succeeded into Product Setup at
+`2026-06-30 01:43:01.382176` by `locallytwisted@gmail.com`: Product Setup
+base price and all 30 Product Setup price rows are `125.0`. The live
+customer-facing price still renders `from $ 175.00` because all 30 live
+`Standard Selling` Item Price rows remain `175.0`. Public copy renders from
+Website Item fields, not the Product Setup top-level story/details fields.
+This is an owner-workflow/projection authority failure, not a failed Desk save
+and not supported as a cache-only issue. Current receipts:
+`workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`;
+decision `decisions/2026-06-30-product-setup-live-authority.md`; failure
+recipe `capabilities/failures/product-setup-projection-authority-drift.md`;
+helper `scripts/dev/lt_live_readonly_product_api_audit.py`. No deploy, cache
+clear, ERPNext write, provider/payment/DNS action, or customer message was
+performed. Next safe action is a no-write Product Setup projection preview,
+row-level rollback capture, and parity verifier before any repair mutation.
+Do not hand-patch only this product or weaken the owner catalog guard.
+
 Meta/Facebook/Instagram operations closeout as of 2026-06-28: GL explicitly
 approved broad supervised LT operating access for Meta surfaces, including
 ads, posting, customer replies, leads, and measurement, with GL remaining the

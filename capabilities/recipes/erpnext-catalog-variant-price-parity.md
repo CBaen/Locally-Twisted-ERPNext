@@ -38,6 +38,10 @@ ERPNext Item variants that came from the old legacy_source shop.
 
 Product page base price is not variant price.
 
+Product Setup saved price is also not public sellable price until it reaches
+the Item Price authority or the runtime contract explicitly reads Product Setup
+as authority.
+
 For legacy_source website_sale products, resolve variant prices through
 `/website_sale/get_combination_info`. Do not trust JSON-LD, card price, listing
 price, or scraped page base price as the price for every ERPNext variant.
@@ -215,3 +219,11 @@ local DB was corrected for that item first, then
 post-apply modifier contract reported 49 products and 10,186 active variants
 checked with 0 remaining changes. Browser proof now confirms the reported page
 selects `20ft` at `$375` and `25ft` at `$440`.
+
+On 2026-06-30, live read-only API proof for `large-head-missionary` showed a
+different price authority split: Product Setup saved base/exact prices at
+`125.0`, but the live `Standard Selling` Item Price rows and public price
+remained `175.0`. That incident is tracked by
+`capabilities/failures/product-setup-projection-authority-drift.md`. For owner
+save incidents, load that failure recipe in addition to this price parity
+recipe.
