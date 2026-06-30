@@ -1,0 +1,30 @@
+# Witness State: Phase 4 Authority Packets
+
+- Date: 2026-06-30
+- Repo/path: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
+- Main goal: continue ecommerce operator hardening by building an offline catalog authority packet/resolver layer from saved Product Setup authority artifacts.
+- Trigger: GL asked to continue phases as far as possible and optimize for outcome; this is client/income-critical architecture work.
+- Current stage: implemented and verified for no-write offline resolver/packet report.
+- Main agent owns: final integration, docs, verification, commit/push if the slice is clean.
+- Witness lanes: implementation worker for offline packet reporter; technical/adversarial witness for false-confidence review.
+- User intent summary: reduce owner-operability failure risk so backend product changes can eventually become reliable live shop changes without AI-only intervention.
+- Clarification status: no user question needed; current slice is no-write/offline and within standing approval.
+- Questions asked / answers: none.
+- Dangerous assumptions: treating Product Setup match as live authority; treating brand lane as implied; treating variant explosion as acceptable because ERPNext rows exist; treating projection preview as mutation approval.
+- Blocked assumptions: any live repair, cache clear, deploy, provider/payment change, product-scope decision, or destructive catalog cleanup.
+- Assumptions: saved `/tmp/lt-catalog-authority-full-20260630` artifacts remain available for verification; source tool must still work with any caller-provided artifact directory.
+- Risks: false clean reports; unproved brand lane; active Product Setup uniqueness depending on brand lane; over-classifying option axes without enough source fields.
+- Truncation/artifact status: prior full catalog artifact summary is documented in `phase-3-catalog-authority-audit-2026-06-30.md`.
+- Recovered source paths: saved catalog artifacts under `/tmp/lt-catalog-authority-full-20260630`; phase note `phase-3-catalog-authority-audit-2026-06-30.md`.
+- Recovered line ranges/chunks: not applicable; JSON artifact summaries inspected through focused scripts.
+- Unverified or blocked spans: cart/checkout/payment/document/live mutation proof remains out of scope.
+- Evidence checked: capability gate PASS for offline authority packet/resolver layer.
+- Evidence missing: none needed before offline implementation.
+- Open disagreements: technical witness warned not to call this repair-ready; main accepted and named it blocker/resolver report.
+- Decisions made: build report-only/offline tool first; no live writes; include rollback/public-route/media/option blockers.
+- Files/systems touched: `scripts/dev/lt_product_setup_authority_packet_report.py`; Phase 4 workstream/docs/capability/queue/handoff updates.
+- Verification planned: py_compile, offline report from saved `/tmp` artifacts, focused JSON sanity, fail-on-blocker behavior.
+- Verification completed: py_compile passed; full saved-catalog report exited 1 with 47 blocked products / 284 blockers; `index.json` explicit input exited 2; incident product packet exited 1; existing blast-radius/parity tools still fail on incident product.
+- Active agent/session ids: Worker A `019f1801-4280-7741-b87f-e02eb21d9e17`; Technical Witness B `019f1801-5cd1-7f33-bc5a-8ee773990bf7`.
+- Cleanup needed: close witness agents and run process hygiene before final.
+- Resume instruction: next safe slice is source-level Product Setup authority controls: brand-lane source/resolver, active uniqueness, owner-visible blockers, and variant-axis classification starting with Birthday Deliveries.

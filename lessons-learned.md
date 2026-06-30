@@ -3851,3 +3851,23 @@ catalog authority collector and saved-artifact verifiers before any write.
 **Avoid:** saying the catalog is wired because a Product Setup row exists,
 using newest-modified Product Setup as authority, or patching one product
 without the catalog resolver/packet layer.
+
+---
+
+## 2026-06-30 - Blocker reports must not become repair permission
+
+**Lesson:** A detailed authority packet report can make the next action feel
+obvious, but it still is not a mutation approval.
+
+**What happened:** The Phase 4 offline report converted saved catalog artifacts
+into 47 blocked product packets and 284 blockers. That made the repair shape
+clearer, but also proved the catalog is not ready for direct writes: brand
+lane, active uniqueness, public route proof, rollback packet, media roles,
+Product Setup status, and variant-axis decisions still block repair.
+
+**Do this next time:** Use blocker reports to choose the next safe build slice.
+Require a pre-mutation packet with rollback snapshots and approval before any
+live Item Price, Website Item, media, cache, deploy, cart, payment, or document
+change.
+
+**Avoid:** turning "we know the mismatch" into "we can write the fix now."

@@ -34,12 +34,23 @@ blockers, 66 total failures, 47 unproved brand lanes, 19 matched Product
 Setups in Draft/inactive authority status, and one product with 2,430 variants
 / 2,430 Item Prices. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.
-Next safe work is a catalog authority resolver/packet layer: brand-lane proof,
-active Product Setup uniqueness by target item/route/brand lane, variant-axis
-classification/collapse plan, rollback target capture, and then owner-visible
-publish/apply or field-level runtime-authority design. Do not patch only this
-product, clear cache, write live records, deploy, or weaken owner catalog
-guards from this queue item alone.
+2026-06-30 Phase 4 added
+`scripts/dev/lt_product_setup_authority_packet_report.py`, an offline
+blocker/resolver report over saved artifacts. Full-catalog report: 47 blocked
+products and 284 blockers, including 47 unproved brand lanes, 47 unproved
+active uniqueness checks, 47 missing public-route proofs, 47 missing
+pre-mutation rollback packets, 31 missing media-role proofs, 19 inactive
+Product Setups, 19 missing setup price values, 19 ambiguous base-price-to-many
+variant mappings, 6 variant-explosion products, and the known
+`large-head-missionary` price/copy drift. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
+Next safe work is source-level Product Setup authority controls: explicit
+brand-lane source/resolver, active Product Setup uniqueness by target
+item/route/brand lane, owner-visible blocker report, variant-axis
+classification/collapse plan starting with Birthday Deliveries, rollback target
+capture, and then owner-visible publish/apply or field-level runtime-authority
+design. Do not patch only this product, clear cache, write live records,
+deploy, or weaken owner catalog guards from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

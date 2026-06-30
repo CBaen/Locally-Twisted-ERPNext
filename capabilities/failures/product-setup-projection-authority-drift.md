@@ -172,6 +172,7 @@ Minimum guard for price/copy:
 Initial offline tools exist:
 
 - `scripts/dev/lt_live_readonly_catalog_authority_audit.py`
+- `scripts/dev/lt_product_setup_authority_packet_report.py`
 - `scripts/dev/lt_product_setup_projection_preview.py`
 - `scripts/verify/product_setup_authority_parity_contract.py`
 - `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`
@@ -194,3 +195,11 @@ Brand lane was unproved for 47 products, and 19 matched Product Setups were in
 Draft/inactive authority status. One product had 2,430 variants and 2,430 Item
 Price rows, proving that the variant-explosion issue is catalog-scale. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.
+
+The follow-up offline authority packet report intentionally blocks all 47
+published products with 284 blockers. The dominant blockers are unproved brand
+lane, unproved active uniqueness, missing public-route proof, missing
+pre-mutation rollback packet, media-role proof gaps, inactive Product Setup
+authority, ambiguous base-price-to-many-variant mapping, and variant explosion.
+See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.

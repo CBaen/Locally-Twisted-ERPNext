@@ -58,6 +58,7 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [live-readonly-api-audit-large-head-missionary-2026-06-30.md](live-readonly-api-audit-large-head-missionary-2026-06-30.md): authenticated live read-only finding showing Product Setup saved at `125.0` while sellable Item Prices/public customer price stayed at `175.0`, and public copy renders from Website Item fields.
 - [phase-2-projection-preview-parity-2026-06-30.md](phase-2-projection-preview-parity-2026-06-30.md): no-write projection preview, parity verifier, and offline blast-radius report tooling closeout.
 - [phase-3-catalog-authority-audit-2026-06-30.md](phase-3-catalog-authority-audit-2026-06-30.md): live read-only full published-catalog authority artifact collection, catalog-wide blocker counts, and next resolver/packet work.
+- [phase-4-authority-packet-resolver-2026-06-30.md](phase-4-authority-packet-resolver-2026-06-30.md): offline blocker/resolver report over saved catalog artifacts, 284 blocker breakdown, and first variant-explosion targets.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
 
@@ -67,6 +68,7 @@ Read-only helper scripts:
 - `scripts/dev/lt_readonly_product_db_snapshot.py`: local-container read-only row snapshot helper for the product authority packet.
 - `scripts/dev/lt_live_readonly_product_api_audit.py`: live read-only API product authority collector using Frappe Cloud site login plus live ERPNext GET requests.
 - `scripts/dev/lt_live_readonly_catalog_authority_audit.py`: live read-only published-catalog authority artifact collector using Frappe Cloud site login plus live ERPNext GET requests.
+- `scripts/dev/lt_product_setup_authority_packet_report.py`: offline blocker/resolver report from saved catalog authority artifacts.
 - `scripts/dev/lt_product_setup_projection_preview.py`: offline no-write Product Setup -> runtime row-diff preview from a saved audit artifact.
 - `scripts/verify/product_setup_authority_parity_contract.py`: offline fail-loud parity verifier for saved audit/projection artifacts.
 - `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`: offline product-by-product risk report from saved audit/projection artifacts.

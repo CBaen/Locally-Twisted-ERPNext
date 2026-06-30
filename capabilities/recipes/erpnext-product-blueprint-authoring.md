@@ -191,6 +191,7 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
 
 2026-06-30 update: the first offline no-write tools are available:
 `scripts/dev/lt_live_readonly_catalog_authority_audit.py`,
+`scripts/dev/lt_product_setup_authority_packet_report.py`,
 `scripts/dev/lt_product_setup_projection_preview.py`,
 `scripts/verify/product_setup_authority_parity_contract.py`, and
 `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. They consume
@@ -200,8 +201,9 @@ artifacts; the projection/parity/blast-radius tools remain offline. The first
 full published-catalog collection processed 47 Website Items and found 47
 Product Setup matches, 47 products with blockers, 47 unproved brand lanes, 19
 Draft/inactive Product Setup authorities, and one product with 2,430 variants
-/ 2,430 Item Prices. These tools do not replace the future owner publish/apply
-workflow.
+/ 2,430 Item Prices. The authority packet report turns those artifacts into
+47 blocked product packets and 284 explicit blockers. These tools do not
+replace the future owner publish/apply workflow.
 
 Backlinks:
 
@@ -209,6 +211,7 @@ Backlinks:
 - `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

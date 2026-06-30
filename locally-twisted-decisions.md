@@ -5944,6 +5944,34 @@ neutral coordination hub.
 
 **Decided by:** Codex worktree failure evidence during the GL-approved
 multi-agent workflow, 2026-05-21.
+## 2026-06-30 - Authority packet reports are blockers, not repair approval
+
+**Decision:** The new catalog authority packet report is a blocker/resolver
+surface. It is not a repair packet, release packet, or approval to mutate live
+ERPNext data.
+
+**Reasoning:** The Phase 4 report found 47 blocked published products and 284
+blockers. The dominant blockers are not just the known `large-head-missionary`
+price/copy drift; they include unproved brand lane, unproved active uniqueness,
+missing public-route proof, missing pre-mutation rollback packets, media-role
+proof gaps, inactive Product Setup status, ambiguous base-price-to-many-variant
+mappings, and variant explosion. Calling that repair-ready would create the
+same false-success pattern that caused the incident.
+
+**Implementation boundary:** Use the authority packet report to pick the next
+safe implementation slice: explicit brand-lane source/resolver, active Product
+Setup uniqueness, owner-visible blockers, and variant-axis classification.
+Do not write live Item Prices, clear cache, deploy, or patch one product from
+this report alone.
+
+**Receipts:** `scripts/dev/lt_product_setup_authority_packet_report.py`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
+
+**Decided by:** live read-only catalog artifacts, offline blocker report, and
+technical witness review, 2026-06-30.
+
+---
+
 ## 2026-06-30 - Catalog product repair requires full read-only authority artifacts first
 
 **Decision:** Product Setup repairs for existing live products must start from

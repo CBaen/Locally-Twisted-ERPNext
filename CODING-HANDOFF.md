@@ -30,11 +30,20 @@ full published catalog into local `/tmp` artifacts: 47 published Website Items,
 unproved brand lanes, 19 Draft/inactive Product Setup authorities, and one
 product with 2,430 variants / 2,430 Item Prices. Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-3-catalog-authority-audit-2026-06-30.md`.
-Next safe action is a catalog authority resolver/packet layer with row-level
-rollback capture, brand-lane proof, active-Product-Setup uniqueness proof,
-variant-axis classification/collapse planning, and publish/apply design before
-any repair mutation. Do not hand-patch only this product or weaken the owner
-catalog guard.
+Phase 4 added `scripts/dev/lt_product_setup_authority_packet_report.py`, an
+offline blocker/resolver report over saved artifacts. It reports 47 blocked
+published products and 284 blockers: 47 unproved brand lanes, 47 unproved
+active uniqueness checks, 47 missing public-route proofs, 47 missing
+pre-mutation rollback packets, 31 media-role proof gaps, 19 inactive Product
+Setups, 19 missing setup price values, 19 ambiguous base-price-to-many-variant
+mappings, six variant-explosion products, and the known `large-head-missionary`
+price/copy drift. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
+Next safe action is source-level Product Setup authority controls with explicit
+brand-lane source/resolver, active-Product-Setup uniqueness proof, owner-visible
+blockers, variant-axis classification/collapse planning, row-level rollback
+capture, and publish/apply design before any repair mutation. Do not hand-patch
+only this product or weaken the owner catalog guard.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand
