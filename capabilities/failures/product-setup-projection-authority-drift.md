@@ -181,6 +181,11 @@ Minimum guard for price/copy:
   Product Setup brand, same-brand duplicate active records, or target-item
   ambiguity must return no setup and log a conflict instead of falling through
   or selecting the newest modified record.
+- Product Setup Desk validation must surface runtime authority blockers before
+  active statuses. If an existing linked Website Item lacks operating-brand
+  metadata, lacks `source_declared` state, disagrees on brand, or disagrees on
+  target Item/Website Item identity, the active Product Setup save/transition
+  must fail loudly in Desk.
 - Decide and implement the owner workflow: explicit publish/apply contract or
   direct Product Setup runtime authority per field.
 - Extend the catalog-wide report to list every published product with Product
@@ -251,3 +256,11 @@ gallery/media lookup now use explicit or source-declared Website Item
 brand, and fail closed on ambiguity. This is still source/runtime protection,
 not live projection repair. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`.
+
+Phase 8 added owner-visible Product Setup validation blockers for active
+authority states. Active Product Setups now block when a linked Website Item is
+missing the runtime brand fields, has a brand/state other than the Product
+Setup's source-declared brand, or disagrees on target identity. Drafts and new
+preview plans with no existing Website Item remain editable. This is Desk/source
+protection only, not live projection repair. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`.

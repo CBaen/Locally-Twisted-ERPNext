@@ -93,3 +93,11 @@ This phase does not fix or prove:
 - Add owner-visible blocker reporting using the same blocker categories.
 - Start variant-axis classification on Birthday Deliveries before any variant-collapse or price repair write.
 - Build row-level rollback packet capture before any repair mutation.
+
+Supersession note:
+
+- Phase 7 completed runtime brand-aware lookup.
+- Phase 8 completed the first owner-visible runtime authority blockers in Desk.
+  Current next safe work is variant-axis classification/collapse planning
+  starting with Birthday Deliveries, plus rollback target capture before any
+  catalog mutation.

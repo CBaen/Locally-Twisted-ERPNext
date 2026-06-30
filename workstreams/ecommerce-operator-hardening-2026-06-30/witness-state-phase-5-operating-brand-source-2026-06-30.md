@@ -117,11 +117,28 @@
   - `python -m py_compile apps/locally_twisted/locally_twisted/product_setup_runtime.py apps/locally_twisted/locally_twisted/api/product_setup.py apps/locally_twisted/locally_twisted/product_options.py apps/locally_twisted/locally_twisted/seed/sync_commerce_rules.py apps/locally_twisted/locally_twisted/patches/sync_product_setup_brand_runtime_fields_20260630.py scripts/verify/product_blueprint_contract.py`
   - `python scripts/verify/product_blueprint_contract.py` passed 26 tests.
   - `git diff --check`
+- Owner-visible runtime authority blocker continuation verification completed:
+  - Intent/risk witness `019f1860-5060-7ec2-8358-7eddf1155bd2` confirmed the
+    owner-facing blocker should say Product Setup cannot be treated as ready
+    because the site cannot safely tell which brand/product setup controls the
+    public product.
+  - Technical witness `019f1860-7414-7012-9d4e-74a4b49c8f80` recommended
+    controller-level runtime row checks because the guard depends on Website
+    Item metadata and target identity, not pure in-record validation alone.
+  - Implemented `product_blueprint_runtime_authority.py` and wired active
+    source-state blockers into `LT Product Blueprint.validate`.
+  - Active Product Setup saves now block when linked Website Item runtime brand
+    fields are missing, mismatched, not `source_declared`, or target identity
+    disagrees. Drafts and new preview plans without existing Website Items are
+    not blocked by this guard.
+  - `python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_runtime_authority.py apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py scripts/verify/product_blueprint_contract.py`
+  - `python scripts/verify/product_blueprint_contract.py` passed 27 tests.
 - Resume instruction: Continue source-only ecommerce Product Setup hardening in
-  the isolated worktree. Phase 7 runtime brand-aware lookup is complete. Next
-  safe slice is owner-visible blocker reporting or variant-axis
-  classification/collapse planning. Do not deploy, mutate live ERPNext records,
-  clear cache, or touch provider/payment/DNS/customer-message paths.
+  the isolated worktree. Phase 8 owner-visible runtime authority blockers are
+  complete locally. Next safe slice is variant-axis classification/collapse
+  planning, starting with Birthday Deliveries, plus row-level rollback target
+  capture before any catalog mutation. Do not deploy, mutate live ERPNext
+  records, clear cache, or touch provider/payment/DNS/customer-message paths.
 
 ## Route Record
 

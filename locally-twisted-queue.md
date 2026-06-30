@@ -67,12 +67,18 @@ or target-item ambiguity instead of falling through or selecting newest
 modified. Website Item brand metadata fields were added to the existing
 commerce custom-field seed and a new migration patch. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`.
-Next safe work is owner-visible blocker reporting, variant-axis
-classification/collapse planning starting with Birthday Deliveries, rollback
-target capture, and then owner-visible publish/apply or field-level
-runtime-authority design. Do not patch only this product, clear cache, write
-live records, deploy, treat defaulted operating-brand values as live proof, or
-weaken owner catalog guards from this queue item alone.
+2026-06-30 Phase 8 added owner-visible runtime authority blockers to Product
+Setup validation: active Product Setups block when linked Website Item runtime
+brand fields are missing, mismatched, not source-declared, or target identity
+disagrees. Drafts/new preview plans without existing Website Items are not
+blocked by this guard. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`.
+Next safe work is variant-axis classification/collapse planning starting with
+Birthday Deliveries, rollback target capture, and then owner-visible
+publish/apply or field-level runtime-authority design. Do not patch only this
+product, clear cache, write live records, deploy, treat defaulted
+operating-brand values as live proof, or weaken owner catalog guards from this
+queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

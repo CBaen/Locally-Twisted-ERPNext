@@ -136,6 +136,11 @@ verifier work. For local build work, name the actual blocker.
   `operating_brand`, checks target Item, target Website Item, and slug inside
   that brand, and fails closed on missing/invalid brand or active ambiguity
   instead of selecting by modified time.
+- Active Product Setup validation includes runtime authority blockers for
+  existing linked Website Items. Missing Website Item runtime brand fields,
+  wrong `operating_brand`, missing `source_declared` state, or target
+  Item/Website Item disagreement blocks active source states before preview,
+  staging, live approval, or local apply can imply readiness.
 
 ## Workflow
 
@@ -208,9 +213,10 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
   live products, starting with `large-head-missionary`.
 - Saved-artifact authority packets must report source-declared operating brand
   and same-brand source uniqueness separately from live brand/route proof.
-- Owner-visible Product Setup blockers still need to surface runtime authority
-  conflicts in Desk. Do not treat defaulted `operating_brand` values as proved
-  live brand lane.
+- Variant-axis classification/collapse planning is still required before
+  reducing the 10k-plus Item/Item Price shape. Do not delete, disable, rename,
+  or repurpose existing variant records until dry-run dependency, rollback,
+  historical-reference, and owner-scope approval pass.
 
 2026-06-30 update: the first offline no-write tools are available:
 `scripts/dev/lt_live_readonly_catalog_authority_audit.py`,
@@ -257,6 +263,13 @@ fields are seeded by `sync_commerce_rules` and registered for existing sites
 through `sync_product_setup_brand_runtime_fields_20260630`. This does not
 repair live public projection or prove live brand lane.
 
+2026-06-30 Phase 8 update: Product Setup validation now surfaces runtime
+authority blockers in Desk for active source states. Existing linked Website
+Items must have installed operating-brand runtime fields, matching
+source-declared brand metadata, and matching target identity before the Product
+Setup can imply preview/staging/live/apply readiness. Drafts and new preview
+plans with no existing Website Item are not blocked by this guard.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -266,6 +279,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

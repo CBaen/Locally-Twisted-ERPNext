@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Active Product Setup saves must surface runtime authority blockers in Desk
+
+**Decision:** Product Setup validation must block active authority states when
+the linked Website Item cannot safely prove the runtime brand/target authority
+that public lookup now requires. Missing Website Item brand metadata fields,
+wrong `operating_brand`, missing `source_declared` state, or target
+Item/Website Item disagreement must be owner-visible blockers before preview,
+staging, live approval, or local apply can imply readiness.
+
+**Reasoning:** Phase 7 made runtime lookup fail closed, but a silent runtime
+failure is still too late for the owner workflow. The owner needs the blocker
+in Desk before a save/transition suggests the product is usable. The blocker
+must explain that the site cannot safely tell which brand/product setup
+controls the public product, rather than letting the problem appear as a
+public-page mystery later.
+
+**Guard:** Drafts remain editable. New preview plans with no existing Website
+Item are not blocked by this guard. Existing linked Website Items are blocked
+when their runtime brand metadata is missing or disagrees with Product Setup
+source authority. This is source/Desk protection only; it does not repair live
+projection, prove public route truth, mutate Website Item fields, prove cart or
+checkout parity, or replace the future owner publish/apply workflow.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`;
+`apps/locally_twisted/locally_twisted/product_blueprint_runtime_authority.py`;
+`scripts/verify/product_blueprint_contract.py`.
+
+**Decided by:** Codex with real witness/triad review on 2026-06-30, under
+GL's standing approval for stronger protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Runtime Product Setup lookup must be brand-scoped and fail closed
 
 **Decision:** Customer-facing/runtime Product Setup lookup must resolve active

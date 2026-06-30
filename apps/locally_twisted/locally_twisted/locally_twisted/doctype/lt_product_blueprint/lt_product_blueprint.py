@@ -16,6 +16,7 @@ from locally_twisted.product_blueprint_local_apply import (
     apply_blueprint_locally,
     build_local_apply_preview,
 )
+from locally_twisted.product_blueprint_runtime_authority import runtime_authority_save_blockers
 from locally_twisted.product_blueprint_validation import BLOCKED, validate_blueprint_doc
 from locally_twisted.product_setup_runtime import ACTIVE_SETUP_STATUSES
 
@@ -24,13 +25,15 @@ class LTProductBlueprint(Document):
     def validate(self):
         result = validate_blueprint_doc(self)
         active_uniqueness_blockers = _active_uniqueness_save_blockers(self)
-        if active_uniqueness_blockers:
+        runtime_authority_blockers = runtime_authority_save_blockers(self)
+        authority_blockers = [*active_uniqueness_blockers, *runtime_authority_blockers]
+        if authority_blockers:
             result["ok"] = False
             result["validation_status"] = BLOCKED
-            result["blockers"].extend(active_uniqueness_blockers)
-            result["save_blockers"].extend(active_uniqueness_blockers)
+            result["blockers"].extend(authority_blockers)
+            result["save_blockers"].extend(authority_blockers)
             result["summary"] = (
-                "Blocked: active Product Setup authority must be unique before preview, "
+                "Blocked: active Product Setup authority must be safe before preview, "
                 "staging, live approval, or local apply."
             )
 

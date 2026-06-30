@@ -180,9 +180,12 @@ Required fix:
   `scripts/verify/product_blueprint_contract.py`.
 - Runtime Product Setup lookup is now brand-aware in source and fails closed
   on missing/invalid brand or active ambiguity.
-- Still open: live brand-lane proof, owner-visible blockers, public projection
-  repair, payment/document identity, media/file ownership, and release packet
-  proof.
+- Active Product Setup Desk validation now blocks when linked Website Item
+  runtime brand fields are missing, mismatched, not `source_declared`, or target
+  identity disagrees.
+- Still open: live brand-lane proof, public projection repair,
+  payment/document identity, media/file ownership, owner dashboard rollup, and
+  release packet proof.
 - Saved-artifact authority packets now report `source_authority.operating_brand`
   separately from live proof.
 - Live proof, projection, and payment/document/media inheritance proof are
@@ -211,10 +214,12 @@ Required fix:
   claim the same slug, target Item, or target Website Item.
 - Runtime active lookup now logs ambiguity and returns no setup when duplicate
   active records match the same runtime key.
+- Active Desk validation now surfaces runtime authority blockers when existing
+  linked Website Item metadata cannot satisfy the brand-aware runtime contract.
 - Saved-artifact authority packets now report same-brand source uniqueness
   separately from live proof.
-- Still open: brand-aware runtime lookup, route-level uniqueness after route
-  authority is modeled, and database-level uniqueness.
+- Still open: route-level uniqueness after route authority is modeled,
+  database-level uniqueness, and live/global active authority proof.
 
 ## B010 - `/shop` May Show A Card That Cart Later Rejects
 

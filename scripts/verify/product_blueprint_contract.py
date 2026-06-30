@@ -25,6 +25,7 @@ from locally_twisted.product_blueprint_local_apply import (  # noqa: E402
     build_local_apply_preview,
     validate_local_apply_request,
 )
+from locally_twisted.product_blueprint_runtime_authority import runtime_authority_save_blockers  # noqa: E402
 from locally_twisted.product_setup_runtime import (  # noqa: E402
     OPERATING_BRAND_OPTIONS,
     active_product_setup_name_for_website_item,
@@ -423,6 +424,83 @@ class ProductBlueprintContractTest(unittest.TestCase):
             self.assertEqual(active_product_setup_name_for_website_item("target-conflict"), "")
         self.assertTrue(any("target_item_code=target-conflict" in row for row in target_item_conflict.errors))
 
+    def test_runtime_authority_blockers_are_owner_visible_before_active_status(self) -> None:
+        active_doc = _doc(
+            publish_status="Local Preview Ready",
+            operating_brand="locally_twisted",
+            product_slug="same-slug",
+            target_item_code="same-slug",
+            target_website_item="WEB-LOCAL",
+        )
+        valid_frappe = _FakeFrappe(
+            [],
+            website_item={
+                "name": "WEB-LOCAL",
+                "item_code": "same-slug",
+                "operating_brand": "locally_twisted",
+                "operating_brand_authority_state": "source_declared",
+            },
+        )
+        self.assertEqual(runtime_authority_save_blockers(active_doc, valid_frappe), [])
+
+        draft_data = dict(active_doc.__dict__)
+        draft_data["publish_status"] = "Draft"
+        draft_doc = _doc(**draft_data)
+        missing_fields = _FakeFrappe(
+            [],
+            website_item={
+                "name": "WEB-LOCAL",
+                "item_code": "same-slug",
+            },
+        )
+        self.assertEqual(runtime_authority_save_blockers(draft_doc, missing_fields), [])
+        draft_blockers = runtime_authority_save_blockers(active_doc, missing_fields)
+        self.assertTrue(any("runtime fields are not installed" in row for row in draft_blockers))
+
+        mismatched_brand = _FakeFrappe(
+            [],
+            website_item={
+                "name": "WEB-LOCAL",
+                "item_code": "same-slug",
+                "operating_brand": "commercial_balloon_decor",
+                "operating_brand_authority_state": "source_declared",
+            },
+        )
+        brand_blockers = runtime_authority_save_blockers(active_doc, mismatched_brand)
+        self.assertTrue(any("Operating Brand must be source-declared as locally_twisted" in row for row in brand_blockers))
+
+        missing_authority_state = _FakeFrappe(
+            [],
+            website_item={
+                "name": "WEB-LOCAL",
+                "item_code": "same-slug",
+                "operating_brand": "locally_twisted",
+                "operating_brand_authority_state": "missing",
+            },
+        )
+        state_blockers = runtime_authority_save_blockers(active_doc, missing_authority_state)
+        self.assertTrue(any("source-declared as locally_twisted" in row for row in state_blockers))
+
+        no_existing_website_item = _FakeFrappe([], website_item=None)
+        self.assertEqual(runtime_authority_save_blockers(active_doc, no_existing_website_item), [])
+
+        mismatched_target = _FakeFrappe(
+            [],
+            website_item={
+                "name": "WEB-LOCAL",
+                "item_code": "other-item",
+                "operating_brand": "locally_twisted",
+                "operating_brand_authority_state": "source_declared",
+            },
+        )
+        target_blockers = runtime_authority_save_blockers(active_doc, mismatched_target)
+        self.assertTrue(any("targets same-slug" in row for row in target_blockers))
+
+        meta_failure = _FakeFrappeMetaFailure([])
+        meta_blockers = runtime_authority_save_blockers(active_doc, meta_failure)
+        self.assertTrue(any("runtime fields are not installed" in row for row in meta_blockers))
+        self.assertTrue(any("Metadata lookup failed" in row for row in meta_blockers))
+
     def test_child_doctypes_are_child_tables(self) -> None:
         for folder, filename in (
             ("lt_product_blueprint_option", "lt_product_blueprint_option.json"),
@@ -667,6 +745,24 @@ def _blueprint(**overrides):
     return data
 
 
+class _Doc:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+
+def _doc(**overrides):
+    data = {
+        "name": "proof-product",
+        "product_slug": "proof-product",
+        "operating_brand": "locally_twisted",
+        "publish_status": "Draft",
+        "target_item_code": "",
+        "target_website_item": "",
+    }
+    data.update(overrides)
+    return _Doc(**data)
+
+
 def _doctype(folder: str, filename: str) -> dict:
     path = DOCTYPE_ROOT / folder / filename
     return json.loads(path.read_text(encoding="utf-8"))
@@ -749,6 +845,11 @@ class _FakeFrappe:
 
     def log_error(self, message: str, title: str | None = None):
         self.errors.append(message)
+
+
+class _FakeFrappeMetaFailure(_FakeFrappe):
+    def get_meta(self, doctype: str):
+        raise RuntimeError("meta unavailable")
 
 
 def _row_matches_filters(row: dict, filters: dict) -> bool:

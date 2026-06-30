@@ -47,6 +47,14 @@ checks target Item, target Website Item, and slug within that brand, and fails
 closed on missing/invalid brand, same-brand duplicate active records, invalid
 active Product Setup brand, or target-item ambiguity.
 
+2026-06-30 Phase 8 progress: Product Setup Desk validation now surfaces
+runtime authority blockers before active states. Existing linked Website Items
+must have installed runtime brand fields, matching source-declared brand
+metadata, and matching target identity before Product Setup can imply preview,
+staging, live approval, or local apply readiness. This does not close SCR-002
+because publish/apply workflow, live projection proof, owner dashboard/reporting,
+and database-level uniqueness remain unbuilt.
+
 ## SCR-003 - Immediate Public Projection For Approved Product Changes
 
 Current state: a backend save can update a field that public pages do not read, leaving live content unchanged.
@@ -119,6 +127,11 @@ Verifier requirement: seeded failing products show actionable blockers; passing 
 
 Safety requirement: verifier failures must feed owner-readable blockers, not only developer logs or Error Logs.
 
+2026-06-30 Phase 8 progress: the first owner-visible runtime authority blockers
+now feed Product Setup validation for active source states. This is not the full
+owner dashboard: catalog-wide blocker reports, last-proof timestamps, public
+projection status, and product readiness rollups remain open.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.
@@ -187,6 +200,11 @@ or document identity, or customer-facing route truth.
 Setup authority for schema/API/gallery resolution. Website Item brand metadata
 fields are seeded as source-declared projection fields, but live public
 brand-lane proof remains a separate release/authority-packet requirement.
+
+2026-06-30 Phase 8 progress: Product Setup validation now blocks active source
+states when existing linked Website Item brand metadata is missing, mismatched,
+not `source_declared`, or target identity disagrees. This is a source/Desk
+guard; live public brand-lane proof and release packet proof remain separate.
 
 ## SCR-013 - Pre-Mutation Release Packet And Rollback Contract
 

@@ -79,11 +79,18 @@ resolver, and `sync_commerce_rules` plus patch
 metadata fields.
 Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`.
-Next safe action is adding owner-visible blockers, starting variant-axis
-classification/collapse planning with Birthday Deliveries, capturing row-level
-rollback targets, and designing publish/apply before any repair mutation. Do
-not hand-patch only this product, treat a defaulted `operating_brand` as proved
-live brand lane, or weaken the owner catalog guard.
+Phase 8 added owner-visible runtime authority blockers in Product Setup Desk
+validation. Active Product Setups now fail before preview/staging/live approval
+or local apply when a linked Website Item lacks the runtime brand fields, has a
+brand/state other than the Product Setup's source-declared brand, or disagrees
+on target Item/Website Item identity. Drafts and new preview plans with no
+existing Website Item are not blocked by this guard. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`.
+Next safe action is starting variant-axis classification/collapse planning
+with Birthday Deliveries, capturing row-level rollback targets, and designing
+publish/apply before any repair mutation. Do not hand-patch only this product,
+treat a defaulted `operating_brand` as proved live brand lane, or weaken the
+owner catalog guard.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

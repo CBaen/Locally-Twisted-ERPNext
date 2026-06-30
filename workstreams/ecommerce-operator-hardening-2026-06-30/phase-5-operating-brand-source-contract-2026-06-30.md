@@ -114,3 +114,8 @@ Completed follow-up:
 - Phase 6 updated saved-artifact authority packet logic so `source_declared`
   operating brand and same-brand source uniqueness are reported separately from
   live proof.
+- Phase 7 completed runtime brand-aware lookup.
+- Phase 8 completed the first owner-visible runtime authority blockers in Desk.
+  Current next safe work is variant-axis classification/collapse planning
+  starting with Birthday Deliveries, plus rollback target capture before any
+  catalog mutation.

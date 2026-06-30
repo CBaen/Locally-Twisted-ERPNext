@@ -116,8 +116,16 @@ brand-aware before cross-brand same-slug active setups are allowed. Product
 schema/API/gallery resolution requires explicit or source-declared
 `operating_brand`, checks target Item, target Website Item, and slug within
 that brand, and fails closed on missing/invalid brand or active ambiguity. The
-next Phase 1 build slice is owner-visible blocker reporting for these
-conflicts.
+next Phase 1 build slice is variant-axis classification/collapse planning,
+starting with Birthday Deliveries, plus rollback target capture before any
+catalog mutation.
+
+2026-06-30 Phase 8 source progress: Product Setup Desk validation now surfaces
+runtime authority blockers for active source states when existing linked Website
+Item brand metadata is missing, mismatched, not `source_declared`, or target
+identity disagrees. This satisfies the first owner-visible runtime-authority
+blocker slice; it does not satisfy live projection, publish/apply, catalog-wide
+dashboard, or database-level uniqueness.
 
 ## Phase 2 - Owner Product Setup UX
 
