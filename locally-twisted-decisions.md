@@ -8,6 +8,37 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-01 - Release packets are proof requirements, not release approval
+
+**Decision:** A Product Setup pre-mutation release packet may organize the
+proof, rollback, target-environment, approval, and customer-impact requirements
+for one product, but packet existence must not approve mutation, cache clear,
+deploy, provider action, payment action, customer messages, or public success
+claims.
+
+**Reasoning:** The project needs a repeatable shape for future product changes,
+but the original failure came from false success. A packet that merely looks
+complete would be dangerous if agents or operators treat it as a live release.
+The Phase 16 report therefore remains blocked even for a product with zero
+dashboard blockers unless fresh target-site proof and explicit approvals exist.
+
+**Guard:** Source-only release packets must keep every apply, mutation, cache,
+deploy, provider, payment, and customer-message approval false. Future live or
+staging execution must use the separate release/provider gates with current
+target-site proof.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-critical-review-2026-07-01.md`;
+`scripts/dev/lt_product_setup_release_packet_report.py`;
+`scripts/verify/product_setup_release_packet_contract.py`.
+
+**Decided by:** Codex with real multi-agent triad/witness support on
+2026-07-01 under GL's standing approval for stronger protective contracts and
+no live mutation.
+
+---
+
 ## 2026-07-01 - Catalog readiness dashboards are blocker maps, not publish queues
 
 **Decision:** A catalog-wide Product Setup readiness dashboard may aggregate

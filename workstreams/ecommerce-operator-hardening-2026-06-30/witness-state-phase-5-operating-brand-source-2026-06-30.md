@@ -294,6 +294,32 @@
   ERPNext records, clear cache, touch provider/payment/DNS/customer-message
   paths, or disable/delete/rename/collapse current variants from
   Phase 9/10/11/12/13/14/15 output alone.
+- Pre-mutation release packet continuation verification completed:
+  - Release packet builder `019f1fed-6c14-7c60-bf89-325ff4a3c1b6`
+    implemented the source-only offline release packet report and verifier.
+  - Critical witness `019f1fed-9fd4-7e03-968f-e99011fa41ee` wrote the Phase 16
+    overclaim review and required acceptance criteria. That witness could not
+    see subagent tooling from inside its own context and labeled its internal
+    review degraded, but the parent orchestration used a real spawned witness
+    lane.
+  - Implemented `lt_product_setup_release_packet_report.py` and
+    `product_setup_release_packet_contract.py`.
+  - Saved `large-head-missionary` packet result: seven dashboard blockers, nine
+    missing release gates, and all local/staging/live apply, mutation, cache
+    clear, deploy, provider, payment, customer-message, and public-success
+    approvals false.
+  - Zero-dashboard-blocker products still remain blocked without fresh target
+    proof and explicit approvals.
+  - `python -m py_compile scripts/dev/lt_product_setup_release_packet_report.py scripts/verify/product_setup_release_packet_contract.py`
+  - `python scripts/verify/product_setup_release_packet_contract.py` passed
+    6 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 16 release packet design is complete locally as
+  blocked planning evidence. Next safe slice is current-data refresh or Desk
+  dashboard design, without enabling live writes. Do not deploy, mutate live
+  ERPNext records, clear cache, touch provider/payment/DNS/customer-message
+  paths, or disable/delete/rename/collapse current variants from
+  Phase 9/10/11/12/13/14/15/16 output alone.
 
 ## Route Record
 

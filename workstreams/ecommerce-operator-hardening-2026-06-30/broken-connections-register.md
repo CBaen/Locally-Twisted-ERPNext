@@ -421,3 +421,45 @@ Required fix:
   variant-explosion products, zero ready products, and all approvals false.
 - Still open: owner-facing Desk dashboard, current live refresh, proof
   timestamps, and release-packet design.
+
+2026-07-01 Phase 16 status:
+
+- `scripts/dev/lt_product_setup_release_packet_report.py` now turns one Phase
+  15 dashboard product row into a source-only pre-mutation release packet.
+- The `large-head-missionary` saved packet remains blocked with seven
+  dashboard blockers and nine missing release gates.
+- Still open: current live refresh, target-site proof, Desk dashboard, owner
+  approval workflow, and any actual release execution.
+
+## B015 - Release Approval Can Be Confused With Packet Existence
+
+Severity: P0
+
+Evidence:
+
+- Phase 15 creates a catalog dashboard and Phase 16 creates a product release
+  packet, but both are built from saved/offline evidence.
+- A named "release packet" can sound like approval if the artifact does not
+  fail loudly.
+
+Failure mode:
+
+- An agent or operator treats packet completeness, owner desire, or saved
+  dashboard counts as permission to mutate Item, Website Item, Item Price, File,
+  cache, deploy, provider, payment, or customer-message state.
+
+Required fix:
+
+- Every source-only release packet must keep approval booleans false until the
+  target environment, row-level diff, rollback, public proof, owner approval,
+  developer review, and no-downtime/customer-impact gates pass.
+- Verifiers must fail if source-only packet output approves mutation, cache
+  clear, deploy, provider, payment, customer message, or public success.
+
+2026-07-01 status:
+
+- `scripts/verify/product_setup_release_packet_contract.py` verifies blocked
+  products remain blocked and zero-dashboard-blocker products still remain
+  blocked without target proof.
+- Still open: actual staging/live release gate execution and target-site proof,
+  which must be a separate approval path.

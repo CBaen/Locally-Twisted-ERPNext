@@ -316,3 +316,11 @@ zero ready products, and all apply/cache/deploy/mutation/public-success
 approvals false. This gives agents and operators one blocker map without
 turning saved/source evidence into publish readiness. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`.
+
+Phase 16 added offline product-specific pre-mutation release packet reporting
+over Phase 15 dashboard JSON. Against `large-head-missionary`, it reports seven
+dashboard blockers and nine missing release gates, and keeps mutation, apply,
+cache, deploy, provider, payment, customer-message, and public-success
+approvals false. Even products with zero dashboard blockers remain blocked
+until fresh target-site proof and explicit approvals exist. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`.

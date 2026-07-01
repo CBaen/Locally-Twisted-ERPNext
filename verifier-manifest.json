@@ -162,6 +162,34 @@
       "what_it_does_not_prove": "It does not prove current live catalog state, public route health, cart/checkout behavior, cache state, deployment readiness, or owner approval."
     },
     {
+      "id": "lt-product-setup-release-packet",
+      "tier": "tier_1_local_fast",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python scripts/verify/product_setup_release_packet_contract.py",
+      "cwd": ".",
+      "scope": "offline Product Setup pre-mutation release packet contract over saved catalog readiness dashboard JSON",
+      "environment": "local source files and saved JSON artifacts only",
+      "mutation": "none",
+      "approval_required": "no, local offline check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md",
+      "capability_refs": [
+        "capabilities/recipes/erpnext-product-blueprint-authoring.md",
+        "capabilities/failures/product-setup-projection-authority-drift.md"
+      ],
+      "risk_triggers": [
+        "treating release packet existence as release approval",
+        "approving mutation, cache clear, deploy, provider, payment, or customer messages",
+        "claiming current target-site proof from saved dashboard data"
+      ],
+      "proves": [
+        "offline release packet output keeps missing proof gates blocking and approvals false"
+      ],
+      "what_it_does_not_prove": "It does not prove current live catalog state, target-site route health, cart/checkout behavior, payment/document safety, rollback execution, deployment readiness, or owner approval."
+    },
+    {
       "id": "lt-frappe-cloud-cloudflare-stripe-launch-gate",
       "tier": "tier_4_live_or_external",
       "graduation_stage": "release_live_approval_backed",

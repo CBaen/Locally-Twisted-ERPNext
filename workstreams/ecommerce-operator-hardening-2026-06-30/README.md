@@ -72,6 +72,8 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-14-product-setup-readiness-desk-display-2026-06-30.md](phase-14-product-setup-readiness-desk-display-2026-06-30.md): Desk read-only Show Readiness display for Product Setup validation readiness state.
 - [phase-15-catalog-readiness-dashboard-2026-07-01.md](phase-15-catalog-readiness-dashboard-2026-07-01.md): offline catalog readiness dashboard over saved authority packet reports.
 - [phase-15-critical-review-2026-07-01.md](phase-15-critical-review-2026-07-01.md): critical witness review for the catalog dashboard phase.
+- [phase-16-release-packet-design-2026-07-01.md](phase-16-release-packet-design-2026-07-01.md): offline pre-mutation release packet report over saved catalog readiness dashboard JSON.
+- [phase-16-critical-review-2026-07-01.md](phase-16-critical-review-2026-07-01.md): critical witness review for the release packet design phase.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -97,6 +99,8 @@ Read-only helper scripts:
 - `scripts/verify/product_setup_publish_readiness_contract.py`: verifier for the offline publish readiness report and Birthday Deliveries saved-artifact behavior.
 - `scripts/dev/lt_product_setup_catalog_readiness_dashboard.py`: offline catalog readiness dashboard from saved authority packet reports.
 - `scripts/verify/product_setup_catalog_readiness_contract.py`: verifier for the offline catalog readiness dashboard and saved full-catalog packet behavior.
+- `scripts/dev/lt_product_setup_release_packet_report.py`: offline pre-mutation release packet report from saved catalog readiness dashboard JSON.
+- `scripts/verify/product_setup_release_packet_contract.py`: verifier for the offline release packet report and saved dashboard behavior.
 
 ## Primary Local Evidence
 

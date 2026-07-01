@@ -296,6 +296,16 @@ next actions. Against the saved full-catalog packet it reports 47 blocked
 products and 284 blockers with all apply/cache/deploy/mutation approvals false.
 It is a blocker map, not a publish/apply workflow.
 
+2026-07-01 Phase 16 update: offline pre-mutation release packet reporting now
+exists at `scripts/dev/lt_product_setup_release_packet_report.py`, guarded by
+`scripts/verify/product_setup_release_packet_contract.py`. It consumes the
+Phase 15 dashboard and creates a product-specific packet with proof gates,
+missing gates, rollback requirements, target environment approvals,
+no-downtime/customer-impact requirements, and allowed actions. It keeps all
+apply/cache/deploy/mutation/provider/payment/customer-message approvals false,
+including for products with zero dashboard blockers until fresh target-site
+proof and approvals exist.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -313,6 +323,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`
