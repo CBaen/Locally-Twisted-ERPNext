@@ -308,3 +308,11 @@ reads validation JSON and shows owner state, next step, public-success
 permission, live apply permission, and blockers. It does not add live publish or
 apply behavior. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`.
+
+Phase 15 added offline catalog readiness dashboard reporting over saved
+authority packet reports. Against the saved full-catalog packet, it reports 47
+products, 47 blocked products, 284 blockers, six variant-explosion products,
+zero ready products, and all apply/cache/deploy/mutation/public-success
+approvals false. This gives agents and operators one blocker map without
+turning saved/source evidence into publish readiness. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`.

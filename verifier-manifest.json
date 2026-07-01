@@ -134,6 +134,34 @@
       "what_it_does_not_prove": "It does not prove payment capture, Stripe live readiness, public sellability on production, or launch approval."
     },
     {
+      "id": "lt-product-setup-catalog-readiness",
+      "tier": "tier_1_local_fast",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python scripts/verify/product_setup_catalog_readiness_contract.py",
+      "cwd": ".",
+      "scope": "offline Product Setup catalog readiness dashboard contract over saved authority packet reports",
+      "environment": "local source files and saved JSON artifacts only",
+      "mutation": "none",
+      "approval_required": "no, local offline check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md",
+      "capability_refs": [
+        "capabilities/recipes/erpnext-product-blueprint-authoring.md",
+        "capabilities/failures/product-setup-projection-authority-drift.md"
+      ],
+      "risk_triggers": [
+        "treating saved packets as current live proof",
+        "claiming publish readiness",
+        "using the dashboard to approve mutation, cache clear, or deploy"
+      ],
+      "proves": [
+        "offline dashboard output keeps blocked saved packets blocked and approvals false"
+      ],
+      "what_it_does_not_prove": "It does not prove current live catalog state, public route health, cart/checkout behavior, cache state, deployment readiness, or owner approval."
+    },
+    {
       "id": "lt-frappe-cloud-cloudflare-stripe-launch-gate",
       "tier": "tier_4_live_or_external",
       "graduation_stage": "release_live_approval_backed",

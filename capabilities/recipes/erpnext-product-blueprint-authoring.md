@@ -287,6 +287,15 @@ release packet exists.
 `Show Readiness` display for the validation readiness state and next owner step.
 It is display-only and does not add a publish/apply path.
 
+2026-07-01 Phase 15 update: offline catalog readiness dashboarding now exists
+at `scripts/dev/lt_product_setup_catalog_readiness_dashboard.py`, guarded by
+`scripts/verify/product_setup_catalog_readiness_contract.py`. It consumes saved
+authority packet report JSON and turns it into catalog counts, product rows,
+blocker groups, variant-explosion summaries, owner-safe actions, and developer
+next actions. Against the saved full-catalog packet it reports 47 blocked
+products and 284 blockers with all apply/cache/deploy/mutation approvals false.
+It is a blocker map, not a publish/apply workflow.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -303,6 +312,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

@@ -110,11 +110,18 @@ deploy. See
 2026-06-30 Phase 14 added a read-only Desk `Show Readiness` display for the
 saved Product Setup validation state and next owner step. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`.
-Next safe work is broader catalog/dashboard wiring or reviewed release-packet
-design without enabling live writes. Do not patch only this product, clear
-cache, write live records, deploy, treat defaulted operating-brand values as
-live proof, weaken owner catalog guards, or delete/disable/rename/collapse
-current variants from this queue item alone.
+2026-07-01 Phase 15 added offline catalog readiness dashboard tooling over
+saved authority packet reports. Against the saved full-catalog packet it
+reports 47 products, 47 blocked products, 284 blockers, six variant-explosion
+products, zero ready products, and all apply/cache/deploy/mutation/public
+success approvals false. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`
+and
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-critical-review-2026-07-01.md`.
+Next safe work is reviewed release-packet design without enabling live writes.
+Do not patch only this product, clear cache, write live records, deploy, treat
+defaulted operating-brand values as live proof, weaken owner catalog guards, or
+delete/disable/rename/collapse current variants from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

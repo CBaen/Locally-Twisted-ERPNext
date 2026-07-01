@@ -174,6 +174,13 @@ success. All apply, mutation, cache clear, and deploy approvals remain false.
 next step, public-success permission, live apply permission, and blockers
 without adding a publish/apply path.
 
+2026-07-01 Phase 15 progress: offline catalog readiness dashboarding now
+aggregates saved authority packet blockers into catalog counts, product rows,
+blocker groups, and variant-explosion summaries. The saved full-catalog packet
+still reports zero ready products, so this is a blocker map only. It does not
+close SCR-008 because owner Desk dashboard wiring, last-proof timestamps,
+current live proof refresh, and any publish/apply workflow remain unbuilt.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.
@@ -189,6 +196,13 @@ Safety requirement: first catalog-wide output is a report, not a write. Any writ
 2026-06-30 progress: offline artifact-backed report scaffolding now exists at
 `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`. It is not
 catalog-wide until fed one saved audit/projection artifact per relevant product.
+
+2026-07-01 progress: `scripts/dev/lt_product_setup_catalog_readiness_dashboard.py`
+now consumes the saved full-catalog authority packet report and produces a
+catalog-wide no-write dashboard. Against the 2026-06-30 saved packet it reports
+47 products, 47 blocked products, 284 blockers, six variant-explosion products,
+zero ready products, and all apply/cache/deploy/mutation approvals false. This
+is the first catalog-wide rollup, not a repair script.
 
 ## SCR-010 - External Research Translation Gate
 

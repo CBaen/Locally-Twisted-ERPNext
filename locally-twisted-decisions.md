@@ -8,6 +8,35 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-01 - Catalog readiness dashboards are blocker maps, not publish queues
+
+**Decision:** A catalog-wide Product Setup readiness dashboard may aggregate
+saved authority-packet blockers across products, but it must keep local apply,
+staging apply, live apply, mutation, cache clear, deploy, and public-success
+approvals false.
+
+**Reasoning:** Phase 14 made one Product Setup's saved readiness state visible
+in Desk. The next owner-useful surface is a catalog map showing which products
+are blocked and why. That map reduces confusion only if it remains explicit
+that saved/source evidence is not current live proof and not permission to
+publish.
+
+**Guard:** The dashboard is offline/source-only. It reads saved packet JSON and
+does not read live ERPNext, clear cache, deploy, mutate catalog records, contact
+providers, send customer messages, or choose product-scope changes.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-critical-review-2026-07-01.md`;
+`scripts/dev/lt_product_setup_catalog_readiness_dashboard.py`;
+`scripts/verify/product_setup_catalog_readiness_contract.py`.
+
+**Decided by:** Codex with real multi-agent triad/witness support on
+2026-07-01 under GL's standing approval for stronger protective contracts and
+no live mutation.
+
+---
+
 ## 2026-06-30 - Desk may show readiness, but not publish from readiness
 
 **Decision:** Product Setup Desk may expose a read-only readiness display from

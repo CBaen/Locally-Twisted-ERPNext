@@ -70,6 +70,8 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md](phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md): offline owner-visible publish readiness report translating replacement blockers into blocked/not-live state language.
 - [phase-13-product-setup-readiness-validation-wiring-2026-06-30.md](phase-13-product-setup-readiness-validation-wiring-2026-06-30.md): Product Setup validation JSON wiring for owner-visible readiness state and false publish/apply approvals.
 - [phase-14-product-setup-readiness-desk-display-2026-06-30.md](phase-14-product-setup-readiness-desk-display-2026-06-30.md): Desk read-only Show Readiness display for Product Setup validation readiness state.
+- [phase-15-catalog-readiness-dashboard-2026-07-01.md](phase-15-catalog-readiness-dashboard-2026-07-01.md): offline catalog readiness dashboard over saved authority packet reports.
+- [phase-15-critical-review-2026-07-01.md](phase-15-critical-review-2026-07-01.md): critical witness review for the catalog dashboard phase.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -93,6 +95,8 @@ Read-only helper scripts:
 - `scripts/verify/product_setup_replacement_model_contract.py`: verifier for the offline replacement model report and Birthday Deliveries saved-artifact behavior.
 - `scripts/dev/lt_product_setup_publish_readiness_report.py`: offline owner-visible publish readiness report from replacement-model blockers.
 - `scripts/verify/product_setup_publish_readiness_contract.py`: verifier for the offline publish readiness report and Birthday Deliveries saved-artifact behavior.
+- `scripts/dev/lt_product_setup_catalog_readiness_dashboard.py`: offline catalog readiness dashboard from saved authority packet reports.
+- `scripts/verify/product_setup_catalog_readiness_contract.py`: verifier for the offline catalog readiness dashboard and saved full-catalog packet behavior.
 
 ## Primary Local Evidence
 

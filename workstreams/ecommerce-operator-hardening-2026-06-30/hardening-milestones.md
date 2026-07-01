@@ -165,6 +165,12 @@ blocked until a separate release packet exists.
 slice is broader product readiness dashboarding or release-packet design; live
 write controls remain blocked.
 
+2026-07-01 Phase 15 source progress: offline catalog readiness dashboarding now
+exists over saved authority packet reports. The saved full-catalog packet still
+reports 47 blocked products and 284 blockers, so the dashboard is a blocker map
+and not a publish queue. The next Phase 7 slice is reviewed release-packet
+design; live write controls remain blocked.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.
@@ -194,6 +200,11 @@ Exit criteria:
 - Owner can understand whether a product is draft, blocked, ready for review, staged, or live.
 - Product Setup does not imply public success until proof exists.
 - Non-developer owner-profile test can understand every blocker without a developer command.
+
+2026-07-01 status: a source-only blocked-products report exists as
+`lt_product_setup_catalog_readiness_dashboard.py`, but it is not yet a Desk
+dashboard and does not include fresh proof timestamps beyond the saved packet
+input.
 
 ## Phase 3 - Price Identity Rebuild
 
@@ -286,6 +297,11 @@ Exit criteria:
 - Every published product has a clean authority packet or an explicit blocked status.
 - Retired/unpublished products remain hidden unless explicitly reapproved.
 - First catalog-wide output is a report, not a write.
+
+2026-07-01 status: first catalog-wide output exists as an offline readiness
+dashboard from the saved Phase 4 packet. It reports zero ready products and all
+approvals false, which satisfies the report-first posture but does not repair
+any product.
 
 ## Phase 7 - Staging And Live Release Gates
 

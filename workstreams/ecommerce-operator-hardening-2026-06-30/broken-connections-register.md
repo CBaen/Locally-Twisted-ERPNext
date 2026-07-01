@@ -78,8 +78,11 @@ Required fix:
   publish/apply approvals.
 - Desk now has a read-only `Show Readiness` display for readiness state and
   next owner step.
-- Still open: broader readiness dashboarding and any publish/apply controls
-  that remain blocked until release proof exists.
+- Offline catalog readiness dashboarding now rolls saved authority packet
+  blockers into 47 blocked product rows and grouped blocker counts.
+- Still open: Desk-level dashboard wiring, current live-proof refresh,
+  last-proof timestamps, and any publish/apply controls that remain blocked
+  until release proof exists.
 
 ## B004 - Raw Catalog Edits Are Protected, But Replacement Workflow Is Incomplete
 
@@ -380,3 +383,41 @@ Required fix:
   - option/add-on type taxonomy,
   - live/staging proof gates.
 - Do not copy naming, code, paths, or implementation patterns from the forbidden source.
+
+## B014 - Catalog Blockers Were Not Visible As One Operator Map
+
+Severity: P1
+
+Evidence:
+
+- Phase 4 authority packet reporting produced product-level blockers, but an
+  operator still had to inspect a large JSON/report artifact or per-product
+  receipts.
+- Phase 14 Desk readiness display showed one record at a time, not the catalog
+  blast radius.
+
+Failure mode:
+
+- Agents or operators can fix whichever product is loudest while missing the
+  catalog-wide pattern: all 47 saved published products were blocked in the
+  saved packet, with authority, public proof, rollback, price, media, and
+  variant-shape blockers.
+
+Required fix:
+
+- Keep a catalog-level readiness dashboard that summarizes product rows,
+  blocker groups, owner-safe actions, developer next actions, and variant
+  explosion risks.
+- Keep all publish/apply/cache/deploy/mutation approvals false in that dashboard
+  until a separate release packet and live proof path exists.
+
+2026-07-01 status:
+
+- `scripts/dev/lt_product_setup_catalog_readiness_dashboard.py` and
+  `scripts/verify/product_setup_catalog_readiness_contract.py` now provide the
+  offline saved-packet dashboard and verifier.
+- Against `/tmp/lt-catalog-authority-full-20260630/authority-packet-report.json`,
+  the dashboard reports 47 products, 47 blocked, 284 blockers, six
+  variant-explosion products, zero ready products, and all approvals false.
+- Still open: owner-facing Desk dashboard, current live refresh, proof
+  timestamps, and release-packet design.
