@@ -155,6 +155,11 @@ reporting now exists. It translates Birthday Deliveries blockers into
 state-machine language contract. The next Phase 2 slice is Product Setup
 validation/UI wiring for this readiness contract, still without live writes.
 
+2026-06-30 Phase 13 source progress: Product Setup validation now carries the
+readiness contract directly in validation JSON. The next Phase 2 slice is Desk
+UI display for readiness state and next owner step. Publish/apply actions remain
+blocked until a separate release packet exists.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

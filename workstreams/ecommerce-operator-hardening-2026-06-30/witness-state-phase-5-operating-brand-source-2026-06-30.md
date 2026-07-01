@@ -241,6 +241,21 @@
   writes. Do not deploy, mutate live ERPNext records, clear cache, touch
   provider/payment/DNS/customer-message paths, or disable/delete/rename/collapse
   current variants from Phase 9/10/11/12 output alone.
+- Product Setup readiness validation wiring verification completed:
+  - Implemented validation output keys `owner_publish_readiness` and
+    `publish_apply_approval` in `product_blueprint_validation.py`.
+  - Added Product Blueprint verifier coverage that Draft, Needs Review, Local
+    Proof Ready, and Blocked states do not claim live success, and that live
+    approval remains blocked.
+  - `python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_validation.py scripts/verify/product_blueprint_contract.py`
+  - `python scripts/verify/product_blueprint_contract.py` passed 28 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 13 validation JSON wiring is complete locally.
+  Next safe slice is Desk UI display for owner readiness state/next owner step,
+  without enabling live writes. Do not deploy, mutate live ERPNext records,
+  clear cache, touch provider/payment/DNS/customer-message paths, or
+  disable/delete/rename/collapse current variants from Phase 9/10/11/12/13
+  output alone.
 
 ## Route Record
 

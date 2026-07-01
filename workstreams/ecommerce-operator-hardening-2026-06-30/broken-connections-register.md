@@ -74,8 +74,10 @@ Required fix:
 - Offline publish readiness reporting now defines owner-visible blocked state
   language and allowed actions.
 - Birthday Deliveries reads as `Blocked - Proof Needed`, not saved/live.
-- Still open: wiring this report contract into Product Setup validation/status
-  UI and publish/apply controls.
+- Product Setup validation JSON now emits the readiness state and false
+  publish/apply approvals.
+- Still open: Desk UI display for readiness state/next owner step and
+  publish/apply controls that remain blocked until release proof exists.
 
 ## B004 - Raw Catalog Edits Are Protected, But Replacement Workflow Is Incomplete
 

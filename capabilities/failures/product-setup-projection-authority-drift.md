@@ -295,3 +295,10 @@ into owner/developer categories, and keeps live apply, mutation, cache clear,
 and deploy approvals false. This is the readiness language contract future
 Product Setup UI/status wiring must obey; it is not a live publish path. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`.
+
+Phase 13 wired the readiness contract into Product Setup validation JSON.
+Validation now emits `owner_publish_readiness` and `publish_apply_approval`,
+with local/staging/live apply, mutation, cache clear, and deploy approvals all
+false. This gives Desk/UI code a source-level state to show without claiming
+live success. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`.

@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Product Setup validation may expose readiness state, but not live success
+
+**Decision:** Product Setup validation JSON should expose
+`owner_publish_readiness` and `publish_apply_approval` so Desk/UI surfaces can
+show owner-friendly blocked/draft/review/local/staging state. All publish/apply
+approvals remain false until a separate release packet and proof path exists.
+
+**Reasoning:** The owner needs a human-readable answer after Save: draft saved,
+review needed, local proof ready, staging ready, or blocked. They should never
+see a state that implies the public website changed unless the live proof path
+actually ran. Putting the state in validation JSON gives UI work a source
+contract without opening a live write path.
+
+**Guard:** This is validation/reporting only. It does not create live publish
+buttons, approve local/staging/live writes, clear cache, deploy, mutate catalog
+records, or repair public projection.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`;
+`apps/locally_twisted/locally_twisted/product_blueprint_validation.py`;
+`scripts/verify/product_blueprint_contract.py`.
+
+**Decided by:** Codex on 2026-06-30 under GL's standing approval for stronger
+protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Owner-facing publish readiness must block false success
 
 **Decision:** Product Setup readiness language must separate draft save success

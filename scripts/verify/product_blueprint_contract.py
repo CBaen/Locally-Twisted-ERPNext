@@ -263,6 +263,27 @@ class ProductBlueprintContractTest(unittest.TestCase):
 
         self.assertIn("Live approval is not available from local product blueprints.", result["save_blockers"])
         self.assertFalse(result["ready_for_live"])
+        self.assertEqual(result["owner_publish_readiness"]["state"], "Blocked - Proof Needed")
+        self.assertFalse(result["owner_publish_readiness"]["public_success_claim_allowed"])
+        self.assertFalse(result["publish_apply_approval"]["live_apply_approved"])
+        self.assertFalse(result["publish_apply_approval"]["mutation_approved"])
+
+    def test_owner_publish_readiness_states_do_not_claim_live_success(self) -> None:
+        draft = validate_blueprint(_blueprint(publish_status="Draft"))
+        self.assertEqual(draft["owner_publish_readiness"]["state"], "Draft")
+        self.assertFalse(draft["owner_publish_readiness"]["publish_apply_allowed"])
+
+        review = validate_blueprint(_blueprint(publish_status="Needs Price Review"))
+        self.assertEqual(review["owner_publish_readiness"]["state"], "Needs Review")
+        self.assertFalse(review["owner_publish_readiness"]["public_success_claim_allowed"])
+
+        local = validate_blueprint(_blueprint(publish_status="Local Preview Ready"))
+        self.assertEqual(local["owner_publish_readiness"]["state"], "Local Proof Ready")
+        self.assertFalse(local["publish_apply_approval"]["cache_clear_approved"])
+
+        blocked = validate_blueprint(_blueprint(product_slug="Bad Slug", publish_status="Local Preview Ready"))
+        self.assertEqual(blocked["owner_publish_readiness"]["state"], "Blocked - Proof Needed")
+        self.assertFalse(blocked["owner_publish_readiness"]["publish_apply_allowed"])
 
     def test_color_recipe_limits_fail_loudly(self) -> None:
         result = validate_blueprint(

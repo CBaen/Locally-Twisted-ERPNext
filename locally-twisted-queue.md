@@ -102,11 +102,16 @@ Against Birthday Deliveries it returns `Blocked - Proof Needed`, groups all
 27 blockers into owner/developer categories, and keeps live apply, mutation,
 cache clear, and deploy approvals false. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`.
-Next safe work is wiring this readiness contract into Product Setup
-validation/UI without enabling live writes. Do not patch only this product,
-clear cache, write live records, deploy, treat defaulted operating-brand values
-as live proof, weaken owner catalog guards, or delete/disable/rename/collapse
-current variants from this queue item alone.
+2026-06-30 Phase 13 wired the same readiness contract into Product Setup
+validation JSON. Validation emits owner readiness state and false
+publish/apply approvals for local, staging, live, mutation, cache clear, and
+deploy. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`.
+Next safe work is Desk UI display for readiness state/next owner step without
+enabling live writes. Do not patch only this product, clear cache, write live
+records, deploy, treat defaulted operating-brand values as live proof, weaken
+owner catalog guards, or delete/disable/rename/collapse current variants from
+this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

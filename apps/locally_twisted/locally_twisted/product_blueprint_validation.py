@@ -188,6 +188,12 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
 
     validation_status = READY_FOR_LOCAL_PREVIEW if not blockers else BLOCKED
     summary = _summary(validation_status, blockers, warnings)
+    owner_readiness = _owner_publish_readiness(
+        publish_status=publish_status,
+        validation_status=validation_status,
+        blockers=blockers,
+        save_blockers=save_blockers,
+    )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -198,6 +204,15 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
         "warnings": warnings,
         "save_blockers": save_blockers,
         "ready_for_live": False,
+        "owner_publish_readiness": owner_readiness,
+        "publish_apply_approval": {
+            "local_apply_approved": False,
+            "staging_apply_approved": False,
+            "live_apply_approved": False,
+            "cache_clear_approved": False,
+            "deploy_approved": False,
+            "mutation_approved": False,
+        },
         "contract": {
             "operating_brand": operating_brand,
             "operating_brand_authority_state": operating_brand_authority_state(operating_brand),
@@ -616,6 +631,68 @@ def _summary(status: str, blockers: list[str], warnings: list[str]) -> str:
             return f"Ready for local preview only, with {len(warnings)} warning(s). No live publishing action exists."
         return "Ready for local preview only. No live publishing action exists."
     return f"Blocked: {len(blockers)} issue(s) must be fixed before preview or staging."
+
+
+def _owner_publish_readiness(
+    *,
+    publish_status: str,
+    validation_status: str,
+    blockers: list[str],
+    save_blockers: list[str],
+) -> dict[str, Any]:
+    if blockers or save_blockers:
+        state = "Blocked - Proof Needed"
+        next_owner_step = (
+            "Keep editing the Product Setup or request technical review; "
+            "do not treat Save as a live website update."
+        )
+    elif publish_status == "Draft":
+        state = "Draft"
+        next_owner_step = "Draft saved only. Request review before any public change."
+    elif publish_status in {"Needs Product Review", "Needs Price Review", "Needs Media Review"}:
+        state = "Needs Review"
+        next_owner_step = "Review requested. Public changes remain blocked until proof exists."
+    elif publish_status == "Local Preview Ready" and validation_status == READY_FOR_LOCAL_PREVIEW:
+        state = "Local Proof Ready"
+        next_owner_step = "Local preview can be reviewed. This is not live."
+    elif publish_status == "Staging Ready" and validation_status == READY_FOR_LOCAL_PREVIEW:
+        state = "Staging Ready"
+        next_owner_step = "Staging review can be prepared by a release packet. This is not live."
+    else:
+        state = "Blocked - Proof Needed"
+        next_owner_step = "This product needs a reviewed proof packet before public changes."
+    return {
+        "state": state,
+        "plain_message": _owner_readiness_message(state),
+        "public_success_claim_allowed": False,
+        "publish_apply_allowed": False,
+        "next_owner_step": next_owner_step,
+        "state_machine_contract": [
+            "Draft",
+            "Needs Review",
+            "Local Proof Ready",
+            "Staging Ready",
+            "Approved For Live",
+            "Live Applied",
+        ],
+    }
+
+
+def _owner_readiness_message(state: str) -> str:
+    if state == "Blocked - Proof Needed":
+        return (
+            "This product is not ready to publish. The site still needs proof "
+            "before a live change is safe."
+        )
+    if state == "Draft":
+        return "Draft saved. Nothing public has been promised."
+    if state == "Needs Review":
+        return "Review is needed before this can move toward a public change."
+    if state == "Local Proof Ready":
+        return "Local proof is ready to review. This is not live."
+    if state == "Staging Ready":
+        return "Staging proof can be prepared. This is not live."
+    return "This product needs reviewed proof before public changes."
 
 
 def _text(value: Any) -> str:

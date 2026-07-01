@@ -164,6 +164,11 @@ Birthday Deliveries replacement-model blockers into owner state
 approvals false. This is a report-level contract only; Product Setup UI/status
 wiring remains open.
 
+2026-06-30 Phase 13 progress: Product Setup validation JSON now emits
+`owner_publish_readiness` and `publish_apply_approval` so future Desk/UI work
+can show blocked/draft/review/local/staging state without implying public
+success. All apply, mutation, cache clear, and deploy approvals remain false.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.

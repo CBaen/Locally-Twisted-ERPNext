@@ -124,11 +124,17 @@ saved Birthday Deliveries replacement report, it returns owner state
 and keeps live apply, mutation, cache clear, and deploy approvals false. Current
 receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`.
-Next safe action is wiring this readiness contract into Product Setup
-validation/UI without enabling live writes. Do not hand-patch only this product,
-treat a defaulted `operating_brand` as proved live brand lane, weaken the owner
-catalog guard, or delete/disable/rename/collapse current variants from
-Phase 9/10/11/12 output alone.
+Phase 13 wired the owner-visible readiness contract into Product Setup
+validation JSON. Validation now emits `owner_publish_readiness` plus
+`publish_apply_approval` with local/staging/live apply, mutation, cache clear,
+and deploy approvals all false. Draft/review/local/staging states are described
+without public success claims, and live approval stays blocked. Current receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`.
+Next safe action is Desk UI display for the readiness state and next owner step,
+still without enabling live writes. Do not hand-patch only this product, treat a
+defaulted `operating_brand` as proved live brand lane, weaken the owner catalog
+guard, or delete/disable/rename/collapse current variants from
+Phase 9/10/11/12/13 output alone.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

@@ -278,6 +278,11 @@ replacement model. Phase 12 translates the replacement blockers into
 owner-visible `Blocked - Proof Needed` readiness. None of these phases approve
 live writes, cache clear, deploy, current variant disablement, or publish/apply.
 
+2026-06-30 Phase 13 update: Product Setup validation JSON now includes
+`owner_publish_readiness` and `publish_apply_approval`, keeping public success
+claims and all apply/mutation/cache/deploy approvals false until a separate
+release packet exists.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -292,6 +297,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`
