@@ -323,6 +323,10 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertIn("Only System Manager or Item Manager", controller)
         self.assertIn("apply_locally_from_desk", client)
         self.assertIn("Preview Local Apply", client)
+        self.assertIn("Show Readiness", client)
+        self.assertIn("owner_publish_readiness", client)
+        self.assertIn("public_success_claim_allowed", client)
+        self.assertIn("Live publish/apply allowed", client)
         self.assertNotIn(LOCAL_APPLY_CONFIRMATION, client)
 
     def test_active_product_setup_uniqueness_fails_closed_in_source(self) -> None:

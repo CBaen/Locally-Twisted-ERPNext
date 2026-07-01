@@ -169,6 +169,11 @@ wiring remains open.
 can show blocked/draft/review/local/staging state without implying public
 success. All apply, mutation, cache clear, and deploy approvals remain false.
 
+2026-06-30 Phase 14 progress: Product Setup Desk now has a read-only
+`Show Readiness` display that reads validation JSON and shows owner state,
+next step, public-success permission, live apply permission, and blockers
+without adding a publish/apply path.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.

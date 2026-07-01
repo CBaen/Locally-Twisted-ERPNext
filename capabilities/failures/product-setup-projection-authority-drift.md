@@ -302,3 +302,9 @@ with local/staging/live apply, mutation, cache clear, and deploy approvals all
 false. This gives Desk/UI code a source-level state to show without claiming
 live success. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`.
+
+Phase 14 added a read-only Product Setup Desk `Show Readiness` display that
+reads validation JSON and shows owner state, next step, public-success
+permission, live apply permission, and blockers. It does not add live publish or
+apply behavior. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`.

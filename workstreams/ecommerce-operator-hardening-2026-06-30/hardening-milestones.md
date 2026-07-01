@@ -160,6 +160,11 @@ readiness contract directly in validation JSON. The next Phase 2 slice is Desk
 UI display for readiness state and next owner step. Publish/apply actions remain
 blocked until a separate release packet exists.
 
+2026-06-30 Phase 14 source progress: Desk now exposes a read-only
+`Show Readiness` display for Product Setup validation state. The next Phase 2/7
+slice is broader product readiness dashboarding or release-packet design; live
+write controls remain blocked.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

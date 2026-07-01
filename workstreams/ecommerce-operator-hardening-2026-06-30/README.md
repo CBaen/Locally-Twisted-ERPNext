@@ -69,6 +69,7 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md](phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md): offline no-write Birthday Deliveries replacement model combining Phase 9 classification and Phase 10 rollback blockers.
 - [phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md](phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md): offline owner-visible publish readiness report translating replacement blockers into blocked/not-live state language.
 - [phase-13-product-setup-readiness-validation-wiring-2026-06-30.md](phase-13-product-setup-readiness-validation-wiring-2026-06-30.md): Product Setup validation JSON wiring for owner-visible readiness state and false publish/apply approvals.
+- [phase-14-product-setup-readiness-desk-display-2026-06-30.md](phase-14-product-setup-readiness-desk-display-2026-06-30.md): Desk read-only Show Readiness display for Product Setup validation readiness state.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.

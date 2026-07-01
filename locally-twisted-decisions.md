@@ -8,6 +8,29 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Desk may show readiness, but not publish from readiness
+
+**Decision:** Product Setup Desk may expose a read-only readiness display from
+validation JSON. It must not add live publish/apply controls, cache clear,
+deploy, provider, payment, or customer-message behavior.
+
+**Reasoning:** Showing the owner what state the product is in reduces the false
+success problem. Adding a publish button before release packets exist would
+recreate the same architectural failure in a new place.
+
+**Guard:** `Show Readiness` is display-only. Parse failure falls back to
+`Blocked - Proof Needed`.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`;
+`apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.js`;
+`scripts/verify/product_blueprint_contract.py`.
+
+**Decided by:** Codex on 2026-06-30 under GL's standing approval for stronger
+protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - Product Setup validation may expose readiness state, but not live success
 
 **Decision:** Product Setup validation JSON should expose

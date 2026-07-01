@@ -2,10 +2,17 @@ frappe.ui.form.on("LT Product Blueprint", {
   refresh(frm) {
     if (frm.is_new()) return;
 
+    add_readiness_button(frm);
     add_target_buttons(frm);
     add_local_apply_buttons(frm);
   },
 });
+
+function add_readiness_button(frm) {
+  frm.add_custom_button(__("Show Readiness"), () => {
+    show_readiness(frm);
+  }, __("Product Setup"));
+}
 
 function add_target_buttons(frm) {
   if (frm.doc.target_item_code) {
@@ -31,6 +38,55 @@ function add_local_apply_buttons(frm) {
   frm.add_custom_button(__("Apply Locally"), () => {
     confirm_local_apply(frm);
   }, __("Local Product Setup"));
+}
+
+function show_readiness(frm) {
+  const validation = parse_validation_json(frm);
+  const readiness = validation.owner_publish_readiness || {};
+  const approvals = validation.publish_apply_approval || {};
+  const blockers = validation.blockers || [];
+  const state = readiness.state || frm.doc.validation_status || __("Not checked");
+  const next_step = readiness.next_owner_step || __("Review the validation summary before taking the next step.");
+  const public_success = readiness.public_success_claim_allowed === true;
+  const apply_allowed = readiness.publish_apply_allowed === true || approvals.live_apply_approved === true;
+  const blocker_html = blockers.length
+    ? `<p><strong>${__("Needs attention")}</strong></p><ul>${blockers.slice(0, 10).map((row) => `<li>${frappe.utils.escape_html(row)}</li>`).join("")}</ul>`
+    : `<p>${__("No validation blockers are listed in the saved readiness packet.")}</p>`;
+
+  frappe.msgprint({
+    title: __("Product Setup Readiness"),
+    indicator: apply_allowed ? "green" : "orange",
+    message: `
+      <p><strong>${frappe.utils.escape_html(state)}</strong></p>
+      <p>${frappe.utils.escape_html(readiness.plain_message || "")}</p>
+      <p>${frappe.utils.escape_html(next_step)}</p>
+      <ul>
+        <li>${__("Public success claim allowed")}: ${public_success ? __("Yes") : __("No")}</li>
+        <li>${__("Live publish/apply allowed")}: ${apply_allowed ? __("Yes") : __("No")}</li>
+      </ul>
+      ${blocker_html}
+    `,
+  });
+}
+
+function parse_validation_json(frm) {
+  if (!frm.doc.validation_json) return {};
+  try {
+    return JSON.parse(frm.doc.validation_json);
+  } catch (error) {
+    return {
+      owner_publish_readiness: {
+        state: __("Blocked - Proof Needed"),
+        plain_message: __("The saved readiness packet could not be read. Re-save this Product Setup before treating it as ready."),
+        public_success_claim_allowed: false,
+        publish_apply_allowed: false,
+      },
+      blockers: [__("Saved validation JSON could not be read.")],
+      publish_apply_approval: {
+        live_apply_approved: false,
+      },
+    };
+  }
 }
 
 function preview_local_apply(frm) {

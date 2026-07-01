@@ -283,6 +283,10 @@ live writes, cache clear, deploy, current variant disablement, or publish/apply.
 claims and all apply/mutation/cache/deploy approvals false until a separate
 release packet exists.
 
+2026-06-30 Phase 14 update: Product Setup Desk now includes a read-only
+`Show Readiness` display for the validation readiness state and next owner step.
+It is display-only and does not add a publish/apply path.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -298,6 +302,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

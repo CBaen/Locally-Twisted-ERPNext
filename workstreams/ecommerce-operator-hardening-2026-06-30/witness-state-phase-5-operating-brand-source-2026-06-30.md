@@ -256,6 +256,23 @@
   clear cache, touch provider/payment/DNS/customer-message paths, or
   disable/delete/rename/collapse current variants from Phase 9/10/11/12/13
   output alone.
+- Product Setup readiness Desk display verification completed:
+  - Implemented read-only Desk `Show Readiness` display in
+    `lt_product_blueprint.js`.
+  - The display reads saved `validation_json.owner_publish_readiness`, shows
+    next owner step/public-success/live-apply status/blockers, and falls back to
+    `Blocked - Proof Needed` if JSON parsing fails.
+  - Added static verifier coverage to ensure readiness UI exists and does not
+    leak the local apply confirmation token.
+  - `python -m py_compile scripts/verify/product_blueprint_contract.py`
+  - `python scripts/verify/product_blueprint_contract.py` passed 28 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 14 Desk readiness display is complete locally.
+  Next safe slice is broader product readiness dashboarding or release-packet
+  design, without enabling live writes. Do not deploy, mutate live ERPNext
+  records, clear cache, touch provider/payment/DNS/customer-message paths, or
+  disable/delete/rename/collapse current variants from Phase 9/10/11/12/13/14
+  output alone.
 
 ## Route Record
 

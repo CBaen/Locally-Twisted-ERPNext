@@ -107,11 +107,14 @@ validation JSON. Validation emits owner readiness state and false
 publish/apply approvals for local, staging, live, mutation, cache clear, and
 deploy. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-13-product-setup-readiness-validation-wiring-2026-06-30.md`.
-Next safe work is Desk UI display for readiness state/next owner step without
-enabling live writes. Do not patch only this product, clear cache, write live
-records, deploy, treat defaulted operating-brand values as live proof, weaken
-owner catalog guards, or delete/disable/rename/collapse current variants from
-this queue item alone.
+2026-06-30 Phase 14 added a read-only Desk `Show Readiness` display for the
+saved Product Setup validation state and next owner step. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`.
+Next safe work is broader catalog/dashboard wiring or reviewed release-packet
+design without enabling live writes. Do not patch only this product, clear
+cache, write live records, deploy, treat defaulted operating-brand values as
+live proof, weaken owner catalog guards, or delete/disable/rename/collapse
+current variants from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

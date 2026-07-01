@@ -76,8 +76,10 @@ Required fix:
 - Birthday Deliveries reads as `Blocked - Proof Needed`, not saved/live.
 - Product Setup validation JSON now emits the readiness state and false
   publish/apply approvals.
-- Still open: Desk UI display for readiness state/next owner step and
-  publish/apply controls that remain blocked until release proof exists.
+- Desk now has a read-only `Show Readiness` display for readiness state and
+  next owner step.
+- Still open: broader readiness dashboarding and any publish/apply controls
+  that remain blocked until release proof exists.
 
 ## B004 - Raw Catalog Edits Are Protected, But Replacement Workflow Is Incomplete
 
