@@ -27,6 +27,14 @@ SKUs, moves `Delivery themes` to configuration payload, and treats
 collapse, historical-reference migration, add-on behavior, or owner approval is
 claimed.
 
+2026-06-30 Phase 10 progress: offline dependency/rollback target capture now
+exists for Birthday Deliveries saved artifacts. It includes row-level rollback
+rows for 2,430 variant Items, 2,430 Item Prices, four Product Setup option
+rows, and nine media/gallery/pointer rows, but still exits blocked for live
+route proof, brand-lane proof, historical references, File/slideshow
+references, and mutation approval. The 3-SKU candidate model remains planning
+evidence only.
+
 ## SCR-002 - Product Setup Becomes Owner Source Of Truth
 
 Current state: Product Setup exists and can preview/local-apply, but live publish/hide/reroute and existing-product changes are not a complete owner-run workflow. Live proof on 2026-06-30 showed `large-head-missionary` Product Setup saved price rows at `125.0` while customer-facing Item Prices/public price stayed at `175.0`.
@@ -231,3 +239,10 @@ Safety requirement: if rollback cannot be defined and re-proved publicly, mutati
 creates field-level proposed changes and rollback targets from saved live-audit
 artifacts. Its rollback targets are preview evidence only; full row snapshots
 remain required before mutation.
+
+2026-06-30 Phase 10 progress:
+`scripts/dev/lt_product_setup_dependency_rollback_report.py` captures
+row-level saved-artifact rollback rows for Birthday Deliveries and intentionally
+fails with blockers while live/public proof, historical reference proof,
+File/slideshow reference proof, and mutation approval are missing. This is a
+pre-mutation planning artifact, not release permission.

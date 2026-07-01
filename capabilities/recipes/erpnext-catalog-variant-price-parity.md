@@ -239,3 +239,14 @@ affects saved price, so a collapse design still needs add-on/runtime pricing
 proof and cart/order/document labels. This is classification evidence only. It
 does not approve mutation, add-on behavior, historical reference migration,
 live repair, or public checkout changes.
+
+On 2026-06-30, Phase 10 added
+`scripts/dev/lt_product_setup_dependency_rollback_report.py` and
+`scripts/verify/product_setup_dependency_rollback_contract.py` for offline
+dependency/rollback target capture from saved catalog authority artifacts.
+Against Birthday Deliveries, it captures row-level saved-artifact rollback rows
+for 2,430 variant Items, 2,430 Item Prices, four Product Setup option rows, and
+nine media/gallery/pointer rows. It intentionally exits blocked while live
+route proof, brand-lane proof, historical references, File/slideshow reference
+proof, add-on/runtime behavior, and owner mutation approval are missing. This
+is a planning and safety artifact, not release approval.

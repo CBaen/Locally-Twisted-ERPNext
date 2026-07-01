@@ -98,11 +98,20 @@ labels exist. The report intentionally remains blocked for mutation with
 `current_sku_axes_need_reclassification` and
 `variant_explosion_requires_no_write_plan`. Current receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`.
-Next safe action is dependency/rollback target capture and no-write replacement
-model design for Birthday Deliveries before any catalog mutation. Do not
-hand-patch only this product, treat a defaulted `operating_brand` as proved live
-brand lane, weaken the owner catalog guard, or delete/disable/rename/collapse
-current variants from Phase 9 output alone.
+Phase 10 added offline dependency/rollback target capture tooling and ran it
+against the saved Birthday Deliveries artifact. The report captures row-level
+saved-artifact rollback rows for 2,430 variants, 2,430 Item Prices, four Product
+Setup option rows, and nine media/gallery/pointer rows, but intentionally exits
+`1` with 20 blockers because live/public route proof, live brand-lane proof,
+historical reference proof, File/slideshow reference proof, and full mutation
+approval remain missing. Current receipts:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-critical-review-2026-06-30.md`.
+Next safe action is no-write replacement model design for Birthday Deliveries,
+using Phase 9 classification plus Phase 10 rollback blockers. Do not hand-patch
+only this product, treat a defaulted `operating_brand` as proved live brand
+lane, weaken the owner catalog guard, or delete/disable/rename/collapse current
+variants from Phase 9/10 output alone.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

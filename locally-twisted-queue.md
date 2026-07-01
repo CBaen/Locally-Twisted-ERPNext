@@ -82,12 +82,19 @@ shape is 2,430 variants / 2,430 Item Prices; candidate no-write model keeps
 add-on/runtime pricing plus cart/order/document labels before any collapse
 could work. The report is intentionally blocked for mutation. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`.
-Next safe work is dependency/rollback target capture for Birthday Deliveries,
-then no-write replacement model design, then owner-visible publish/apply or
-field-level runtime-authority design. Do not patch only this product, clear
-cache, write live records, deploy, treat defaulted operating-brand values as
-live proof, weaken owner catalog guards, or delete/disable/rename/collapse
-current variants from this queue item alone.
+2026-06-30 Phase 10 added offline dependency/rollback target capture tooling
+and ran it against the saved Birthday Deliveries artifact. The report includes
+row-level saved-artifact rollback rows for 2,430 variant Items, 2,430 Item
+Prices, four Product Setup option rows, and nine media/gallery/pointer rows,
+but intentionally exits `1` with 20 blockers because live route proof,
+brand-lane proof, historical references, File/slideshow references, and mutation
+approval remain missing. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`.
+Next safe work is no-write replacement model design for Birthday Deliveries,
+then owner-visible publish/apply or field-level runtime-authority design. Do
+not patch only this product, clear cache, write live records, deploy, treat
+defaulted operating-brand values as live proof, weaken owner catalog guards, or
+delete/disable/rename/collapse current variants from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

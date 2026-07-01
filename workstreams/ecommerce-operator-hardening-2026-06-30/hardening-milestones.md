@@ -134,6 +134,14 @@ the blocked candidate model has 3 SKU variants from `Delivery Size`, with
 as paid add-on candidates. The next Phase 1/6 slice is dependency and rollback
 target capture before any replacement model or mutation packet.
 
+2026-06-30 Phase 10 source progress: offline dependency/rollback target capture
+now exists for Birthday Deliveries saved artifacts. The report captures
+row-level saved-artifact rollback rows for current variant Items, Item Prices,
+Product Setup option rows, and media/gallery pointers, and intentionally fails
+with blockers for missing live route proof, brand-lane proof, historical
+references, File/slideshow references, and mutation approval. The next Phase 6
+slice is no-write replacement model design; mutation remains blocked.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

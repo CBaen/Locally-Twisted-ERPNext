@@ -169,6 +169,31 @@
   ERPNext records, clear cache, touch provider/payment/DNS/customer-message
   paths, or disable/delete/rename/collapse current variants from Phase 9 output
   alone.
+- Dependency/rollback capture continuation verification completed:
+  - Technical builder `019f1896-f9d8-7d41-a450-1b1c9ac734fd` implemented the
+    source-only offline dependency/rollback report and verifier.
+  - Documentation builder `019f1897-1775-7f70-a3c7-7c52e78ce64d` wrote the
+    Phase 10 receipt/plan.
+  - Critical verifier `019f1897-2d07-7be0-9e77-ea346934901a` wrote the Phase 10
+    overclaim and blocker review.
+  - Implemented `lt_product_setup_dependency_rollback_report.py` and
+    `product_setup_dependency_rollback_contract.py`.
+  - Saved Birthday Deliveries artifact result: row-level saved-artifact
+    rollback rows included for 2,430 variants, 2,430 Item Prices, four Product
+    Setup option rows, and nine media/gallery/pointer rows.
+  - The report intentionally exits nonzero with 20 blockers because live route
+    proof, brand-lane proof, historical references, File/slideshow references,
+    add-on/runtime proof, and mutation approval remain missing.
+  - `python -m py_compile scripts/dev/lt_product_setup_dependency_rollback_report.py scripts/verify/product_setup_dependency_rollback_contract.py`
+  - `python scripts/verify/product_setup_dependency_rollback_contract.py`
+    passed 3 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 10 dependency/rollback target capture is
+  complete locally as blocked planning evidence. Next safe slice is Birthday
+  Deliveries no-write replacement model design. Do not deploy, mutate live
+  ERPNext records, clear cache, touch provider/payment/DNS/customer-message
+  paths, or disable/delete/rename/collapse current variants from Phase 9/10
+  output alone.
 
 ## Route Record
 

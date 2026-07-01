@@ -264,3 +264,18 @@ Setup's source-declared brand, or disagrees on target identity. Drafts and new
 preview plans with no existing Website Item remain editable. This is Desk/source
 protection only, not live projection repair. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`.
+
+Phase 9 added offline variant-axis classification for saved catalog artifacts,
+starting with Birthday Deliveries. It identified the current 2,430-variant
+shape and a blocked 3-SKU candidate model, but does not approve mutation. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`.
+
+Phase 10 added offline dependency/rollback target capture for saved catalog
+artifacts. Against Birthday Deliveries, it captures row-level saved-artifact
+rollback rows for 2,430 variant Items, 2,430 Item Prices, four Product Setup
+option rows, and nine media/gallery/pointer rows, then intentionally exits
+blocked for missing live route proof, brand-lane proof, historical references,
+File/slideshow reference proof, add-on/runtime proof, and mutation approval.
+This is planning evidence only, not live projection repair or release approval.
+See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`.

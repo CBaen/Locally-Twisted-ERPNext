@@ -8,6 +8,40 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Variant-collapse planning requires dependency and rollback capture before replacement design
+
+**Decision:** No-write replacement modeling for high-cardinality products must
+start from a dependency/rollback capture packet, not only from axis
+classification. The packet may use saved read-only artifacts as planning
+evidence, but it must keep mutation blocked while live route proof, brand-lane
+proof, historical references, File/slideshow references, full row snapshots,
+and owner-scope approval are missing.
+
+**Reasoning:** Birthday Deliveries has 2,430 current variant Items and 2,430
+Item Prices. Phase 9 identified a safer candidate shape, but that does not
+show what current rows are still referenced by carts, orders, invoices,
+payments, communications, files, public routes, or verifiers. Phase 10 now
+captures row-level saved-artifact rollback rows for the current variants,
+prices, Product Setup options, and media/gallery pointers, and still exits
+blocked. That is the correct posture: better mapped, not ready to mutate.
+
+**Guard:** A rollback target list is not a release packet. It does not approve
+disabling, deleting, renaming, repurposing, or collapsing current variants. It
+also does not approve the 3-SKU candidate model, paid add-on runtime behavior,
+public/cart/document labels, live brand-lane truth, or cache/deploy actions.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-critical-review-2026-06-30.md`;
+`scripts/dev/lt_product_setup_dependency_rollback_report.py`;
+`scripts/verify/product_setup_dependency_rollback_contract.py`.
+
+**Decided by:** Codex with write-capable triad/witness support on 2026-06-30,
+under GL's standing approval for stronger protective contracts and no live
+mutation.
+
+---
+
 ## 2026-06-30 - Variant collapse must start as classification-only proof
 
 **Decision:** Variant-explosion repair must begin with offline axis

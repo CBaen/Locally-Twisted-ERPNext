@@ -64,6 +64,8 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-7-runtime-brand-aware-lookup-2026-06-30.md](phase-7-runtime-brand-aware-lookup-2026-06-30.md): source-only runtime lookup hardening so Product Setup schema/API/gallery resolution uses explicit or source-declared operating brand and fails closed on ambiguity.
 - [phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md](phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md): Product Setup Desk validation blockers for linked Website Item brand metadata and target-identity conflicts before active authority states.
 - [phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md](phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md): offline Birthday Deliveries variant-axis classification report showing a 2,430 current-variant shape and a blocked 3-SKU candidate model.
+- [phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md](phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md): offline Birthday Deliveries dependency/rollback target capture receipt, including row-level saved-artifact rollback rows and mutation blockers.
+- [phase-10-critical-review-2026-06-30.md](phase-10-critical-review-2026-06-30.md): critical review artifact for Phase 10 overclaim risks, minimum blockers, and verification expectations.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -81,6 +83,8 @@ Read-only helper scripts:
 - `scripts/dev/lt_product_setup_catalog_blast_radius_report.py`: offline product-by-product risk report from saved audit/projection artifacts.
 - `scripts/dev/lt_product_setup_variant_axis_classification_report.py`: offline variant-axis classification report from saved catalog authority artifacts.
 - `scripts/verify/product_setup_variant_axis_classification_contract.py`: verifier for the offline variant-axis classification report and Birthday Deliveries saved-artifact behavior.
+- `scripts/dev/lt_product_setup_dependency_rollback_report.py`: offline dependency/rollback target report from saved catalog authority artifacts.
+- `scripts/verify/product_setup_dependency_rollback_contract.py`: verifier for the offline dependency/rollback report and Birthday Deliveries saved-artifact behavior.
 
 ## Primary Local Evidence
 

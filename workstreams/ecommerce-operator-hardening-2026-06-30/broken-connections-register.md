@@ -136,6 +136,18 @@ Required fix:
   Sales Order/Invoice/payment/receipt labels, historical references, rollback,
   and owner approval.
 
+2026-06-30 Phase 10 status:
+
+- Offline dependency/rollback tooling now captures saved-artifact rollback rows
+  for Birthday Deliveries variant Items, Item Prices, Product Setup option
+  rows, and media/gallery pointers.
+- The report still fails loudly because live route proof, brand-lane proof,
+  historical references, File/slideshow references, add-on/runtime behavior,
+  and owner mutation approval remain missing.
+- Still open: no-write replacement model design, paid add-on implementation
+  proof, cart/order/document/payment label proof, and a reviewed release packet
+  before any catalog write.
+
 ## B007 - Conditional Pricing Is Captured But Not A Complete Owner Price Engine
 
 Severity: P1
