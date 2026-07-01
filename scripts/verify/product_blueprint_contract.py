@@ -329,6 +329,72 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertIn("Live publish/apply allowed", client)
         self.assertNotIn(LOCAL_APPLY_CONFIRMATION, client)
 
+    def test_desk_catalog_readiness_summary_is_read_only(self) -> None:
+        controller = _read_doctype_file("lt_product_blueprint", "lt_product_blueprint.py")
+        client = _read_doctype_file("lt_product_blueprint", "lt_product_blueprint.js")
+        summary_body = _extract_python_function(controller, "get_catalog_readiness_summary")
+        dashboard_body = _extract_js_function(client, "show_catalog_readiness")
+
+        self.assertIn("@frappe.whitelist()\ndef get_catalog_readiness_summary", controller)
+        self.assertIn('_require_product_setup_user("view product setup readiness")', summary_body)
+        self.assertIn("frappe.get_all", summary_body)
+        self.assertIn("CATALOG_READINESS_FIELDS", summary_body)
+        for fieldname in (
+            "name",
+            "product_name",
+            "product_slug",
+            "target_item_code",
+            "target_website_item",
+            "publish_status",
+            "validation_status",
+            "validation_json",
+            "modified",
+        ):
+            self.assertIn(f'"{fieldname}"', controller)
+
+        self.assertIn("json.loads", controller)
+        self.assertIn("json.JSONDecodeError", controller)
+        self.assertIn("Saved validation JSON could not be read.", controller)
+        self.assertIn("counts_by_owner_state", summary_body)
+        self.assertIn('"proof_mode": "source_saved_validation_only"', summary_body)
+        self.assertIn("blocked_count", summary_body)
+        self.assertIn("public_success_claim_allowed_count", summary_body)
+        self.assertIn("live_apply_allowed_count", summary_body)
+        self.assertIn("validation_modified_on", controller)
+        self.assertIn("evidence_source", controller)
+        self.assertIn("next_owner_step", controller)
+        self.assertIn("next_developer_step", controller)
+        self.assertIn("developer_help_needed", controller)
+        self.assertIn('"live_apply_approved": False', controller)
+        self.assertIn('"mutation_approved": False', controller)
+        self.assertIn('"cache_clear_approved": False', controller)
+        self.assertIn('"deploy_approved": False', controller)
+        self.assertIn('"provider_approved": False', controller)
+        self.assertIn('"payment_approved": False', controller)
+        self.assertIn('"customer_message_approved": False', controller)
+
+        self.assertIn("Show Catalog Readiness", client)
+        self.assertIn("add_catalog_readiness_button", client)
+        self.assertIn("get_catalog_readiness_summary", dashboard_body)
+        self.assertIn("Proof mode", dashboard_body)
+        self.assertIn("counts_by_owner_state", dashboard_body)
+        self.assertIn("Top blocked products", dashboard_body)
+        self.assertIn("Developer help", client)
+        self.assertIn("Saved evidence", client)
+        self.assertNotIn("apply_locally_from_desk", dashboard_body)
+        self.assertNotIn("get_local_apply_preview", dashboard_body)
+        self.assertNotIn(LOCAL_APPLY_CONFIRMATION, client)
+        for blocked_call in (
+            "apply_blueprint_locally",
+            "build_local_apply_preview",
+            "frappe.db.set_value",
+            ".save(",
+            "clear_cache",
+            "deploy",
+            "stripe",
+        ):
+            self.assertNotIn(blocked_call, summary_body)
+
     def test_active_product_setup_uniqueness_fails_closed_in_source(self) -> None:
         controller = _read_doctype_file("lt_product_blueprint", "lt_product_blueprint.py")
         runtime = (ROOT / "apps" / "locally_twisted" / "locally_twisted" / "product_setup_runtime.py").read_text(
@@ -795,6 +861,18 @@ def _doctype(folder: str, filename: str) -> dict:
 
 def _read_doctype_file(folder: str, filename: str) -> str:
     return (DOCTYPE_ROOT / folder / filename).read_text(encoding="utf-8")
+
+
+def _extract_python_function(source: str, name: str) -> str:
+    start = source.index(f"def {name}")
+    end = source.find("\ndef ", start + 1)
+    return source[start:] if end == -1 else source[start:end]
+
+
+def _extract_js_function(source: str, name: str) -> str:
+    start = source.index(f"function {name}")
+    end = source.find("\nfunction ", start + 1)
+    return source[start:] if end == -1 else source[start:end]
 
 
 class _PatchedFrappe:

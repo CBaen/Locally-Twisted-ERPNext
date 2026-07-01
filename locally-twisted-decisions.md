@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-01 - Desk catalog readiness is a source summary, not live proof
+
+**Decision:** Product Setup Desk may show a catalog-wide readiness summary from
+saved Product Setup validation JSON, but that summary must remain read-only and
+must not approve publish, apply, cache clear, deploy, provider action, payment
+action, customer messages, or public success claims.
+
+**Reasoning:** Operators need a single place to see which products are blocked
+and what the next safe step is. The original failure came from backend success
+being mistaken for public success, so the Desk summary has to bring blocker
+evidence closer to the owner workflow without becoming a live-release control.
+
+**Guard:** `Show Catalog Readiness` is display-only. It reads saved Product
+Setup validation rows, labels the proof mode as source/saved evidence, and
+keeps all approval fields false. Fresh live/public proof and release gates
+remain separate.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-critical-review-2026-07-01.md`;
+`apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py`;
+`apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.js`;
+`scripts/verify/product_blueprint_contract.py`.
+
+**Decided by:** Codex with real multi-agent triad/witness support on
+2026-07-01 under GL's standing approval for stronger protective contracts and
+no live mutation.
+
+---
+
 ## 2026-07-01 - Release packets are proof requirements, not release approval
 
 **Decision:** A Product Setup pre-mutation release packet may organize the

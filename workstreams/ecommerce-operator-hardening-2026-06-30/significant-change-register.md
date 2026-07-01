@@ -189,6 +189,14 @@ mutation, cache, deploy, provider, payment, and customer-message approvals
 false. This does not close SCR-008 because it remains a source-only report and
 not an owner Desk workflow.
 
+2026-07-01 Phase 17 progress: Product Setup Desk now has a read-only
+`Show Catalog Readiness` summary that rolls saved Product Setup validation JSON
+into catalog counts, blocked rows, proof mode, saved evidence time, next owner
+step, and developer-help flags. This is the first Desk catalog dashboard slice,
+but it remains source/saved evidence only and does not close SCR-008 until
+current proof refresh, owner-profile acceptance, and approved publish/apply
+workflow exist.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.

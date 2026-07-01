@@ -153,11 +153,19 @@ approval exist. All mutation, apply, cache, deploy, provider, payment, and
 customer-message approvals remain false. Current receipts:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`;
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-critical-review-2026-07-01.md`.
-Next safe action is current-data refresh or Desk dashboard design, still without
-enabling live writes. Do not hand-patch only this product, treat a defaulted
+Phase 17 added a read-only Desk `Show Catalog Readiness` summary for Product
+Setup. It reads saved `LT Product Blueprint.validation_json` rows only, shows
+catalog counts, blocked rows, saved proof mode, saved evidence time, next owner
+step, and whether developer help is needed. It does not call preview/apply
+methods, mutate ERPNext records, clear cache, deploy, contact providers, touch
+payments, or send customer messages. Current receipts:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-critical-review-2026-07-01.md`.
+Next safe action is current-data refresh or owner-profile Desk proof, still
+without enabling live writes. Do not hand-patch only this product, treat a defaulted
 `operating_brand` as proved live brand lane, weaken the owner catalog guard, or
 delete/disable/rename/collapse current variants from
-Phase 9/10/11/12/13/14/15/16 output alone.
+Phase 9/10/11/12/13/14/15/16/17 output alone.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand

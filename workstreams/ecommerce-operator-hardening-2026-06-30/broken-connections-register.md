@@ -80,9 +80,12 @@ Required fix:
   next owner step.
 - Offline catalog readiness dashboarding now rolls saved authority packet
   blockers into 47 blocked product rows and grouped blocker counts.
-- Still open: Desk-level dashboard wiring, current live-proof refresh,
-  last-proof timestamps, and any publish/apply controls that remain blocked
-  until release proof exists.
+- Desk now has a read-only `Show Catalog Readiness` summary over saved Product
+  Setup validation rows with proof mode, blocked rows, next owner step, saved
+  evidence time, and developer-help flags.
+- Still open: owner-profile Desk proof, current live-proof refresh, durable
+  last-proof timestamps beyond saved validation modified time, and any
+  publish/apply controls that remain blocked until release proof exists.
 
 ## B004 - Raw Catalog Edits Are Protected, But Replacement Workflow Is Incomplete
 

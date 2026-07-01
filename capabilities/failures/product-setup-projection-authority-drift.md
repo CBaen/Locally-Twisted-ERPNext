@@ -324,3 +324,11 @@ cache, deploy, provider, payment, customer-message, and public-success
 approvals false. Even products with zero dashboard blockers remain blocked
 until fresh target-site proof and explicit approvals exist. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`.
+
+Phase 17 added a read-only Product Setup Desk `Show Catalog Readiness` summary
+from saved validation JSON. It shows source/saved proof mode, catalog counts,
+blocked rows, next owner step, saved evidence time, and developer-help flags
+without opening publish/apply/live mutation behavior. This reduces operator
+confusion but does not repair live projection drift or prove current public
+catalog state. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`.

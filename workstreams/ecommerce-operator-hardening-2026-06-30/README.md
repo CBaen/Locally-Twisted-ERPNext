@@ -74,6 +74,8 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-15-critical-review-2026-07-01.md](phase-15-critical-review-2026-07-01.md): critical witness review for the catalog dashboard phase.
 - [phase-16-release-packet-design-2026-07-01.md](phase-16-release-packet-design-2026-07-01.md): offline pre-mutation release packet report over saved catalog readiness dashboard JSON.
 - [phase-16-critical-review-2026-07-01.md](phase-16-critical-review-2026-07-01.md): critical witness review for the release packet design phase.
+- [phase-17-desk-catalog-readiness-summary-2026-07-01.md](phase-17-desk-catalog-readiness-summary-2026-07-01.md): Desk read-only catalog readiness summary from saved Product Setup validation JSON.
+- [phase-17-critical-review-2026-07-01.md](phase-17-critical-review-2026-07-01.md): critical witness review for the Desk catalog readiness summary.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -101,6 +103,9 @@ Read-only helper scripts:
 - `scripts/verify/product_setup_catalog_readiness_contract.py`: verifier for the offline catalog readiness dashboard and saved full-catalog packet behavior.
 - `scripts/dev/lt_product_setup_release_packet_report.py`: offline pre-mutation release packet report from saved catalog readiness dashboard JSON.
 - `scripts/verify/product_setup_release_packet_contract.py`: verifier for the offline release packet report and saved dashboard behavior.
+- Product Setup Desk `Show Catalog Readiness`: read-only catalog summary inside
+  `lt_product_blueprint.py` and `lt_product_blueprint.js`, guarded by
+  `scripts/verify/product_blueprint_contract.py`.
 
 ## Primary Local Evidence
 

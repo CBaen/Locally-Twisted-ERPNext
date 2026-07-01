@@ -180,6 +180,13 @@ dashboard blockers and nine missing release gates. The next safe slice is
 current-data refresh or Desk dashboard design; live write controls remain
 blocked.
 
+2026-07-01 Phase 17 source progress: Desk now exposes a read-only
+`Show Catalog Readiness` summary from saved Product Setup validation JSON. It
+shows source/saved proof mode, catalog counts, blocked rows, next owner step,
+developer-help flags, and saved evidence time without opening publish/apply or
+live mutation controls. The next safe slice is current-data refresh or
+owner-profile Desk proof; live write controls remain blocked.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.
@@ -211,9 +218,10 @@ Exit criteria:
 - Non-developer owner-profile test can understand every blocker without a developer command.
 
 2026-07-01 status: a source-only blocked-products report exists as
-`lt_product_setup_catalog_readiness_dashboard.py`, but it is not yet a Desk
-dashboard and does not include fresh proof timestamps beyond the saved packet
-input.
+`lt_product_setup_catalog_readiness_dashboard.py`, and Desk has a read-only
+`Show Catalog Readiness` summary from saved Product Setup validation JSON. This
+does not include fresh proof timestamps beyond saved validation modified time,
+and owner-profile acceptance remains unproved.
 
 ## Phase 3 - Price Identity Rebuild
 

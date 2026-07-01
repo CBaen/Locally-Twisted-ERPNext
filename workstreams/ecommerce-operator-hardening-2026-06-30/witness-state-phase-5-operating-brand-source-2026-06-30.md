@@ -320,6 +320,28 @@
   ERPNext records, clear cache, touch provider/payment/DNS/customer-message
   paths, or disable/delete/rename/collapse current variants from
   Phase 9/10/11/12/13/14/15/16 output alone.
+- Desk catalog readiness continuation verification completed:
+  - Builder lane `019f1ffe-2b30-79b2-8651-aca30d05fe9c` implemented the
+    read-only Desk catalog readiness summary over saved Product Setup
+    validation JSON.
+  - Critical witness lane `019f1ffe-5c5a-7b01-b219-7d4beb64b5f7` wrote the
+    Phase 17 overclaim review and required acceptance criteria.
+  - Implemented `get_catalog_readiness_summary` plus Desk
+    `Show Catalog Readiness`.
+  - The summary reports source/saved proof mode, catalog counts, blocked rows,
+    next owner step, saved evidence time, and developer-help flags while keeping
+    all apply/mutation/cache/deploy/provider/payment/customer-message approvals
+    false.
+  - `python -m py_compile apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py scripts/verify/product_blueprint_contract.py`
+  - `node --check apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.js`
+  - `python scripts/verify/product_blueprint_contract.py` passed 29 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 17 Desk catalog readiness summary is complete
+  locally as a source/saved blocker surface. Next safe slice is current-data
+  refresh or owner-profile Desk proof, without enabling live writes. Do not
+  deploy, mutate live ERPNext records, clear cache, touch provider/payment/DNS/
+  customer-message paths, or disable/delete/rename/collapse current variants
+  from Phase 9/10/11/12/13/14/15/16/17 output alone.
 
 ## Route Record
 

@@ -126,7 +126,14 @@ See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`
 and
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-critical-review-2026-07-01.md`.
-Next safe work is current-data refresh or Desk dashboard design without
+2026-07-01 Phase 17 added a read-only Desk `Show Catalog Readiness` summary
+from saved Product Setup validation JSON. It shows proof mode, catalog counts,
+blocked rows, saved evidence time, next owner step, and developer-help flags
+without calling preview/apply paths or changing product records. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`
+and
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-critical-review-2026-07-01.md`.
+Next safe work is current-data refresh or owner-profile Desk proof without
 enabling live writes. Do not patch only this product, clear cache, write live
 records, deploy, treat defaulted operating-brand values as live proof, weaken
 owner catalog guards, or delete/disable/rename/collapse current variants from

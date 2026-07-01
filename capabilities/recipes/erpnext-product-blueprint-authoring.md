@@ -306,6 +306,14 @@ apply/cache/deploy/mutation/provider/payment/customer-message approvals false,
 including for products with zero dashboard blockers until fresh target-site
 proof and approvals exist.
 
+2026-07-01 Phase 17 update: Product Setup Desk now includes a read-only
+`Show Catalog Readiness` summary from saved `LT Product Blueprint.validation_json`
+rows. The summary is guarded by `scripts/verify/product_blueprint_contract.py`
+and reports source/saved proof mode, catalog counts, blocked rows, next owner
+step, saved evidence time, and developer-help flags. It does not call local
+preview/apply methods, mutate product records, clear cache, deploy, contact
+providers, touch payments, or send customer messages.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -324,6 +332,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-14-product-setup-readiness-desk-display-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

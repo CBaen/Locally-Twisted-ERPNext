@@ -2,11 +2,18 @@ frappe.ui.form.on("LT Product Blueprint", {
   refresh(frm) {
     if (frm.is_new()) return;
 
+    add_catalog_readiness_button(frm);
     add_readiness_button(frm);
     add_target_buttons(frm);
     add_local_apply_buttons(frm);
   },
 });
+
+function add_catalog_readiness_button(frm) {
+  frm.add_custom_button(__("Show Catalog Readiness"), () => {
+    show_catalog_readiness();
+  }, __("Product Setup"));
+}
 
 function add_readiness_button(frm) {
   frm.add_custom_button(__("Show Readiness"), () => {
@@ -87,6 +94,60 @@ function parse_validation_json(frm) {
       },
     };
   }
+}
+
+function show_catalog_readiness() {
+  frappe.call({
+    method: "locally_twisted.locally_twisted.doctype.lt_product_blueprint.lt_product_blueprint.get_catalog_readiness_summary",
+    freeze: true,
+    freeze_message: __("Reading saved Product Setup readiness..."),
+  }).then((response) => {
+    const result = response.message || {};
+    const counts = result.counts_by_owner_state || {};
+    const rows = result.rows || [];
+    const blocked = rows.filter((row) => row.is_blocked).slice(0, 10);
+    const count_html = Object.keys(counts).length
+      ? `<ul>${Object.keys(counts).sort().map((state) => `<li>${frappe.utils.escape_html(state)}: ${counts[state]}</li>`).join("")}</ul>`
+      : `<p>${__("No saved readiness states were found.")}</p>`;
+    const blocked_html = blocked.length
+      ? `<ul>${blocked.map((row) => catalog_readiness_blocked_row_html(row)).join("")}</ul>`
+      : `<p>${__("No blocked Product Setup rows were found in the saved readiness summary.")}</p>`;
+
+    frappe.msgprint({
+      title: __("Catalog Readiness"),
+      indicator: result.blocked_count ? "orange" : "green",
+      message: `
+        <p>${__("Read-only summary from saved Product Setup validation rows. No product records were changed.")}</p>
+        <p>${__("Proof mode")}: ${frappe.utils.escape_html(result.proof_mode || "source_saved_validation_only")}</p>
+        <ul>
+          <li>${__("Products checked")}: ${result.total_products || 0}</li>
+          <li>${__("Blocked")}: ${result.blocked_count || 0}</li>
+          <li>${__("Public success claim allowed")}: ${result.public_success_claim_allowed_count || 0}</li>
+          <li>${__("Live publish/apply allowed")}: ${result.live_apply_allowed_count || 0}</li>
+        </ul>
+        <p><strong>${__("By saved readiness state")}</strong></p>
+        ${count_html}
+        <p><strong>${__("Top blocked products")}</strong></p>
+        ${blocked_html}
+      `,
+    });
+  });
+}
+
+function catalog_readiness_blocked_row_html(row) {
+  const label = row.product_name || row.product_slug || row.name || __("Unnamed Product Setup");
+  const blockers = row.blockers || [];
+  const blocker_text = blockers.length ? blockers[0] : __("No blocker details saved.");
+  return `
+    <li>
+      <strong>${frappe.utils.escape_html(label)}</strong>
+      <br>${frappe.utils.escape_html(row.owner_state || __("Blocked - Proof Needed"))}
+      <br>${frappe.utils.escape_html(blocker_text)}
+      <br>${__("Next")}: ${frappe.utils.escape_html(row.next_owner_step || __("Review this Product Setup before taking action."))}
+      <br>${__("Developer help")}: ${row.developer_help_needed ? __("Yes") : __("No")}
+      <br>${__("Saved evidence")}: ${frappe.utils.escape_html(row.validation_modified_on || __("Unknown"))}
+    </li>
+  `;
 }
 
 function preview_local_apply(frm) {
