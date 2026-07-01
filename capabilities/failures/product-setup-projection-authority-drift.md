@@ -279,3 +279,12 @@ File/slideshow reference proof, add-on/runtime proof, and mutation approval.
 This is planning evidence only, not live projection repair or release approval.
 See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`.
+
+Phase 11 added offline no-write replacement model reporting. Against Birthday
+Deliveries, it proposes three design-only candidate SKU rows from
+`Delivery Size`, models `Delivery themes` as configuration payload, and holds
+`Add Foil Number` plus `Add Bouquet` as paid add-on candidates. It intentionally
+exits blocked with 27 blockers. This is not live projection repair and not
+approval to write Item, Item Price, Website Item, Product Setup, cart, order,
+invoice, payment, receipt, or customer-facing records. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`.

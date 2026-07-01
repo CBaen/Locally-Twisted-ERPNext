@@ -35,6 +35,15 @@ route proof, brand-lane proof, historical references, File/slideshow
 references, and mutation approval. The 3-SKU candidate model remains planning
 evidence only.
 
+2026-06-30 Phase 11 progress: offline no-write replacement modeling now
+combines Phase 9 classification and Phase 10 rollback blockers. It proposes
+three design-only candidate SKU rows from `Delivery Size`, moves
+`Delivery themes` to configuration payload, and holds `Add Foil Number` plus
+`Add Bouquet` as paid add-on candidates. It intentionally exits blocked with
+27 blockers and keeps all current variant/price rows preserved until add-on,
+payload, live/public, historical-reference, owner approval, and release packet
+proof exists.
+
 ## SCR-002 - Product Setup Becomes Owner Source Of Truth
 
 Current state: Product Setup exists and can preview/local-apply, but live publish/hide/reroute and existing-product changes are not a complete owner-run workflow. Live proof on 2026-06-30 showed `large-head-missionary` Product Setup saved price rows at `125.0` while customer-facing Item Prices/public price stayed at `175.0`.
@@ -246,3 +255,9 @@ row-level saved-artifact rollback rows for Birthday Deliveries and intentionally
 fails with blockers while live/public proof, historical reference proof,
 File/slideshow reference proof, and mutation approval are missing. This is a
 pre-mutation planning artifact, not release permission.
+
+2026-06-30 Phase 11 progress:
+`scripts/dev/lt_product_setup_replacement_model_report.py` creates a no-write
+replacement model from classification, rollback, and optional saved source
+artifacts. It records candidate rows and proposed actions but keeps every action
+unapproved until the release packet exists.

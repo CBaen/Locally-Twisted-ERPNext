@@ -90,11 +90,18 @@ but intentionally exits `1` with 20 blockers because live route proof,
 brand-lane proof, historical references, File/slideshow references, and mutation
 approval remain missing. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`.
-Next safe work is no-write replacement model design for Birthday Deliveries,
-then owner-visible publish/apply or field-level runtime-authority design. Do
-not patch only this product, clear cache, write live records, deploy, treat
-defaulted operating-brand values as live proof, weaken owner catalog guards, or
-delete/disable/rename/collapse current variants from this queue item alone.
+2026-06-30 Phase 11 added offline no-write replacement model tooling and ran it
+against the saved Birthday Deliveries Phase 9/10/source artifacts. The model
+keeps current rows preserved, proposes 3 design-only candidate SKU rows from
+`Delivery Size`, moves `Delivery themes` to configuration payload, and holds
+`Add Foil Number` plus `Add Bouquet` as paid add-on candidates. It intentionally
+exits `1` with 27 blockers. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`.
+Next safe work is owner-visible publish/apply or field-level runtime-authority
+design. Do not patch only this product, clear cache, write live records, deploy,
+treat defaulted operating-brand values as live proof, weaken owner catalog
+guards, or delete/disable/rename/collapse current variants from this queue item
+alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

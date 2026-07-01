@@ -8,6 +8,37 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - No-write replacement models are design evidence, not catalog changes
+
+**Decision:** A replacement model report may propose bounded SKU rows and
+payload/add-on targets, but it must remain no-write design evidence until
+add-on/runtime pricing, payload preservation, live route proof, brand-lane
+proof, historical references, rollback procedure, owner-scope approval, and a
+pre-mutation release packet exist.
+
+**Reasoning:** Birthday Deliveries can be modeled as three candidate SKU rows
+from `Delivery Size`, with `Delivery themes` as configuration payload and
+`Add Foil Number` / `Add Bouquet` as paid add-on candidates. That model is
+useful, but it still does not prove current references are safe to change or
+that non-SKU options can travel through cart, order, invoice, payment, receipt,
+and customer-facing labels.
+
+**Guard:** Candidate item codes and price hints are not approved Item records or
+Item Prices. Existing variant Items and Item Prices remain preserved until a
+reviewed write path explicitly supersedes or disables them with rollback proof.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`;
+`scripts/dev/lt_product_setup_replacement_model_report.py`;
+`scripts/verify/product_setup_replacement_model_contract.py`.
+
+**Decided by:** Codex on 2026-06-30 under GL's standing approval for stronger
+protective contracts and no live mutation. Phase 11 inherited Phase 9/10
+witness findings; a fresh subagent review attempt hit the platform usage limit
+before work began, so no additional Phase 11 subagent review is claimed.
+
+---
+
 ## 2026-06-30 - Variant-collapse planning requires dependency and rollback capture before replacement design
 
 **Decision:** No-write replacement modeling for high-cardinality products must

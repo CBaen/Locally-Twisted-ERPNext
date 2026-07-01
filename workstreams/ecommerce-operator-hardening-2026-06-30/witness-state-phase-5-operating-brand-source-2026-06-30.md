@@ -194,6 +194,34 @@
   ERPNext records, clear cache, touch provider/payment/DNS/customer-message
   paths, or disable/delete/rename/collapse current variants from Phase 9/10
   output alone.
+- No-write replacement model continuation verification completed:
+  - Attempted a fresh post-Phase-10 technical review subagent
+    `019f189f-f80a-7312-8fab-dc99e5b1e073`, but it errored before work began
+    because the platform usage limit was reached. No Phase 11 subagent review is
+    claimed.
+  - Phase 11 therefore inherited Phase 9/10 witness findings and stayed
+    source-only/no-write with mutation blocked.
+  - Implemented `lt_product_setup_replacement_model_report.py` and
+    `product_setup_replacement_model_contract.py`.
+  - Saved Birthday Deliveries result: three design-only candidate SKU rows for
+    `Small`, `Medium`, and `Large`; `Delivery themes` as configuration payload;
+    `Add Foil Number` and `Add Bouquet` as paid add-on candidates; 2,430
+    current variant rows and 2,430 Item Price rows preserved as current state;
+    27 blockers.
+  - The report intentionally exits nonzero because add-on/runtime pricing,
+    payload preservation, live route proof, brand-lane proof, historical
+    references, File/slideshow references, owner approval, and pre-mutation
+    release packet proof remain missing.
+  - `python -m py_compile scripts/dev/lt_product_setup_replacement_model_report.py scripts/verify/product_setup_replacement_model_contract.py`
+  - `python scripts/verify/product_setup_replacement_model_contract.py` passed
+    3 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 11 no-write replacement model design is complete
+  locally as blocked planning evidence. Next safe slice is owner-visible
+  publish/apply or field-level runtime-authority contract design. Do not deploy,
+  mutate live ERPNext records, clear cache, touch provider/payment/DNS/customer
+  message paths, or disable/delete/rename/collapse current variants from
+  Phase 9/10/11 output alone.
 
 ## Route Record
 

@@ -66,6 +66,7 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md](phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md): offline Birthday Deliveries variant-axis classification report showing a 2,430 current-variant shape and a blocked 3-SKU candidate model.
 - [phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md](phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md): offline Birthday Deliveries dependency/rollback target capture receipt, including row-level saved-artifact rollback rows and mutation blockers.
 - [phase-10-critical-review-2026-06-30.md](phase-10-critical-review-2026-06-30.md): critical review artifact for Phase 10 overclaim risks, minimum blockers, and verification expectations.
+- [phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md](phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md): offline no-write Birthday Deliveries replacement model combining Phase 9 classification and Phase 10 rollback blockers.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -85,6 +86,8 @@ Read-only helper scripts:
 - `scripts/verify/product_setup_variant_axis_classification_contract.py`: verifier for the offline variant-axis classification report and Birthday Deliveries saved-artifact behavior.
 - `scripts/dev/lt_product_setup_dependency_rollback_report.py`: offline dependency/rollback target report from saved catalog authority artifacts.
 - `scripts/verify/product_setup_dependency_rollback_contract.py`: verifier for the offline dependency/rollback report and Birthday Deliveries saved-artifact behavior.
+- `scripts/dev/lt_product_setup_replacement_model_report.py`: offline no-write replacement model report from classification, rollback, and optional saved source artifacts.
+- `scripts/verify/product_setup_replacement_model_contract.py`: verifier for the offline replacement model report and Birthday Deliveries saved-artifact behavior.
 
 ## Primary Local Evidence
 

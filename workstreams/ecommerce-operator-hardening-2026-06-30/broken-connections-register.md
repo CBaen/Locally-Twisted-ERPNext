@@ -148,6 +148,17 @@ Required fix:
   proof, cart/order/document/payment label proof, and a reviewed release packet
   before any catalog write.
 
+2026-06-30 Phase 11 status:
+
+- Offline replacement-model tooling now proposes three design-only candidate SKU
+  rows from `Delivery Size`.
+- `Delivery themes` is modeled as configuration payload.
+- `Add Foil Number` and `Add Bouquet` are modeled as paid add-on candidates;
+  `Add Bouquet` remains blocked as a current price-affecting non-SKU axis.
+- The report still fails loudly until add-on/runtime pricing, payload
+  preservation, live route, brand-lane, historical-reference, owner approval,
+  and release packet proof exist.
+
 ## B007 - Conditional Pricing Is Captured But Not A Complete Owner Price Engine
 
 Severity: P1

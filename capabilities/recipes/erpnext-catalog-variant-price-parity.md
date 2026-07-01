@@ -250,3 +250,14 @@ nine media/gallery/pointer rows. It intentionally exits blocked while live
 route proof, brand-lane proof, historical references, File/slideshow reference
 proof, add-on/runtime behavior, and owner mutation approval are missing. This
 is a planning and safety artifact, not release approval.
+
+On 2026-06-30, Phase 11 added
+`scripts/dev/lt_product_setup_replacement_model_report.py` and
+`scripts/verify/product_setup_replacement_model_contract.py` for no-write
+replacement model design. Against Birthday Deliveries, it produces three
+design-only candidate SKU rows from `Delivery Size`, models `Delivery themes`
+as configuration payload, and holds `Add Foil Number` plus `Add Bouquet` as
+paid add-on candidates. It intentionally exits blocked because the model still
+needs add-on/runtime pricing, payload preservation, live/public proof,
+historical references, owner approval, and a release packet before any catalog
+write.
