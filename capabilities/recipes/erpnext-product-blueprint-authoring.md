@@ -270,6 +270,14 @@ source-declared brand metadata, and matching target identity before the Product
 Setup can imply preview/staging/live/apply readiness. Drafts and new preview
 plans with no existing Website Item are not blocked by this guard.
 
+2026-06-30 Phases 9-12 update: Birthday Deliveries now has a source-only
+hardening chain for variant collapse planning. Phase 9 classifies the current
+2,430-variant shape into a blocked 3-SKU candidate model. Phase 10 captures
+saved-artifact rollback rows and blockers. Phase 11 creates a no-write
+replacement model. Phase 12 translates the replacement blockers into
+owner-visible `Blocked - Proof Needed` readiness. None of these phases approve
+live writes, cache clear, deploy, current variant disablement, or publish/apply.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -280,6 +288,10 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-5-operating-brand-source-contract-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-7-runtime-brand-aware-lookup-2026-06-30.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-8-owner-visible-runtime-authority-blockers-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-9-variant-axis-classification-birthday-deliveries-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-10-dependency-rollback-capture-birthday-deliveries-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

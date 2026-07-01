@@ -69,6 +69,14 @@ Required fix:
 - Add explicit state machine: Draft -> Needs Review -> Local Proof -> Staging Proof -> Approved For Live -> Live Applied.
 - Attach proof artifacts and make live publish a reviewed operation, not a raw save side effect.
 
+2026-06-30 Phase 12 status:
+
+- Offline publish readiness reporting now defines owner-visible blocked state
+  language and allowed actions.
+- Birthday Deliveries reads as `Blocked - Proof Needed`, not saved/live.
+- Still open: wiring this report contract into Product Setup validation/status
+  UI and publish/apply controls.
+
 ## B004 - Raw Catalog Edits Are Protected, But Replacement Workflow Is Incomplete
 
 Severity: P1

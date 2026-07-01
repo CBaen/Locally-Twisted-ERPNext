@@ -158,6 +158,12 @@ now feed Product Setup validation for active source states. This is not the full
 owner dashboard: catalog-wide blocker reports, last-proof timestamps, public
 projection status, and product readiness rollups remain open.
 
+2026-06-30 Phase 12 progress: offline publish readiness reporting now turns the
+Birthday Deliveries replacement-model blockers into owner state
+`Blocked - Proof Needed`, with live apply, mutation, cache clear, and deploy
+approvals false. This is a report-level contract only; Product Setup UI/status
+wiring remains open.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.

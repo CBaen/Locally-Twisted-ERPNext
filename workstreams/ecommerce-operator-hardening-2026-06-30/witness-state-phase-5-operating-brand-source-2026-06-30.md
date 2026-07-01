@@ -222,6 +222,25 @@
   mutate live ERPNext records, clear cache, touch provider/payment/DNS/customer
   message paths, or disable/delete/rename/collapse current variants from
   Phase 9/10/11 output alone.
+- Owner-visible publish readiness continuation verification completed:
+  - Implemented `lt_product_setup_publish_readiness_report.py` and
+    `product_setup_publish_readiness_contract.py`.
+  - Saved Birthday Deliveries result: owner state `Blocked - Proof Needed`,
+    27 blockers grouped into approval/release, brand/public route,
+    history/rollback, media/files, options/add-ons/payload, and price/SKU model
+    categories.
+  - The report keeps local apply, staging apply, live apply, mutation, cache
+    clear, and deploy approvals false.
+  - `python -m py_compile scripts/dev/lt_product_setup_publish_readiness_report.py scripts/verify/product_setup_publish_readiness_contract.py`
+  - `python scripts/verify/product_setup_publish_readiness_contract.py` passed
+    3 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 12 owner-visible publish readiness reporting is
+  complete locally as blocked planning evidence. Next safe slice is Product
+  Setup validation/UI wiring for the readiness contract, without enabling live
+  writes. Do not deploy, mutate live ERPNext records, clear cache, touch
+  provider/payment/DNS/customer-message paths, or disable/delete/rename/collapse
+  current variants from Phase 9/10/11/12 output alone.
 
 ## Route Record
 

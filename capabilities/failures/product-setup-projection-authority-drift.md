@@ -288,3 +288,10 @@ exits blocked with 27 blockers. This is not live projection repair and not
 approval to write Item, Item Price, Website Item, Product Setup, cart, order,
 invoice, payment, receipt, or customer-facing records. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`.
+
+Phase 12 added offline owner-visible publish readiness reporting. Against
+Birthday Deliveries, it reports `Blocked - Proof Needed`, groups 27 blockers
+into owner/developer categories, and keeps live apply, mutation, cache clear,
+and deploy approvals false. This is the readiness language contract future
+Product Setup UI/status wiring must obey; it is not a live publish path. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`.

@@ -149,6 +149,12 @@ design-only candidate SKU rows, configuration payload/add-on target contracts,
 and 27 blockers. The next Phase 2/6 slice is owner-visible publish/apply or
 field-level runtime-authority design; mutation remains blocked.
 
+2026-06-30 Phase 12 source progress: offline owner-visible publish readiness
+reporting now exists. It translates Birthday Deliveries blockers into
+`Blocked - Proof Needed`, allowed owner actions, developer next actions, and a
+state-machine language contract. The next Phase 2 slice is Product Setup
+validation/UI wiring for this readiness contract, still without live writes.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.

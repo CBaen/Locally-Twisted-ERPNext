@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-06-30 - Owner-facing publish readiness must block false success
+
+**Decision:** Product Setup readiness language must separate draft save success
+from public/live success. A product with unresolved proof gaps should be
+reported as `Blocked - Proof Needed`, with publish/apply controls and live
+success claims blocked until the no-write packet and release packet pass.
+
+**Reasoning:** The original incident happened because a human Save looked
+successful while the live customer-facing page still showed old price/copy
+authority. Phase 12 turns technical blockers into plain owner-visible state
+language so future UI work can say what is true: draft edits may save, but live
+publication is blocked until proof exists.
+
+**Guard:** Readiness reporting is not the publish workflow. It approves no
+mutation, cache clear, deployment, or customer-facing claim. It is the contract
+that future Product Setup UI/status code must obey.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`;
+`scripts/dev/lt_product_setup_publish_readiness_report.py`;
+`scripts/verify/product_setup_publish_readiness_contract.py`.
+
+**Decided by:** Codex on 2026-06-30 under GL's standing approval for stronger
+protective contracts and no live mutation.
+
+---
+
 ## 2026-06-30 - No-write replacement models are design evidence, not catalog changes
 
 **Decision:** A replacement model report may propose bounded SKU rows and

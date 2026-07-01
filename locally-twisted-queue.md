@@ -97,11 +97,16 @@ keeps current rows preserved, proposes 3 design-only candidate SKU rows from
 `Add Foil Number` plus `Add Bouquet` as paid add-on candidates. It intentionally
 exits `1` with 27 blockers. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`.
-Next safe work is owner-visible publish/apply or field-level runtime-authority
-design. Do not patch only this product, clear cache, write live records, deploy,
-treat defaulted operating-brand values as live proof, weaken owner catalog
-guards, or delete/disable/rename/collapse current variants from this queue item
-alone.
+2026-06-30 Phase 12 added offline owner-visible publish readiness reporting.
+Against Birthday Deliveries it returns `Blocked - Proof Needed`, groups all
+27 blockers into owner/developer categories, and keeps live apply, mutation,
+cache clear, and deploy approvals false. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`.
+Next safe work is wiring this readiness contract into Product Setup
+validation/UI without enabling live writes. Do not patch only this product,
+clear cache, write live records, deploy, treat defaulted operating-brand values
+as live proof, weaken owner catalog guards, or delete/disable/rename/collapse
+current variants from this queue item alone.
 
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three

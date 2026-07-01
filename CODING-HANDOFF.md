@@ -118,11 +118,17 @@ payload-preservation, live route, brand-lane, historical-reference,
 File/slideshow, owner approval, and pre-mutation release packet proof. Current
 receipt:
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-11-no-write-replacement-model-birthday-deliveries-2026-06-30.md`.
-Next safe action is source-only owner-visible publish/apply contract design for
-Product Setup changes. Do not hand-patch only this product, treat a defaulted
-`operating_brand` as proved live brand lane, weaken the owner catalog guard, or
-delete/disable/rename/collapse current variants from Phase 9/10/11 output
-alone.
+Phase 12 added offline owner-visible publish readiness reporting. Against the
+saved Birthday Deliveries replacement report, it returns owner state
+`Blocked - Proof Needed`, groups all 27 blockers into owner/developer categories,
+and keeps live apply, mutation, cache clear, and deploy approvals false. Current
+receipt:
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-12-owner-visible-publish-readiness-birthday-deliveries-2026-06-30.md`.
+Next safe action is wiring this readiness contract into Product Setup
+validation/UI without enabling live writes. Do not hand-patch only this product,
+treat a defaulted `operating_brand` as proved live brand lane, weaken the owner
+catalog guard, or delete/disable/rename/collapse current variants from
+Phase 9/10/11/12 output alone.
 
 Three-brand DBA boundary as of 2026-06-28: LT is the existing
 accounting/ERPNext operating company for three separate customer-facing brand
