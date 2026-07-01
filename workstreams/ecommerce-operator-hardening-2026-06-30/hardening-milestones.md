@@ -187,6 +187,13 @@ developer-help flags, and saved evidence time without opening publish/apply or
 live mutation controls. The next safe slice is current-data refresh or
 owner-profile Desk proof; live write controls remain blocked.
 
+2026-07-01 Phase 18 source progress: the Desk catalog summary row/summary
+construction now lives in a pure source-only builder with runtime-shaped hostile
+fixture tests. Missing/malformed validation JSON and saved approval claims
+block the row; all approval/public-success/live-apply outputs remain false.
+The next safe slice is current-data refresh or owner-profile Desk proof; live
+write controls remain blocked.
+
 ## Phase 2 - Owner Product Setup UX
 
 Outcome: owner sees a real business process, not technical fields.
@@ -220,8 +227,9 @@ Exit criteria:
 2026-07-01 status: a source-only blocked-products report exists as
 `lt_product_setup_catalog_readiness_dashboard.py`, and Desk has a read-only
 `Show Catalog Readiness` summary from saved Product Setup validation JSON. This
-does not include fresh proof timestamps beyond saved validation modified time,
-and owner-profile acceptance remains unproved.
+summary is now guarded by a pure runtime-shaped verifier. It does not include
+fresh proof timestamps beyond saved validation modified time, and owner-profile
+acceptance remains unproved.
 
 ## Phase 3 - Price Identity Rebuild
 

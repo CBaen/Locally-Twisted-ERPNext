@@ -332,3 +332,11 @@ without opening publish/apply/live mutation behavior. This reduces operator
 confusion but does not repair live projection drift or prove current public
 catalog state. See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`.
+
+Phase 18 extracted the Desk catalog summary logic into a pure source-only
+builder and added runtime-shaped hostile fixture tests. Missing or malformed
+saved validation JSON blocks the row, and saved packets that claim source-only
+public/live/apply/mutation/cache/deploy/provider/payment/customer-message
+approvals are blocked and clamped false. This hardens the blocker map but still
+does not prove current public catalog state. See
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md`.

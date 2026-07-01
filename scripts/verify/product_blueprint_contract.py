@@ -332,6 +332,9 @@ class ProductBlueprintContractTest(unittest.TestCase):
     def test_desk_catalog_readiness_summary_is_read_only(self) -> None:
         controller = _read_doctype_file("lt_product_blueprint", "lt_product_blueprint.py")
         client = _read_doctype_file("lt_product_blueprint", "lt_product_blueprint.js")
+        pure_builder = (ROOT / "apps" / "locally_twisted" / "locally_twisted" / "product_setup_catalog_readiness.py").read_text(
+            encoding="utf-8"
+        )
         summary_body = _extract_python_function(controller, "get_catalog_readiness_summary")
         dashboard_body = _extract_js_function(client, "show_catalog_readiness")
 
@@ -339,6 +342,11 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertIn('_require_product_setup_user("view product setup readiness")', summary_body)
         self.assertIn("frappe.get_all", summary_body)
         self.assertIn("CATALOG_READINESS_FIELDS", summary_body)
+        self.assertIn("build_catalog_readiness_summary", summary_body)
+        self.assertNotIn("json.loads", summary_body)
+        self.assertNotIn("json.JSONDecodeError", summary_body)
+        self.assertNotIn("import frappe", pure_builder)
+        self.assertNotIn("from frappe", pure_builder)
         for fieldname in (
             "name",
             "product_name",
@@ -350,28 +358,30 @@ class ProductBlueprintContractTest(unittest.TestCase):
             "validation_json",
             "modified",
         ):
-            self.assertIn(f'"{fieldname}"', controller)
+            self.assertIn(f'"{fieldname}"', pure_builder)
 
-        self.assertIn("json.loads", controller)
-        self.assertIn("json.JSONDecodeError", controller)
-        self.assertIn("Saved validation JSON could not be read.", controller)
-        self.assertIn("counts_by_owner_state", summary_body)
-        self.assertIn('"proof_mode": "source_saved_validation_only"', summary_body)
-        self.assertIn("blocked_count", summary_body)
-        self.assertIn("public_success_claim_allowed_count", summary_body)
-        self.assertIn("live_apply_allowed_count", summary_body)
-        self.assertIn("validation_modified_on", controller)
-        self.assertIn("evidence_source", controller)
-        self.assertIn("next_owner_step", controller)
-        self.assertIn("next_developer_step", controller)
-        self.assertIn("developer_help_needed", controller)
-        self.assertIn('"live_apply_approved": False', controller)
-        self.assertIn('"mutation_approved": False', controller)
-        self.assertIn('"cache_clear_approved": False', controller)
-        self.assertIn('"deploy_approved": False', controller)
-        self.assertIn('"provider_approved": False', controller)
-        self.assertIn('"payment_approved": False', controller)
-        self.assertIn('"customer_message_approved": False', controller)
+        self.assertIn("json.loads", pure_builder)
+        self.assertIn("json.JSONDecodeError", pure_builder)
+        self.assertIn("Saved validation JSON could not be read.", pure_builder)
+        self.assertIn("Saved validation JSON is missing", pure_builder)
+        self.assertIn("counts_by_owner_state", pure_builder)
+        self.assertIn('"proof_mode": PROOF_MODE', pure_builder)
+        self.assertIn("blocked_count", pure_builder)
+        self.assertIn('"public_success_claim_allowed_count": 0', pure_builder)
+        self.assertIn('"live_apply_allowed_count": 0', pure_builder)
+        self.assertIn("validation_modified_on", pure_builder)
+        self.assertIn("evidence_source", pure_builder)
+        self.assertIn("next_owner_step", pure_builder)
+        self.assertIn("next_developer_step", pure_builder)
+        self.assertIn("developer_help_needed", pure_builder)
+        self.assertIn('"live_apply_approved": False', pure_builder)
+        self.assertIn('"mutation_approved": False', pure_builder)
+        self.assertIn('"cache_clear_approved": False', pure_builder)
+        self.assertIn('"deploy_approved": False', pure_builder)
+        self.assertIn('"provider_approved": False', pure_builder)
+        self.assertIn('"payment_approved": False', pure_builder)
+        self.assertIn('"customer_message_approved": False', pure_builder)
+        self.assertIn('"public_success_claim_allowed": False', pure_builder)
 
         self.assertIn("Show Catalog Readiness", client)
         self.assertIn("add_catalog_readiness_button", client)

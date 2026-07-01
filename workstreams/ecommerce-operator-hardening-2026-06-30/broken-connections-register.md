@@ -83,6 +83,9 @@ Required fix:
 - Desk now has a read-only `Show Catalog Readiness` summary over saved Product
   Setup validation rows with proof mode, blocked rows, next owner step, saved
   evidence time, and developer-help flags.
+- The Desk catalog summary builder is now pure and tested with runtime-shaped
+  rows so missing/malformed validation JSON and optimistic saved approval flags
+  block the row instead of becoming public/live permission.
 - Still open: owner-profile Desk proof, current live-proof refresh, durable
   last-proof timestamps beyond saved validation modified time, and any
   publish/apply controls that remain blocked until release proof exists.

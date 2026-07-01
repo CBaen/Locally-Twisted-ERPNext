@@ -146,7 +146,7 @@
       "approval_required": "no, local source/static check only",
       "requires_explicit_approval": false,
       "runs_automatically": false,
-      "evidence_artifact": "workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md",
+      "evidence_artifact": "workstreams/ecommerce-operator-hardening-2026-06-30/phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md",
       "capability_refs": [
         "capabilities/recipes/erpnext-product-blueprint-authoring.md",
         "capabilities/failures/product-setup-projection-authority-drift.md"
@@ -158,6 +158,34 @@
       ],
       "proves": [
         "Product Setup source and Desk readiness contracts keep readiness displays read-only and approval flags false"
+      ],
+      "what_it_does_not_prove": "It does not prove current live catalog state, public route health, cart/checkout behavior, cache state, deployment readiness, owner acceptance, or release approval."
+    },
+    {
+      "id": "lt-product-setup-desk-catalog-summary",
+      "tier": "tier_1_local_fast",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python scripts/verify/product_setup_desk_catalog_summary_contract.py",
+      "cwd": ".",
+      "scope": "pure runtime-shaped source contract for Product Setup Desk catalog readiness summary rows",
+      "environment": "local source files and synthetic row fixtures only",
+      "mutation": "none",
+      "approval_required": "no, local pure source check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "workstreams/ecommerce-operator-hardening-2026-06-30/phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md",
+      "capability_refs": [
+        "capabilities/recipes/erpnext-product-blueprint-authoring.md",
+        "capabilities/failures/product-setup-projection-authority-drift.md"
+      ],
+      "risk_triggers": [
+        "trusting saved validation approval flags",
+        "treating missing or malformed validation JSON as non-blocking",
+        "claiming live/public readiness from source-only Product Setup rows"
+      ],
+      "proves": [
+        "pure Desk catalog summary builder blocks bad saved evidence and clamps approval outputs false"
       ],
       "what_it_does_not_prove": "It does not prove current live catalog state, public route health, cart/checkout behavior, cache state, deployment readiness, owner acceptance, or release approval."
     },

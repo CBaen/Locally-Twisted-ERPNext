@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-01 - Saved catalog summaries must distrust optimistic saved flags
+
+**Decision:** Desk catalog readiness summary logic must be built in a pure,
+testable source module and must fail closed when saved validation JSON is
+missing, malformed, or tries to claim public/live/apply/mutation/cache/deploy/
+provider/payment/customer-message approval.
+
+**Reasoning:** A saved Product Setup packet is not live proof. Even if future
+saved JSON accidentally contains optimistic flags, the owner-facing catalog
+summary must not turn those flags into permission or a green release lane.
+
+**Guard:** The whitelisted Desk method stays a thin permission and read wrapper.
+The pure builder clamps all approvals false and blocks hostile optimistic saved
+packets. Runtime-shaped tests must cover these cases before changing the
+summary contract.
+
+**Receipts:**
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/phase-18-critical-review-2026-07-01.md`;
+`apps/locally_twisted/locally_twisted/product_setup_catalog_readiness.py`;
+`scripts/verify/product_setup_desk_catalog_summary_contract.py`.
+
+**Decided by:** Codex with real multi-agent triad/witness support on
+2026-07-01 under GL's standing approval for stronger protective contracts and
+no live mutation.
+
+---
+
 ## 2026-07-01 - Desk catalog readiness is a source summary, not live proof
 
 **Decision:** Product Setup Desk may show a catalog-wide readiness summary from

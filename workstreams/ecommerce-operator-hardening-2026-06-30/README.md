@@ -76,6 +76,8 @@ Authenticated live read-only API proof later confirmed the owner save worked: li
 - [phase-16-critical-review-2026-07-01.md](phase-16-critical-review-2026-07-01.md): critical witness review for the release packet design phase.
 - [phase-17-desk-catalog-readiness-summary-2026-07-01.md](phase-17-desk-catalog-readiness-summary-2026-07-01.md): Desk read-only catalog readiness summary from saved Product Setup validation JSON.
 - [phase-17-critical-review-2026-07-01.md](phase-17-critical-review-2026-07-01.md): critical witness review for the Desk catalog readiness summary.
+- [phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md](phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md): pure source-only runtime-shaped contract for Desk catalog summary behavior.
+- [phase-18-critical-review-2026-07-01.md](phase-18-critical-review-2026-07-01.md): critical witness review for the pure Desk catalog summary contract.
 - [witness-state-phase-5-operating-brand-source-2026-06-30.md](witness-state-phase-5-operating-brand-source-2026-06-30.md): triad/witness state packet for the source-only operating-brand contract.
 - [authority-matrix-template.md](authority-matrix-template.md): reusable non-mutating product authority matrix template.
 - [authority-packet-large-head-missionary.md](authority-packet-large-head-missionary.md): first partial authority packet for the incident product.
@@ -106,6 +108,10 @@ Read-only helper scripts:
 - Product Setup Desk `Show Catalog Readiness`: read-only catalog summary inside
   `lt_product_blueprint.py` and `lt_product_blueprint.js`, guarded by
   `scripts/verify/product_blueprint_contract.py`.
+- `apps/locally_twisted/locally_twisted/product_setup_catalog_readiness.py`:
+  Frappe-independent source-only builder for Desk catalog readiness summaries.
+- `scripts/verify/product_setup_desk_catalog_summary_contract.py`: runtime-shaped
+  hostile fixture verifier for the pure Desk catalog summary builder.
 
 ## Primary Local Evidence
 

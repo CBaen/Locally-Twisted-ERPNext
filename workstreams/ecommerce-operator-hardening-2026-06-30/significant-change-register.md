@@ -197,6 +197,13 @@ but it remains source/saved evidence only and does not close SCR-008 until
 current proof refresh, owner-profile acceptance, and approved publish/apply
 workflow exist.
 
+2026-07-01 Phase 18 progress: the Desk catalog summary now uses a pure
+Frappe-independent source builder with runtime-shaped hostile fixture tests.
+Missing/malformed validation JSON and optimistic saved approval flags block the
+row, while all approval/public-success/live-apply outputs remain false. This
+does not close SCR-008 because the dashboard still has no current live proof or
+owner-profile acceptance.
+
 ## SCR-009 - Existing Catalog Repair And Migration
 
 Current state: current product records reflect historical import decisions and scaffold/test fixture assumptions. Counts and shape may be stale or excessive.

@@ -342,6 +342,28 @@
   deploy, mutate live ERPNext records, clear cache, touch provider/payment/DNS/
   customer-message paths, or disable/delete/rename/collapse current variants
   from Phase 9/10/11/12/13/14/15/16/17 output alone.
+- Desk catalog summary runtime-shaped contract verification completed:
+  - Builder lane `019f200c-a09d-7a80-8102-36bb91251ea4` extracted the summary
+    construction into a pure Frappe-independent module and added hostile
+    runtime-shaped fixture tests.
+  - Critical witness lane `019f200c-c5b3-73d2-8704-1b33c6f166a4` wrote the
+    Phase 18 overclaim review and required acceptance criteria.
+  - Implemented `product_setup_catalog_readiness.py` and
+    `product_setup_desk_catalog_summary_contract.py`.
+  - Missing/malformed saved validation JSON and saved source-only approval
+    claims now block rows and keep every approval/public-success/live-apply
+    output false.
+  - `python -m py_compile apps/locally_twisted/locally_twisted/product_setup_catalog_readiness.py apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py scripts/verify/product_setup_desk_catalog_summary_contract.py scripts/verify/product_blueprint_contract.py`
+  - `python scripts/verify/product_setup_desk_catalog_summary_contract.py`
+    passed 4 tests.
+  - `python scripts/verify/product_blueprint_contract.py` passed 29 tests.
+- Resume instruction: Continue source-only ecommerce Product Setup hardening in
+  the isolated worktree. Phase 18 pure summary contract is complete locally.
+  Next safe slice is current-data refresh or owner-profile Desk proof, without
+  enabling live writes. Do not deploy, mutate live ERPNext records, clear cache,
+  touch provider/payment/DNS/customer-message paths, or disable/delete/rename/
+  collapse current variants from Phase 9/10/11/12/13/14/15/16/17/18 output
+  alone.
 
 ## Route Record
 

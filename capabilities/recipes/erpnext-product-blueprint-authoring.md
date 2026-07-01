@@ -314,6 +314,13 @@ step, saved evidence time, and developer-help flags. It does not call local
 preview/apply methods, mutate product records, clear cache, deploy, contact
 providers, touch payments, or send customer messages.
 
+2026-07-01 Phase 18 update: the Desk catalog readiness summary builder now
+lives in `apps/locally_twisted/locally_twisted/product_setup_catalog_readiness.py`,
+a Frappe-independent pure module guarded by
+`scripts/verify/product_setup_desk_catalog_summary_contract.py`. Missing or
+malformed validation JSON blocks the row, and saved validation packets that try
+to claim source-only approvals are blocked and clamped false.
+
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
@@ -333,6 +340,7 @@ Backlinks:
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-15-catalog-readiness-dashboard-2026-07-01.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-16-release-packet-design-2026-07-01.md`
 - `workstreams/ecommerce-operator-hardening-2026-06-30/phase-17-desk-catalog-readiness-summary-2026-07-01.md`
+- `workstreams/ecommerce-operator-hardening-2026-06-30/phase-18-desk-catalog-summary-runtime-contract-2026-07-01.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`
