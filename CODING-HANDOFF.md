@@ -1,5 +1,15 @@
 # Locally Twisted - Coding Handoff
 
+2026-07-02 nested frappe_docker custody note: the ignored nested repo at
+`Locally-Twisted-Backend/frappe_docker/` now has an owned private archive
+remote contract documented in `LOCAL-REMOTE-CUSTODY.md`. `origin` is
+`https://github.com/CBaen/Locally-Twisted-Frappe-Docker.git`; `upstream` is
+`https://github.com/frappe/frappe_docker.git` with push disabled. Parent LT
+`git status` will not surface nested tracked changes. First archive push is
+blocked until CBaen GitHub auth has `workflow` scope because inherited upstream
+history contains `.github/workflows/*`. Do not force push and do not push to
+upstream.
+
 2026-07-02 Kubuntu active-guidance cleanup: active LT instructions now use
 `/home/guidingl/...` paths for the machine guide, coordination hub, linked
 worktree root, hooks, and shared no-monolith capability source. Missing local

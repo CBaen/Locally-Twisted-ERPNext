@@ -210,6 +210,26 @@ one. Re-check DB before changing catalog docs or seed logic.
 | Frappe site | `frontend` |
 | Admin/dev login | Not stored in committed docs. Use approved local credentials from the operator or environment variables such as `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for verifiers. |
 
+## Nested Frappe Docker Remote Custody
+
+`Locally-Twisted-Backend/frappe_docker/` is an ignored nested git repo with its
+own custody rules. The parent LT repo will not show its tracked files in normal
+parent `git status`.
+
+Current contract:
+
+- `origin` must stay on the owned private archive repo:
+  `https://github.com/CBaen/Locally-Twisted-Frappe-Docker.git`.
+- `upstream` may fetch from `https://github.com/frappe/frappe_docker.git` as
+  reference material only.
+- `upstream` push URL must stay `DISABLED`.
+- Do not re-point `origin` to upstream Frappe.
+- First archive push is blocked until CBaen GitHub auth has `workflow` scope,
+  because inherited upstream history contains `.github/workflows/*`.
+
+Before touching that nested repo, read
+`Locally-Twisted-Backend/frappe_docker/LOCAL-REMOTE-CUSTODY.md`.
+
 ## Local Docker Runtime Posture
 
 Docker stays as a boxed workshop, but it does not get to live rent-free in the
