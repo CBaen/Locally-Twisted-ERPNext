@@ -8,6 +8,35 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-02 - LT ecommerce advertising is paused until an agnostic shop exists
+
+**Decision:** LT's current ecommerce shop should not be treated as
+advertising-ready. The reusable ERPNext ecommerce shop must be built first as a
+project-agnostic parent template, then LT products can migrate into that
+template later. LT's current shop is failure evidence and a migration target,
+not the architecture source.
+
+**Reasoning:** Emergency live work repaired and verified selected paths for
+`large-head-missionary` and `birthday-deliveries`, but the incident showed a
+catalog-level trust problem: backend saves, public product pages, variant
+selectors, add-ons, Item Prices, and cart/checkout behavior are not governed by
+one clean contract. GL explicitly rejected using LT's broken current
+implementation as the basis for the reusable shop.
+
+**Guard:** Do not launch ads into ecommerce product pages unless GL gives a
+fresh narrow exception or the new agnostic shop/migration path is accepted. Do
+not describe the parent template as a generalized LT shop. Do not migrate LT
+products before the parent template is correct.
+
+**Receipts:** `decisions/2026-07-02-ecommerce-advertising-pause-and-agnostic-shop-boundary.md`;
+`workstreams/ecommerce-operator-hardening-2026-06-30/emergency-live-repair-ad-products-2026-07-01.md`;
+parent `_TEMPLATES/agnostic-erpnext-ecommerce-shop/README.md`.
+
+**Decided by:** Guiding Light correction on 2026-07-02; Codex documentation
+parity update.
+
+---
+
 ## 2026-07-01 - Missionary Meta work has its own sales-campaign rail and remains launch-blocked
 
 **Decision:** The Large head Missionary paid Meta work is a separate
@@ -425,6 +454,8 @@ cleanup state changed.
 product routes. Live homepage renders `Customer Favorites` with Birthday
 Deliveries `From $90.00`, Large head Missionary `From $175.00`, Minion Bouquet
 `From $35.00`, and Bandage `"GET WELL"` Bouquet (Latex free) `From $35.00`.
+This price set was true for the 2026-06-24 release; Large head Missionary was
+later superseded by the 2026-07-02 emergency repair and now verifies at `$125`.
 Stable section IDs prove Reviews, Favorites, Twisting, One of a Kind, crawl,
 CTA order. Old `Balloons-to-Order` copy is absent. `/shop` title is `Pickups &
 Deliveries Balloon Decor`. The three July hero WebP assets return
@@ -468,7 +499,9 @@ Kind Designs, trusted-client crawl, and closing CTA in that order. Customer
 Favorites are data-backed from published Website Item routes and
 `get_variant_starting_price`: Birthday Deliveries `From $90.00`, Large head
 Missionary `From $175.00`, Minion Bouquet `From $35.00`, and Bandage `"GET
-WELL"` Bouquet (Latex free) `From $35.00`. Public shop-category chrome now
+WELL"` Bouquet (Latex free) `From $35.00`. This was the 2026-06-24 release
+state; Large head Missionary was superseded by the 2026-07-02 emergency repair
+and now verifies at `$125`. Public shop-category chrome now
 uses `Pickups & Deliveries` / `All Pickups & Deliveries` across desktop nav,
 mobile drawer, search quick links, footer, shop rail/select, `/shop` copy, and
 verifiers. Category discovery remains Item Group based; this did not become a

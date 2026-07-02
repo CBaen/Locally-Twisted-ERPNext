@@ -1,11 +1,30 @@
 # Ecommerce Shop Handoff
 
+Status addendum as of 2026-07-02: LT ecommerce advertising should be treated
+as paused. The current shop is not the reusable ecommerce architecture and must
+not be used as the parent template. The parent reusable shop must be built as
+an agnostic ERPNext ecommerce template first, then LT products can migrate into
+it later. Parent charter:
+`/home/guidingl/projects/Built_by_Cameron/_TEMPLATES/agnostic-erpnext-ecommerce-shop/README.md`.
+LT decision:
+`decisions/2026-07-02-ecommerce-advertising-pause-and-agnostic-shop-boundary.md`.
+
+Emergency live state as of 2026-07-02: `large-head-missionary` now verifies at
+`$125` on the public route and cart pricing API path. `birthday-deliveries`
+now shows `ADD BIRTHDAY AGE` as a visible number input and hides the old
+`Add Foil Number` native selector through a temporary route-scoped bridge while
+existing variants still resolve. `scripts/verify/ad_product_live_stability.spec.js`
+passed 11/11 against `https://locallytwisted.com`. This is a smoke alarm for
+two products, not catalog-wide readiness.
+
 Status addendum as of 2026-06-24: the homepage `Customer Favorites` row is
 implemented and live on `https://locallytwisted.com/`. Product targets are Birthday
 Deliveries, Large head Missionary, Minion Bouquet, and Bandage "GET WELL"
 Bouquet (Latex free). Favorite-card prices are sourced from the same
 product/variant starting-price helper used by product pages and display as
-`From $XX.XX`: `$90.00`, `$175.00`, `$35.00`, and `$35.00` respectively.
+`From $XX.XX`: `$90.00`, `$175.00`, `$35.00`, and `$35.00` respectively as
+of that 2026-06-24 release. The Large head Missionary price was superseded by
+the 2026-07-02 emergency repair and now verifies at `$125`.
 Classic Arch remains out of this row because it is quote-first. The public
 shop-category menu label is now `Pickups & Deliveries`, but the menu remains
 category discovery from Item Group children under `Shop Items`; it is not a

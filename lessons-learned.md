@@ -6,6 +6,33 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-07-02 - Do not turn a broken client shop into the reusable shop template
+
+The live LT ecommerce emergency made the need for a real reusable ecommerce
+shop clearer, but GL corrected the framing: LT's current shop is not the source
+architecture. If an agent starts from LT's emergency bridges, Product Setup
+drift, variant explosion, or product-specific fixes, it will build the wrong
+thing.
+
+**Counter-move:** build the reusable ERPNext ecommerce shop first at the parent
+template level as an agnostic system. Use LT only as later migration input and
+as failure-test evidence. For LT itself, keep advertising-dependent ecommerce
+claims paused unless GL gives a fresh narrow exception or the agnostic shop
+migration path is accepted.
+
+## 2026-07-02 - Product-specific smoke alarms are not advertising readiness
+
+The emergency live verifier for Missionary and Birthday Deliveries is useful:
+it proves the current public path for two products. It does not prove the rest
+of the catalog, option logic, add-ons, image authority, checkout, or owner
+save-to-live workflow.
+
+**Counter-move:** call narrow verifiers smoke alarms. For advertising readiness,
+require backend-to-public-to-cart-to-checkout parity across the actual product
+scope. Do not treat a passed product route test as catalog trust.
+
+---
+
 ## 2026-07-01 - Paid ad rails must separate source readiness from spend readiness
 
 The Missionary Meta campaign work exposed a documentation hazard: a landing

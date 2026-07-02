@@ -10,6 +10,21 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 ecommerce advertising pause and agnostic-shop migration boundary
+(2026-07-02):** Do not treat the current LT ecommerce shop as
+advertising-ready. Emergency live repair/verifier work now holds two
+ad-facing products together (`large-head-missionary` at `$125` and
+`birthday-deliveries` age/bouquet pricing), but that is not catalog-wide
+commerce safety. The reusable ERPNext ecommerce shop must be built first as a
+project-agnostic parent template under
+`/home/guidingl/projects/Built_by_Cameron/_TEMPLATES/agnostic-erpnext-ecommerce-shop/`.
+LT is a later migration target and failure-test source, not the template.
+Decision:
+`decisions/2026-07-02-ecommerce-advertising-pause-and-agnostic-shop-boundary.md`.
+Temporary live smoke guard:
+`scripts/verify/ad_product_live_stability.spec.js`. Do not keep patching
+individual products as if that completes ecommerce architecture.
+
 **P0 ecommerce Product Setup projection authority hardening (2026-06-30):**
 Live read-only API proof confirmed a successful owner save for
 `large-head-missionary` did not update customer-facing authority. Product Setup

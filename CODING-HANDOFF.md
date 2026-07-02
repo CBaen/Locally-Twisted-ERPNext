@@ -1,5 +1,24 @@
 # Locally Twisted - Coding Handoff
 
+2026-07-02 ecommerce correction: do not use LT's current ecommerce shop as the
+architecture for the reusable shop. GL corrected this explicitly. The reusable
+ERPNext ecommerce shop must be built first as a project-agnostic parent
+template under
+`/home/guidingl/projects/Built_by_Cameron/_TEMPLATES/agnostic-erpnext-ecommerce-shop/`.
+LT is a later migration target and failure-test source, not the template.
+LT ecommerce advertising should remain paused unless GL gives a fresh narrow
+exception or the agnostic template/migration path is accepted. Project decision:
+`decisions/2026-07-02-ecommerce-advertising-pause-and-agnostic-shop-boundary.md`.
+
+2026-07-02 emergency live product state: `large-head-missionary` was repaired
+live to `$125` in Item Price/public/cart proof. `birthday-deliveries` was
+temporarily bridged so customers see `ADD BIRTHDAY AGE` as a number input while
+the legacy native `Add Foil Number` variant axis is hidden for compatibility.
+The focused public verifier
+`scripts/verify/ad_product_live_stability.spec.js` passed 11/11 against
+`https://locallytwisted.com`. This is a temporary smoke guard, not ecommerce
+architecture or catalog-wide advertising readiness.
+
 Meta Missionary sales-campaign rail as of 2026-07-01: the canonical
 marketing/ad handoff is
 `workstreams/meta-missionary-sales-campaign-2026-06-30.md`. Keep this rail
@@ -15,14 +34,15 @@ or funded. Before any spend: stabilize the website work, release and live-prove
 the sales-event source, verify product creative preview/MIME behavior, get
 exact America/Denver start/end approval, and get final Meta preview approval.
 
-Ecommerce Product Setup authority incident closeout as of 2026-06-30: live
-read-only API proof confirmed GL's owner-save report for
+Historical Ecommerce Product Setup authority incident closeout as of
+2026-06-30, before the 2026-07-02 emergency repair: live read-only API proof
+confirmed GL's owner-save report for
 `large-head-missionary`. The owner save succeeded into Product Setup at
 `2026-06-30 01:43:01.382176` by `locallytwisted@gmail.com`: Product Setup
-base price and all 30 Product Setup price rows are `125.0`. The live
-customer-facing price still renders `from $ 175.00` because all 30 live
-`Standard Selling` Item Price rows remain `175.0`. Public copy renders from
-Website Item fields, not the Product Setup top-level story/details fields.
+base price and all 30 Product Setup price rows were `125.0`. At that time,
+the live customer-facing price still rendered `from $ 175.00` because all 30
+live `Standard Selling` Item Price rows remained `175.0`. Public copy rendered
+from Website Item fields, not the Product Setup top-level story/details fields.
 This is an owner-workflow/projection authority failure, not a failed Desk save
 and not supported as a cache-only issue. Current receipts:
 `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`;
@@ -140,7 +160,9 @@ before One of a Kind Designs, and keeps the client crawl/CTA after that proof
 sequence. Favorites are data-backed from published `Website Item` routes and
 use `get_variant_starting_price` for `From $XX.XX`: Birthday Deliveries
 `$90.00`, Large head Missionary `$175.00`, Minion Bouquet `$35.00`, and Bandage
-`"GET WELL"` Bouquet (Latex free) `$35.00`. Public shop-category chrome now
+`"GET WELL"` Bouquet (Latex free) `$35.00` as of that release. Large head
+Missionary was superseded by the 2026-07-02 emergency repair and now verifies
+at `$125`. Public shop-category chrome now
 uses `Pickups & Deliveries` / `All Pickups & Deliveries` across desktop nav,
 mobile drawer, search quick links, footer, shop rail/select, `/shop` copy, and
 verifiers while preserving Item Group category discovery. Local proof passed

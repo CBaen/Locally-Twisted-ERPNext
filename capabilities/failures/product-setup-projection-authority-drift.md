@@ -4,7 +4,7 @@ type: failure
 failure_kind: recurring_pattern
 schema_version: 0.1
 date_discovered: 2026-06-30
-last_updated: 2026-06-30
+last_updated: 2026-07-02
 status: active_guard_needed
 scope: project
 owner_context: Locally Twisted ERPNext/Frappe ecommerce Product Setup and public shop projection
@@ -146,6 +146,9 @@ Minimum guard for price/copy:
 ## What Not To Do
 
 - Do not hand-patch one product and call the architecture fixed.
+- Do not use LT's current ecommerce shop as the source architecture for a
+  reusable ecommerce template. LT is a later migration target and failure-test
+  source, not the template.
 - Do not weaken the owner catalog guard to make raw Desk edits easier.
 - Do not tell the owner a saved Product Setup is live unless public/runtime
   proof exists.
@@ -203,3 +206,17 @@ pre-mutation rollback packet, media-role proof gaps, inactive Product Setup
 authority, ambiguous base-price-to-many-variant mapping, and variant explosion.
 See
 `workstreams/ecommerce-operator-hardening-2026-06-30/phase-4-authority-packet-resolver-2026-06-30.md`.
+
+## 2026-07-02 Emergency Repair And Template Boundary
+
+Emergency live repair brought `large-head-missionary` to `$125` in public/cart
+proof and temporarily bridged `birthday-deliveries` so customers see
+`ADD BIRTHDAY AGE` while the legacy native `Add Foil Number` axis is hidden.
+`scripts/verify/ad_product_live_stability.spec.js` passed 11 tests against the
+public site.
+
+That verifier is a temporary smoke guard. It does not prove catalog-wide
+advertising readiness and must not be treated as the reusable ecommerce
+architecture. The reusable shop belongs in the parent
+`_TEMPLATES/agnostic-erpnext-ecommerce-shop/` path and must be designed
+agnostically before LT products migrate into it.

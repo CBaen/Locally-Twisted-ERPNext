@@ -193,6 +193,13 @@ Latest proof:
 
 Do not treat this repair as the ecommerce architecture fix.
 
+2026-07-02 framing correction: do not use LT's current ecommerce shop as the
+architecture source for the reusable shop. The reusable ERPNext ecommerce shop
+must be built first as a parent-level, project-agnostic template. LT is a later
+migration target and failure-test source only. Advertising-dependent ecommerce
+claims for LT should remain paused unless GL gives a fresh narrow exception or
+the agnostic template/migration path is accepted.
+
 Required reusable architecture work:
 
 - Product Setup `Number` and `Text` controls should not require or enforce
