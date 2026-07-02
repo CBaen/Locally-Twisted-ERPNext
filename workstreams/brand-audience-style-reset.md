@@ -110,10 +110,12 @@ This should be written as company capability, not founder personality.
 
 ## Authority Proof Inventory
 
-Local source inventory checked 2026-05-02:
+Source inventory checked 2026-05-02. Retired catalog-data source locations are
+historical evidence only; do not recreate or depend on them as active Kubuntu
+paths.
 
-- Previous-client source: `/home/guidingl/projects/external-catalog-data/assets/previous clients.txt`
-- catalog_data-era image source: `/home/guidingl/projects/external-catalog-data/assets/image assets/`
+- Previous-client source: retired catalog-data client list, now historical evidence only
+- catalog_data-era image source: retired catalog-data image material, now historical evidence only
 - Current site image source: `_resources/images/`
 - Current homepage proof source: `apps/locally_twisted/locally_twisted/www/home.py`
 - Shared Drive source: `https://drive.google.com/drive/folders/191Fnz-Eanwpi4rbTFyy08P6ZF8X5NqNz?usp=sharing`

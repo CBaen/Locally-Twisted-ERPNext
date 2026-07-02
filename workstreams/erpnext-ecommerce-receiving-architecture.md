@@ -98,7 +98,7 @@ Brief must be exact to this stack:
 - ERPNext/Frappe v15 in Docker/Frappe app `locally_twisted`.
 - Current Webshop item override under `apps/locally_twisted/locally_twisted/templates/generators/item/`.
 - Current product contract starter under `apps/locally_twisted/locally_twisted/catalog_contract/`.
-- catalog_data source is read-only reference at `/home/guidingl/projects/external-catalog-data/` and catalog_data shop behavior is conceptual/reference input, not infrastructure to copy.
+- Retired catalog-data behavior is conceptual/reference input only where already captured in current repo evidence or explicitly restored/approved for a narrow task. It is not active local infrastructure to copy or depend on.
 - Native ERPNext ecommerce is insufficient; research must identify implementation patterns and risks for building a safer ERPNext-side ecommerce logic layer.
 
 No code/product import until research brief -> expedition -> synthesis -> GL architecture checkpoint.

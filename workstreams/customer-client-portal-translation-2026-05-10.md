@@ -169,12 +169,13 @@ Important behavior:
 
 ## catalog_data Reference Signals
 
-Reference files inspected read-only:
+Reference files inspected read-only from retired catalog-data source material.
+These are historical intent signals only, not active local dependencies:
 
-- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/controllers/portal.py`
-- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/views/portal_templates.xml`
-- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/security/lt_groups.xml`
-- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/security/lt_rules.xml`
+- `addons/locally_twisted/controllers/portal.py`
+- `addons/locally_twisted/views/portal_templates.xml`
+- `addons/locally_twisted/security/lt_groups.xml`
+- `addons/locally_twisted/security/lt_rules.xml`
 
 Translated intent:
 

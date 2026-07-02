@@ -173,7 +173,7 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 | 2026-04-26 | All policy + brand resources live in `_resources/` (scrubbed of platform refs) | Project must stand alone; catalog_data dir will be retired |
 | 2026-04-25 | ERPNext v15.105.0 pinned (latest stable v15 patch) | Past Stripe-broken window; latest patch on a mature line |
 | 2026-04-25 | Local Docker for build, Frappe Cloud Sites plan ($5/mo) for prod | Local is free + breakable; Frappe Cloud is managed + transferable per-site |
-| 2026-04-25 | Don't modify anything in `external-catalog-data/` | Read-only reference; will be retired post-cutover |
+| 2026-04-25 | Do not modify retired catalog-data source material from LT | Historical source evidence only; not an active Kubuntu dependency |
 
 ## Reference Disposition
 
@@ -371,7 +371,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Competitor survey** at `_resources/competitor-survey-2026-04-26.md` — 9 verified live competitor sites (4 balloon decor + 3 wedding florists + 1 mixed + 1 enterprise tier). Five patterns observed across all 9: every custom-decor offering uses inquiry/quote, never configurator; portfolio is a nav item not a homepage feature; shops are sidebars; "Inquire" beats "Buy" above ~$30; social proof tier matches business tier. The survey is the receipt for the lookbook-forward decision.
 - **ROADMAP.md and PLAN.md updated** to reflect the site shape and the slice reorder. `/book` moved from Phase 2 → Phase 1 (Slice 10) since the lookbook-forward shape requires the inquiry conversion path live in Phase 1. Phase 2 reframed to "form-handling depth" (Contact dedup, ack email, loud-failure audit, monitor alerts).
 - **About snippet removed** from homepage. Defer until Jeff is ready (per GL).
-- **5 real photos copied** from `external-catalog-data/assets/image assets/photos for website/` (and `balloon twisting pics/`) to `apps/locally_twisted/locally_twisted/public/images/home/`: hero (Celebrate backdrop), featured-arches (Knight & Dragon), featured-garlands (Celebrate organic arch), featured-corporate (Logo arch), twisting (Twisting photo).
+- **5 real photos copied** from retired catalog-data source material into `apps/locally_twisted/locally_twisted/public/images/home/`: hero (Celebrate backdrop), featured-arches (Knight & Dragon), featured-garlands (Celebrate organic arch), featured-corporate (Logo arch), twisting (Twisting photo).
 - **Web Page record `locally-twisted` (route="home")** set to `published=0` — was the placeholder "Site under construction" content. Deactivating let the new `www/home.html` take precedence.
 - **Reviews wired into the carousel** — 19 real 5-star Google reviews verbatim from GL's paste, mix of birthday / wedding / corporate / ribbon-cutting / school / face-painting / Mother's Day / church-picnic / funeral-stand / longtime-client. Names, dates, event tags preserved. Verbatim including KJSCOTT's "Totally Twisted" typo (authenticity over correction).
 - **Carousel slowed to 270s** (was 90s → 180s → 270s after iterations) for the client logo crawl. Reviews carousel runs 360s.

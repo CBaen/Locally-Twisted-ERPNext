@@ -432,15 +432,15 @@ Primary references:
 - `workstreams/responsive-container-integrity.md`
 - `_resources/policies/`
 - `_resources/catalog-source/`
-- `/home/guidingl/projects/external-catalog-data/` as the read-only business-detail source of truth for customer-facing business claims, policies, product/service details, voice, and legacy business decisions
+- committed `_resources/` source material, explicitly approved restored external evidence, or GL/legal approval for customer-facing business claims, policies, product/service details, voice, and legacy business decisions
 
 ## Dependencies And Collision Points
 
 - Form audit owns current `/contact` and Lead-submission review until handed off.
 - Shop lane owns catalog correctness, media, product detail, and browse-surface polish for V1.
 - Backend simplification owns Jeff-facing Desk and stale Lead/schema cleanup.
-- Policy/legal pages require the catalog_data business-detail source, approved current project resources that trace back to it, or GL/legal approval.
-- Business details from the catalog_data project drive are source-of-truth evidence for business meaning, not app-build instructions. Do not modify `/home/guidingl/projects/external-catalog-data/` from this repo.
+- Policy/legal pages require committed `_resources/` source material, explicitly approved restored evidence, or GL/legal approval.
+- Retired catalog-data project drives are not active local dependencies. Do not recreate or modify them from this repo; use only committed current-source material, explicitly approved restored evidence, or GL/legal approval.
 - Media/render work must stay honest to balloon construction and product reality; do not attach generated concepts to products as factual photos.
 
 ## Do Not Do

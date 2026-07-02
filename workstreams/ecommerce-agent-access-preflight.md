@@ -1,7 +1,7 @@
 # Ecommerce Agent Access Preflight — Locally Twisted
 
 Date: 2026-05-10
-Status: binding pre-dispatch checklist
+Status: historical pre-dispatch checklist; not current Kubuntu access guidance
 Related rollback: `lt-ecommerce-audit-pre-dispatch-20260510-0841`
 Rollback package: `/home/guidingl/.openclaw/workspace/reports/rollback/lt-ecommerce-audit-pre-dispatch-20260510-0841`
 
@@ -19,7 +19,7 @@ Do not dispatch ecommerce agents until all gates below are true.
    - Package path above.
 
 2. **Exact software models are in prompt**
-   - Destination: Locally Twisted ERPNext/Frappe v15, documented as `frappe/erpnext:v15.105.0`, apps `frappe`, `erpnext`, `payments`, `webshop`, `locally_twisted`.
+   - Destination: Locally Twisted ERPNext/Frappe v15, documented as custom image `locally-twisted-erpnext:v15` built from base `frappe/erpnext:v15.105.0`, apps `frappe`, `erpnext`, `payments`, `webshop`, `locally_twisted`.
    - Source witness: Locally Twisted catalog_data 19 Community, local module `addons/locally_twisted` currently `19.0.2.15.0`; prior notes warn production DB may be `19.0.2.14.0`.
    - Any mismatch gets `[VERSION-MISMATCH]` until reconciled.
 

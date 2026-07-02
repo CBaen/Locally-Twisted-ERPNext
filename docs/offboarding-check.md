@@ -88,13 +88,13 @@ python scripts/verify/playwright_screenshot.py --base-url https://example.com --
 
 **Expected:** PASS — screenshot saved to `scripts/verify/_screenshots/<timestamp>/home.png`.
 
-### Step 8: Run deploy orchestrator dry-run
+### Step 8: Run current LT static/runtime gates
 
 ```bash
-python scripts/deploy.py --dry-run
+python scripts/verify/kubuntu_doctor.py --static-only
 ```
 
-**Expected:** Pre-deploy gates report PASS / SKIP, then "DRY RUN — STOPPING BEFORE DEPLOY" — exit code 0.
+**Expected:** Static Kubuntu source/tool checks pass without starting the local stack. Runtime proof still requires the on-demand stack and the current route-specific verifier for the work being handed off.
 
 ### Step 9: Verify CI workflow
 
@@ -129,7 +129,7 @@ If ALL of those are true, the kit is portable. The client can take this repo to 
 
 ## Pass criteria for the kit's PROMISE
 
-A passing offboarding check means: a contractor on a fresh laptop, with no Built_by_Cameron tooling, can clone this repo, install dependencies, and run `python scripts/deploy.py` to deploy this client's work — including all framework-protective gates — without anything breaking due to a missing agency dependency.
+A passing offboarding check means: a contractor on a fresh laptop, with no Built_by_Cameron tooling, can clone this repo, install dependencies, and run the current LT verifiers without anything breaking due to a missing agency dependency. Production deploy remains governed by the current Frappe Cloud/provider release gate, not a stale local `deploy.py` script.
 
 That is the kit's deliverable promise.
 

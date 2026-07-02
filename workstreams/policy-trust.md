@@ -6,9 +6,10 @@ Last updated: 2026-05-11 by Codex after checkout/order-email disclosure follow-t
 
 Make the launch policy/trust surface accurate enough to support customer trust and Stripe readiness without inventing legal or business terms.
 
-Business source of truth: `/home/guidingl/projects/external-catalog-data/4-20-25-jeff-cameron/`.
+Business source of truth: committed `_resources/` policy/business material,
+explicitly approved restored evidence for a narrow task, or GL/legal approval.
 
-Do not treat current ERPNext policy pages as authoritative until each claim is traced to the catalog_data business source, current GL approval, or legal approval.
+Do not treat current ERPNext policy pages as authoritative until each claim is traced to committed source material, current GL approval, or legal approval.
 
 ## Current Stage
 

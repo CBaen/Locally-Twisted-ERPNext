@@ -10,8 +10,8 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 |------|---------|
 | `AGENTS.md` | Current client project rules, voice, startup order, and Kubuntu source-of-truth guidance |
 | `CLAUDE.md` | Retired pointer only; not active guidance |
-| `PROJECT-STATUS.md` | Current state + dated update log |
-| `HANDOFF.md` | Instance-to-instance handoff (overwrite, ~40 lines) |
+| `PROJECT-STATUS.md` | Broad legacy/project map; verify against current queue, workstreams, git, and runtime before relying on it |
+| `HANDOFF.md` | Legacy whole-project context record; not the active coordination surface |
 | `lessons-learned.md` | Append-only LT-specific lessons |
 | `anti-gl-patterns.md` | Project-local instance-authored anti-pattern catalog |
 | `BRAND-BOUNDARY.md` | Current three-brand DBA boundary: one LT accounting operation, three separate brand lanes, no fourth brand |
@@ -42,7 +42,7 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 | `.planning/REQUIREMENTS.md` | Requirements with REQ-IDs and traceability; read the 2026-06-28 three-brand DBA correction before using older out-of-scope language |
 | `.planning/ROADMAP.md` | 6 workflow-centric phases (frame reset 2026-04-26) |
 | `.planning/STATE.md` | Current execution pointer |
-| `.planning/config.json` | YOLO mode, fine granularity, parallel exec, Quality model profile |
+| `.planning/config.json` | Historical planning-tool config; active agents start from `AGENTS.md` and the capability gate |
 | `.planning/decisions/header-navigation.md` | Phase 1 decision gate: super-menus vs. consolidated nav |
 | `.planning/decisions/accessibility-statement.md` | Phase 1 decision gate: statement options + small-business legal risk |
 | `.planning/phases/01-customer-site-and-storefront/PLAN.md` | Phase 1 slice plan (drafted; awaiting decision gates before some slices proceed) |
@@ -63,14 +63,14 @@ Built before the frame reset; some still active, some legacy reference.
 | `scripts/setup/sync_marketing_vendor_access.py` | Approved operator helper for syncing known external marketing vendor user into review or builder lane | Active; approval-gated for live user changes |
 | `scripts/setup/send_marketing_access_reset.py` | Fail-loud dry-run/preview/send helper for known external marketing account password resets | Active; real send requires explicit approval |
 | `scripts/setup/sync_password_reset_template.py` | Installs/verifies the branded Locally Twisted password-reset Email Template | Active |
-| `scripts/fix/patch_nginx_socketio_origin.py` | nginx /socket.io/ Origin pass-through patch | Active; persistence via compose override is P2 backlog |
-| `scripts/translate/translate_dashboard_review.py` | Dashboard Reviewed Item DocType (early proof-of-pattern) | Done; no current Phase depends on it |
+| `scripts/fix/patch_nginx_socketio_origin.py` | Historical/fallback nginx /socket.io/ Origin pass-through patch | Use only if a rebuilt image is verified missing the Origin header line |
+| Retired translation scripts | Old one-off model translation scripts were removed because they depended on retired catalog-data source paths. | Git history only |
 
 ## Subdirectories
 
 | Path | Contents |
 |------|----------|
-| `Locally-Twisted-Backend/frappe_docker/` | LT's ERPNext v15.105.0 install (cloned from frappe/frappe_docker, pwd.yml pinned + port `8081:8080`); compose project `locally-twisted-erpnext-v15` running on `:8081`. Gitignored. |
+| `Locally-Twisted-Backend/frappe_docker/` | Ignored nested git repo for the local LT Frappe Docker stack. Current runtime uses custom image `locally-twisted-erpnext:v15` built from base `frappe/erpnext:v15.105.0`, compose project `locally-twisted-erpnext-v15`, local URL `http://localhost:8081`, and separate remote custody in `LOCAL-REMOTE-CUSTODY.md`. |
 | `Locally-Twisted-Frontend/` | Reserved for LT decoupled frontend if needed (empty). Gitignored. |
 | `_resources/` | Canonical resources — see Resources section above |
 | `workstreams/` | Feature/outcome handoffs for multi-agent work. Start with `website-launch.md` and `launch-v1-success-contract.md` for current website launch scope. |

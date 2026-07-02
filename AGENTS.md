@@ -206,7 +206,7 @@ one. Re-check DB before changing catalog docs or seed logic.
 | Compose project | `locally-twisted-erpnext-v15` |
 | Host URL | `http://localhost:8081` |
 | Stack dir | `Locally-Twisted-Backend/frappe_docker/` |
-| ERPNext image | `frappe/erpnext:v15.105.0` |
+| ERPNext image | `locally-twisted-erpnext:v15`, built from `docker/Dockerfile` on base `frappe/erpnext:v15.105.0` |
 | Frappe site | `frontend` |
 | Admin/dev login | Not stored in committed docs. Use approved local credentials from the operator or environment variables such as `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for verifiers. |
 

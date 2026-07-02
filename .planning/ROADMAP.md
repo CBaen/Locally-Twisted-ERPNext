@@ -98,7 +98,7 @@ The brand foundation (style guide tokens, fonts, colors, typography) is baked in
 4. Booking confirmed → project task auto-created with crew, supplies, equipment checklist fields
 5. Day-of view: a crew member can pull up the day's events on mobile and see customer name, address, services, time, contact phone, supplies needed
 6. Every cross-model automation logs entry + exit at INFO level (loud-failure compliance)
-7. Plain-language labels everywhere: no "Qualification Status," no "Opportunity," no "Pipeline Stage." See CLAUDE.md Voice & Language table.
+7. Plain-language labels everywhere: no "Qualification Status," no "Opportunity," no "Pipeline Stage." Use `AGENTS.md` Voice And UI Language plus current UI/source proof.
 
 ### Phase 4 — Money & compliance
 
@@ -150,7 +150,7 @@ The brand foundation (style guide tokens, fonts, colors, typography) is baked in
 4. Cameron retains developer-role access only — verified by trying (and failing) to access billing
 5. Jeff can log in, place a test order in his own admin, and navigate without assistance
 6. Old `locallytwisted.com` site (the dying current one) is decommissioned and a snapshot is archived
-7. References retired per CLAUDE.md "Reference Disposition": `external-catalog-data/` archived to GitHub and removed from local; failed current import capture deployment shut down; GitHub catalog_data repo marked read-only
+7. Retired reference sources remain out of active local guidance; use committed current-source material, explicitly approved restored evidence, or GL/legal approval for narrow recovery tasks
 
 ## Progress
 

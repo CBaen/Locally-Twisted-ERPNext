@@ -112,6 +112,11 @@ If you find yourself in a planner-checker revision loop on a phase that hasn't m
 
 ## Blindspots specific to this project
 
+The notes below are historical unless a current task deliberately reopens the
+same lane through the LT capability gate. Do not use them as permission to touch
+production DBs, recreate old source checkouts, or follow catalog_data URLs during
+Kubuntu cleanup.
+
 - **The Wall 2 / Wall 3 hook scope.** SSH commands matching the Locally Twisted production IP `` are blocked by a global hook in `pre-tool-compress.py`. Other production IPs (jakenfriends `204.168.202.246`) are not currently in scope. This affects any production-DB or production-server work targeting LT — but per the current direction, you should not be doing such work in this session anyway. INV-02 is deferred.
 - **The off-catalog_data expedition is the project's research baseline.** It lives in `external-catalog-data/research/extended-expedition-off-catalog_data-replacement/`. ERPNext was the convergent recommendation. Re-doing this research is wasted tokens — it's been done.
 - **GL granted production DB read access on 2026-04-25** but the access is not yet exercised, and the related work (INV-02) is deferred. The grant survives; just don't act on it now.

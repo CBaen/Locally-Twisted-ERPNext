@@ -36,8 +36,8 @@ back or stop active damage.
 
 2. Split work by user-facing lane, not technical layer.
    - Inquiry path: `/contact`, `/book` redirect, Lead/service taxonomy, loud failure behavior.
-   - Trust/policy: `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, Stripe URL readiness. Business/legal content should trace to `/home/guidingl/projects/external-catalog-data/`, approved current resources, or GL/legal approval.
-   - Shop/media: product/category media, variant correctness, Item Group images, product detail confidence. Product/service claims should trace to the catalog_data business-detail source or GL approval.
+   - Trust/policy: `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, Stripe URL readiness. Business/legal content should trace to committed `_resources/` material, explicitly approved restored evidence, or GL/legal approval.
+   - Shop/media: product/category media, variant correctness, Item Group images, product detail confidence. Product/service claims should trace to committed source material or GL approval.
    - Visual/accessibility QA: desktop/mobile screenshots, layout fit, navigation, keyboard/screen-reader basics.
    - Backend readiness: Jeff-facing Lead/Contact/order flow, stale scripts, sample data after schema cleanup.
    - Release gate: final full-flow verification and launch-readiness report.

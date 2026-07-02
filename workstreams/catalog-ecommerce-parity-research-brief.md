@@ -18,7 +18,7 @@ Current evidence shows the ERPNext/Frappe stack has a real backend-first archite
 
 Version/context anchors researchers must treat as part of the problem, not trivia:
 
-- Destination stack is Locally Twisted ERPNext/Frappe v15, documented locally as Docker image `frappe/erpnext:v15.105.0`, compose project `locally-twisted-erpnext-v15`, apps `frappe`, `erpnext`, `payments`, `webshop`, and `locally_twisted`.
+- Destination stack is Locally Twisted ERPNext/Frappe v15, documented locally as custom Docker image `locally-twisted-erpnext:v15` built from base `frappe/erpnext:v15.105.0`, compose project `locally-twisted-erpnext-v15`, apps `frappe`, `erpnext`, `payments`, `webshop`, and `locally_twisted`.
 - Source witness stack is Locally Twisted catalog_data 19 Community. The tracked local module manifest currently says `addons/locally_twisted` version `19.0.2.15.0`; prior migration-risk docs warn production DB may be `19.0.2.14.0` while `origin/main` contains `19.0.2.15.0`, so source-version parity must be verified before any source claim is treated as complete.
 - catalog_data version behavior matters: website editor / `arch_db` drift, `noupdate`, Copy-on-Write, asset behavior, `website_sale` combination/variant resolver behavior, and production-vs-source divergence may change what is true.
 - ERPNext/Frappe version behavior matters: Webshop v15 cart/checkout APIs, Website Item/Item Price behavior, custom field sync, fixtures, hooks, scheduler, and Sales Order/Sales Invoice copying paths are version-specific.

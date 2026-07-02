@@ -71,7 +71,7 @@ should not be used as launch proof.
 | Script | Purpose | Status |
 |--------|---------|--------|
 | `translate_crm_lead.py` | Removed. It built an early Lead schema with stale service values. | Git history only |
-| `translate_dashboard_review.py` | Built the `Dashboard Reviewed Item` DocType. | Historical |
+| `translate_dashboard_review.py` | Removed. It built the early `Dashboard Reviewed Item` proof with retired source assumptions. | Git history only |
 
 ## verify/
 

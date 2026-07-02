@@ -474,9 +474,13 @@ Run:
 
 ```bash
 python scripts/dev/clear_website_cache.py
-$html = (Invoke-WebRequest -Uri 'http://localhost:8081/balloon-twisting-and-face-painting' -UseBasicParsing).Content
-$html.Contains('id="lt-btfp-form"')
-$html.Contains('/contact?service=btfp')
+python - <<'PY'
+from urllib.request import urlopen
+
+html = urlopen("http://localhost:8081/balloon-twisting-and-face-painting", timeout=20).read().decode("utf-8")
+print('id="lt-btfp-form"' in html)
+print('/contact?service=btfp' in html)
+PY
 ```
 
 Expected output:
@@ -565,9 +569,23 @@ Run:
 
 ```bash
 python scripts/dev/clear_website_cache.py --restart
-$response = Invoke-WebRequest -Uri 'http://localhost:8081/book' -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue
-$response.StatusCode
-$response.Headers.Location
+python - <<'PY'
+import urllib.error
+import urllib.request
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+opener = urllib.request.build_opener(NoRedirect)
+try:
+    response = opener.open("http://localhost:8081/book", timeout=20)
+except urllib.error.HTTPError as exc:
+    response = exc
+
+print(response.code)
+print(response.headers.get("Location"))
+PY
 ```
 
 Expected result: a redirect status such as `301` or `302`, with `Location` containing `/contact?intent=quick`.
@@ -591,11 +609,21 @@ git commit -m "feat: route book traffic to guided contact"
 Run:
 
 ```bash
-$routes = @('/contact','/contact?service=btfp','/contact?service=twisting','/contact?service=face-painting','/balloon-twisting-and-face-painting')
-foreach ($r in $routes) {
-  $res = Invoke-WebRequest -Uri "http://localhost:8081$r" -UseBasicParsing
-  "$r $($res.StatusCode)"
-}
+python - <<'PY'
+from urllib.request import urlopen
+
+routes = [
+    "/contact",
+    "/contact?service=btfp",
+    "/contact?service=twisting",
+    "/contact?service=face-painting",
+    "/balloon-twisting-and-face-painting",
+]
+
+for route in routes:
+    response = urlopen(f"http://localhost:8081{route}", timeout=20)
+    print(route, response.status)
+PY
 ```
 
 Expected result: every listed route prints `200`.

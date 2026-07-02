@@ -31,9 +31,9 @@ This file is split into two sections:
 
 **Mechanism:** A hash mismatch between `assets.json` and the actual built asset files causes ERPNext to serve stale CSS/JS in production. No clear trigger has been identified by the Frappe team. The site looks fine for up to 15 days, then loses all styling at once.
 
-**Defense:** Asset hash comparison check in `scripts/deploy.py` Gate 4 (Visual screenshot). If the screenshot shows unstyled HTML, the asset bundle is broken.
+**Defense:** Use current LT public-route verifiers and browser screenshots, not the retired `scripts/deploy.py` orchestrator. If screenshots show unstyled HTML, verify asset integrity and rebuild through the custom-image path.
 
-**Verification:** Run `python scripts/deploy.py --dry-run` after a fresh `bench build`. The post-deploy screenshot gate will fail loudly if styles are not loading.
+**Verification:** Run the route-appropriate public verifier, for example `npm run test:public-verify` or `python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke`, after the current asset build/rebuild path.
 
 ---
 
@@ -93,7 +93,7 @@ This file is split into two sections:
 
 **Defense:** Build assets via CI or a dedicated build step before container start. Never run `bench build` against a running production container.
 
-**Verification:** `scripts/deploy.py` does not call `bench build` against a running prod container; it calls it as a pre-deploy step against a build target.
+**Verification:** Current asset work must use the custom-image build/recreate path or a provider-approved build pipeline. Do not use the retired `scripts/deploy.py` file as evidence.
 
 ---
 
@@ -137,15 +137,15 @@ These have been observed in the LT build itself. They are receipts, not predicti
 
 ---
 
-### Trap LT-2: nginx Origin patch is non-persistent across container recreation
+### Trap LT-2: nginx Origin pass-through must stay image-owned
 
-**Status:** OBSERVED — receipt: HANDOFF.md 2026-04-26 ("nginx Origin patch... Re-applied this session post-recreate"); fix script at `scripts/fix/patch_nginx_socketio_origin.py`.
+**Status:** SUPERSEDED — the old docker-exec patch was replaced by the current custom image. Current receipts: `PROJECT-STATUS.md` 2026-07-02 and `locally-twisted-decisions.md` 2026-07-02 custom-image entries.
 
-**Mechanism:** A correct browser-direct localhost setup requires nginx to receive the right `Origin` header for SocketIO upgrades. The default `frappe_docker` nginx config does not pass it through. The patch is currently applied via `docker exec` editing the container's nginx config — which means the patch is lost on every `docker compose up --force-recreate`, every container respawn, and every image upgrade. Without the patch, real-time UI features fail silently against `http://localhost:8081`.
+**Mechanism:** A correct browser-direct localhost setup requires nginx to receive the right `Origin` header for SocketIO upgrades. The earlier container-writable patch was lost on recreate. The current stack bakes `proxy_set_header Origin $http_origin;` into `locally-twisted-erpnext:v15`, so routine recreate should not require a post-recreate patch script.
 
-**Defense:** After every `docker compose up --force-recreate` (or any container respawn): run `python scripts/fix/patch_nginx_socketio_origin.py`. Long-term: replace the docker-exec patch with a docker-compose override that bind-mounts a custom `frappe.conf` containing the pass-through line. Tracked as P2 in `locally-twisted-queue.md` ("Persist the nginx Origin patch...").
+**Defense:** Do not run `scripts/fix/patch_nginx_socketio_origin.py` as a routine post-recreate step. Treat it as historical/fallback only, and first verify the rebuilt frontend image is actually missing the Origin header line.
 
-**Verification:** After container respawn, `curl -I http://localhost:8081/socket.io/` should return a 200 or 101 (not 502). `Access-Control-Allow-Origin: http://localhost:8081` should appear on responses.
+**Verification:** After image rebuild or container respawn, inspect the frontend nginx config for `proxy_set_header Origin $http_origin;` and verify SocketIO does not return `502` at `http://localhost:8081/socket.io/`.
 
 ---
 

@@ -757,11 +757,13 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 ### Gate-kit follow-ups (added 2026-04-26 by gate-kit install — see `docs/GATE-KIT-INSTALL-NOTES.md`)
 
+2026-07-02 cleanup note: the old local `scripts/deploy.py` orchestrator was
+removed because it carried stale `/book`, `/all-products`, and local deploy
+assumptions. Use current discrete verifiers plus the Frappe Cloud/provider
+release gate instead.
+
 - [P1] **Add `requirements.txt` at repo root.** Currently `playwright` and `requests` are install-time prerequisites for the gate kit but not declared anywhere. Minimum: `playwright>=1.40` and `requests>=2.31`.
-- [P2] **Document the human-review-commit deploy ritual in `scripts/README.md`.** The gate at `scripts/deploy.py:gate_human_review_commit()` refuses to deploy when HEAD's commit message starts with `auto:`. Routine remediation: `git commit --allow-empty -m "review: <pre-deploy summary>"` before running deploy.
 - [P2] **Set `STAGING_URL` secret in GitHub repo settings + uncomment the CI form-shape step.** `.github/workflows/ci.yml` lines 35-36 are commented out pending a staging URL. Defer until staging exists.
-- [P3] **At cutover (Phase 6): flip `scripts/deploy.py` `CONFIG["site_url"]` and `smoke_test_screenshot_paths`.** Currently `http://localhost:8081`; production URL TBD.
-- [P3] **Wire `/contact` smoke test into deploy config.** `CONFIG["smoke_test_form_path"]` should target `/contact`; `/book` redirects to `/contact?intent=quick`.
 
 
 ## Blocked

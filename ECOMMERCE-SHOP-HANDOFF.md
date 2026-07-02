@@ -605,7 +605,7 @@ Files added:
 
 Green gates:
 
-- `python -m py_compile apps/locally_twisted/locally_twisted/catalog_contract\complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold_contract.py`
+- `python -m py_compile apps/locally_twisted/locally_twisted/catalog_contract/complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold_contract.py`
 - `python scripts/verify/complex_checkout_scaffold_contract.py`
 - `python scripts/verify/complex_checkout_scaffold.py`
 

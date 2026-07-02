@@ -67,7 +67,7 @@
 - [ ] **CUTOVER-03**: Site ownership transferred to Jeff Kimber's Frappe Cloud team account. Cameron retains developer-role access only.
 - [ ] **CUTOVER-04**: Jeff onboarded — can log in, place a test order in his own admin, and navigate without assistance.
 - [ ] **CUTOVER-05**: Old `locallytwisted.com` site decommissioned and snapshotted.
-- [ ] **CUTOVER-06**: References retired per CLAUDE.md "Reference Disposition": catalog_data dir archived + removed from local; failed current import capture deployment shut down; GitHub catalog_data repo marked read-only.
+- [ ] **CUTOVER-06**: Retired reference sources remain out of active local guidance; use committed current-source material, explicitly approved restored evidence, or GL/legal approval for narrow recovery tasks.
 
 ---
 

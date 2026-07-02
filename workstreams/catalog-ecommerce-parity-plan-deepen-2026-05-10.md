@@ -79,7 +79,7 @@ When source evidence conflicts, preserve the customer/operator meaning and mark 
 
 ### Risk
 
-Frappe/ERPNext Webshop may be too shallow for Locally Twisted’s real product logic, and behavior is version-specific. Destination is documented as ERPNext/Frappe v15 using `frappe/erpnext:v15.105.0`, with `payments`, `webshop`, and `locally_twisted`. Researchers may try to cram complex behavior into generic Website Item fields or unversioned JSON without checking how this exact v15 stack handles cart, checkout, custom fields, hooks, and invoice copying.
+Frappe/ERPNext Webshop may be too shallow for Locally Twisted's real product logic, and behavior is version-specific. Current Kubuntu runtime uses custom image `locally-twisted-erpnext:v15`, built from base `frappe/erpnext:v15.105.0`, with `payments`, `webshop`, and `locally_twisted`. Researchers may try to cram complex behavior into generic Website Item fields or unversioned JSON without checking how this exact v15 stack handles cart, checkout, custom fields, hooks, and invoice copying.
 
 ### Failure mode
 
