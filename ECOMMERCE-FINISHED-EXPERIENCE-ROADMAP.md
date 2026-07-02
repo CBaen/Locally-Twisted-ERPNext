@@ -16,8 +16,8 @@ The standard is not that a product page renders. The standard is that every chec
 
 Verified gates at the time this plan was written:
 
-- `python scripts\verify\product_pattern_contract.py` passes.
-- `python scripts\verify\cart_checkout_contract.py` passes.
+- `python scripts/verify/product_pattern_contract.py` passes.
+- `python scripts/verify/cart_checkout_contract.py` passes.
 - Current architecture includes a generic multi-color recipe contract.
 - Single-select color is not allowed to clear checkout readiness for color-recipe products.
 - Source mapper slug checkout overrides are guarded against.
@@ -170,8 +170,8 @@ Build plan:
 
 Proof gate:
 
-- `scripts\verify\product_pattern_contract.py`
-- `scripts\verify\product_pattern_contract_report.py`
+- `scripts/verify/product_pattern_contract.py`
+- `scripts/verify/product_pattern_contract_report.py`
 
 Pass condition:
 
@@ -226,7 +226,7 @@ Build plan:
 
 Proof gate:
 
-- `scripts\verify\cart_checkout_contract.py`
+- `scripts/verify/cart_checkout_contract.py`
 - runtime resolver tests for selected configuration validation.
 
 Pass condition:

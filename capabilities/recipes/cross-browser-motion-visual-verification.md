@@ -48,7 +48,7 @@ Do not treat a fresh headless Playwright pass as proof of the user's browser-vis
 1. Confirm the running site is serving the expected HTML/CSS, not just that disk files changed.
 2. Clear Frappe website cache after Jinja/CSS/controller edits:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 ```
 
@@ -72,9 +72,9 @@ await page.emulateMedia({ reducedMotion: "reduce" });
 
 5. Use the installed browser executables when browser-specific behavior matters:
 
-```powershell
-C:\Program Files\Google\Chrome\Application\chrome.exe
-C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
+```bash
+/usr/bin/google-chrome
+/usr/bin/brave-browser
 ```
 
 6. Capture or inspect real screenshots after the dynamic state is visible. Computed style alone is not enough.

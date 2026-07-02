@@ -59,7 +59,7 @@ Related capability contracts:
 
 Fresh verification run on 2026-05-08:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 python -m py_compile scripts/verify/nav_ia.py scripts/verify/smoke_shop.py apps/locally_twisted/locally_twisted/www/home.py
 node --check apps/locally_twisted/locally_twisted/public/js/lt-megamenu.js

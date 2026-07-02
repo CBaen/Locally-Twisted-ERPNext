@@ -67,7 +67,7 @@ Primary verifier files:
 
 Latest focused verification from this slice:
 
-```powershell
+```bash
 python -m py_compile apps/locally_twisted/locally_twisted/commerce_rules.py apps/locally_twisted/locally_twisted/www/checkout.py apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/seed/sync_commerce_rules.py apps/locally_twisted/locally_twisted/seed/sync_contact_intake_backend.py apps/locally_twisted/locally_twisted/patches/sync_commerce_rules.py apps/locally_twisted/locally_twisted/patches/sync_contact_intake_backend.py apps/locally_twisted/locally_twisted/verify/commerce_rules_contract.py apps/locally_twisted/locally_twisted/verify/checkout_fulfillment_contract.py apps/locally_twisted/locally_twisted/verify/checkout_lead_conversion_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.sync_contact_intake_backend.execute
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.sync_commerce_rules.execute

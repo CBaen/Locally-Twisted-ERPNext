@@ -7,7 +7,8 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 URL = "http://localhost:8081/"
-OUT = Path("C:/Users/baenb/.claude")
+OUT = Path("output/playwright")
+OUT.mkdir(parents=True, exist_ok=True)
 
 
 def main():

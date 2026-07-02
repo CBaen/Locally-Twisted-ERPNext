@@ -72,7 +72,7 @@ but direct catalog mutation needs guardrails.
 
 Read-only verifier commands run in this pass:
 
-```powershell
+```bash
 python scripts/verify/human_access_silo_matrix.py
 python scripts/verify/webshop_guest_party_contract.py
 python scripts/verify/owner_catalog_guard_contract.py
@@ -152,7 +152,7 @@ Remaining work:
 
 4. Add a cleanup safety gate that must run after any fake/demo cleanup:
 
-```powershell
+```bash
 python scripts/verify/webshop_guest_party_contract.py
 python scripts/verify/human_access_silo_matrix.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
@@ -161,7 +161,7 @@ npm run test:public-network -- --workers=1
 
 5. Keep import destructive mode behind a release gate:
 
-```powershell
+```bash
 python scripts/setup/stage_seed_data.py
 python scripts/verify/catalog_state_snapshot_contract.py
 python scripts/verify/catalog_purge_scope_dry_run.py

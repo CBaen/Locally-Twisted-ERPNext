@@ -48,7 +48,7 @@ Use this when translating a client's approved sales stages into ERPNext, especia
 
 ## LT verification commands
 
-```powershell
+```bash
 python scripts/setup/sync_crm_pipeline.py
 python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py

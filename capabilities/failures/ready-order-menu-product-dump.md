@@ -49,11 +49,11 @@ Forbidden customer-facing menu copy includes:
 
 Use the focused source gates:
 
-```powershell
+```bash
 python scripts/verify/nav_ia.py
-python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py
-node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js
-node --check scripts\verify\search_contract.spec.js
+python -m py_compile apps/locally_twisted/locally_twisted/navbar_context.py scripts/verify/smoke_shop.py scripts/verify/ecommerce_pause_contract.py
+node --check apps/locally_twisted/locally_twisted/public/js/lt-megamenu.js
+node --check scripts/verify/search_contract.spec.js
 ```
 
 For rendered proof, first ensure the local Docker stack is using the branch or

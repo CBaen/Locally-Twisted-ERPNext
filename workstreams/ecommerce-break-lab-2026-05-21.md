@@ -32,13 +32,13 @@ testing mode:
 
 Verified after all break probes were restored:
 
-```powershell
-python -B -m py_compile apps\locally_twisted\locally_twisted\verify\ecommerce_break_lab.py scripts\verify\ecommerce_expected_mode.py
+```bash
+python -B -m py_compile apps/locally_twisted/locally_twisted/verify/ecommerce_break_lab.py scripts/verify/ecommerce_expected_mode.py
 npm run test:ecommerce-open-mode
 npm run test:webshop-guest-party
 npm run test:owner-catalog-guard
-python scripts\verify\cart_checkout_contract.py
-python scripts\verify\stripe_amount_parity_contract.py
+python scripts/verify/cart_checkout_contract.py
+python scripts/verify/stripe_amount_parity_contract.py
 npm run test:human-access
 npm run test:product-prices
 npm run test:product-price-display -- --workers=1 --grep "variant size"
@@ -100,10 +100,10 @@ Follow-up triad review for owner product-management work is documented in
 
 Additional focused proof after the triad fixes:
 
-```powershell
-python scripts\verify\owner_catalog_guard_contract.py
-python scripts\verify\product_blueprint_live_contract.py
-python scripts\setup\sync_product_blueprints_from_catalog.py
+```bash
+python scripts/verify/owner_catalog_guard_contract.py
+python scripts/verify/product_blueprint_live_contract.py
+python scripts/setup/sync_product_blueprints_from_catalog.py
 ```
 
 Results:
@@ -194,7 +194,7 @@ Risk:
 
 Guard:
 
-```powershell
+```bash
 npm run test:public-assets
 npm run test:public-network
 npm run test:webshop-guest-party
@@ -211,7 +211,7 @@ output.
 
 Trigger:
 
-```powershell
+```bash
 bench --site frontend set-config lt_ecommerce_paused 1
 python scripts/dev/clear_website_cache.py
 ```
@@ -234,7 +234,7 @@ Seriousness: Release blocker.
 
 Recovery:
 
-```powershell
+```bash
 bench --site frontend set-config lt_ecommerce_paused 0
 python scripts/dev/clear_website_cache.py
 npm run test:ecommerce-open-mode
@@ -256,7 +256,7 @@ Rule:
 
 Trigger:
 
-```powershell
+```bash
 bench --site frontend execute locally_twisted.verify.ecommerce_break_lab.break_guest_portal_link
 ```
 
@@ -278,7 +278,7 @@ Seriousness: Critical hidden infrastructure drift.
 
 Recovery:
 
-```powershell
+```bash
 bench --site frontend execute locally_twisted.verify.ecommerce_break_lab.restore_guest_portal_link
 python scripts/dev/clear_website_cache.py
 npm run test:webshop-guest-party
@@ -294,7 +294,7 @@ Prevention:
 
 Trigger:
 
-```powershell
+```bash
 bench --site frontend execute locally_twisted.verify.ecommerce_break_lab.break_guest_price_visibility
 ```
 
@@ -318,7 +318,7 @@ Seriousness: High / release blocker for open checkout.
 
 Recovery:
 
-```powershell
+```bash
 bench --site frontend execute locally_twisted.verify.ecommerce_break_lab.restore_webshop_settings
 python scripts/dev/clear_website_cache.py
 npm run test:webshop-guest-party
@@ -358,7 +358,7 @@ not exotic attacks.
 
 Minimum local proof for the owner-important ecommerce slice:
 
-```powershell
+```bash
 npm run test:ecommerce-open-mode
 npm run test:webshop-guest-party
 python scripts/verify/cart_checkout_contract.py
@@ -373,7 +373,7 @@ npm run test:human-access
 
 For a paused staging/live gate, replace the open-mode check with:
 
-```powershell
+```bash
 npm run test:ecommerce-paused-mode
 python scripts/verify/ecommerce_pause_contract.py
 ```

@@ -56,20 +56,20 @@ uploads, Lead photo storage, or owner notifications.
 
 Local source and behavior proof:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\verify\book_form_repeat_email_photos_email_contract.py apps\locally_twisted\locally_twisted\verify\customer_email_policy_contract.py scripts\verify\customer_email_policy_contract.py
-python scripts\verify\customer_email_policy_contract.py
-python scripts\verify\inquiry_upload_failure_contract.py
-python scripts\dev\clear_website_cache.py --restart
-python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/lead_cascade.py apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_email_contract.py apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py scripts/verify/customer_email_policy_contract.py
+python scripts/verify/customer_email_policy_contract.py
+python scripts/verify/inquiry_upload_failure_contract.py
+python scripts/dev/clear_website_cache.py --restart
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 ```
 
 Live release proof after Frappe Cloud deploy and site update:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
-python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
 ```
 
 2026-05-16 live proof used an intentional real business-email smoke instead of

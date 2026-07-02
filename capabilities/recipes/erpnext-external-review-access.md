@@ -99,7 +99,7 @@ is acceptable.
 
 Run:
 
-```powershell
+```bash
 python scripts/setup/sync_marketing_review_access.py
 python scripts/verify/marketing_review_access_boundary.py
 npm run test:marketing-review-access
@@ -107,7 +107,7 @@ npm run test:marketing-review-access
 
 After changing `/me`, hooks, role logic, or any adjacent portal route, also run:
 
-```powershell
+```bash
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_portal_v1_contract.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
@@ -115,7 +115,7 @@ python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8
 
 After changing Desk/persona access at the same time, also run:
 
-```powershell
+```bash
 python scripts/verify/backend_workspace_parity.py
 python scripts/verify/finance_workspace_parity.py
 $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas

@@ -27,14 +27,14 @@ Non-scope honored: no legacy_source mutation, no public ecommerce opening, no pr
 
 ## Commands run and exact output
 
-### `python scripts\verify\checkout_fulfillment_contract.py`
+### `python scripts/verify/checkout_fulfillment_contract.py`
 
 ```text
 [CHECKOUT FULFILLMENT CONTRACT] PASS
   rollback: verifier rolled back generated records
 ```
 
-### `python scripts\verify\payment_cascade_contract.py`
+### `python scripts/verify/payment_cascade_contract.py`
 
 ```text
 [PAYMENT CASCADE CONTRACT] PASS
@@ -49,7 +49,7 @@ Non-scope honored: no legacy_source mutation, no public ecommerce opening, no pr
   rollback: verifier rolled back all generated records
 ```
 
-### `python scripts\verify\customer_note_checkout_preservation_contract.py`
+### `python scripts/verify/customer_note_checkout_preservation_contract.py`
 
 ```text
 [CUSTOMER NOTE CHECKOUT PRESERVATION CONTRACT] PASS

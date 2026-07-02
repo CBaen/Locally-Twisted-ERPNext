@@ -87,9 +87,11 @@ def main():
                 print(f"  {k}: {v}")
 
             # Crop the nav with hover state captured
-            page.screenshot(path="C:/Users/baenb/.claude/lt-nav-hover.png",
+            out_path = Path("output/playwright/lt-nav-hover.png")
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            page.screenshot(path=str(out_path),
                           clip={"x": 0, "y": 0, "width": 1366, "height": 200})
-            print(f"\n  Saved hover screenshot: C:/Users/baenb/.claude/lt-nav-hover.png")
+            print(f"\n  Saved hover screenshot: {out_path}")
 
         b.close()
 

@@ -114,7 +114,7 @@ For quote-first/event paths:
 
 Current key verifier family to consider, depending on scope:
 
-```powershell
+```bash
 python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/cart_checkout_contract.py

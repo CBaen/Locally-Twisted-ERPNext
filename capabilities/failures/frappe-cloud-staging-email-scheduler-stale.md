@@ -47,7 +47,7 @@ error because the automatic scheduler/background queue path is stale.
 
 | Date | Project | Surface | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|
-| 2026-05-29 | Locally Twisted | Hosted staging paid-order emails | Four paid staging orders created eight receipt/operator Email Queue rows, all `Not Sent`, while scheduler/job timestamps were stale | `.tmp/staging-record-audit-20260529034307.json`; witness packet `C:\Users\baenb\.codex\tmp\witness-state\lt-staging-email-queue-20260529.md`; triad review | failure recipe added; repair still needs staging scheduler recovery and fresh checkout proof | open |
+| 2026-05-29 | Locally Twisted | Hosted staging paid-order emails | Four paid staging orders created eight receipt/operator Email Queue rows, all `Not Sent`, while scheduler/job timestamps were stale | `.tmp/staging-record-audit-20260529034307.json`; witness packet `/home/guidingl/.codex/tmp/witness-state/lt-staging-email-queue-20260529.md`; triad review | failure recipe added; repair still needs staging scheduler recovery and fresh checkout proof | open |
 
 ## Root Pattern
 

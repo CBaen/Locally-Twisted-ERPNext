@@ -23,7 +23,7 @@ Sources inspected:
 
 Verifier commands run:
 
-```powershell
+```bash
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/checkout_fulfillment_contract.py
 ```

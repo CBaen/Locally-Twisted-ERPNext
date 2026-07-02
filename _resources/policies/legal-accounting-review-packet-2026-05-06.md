@@ -178,10 +178,10 @@ Accounting questions:
 
 These checks passed during the policy/trust implementation pass:
 
-- `node --check apps\locally_twisted\locally_twisted\public\js\lt-site-preferences.js`
-- `python scripts\verify\commerce_rules_contract.py`
-- `python scripts\verify\checkout_fulfillment_contract.py`
-- `python scripts\verify\cart_checkout_contract.py`
+- `node --check apps/locally_twisted/locally_twisted/public\js\lt-site-preferences.js`
+- `python scripts/verify/commerce_rules_contract.py`
+- `python scripts/verify/checkout_fulfillment_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
 - Route checks returned `200` for `/privacy`, `/terms-of-service`, `/refund-policy`, `/faq`, `/balloon-twisting-and-face-painting`, and `/checkout`.
 - Cookie script is included live and the asset returns `200`.
 - Layout coverage passed in split Playwright batches: `78 + 104 + 65 + 13 = 260/260`.

@@ -5,7 +5,7 @@
 Seed propagation completed; project-local validation debt remains.
 
 Source package handoff:
-`C:\Users\baenb\projects\capabilities-framework\workstreams\project-root-seed-propagation-2026-05-21.md`
+`/home/guidingl/projects/capabilities-framework/workstreams/project-root-seed-propagation-2026-05-21.md`
 
 ## What Changed
 

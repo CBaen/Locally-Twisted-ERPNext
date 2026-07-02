@@ -30,14 +30,14 @@ Phase 4 does not open public ecommerce, process live payment, mutate legacy_sour
 
 ## Required gates
 
-- `python -m py_compile apps\locally_twisted\locally_twisted\product_page_runtime.py apps\locally_twisted\locally_twisted\api\cart.py apps\locally_twisted\locally_twisted\verify\quote_event_checkout_boundary_contract.py scripts\verify\quote_event_checkout_boundary_contract.py`
-- `python scripts\verify\quote_event_checkout_boundary_contract.py --report output\phase-4-quote-event-checkout-boundary-contract-20260510.json`
+- `python -m py_compile apps/locally_twisted/locally_twisted/product_page_runtime.py apps/locally_twisted/locally_twisted/api\cart.py apps/locally_twisted/locally_twisted/verify\quote_event_checkout_boundary_contract.py scripts/verify/quote_event_checkout_boundary_contract.py`
+- `python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json`
 - Regression gates:
-  - `python scripts\verify\product_page_runtime_contract.py`
-  - `python scripts\verify\checkout_product_family_contract.py --report output\phase-3-checkout-product-family-contract-20260510.json`
-  - `python scripts\verify\website_item_classification_contract.py --report output\phase-4-website-item-classification-contract-20260510.json`
-  - `python scripts\verify\checkout_fulfillment_contract.py`
-  - `python scripts\verify\customer_note_checkout_preservation_contract.py`
+  - `python scripts/verify/product_page_runtime_contract.py`
+  - `python scripts/verify/checkout_product_family_contract.py --report output/phase-3-checkout-product-family-contract-20260510.json`
+  - `python scripts/verify/website_item_classification_contract.py --report output/phase-4-website-item-classification-contract-20260510.json`
+  - `python scripts/verify/checkout_fulfillment_contract.py`
+  - `python scripts/verify/customer_note_checkout_preservation_contract.py`
 
 ## Review lenses
 

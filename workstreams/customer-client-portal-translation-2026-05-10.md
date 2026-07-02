@@ -43,13 +43,13 @@ Shared files requiring hunk-level review before staging:
 
 Commands:
 
-```powershell
+```bash
 python scripts/verify/customer_portal_v1_contract.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
 npm run test:customer-login-visual
-npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "logged-in public header exposes logout" --reporter=line --workers=1
+npx playwright test scripts/verify/interactive_layout.spec.js --grep "logged-in public header exposes logout" --reporter=line --workers=1
 ```
 
 Result on 2026-05-11: all listed contracts passed locally. The focused logout
@@ -171,10 +171,10 @@ Important behavior:
 
 Reference files inspected read-only:
 
-- `C:\Users\baenb\projects\locally-twisted-legacy_source\addons\locally_twisted\controllers\portal.py`
-- `C:\Users\baenb\projects\locally-twisted-legacy_source\addons\locally_twisted\views\portal_templates.xml`
-- `C:\Users\baenb\projects\locally-twisted-legacy_source\addons\locally_twisted\security\lt_groups.xml`
-- `C:\Users\baenb\projects\locally-twisted-legacy_source\addons\locally_twisted\security\lt_rules.xml`
+- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/controllers/portal.py`
+- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/views/portal_templates.xml`
+- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/security/lt_groups.xml`
+- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/security/lt_rules.xml`
 
 Translated intent:
 
@@ -192,7 +192,7 @@ Do not port legacy_source code or schema directly.
 
 Primary V1 gate:
 
-```powershell
+```bash
 python scripts/verify/customer_portal_v1_contract.py
 ```
 
@@ -204,7 +204,7 @@ customer file-registration guard blocks arbitrary File attachment by name.
 
 Supporting gates:
 
-```powershell
+```bash
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py

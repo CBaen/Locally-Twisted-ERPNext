@@ -126,17 +126,17 @@ Related evidence:
 
 Latest proof after the 2026-05-22 triad fixes:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_blueprint_local_apply.py apps\locally_twisted\locally_twisted\verify\product_blueprint_contract.py apps\locally_twisted\locally_twisted\seed\sync_product_blueprints_from_catalog.py apps\locally_twisted\locally_twisted\locally_twisted\doctype\lt_product_blueprint\lt_product_blueprint.py apps\locally_twisted\locally_twisted\verify\owner_catalog_guard_contract.py
-python scripts\verify\owner_catalog_guard_contract.py
-python scripts\verify\product_blueprint_live_contract.py
-python scripts\setup\sync_product_blueprints_from_catalog.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_local_apply.py apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py apps/locally_twisted/locally_twisted/seed/sync_product_blueprints_from_catalog.py apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py apps/locally_twisted/locally_twisted/verify/owner_catalog_guard_contract.py
+python scripts/verify/owner_catalog_guard_contract.py
+python scripts/verify/product_blueprint_live_contract.py
+python scripts/setup/sync_product_blueprints_from_catalog.py
 npm run test:owner-product-safety
 npm run test:product-options-experience
 npm run test:public-network
-python scripts\verify\allow_guest_surface_inventory.py
-python scripts\verify\smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
-python scripts\verify\newsletter_concurrency_contract.py --base-url http://localhost:8081
+python scripts/verify/allow_guest_surface_inventory.py
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
+python scripts/verify/newsletter_concurrency_contract.py --base-url http://localhost:8081
 npm run test:form-experience
 npm run test:public-assets
 git diff --check
@@ -178,7 +178,7 @@ Previously green in the recovered lane before the final triad fixes:
 Before staging/live, rerun the full owner-product umbrella if source changes
 again:
 
-```powershell
+```bash
 npm run test:owner-product-safety
 ```
 

@@ -19,7 +19,7 @@ This is not a customer-send surface. It is an internal review queue payload that
 
 Fresh local verification on 2026-05-06:
 
-```powershell
+```bash
 python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json --markdown output/customer-reminder-dry-run.md
 python scripts/setup/sync_finance_workspace.py

@@ -3,7 +3,7 @@
 ## Decision
 
 LT active agent guidance must use current Kubuntu paths and must not point
-agents at nonexistent local Windows-era folders. The fast Kubuntu doctor bundle
+agents at nonexistent local retired-host folders. The fast Kubuntu doctor bundle
 is now static/source preflight by default through `--static-only`; full local
 runtime proof remains available as the separate `lt-kubuntu-runtime-doctor`
 manifest bundle after the on-demand LT stack is intentionally started.

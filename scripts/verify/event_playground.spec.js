@@ -11,7 +11,7 @@ const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const DESK_USER = process.env.LT_DESK_TEST_USER;
 const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
 const DEFAULT_SPIKE_DIR =
-	"C:/Users/baenb/projects/design-studio/workstreams/locally-twisted-plan-custom-decor-v2/design-studio-v2/event-builder-spike";
+	"/home/guidingl/projects/design-studio/workstreams/locally-twisted-plan-custom-decor-v2/design-studio-v2/event-builder-spike";
 const SPIKE_DIR = path.resolve(process.env.EVENT_PLAYGROUND_SPIKE_DIR || DEFAULT_SPIKE_DIR);
 let viteServer = null;
 
@@ -185,9 +185,9 @@ test.describe("Event Playground route", () => {
 		await frame.locator("input[name='phone']").fill("801-555-0198");
 		await frame.locator("input[name='event_date']").fill("2026-06-14");
 		await frame.locator("input[name='event_city']").fill("Ogden Union Station");
-		await frame.locator("[data-action='submit-inquiry']").click();
+			await frame.locator("[data-action='submit-inquiry']").click();
 
-		await page.waitForURL(/\/contact\?intent=quote&source=event-playground/, { timeout: 15000 });
+			await page.waitForURL(/\/contact\?intent=quote&source=event-playground/, { timeout: 15000 });
 		await expect(page.locator("#book_name")).toHaveValue("Avery Planner");
 		await expect(page.locator("#book_email")).toHaveValue("avery@example.invalid");
 		await expect(page.locator("#book_phone")).toHaveValue("801-555-0198");
@@ -195,7 +195,7 @@ test.describe("Event Playground route", () => {
 		await expect(page.locator("#book_location")).toHaveValue("Ogden Union Station");
 		await expect(page.locator("input[name='x_services'][value='Balloon Decor']")).toBeChecked();
 		await expect(page.locator("#book_notes")).toHaveValue(/Event Playground design preview/);
-		await expect(page.locator("#book_notes")).toHaveValue(/Event date: 2026-06-14/);
-		await expect(page.locator("#book_notes")).toHaveValue(/Event city \/ venue: Ogden Union Station/);
+			await expect(page.locator("#book_notes")).toHaveValue(/Event date: 2026-06-14/);
+			await expect(page.locator("#book_notes")).toHaveValue(/Event city \/ venue: Ogden Union Station/);
 	});
 });

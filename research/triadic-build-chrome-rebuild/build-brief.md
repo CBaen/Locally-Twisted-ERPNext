@@ -98,8 +98,8 @@ The persistent header + footer chrome for Locally Twisted's ERPNext site, Hetzne
 7. **No `color-mix()`** in any SCSS file (we don't use SCSS for chrome but flag for awareness — plain CSS only here).
 8. **Loud-failure rule** — newsletter submit must show user-visible error on failure (red banner with phone fallback). Server endpoint logs payload + IP via `frappe.log_error` on exception.
 9. **Frappe sanitizer awareness** — anything written to `Website Settings.head_html`, Web Page `main_section`, or any CMS-editable field is sanitized. We're NOT writing to those fields. We're writing to template files in the app, which are NOT sanitized. But Builder Jinja must NOT introduce any code paths that round-trip user content through CMS-editable fields.
-10. **Frappe v15 + Bootstrap 4 utilities only**. Confirmed conventions in `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`.
-11. **Loud-failure rule for newsletter** is non-negotiable per `~/.claude/rules/loud-failure.md` and `frappe-form-integrity` skill.
+10. **Frappe v15 + Bootstrap 4 utilities only**. Confirmed conventions in `Built_by_Cameron/capabilities/recipes/frappe-conventions.md`.
+11. **Loud-failure rule for newsletter** is non-negotiable per `capabilities/recipes/fail-loud-operating-law.md` and `frappe-form-integrity` skill.
 
 ### Post-build invariants (must remain true)
 
@@ -129,7 +129,7 @@ The agency gate fires on edits to Frappe app files. Each builder MUST invoke the
 For all builders: after their edits, run:
 
 ```bash
-docker restart locally-twisted-erpnext-v15-backend-1 && sleep 12 && python "C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted/scripts/dev/clear_website_cache.py"
+docker restart locally-twisted-erpnext-v15-backend-1 && sleep 12 && python "/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/scripts/dev/clear_website_cache.py"
 ```
 
 Then verify routes still load:

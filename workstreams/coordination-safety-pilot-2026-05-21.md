@@ -9,19 +9,19 @@ coordination system. This is a process proof, not an ecommerce or release lane.
 
 ## Current State
 
-- Repo root: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`
+- Repo root: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
 - Repo class: child/client repo under the Built by Cameron parent repo.
 - Branch at enrollment: `main`.
 - Latest pilot audit state: clean.
-- Worktree root: `C:\Users\baenb\agent-worktrees\builtbycameron-lt`.
-- Parent/company repo above: `C:\Users\baenb\projects\Built_by_Cameron`.
+- Worktree root: `/home/guidingl/agent-worktrees/builtbycameron-lt`.
+- Parent/company repo above: `/home/guidingl/projects/Built_by_Cameron`.
 - Nested repos exist below LT and must be treated as separate Git authorities.
 
 ## Pilot Rules
 
 - First action is a read-only cold-agent dry run.
 - Future write actions must name the Six-Box target before editing.
-- Claim work in `C:\Users\baenb\agent-coordination\LIVE-BOARD.md` and
+- Claim work in `/home/guidingl/agent-coordination/LIVE-BOARD.md` and
   `SESSION-REGISTRY.md` before editing.
 - Do not use this pilot as permission for product, ERPNext, Frappe Cloud, DNS,
   Stripe, staging, or live release work.

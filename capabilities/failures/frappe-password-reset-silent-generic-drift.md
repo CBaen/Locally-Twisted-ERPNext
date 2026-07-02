@@ -80,7 +80,7 @@ not the same thing.
 
 Use the fail-loud operator helper:
 
-```powershell
+```bash
 npm run test:marketing-access-reset
 npm run preview:marketing-access-reset
 npm run send:marketing-access-reset
@@ -88,7 +88,7 @@ npm run send:marketing-access-reset
 
 For template-only changes:
 
-```powershell
+```bash
 npm run test:password-reset-template
 ```
 

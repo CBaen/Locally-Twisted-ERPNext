@@ -31,7 +31,7 @@ other Cloudflare deployment and management tasks.
 
 Check availability and identity before relying on it:
 
-```powershell
+```bash
 npx wrangler --version
 npx wrangler whoami
 ```

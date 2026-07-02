@@ -18,8 +18,8 @@ Keep the Locally Twisted launch repo light enough for client handoff while prese
 ## Cleanup Completed
 
 - Removed regenerable local output and verifier debris: `.tmp/`, `output/`, `test-results/`, `test invoices/`, Python `__pycache__/`, old generated build folders, and stale local verification artifacts.
-- Moved large raw photo drops out of the repo, without deleting them, to `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\`.
-- 2026-05-11 follow-up: removed the tracked duplicate raw launch photos from `assets/what we do photos/` after verifying exact blob-hash copies in `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`.
+- Moved large raw photo drops out of the repo, without deleting them, to `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/`.
+- 2026-05-11 follow-up: removed the tracked duplicate raw launch photos from `assets/what we do photos/` after verifying exact blob-hash copies in `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/landing-page-pics-20260510/`.
 - Added `.gitignore` guards for raw/drop folders: `assets/landing page pics/`, `assets/landing page assets/`, `assets/hero assets/`, `balloon drop/`, and `balloon drop.zip`.
 - Removed old ignored legacy_source mirror/reference output, old Chrome/audit render output, upstream app clones, and research throwaways that were no longer source of truth.
 - Removed the tracked `contests/audience-pages-2026-05-08/**` contest output from the launch repo. Use Git history if that old contest material is ever needed.
@@ -39,7 +39,7 @@ Keep the Locally Twisted launch repo light enough for client handoff while prese
 - `python scripts/verify/ecommerce_pause_contract.py` passed after the cleanup.
 - `python scripts/verify/nav_ia.py` passed after the cleanup.
 - `git diff --check` passed for the cleanup-owned docs and `.gitignore`; Git warned that `workstreams/website-launch.md` will normalize CRLF to LF when touched.
-- 2026-05-11 follow-up: `git merge-base --is-ancestor ecommerce-phase-1-4-hygiene-20260510 main` passed before branch deletion; `git branch --list` and `git branch -r` then showed only `main` / `origin/main`. `git hash-object` proved the three removed image assets match the copies under `locally-twisted-local-drops\landing-page-pics-20260510\`.
+- 2026-05-11 follow-up: `git merge-base --is-ancestor ecommerce-phase-1-4-hygiene-20260510 main` passed before branch deletion; `git branch --list` and `git branch -r` then showed only `main` / `origin/main`. `git hash-object` proved the three removed image assets match the copies under `locally-twisted-local-drops/landing-page-pics-20260510/`.
 
 ## Next Safe Cleanup Slice
 

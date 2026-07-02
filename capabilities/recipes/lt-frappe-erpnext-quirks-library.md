@@ -64,7 +64,7 @@ dedicated failure cards.
 - Source / evidence:
   `lessons-learned.md` section `2026-04-26 (Slice 2 build) - Frappe / ERPNext quirks discovered while building the website shell` (`content_type` entry).
 - Direct check command:
-  ```powershell
+  ```bash
   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_value --kwargs "{'doctype':'Web Page','filters':{'route':'contact'},'fieldname':['name','content_type','main_section','main_section_html']}"
   ```
 - Verifier command: none currently dedicated.
@@ -82,11 +82,11 @@ dedicated failure cards.
 - Source / evidence:
   `lessons-learned.md` section `2026-04-26 (Slice 2 build)` (`Top Bar Item parent rows` and `Footer Items` entries).
 - Direct check command:
-  ```powershell
+  ```bash
   python scripts/verify/nav_ia.py
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   python scripts/verify/smoke_shop.py
   ```
 - Guardrail: model parent rows as label-only grouping rows (`url=""`), with URLs
@@ -102,11 +102,11 @@ dedicated failure cards.
 - Source / evidence:
   `lessons-learned.md` section `2026-04-26 (Slice 2 build)` (`Frappe HTML sanitizer strips inline SVG` entry).
 - Direct check command:
-  ```powershell
+  ```bash
   rg -n "<path d=|navbar-toggler-icon|icon-menu" apps/locally_twisted/locally_twisted/templates apps/locally_twisted/locally_twisted/public
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   npm run test:layout-fit
   ```
 - Guardrail: use file-based SVG assets in app `public/icons` and reference them
@@ -122,11 +122,11 @@ dedicated failure cards.
 - Source / evidence:
   `lessons-learned.md` section `2026-04-26 (Slice 2 build)` (`head_html styles load BEFORE Frappe bundled stylesheets` entry) and `AGENTS.md` Frappe rule `Avoid head_html CSS injection`.
 - Direct check command:
-  ```powershell
+  ```bash
   rg -n "head_html|web_include_css|website_theme_scss" apps/locally_twisted/locally_twisted/hooks.py AGENTS.md
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   npm run test:container-contract
   ```
 - Guardrail: keep production styling in app-managed assets (`web_include_css` or
@@ -143,11 +143,11 @@ dedicated failure cards.
 - Source / evidence:
   `lessons-learned.md` section `2026-04-26 (Slice 2 build)` (`navbar-toggler markup` entry).
 - Direct check command:
-  ```powershell
+  ```bash
   python scripts/verify/nav_ia.py
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   npm run test:interactive-layout
   ```
 - Guardrail: style `.navbar-toggler` and hide/replace its inner SVG intentionally
@@ -166,11 +166,11 @@ dedicated failure cards.
   `lessons-learned.md` section `2026-04-26 (Slice 2 build)` (`Editable pip install...` entry),
   with architecture correction in `locally-twisted-decisions.md` `2026-04-30 (late evening) - Container reversion...`.
 - Direct check command:
-  ```powershell
+  ```bash
   docker exec locally-twisted-erpnext-v15-backend-1 python -c "import locally_twisted; print('ok')"
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   python scripts/verify/nav_ia.py
   ```
 - Guardrail: treat this as a historical trap until reverified under the current
@@ -189,11 +189,11 @@ dedicated failure cards.
   `CODING-HANDOFF.md` Webshop asset-map correction note and `workstreams/shop.md`
   Webshop build-path receipt (frontend/nginx-serving container last).
 - Direct check command:
-  ```powershell
+  ```bash
   python scripts/verify/smoke_shop.py
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   npm run test:website-verify
   ```
 - Guardrail: execute the final Webshop build in the frontend-serving path,
@@ -215,11 +215,11 @@ dedicated failure cards.
   `workstreams/ecommerce-break-lab-2026-05-21.md` incident note for
   Webshop startup POST 400s and stale hashed asset.
 - Direct check command:
-  ```powershell
+  ```bash
   npm run test:public-network
   ```
 - Verifier command:
-  ```powershell
+  ```bash
   npm run test:public-network
   ```
 - Guardrail: keep the marker in the LT base template, clear website/asset

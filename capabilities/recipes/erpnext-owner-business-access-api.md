@@ -37,7 +37,7 @@ Use this when Jeff/business-owner access needs fewer taps, mobile-friendly conta
 
 Run the focused owner gate after touching this lane:
 
-```powershell
+```bash
 $env:LT_DESK_TEST_USER='locallytwisted@gmail.com'
 $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'
 npm run test:owner-actions
@@ -47,7 +47,7 @@ npm run test:desk-owner
 
 Use the broader synthetic pipeline when fake-data or Lead/Contact/Sales Order creation changed:
 
-```powershell
+```bash
 python scripts/verify/synthetic_business_pipeline.py
 ```
 

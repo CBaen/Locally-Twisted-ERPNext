@@ -47,10 +47,10 @@ state.
 
 Final pre-commit local proof:
 
-```powershell
+```bash
 npm run test:product-options-experience
 npm run test:product-price-display
-python scripts\verify\cart_checkout_contract.py
+python scripts/verify/cart_checkout_contract.py
 ```
 
 Result: product-options passed `4/4`; visible price display and cart/checkout
@@ -58,10 +58,10 @@ also passed through `npm run test:owner-product-safety`.
 
 Before staging, rerun if source changes again:
 
-```powershell
+```bash
 npm run test:product-options-experience
 npm run test:product-price-display
-python scripts\verify\cart_checkout_contract.py
+python scripts/verify/cart_checkout_contract.py
 ```
 
 ## Boundaries

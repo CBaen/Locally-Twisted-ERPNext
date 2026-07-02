@@ -16,10 +16,10 @@ imports, prices, Stripe, DNS, staging, or live release state.
 ## Branch And Worktree
 
 - Branch: `codex/ready-order-category-menu`
-- Worktree: `C:\Users\baenb\agent-worktrees\builtbycameron-lt\codex-20260521-rom`
+- Worktree: `/home/guidingl/agent-worktrees/builtbycameron-lt/codex-20260521-rom`
 - Base: local LT `main` at `3a4d494 allow reviewed external worktrees for LT agents`
 - Coordination claim: `codex-20260521-ready-order-menu` in
-  `C:\Users\baenb\agent-coordination\LIVE-BOARD.md` and
+  `/home/guidingl/agent-coordination/LIVE-BOARD.md` and
   `SESSION-REGISTRY.md`
 
 ## Source Of Truth
@@ -48,7 +48,7 @@ needed for forensics.
 
 Proof command shape:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_list --kwargs "{'doctype':'Item Group','filters':{'parent_item_group':'Shop Items','show_in_website':1},'fields':['name','item_group_name','route','weightage'],'order_by':'weightage asc, item_group_name asc'}"
 ```
 
@@ -82,19 +82,19 @@ Changed files:
   - Updates the open-commerce marker to the category search attribute.
 - `AGENTS.md`
   - Updates LT's approved worktree root to the shorter
-    `C:\Users\baenb\agent-worktrees\builtbycameron-lt`.
+    `/home/guidingl/agent-worktrees/builtbycameron-lt`.
 
 ## Local Runtime State
 
 Initial finding: the running Docker stack for `http://localhost:8081/` was
 bind-mounted to the main LT checkout:
 
-`C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\apps\locally_twisted`
+`/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/apps/locally_twisted`
 
 For local review, Codex recreated the local compose services with a temporary
 override that bind-mounted this branch worktree instead:
 
-`C:\Users\baenb\agent-worktrees\builtbycameron-lt\codex-20260521-rom\apps\locally_twisted`
+`/home/guidingl/agent-worktrees/builtbycameron-lt/codex-20260521-rom/apps/locally_twisted`
 
 That made the branch visible on `http://localhost:8081/` without editing the
 main checkout. The temporary override file was removed after the containers
@@ -105,11 +105,11 @@ from the normal `pwd.yml` without the override.
 
 Fresh branch-level checks run from the worktree:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\nav_ia.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py
-node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js
-node --check scripts\verify\search_contract.spec.js
-python scripts\verify\nav_ia.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/navbar_context.py scripts/verify/nav_ia.py scripts/verify/smoke_shop.py scripts/verify/ecommerce_pause_contract.py
+node --check apps/locally_twisted/locally_twisted/public/js/lt-megamenu.js
+node --check scripts/verify/search_contract.spec.js
+python scripts/verify/nav_ia.py
 ```
 
 All four checks exited 0. These checks proved the branch source contract before
@@ -117,7 +117,7 @@ the local Docker stack was repointed.
 
 Rendered local proof after repointing the Docker bind mount to this worktree:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 python scripts/verify/smoke_shop.py
 ```

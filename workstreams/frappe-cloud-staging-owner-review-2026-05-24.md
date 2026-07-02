@@ -91,7 +91,7 @@ App-mirror commits after the staging restore point:
 
 Fresh public staging proof during the documentation pass:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 npm run test:product-gallery-experience
@@ -167,13 +167,13 @@ Before handing the owner a checkout review path, keep the boundaries explicit:
 staging test checkout is usable; live checkout is not approved by this proof.
 Rerun the route proof if more source or provider settings change:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 npm run test:product-gallery-experience
-python scripts\verify\payment_backend_config_contract.py
-python scripts\verify\payment_webhook_contract.py
-python scripts\verify\stripe_amount_parity_contract.py
+python scripts/verify/payment_backend_config_contract.py
+python scripts/verify/payment_webhook_contract.py
+python scripts/verify/stripe_amount_parity_contract.py
 ```
 
 The connected Gmail MCP account was `cameronbpaul@gmail.com`, so it could not

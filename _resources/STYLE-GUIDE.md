@@ -788,7 +788,7 @@ Before claiming visual/frontend work is complete:
 
 Useful commands:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
 npm run test:container-contract

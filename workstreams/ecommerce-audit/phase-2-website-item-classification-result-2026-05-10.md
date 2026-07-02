@@ -35,14 +35,14 @@ Generated local evidence artifacts:
 
 Command:
 
-```powershell
+```bash
 python scripts/verify/website_item_classification_contract.py --report output/phase-2-website-item-classification-dry-run-20260510.json
 ```
 
 Output:
 
 ```text
-[WEBSITE ITEM CLASSIFICATION CONTRACT] wrote output\phase-2-website-item-classification-dry-run-20260510.json
+[WEBSITE ITEM CLASSIFICATION CONTRACT] wrote output/phase-2-website-item-classification-dry-run-20260510.json
 [WEBSITE ITEM CLASSIFICATION CONTRACT] PASS (dry_run)
   expected_total: 53
   matched_count: 53
@@ -61,14 +61,14 @@ Dry-run gate result: exact expected 53 Website Items, no missing identities, no 
 
 Command:
 
-```powershell
+```bash
 python scripts/verify/website_item_classification_contract.py --apply --report output/phase-2-website-item-classification-apply-20260510.json
 ```
 
 Output:
 
 ```text
-[WEBSITE ITEM CLASSIFICATION CONTRACT] wrote output\phase-2-website-item-classification-apply-20260510.json
+[WEBSITE ITEM CLASSIFICATION CONTRACT] wrote output/phase-2-website-item-classification-apply-20260510.json
 [WEBSITE ITEM CLASSIFICATION CONTRACT] PASS (apply)
   expected_total: 53
   matched_count: 53
@@ -87,14 +87,14 @@ Note: an initial apply wrapper attempt failed before reaching the verifier becau
 
 Command:
 
-```powershell
+```bash
 python scripts/verify/website_item_classification_contract.py --report output/phase-2-website-item-classification-post-apply-report-20260510.json
 ```
 
 Output:
 
 ```text
-[WEBSITE ITEM CLASSIFICATION CONTRACT] wrote output\phase-2-website-item-classification-post-apply-report-20260510.json
+[WEBSITE ITEM CLASSIFICATION CONTRACT] wrote output/phase-2-website-item-classification-post-apply-report-20260510.json
 [WEBSITE ITEM CLASSIFICATION CONTRACT] PASS (dry_run)
   expected_total: 53
   matched_count: 53
@@ -136,14 +136,14 @@ No product publishing, deleting, reimporting, price, media, or business-copy fie
 
 Command:
 
-```powershell
-python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json
+```bash
+python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json
 ```
 
 Output:
 
 ```text
-[PRODUCT PAGE ARCHITECTURE READINESS] wrote output\product-page-architecture-readiness-infrastructure-research-20260510.json
+[PRODUCT PAGE ARCHITECTURE READINESS] wrote output/product-page-architecture-readiness-infrastructure-research-20260510.json
 [PRODUCT PAGE ARCHITECTURE READINESS] BLOCKED
   technical_architecture_ok: True
   import_reopen_ok: False
@@ -181,8 +181,8 @@ Result: technical architecture remains true; import/reopen remains blocked becau
 
 Command:
 
-```powershell
-python scripts\verify\checkout_fulfillment_contract.py
+```bash
+python scripts/verify/checkout_fulfillment_contract.py
 ```
 
 Output:
@@ -196,8 +196,8 @@ Output:
 
 Command:
 
-```powershell
-python scripts\verify\customer_note_checkout_preservation_contract.py
+```bash
+python scripts/verify/customer_note_checkout_preservation_contract.py
 ```
 
 Output:

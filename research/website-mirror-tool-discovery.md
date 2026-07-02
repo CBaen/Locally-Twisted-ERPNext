@@ -15,7 +15,7 @@
 - Returns both raw HTML and markdown per page — raw HTML is the useful output for CMS porting (inspect structure, extract content blocks).
 - Actively maintained v0.8.x; deep-crawl feature is documented and stable as of 2026-04-30.
 
-**Install (Git Bash, Python 3.12 venv):**
+**Install (Bash, Python 3.12 venv):**
 ```bash
 pip install crawl4ai
 crawl4ai-setup          # downloads Chromium automatically

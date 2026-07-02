@@ -29,4 +29,4 @@ These are authenticated/admin-like legacy_source surfaces. Future audit agents m
 
 The recurring no-artifact/truncated-subagent failure observed during this audit is cataloged in the capabilities framework as:
 
-`C:\Users\baenb\projects\capabilities-framework\capabilities\failures\artifactless-research-delegation.md`
+`/home/guidingl/projects/capabilities-framework/capabilities/failures/artifactless-research-delegation.md`

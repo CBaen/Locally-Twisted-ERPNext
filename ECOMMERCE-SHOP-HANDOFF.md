@@ -209,10 +209,10 @@ template now reads LT projected gallery slides before Webshop fallback
 
 Green gates:
 
-- `python scripts/verify\product_page_media_classification_packet.py`
-- `python scripts/verify\product_page_media_visibility_contract.py`
-- `python scripts/verify\product_setup_catalog_coverage.py`
-- `python scripts/verify\product_gallery_projection_contract.py`
+- `python scripts/verify/product_page_media_classification_packet.py`
+- `python scripts/verify/product_page_media_visibility_contract.py`
+- `python scripts/verify/product_setup_catalog_coverage.py`
+- `python scripts/verify/product_gallery_projection_contract.py`
 - `npm run test:product-gallery-experience`
 - `npm run test:owner-product-safety`
 - `npm run test:ecommerce-full`
@@ -252,7 +252,7 @@ Rerun before staging if source changes again:
 
 - `npm run test:product-options-experience`
 - `npm run test:product-price-display`
-- `python scripts/verify\cart_checkout_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
 
 ### Owner Product Setup guard closeout - 2026-05-22
 
@@ -282,10 +282,10 @@ Green focused gates:
 
 - `python -m py_compile` for Product Blueprint local apply, Product Blueprint
   verifier, Product Setup sync, DocType controller, and owner catalog guard.
-- `python scripts/verify\owner_catalog_guard_contract.py` passed `19/19`.
-- `python scripts/verify\product_blueprint_live_contract.py` passed with
+- `python scripts/verify/owner_catalog_guard_contract.py` passed `19/19`.
+- `python scripts/verify/product_blueprint_live_contract.py` passed with
   existing-public visibility, hide, and route-change protections.
-- `python scripts/setup\sync_product_blueprints_from_catalog.py` dry run
+- `python scripts/setup/sync_product_blueprints_from_catalog.py` dry run
   passed for `51` Website Items, `0` creates, `21` would-update rows.
 - `npm run test:owner-product-safety` passed in the final pre-commit state.
 - `npm run test:public-network` passed `40/40`.
@@ -357,9 +357,9 @@ Green gates:
 
 - `python -m compileall apps/locally_twisted/locally_twisted/color_preset_rules.py apps/locally_twisted/locally_twisted/seed/repair_school_seasonal_color_presets.py apps/locally_twisted/locally_twisted/verify/school_seasonal_color_preset_contract.py scripts/verify/school_seasonal_color_preset_contract.py scripts/verify/catalog_variant_contract.py`
 - `python -m json.tool apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`
-- `python scripts/verify\school_seasonal_color_preset_contract.py`
-- `python scripts/verify\catalog_variant_contract.py`
-- `python scripts/dev\clear_website_cache.py`
+- `python scripts/verify/school_seasonal_color_preset_contract.py`
+- `python scripts/verify/catalog_variant_contract.py`
+- `python scripts/dev/clear_website_cache.py`
 - Browser Playwright probes for `/shop-items/garlands/graduation-grab-n-go`,
   `/shop-items/stands-easels/6-graduation-stands`, and
   `/shop-items/arches/classic-arch`
@@ -392,16 +392,16 @@ old `Custom quote page` label remains accepted as a legacy safe alias.
 Green gates:
 
 - `bench --site frontend migrate`
-- `python scripts/verify\catalog_variant_contract.py`
-- `python scripts/verify\product_page_architecture_readiness.py --json`
-- `python scripts/verify\product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
-- `python scripts/verify\product_blueprint_contract.py`
+- `python scripts/verify/catalog_variant_contract.py`
+- `python scripts/verify/product_page_architecture_readiness.py --json`
+- `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
+- `python scripts/verify/product_blueprint_contract.py`
 - `bench --site frontend execute locally_twisted.verify.product_blueprint_contract.run`
-- `python scripts/verify\cart_checkout_contract.py`
-- `python scripts/verify\variant_media_contract.py`
-- `python scripts/verify\checkout_product_family_contract.py`
-- `python scripts/verify\product_add_on_dependency_contract.py`
-- `python scripts/verify\product_page_runtime_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/variant_media_contract.py`
+- `python scripts/verify/checkout_product_family_contract.py`
+- `python scripts/verify/product_add_on_dependency_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
 
 ### Variant item media restore - 2026-05-17
 
@@ -424,10 +424,10 @@ and receipt helpers share the same selected-media path.
 
 Green gates:
 
-- `python -m py_compile apps/locally_twisted\locally_twisted\product_variant_media.py apps/locally_twisted\locally_twisted\api\variant_media.py apps/locally_twisted\locally_twisted\api\cart.py apps/locally_twisted\locally_twisted\product_page_runtime.py scripts/verify\variant_media_contract.py`
-- `python scripts/verify\variant_media_contract.py`
-- `python scripts/verify\cart_checkout_contract.py`
-- `python scripts/verify\product_page_runtime_contract.py`
+- `python -m py_compile apps/locally_twisted/locally_twisted/product_variant_media.py apps/locally_twisted/locally_twisted/api\variant_media.py apps/locally_twisted/locally_twisted/api\cart.py apps/locally_twisted/locally_twisted/product_page_runtime.py scripts/verify/variant_media_contract.py`
+- `python scripts/verify/variant_media_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
 
 ### Sellable product reimport - 2026-05-17
 
@@ -456,18 +456,18 @@ preview. `lt_ecommerce_paused=1` was restored and verified.
 
 Green gates:
 
-- `python scripts/verify\product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
-- `python scripts/verify\v1_legacy_source_erpnext_import_manifest.py`
-- `python scripts/verify\catalog_purge_scope_dry_run.py`
-- `python scripts/verify\product_source_repair_map.py`
-- `python scripts/verify\complex_checkout_scaffold.py`
-- `python scripts/verify\product_pattern_contract_report.py`
-- `python scripts/verify\product_page_architecture_contract.py`
-- `python scripts/verify\product_page_runtime_contract.py`
-- `python scripts/verify\cart_checkout_contract.py`
-- `python scripts/verify\product_variant_price_contract.py`
-- `node scripts/verify\post_import_checkout_proof.js` with all-53 manifest/snapshot batch proof
-- `python scripts/verify\ecommerce_pause_contract.py`
+- `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
+- `python scripts/verify/v1_legacy_source_erpnext_import_manifest.py`
+- `python scripts/verify/catalog_purge_scope_dry_run.py`
+- `python scripts/verify/product_source_repair_map.py`
+- `python scripts/verify/complex_checkout_scaffold.py`
+- `python scripts/verify/product_pattern_contract_report.py`
+- `python scripts/verify/product_page_architecture_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/product_variant_price_contract.py`
+- `node scripts/verify/post_import_checkout_proof.js` with all-53 manifest/snapshot batch proof
+- `python scripts/verify/ecommerce_pause_contract.py`
 
 Remaining local product-data caveats: product-page gallery media is no longer
 held under the old blanket extra-image rule; it is approved through Product
@@ -483,20 +483,20 @@ Result: complete on `main` at `e4186c1`; no backend edits were needed.
 
 Green gates:
 
-- `python scripts/verify\product_pattern_contract.py`
-- `python scripts/verify\product_pattern_contract_report.py`
-- `python scripts/verify\cart_checkout_contract.py`
-- `python scripts/verify\product_page_runtime_contract.py`
-- `python scripts/verify\checkout_product_family_contract.py`
-- `python scripts/verify\product_add_on_dependency_contract.py`
-- `python scripts/verify\checkout_fulfillment_contract.py`
-- `python scripts/verify\checkout_lead_conversion_contract.py`
-- `python scripts/verify\product_quote_customization_contract.py`
-- `python scripts/verify\product_quote_acceptance_contract.py`
-- `python scripts/verify\product_quote_operator_review_contract.py`
-- `python scripts/verify\product_quote_customer_delivery_contract.py`
-- `python scripts/verify\product_quote_operator_send_control_contract.py`
-- `python scripts/verify\customer_note_checkout_preservation_contract.py`
+- `python scripts/verify/product_pattern_contract.py`
+- `python scripts/verify/product_pattern_contract_report.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
+- `python scripts/verify/checkout_product_family_contract.py`
+- `python scripts/verify/product_add_on_dependency_contract.py`
+- `python scripts/verify/checkout_fulfillment_contract.py`
+- `python scripts/verify/checkout_lead_conversion_contract.py`
+- `python scripts/verify/product_quote_customization_contract.py`
+- `python scripts/verify/product_quote_acceptance_contract.py`
+- `python scripts/verify/product_quote_operator_review_contract.py`
+- `python scripts/verify/product_quote_customer_delivery_contract.py`
+- `python scripts/verify/product_quote_operator_send_control_contract.py`
+- `python scripts/verify/customer_note_checkout_preservation_contract.py`
 
 Evidence summary after the 2026-05-17 reimport: 53 published/priced Website
 Items are checkout-ready at the product-page architecture layer. ProductPatternContract,
@@ -512,7 +512,7 @@ Result: complete. Commit pushed: `9a27b49 treat needs review lane as fail closed
 
 Guarded data repair:
 
-- `python scripts/verify\website_item_classification_contract.py --apply`
+- `python scripts/verify/website_item_classification_contract.py --apply`
 - Changed exactly 5 Website Item classification fields to `needs_review|needs_review`.
 
 Current local ERPNext counts after the 2026-06-21 requested product retirement:
@@ -569,9 +569,9 @@ Green gates:
 - `python scripts/dev/clear_website_cache.py`
 - focused container contract
 - focused interactive-layout checks
-- `python scripts/verify\nav_ia.py`
+- `python scripts/verify/nav_ia.py`
 - `npm run test:search-contract`
-- `python scripts/verify\smoke_shop.py`
+- `python scripts/verify/smoke_shop.py`
 
 Remaining broad layout-fit noise is transient ERPNext HTTP 417/502 during long sweeps; exact reruns passed and it is not a product behavior or runner primitive blocker.
 
@@ -605,9 +605,9 @@ Files added:
 
 Green gates:
 
-- `python -m py_compile apps/locally_twisted\locally_twisted\catalog_contract\complex_checkout_scaffold.py scripts/verify\complex_checkout_scaffold.py scripts/verify\complex_checkout_scaffold_contract.py`
-- `python scripts/verify\complex_checkout_scaffold_contract.py`
-- `python scripts/verify\complex_checkout_scaffold.py`
+- `python -m py_compile apps/locally_twisted/locally_twisted/catalog_contract\complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold_contract.py`
+- `python scripts/verify/complex_checkout_scaffold_contract.py`
+- `python scripts/verify/complex_checkout_scaffold.py`
 
 Evidence summary after the 2026-06-21 retirement update: 47 published products
 remain in the active customer-facing set, 4 requested products are hidden as

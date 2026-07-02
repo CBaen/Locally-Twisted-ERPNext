@@ -116,14 +116,14 @@ Source changes:
 - `seo_contract.spec.js` verifies the current ecommerce indexing gate and the
   pause doorway noindex state.
 
-Local result after cache clear and web-process restart: `npm.cmd run
+Local result after cache clear and web-process restart: `npm run
 test:seo-contract` passed 13/13 against `http://localhost:8081`.
 
 Feature handoff: `workstreams/selective-indexing-gate-2026-05-21.md`.
 
 ## Verification
 
-```powershell
+```bash
 npm run test:seo-contract
 ```
 
@@ -132,7 +132,7 @@ Latest focused route-removal result: 2/2 passed on 2026-05-11 with
 
 Live reindex gate after Frappe Cloud release:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```

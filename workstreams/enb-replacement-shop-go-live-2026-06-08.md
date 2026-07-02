@@ -38,7 +38,7 @@ Out of scope until explicitly approved:
 
 Stage: `access/reset closeout complete` as of 2026-06-13; marketing/ad/provider lanes remain approval-gated.
 
-Repo: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`
+Repo: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
 
 Branch: `main`
 
@@ -201,7 +201,7 @@ Proof needed:
 
 ## Local Proof Commands
 
-```powershell
+```bash
 python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke
 npm run test:marketing-review-access
 python scripts/verify/ecommerce_pause_contract.py

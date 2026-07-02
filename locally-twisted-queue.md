@@ -176,7 +176,7 @@ archived to GitHub. GitHub auth was repaired with `gh auth login` plus
 login values from `AGENTS.md`. Follow-up on 2026-07-02 made
 `lt-kubuntu-doctor` a `--static-only` source/tool preflight and added
 `lt-kubuntu-runtime-doctor` for full local runtime proof after the on-demand
-stack is intentionally started. Active Windows-era path guidance in `AGENTS.md`
+stack is intentionally started. Active retired-host path guidance in `AGENTS.md`
 was replaced with Kubuntu paths. Decision:
 `decisions/2026-07-02-kubuntu-active-guidance-static-doctor.md`. This lane is source/runtime preflight only: no
 staging/live/provider/DNS/payment/customer-data action. Remaining aftercare:

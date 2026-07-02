@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
 Run:
 
-```powershell
+```bash
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 ```
 
@@ -120,7 +120,7 @@ Expected result: at least one `FAIL - checkbox ... is not checked` because the f
 
 Run:
 
-```powershell
+```bash
 git add scripts/verify/contact_prefill.py
 git commit -m "test: add contact service prefill verifier"
 ```
@@ -224,7 +224,7 @@ with:
 
 Run:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 ```
@@ -235,7 +235,7 @@ Expected result: `[PREFILL] PASS`.
 
 Run:
 
-```powershell
+```bash
 git add apps/locally_twisted/locally_twisted/www/contact.py apps/locally_twisted/locally_twisted/www/contact.html apps/locally_twisted/locally_twisted/templates/includes/book_form.html
 git commit -m "feat: prefill contact form from service links"
 ```
@@ -472,7 +472,7 @@ Append this CSS inside `PAGE_CSS`:
 
 Run:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 $html = (Invoke-WebRequest -Uri 'http://localhost:8081/balloon-twisting-and-face-painting' -UseBasicParsing).Content
 $html.Contains('id="lt-btfp-form"')
@@ -490,7 +490,7 @@ True
 
 Run:
 
-```powershell
+```bash
 git add apps/locally_twisted/locally_twisted/www/balloon_twisting_and_face_painting.html apps/locally_twisted/locally_twisted/www/balloon_twisting_and_face_painting.py
 git commit -m "feat: refresh btfp page as contact-led service page"
 ```
@@ -563,7 +563,7 @@ form_paths = args.form_path or ["/contact"]
 
 Run:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 $response = Invoke-WebRequest -Uri 'http://localhost:8081/book' -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue
 $response.StatusCode
@@ -576,7 +576,7 @@ Expected result: a redirect status such as `301` or `302`, with `Location` conta
 
 Run:
 
-```powershell
+```bash
 git add apps/locally_twisted/locally_twisted/hooks.py apps/locally_twisted/locally_twisted/www/book.py scripts/verify/smoke_forms.py
 git commit -m "feat: route book traffic to guided contact"
 ```
@@ -590,7 +590,7 @@ git commit -m "feat: route book traffic to guided contact"
 
 Run:
 
-```powershell
+```bash
 $routes = @('/contact','/contact?service=btfp','/contact?service=twisting','/contact?service=face-painting','/balloon-twisting-and-face-painting')
 foreach ($r in $routes) {
   $res = Invoke-WebRequest -Uri "http://localhost:8081$r" -UseBasicParsing
@@ -604,7 +604,7 @@ Expected result: every listed route prints `200`.
 
 Run:
 
-```powershell
+```bash
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 ```
 
@@ -614,7 +614,7 @@ Expected result: `[PREFILL] PASS`.
 
 Run:
 
-```powershell
+```bash
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
 ```
 
@@ -624,7 +624,7 @@ Expected result: form smoke passes. If `LT_ADMIN_PASSWORD` is not set, backend v
 
 Run:
 
-```powershell
+```bash
 python scripts/verify/playwright_route_screenshot.py --base-url http://localhost:8081 --paths "/balloon-twisting-and-face-painting,/contact?service=btfp" --out-dir scripts/verify/_screenshots/btfp-contact-consolidation
 ```
 
@@ -645,7 +645,7 @@ Open the generated screenshots and verify:
 
 Only if a project status or handoff doc is intentionally updated, run:
 
-```powershell
+```bash
 git add CODING-HANDOFF.md locally-twisted-decisions.md PROJECT-STATUS.md
 git commit -m "docs: record btfp contact consolidation"
 ```

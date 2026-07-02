@@ -35,7 +35,7 @@ Verification artifacts:
 - Staging/live comparison: `.tmp/release-snapshots/staging-vs-live-after-domain-bind-full-watch.json` (`ok: true`; only expected URL changes).
 - Full live launch verifier log: `output/live-website-launch-verify-cdp.log`.
 - Cloudflare readiness: `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` passed with 0 blockers and 0 warnings.
-- Full live verifier: `python scripts/verify/website_launch_verify.py --base-url https://locallytwisted.com --with-a11y --with-contact-smoke` reported `PASS: 16 steps completed`; the PowerShell wrapper returned nonzero because post-pass Node deprecation warnings were emitted to stderr.
+- Full live verifier: `python scripts/verify/website_launch_verify.py --base-url https://locallytwisted.com --with-a11y --with-contact-smoke` reported `PASS: 16 steps completed`; the Bash wrapper returned nonzero because post-pass Node deprecation warnings were emitted to stderr.
 
 ## Current Verified Facts
 
@@ -47,7 +47,7 @@ Verification artifacts:
 - App metadata exists at `apps/locally_twisted/pyproject.toml`.
 - App advertises Frappe v15 support with `frappe = ">=15.0.0,<16.0.0"`.
 - App has no declared APT packages today: `[deploy.dependencies.apt] packages = []`.
-- Frappe Cloud SSH key to add in the dashboard: `C:\Users\baenb\.ssh\id_ed25519.pub`.
+- Frappe Cloud SSH key to add in the dashboard: `/home/guidingl/.ssh/id_ed25519.pub`.
 - Frappe Cloud SSH key fingerprint: `SHA256:7xYKNfuUifwOSCXCVeZcb7YNk4/djsiwg49abG9j9uU`.
 - Public domain is already delegated to Cloudflare:
   - `edward.ns.cloudflare.com`
@@ -103,7 +103,7 @@ Do not restore a local dev backup without a scrub pass. Local data may contain f
 
 Run this before any Frappe Cloud account work:
 
-```powershell
+```bash
 python scripts/verify/frappe_cloud_preflight.py
 ```
 
@@ -127,7 +127,7 @@ Resolved prep warnings:
 Use the dashboard until there is a reason to automate.
 
 1. Log into Frappe Cloud.
-2. Add `C:\Users\baenb\.ssh\id_ed25519.pub` under Frappe Cloud account settings.
+2. Add `/home/guidingl/.ssh/id_ed25519.pub` under Frappe Cloud account settings.
 3. Create a private bench on Frappe/ERPNext v15 in the chosen region.
 4. Add required apps to the private bench:
    - ERPNext
@@ -186,7 +186,7 @@ Do this only after the Frappe Cloud staging URL passes verification.
 
 Run against the staging Frappe Cloud URL before domain cutover:
 
-```powershell
+```bash
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/nav_ia.py
 npm run test:layout-fit

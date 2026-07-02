@@ -12,7 +12,7 @@
 
 Phase 1 is sliced into ~14 deliverables. Each slice ends in something visible GL can react to. Slices completed in earlier sessions are marked DONE; remaining slices are listed in priority order.
 
-Build pattern for every new portal page: the meal at `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` is the binding shape. Read approved content first, write controller, write template extending `templates/web.html`, append BEM CSS, smoke-test the form (if any), Playwright at mobile + desktop, hand to GL with hard-refresh instruction.
+Build pattern for every new portal page: the meal at `Built_by_Cameron/capabilities/meals/build-frappe-portal-page.md` is the binding shape. Read approved content first, write controller, write template extending `templates/web.html`, append BEM CSS, smoke-test the form (if any), Playwright at mobile + desktop, hand to GL with hard-refresh instruction.
 
 | # | Slice | State | Surface | Notes |
 |---|---|---|---|---|

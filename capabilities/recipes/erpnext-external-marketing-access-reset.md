@@ -94,7 +94,7 @@ scripts/verify/external_marketing_builder_access_contract.py
 
 ## Safe Command Order
 
-```powershell
+```bash
 npm run test:external-marketing-builder-access
 npm run test:password-reset-template
 npm run test:marketing-access-reset
@@ -103,13 +103,13 @@ npm run preview:marketing-access-reset
 
 Only after explicit approval for the exact recipient/send:
 
-```powershell
+```bash
 npm run send:marketing-access-reset
 ```
 
 For role/user sync when approved:
 
-```powershell
+```bash
 npm run sync:marketing-vendor-builder-access
 npm run sync:marketing-vendor-review-access
 ```

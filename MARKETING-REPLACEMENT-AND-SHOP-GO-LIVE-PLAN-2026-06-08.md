@@ -249,25 +249,25 @@ Use these current repo surfaces before changing behavior:
 
 Local website and inquiry readiness:
 
-```powershell
+```bash
 python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke
 ```
 
 Marketing access boundary:
 
-```powershell
+```bash
 npm run test:marketing-review-access
 ```
 
 Paused ecommerce safety:
 
-```powershell
+```bash
 python scripts/verify/ecommerce_pause_contract.py
 ```
 
 Open ecommerce local proof when intentionally reopened locally:
 
-```powershell
+```bash
 npm run test:ecommerce-full
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
@@ -275,7 +275,7 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 
 Payment local readiness:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
@@ -286,7 +286,7 @@ python scripts/verify/stripe_amount_parity_contract.py
 
 Live readiness, only after target approval:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py --mode live --base-url <staging-url>
 python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com

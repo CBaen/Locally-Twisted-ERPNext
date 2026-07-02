@@ -52,7 +52,7 @@ Use this when a client repo starts handling QuickBooks migration, invoicing, pay
 
 ## LT verification commands
 
-```powershell
+```bash
 python scripts/verify/finance_inventory.py
 python scripts/verify/finance_inventory_contract.py
 python scripts/setup/sync_finance_workspace.py
@@ -61,7 +61,7 @@ python scripts/verify/finance_workspace_parity.py
 
 When changing checkout, payment, or CRM finance boundaries, also run:
 
-```powershell
+```bash
 python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py

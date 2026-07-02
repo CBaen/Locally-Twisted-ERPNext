@@ -59,7 +59,7 @@ Capability router:
 
 Passed on 2026-05-10:
 
-```powershell
+```bash
 node --check apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js
 node --check apps/locally_twisted/locally_twisted/public/js/lt-site-preferences.js
 python -m py_compile apps/locally_twisted/locally_twisted/hooks.py
@@ -83,7 +83,7 @@ Follow-up pass on 2026-05-10 removed the over-explaining submit chrome and
 quieted the modal. It also fixed the false photo-warning path where an empty
 browser upload slot counted as a failed photo. Verification:
 
-```powershell
+```bash
 node --check apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js
 python -m py_compile apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py
 python scripts/dev/clear_website_cache.py --restart
@@ -99,7 +99,7 @@ scopes existing `Email Queue` and `Communication` rows to the current Lead
 creation time, and the UI copy promises a confirmation email plus 24-hour
 contact window. Verification:
 
-```powershell
+```bash
 node --check apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js
 node --check scripts/verify/form_experience.spec.js
 python -m py_compile apps/locally_twisted/locally_twisted/lead_cascade.py apps/locally_twisted/locally_twisted/www/book.py
@@ -113,7 +113,7 @@ Live cutover closeout later on 2026-05-12 fixed the repeat same-email `409`,
 added owner/business notification proof, and required actual customer/owner
 Email Queue body/recipient verification. Live proof:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222

@@ -70,7 +70,7 @@ Other DA challenges:
 
 Two sources of approved Jeff content now exist:
 
-**Source A — Local legacy_source XML (`C:/Users/baenb/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`):** This was the most recent legacy_source-side update before the legacy_source project was paused. Per CLAUDE.md, this is the authoritative content for the new build. Key strings (verbatim):
+**Source A — Local legacy_source XML (`/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`):** This was the most recent legacy_source-side update before the legacy_source project was paused. Per CLAUDE.md, this is the authoritative content for the new build. Key strings (verbatim):
 - Utility strip: "Bringing celebration to the Wasatch Front since 1998"
 - Hero (3 slides): "Utah's Balloon Specialists" / "Custom Balloon Designs" / "Events & Special Occasions"
 - CTA section: "Make Your Celebration Unforgettable" / "From birthdays to weddings, baby showers to corporate events — we've been part of Utah celebrations since 1998. Yours is next."

@@ -65,7 +65,7 @@ GL clarifications during pre-flight (2026-05-10):
 
 ## Destructive Boundaries
 
-- Do NOT modify any file in `C:\Users\baenb\projects\locally-twisted-legacy_source\` (read-only reference per standing rule 2026-04-25).
+- Do NOT modify any file in `/home/guidingl/projects/locally-twisted-legacy_source/` (read-only reference per standing rule 2026-04-25).
 - Do NOT modify the live `locallytwisted.com` site.
 - Do NOT propose abandoning ERPNext as backend.
 - Do NOT propose a re-import of the catalog into a third-party platform without explicit cost accounting (10,672 Items + 10,617 variants + 10,654 Item Prices is real work).
@@ -122,10 +122,10 @@ Use `context7` MCP if available; verify against current versioned docs.
 ### Researcher 3 — Ground Truth (local codebase + git history ONLY)
 
 **legacy_source benchmark (read-only):**
-Open `C:\Users\baenb\projects\locally-twisted-legacy_source\` and quantify what legacy_source's `website_sale` module actually provides for: per-variant photos (multi-image mechanism), conditional attribute display (the JS that reveals/hides options), color-swatch rendering, color combinations (multi-attribute variants), cart customization, checkout flow. Read the controllers and the variant + product templates. This is GL's implicit benchmark.
+Open `/home/guidingl/projects/locally-twisted-legacy_source/` and quantify what legacy_source's `website_sale` module actually provides for: per-variant photos (multi-image mechanism), conditional attribute display (the JS that reveals/hides options), color-swatch rendering, color combinations (multi-attribute variants), cart customization, checkout flow. Read the controllers and the variant + product templates. This is GL's implicit benchmark.
 
 **Local LT install:**
-Open `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\`:
+Open `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/`:
 - `apps/locally_twisted/locally_twisted/` — LT app source (templates, JS, hooks.py, the two product page templates)
 - The bind-mounted Webshop install (find via docker volumes / image)
 - `workstreams/erpnext-ecommerce-receiving-architecture.md` — existing architecture intent

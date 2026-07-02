@@ -59,7 +59,7 @@ Covered issues:
 
 Fresh staging command during this documentation pass:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 ```
@@ -121,12 +121,12 @@ still confirm inbox receipt if that experience matters for owner review.
 
 Before live approval:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
-python scripts\verify\payment_backend_config_contract.py
-python scripts\verify\payment_webhook_contract.py
-python scripts\verify\stripe_amount_parity_contract.py
+python scripts/verify/payment_backend_config_contract.py
+python scripts/verify/payment_webhook_contract.py
+python scripts/verify/stripe_amount_parity_contract.py
 ```
 
 Then repeat an authorized Stripe test-mode checkout after any further staging

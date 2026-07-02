@@ -12,7 +12,7 @@ This lane is deliberately separate from live cutover. Live Stripe keys, webhook 
 
 Latest command:
 
-```powershell
+```bash
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 ```
 

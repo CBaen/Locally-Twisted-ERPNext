@@ -66,7 +66,7 @@ to exist after cleanup.
 
 Unassigned next agent/session.
 
-Current branch/worktree: main workspace at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`.
+Current branch/worktree: main workspace at `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`.
 
 ## User-Facing Impact
 
@@ -556,7 +556,7 @@ The next agent should do this in small verified slices:
 
 Minimum checks after backend simplification edits:
 
-```powershell
+```bash
 python scripts/setup/sync_contact_intake_backend.py
 python scripts/setup/sync_crm_pipeline.py
 python scripts/setup/sync_stage_cascade.py
@@ -573,7 +573,7 @@ python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 
 For contact submission and backend records:
 
-```powershell
+```bash
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
 ```
 
@@ -581,13 +581,13 @@ If backend record verification is needed, set `LT_ADMIN_PASSWORD` first. Previou
 
 When Python modules change:
 
-```powershell
-python -m compileall apps\locally_twisted\locally_twisted scripts\verify scripts\setup
+```bash
+python -m compileall apps/locally_twisted/locally_twisted scripts/verify scripts/setup
 ```
 
 After Jinja/CSS/Web Page changes:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 ```
 
@@ -624,7 +624,7 @@ Continue with explicit stage-threshold design before adding any manual stage-to-
 
 Recommended first command set:
 
-```powershell
+```bash
 git status --short
 python scripts/verify/backend_schema_inventory.py
 python scripts/verify/checkout_lead_conversion_contract.py

@@ -7,7 +7,7 @@ downgraded, marked verified/staple, or cleared from watch/probation in this
 pass.
 
 Source package handoff:
-`C:\Users\baenb\projects\capabilities-framework\workstreams\capability-graduation-ladder-2026-05-21.md`
+`/home/guidingl/projects/capabilities-framework/workstreams/capability-graduation-ladder-2026-05-21.md`
 
 ## What Changed
 
@@ -52,10 +52,10 @@ approved packets.
 
 Read-only first:
 
-```powershell
-python C:\Users\baenb\projects\capabilities-framework\tools\capability_graduation_audit.py --root C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\capabilities --json
-python C:\Users\baenb\projects\capabilities-framework\tools\validate_capability_graph.py --root C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\capabilities --json
-python C:\Users\baenb\projects\capabilities-framework\tools\capability_registry.py --root C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\capabilities --json
+```bash
+python /home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py --root /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/capabilities --json
+python /home/guidingl/projects/capabilities-framework/tools/validate_capability_graph.py --root /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/capabilities --json
+python /home/guidingl/projects/capabilities-framework/tools/capability_registry.py --root /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/capabilities --json
 ```
 
 ## Latest Validation Snapshot
@@ -76,8 +76,8 @@ Checked 2026-05-21:
 After LT explicitly marks any cards with `graduation_required: true`, blocking
 mode can be used:
 
-```powershell
-python C:\Users\baenb\projects\capabilities-framework\tools\capability_graduation_audit.py --root C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\capabilities --json --fail-on-required
+```bash
+python /home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py --root /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/capabilities --json --fail-on-required
 ```
 
 ## Boundaries

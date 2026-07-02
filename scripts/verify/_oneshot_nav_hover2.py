@@ -1,5 +1,9 @@
 """Confirm hover state has no border/underline after the lt-theme.css update."""
 from playwright.sync_api import sync_playwright
+from pathlib import Path
+
+OUT = Path("output/playwright/lt-nav-hover-after.png")
+OUT.parent.mkdir(parents=True, exist_ok=True)
 
 with sync_playwright() as p:
     b = p.chromium.launch(headless=True)
@@ -27,8 +31,8 @@ with sync_playwright() as p:
     for k, v in post.items():
         print(f"  {k}: {v}")
 
-    page.screenshot(path="C:/Users/baenb/.claude/lt-nav-hover-after.png",
+    page.screenshot(path=str(OUT),
                   clip={"x": 0, "y": 100, "width": 1366, "height": 150})
-    print("\nSaved hover screenshot: C:/Users/baenb/.claude/lt-nav-hover-after.png")
+    print(f"\nSaved hover screenshot: {OUT}")
 
     b.close()

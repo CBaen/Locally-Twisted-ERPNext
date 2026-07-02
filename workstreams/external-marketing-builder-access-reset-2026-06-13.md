@@ -61,7 +61,7 @@ scripts/verify/external_marketing_builder_access_contract.py
 
 Useful local commands:
 
-```powershell
+```bash
 npm run test:external-marketing-builder-access
 npm run sync:marketing-vendor-builder-access
 ```
@@ -88,7 +88,7 @@ scripts/setup/sync_password_reset_template.py
 
 NPM wrappers:
 
-```powershell
+```bash
 npm run test:marketing-access-reset
 npm run preview:marketing-access-reset
 npm run send:marketing-access-reset

@@ -22,8 +22,8 @@ The correct target is not “copy legacy_source” and not “native Webshop pro
 
 Latest parent verifier rerun:
 
-```powershell
-python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json
+```bash
+python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json
 ```
 
 Result:

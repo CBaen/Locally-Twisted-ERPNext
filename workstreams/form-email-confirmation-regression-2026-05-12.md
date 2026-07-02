@@ -136,10 +136,10 @@ ToDos, Events, or Comments.
 
 Local proof passed on 2026-05-12:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\book.py
-node --check apps\locally_twisted\locally_twisted\public\js\lt-inquiry-form-experience.js
-node --check scripts\verify\form_experience.spec.js
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/lead_cascade.py apps/locally_twisted/locally_twisted/www/book.py
+node --check apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js
+node --check scripts/verify/form_experience.spec.js
 python scripts/dev/clear_website_cache.py
 npm run test:form-experience
 python scripts/verify/customer_email_policy_contract.py
@@ -153,12 +153,12 @@ backend and cache-busted JS.
 
 Live proof passed after the final Frappe Cloud deploy and site update:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
-python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
-python scripts\verify\smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
-python scripts\verify\smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
 ```
 
 Strict live verifier output included:

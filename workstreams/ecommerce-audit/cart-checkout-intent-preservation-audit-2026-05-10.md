@@ -2,7 +2,7 @@
 
 Date: 2026-05-10  
 Rollback anchor: `lt-ecommerce-audit-pre-dispatch-20260510-0841` (`264c6553acd5708ecdb498cb6fa6a5c594260abc`)  
-Repo: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`
+Repo: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
 
 ## Status block
 
@@ -203,11 +203,11 @@ Passed negative tests:
 
 ## Commands run
 
-```powershell
+```bash
 git status --short --branch
 git rev-parse HEAD
 git tag --points-at HEAD
-docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+docker ps --format "table {{.Names}}/t{{.Image}}/t{{.Status}}/t{{.Ports}}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend version
 python scripts/verify/cart_checkout_contract.py
 python scripts/verify/product_page_runtime_contract.py

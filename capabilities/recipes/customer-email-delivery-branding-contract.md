@@ -131,7 +131,7 @@ privacy copy.
 Run the static policy guard and rollback-safe Email Queue contracts after any
 email theme, copy routing, subject, or sendmail change:
 
-```powershell
+```bash
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
@@ -152,7 +152,7 @@ family.
 When generating review previews under `output/email-previews/`, run a browser
 image check that fails on unresolved images:
 
-```powershell
+```bash
 # This should print no matches; any cid: match means the standalone preview is
 # not self-contained. Then use Playwright to fail any image whose
 # naturalWidth/naturalHeight is 0.
@@ -161,7 +161,7 @@ rg -n "cid:" output/email-previews output/email-print-fit
 
 When payment/operator paths are touched, also run:
 
-```powershell
+```bash
 python scripts/verify/client_event_automation_matrix.py
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 ```
@@ -169,7 +169,7 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
 For live public form release proof, use authenticated backend checks and verify
 actual Email Queue content:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222

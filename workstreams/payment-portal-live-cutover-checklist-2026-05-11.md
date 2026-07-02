@@ -14,7 +14,7 @@ Technical implementation, verifier, and non-production repo-edit decisions route
 
 Known passing local commands from the ecommerce proof pass:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
@@ -53,7 +53,7 @@ Required non-secret expectations:
 
 Run on staging first:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py --mode live --base-url <staging-url>
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
@@ -62,7 +62,7 @@ python scripts/verify/stripe_amount_parity_contract.py
 
 Then after production host cutover, run:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
 ```

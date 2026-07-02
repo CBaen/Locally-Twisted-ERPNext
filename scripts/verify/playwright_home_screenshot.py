@@ -7,8 +7,8 @@ browser. Playwright's chromium gives us proper networkidle-wait, full-page
 captures, and rendering closer to real-browser behavior.
 
 Outputs:
-  C:/Users/baenb/.claude/lt-playwright-desktop.png  (1366x900 viewport, full page)
-  C:/Users/baenb/.claude/lt-playwright-mobile.png   (375x812 viewport, full page)
+  output/playwright/lt-playwright-desktop.png  (1366x900 viewport, full page)
+  output/playwright/lt-playwright-mobile.png   (375x812 viewport, full page)
 
 Run:
   PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/playwright_home_screenshot.py
@@ -21,7 +21,7 @@ from _cli import parse_noop_args
 from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
 URL = "http://localhost:8081/"
-OUT_DIR = Path("C:/Users/baenb/.claude")
+OUT_DIR = Path("output/playwright")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 

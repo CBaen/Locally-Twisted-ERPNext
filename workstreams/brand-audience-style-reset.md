@@ -112,8 +112,8 @@ This should be written as company capability, not founder personality.
 
 Local source inventory checked 2026-05-02:
 
-- Previous-client source: `C:\Users\baenb\projects\locally-twisted-legacy_source\assets\previous clients.txt`
-- legacy_source-era image source: `C:\Users\baenb\projects\locally-twisted-legacy_source\assets\image assets\`
+- Previous-client source: `/home/guidingl/projects/locally-twisted-legacy_source/assets/previous clients.txt`
+- legacy_source-era image source: `/home/guidingl/projects/locally-twisted-legacy_source/assets/image assets/`
 - Current site image source: `_resources/images/`
 - Current homepage proof source: `apps/locally_twisted/locally_twisted/www/home.py`
 - Shared Drive source: `https://drive.google.com/drive/folders/191Fnz-Eanwpi4rbTFyy08P6ZF8X5NqNz?usp=sharing`

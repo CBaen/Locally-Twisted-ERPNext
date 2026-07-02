@@ -114,7 +114,7 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 
 Run after homepage/Jinja/CSS/JS changes:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npm run test:interactive-layout -- --grep "homepage review marquee|homepage client crawl banner|homepage reduced motion keeps"
 npm run test:interactive-layout -- --grep "mobile review proof"
@@ -126,14 +126,14 @@ npm run test:interactive-layout -- --grep "compact hero height contract"
 After hiding or restoring Custom Event Decor, also verify that the intended
 visibility state is true in the live DOM and rerun the homepage layout gate:
 
-```powershell
-npx.cmd playwright test scripts/verify/layout_fit.spec.js --grep "home fits" --reporter=line --workers=1
+```bash
+npx playwright test scripts/verify/layout_fit.spec.js --grep "home fits" --reporter=line --workers=1
 ```
 
 If `home.py` route-controller constants such as `PAGE_CSS` changed, restart the
 Frappe backend container before final browser inspection:
 
-```powershell
+```bash
 docker restart locally-twisted-erpnext-v15-backend-1
 python scripts/dev/clear_website_cache.py
 ```

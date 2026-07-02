@@ -1,6 +1,6 @@
 # Framework Traps — Known Adversarial Defaults
 
-**Purpose:** A portable catalog of known adversarial-default behaviors in this client's framework. The portable analog of `~/.claude/HOW-TO-WIN-AT-{stack}/auto-behaviors.md`. This file ports cleanly with the repo. Future contractors and clients themselves can read it.
+**Purpose:** A portable catalog of known adversarial-default behaviors in this client's framework. This file ports cleanly with the repo. Future contractors and clients themselves can read it.
 
 **Update rule:** When you encounter a framework behavior that bites you in a way the framework's documentation doesn't warn about, add an entry. Each entry needs: behavior, mechanism, defense, verification.
 

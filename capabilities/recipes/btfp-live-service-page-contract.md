@@ -77,7 +77,7 @@ copy that describes Balloon Twisting and Face Painting pricing.
 
 Focused route contract:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
@@ -85,7 +85,7 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url http://localho
 
 Public layout and accessibility:
 
-```powershell
+```bash
 npm run test:a11y
 npm run test:a11y-manual
 npm run test:layout-fit

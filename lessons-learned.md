@@ -2644,7 +2644,7 @@ GL ran a 7-designer LT design competition on 2026-04-26 in a separate project di
 
 ### Reporting without watching, escalated: trying to canonize unverified work is "scary"
 
-I declared the structural CSS fix done off DOM probes (no overflow, hamburger at 304 R-edge on 320 viewport, etc.) and started writing it up as the agency-wide pattern in `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` and `HOW-TO-WIN-AT-FRAPPE/auto-behaviors.md`. GL stopped this with: *"do not put that on the agency tier, because you did not prove anything. In fact, you essentially showed what you were doing wrong and trying to codify it, and that is scary."*
+I declared the structural CSS fix done off DOM probes (no overflow, hamburger at 304 R-edge on 320 viewport, etc.) and started writing it up as the agency-wide pattern in `Built_by_Cameron/capabilities/recipes/frappe-conventions.md` and `HOW-TO-WIN-AT-FRAPPE/auto-behaviors.md`. GL stopped this with: *"do not put that on the agency tier, because you did not prove anything. In fact, you essentially showed what you were doing wrong and trying to codify it, and that is scary."*
 
 The agency tier exists to hold STABLE, PROVEN, MULTI-VALIDATED patterns that future BBC clients inherit. Putting fresh single-instance work there spreads bugs forward into every future client — they read the bad pattern as truth. Reporting without watching is a single-session trust withdrawal; canonifying without watching is a cross-client trust withdrawal.
 
@@ -3131,7 +3131,7 @@ The git status at session start showed 6 ` D ` (working-tree-deleted, unstaged) 
 
 ## 2026-04-26 (codification + chrome + accessibility + contact + BTFP session) — Five gotchas worth carrying forward
 
-This session shipped four real surfaces (chrome, accessibility, contact, BTFP) and one meal. Five gotchas hit during the work, each with a verified receipt. All five are now codified in `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` "Known gotchas" section so the next instance doesn't rediscover.
+This session shipped four real surfaces (chrome, accessibility, contact, BTFP) and one meal. Five gotchas hit during the work, each with a verified receipt. All five are now codified in `Built_by_Cameron/capabilities/meals/build-frappe-portal-page.md` "Known gotchas" section so the next instance doesn't rediscover.
 
 ### Frappe `www/` does NOT auto-translate underscored filenames to dashed URLs
 
@@ -3163,7 +3163,7 @@ Each of these is now in the meal's "Known gotchas" section with a receipt. The n
 
 External research (Magic Research / `frappe-erpnext-non-gpl-hooks-comparison.md`) recommended preferring `extend_doctype_class` over `override_doctype_class` for "lower-conflict" coupling. Verified against running Frappe v15 source: `grep -rn 'extend_doctype_class' apps/frappe/` returns NO consumer in Frappe core. The Payments app declares `extend_doctype_class = {"Web Form": "..."}` in its `hooks.py`, but Frappe never reads that hook key — Payments' actual Web Form behavior change comes through `override_whitelisted_methods` instead.
 
-**Generalizable lesson:** verify external research against the running source before codifying. If GL hadn't asked for it to be codified at agency tier, this wrong claim could have led the next instance to declare a hook that does nothing. The verify-against-source rule worked — it caught a 95%-correct external research piece's one wrong claim. Codified at `Built_by_Cameron/.claude/capabilities/recipes/license-isolated-app-architecture.md` "Corrections from source" section.
+**Generalizable lesson:** verify external research against the running source before codifying. If GL hadn't asked for it to be codified at agency tier, this wrong claim could have led the next instance to declare a hook that does nothing. The verify-against-source rule worked — it caught a 95%-correct external research piece's one wrong claim. Codified at `Built_by_Cameron/capabilities/recipes/license-isolated-app-architecture.md` "Corrections from source" section.
 
 ---
 
@@ -3240,7 +3240,7 @@ I went and read the Web Page DocType schema (`apps/frappe/frappe/website/doctype
 
 3. **The general rule:** before reaching for a custom Web Template, custom hook, custom controller, or template override — **read the DocType's `.json` schema in the running container.** Frappe DocTypes have many more fields than the desk UI immediately surfaces. Tabs are collapsed by default. Code-fieldtype fields are easy to miss. The schema is authoritative; the form layout is just one view of it.
 
-**Generalizable lesson promoted to agency-tier:** added a "Standing principle: System-native first" section at the top of `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — every BBC client benefits.
+**Generalizable lesson promoted to agency-tier:** added a "Standing principle: System-native first" section at the top of `Built_by_Cameron/capabilities/recipes/frappe-conventions.md` — every BBC client benefits.
 
 ---
 
@@ -3476,7 +3476,7 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 
 **Root cause:** Unknown — possibly prior-platform shell interaction with first-commit-on-empty-repo state. The plumbing (ls-files, commit, ls-tree) was correct; only the porcelain (status) lied.
 
-**What to do:** Trust `git ls-files --stage` and `git ls-tree -r HEAD --name-only` over `git status` when verifying first-commit state on Windows. The actual commit succeeds; status display is unreliable.
+**What to do:** Trust `git ls-files --stage` and `git ls-tree -r HEAD --name-only` over `git status` when verifying first-commit state after a host transition. The actual commit succeeds; status display is unreliable.
 
 ---
 
@@ -3493,14 +3493,6 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 **What happened:** First `docker compose up` for a Frappe stack took several minutes (image pull, layer extraction). The second compose project for LT used the same `frappe/erpnext:v15.105.0` image and came up in 18 seconds — Docker recognized the layers and just retagged.
 
 **What to do:** When spinning up multiple ERPNext sites locally, reuse the same image tag across compose projects. Each site gets its own volumes (named differently per project) but shares the image. This is fast and disk-efficient.
-
----
-
-## 2026-04-25 — retired prior-platform VM default RAM allocation is below ERPNext's working set; bump `.wslconfig` to 8 GB before installing
-
-**What happened:** Initial retired prior-platform VM had 1.5 GB RAM cap (set in `.wslconfig` from a prior expedition). Frappe stack runs MariaDB + Redis + web + socketio + scheduler + 2 worker queues — 1.5 GB was below ERPNext's 4 GB minimum. Visible in `docker info` as `MemTotal: ~1.47 GB`.
-
-**What to do:** Edit `retired prior-platform VM config` `[wsl2]` section to `memory=8GB processors=4 swap=2GB` (the machine has 47.7 GB total — 8 GB is conservative). After edit, `wsl --shutdown` then run any docker command to wake the daemon with the new limits. Verify with `docker info | grep MemTotal`.
 
 ---
 
@@ -3758,8 +3750,7 @@ intent is category discovery.
 
 ## 2026-05-21 - Derived worktree IDs still need path-length reality checks
 
-**Lesson:** A stable readable project ID can still be too long for a Windows
-worktree when the repo has deep framework paths. Repo-forest safety and path
+**Lesson:** A stable readable project ID can still be too long for a deeply nested worktree when the repo has deep framework paths. Repo-forest safety and path
 length both matter.
 
 **What happened:** The first LT worktree path used the full derived ID

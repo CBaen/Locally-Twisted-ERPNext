@@ -41,8 +41,8 @@ Create the first five render prompts that GL can review as Jeff's proxy before L
 
 Run:
 
-```powershell
-Test-Path docs\superpowers\specs\2026-05-01-balloon-render-pilot-show-pack.md
+```bash
+Test-Path docs/superpowers/specs/2026-05-01-balloon-render-pilot-show-pack.md
 ```
 
 Expected: `True`.
@@ -51,7 +51,7 @@ Expected: `True`.
 
 Run:
 
-```powershell
+```bash
 git add -- docs/superpowers/specs/2026-05-01-balloon-render-pilot-show-pack.md
 git diff --cached --check
 git commit -m "Add balloon render pilot show pack"
@@ -74,8 +74,8 @@ Expected: the commit includes only the show pack doc.
 
 Run:
 
-```powershell
-New-Item -ItemType Directory -Force _resources\generated-renders\pilot
+```bash
+New-Item -ItemType Directory -Force _resources/generated-renders/pilot
 ```
 
 Expected: `_resources/generated-renders/pilot` exists.
@@ -118,7 +118,7 @@ These images are generated illustrative drafts for GL/Jeff review. They are not 
 
 Run:
 
-```powershell
+```bash
 git add -- _resources/generated-renders/pilot
 git diff --cached --check
 git commit -m "Add balloon render pilot drafts"

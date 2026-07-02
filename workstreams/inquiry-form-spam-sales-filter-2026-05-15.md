@@ -66,15 +66,15 @@ Related capabilities:
 
 Run against local ERPNext at `http://localhost:8081` on 2026-05-15:
 
-```powershell
-python scripts\verify\inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
-python scripts\verify\inquiry_spam_gate.py --base-url http://localhost:8081
+```bash
+python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
+python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081
 npm run test:form-experience
-python scripts\verify\lead_backend_intake_parity.py
-python scripts\verify\contact_service_logic.py --base-url http://localhost:8081
-python scripts\verify\smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
-python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
-python scripts\verify\customer_email_policy_contract.py
+python scripts/verify/lead_backend_intake_parity.py
+python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts/verify/customer_email_policy_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.inquiry_upload_failure_contract.run
 ```
 
@@ -102,11 +102,11 @@ exercise the sales-suppression branch or bot rejection fixtures on live.
 Use these gates after any future form-security, spam-filter, token, honeypot,
 submit, email, or file-handling change:
 
-```powershell
-python scripts\verify\inquiry_spam_gate.py --base-url https://locallytwisted.com
-python scripts\verify\inquiry_sales_solicitation_filter.py --base-url https://locallytwisted.com
-python scripts\verify\smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
-python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+```bash
+python scripts/verify/inquiry_spam_gate.py --base-url https://locallytwisted.com
+python scripts/verify/inquiry_sales_solicitation_filter.py --base-url https://locallytwisted.com
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
 ```
 
 Use `LT_BACKEND_BASE_URL` / `LT_BACKEND_CDP_URL` as needed for authenticated

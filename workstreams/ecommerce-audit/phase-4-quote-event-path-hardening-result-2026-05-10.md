@@ -144,13 +144,13 @@ Security/ops verified:
 
 ## Final parent-run gates
 
-Commands run from `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`:
+Commands run from `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`:
 
 ```text
-python -m py_compile apps\locally_twisted\locally_twisted\product_page_runtime.py apps\locally_twisted\locally_twisted\api\cart.py apps\locally_twisted\locally_twisted\verify\quote_event_checkout_boundary_contract.py scripts\verify\quote_event_checkout_boundary_contract.py
+python -m py_compile apps/locally_twisted/locally_twisted/product_page_runtime.py apps/locally_twisted/locally_twisted/api/cart.py apps/locally_twisted/locally_twisted/verify/quote_event_checkout_boundary_contract.py scripts/verify/quote_event_checkout_boundary_contract.py
 # exit 0
 
-python scripts\verify\quote_event_checkout_boundary_contract.py --report output\phase-4-quote-event-checkout-boundary-contract-20260510.json
+python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json
 [QUOTE/EVENT CHECKOUT BOUNDARY CONTRACT] PASS
   quote_first_count: 33
   needs_review_count: 5
@@ -160,13 +160,13 @@ python scripts\verify\quote_event_checkout_boundary_contract.py --report output\
   no_sellable_candidate_count: 0
   rollback: verifier rolled back and created no business records
 
-python scripts\verify\product_page_runtime_contract.py
+python scripts/verify/product_page_runtime_contract.py
 [PRODUCT PAGE RUNTIME CONTRACT] PASS
   ok: true
   proof_item: unicorn-bouquet-SMA
   rolled_back: true
 
-python scripts\verify\checkout_product_family_contract.py --report output\phase-3-checkout-product-family-contract-20260510.json
+python scripts/verify/checkout_product_family_contract.py --report output/phase-3-checkout-product-family-contract-20260510.json
 [CHECKOUT PRODUCT-FAMILY CONTRACT] PASS
   bouquet_family_count: 13
   sales_order_line_count: 27
@@ -175,18 +175,18 @@ python scripts\verify\checkout_product_family_contract.py --report output\phase-
   survivor_counts: {'customer': 0, 'sales_order': 0, 'sales_invoice': 0}
   rollback: verifier rolled back all generated records
 
-python scripts\verify\website_item_classification_contract.py --report output\phase-4-website-item-classification-contract-20260510.json
+python scripts/verify/website_item_classification_contract.py --report output/phase-4-website-item-classification-contract-20260510.json
 [WEBSITE ITEM CLASSIFICATION CONTRACT] PASS (dry_run)
   expected_total: 53
   matched_count: 53
   planned_change_count: 0
   stored_counts_for_targets: {'simple_product|checkout': 15, 'complex_custom_product|quote_first': 33, 'needs_review|needs_review': 5}
 
-python scripts\verify\checkout_fulfillment_contract.py
+python scripts/verify/checkout_fulfillment_contract.py
 [CHECKOUT FULFILLMENT CONTRACT] PASS
   rollback: verifier rolled back generated records
 
-python scripts\verify\customer_note_checkout_preservation_contract.py
+python scripts/verify/customer_note_checkout_preservation_contract.py
 [CUSTOMER NOTE CHECKOUT PRESERVATION CONTRACT] PASS
   no_fake_customer_note: true
   survivor_counts: {'customer': 0, 'contact': 0, 'contact_email': 0, 'address': 0, 'sales_order': 0, 'payment_request': 0, 'payment_entry': 0, 'sales_invoice': 0, 'communication': 0, 'email_queue': 0}

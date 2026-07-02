@@ -70,8 +70,8 @@ Important caveat: a fresh attempt to run `product_page_architecture_readiness.py
 
 Ran:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_page_runtime.py apps\locally_twisted\locally_twisted\product_quote_runtime.py apps\locally_twisted\locally_twisted\api\cart.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\verify\product_page_architecture_readiness.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_page_runtime.py apps/locally_twisted/locally_twisted/product_quote_runtime.py apps/locally_twisted/locally_twisted/api/cart.py apps/locally_twisted/locally_twisted/www/checkout.py apps/locally_twisted/locally_twisted/verify/product_page_architecture_readiness.py
 ```
 
 Result: passed with no output.

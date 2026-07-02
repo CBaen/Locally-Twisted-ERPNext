@@ -24,7 +24,7 @@ Purpose: map the working legacy_source commerce meaning that ERPNext must model.
 
 ### Local legacy_source source witness
 
-- `C:/Users/baenb/projects/locally-twisted-legacy_source/addons/locally_twisted/__manifest__.py` — module version `19.0.2.15.0`; dependencies include `website_sale`, `delivery`, `payment_stripe`, `sale_loyalty`.
+- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/__manifest__.py` — module version `19.0.2.15.0`; dependencies include `website_sale`, `delivery`, `payment_stripe`, `sale_loyalty`.
 - `addons/locally_twisted/models/product_template.py` — seeds `website_description` from `description_sale` when website description is empty.
 - `addons/locally_twisted/views/product_views.xml` — adds backend product `Images` tab using `product_template_image_ids` and `image_1920`.
 - `addons/locally_twisted/views/website_sale_templates.xml` — product detail branding, product inquiry form, multi-checkbox color dots, cart summary safety override.

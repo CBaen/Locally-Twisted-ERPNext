@@ -80,13 +80,13 @@ price, or scraped page base price as the price for every ERPNext variant.
 
 1. Stage source data for in-container commands when needed:
 
-   ```powershell
+   ```bash
    python scripts/setup/stage_seed_data.py
    ```
 
 2. Use the dynamic resolver path:
 
-   ```powershell
+   ```bash
    docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_legacy_source.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
    ```
 
@@ -94,7 +94,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 
 4. Apply only bounded, reviewed slices:
 
-   ```powershell
+   ```bash
    docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_legacy_source.execute --kwargs "{'slug_filter':'unicorn-bouquet'}"
    ```
 
@@ -102,7 +102,7 @@ price, or scraped page base price as the price for every ERPNext variant.
 
 6. Run cart/checkout verification after price changes:
 
-   ```powershell
+   ```bash
    npm run test:product-prices
    npm run test:product-price-display
    python scripts/verify/cart_checkout_contract.py
@@ -110,8 +110,8 @@ price, or scraped page base price as the price for every ERPNext variant.
 
 7. Remove ignored staging copies when done if they are no longer needed:
 
-   ```powershell
-   Remove-Item -LiteralPath apps\locally_twisted\locally_twisted\seed\_data -Recurse -Force
+   ```bash
+   Remove-Item -LiteralPath apps/locally_twisted/locally_twisted/seed/_data -Recurse -Force
    ```
 
 ## Known Failure
@@ -142,7 +142,7 @@ failure recipe
 
 Current focused guard:
 
-```powershell
+```bash
 npm run test:product-prices
 ```
 
@@ -155,13 +155,13 @@ This now runs both:
 
 Visible-page guard for the reported Easter Bunny Ear Arch failure:
 
-```powershell
+```bash
 npm run test:product-price-display
 ```
 
 Launch gate integration:
 
-```powershell
+```bash
 python scripts/verify/website_launch_verify.py
 ```
 
@@ -170,13 +170,13 @@ price-display contract in addition to the older bouquet price contract.
 
 Current supporting checkout guard:
 
-```powershell
+```bash
 python scripts/verify/cart_checkout_contract.py
 ```
 
 Current shape guard:
 
-```powershell
+```bash
 python scripts/verify/catalog_variant_contract.py
 ```
 

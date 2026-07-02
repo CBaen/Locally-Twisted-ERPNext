@@ -14,7 +14,8 @@
 
 ## The check
 
-A clean checkout of this repo, on a machine that has NEVER had `~/.claude/`, must be able to:
+A clean checkout of this repo, on a machine that has none of Guiding Light's
+machine-local agent tooling installed, must be able to:
 
 1. Run all four gates (lint, schema-parity, smoke-forms, screenshot)
 2. Run the deploy orchestrator end-to-end in `--dry-run` mode
@@ -36,10 +37,10 @@ git clone <client-repo-url> /tmp/client-offboard-test
 cd /tmp/client-offboard-test
 ```
 
-### Step 2: Confirm no `~/.claude/` references
+### Step 2: Confirm no machine-local agent tooling references
 
 ```bash
-grep -rn "\.claude" scripts/ docs/ .github/ 2>/dev/null
+grep -rn "/home/guidingl\\|/home/.*\\.codex\\|/home/.*\\.claude" scripts/ docs/ .github/ 2>/dev/null
 ```
 
 **Expected:** zero results, or only references inside comments explicitly framed as "agency-side, does not apply to this repo."
@@ -118,7 +119,7 @@ wc -l docs/framework-traps.md
 
 The offboarding check PASSES when:
 
-- Step 2 returns zero non-comment `~/.claude/` references
+- Step 2 returns zero non-comment machine-local agent tooling references
 - Steps 4, 6, 7, 8, 9, 10 all complete with exit code 0
 - Step 5 either passes or skips gracefully
 

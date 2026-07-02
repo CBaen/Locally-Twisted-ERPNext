@@ -6,7 +6,7 @@
  * @playwright/test runner has hung in this environment before page assertions.
  *
  * Run after the corrected purge/re-import is complete:
- *   "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js
+ *   "node" scripts/verify/post_import_checkout_proof.js
  */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -15,7 +15,7 @@ const { chromium } = require("playwright");
 const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const CHROME_PATH =
 	process.env.PLAYWRIGHT_CHROME_PATH ||
-	"C:/Program Files/Google/Chrome/Application/chrome.exe";
+	"/usr/bin/google-chrome";
 const OUT_DIR = path.join(process.cwd(), "output", "playwright");
 const DEFAULT_PRODUCTS_MANIFEST = path.join(
 	process.cwd(),

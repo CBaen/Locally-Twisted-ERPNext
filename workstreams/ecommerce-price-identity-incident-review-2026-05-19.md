@@ -90,7 +90,7 @@ Local apply evidence:
 
 Focused local proof:
 
-```powershell
+```bash
 python scripts/verify/catalog_variant_contract.py
 npm run test:product-prices
 npm run test:product-price-display

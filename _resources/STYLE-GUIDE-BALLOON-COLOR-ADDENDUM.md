@@ -23,8 +23,8 @@ Source files:
 
 Verification command:
 
-```powershell
-python scripts\verify\color_swatch_contract.py
+```bash
+python scripts/verify/color_swatch_contract.py
 ```
 
 Current verified result:

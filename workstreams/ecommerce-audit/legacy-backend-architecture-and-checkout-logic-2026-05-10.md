@@ -25,18 +25,18 @@ Sensitive checkout values observed in the browser were redacted from this artifa
 
 ### Local source files checked
 
-- `C:\Users\baenb\projects\locally-twisted-legacy_source\addons\locally_twisted\__manifest__.py`
-- `...\models\product_template.py`
-- `...\models\crm_lead.py`
-- `...\models\project_task.py`
-- `...\views\website_sale_templates.xml`
-- `...\views\product_views.xml`
-- `...\data\automation_data.xml`
-- `...\data\delivery_data.xml`
-- `...\data\ir_config_parameter.xml`
-- `...\data\ir_asset.xml`
-- `...\static\src\js\payment_post_processing.js`
-- `...\controllers\main.py`
+- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/__manifest__.py`
+- `.../models/product_template.py`
+- `.../models/crm_lead.py`
+- `.../models/project_task.py`
+- `.../views/website_sale_templates.xml`
+- `.../views/product_views.xml`
+- `.../data/automation_data.xml`
+- `.../data/delivery_data.xml`
+- `.../data/ir_config_parameter.xml`
+- `.../data/ir_asset.xml`
+- `.../static/src/js/payment_post_processing.js`
+- `.../controllers/main.py`
 
 ## 1. legacy_source module architecture: this is not only ecommerce
 
@@ -617,8 +617,8 @@ ERPNext target: product pages and checkout must feed CRM/Opportunity/Project/Eve
 
 Parent re-ran:
 
-```powershell
-python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json
+```bash
+python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json
 ```
 
 Result at 2026-05-10 14:06 MDT:

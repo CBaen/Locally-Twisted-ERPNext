@@ -35,7 +35,7 @@ Use this recipe before changing public layout, full-bleed sections, crawls, caro
 Before diagnosing a Frappe-native gap, heading, breadcrumb, Webshop panel,
 cart/card padding, navbar/footer default, or CMS-style issue, read the agency
 conversion chart at
-`C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md`.
+`/home/guidingl/projects/Built_by_Cameron/capabilities/recipes/frappe-default-surface-map.md`.
 That card maps native Frappe/Webshop defaults to the usual BBC override moves.
 This LT recipe then decides the local route/container contract.
 

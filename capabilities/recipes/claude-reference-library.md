@@ -15,8 +15,8 @@ Use this when a Locally Twisted task may benefit from older cross-project proced
 ## Current status
 
 The older Claude workspace is not active local project truth on Wardenclyffe
-Kubuntu. Do not use prior-host `.claude` paths as instructions, and do not
-restore them into LT docs.
+Kubuntu. Do not use prior-host Claude workspace paths as instructions, and do
+not restore them into LT docs.
 
 If GL explicitly restores a Claude-era reference library from external backup
 for a narrow task, treat the operator-provided Kubuntu path as read-only
@@ -47,5 +47,5 @@ For this ERPNext/Frappe launch, the most relevant older Claude skills are:
 ## Failure modes
 
 - Copying stale Claude text into current docs creates confident-but-wrong handoffs.
-- Reading broad `.claude` runtime/session data wastes attention and risks exposing private or secret material.
+- Reading broad retired agent workspace runtime/session data wastes attention and risks exposing private or secret material.
 - Treating an old Frappe skill as current proof can miss repo-specific changes. Use it to decide what to check, then verify locally.

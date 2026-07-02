@@ -101,15 +101,15 @@ Live shop/payment remains blocked by the following documented items:
 
 Run from repo root:
 
-```powershell
-Set-Location -LiteralPath 'C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted'
+```bash
+Set-Location -LiteralPath '/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted'
 ```
 
 ### Local Readiness
 
 Use local commands for local proof only:
 
-```powershell
+```bash
 git diff --check
 python scripts/verify/ecommerce_expected_mode.py --expect paused
 python scripts/verify/ecommerce_pause_contract.py
@@ -131,7 +131,7 @@ python scripts/verify/synthetic_business_pipeline.py
 If a local test intentionally opens ecommerce mode, restore the resting state
 and prove it before closeout:
 
-```powershell
+```bash
 python scripts/verify/ecommerce_expected_mode.py --expect paused
 python scripts/verify/ecommerce_pause_contract.py
 ```
@@ -141,7 +141,7 @@ python scripts/verify/ecommerce_pause_contract.py
 These commands prove hosted staging route/UI/assets only unless the staging
 backend/provider evidence is also captured.
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 npm run test:product-gallery-experience
@@ -163,7 +163,7 @@ Desk/backend evidence:
 
 After any staging provider/settings repair, rerun:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 python scripts/verify/payment_backend_config_contract.py
@@ -180,7 +180,7 @@ config proof from a host run alone.
 Do not run live/provider/payment checks without explicit approval for this
 stage.
 
-```powershell
+```bash
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/cloudflare_launch_readiness_contract.py
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
@@ -196,7 +196,7 @@ python scripts/verify/stripe_amount_parity_contract.py
 
 Live form proof, if bundled into the same release review after approval:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
@@ -252,7 +252,7 @@ Use only after all approval gates above are satisfied.
 11. Restore the resting state unless GL explicitly approves wider live
     ecommerce exposure:
 
-```powershell
+```bash
 python scripts/verify/ecommerce_expected_mode.py --expect paused
 python scripts/verify/ecommerce_pause_contract.py
 ```
@@ -273,7 +273,7 @@ Default rollback/resting posture:
   target app mirror commit before rollback or forward fix.
 - After rollback, rerun:
 
-```powershell
+```bash
 python scripts/verify/ecommerce_expected_mode.py --expect paused
 python scripts/verify/ecommerce_pause_contract.py
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com

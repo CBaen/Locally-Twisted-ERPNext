@@ -123,14 +123,14 @@ Gold, dog-logo, and more expressive brand treatments can be used later in propos
 
 For Sales Invoice output:
 
-```powershell
+```bash
 python scripts/setup/sync_invoice_branding.py
 python scripts/verify/invoice_branding_contract.py
 ```
 
 For the standard outbound document source folder:
 
-```powershell
+```bash
 python scripts/verify/outbound_documents_contract.py
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
 python scripts/verify/unpaid_invoice_draft_packet_contract.py
@@ -148,7 +148,7 @@ The outbound registry verifier requires each source template to include `## Answ
 
 For customer-policy text touched by documents:
 
-```powershell
+```bash
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/payment_cascade_contract.py
 ```

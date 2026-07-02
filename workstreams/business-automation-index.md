@@ -31,7 +31,7 @@ This workstream is the cross-system map. It coordinates with `paperwork-backend-
 
 Latest report:
 
-```powershell
+```bash
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```
 
@@ -161,7 +161,7 @@ Use fake data aggressively in local verification, but do not leave generated bus
 
 Core automation map:
 
-```powershell
+```bash
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
@@ -194,7 +194,7 @@ python scripts/verify/maintenance_admin_boundary.py
 
 Launch money path:
 
-```powershell
+```bash
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/payment_cascade_contract.py
@@ -204,7 +204,7 @@ python scripts/verify/checkout_fulfillment_contract.py
 
 Public intake and CRM:
 
-```powershell
+```bash
 python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
 python scripts/verify/crm_stage_cascade.py
@@ -212,7 +212,7 @@ python scripts/verify/crm_stage_cascade.py
 
 Paperwork and finance visibility:
 
-```powershell
+```bash
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/invoice_branding_contract.py
@@ -244,7 +244,7 @@ python scripts/verify/maintenance_admin_boundary.py
 
 Cutover-only check:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py --mode live
 ```
 

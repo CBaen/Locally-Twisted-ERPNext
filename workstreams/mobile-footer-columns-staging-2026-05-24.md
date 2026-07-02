@@ -33,7 +33,7 @@ visually checked on the hosted staging URL whenever footer/layout changes are
 touched again. For broad public layout work, rerun the normal public layout
 gates:
 
-```powershell
+```bash
 npm run test:layout-fit
 npm run test:interactive-layout
 ```

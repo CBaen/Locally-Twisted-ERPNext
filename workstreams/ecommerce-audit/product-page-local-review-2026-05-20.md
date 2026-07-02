@@ -34,14 +34,14 @@ classification mutation.
 Passed locally after cache clear/restart:
 
 - `python scripts/dev/clear_website_cache.py --restart`
-- `python scripts\verify\product_page_runtime_contract.py`
-- `python scripts\verify\proof_product_contract.py`
-- `python scripts\verify\commerce_rules_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
+- `python scripts/verify/proof_product_contract.py`
+- `python scripts/verify/commerce_rules_contract.py`
 - `npm run test:product-price-display`
 - `npm run test:variant-media`
-- `python scripts\verify\smoke_shop.py`
+- `python scripts/verify/smoke_shop.py`
 - `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` (39/39)
-- `python -m py_compile apps\locally_twisted\locally_twisted\commerce_rules.py apps\locally_twisted\locally_twisted\verify\product_page_runtime_contract.py scripts\verify\proof_product_contract.py scripts\verify\smoke_shop.py`
+- `python -m py_compile apps/locally_twisted/locally_twisted/commerce_rules.py apps/locally_twisted/locally_twisted/verify\product_page_runtime_contract.py scripts/verify/proof_product_contract.py scripts/verify/smoke_shop.py`
 
 Ignored local screenshot evidence was kept at
 `output/playwright/product-redesign-review-20260520/` with final desktop/mobile

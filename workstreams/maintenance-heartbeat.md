@@ -59,7 +59,7 @@ Latest documentation handoff commit: `170ad21 Document backend automation safety
 
 ## Verification
 
-```powershell
+```bash
 python scripts/setup/sync_maintenance_package.py
 python scripts/verify/maintenance_heartbeat.py
 python scripts/verify/maintenance_heartbeat.py --heavy

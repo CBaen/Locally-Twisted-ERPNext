@@ -81,7 +81,7 @@ deleted. That made the production code harder for the designer to critique.
 
 For visual route work, verify the actual running site:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 npm run test:layout-fit -- --grep <route-name>
 npm run test:interactive-layout -- --grep <route-or-state-name>

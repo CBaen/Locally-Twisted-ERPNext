@@ -12,7 +12,7 @@ This is not permission to copy legacy_source code. legacy_source is the source w
 - Live legacy_source backend/public read-only witness:
   - `workstreams/ecommerce-audit/legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md`
 - Local legacy_source addon source:
-  - `C:\Users\baenb\projects\locally-twisted-legacy_source\addons\locally_twisted\__manifest__.py`
+  - `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/__manifest__.py`
   - `models/product_template.py`
   - `models/crm_lead.py`
   - `models/project_task.py`
@@ -32,7 +32,7 @@ This is not permission to copy legacy_source code. legacy_source is the source w
   - `native-frappe-product-template-architecture-2026-05-10.md`
   - `cart-checkout-intent-preservation-audit-2026-05-10.md`
 - Fresh verifier:
-  - `python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json`
+  - `python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json`
   - latest parent rerun: PASS, 14 pass / 0 blocked / 1 deferred.
 
 ## Convergence decision

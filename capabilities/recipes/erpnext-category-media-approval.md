@@ -62,7 +62,7 @@ category surface should show installed proof rather than a literal product photo
 
 ## Commands
 
-```powershell
+```bash
 python scripts/verify/category_media_candidates.py
 python -m json.tool output/category-media-candidates.json
 python scripts/setup/sync_category_media.py --write-template
@@ -72,7 +72,7 @@ python scripts/setup/sync_category_media.py --selection output/category-media-se
 After GL/Jeff approval, copy or edit the template into an approved selection
 file and set `approved: true` only on approved rows:
 
-```powershell
+```bash
 python scripts/setup/sync_category_media.py --selection output/category-media-selection.approved.json --apply
 ```
 

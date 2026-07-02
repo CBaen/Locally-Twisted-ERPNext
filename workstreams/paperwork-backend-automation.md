@@ -294,7 +294,7 @@ Current live-data facts from the fresh finance inventory:
 
 Core paperwork/backend baseline:
 
-```powershell
+```bash
 python scripts/verify/finance_inventory.py --json
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/customer_email_policy_contract.py
@@ -336,7 +336,7 @@ python scripts/verify/render_outbound_document_previews.py --slug outbound-docum
 
 Cutover-only payment check:
 
-```powershell
+```bash
 python scripts/verify/payment_launch_readiness.py --mode live
 ```
 

@@ -12,8 +12,8 @@ related_capabilities:
   - ../recipes/frappe-public-nav-business-route-contract.md
   - ../recipes/lt-seo-geo-aeo-contract.md
 related_failures:
-  - C:\Users\baenb\capabilities\failures\agent-owned-capability-root-fragmentation.md
-  - C:\Users\baenb\projects\Built_by_Cameron\capabilities\failures\erpnext-public-nav-seo-verifier-drift.md
+  - /home/guidingl/capabilities/failures/agent-owned-capability-root-fragmentation.md
+  - /home/guidingl/projects/Built_by_Cameron/capabilities/failures/erpnext-public-nav-seo-verifier-drift.md
 tags:
   - locally-twisted
   - public-nav
@@ -91,7 +91,7 @@ event-discovery routes.
    removed-route link.
 2. Repair the smallest navbar/search/drawer template surface.
 3. Clear Frappe website cache after Jinja/CSS changes.
-4. Run `python scripts\verify\nav_ia.py`.
+4. Run `python scripts/verify/nav_ia.py`.
 5. Run search and layout checks that cover header/search behavior.
 6. Update this Failure Recipe if another public-chrome regression occurs.
 
@@ -108,9 +108,9 @@ event-discovery routes.
 
 - Related capability: `../recipes/frappe-public-nav-business-route-contract.md`
 - Related capability: `../recipes/lt-seo-geo-aeo-contract.md`
-- Related agency failure: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\failures\erpnext-public-nav-seo-verifier-drift.md`
-- Related verifier: `..\..\scripts\verify\nav_ia.py`
-- Related template: `..\..\apps\locally_twisted\locally_twisted\templates\includes\navbar\navbar.html`
+- Related agency failure: `/home/guidingl/projects/Built_by_Cameron/capabilities/failures/erpnext-public-nav-seo-verifier-drift.md`
+- Related verifier: `../../scripts/verify/nav_ia.py`
+- Related template: `../../apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html`
 
 ## Evidence quality
 

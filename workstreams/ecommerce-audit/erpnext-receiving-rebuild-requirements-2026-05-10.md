@@ -7,7 +7,7 @@ D:2026-05-10 | Check:local repo/docs/source + existing audit artifacts 2026-05-1
 - **Lane:** ERPNext Receiving Architect / rebuild requirements.
 - **Scope:** research/design requirements for a future purge/rebuild/import of Locally Twisted ecommerce products into native ERPNext/Frappe/Webshop. This is not implementation.
 - **Non-scope:** no code changes, no commits, no product deletes/purges/imports, no customer/live payment/email path, no production data mutation.
-- **Repo/worktree witness:** repo `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`; branch check returned `main`; artifact did not previously exist. Worktree already had many unrelated modified files before this artifact was created.
+- **Repo/worktree witness:** repo `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`; branch check returned `main`; artifact did not previously exist. Worktree already had many unrelated modified files before this artifact was created.
 - **Primary evidence read:**
   - `AGENTS.md`
   - `ROLE.md` from this agent workspace

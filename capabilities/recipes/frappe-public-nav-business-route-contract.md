@@ -101,7 +101,7 @@ For the current LT site:
 
 ## Verification Commands
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 python scripts/verify/nav_ia.py
 python scripts/verify/smoke_shop.py
@@ -193,7 +193,7 @@ only an allowlist, and
 `navbar_context.py` still requires backend Website Item `simple_product|checkout`
 before nav/search exposure. `search_contract.spec.js` now asserts filtered
 backend-approved quick links are hidden rather than removed, while Classic
-owner-excluded products remain absent. `python scripts\verify\nav_ia.py`,
+owner-excluded products remain absent. `python scripts/verify/nav_ia.py`,
 `npm run test:search-contract`, and live ERPNext reads of the four included item
 codes passed.
 

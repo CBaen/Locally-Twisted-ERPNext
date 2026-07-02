@@ -42,7 +42,7 @@ Keep Jeff as founder/context only. Locally Twisted, the team, and the company pr
 
 Verified locally on 2026-05-03:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 python scripts/verify/nav_ia.py
 npm run test:layout-fit

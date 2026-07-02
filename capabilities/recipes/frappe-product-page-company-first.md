@@ -85,7 +85,7 @@ retail recommendation engine.
 
 Run focused product checks first:
 
-```powershell
+```bash
 python scripts/verify/smoke_shop.py
 npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"
 ```

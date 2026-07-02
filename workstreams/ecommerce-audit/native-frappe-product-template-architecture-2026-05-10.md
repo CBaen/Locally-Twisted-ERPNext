@@ -5,7 +5,7 @@
 - **Lane:** D — Native Product Template Architecture Designer.
 - **Environment/auth context:** local repository/source inspection only on `main` at `264c6553acd5708ecdb498cb6fa6a5c594260abc`; no browser clicks; no ERPNext admin/operator session; no customer/live surface interaction. Destination stack is treated as local/test unless Lane C proves otherwise. Compose source says the image is `${CUSTOM_IMAGE:-frappe/erpnext}:${CUSTOM_TAG:-$ERPNEXT_VERSION}`; AGENTS.md documents current intended stack as ERPNext/Frappe v15.105.0, apps `frappe`, `erpnext`, `payments`, `webshop`, `locally_twisted`.
 - **Sources inspected:** `AGENTS.md`; `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`; `workstreams/ecommerce-audit-dispatch-prompts-2026-05-10.md`; `Locally-Twisted-Backend/frappe_docker/compose.yaml`; `package.json`; `apps/locally_twisted/locally_twisted/product_page_runtime.py`; `product_page_labels.py`; `product_options.py`; `product_quote_request.py`; `product_quote_runtime.py`; `catalog_contract/models.py`; `catalog_contract/source_builder.py`; `catalog_contract/addon_rules.py`; `catalog_contract/dependency_rules.py`; `seed/sync_commerce_rules.py`; `seed/sync_contact_intake_backend.py`; `templates/generators/item/item_details.html`; `item_configure.html`; `item_quote_first.html`; `www/book.py`; source audit reports under `audits/catalog-import-audit-2026-05-08/`. A local `.env` was opened accidentally during version lookup; no secrets from it are used, cited, or reproduced here.
-- **Commands/actions run:** `git rev-parse --abbrev-ref HEAD`; `git rev-parse HEAD`; `git status --short`; PowerShell `Get-ChildItem`/`rg` source searches; read-only file reads; created this artifact directory/file only.
+- **Commands/actions run:** `git rev-parse --abbrev-ref HEAD`; `git rev-parse HEAD`; `git status --short`; Bash `Get-ChildItem`/`rg` source searches; read-only file reads; created this artifact directory/file only.
 - **Records created/cleaned:** none. No ERPNext/legacy_source records, carts, orders, quotes, invoices, emails, payments, products, or legacy_source rows were created or mutated.
 - **Key findings:** smallest safe architecture is a native Webshop/ERPNext extension layer with two reusable product-page classes, versioned line payloads, quote-first handoff, dependency matrices, approved add-on contracts, media classification staging, and explicit import/reopen gates. Current source code already contains a significant first slice, but this lane did not run runtime verifiers, so runtime survival claims remain `[PENDING-LANE-C]` unless directly evidenced by code.
 - **Blockers:** Lane A/C/E artifacts are not present in `workstreams/ecommerce-audit/` at time of writing; source meaning, browser/cart/order proof, and docs convergence need reconciliation before Lane F or implementation decisions. Source-derived counts from older audit artifacts are useful but labeled `[PENDING-LANE-A]` until Lane A refreshes them.
@@ -233,7 +233,7 @@ Use this decision tree at import/runtime:
 
 ## Rollback and fail-loud gates
 
-Rollback anchor for this workstream remains `lt-ecommerce-audit-pre-dispatch-20260510-0841`; rollback package is `C:\Users\baenb\.openclaw\workspace\reports\rollback\lt-ecommerce-audit-pre-dispatch-20260510-0841`.
+Rollback anchor for this workstream remains `lt-ecommerce-audit-pre-dispatch-20260510-0841`; rollback package is `/home/guidingl/.openclaw/workspace/reports/rollback/lt-ecommerce-audit-pre-dispatch-20260510-0841`.
 
 Required fail-loud gates before implementation/import claims:
 
@@ -251,7 +251,7 @@ Required fail-loud gates before implementation/import claims:
 
 Known verifier entrypoints from source/capability docs include:
 
-```powershell
+```bash
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py
 python scripts/verify/product_page_dependency_contract.py

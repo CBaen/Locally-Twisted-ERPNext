@@ -50,7 +50,7 @@ Do not collapse a mixed cart into delivery-only.
 
 Local proof before source freeze:
 
-```powershell
+```bash
 python -m py_compile apps/locally_twisted/locally_twisted/commerce_rules.py apps/locally_twisted/locally_twisted/checkout_fulfillment.py apps/locally_twisted/locally_twisted/api/cart.py apps/locally_twisted/locally_twisted/www/checkout.py apps/locally_twisted/locally_twisted/seed/sync_commerce_rules.py apps/locally_twisted/locally_twisted/patches/sync_delivery_only_fulfillment_20260525.py apps/locally_twisted/locally_twisted/verify/checkout_fulfillment_contract.py
 git diff --check
 python scripts/verify/frappe_cloud_preflight.py
@@ -66,7 +66,7 @@ npm run test:checkout-experience
 
 Hosted staging proof after app mirror update, migration, and cache clear:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 ```

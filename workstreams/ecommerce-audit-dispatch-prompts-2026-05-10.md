@@ -2,9 +2,9 @@
 
 Status: plan-deepened and adjusted before dispatch
 Rollback anchor for every lane: `lt-ecommerce-audit-pre-dispatch-20260510-0841`
-Rollback package: `C:\Users\baenb\.openclaw\workspace\reports\rollback\lt-ecommerce-audit-pre-dispatch-20260510-0841`
-Repo: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`
-legacy_source witness repo: `C:\Users\baenb\projects\locally-twisted-legacy_source`
+Rollback package: `/home/guidingl/.openclaw/workspace/reports/rollback/lt-ecommerce-audit-pre-dispatch-20260510-0841`
+Repo: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
+legacy_source witness repo: `/home/guidingl/projects/locally-twisted-legacy_source/`
 
 ## Common binding instructions for every lane
 

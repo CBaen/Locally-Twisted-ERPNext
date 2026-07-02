@@ -119,7 +119,7 @@ is rerun.
 
 Local verification after the source patch:
 
-- `python -m py_compile apps\locally_twisted\locally_twisted\seo.py apps\locally_twisted\locally_twisted\www\sitemap.py`
+- `python -m py_compile apps/locally_twisted/locally_twisted/seo.py apps/locally_twisted/locally_twisted/www/sitemap.py`
 - `npm run test:seo-contract` passed 11/11 against `http://localhost:8081`.
 - `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` passed 10/10 against current live, proving route health only.
 
@@ -166,7 +166,7 @@ Local verification after the source patch:
 3. Clear Frappe Cloud website cache.
 4. Recheck live:
 
-```powershell
+```bash
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
 $env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 ```
@@ -218,7 +218,7 @@ Initial decision queue:
 
 ## Verification Commands Used
 
-```powershell
+```bash
 Resolve-DnsName locallytwisted.com NS
 Resolve-DnsName locallytwisted.com A
 Resolve-DnsName www.locallytwisted.com CNAME

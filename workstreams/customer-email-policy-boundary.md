@@ -115,7 +115,7 @@ absent.
 
 ## Verification
 
-```powershell
+```bash
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
@@ -129,7 +129,7 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 
 Live release proof:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222

@@ -15,7 +15,6 @@ SKIP_PARTS = {
     "__pycache__",
 }
 TEXT_SUFFIXES = {
-    ".cmd",
     ".css",
     ".html",
     ".js",

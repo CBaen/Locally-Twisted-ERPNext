@@ -20,7 +20,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 CONTAINER = os.environ.get("LT_FRAPPE_BACKEND_CONTAINER", "locally-twisted-erpnext-v15-backend-1")
 SITE = os.environ.get("LT_FRAPPE_SITE", "frontend")
-NODE = os.environ.get("LT_NODE_EXE", r"C:\Program Files\nodejs\node.exe")
+NODE = os.environ.get("LT_NODE_EXE", r"node")
 REPORT = "workstreams/ecommerce-audit/multi-color-purchasable-browser-proof-2026-05-17.json"
 APPLY_METHOD = "locally_twisted.verify.multi_color_purchasable_browser_support.apply_open_contracts"
 RESTORE_METHOD = "locally_twisted.verify.multi_color_purchasable_browser_support.restore_contracts"

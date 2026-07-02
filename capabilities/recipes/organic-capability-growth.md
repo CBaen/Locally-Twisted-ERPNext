@@ -52,9 +52,9 @@ attribution_required: unknown
 
 Then run the growth index:
 
-```powershell
-python tools\capability_growth_index.py --root capabilities --root-alias local --json
-python tools\capability_growth_index.py --root capabilities --root-alias project --related-root shared=C:\Users\<user>\capabilities --json
+```bash
+python tools/capability_growth_index.py --root capabilities --root-alias local --json
+python tools/capability_growth_index.py --root capabilities --root-alias project --related-root shared=/home/guidingl/capabilities --json
 ```
 
 Read the report as a pantry map:

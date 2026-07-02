@@ -29,10 +29,10 @@ maps every product into an implementation lane before any future lane flip:
 
 Commands run locally on Wardenclyffe:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\catalog_contract\complex_checkout_scaffold.py scripts\verify\complex_checkout_scaffold.py scripts\verify\complex_checkout_scaffold_contract.py
-python scripts\verify\complex_checkout_scaffold_contract.py
-python scripts\verify\complex_checkout_scaffold.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/catalog_contract/complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold.py scripts/verify/complex_checkout_scaffold_contract.py
+python scripts/verify/complex_checkout_scaffold_contract.py
+python scripts/verify/complex_checkout_scaffold.py
 ```
 
 Latest scaffold result:

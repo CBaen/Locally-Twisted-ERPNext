@@ -88,7 +88,7 @@ repo per the agency isolation rule.
 **What works:**
 - ERPNext v15.105.0 running locally at `http://localhost:8081` (9 containers, compose project `locally-twisted-erpnext-v15`)
 - Wardenclyffe Kubuntu local Docker runtime is the current source/runtime
-  posture. The old WSL2 tuning note is obsolete and not active setup guidance.
+  posture. The old prior-host Docker tuning note is obsolete and not active setup guidance.
 - `pwd.yml` uses the custom baked image `locally-twisted-erpnext:v15` built from `docker/Dockerfile`, with `apps/locally_twisted` still bind-mounted into the Frappe services for local development. Verified by `docker inspect` on 2026-05-01.
 - LT Company record + Fiscal Year 2026 + Services domain + Standard with Numbers chart of accounts
 - 3 LT-specific DocTypes: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
@@ -318,7 +318,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Server-side reconciliation on `/payment-success`** marks the PR paid synchronously when the customer's browser lands — uses `stripe.checkout.Session.retrieve()` to verify `payment_status == 'paid'` then calls `pr.set_as_paid()`. Idempotent: webhook also fires async, second path no-ops.
 - **Webhook handler shipped** at `apps/locally_twisted/locally_twisted/payments/stripe_webhook.py`. Signature-verified, reads secret from `frappe.conf.get('stripe_webhook_signing_secret')` (which lives in `site_config.json`, not in a doctype). Currently dormant (success-page reconciliation handles the demo flow); ready for production where it's the safety net for browser-closed-before-redirect.
 - **`/checkout` page got two-column layout with persistent right-side order summary** (item thumbnail + name + qty + line total + grand total + "Secure payment — payment is processed by Stripe" notice). On mobile, summary stacks above form. Matches the legacy_source `/shop/cart`/`/shop/address` pattern GL referenced.
-- **Agency-tier decision logged + kitchen note dropped** at `Built_by_Cameron/built-by-cameron-decisions.md` (per-client Stripe accounts; Charges API forbidden for new builds; webhook secrets in `site_config.json`) and `Built_by_Cameron/.claude/capabilities/kitchen/2026-04-29-stripe-checkout-sessions-for-frappe.md` (full pattern). Promote kitchen note to recipe when client #2 adopts.
+- **Agency-tier decision logged + kitchen note dropped** at `Built_by_Cameron/built-by-cameron-decisions.md` (per-client Stripe accounts; Charges API forbidden for new builds; webhook secrets in `site_config.json`) and `Built_by_Cameron/capabilities/kitchen/2026-04-29-stripe-checkout-sessions-for-frappe.md` (full pattern). Promote kitchen note to recipe when client #2 adopts.
 - **Local dev webhook listener pattern:** `stripe listen --api-key "$STRIPE_TEST_SECRET_KEY" --forward-to <url>` bypasses `stripe login` 2FA when client account isn't accessible. Stripe CLI's stored auth (`stripe config --list`) is a separate context from ERPNext's runtime auth (Stripe Settings doctype, populated from `.env`).
 - **NOT verified by GL with a real `4242` card.** All my checks were curl + Playwright + simulated session_id. The actual customer flow — fill form → land on Stripe's page → submit `4242` → land on `/thank-you` → SO marked Paid in desk — is GL's first task on resume.
 - **Files added:** `apps/locally_twisted/locally_twisted/payments/{__init__.py, stripe_session.py, stripe_webhook.py}`, `apps/locally_twisted/locally_twisted/www/payment_success.{py,html}`, `scripts/setup/set_stripe_webhook_secret.py`.
@@ -351,7 +351,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 ### 2026-04-27 (Slice 6b — Refund Policy + FAQ + framework observations) — Static portal pages with accordion + agency capabilities update
 
 - **Slice 6b shipped:** `/refund-policy` and `/faq` (with accordion via native `<details>`/`<summary>`). Source: `legal-interview-answers.md` Part 2C + `deposits.md` + 6 confirmed policy files. All 13 FAQ Q&As trace to Jeff-confirmed policy content (no invention).
-- **Agency capabilities update:** added "Layer boundaries" section to `Built_by_Cameron/.claude/capabilities/INDEX.md` (recipe vs meal discipline). Dropped kitchen note `2026-04-27-framework-shape-observations.md` with 4 open questions for the framework's evolution.
+- **Agency capabilities update:** added "Layer boundaries" section to `Built_by_Cameron/capabilities/INDEX.md` (recipe vs meal discipline). Dropped kitchen note `2026-04-27-framework-shape-observations.md` with 4 open questions for the framework's evolution.
 - **BTFP form copy fix:** updated cancellation note from "48 hours' notice required. Deposits are non-refundable." → "Cancel 72+ hours before your event and your deposit transfers to a new date." per GL's verbal confirmation matching legal-interview Part 2C.
 
 ### 2026-04-27 (homepage build session) — Slice 3 (Homepage) DONE; site shape locked; reviews carousel with 19 real Google quotes wired
@@ -416,7 +416,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - Contact first-ship omissions: Google Maps iframe, modal, `/privacy` link target
 
 **Standing rules added/refined this session:**
-- The meal at `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` is the binding shape for any new portal page.
+- The meal at `Built_by_Cameron/capabilities/meals/build-frappe-portal-page.md` is the binding shape for any new portal page.
 - Five "Known gotchas" with receipts now codified in the meal: text-align inheritance, underscore→dash routing, webshop bundle compilation, Lead Source ensure-or-create, browser cache.
 - "Hard refresh" must be in every handoff to GL when shipping a CSS-touching change. Always.
 
@@ -427,11 +427,11 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - Modified: `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` — appended `.lt-header__*`, `.lt-footer__*` BEM blocks (no `!important`)
 - Modified: `apps/locally_twisted/locally_twisted/hooks.py` — added `website_route_rules` for the BTFP dashed-URL alias
 - Modified: `scripts/setup/install_webshop.py` — added `--build-assets` flag with full Node + yarn + bench build pipeline
-- New (agency-tier): `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md`
-- New (agency-tier): `Built_by_Cameron/.claude/capabilities/recipes/frappe-portal-implementation.md`
-- New (agency-tier): `Built_by_Cameron/.claude/capabilities/recipes/license-isolated-app-architecture.md`
-- Modified (agency-tier): `Built_by_Cameron/.claude/capabilities/INDEX.md`, `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`, `Built_by_Cameron/built-by-cameron-decisions.md`
-- New (agency-tier): kitchen note at `Built_by_Cameron/.claude/capabilities/kitchen/2026-04-26-1830-frappe-portal-validator-skill.md`
+- New (agency-tier): `Built_by_Cameron/capabilities/meals/build-frappe-portal-page.md`
+- New (agency-tier): `Built_by_Cameron/capabilities/recipes/frappe-portal-implementation.md`
+- New (agency-tier): `Built_by_Cameron/capabilities/recipes/license-isolated-app-architecture.md`
+- Modified (agency-tier): `Built_by_Cameron/capabilities/INDEX.md`, `Built_by_Cameron/capabilities/recipes/frappe-conventions.md`, `Built_by_Cameron/built-by-cameron-decisions.md`
+- New (agency-tier): kitchen note at `Built_by_Cameron/capabilities/kitchen/2026-04-26-1830-frappe-portal-validator-skill.md`
 - Deleted: 6 disposable `_oneshot_*.py` screenshot scripts (git history preserves them)
 - Deleted from DB: smoke-test Leads `CRM-LEAD-2026-00001`, `CRM-LEAD-2026-00002` + linked Communications
 
@@ -481,7 +481,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - New: `apps/payments/` + `apps/webshop/` (bind-mounted; gitignored)
 - Modified: `pwd.yml` (added bind-mounts for payments + webshop in all 8 services)
 - Modified: `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` (down to 608 lines from 770; navbar toggler block + `.web-footer` chains stripped)
-- Modified: `CLAUDE.md`, `STATE.md`, `lessons-learned.md`, `locally-twisted-decisions.md`, `locally-twisted-queue.md`, `HANDOFF.md`, agency `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`
+- Modified: `CLAUDE.md`, `STATE.md`, `lessons-learned.md`, `locally-twisted-decisions.md`, `locally-twisted-queue.md`, `HANDOFF.md`, agency `Built_by_Cameron/capabilities/recipes/frappe-conventions.md`
 - Deleted: `scripts/setup/build_landing_page.sh` (the broken landing build orchestrator — retired)
 
 ### 2026-04-26 (webshop install + framework study session) — Three blockers resolved; Slice 2 redo unblocked
@@ -501,7 +501,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - Historical: nginx Origin patch was re-applied post-recreate. Current runtime has the Origin pass-through baked into the custom image.
 
 **Documentation added/updated:**
-- `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — added `payments` dependency note, `--skip-assets` install pattern, "Customizing webshop pages" primitive map, "Verified against source — 2026-04-26" appendix (with `.web-footer` myth correction)
+- `Built_by_Cameron/capabilities/recipes/frappe-conventions.md` — added `payments` dependency note, `--skip-assets` install pattern, "Customizing webshop pages" primitive map, "Verified against source — 2026-04-26" appendix (with `.web-footer` myth correction)
 - `_CLIENTS/locally-twisted/lessons-learned.md` — `.web-footer` entry rewritten with RESOLVED status + root cause + path forward
 - `_CLIENTS/locally-twisted/HANDOFF.md` — full rewrite reflecting current state + Slice 2 redo plan
 - `_CLIENTS/locally-twisted/locally-twisted-decisions.md` — entry on webshop install + "work within Frappe" principle + `.web-footer` resolution
@@ -528,7 +528,7 @@ This session produced more documentation than working code, by design. The insta
 - `_CLIENTS/locally-twisted/lessons-learned.md` — 11 dated entries cataloging Frappe/ERPNext quirks (license casing, parent URL constraint, content_type field-routing, sanitizer, head_html cascade order, data URI silent failure, navbar-toggler markup, copyright auto-prepend, editable pip install lifecycle, the unresolved `.web-footer` height mystery).
 - `_CLIENTS/locally-twisted/HANDOFF.md` — full rewrite reflecting honest broken state.
 - `Built_by_Cameron/lessons-learned.md` — cross-client Frappe gotchas with a generalizable "study the source first" rule.
-- `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — agency-tier reference for Frappe v15 customization primitives, the right way to override theme CSS / navbar / footer / pages, and the v15 ecommerce surprise.
+- `Built_by_Cameron/capabilities/recipes/frappe-conventions.md` — agency-tier reference for Frappe v15 customization primitives, the right way to override theme CSS / navbar / footer / pages, and the v15 ecommerce surprise.
 - `_CLIENTS/locally-twisted/CLAUDE.md` + `Built_by_Cameron/CLAUDE.md` — added "Stack & code conventions" blocks pointing at the conventions reference.
 - `<memory>/jeff_trust_and_phase_1_demo_stakes.md` — project memory: Jeff knows about the legacy_source attempt and lived its struggles; what he doesn't know is the full platform pivot to ERPNext.
 
@@ -550,7 +550,7 @@ This session produced more documentation than working code, by design. The insta
 - All Phase 1 decision gates resolved (header nav B, accessibility B, blog yes, photography placeholders, customer-inquiry email = locallytwisted@gmail.com, pricing calc embedded in BTFP page)
 - 15 brand-aligned placeholder images generated via Together API FLUX.1-schnell (~$0.05). Mapped slot → file → use in `_resources/images/INDEX.md`
 - ERPNext user records cleaned: `locallytwisted@gmail.com` renamed "Jeff Baen" → "Jeff Kimber" (Baen was Cameron's middle name that got tangled); `locallytwisted@yahoo.com` placeholder disabled (reversible)
-- Agency-tier capabilities added: `together-image-gen` ingredient + `generate-client-image-set` recipe (transferable to any future BBC client) at `Built_by_Cameron/.claude/capabilities/`
+- Agency-tier capabilities added: `together-image-gen` ingredient + `generate-client-image-set` recipe (transferable to any future BBC client) at `Built_by_Cameron/capabilities/`
 - Stale artifacts deleted: `.planning/phases/01-inventory/` (research from old framing), empty `Locally-Twisted-Frontend/`
 
 ### 2026-04-26 — Restructure: BBC root → agency-level; LT lives in `_CLIENTS/locally-twisted/`

@@ -67,10 +67,10 @@ Completed on 2026-05-07:
 
 Custom Event Decor hide on 2026-05-11:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/www/home.py
 python scripts/dev/clear_website_cache.py --restart
-npx.cmd playwright test scripts/verify/layout_fit.spec.js --grep "home fits" --reporter=line --workers=1
+npx playwright test scripts/verify/layout_fit.spec.js --grep "home fits" --reporter=line --workers=1
 ```
 
 Result: before hiding, the block screenshot and all eight inline SVG icons were
@@ -81,9 +81,9 @@ passed 13/13.
 
 Mobile review compactness correction on 2026-05-08:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
-python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
+python -m py_compile apps/locally_twisted/locally_twisted/www/home.py
 npx playwright test scripts/verify/interactive_layout.spec.js --grep "mobile review proof|reviews crawl left-to-right" --reporter=line --workers=1
 npx playwright test scripts/verify/layout_fit.spec.js --grep "home fits at mobile-320|home fits at mobile-390|home fits at desktop-1200" --reporter=line --workers=1
 ```
@@ -96,9 +96,9 @@ the targeted home layout-fit checks passed 3/3. Full feature details live in
 
 Featured-work correction on 2026-05-08:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
-node --check scripts\verify\interactive_layout.spec.js
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/www/home.py
+node --check scripts/verify/interactive_layout.spec.js
 python scripts/dev/clear_website_cache.py --restart
 npx playwright test scripts/verify/interactive_layout.spec.js --reporter=line --grep "homepage installed-work proof|homepage leads with Google review|homepage hero uses one visible|small mobile homepage|mobile cookie notice|desktop homepage cookie|site-preferences" --workers=1
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits" --workers=1
@@ -116,7 +116,7 @@ axe passed 38 route/viewport results with 0 violations. Screenshots are in
 
 Passed:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"
@@ -125,7 +125,7 @@ npm run test:interactive-layout -- --grep "compact hero height contract"
 
 Same-day correction after GL clarified the proof order:
 
-```powershell
+```bash
 docker restart locally-twisted-erpnext-v15-backend-1
 python scripts/dev/clear_website_cache.py
 npm run test:interactive-layout -- --grep "homepage leads with Google review|homepage hero uses one visible|small mobile homepage|mobile cookie notice|desktop homepage cookie|site-preferences"
@@ -171,9 +171,9 @@ mode, or if the trusted-business crawl differs from the review-card pixel speed.
 
 Current crawl verification:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
-node --check scripts\verify\interactive_layout.spec.js
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/www/home.py
+node --check scripts/verify/interactive_layout.spec.js
 python scripts/dev/clear_website_cache.py --restart
 npm run test:interactive-layout -- --grep "homepage review marquee|homepage client crawl banner|homepage reduced motion keeps"
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
@@ -186,7 +186,7 @@ correction. Current verification proves left-to-right deltas.
 
 Left-to-right correction verification:
 
-```powershell
+```bash
 npm run test:interactive-layout -- --grep "homepage review marquee|homepage client crawl banner|homepage reduced motion keeps"
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"

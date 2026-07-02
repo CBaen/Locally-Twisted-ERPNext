@@ -34,7 +34,7 @@ GL flagged that the old generic `Booking and pricing` section answered pricing w
 
 Focused checks used after the rewrite:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npm run test:container-contract -- --grep faq
 npm run test:layout-fit -- --grep faq

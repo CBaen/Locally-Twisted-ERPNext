@@ -6,7 +6,7 @@ Last updated: 2026-05-11 by Codex after checkout/order-email disclosure follow-t
 
 Make the launch policy/trust surface accurate enough to support customer trust and Stripe readiness without inventing legal or business terms.
 
-Business source of truth: `C:\Users\baenb\projects\locally-twisted-legacy_source\4-20-25-jeff-cameron\`.
+Business source of truth: `/home/guidingl/projects/locally-twisted-legacy_source/4-20-25-jeff-cameron/`.
 
 Do not treat current ERPNext policy pages as authoritative until each claim is traced to the legacy_source business source, current GL approval, or legal approval.
 
@@ -115,7 +115,7 @@ Prepare the legal/accounting approval packet and future analytics wiring rules:
 
 After policy edits:
 
-```powershell
+```bash
 python scripts/verify/nav_ia.py
 python scripts/verify/customer_contact_points_contract.py
 npm run test:layout-fit
@@ -123,7 +123,7 @@ npm run test:layout-fit
 
 Then route-check:
 
-```powershell
+```bash
 python - <<'PY'
 import urllib.request
 for route in ['/privacy', '/terms-of-service', '/refund-policy', '/accessibility']:

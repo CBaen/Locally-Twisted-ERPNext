@@ -44,7 +44,7 @@ and asked for the page and buttons to be deleted with no redirect.
 
 Fresh checks from 2026-05-11:
 
-- `rg -n "/event-balloons|event_balloons" apps\locally_twisted\locally_twisted`
+- `rg -n "/event-balloons|event_balloons" apps/locally_twisted/locally_twisted`
   returned no live app-source matches.
 - Direct no-redirect HTTP check returned `404` with no `Location` header for
   both `/event-balloons` and `/event_balloons`.

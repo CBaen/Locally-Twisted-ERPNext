@@ -88,7 +88,7 @@ Accountant Home now has Number Cards for:
 
 Sync and verify:
 
-```powershell
+```bash
 python scripts/setup/sync_finance_workspace.py
 python scripts/verify/finance_workspace_parity.py
 ```
@@ -132,21 +132,21 @@ Contractors:
 
 Read-only finance inventory:
 
-```powershell
+```bash
 python scripts/verify/finance_inventory.py
 python scripts/verify/finance_inventory.py --json
 ```
 
 Unit/contract checks:
 
-```powershell
+```bash
 python scripts/verify/finance_inventory_contract.py
 python -B -m py_compile scripts/verify/finance_inventory.py scripts/verify/finance_inventory_contract.py scripts/verify/finance_workspace_parity.py scripts/setup/sync_finance_workspace.py apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py
 ```
 
 Backend/payment guards to run when changing money flow:
 
-```powershell
+```bash
 python scripts/verify/backend_schema_inventory.py
 python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py

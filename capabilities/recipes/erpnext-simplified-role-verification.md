@@ -67,7 +67,7 @@ Check the whole chain in this order:
 
 For LT's current simplified backend lane, run the durable repo checks first:
 
-```powershell
+```bash
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/backend_workspace_parity.py
 $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
@@ -75,7 +75,7 @@ $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='
 
 Useful manual verification skeleton:
 
-```powershell
+```bash
 @'
 import json, urllib.request, urllib.parse, urllib.error
 from http.cookiejar import CookieJar

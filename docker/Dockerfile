@@ -81,7 +81,7 @@ RUN printf '%s\n' frappe erpnext payments webshop locally_twisted > sites/apps.t
 # the apps must be passed by name or their bundles get skipped — that's the bug
 # that left webshop's web.bundle.js missing and broke category pages.
 #
-# Split into separate RUN steps to avoid OOM on Docker Desktop's 8GB WSL2 cap
+# Split into separate RUN steps to avoid OOM on constrained local Docker hosts.
 # (yarn's bundler holds a lot of RAM per app; one app per RUN clears between).
 # frappe + erpnext are already compiled in the base image, so don't rebuild
 # them. locally_twisted has only plain CSS + plain JS (no SCSS, no bundle
@@ -89,7 +89,7 @@ RUN printf '%s\n' frappe erpnext payments webshop locally_twisted > sites/apps.t
 #
 # NODE_OPTIONS caps Node's heap so the bundler stays within the build host's
 # memory budget. Without this, esbuild can OOM during the production minify
-# step on Docker Desktop's 8GB WSL2 default.
+# step on constrained local Docker memory defaults.
 ENV NODE_OPTIONS=--max-old-space-size=3072
 RUN bench build --app payments --production
 RUN bench build --app webshop --production
@@ -106,7 +106,7 @@ RUN find apps -mindepth 1 -path "*/.git" -exec rm -rf {} + 2>/dev/null || true
 USER root
 RUN sed -i 's|proxy_set_header Origin [^;]*;|proxy_set_header Origin $http_origin;|' \
     /templates/nginx/frappe.conf.template \
-    && grep -q 'proxy_set_header Origin \$http_origin;' /templates/nginx/frappe.conf.template
+    && grep -Fq 'proxy_set_header Origin $http_origin;' /templates/nginx/frappe.conf.template
 USER frappe
 
 # Inherit volumes, ports, command from the base image. The base already

@@ -97,7 +97,7 @@ customer-facing success message over broken intake.
 
 ## LT verification commands
 
-```powershell
+```bash
 python scripts/setup/sync_contact_intake_backend.py
 python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
@@ -112,7 +112,7 @@ npm run test:form-experience
 For Frappe Cloud/live schema proof, include the site update/migrate job and a
 live writing smoke:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter

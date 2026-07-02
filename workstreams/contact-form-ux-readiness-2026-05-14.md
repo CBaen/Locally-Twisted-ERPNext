@@ -32,15 +32,15 @@ Current state:
 
 Local proof passed on 2026-05-15:
 
-```powershell
-python scripts\verify\inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
-python scripts\verify\inquiry_spam_gate.py --base-url http://localhost:8081
+```bash
+python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
+python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081
 npm run test:form-experience
-python scripts\verify\lead_backend_intake_parity.py
-python scripts\verify\contact_service_logic.py --base-url http://localhost:8081
-python scripts\verify\smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
-python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
-python scripts\verify\customer_email_policy_contract.py
+python scripts/verify/lead_backend_intake_parity.py
+python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts/verify/customer_email_policy_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.inquiry_upload_failure_contract.run
 ```
 
@@ -74,15 +74,15 @@ spam/sales-filter gates.
 Latest local verification passed on 2026-05-15 against
 `http://localhost:8081/contact`:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\contact.py scripts\verify\contact_service_logic.py scripts\verify\lead_backend_intake_parity.py
-python scripts\dev\clear_website_cache.py
-python scripts\verify\contact_service_logic.py --base-url http://localhost:8081
-python scripts\verify\lead_backend_intake_parity.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/www/contact.py scripts/verify/contact_service_logic.py scripts/verify/lead_backend_intake_parity.py
+python scripts/dev/clear_website_cache.py
+python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
+python scripts/verify/lead_backend_intake_parity.py
 npm run test:form-experience
-python scripts\verify\smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
-python scripts\verify\customer_email_policy_contract.py
-python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+python scripts/verify/customer_email_policy_contract.py
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 ```
 
 Observed local/live gap on 2026-05-15:

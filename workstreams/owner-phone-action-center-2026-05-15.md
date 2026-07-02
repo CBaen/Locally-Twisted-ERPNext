@@ -70,9 +70,9 @@ not launch/customer data.
 
 Passed locally on 2026-05-15:
 
-```powershell
-python -m compileall apps\locally_twisted\locally_twisted\owner_business_access.py apps\locally_twisted\locally_twisted\api\owner_business.py apps\locally_twisted\locally_twisted\www\owner-actions\index.py apps\locally_twisted\locally_twisted\seed\owner_demo_data.py apps\locally_twisted\locally_twisted\verify\owner_business_access_contract.py scripts\setup\sync_owner_demo_data.py scripts\verify\owner_business_access_contract.py
-node --check scripts\verify\owner_action_center.spec.js
+```bash
+python -m compileall apps/locally_twisted/locally_twisted/owner_business_access.py apps/locally_twisted/locally_twisted/api/owner_business.py apps/locally_twisted/locally_twisted/www/owner-actions/index.py apps/locally_twisted/locally_twisted/seed/owner_demo_data.py apps/locally_twisted/locally_twisted/verify/owner_business_access_contract.py scripts/setup/sync_owner_demo_data.py scripts/verify/owner_business_access_contract.py
+node --check scripts/verify/owner_action_center.spec.js
 python scripts/setup/sync_backend_workspaces.py
 python scripts/setup/sync_owner_demo_data.py
 python scripts/verify/backend_workspace_parity.py

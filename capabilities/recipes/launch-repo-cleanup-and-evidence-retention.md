@@ -75,11 +75,11 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 
 ## 2026-05-10 Receipt
 
-The launch cleanup removed regenerable outputs, stale mirrors/audits, old app clones, research throwaways, and tracked audience-page contest output. Raw photo drops were moved to `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\`. `.gitignore` now blocks the known raw/drop paths from returning. `ecommerce_pause_contract.py`, `nav_ia.py`, and cleanup-owned `git diff --check` passed.
+The launch cleanup removed regenerable outputs, stale mirrors/audits, old app clones, research throwaways, and tracked audience-page contest output. Raw photo drops were moved to `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/`. `.gitignore` now blocks the known raw/drop paths from returning. `ecommerce_pause_contract.py`, `nav_ia.py`, and cleanup-owned `git diff --check` passed.
 
 ## 2026-05-11 Receipt
 
-Follow-up cleanup removed the forbidden linked worktree/branch `ecommerce-phase-1-4-hygiene-20260510` after ancestry and worktree-state checks proved it did not hold unique unstaged/untracked work. The three deleted tracked `assets/what we do photos/` raw images were removed from repo source after `git hash-object` proved exact copies in `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`. Ignored forensic screenshot folders from regression research were deleted after the findings moved into tracked docs.
+Follow-up cleanup removed the forbidden linked worktree/branch `ecommerce-phase-1-4-hygiene-20260510` after ancestry and worktree-state checks proved it did not hold unique unstaged/untracked work. The three deleted tracked `assets/what we do photos/` raw images were removed from repo source after `git hash-object` proved exact copies in `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/landing-page-pics-20260510/`. Ignored forensic screenshot folders from regression research were deleted after the findings moved into tracked docs.
 
 ## 2026-05-17 Receipt
 

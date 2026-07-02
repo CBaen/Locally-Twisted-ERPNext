@@ -1,10 +1,9 @@
 """Capture any LT route at desktop + mobile via Playwright.
 
-Saves to C:/Users/baenb/.claude/lt-{slug}-{viewport}.png so the file is
-trivially Read-able from a future Claude session.
+Saves to output/playwright/lt-{slug}-{viewport}.png for local review.
 
 Run:
-    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 \\
+    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 /
         python scripts/verify/playwright_route_screenshot.py /contact
 """
 from __future__ import annotations
@@ -14,7 +13,7 @@ from pathlib import Path
 
 from browser_runtime import MissingPlaywright, launch_chromium, require_playwright
 
-OUT_DIR = Path("C:/Users/baenb/.claude")
+OUT_DIR = Path("output/playwright")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 DEFAULT_BASE = "http://localhost:8081"

@@ -25,7 +25,7 @@ Do **not** run a purge/reupload in this audit. Destructive product import/purge 
 
 ## Non-negotiable boundaries
 
-- Worktree: `C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted`.
+- Worktree: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`.
 - Branch rule: `main` only. Do not create branches.
 - Do not commit, push, stage, reset, purge, reimport, mutate legacy_source, open public ecommerce, process live payments, or send real customer messages.
 - Public ecommerce stays paused with `lt_ecommerce_paused=1`.

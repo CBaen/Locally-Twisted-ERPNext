@@ -1,6 +1,6 @@
 {
   "baseUrl": "http://localhost:8081",
-  "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "chromePath": "/usr/bin/google-chrome",
   "expectedProductCount": 4,
   "products": [
     {

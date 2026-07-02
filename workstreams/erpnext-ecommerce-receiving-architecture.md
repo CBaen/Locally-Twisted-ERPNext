@@ -98,7 +98,7 @@ Brief must be exact to this stack:
 - ERPNext/Frappe v15 in Docker/Frappe app `locally_twisted`.
 - Current Webshop item override under `apps/locally_twisted/locally_twisted/templates/generators/item/`.
 - Current product contract starter under `apps/locally_twisted/locally_twisted/catalog_contract/`.
-- legacy_source source is read-only reference at `C:/Users/baenb/projects/locally-twisted-legacy_source/` and old legacy_source shop behavior is conceptual/reference input, not infrastructure to copy.
+- legacy_source source is read-only reference at `/home/guidingl/projects/locally-twisted-legacy_source/` and old legacy_source shop behavior is conceptual/reference input, not infrastructure to copy.
 - Native ERPNext ecommerce is insufficient; research must identify implementation patterns and risks for building a safer ERPNext-side ecommerce logic layer.
 
 No code/product import until research brief -> expedition -> synthesis -> GL architecture checkpoint.
@@ -120,7 +120,7 @@ Durable research artifact:
 `research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md`
 
 OpenClaw cockpit witness:
-`C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md`
+`retired local project path removed`
 
 Current conclusion:
 

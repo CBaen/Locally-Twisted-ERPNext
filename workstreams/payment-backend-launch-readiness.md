@@ -72,20 +72,20 @@ Latest payment commits on `main`:
 
 Use these from the repo root:
 
-```powershell
-python scripts\verify\payment_backend_config_contract.py
-python scripts\verify\payment_webhook_contract.py
-python scripts\verify\payment_cascade_contract.py
-python scripts\verify\cart_checkout_contract.py
-python scripts\verify\payment_launch_readiness.py
+```bash
+python scripts/verify/payment_backend_config_contract.py
+python scripts/verify/payment_webhook_contract.py
+python scripts/verify/payment_cascade_contract.py
+python scripts/verify/cart_checkout_contract.py
+python scripts/verify/payment_launch_readiness.py
 ```
 
 Expected current local result: all pass.
 
 Before live cutover:
 
-```powershell
-python scripts\verify\payment_launch_readiness.py --mode live
+```bash
+python scripts/verify/payment_launch_readiness.py --mode live
 ```
 
 Run this only during cutover work. It is intentionally outside the current fake-data/synthetic backend readiness gate.

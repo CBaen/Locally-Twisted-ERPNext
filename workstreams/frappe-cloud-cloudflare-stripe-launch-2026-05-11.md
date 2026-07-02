@@ -79,7 +79,7 @@ failure and not live checkout approval. Handoff:
 | Public site/forms | Live smoke on 2026-05-16 proved Lead `CRM-LEAD-2026-00013`, five private Files, five CRM photo rows, owner Email Queue `683s86r04b` with five attachment refs, and customer Email Queue `683suhfaa9` with zero photo attachments | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP after future form changes |
 | Hidden commerce | Website launch does not approve checkout | `python scripts/verify/ecommerce_pause_contract.py` before relying on a paused/no-purchase posture |
 | Cloudflare | Domain now routes to Frappe Cloud for pages/forms; rerun dynamic-route gate after any DNS/cache/security change | `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` |
-| SEO/reindex | Source guard added for sitemap/canonical public-domain drift, but live still advertises the Frappe Cloud vanity host until a Frappe Cloud release lands | `$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract` |
+| SEO/reindex | Source guard added for sitemap/canonical public-domain drift, but live still advertises the Frappe Cloud vanity host until a Frappe Cloud release lands | `LT_BASE_URL='https://locallytwisted.com' npm run test:seo-contract` |
 | Stripe | Live checkout remains blocked | `python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com` plus one intentional low-risk real payment test |
 | Backend proof before opening checkout | Still required before any checkout scope opens | `business_automation_index.py`, `synthetic_business_pipeline.py`, `payment_backend_config_contract.py`, `payment_webhook_contract.py`, `stripe_amount_parity_contract.py` |
 
@@ -189,7 +189,7 @@ Cache-Everything-style rule.
 
 Fast local contract:
 
-```powershell
+```bash
 python scripts/verify/cloudflare_launch_readiness_contract.py
 ```
 
@@ -217,12 +217,12 @@ python scripts/verify/cloudflare_launch_readiness_contract.py
 
 Passed on 2026-05-12 after final deploy and site update:
 
-```powershell
-$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
-$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
-python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
-python scripts\verify\smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
-python scripts\verify\smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+```bash
+export LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+export LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
 ```
 
 Strict verifier summary:

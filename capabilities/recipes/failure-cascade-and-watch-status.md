@@ -54,9 +54,9 @@ regresses, or becomes stale.
 
 Use the dry-run report before edits:
 
-```powershell
-python tools\capability_failure_cascade.py --root capabilities --root-alias local --capability-id <id> --event failure --json
-python tools\capability_failure_cascade.py --root capabilities --root-alias project --related-root shared=C:\Users\<user>\capabilities --capability-id <id> --event failure --json
+```bash
+python tools/capability_failure_cascade.py --root capabilities --root-alias local --capability-id <id> --event failure --json
+python tools/capability_failure_cascade.py --root capabilities --root-alias project --related-root shared=/home/guidingl/capabilities --capability-id <id> --event failure --json
 ```
 
 Read the report as a kitchen inspection:

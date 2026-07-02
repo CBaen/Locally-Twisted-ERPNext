@@ -112,7 +112,7 @@ Add route-specific widths when the changed surface has its own breakpoint.
 
 ## Verification Commands
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npm run test:a11y
 npm run test:a11y-manual

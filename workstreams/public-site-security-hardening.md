@@ -70,17 +70,17 @@ Remaining follow-ups:
 
 After each security hardening change:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
-python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\shop.py apps\locally_twisted\locally_twisted\www\thank_you.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\www\event_playground.py
+python -m py_compile apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/www/shop.py apps/locally_twisted/locally_twisted/www/thank_you.py apps/locally_twisted/locally_twisted/www/checkout.py apps/locally_twisted/locally_twisted/www/payment_success.py apps/locally_twisted/locally_twisted/www/event_playground.py
 npm run test:shop-smoke
 npm run test:interactive-layout
 python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/event_playground_gate.py
 npm run test:event-playground
-python scripts/verify/business_automation_index.py --report output\business-automation-index.json
-python scripts/verify/synthetic_business_pipeline.py --report output\synthetic-business-pipeline.json
+python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 ```
 
 Also run targeted checks for the exact security symptom:

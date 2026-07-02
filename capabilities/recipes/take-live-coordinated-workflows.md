@@ -36,7 +36,7 @@ back or stop active damage.
 
 2. Split work by user-facing lane, not technical layer.
    - Inquiry path: `/contact`, `/book` redirect, Lead/service taxonomy, loud failure behavior.
-   - Trust/policy: `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, Stripe URL readiness. Business/legal content should trace to `C:\Users\baenb\projects\locally-twisted-legacy_source\`, approved current resources, or GL/legal approval.
+   - Trust/policy: `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, Stripe URL readiness. Business/legal content should trace to `/home/guidingl/projects/locally-twisted-legacy_source/`, approved current resources, or GL/legal approval.
    - Shop/media: product/category media, variant correctness, Item Group images, product detail confidence. Product/service claims should trace to the legacy_source business-detail source or GL approval.
    - Visual/accessibility QA: desktop/mobile screenshots, layout fit, navigation, keyboard/screen-reader basics.
    - Backend readiness: Jeff-facing Lead/Contact/order flow, stale scripts, sample data after schema cleanup.
@@ -80,7 +80,7 @@ back or stop active damage.
 
 - [claude-reference-library](claude-reference-library.md) - optional read-only reference for older Frappe launch, payment, form, fixture, migration, and deploy safety checklists.
 - [visual-debugging](visual-debugging.md) - supports visual inspection when browser screenshots are needed.
-- `C:\Users\baenb\capabilities\recipes\client-release-safety-gates.md` - agency-wide local/preflight, staging, approval, live, and post-live release gate.
+- `/home/guidingl/capabilities/recipes/client-release-safety-gates.md` - agency-wide local/preflight, staging, approval, live, and post-live release gate.
 
 ## Failure modes
 

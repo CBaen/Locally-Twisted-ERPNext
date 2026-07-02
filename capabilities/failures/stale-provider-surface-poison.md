@@ -93,7 +93,7 @@ The minimum proof is:
 - Do not assume `locallytwisted-staging.frappe.cloud` is disposable if it owns
   or serves `locallytwisted.com`.
 - Do not keep stale queue blockers after live proof supersedes them.
-- Do not let cleanup become a broad Docker, WSL, browser, cache, or machine
+- Do not let cleanup become a broad Docker, Linux host, browser, cache, or machine
   prune.
 
 ## Known Instance

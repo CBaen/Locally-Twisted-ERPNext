@@ -69,9 +69,9 @@ restored intentionally.
 
 Passed on 2026-05-12:
 
-```powershell
+```bash
 python -m py_compile apps/locally_twisted/locally_twisted/navbar_context.py scripts/verify/nav_ia.py
-python scripts\verify\nav_ia.py
+python scripts/verify/nav_ia.py
 npm run test:search-contract
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_list --kwargs "{'doctype':'Website Item','filters':{'item_code':['in',['6-graduation-stands','7-butterfly-column','easter-balloon-cups','graduation-grab-n-go']]},'fields':['item_code','published','lt_product_page_type','lt_commerce_lane','route'],'limit_page_length':20,'order_by':'item_code asc'}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.navbar_context._ready_to_order_exclusion_reason --args "[{'item_code':'7-butterfly-column','lt_product_page_type':'quote_first','lt_commerce_lane':'quote'}]"
@@ -85,5 +85,5 @@ The synthetic `quote_first` owner-included product returned
 
 Do not add a product to Ready-to-Order nav/search by editing the template alone.
 Change the Website Item fields and owner include/exclude constants
-deliberately, then rerun `python scripts\verify\nav_ia.py` and
+deliberately, then rerun `python scripts/verify/nav_ia.py` and
 `npm run test:search-contract`.

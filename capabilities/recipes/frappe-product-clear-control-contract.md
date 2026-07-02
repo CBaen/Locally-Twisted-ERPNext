@@ -79,7 +79,7 @@ fulfillment panel.
 
 Run:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 python scripts/verify/smoke_shop.py
 npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"

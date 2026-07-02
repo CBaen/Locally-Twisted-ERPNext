@@ -220,7 +220,7 @@ For every page in Phase 2:
 3. **Playwright viewport screenshot** — desktop 1280×800 + mobile 375×667. Saved to `_resources/audit-2026-04-30/<route>-{desktop,mobile}.png`.
 4. **Read the screenshot** — describe what's visible. If the description doesn't match Hetzner's mirrored render, the build is not done.
 5. **Console clean** — Playwright capture of `console.log` and `console.error`. Any error = FAIL.
-6. **Form-bearing pages also:** smoke-test the form via curl with X-Requested-With header. Lead created or 200 with success body. Loud-failure rule per `~/.claude/rules/loud-failure.md`.
+6. **Form-bearing pages also:** smoke-test the form via curl with X-Requested-With header. Lead created or 200 with success body. Loud-failure rule per `capabilities/recipes/fail-loud-operating-law.md`.
 
 The DOM saying `is_visible: True` is not the same as the pixels showing the content. Per the lessons-learned 2026-04-29: viewport-only Playwright screenshots are the verification method, NOT full-page screenshots (which compress at extreme aspect ratios and lie).
 

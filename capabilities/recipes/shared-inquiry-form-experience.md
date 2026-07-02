@@ -109,7 +109,7 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 
 Focused form experience:
 
-```powershell
+```bash
 npm run test:form-experience
 python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081
 python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
@@ -117,7 +117,7 @@ python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://loc
 
 Backend submit and cleanup:
 
-```powershell
+```bash
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 python scripts/verify/customer_email_policy_contract.py
@@ -125,7 +125,7 @@ python scripts/verify/customer_email_policy_contract.py
 
 Live public form release proof:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
@@ -135,7 +135,7 @@ python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --for
 
 Useful adjacent checks after form markup, cache-buster, or page-shell changes:
 
-```powershell
+```bash
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/inquiry_upload_failure_contract.py

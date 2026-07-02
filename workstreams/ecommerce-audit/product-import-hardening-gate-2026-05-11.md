@@ -18,7 +18,7 @@ This handoff is written for peer GPT 5.5 agents working in the LT Frappe stack:
 
 ## Gate Command
 
-```powershell
+```bash
 python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json
 ```
 
@@ -43,7 +43,7 @@ The dry-run plan excludes V1 products with color/customization axes, more than 5
 
 Next command sequence for peer GPT 5.5 agents:
 
-```powershell
+```bash
 python scripts/setup/stage_seed_data.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs "{'dry_run': True}"
 python scripts/verify/product_import_readiness_gate.py

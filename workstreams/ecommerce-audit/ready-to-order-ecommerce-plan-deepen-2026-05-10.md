@@ -234,7 +234,7 @@ Actions:
    - assert operator evidence can read note;
    - rollback and prove no generated money/customer/note records survive.
 3. Rerun:
-   - `python scripts\verify\payment_cascade_contract.py`
+   - `python scripts/verify/payment_cascade_contract.py`
    - repaired fulfillment verifier
    - focused customer-note verifier.
 

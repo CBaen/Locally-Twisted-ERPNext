@@ -78,11 +78,11 @@ After the local write/apply pass:
 
 Fresh local proof:
 
-```powershell
-python scripts\verify\product_page_media_classification_packet.py
-python scripts\verify\product_page_media_visibility_contract.py
-python scripts\verify\product_setup_catalog_coverage.py
-python scripts\verify\product_gallery_projection_contract.py
+```bash
+python scripts/verify/product_page_media_classification_packet.py
+python scripts/verify/product_page_media_visibility_contract.py
+python scripts/verify/product_setup_catalog_coverage.py
+python scripts/verify/product_gallery_projection_contract.py
 npm run test:product-gallery-experience
 npm run test:owner-product-safety
 npm run test:ecommerce-full

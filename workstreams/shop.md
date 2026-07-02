@@ -32,7 +32,7 @@ Unassigned next agent/session.
 
 Work from the main project workspace unless the user explicitly asks for a separate worktree:
 
-`C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`
+`/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
 
 ## User-Facing Impact
 

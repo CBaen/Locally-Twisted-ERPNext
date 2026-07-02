@@ -18,19 +18,19 @@ Use it when the business wants reminder infrastructure but has not approved live
 
 The current no-live reminder queue is:
 
-```powershell
+```bash
 python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json --markdown output/customer-reminder-dry-run.md
 ```
 
 The current no-live reminder review report is:
 
-```powershell
+```bash
 python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json --markdown output/customer-reminder-review-report.md --csv output/customer-reminder-review-report.csv
 ```
 
 Fake scenario coverage is:
 
-```powershell
+```bash
 python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/verify/customer_reminder_review_report_contract.py
 ```

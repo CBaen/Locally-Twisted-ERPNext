@@ -3,8 +3,8 @@
 ## Scope
 Diagnose the fresh failure from:
 
-```powershell
-python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json
+```bash
+python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json
 ```
 
 Observed prior symptom from handoff: `[PRODUCT PAGE ARCHITECTURE READINESS] FAIL - bench execute failed`.
@@ -35,8 +35,8 @@ Host wrapper: `scripts/verify/product_page_architecture_readiness.py`
 
 ## Environment checks
 
-```powershell
-docker ps --format "table {{.Names}}\t{{.Status}}"
+```bash
+docker ps --format "table {{.Names}}/t{{.Status}}"
 ```
 
 Output showed the expected backend container running:
@@ -46,7 +46,7 @@ locally-twisted-erpnext-v15-backend-1       Up About an hour
 locally-twisted-erpnext-v15-db-1            Up 25 hours (healthy)
 ```
 
-```powershell
+```bash
 docker inspect locally-twisted-erpnext-v15-backend-1 --format "Started={{.State.StartedAt}} Status={{.State.Status}} Restarting={{.State.Restarting}} ExitCode={{.State.ExitCode}} RestartCount={{.RestartCount}}"
 ```
 
@@ -58,7 +58,7 @@ Started=2026-05-10T18:56:53.786615446Z Status=running Restarting=false ExitCode=
 
 Backend logs around the reported failure window had no matching output:
 
-```powershell
+```bash
 docker logs --since 2026-05-10T19:50:00Z --until 2026-05-10T20:06:00Z locally-twisted-erpnext-v15-backend-1
 ```
 
@@ -68,8 +68,8 @@ Output: no lines.
 
 ### Exact verifier command
 
-```powershell
-python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json
+```bash
+python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json
 ```
 
 Result: **PASS**, exit code `0`.
@@ -77,7 +77,7 @@ Result: **PASS**, exit code `0`.
 Key output:
 
 ```text
-[PRODUCT PAGE ARCHITECTURE READINESS] wrote output\product-page-architecture-readiness-infrastructure-research-20260510.json
+[PRODUCT PAGE ARCHITECTURE READINESS] wrote output/product-page-architecture-readiness-infrastructure-research-20260510.json
 [PRODUCT PAGE ARCHITECTURE READINESS] PASS
   technical_architecture_ok: True
   import_reopen_ok: True
@@ -113,7 +113,7 @@ Generated report summary:
 
 ### Direct bench execute
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.product_page_architecture_readiness.run
 ```
 
@@ -132,7 +132,7 @@ Those warnings/errors did **not** cause a non-zero bench exit and did **not** pr
 
 ## Existing related reports
 
-```powershell
+```bash
 Get-ChildItem output -Filter "*architecture-readiness*" | Select-Object Name,Length,LastWriteTime
 ```
 
@@ -174,8 +174,8 @@ Recommended small hardening if this recurs: improve `scripts/verify/product_page
 
 If it fails again, rerun this immediately before any restart:
 
-```powershell
-docker ps --format "table {{.Names}}\t{{.Status}}"
+```bash
+docker ps --format "table {{.Names}}/t{{.Status}}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.product_page_architecture_readiness.run
 docker inspect locally-twisted-erpnext-v15-backend-1 --format "Started={{.State.StartedAt}} Status={{.State.Status}} Restarting={{.State.Restarting}} ExitCode={{.State.ExitCode}} RestartCount={{.RestartCount}}"
 ```

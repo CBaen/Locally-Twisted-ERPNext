@@ -2,7 +2,8 @@
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 
-OUT = Path("C:/Users/baenb/.claude/lt-contact-cta-closeup.png")
+OUT = Path("output/playwright/lt-contact-cta-closeup.png")
+OUT.parent.mkdir(parents=True, exist_ok=True)
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)

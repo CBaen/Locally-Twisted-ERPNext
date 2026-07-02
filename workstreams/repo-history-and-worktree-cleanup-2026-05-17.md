@@ -11,7 +11,7 @@ This was repo operations work only. It did not change ERPNext app behavior, owne
 Touched cleanup surfaces:
 
 - Local git history alignment for `main`.
-- Stale detached Codex worktrees under `C:\Users\baenb\.codex\worktrees\`.
+- Stale detached Codex worktrees under `/home/guidingl/.codex/worktrees/`.
 - Cleanup documentation and capability receipts.
 
 ## What Was Done
@@ -21,8 +21,8 @@ Touched cleanup surfaces:
 3. Rebasing local `main` onto `origin/main` skipped or dropped duplicate commits after comparing each local commit to the pushed remote equivalent.
 4. Verified local `main` and `origin/main` both resolved to `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`.
 5. Reviewed two detached worktrees before removal:
-   - `C:\Users\baenb\.codex\worktrees\84e7\locally-twisted`
-   - `C:\Users\baenb\.codex\worktrees\lt-backend-checkout-docs-20260503`
+   - `/home/guidingl/.codex/worktrees/84e7/locally-twisted`
+   - `/home/guidingl/.codex/worktrees/lt-backend-checkout-docs-20260503`
 6. Confirmed both worktrees were clean, their HEAD commits were ancestors of `main` and `origin/main`, and their visible feature value already existed in the current repo.
 7. Deleted only those two approved stale worktrees and pruned the worktree registry.
 
@@ -43,13 +43,13 @@ These local commits were already represented by pushed remote commits and were n
 
 ## Worktree Value Review
 
-`C:\Users\baenb\.codex\worktrees\84e7\locally-twisted`
+`/home/guidingl/.codex/worktrees/84e7/locally-twisted`
 
 - HEAD: `5ff6964 feat: prefill contact form from service links`.
 - State before deletion: clean, detached, ancestor of `main` and `origin/main`.
 - Value check: contact prefill behavior and documentation are already present in current `main`, including `scripts/verify/contact_prefill.py`, `/contact` prefill docs, and service-link references.
 
-`C:\Users\baenb\.codex\worktrees\lt-backend-checkout-docs-20260503`
+`/home/guidingl/.codex/worktrees/lt-backend-checkout-docs-20260503`
 
 - HEAD: `683b2d6 Align checkout lead conversion docs`.
 - State before deletion: clean, detached, ancestor of `main` and `origin/main`.
@@ -88,6 +88,6 @@ Do not delete a detached worktree just because it is merged. First check:
 
 Capability reference: `capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
 
-Agency backlink: `C:\Users\baenb\projects\Built_by_Cameron\lessons-learned.md`
+Agency backlink: `/home/guidingl/projects/Built_by_Cameron/lessons-learned.md`
 now records the cross-client lesson for stale worktree value review before
 deletion.

@@ -64,10 +64,10 @@ the actual product.
 Passed locally after restarting the local Frappe backend worker and clearing
 website cache:
 
-- `python -m py_compile apps\locally_twisted\locally_twisted\product_variant_media.py apps\locally_twisted\locally_twisted\api\variant_media.py apps\locally_twisted\locally_twisted\api\cart.py apps\locally_twisted\locally_twisted\product_page_runtime.py scripts\verify\variant_media_contract.py`
-- `python scripts\verify\variant_media_contract.py`
-- `python scripts\verify\cart_checkout_contract.py`
-- `python scripts\verify\product_page_runtime_contract.py`
+- `python -m py_compile apps/locally_twisted/locally_twisted/product_variant_media.py apps/locally_twisted/locally_twisted/api\variant_media.py apps/locally_twisted/locally_twisted/api\cart.py apps/locally_twisted/locally_twisted/product_page_runtime.py scripts/verify/variant_media_contract.py`
+- `python scripts/verify/variant_media_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
 
 ## Boundary
 

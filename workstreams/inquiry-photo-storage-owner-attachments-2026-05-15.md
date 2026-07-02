@@ -80,12 +80,12 @@ Changed behavior:
 
 Local verification passed before this documentation update:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\verify\book_form_repeat_email_photos_email_contract.py apps\locally_twisted\locally_twisted\verify\customer_email_policy_contract.py scripts\verify\customer_email_policy_contract.py
-python scripts\verify\customer_email_policy_contract.py
-python scripts\verify\inquiry_upload_failure_contract.py
-python scripts\dev\clear_website_cache.py --restart
-python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/lead_cascade.py apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_email_contract.py apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py scripts/verify/customer_email_policy_contract.py
+python scripts/verify/customer_email_policy_contract.py
+python scripts/verify/inquiry_upload_failure_contract.py
+python scripts/dev/clear_website_cache.py --restart
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 ```
 
 The strict local form verifier passed with two repeat same-email submissions,
@@ -96,9 +96,9 @@ cleaned.
 Frappe Cloud preflight and Cloudflare route health were checked after the
 source push:
 
-```powershell
-python scripts\verify\frappe_cloud_preflight.py
-python scripts\verify\cloudflare_launch_readiness.py --base-url https://locallytwisted.com
+```bash
+python scripts/verify/frappe_cloud_preflight.py
+python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
 ```
 
 Both passed with zero hard blockers. That proves route/preflight health, not

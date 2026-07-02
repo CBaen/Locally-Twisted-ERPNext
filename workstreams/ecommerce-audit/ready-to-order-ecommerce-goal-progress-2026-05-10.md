@@ -66,9 +66,9 @@ Exact Phase 2 classifier outputs:
 
 Safe gates after Phase 2:
 
-- `python scripts\verify\product_page_architecture_readiness.py --report output\product-page-architecture-readiness-infrastructure-research-20260510.json` — BLOCKED only on expected safe public ecommerce pause; technical architecture true.
-- `python scripts\verify\checkout_fulfillment_contract.py` — PASS and rollback.
-- `python scripts\verify\customer_note_checkout_preservation_contract.py` — PASS and rollback.
+- `python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness-infrastructure-research-20260510.json` — BLOCKED only on expected safe public ecommerce pause; technical architecture true.
+- `python scripts/verify/checkout_fulfillment_contract.py` — PASS and rollback.
+- `python scripts/verify/customer_note_checkout_preservation_contract.py` — PASS and rollback.
 
 ## Phase 2 parent-verified command output
 

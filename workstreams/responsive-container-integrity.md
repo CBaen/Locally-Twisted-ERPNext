@@ -70,7 +70,7 @@ The standing viewport families are:
 - `node --check scripts/verify/layout_helpers.js` passed.
 - `node --check scripts/verify/layout_fit.spec.js` passed.
 - `node --check scripts/verify/interactive_layout.spec.js` passed.
-- `python -B -m py_compile scripts\verify\smoke_shop.py` passed.
+- `python -B -m py_compile scripts/verify/smoke_shop.py` passed.
 - `python scripts/verify/commerce_rules_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed.
 - `npm run test:interactive-layout` passed 154/154 after the generated-photo hero repair.
@@ -79,7 +79,7 @@ The standing viewport families are:
 - `npm run test:container-contract` passed 69/69 after the executable route contract repair and route matrix expansion.
 - `npm run test:a11y` passed with 50 route/viewport axe results and 0 violations after the generated-photo hero selector leak and later homepage carousel accessibility blocker were fixed.
 - `npm run test:website-verify` passed; `npm run test:public-verify` aliases to the same website-only gate.
-- `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "compact hero height contract" --reporter=line --workers=1` passed 66/66 after the generated-photo hero repair.
+- `npx playwright test scripts/verify/interactive_layout.spec.js --grep "compact hero height contract" --reporter=line --workers=1` passed 66/66 after the generated-photo hero repair.
 - 2026-05-10 Event Balloons hero follow-up: `npx playwright test scripts/verify/event_hero_mobile.spec.js --reporter=line` passed 12/12, targeted Event Balloons `layout-fit` passed 65/65, targeted `container-contract` passed 15/15, and `npm run test:a11y-manual` passed. Later 2026-05-10 broad launch verification passed full `interactive_layout.spec.js` 163/163 inside `website_launch_verify.py`, `npm run test:a11y` 50 route/viewport axe checks with 0 violations, and `npm run test:a11y-manual`.
 
 ## Rules For Future Work

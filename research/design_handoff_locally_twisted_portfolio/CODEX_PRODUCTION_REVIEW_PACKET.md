@@ -54,7 +54,7 @@ The reference folders are critique input only. They are not production source.
 
 Latest focused verification on the local Frappe site:
 
-```powershell
+```bash
 npm run test:portfolio-reel
 npm run test:layout-fit -- --grep portfolio
 npm run test:interactive-layout -- --grep portfolio

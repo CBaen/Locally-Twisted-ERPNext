@@ -40,16 +40,16 @@ That is wrong for the current product model:
 
 Green after repair and migrate:
 
-- `python scripts\verify\catalog_variant_contract.py`
-- `python scripts\verify\product_page_architecture_readiness.py --json`
-- `python scripts\verify\product_import_readiness_gate.py --report output\product-import-readiness-gate.json`
-- `python scripts\verify\product_blueprint_contract.py`
+- `python scripts/verify/catalog_variant_contract.py`
+- `python scripts/verify/product_page_architecture_readiness.py --json`
+- `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
+- `python scripts/verify/product_blueprint_contract.py`
 - `bench --site frontend execute locally_twisted.verify.product_blueprint_contract.run`
-- `python scripts\verify\cart_checkout_contract.py`
-- `python scripts\verify\variant_media_contract.py`
-- `python scripts\verify\checkout_product_family_contract.py`
-- `python scripts\verify\product_add_on_dependency_contract.py`
-- `python scripts\verify\product_page_runtime_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/variant_media_contract.py`
+- `python scripts/verify/checkout_product_family_contract.py`
+- `python scripts/verify/product_add_on_dependency_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
 
 Local DB check after migrate:
 

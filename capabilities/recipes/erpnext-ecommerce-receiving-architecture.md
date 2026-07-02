@@ -44,7 +44,7 @@ Do not treat product transfer as the goal. ERPNext must first be able to safely 
 legacy_source is a conceptual witness for mature ecommerce behavior, not infrastructure to copy. Do not import legacy_source fields into ERPNext unless the ERPNext destination field, behavior owner, and verifier exist.
 
 OpenClaw cockpit witness:
-`C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md`
+`retired local project path removed`
 
 ## Current LT Contract
 
@@ -342,7 +342,7 @@ As of 2026-05-10, the first backend preservation slice exists:
 
 Primary verifier:
 
-```powershell
+```bash
 python scripts/verify/complex_checkout_scaffold_contract.py
 python scripts/verify/complex_checkout_scaffold.py
 python scripts/verify/product_page_architecture_contract_contract.py
@@ -441,7 +441,7 @@ open.
 
 Focused evidence:
 
-```powershell
+```bash
 python scripts/verify/proof_product_contract.py
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_page_contract_source_audit.py

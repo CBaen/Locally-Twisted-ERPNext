@@ -26,8 +26,8 @@ Total: 563 enabled color SKUs.
 
 Command:
 
-```powershell
-python scripts\verify\multi_color_purchasable_rehearsal_contract.py --report workstreams\ecommerce-audit\multi-color-purchasable-rehearsal-2026-05-17.json
+```bash
+python scripts/verify/multi_color_purchasable_rehearsal_contract.py --report workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.json
 ```
 
 Result:

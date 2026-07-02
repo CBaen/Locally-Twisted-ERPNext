@@ -20,11 +20,11 @@ Use this section when something is broken and the cause is not obvious.
 
 | Symptom | Suspect Layer | First Test | Restore | Prevention |
 |---|---|---|---|---|
-| Signup/account access appears for strangers | Website/Portal Settings | `python scripts\verify\customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu` | `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_invite_only_portal` | `npm run test:public-access-guard` and `doc_events` guard |
-| Customer portal shows supplier/procurement links | Portal Settings menu role drift | `python scripts\verify\customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu` | `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_supplier_routes` | `npm run test:public-access-guard` and `doc_events` guard |
+| Signup/account access appears for strangers | Website/Portal Settings | `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu` | `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_invite_only_portal` | `npm run test:public-access-guard` and `doc_events` guard |
+| Customer portal shows supplier/procurement links | Portal Settings menu role drift | `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu` | `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_supplier_routes` | `npm run test:public-access-guard` and `doc_events` guard |
 | Marketing can see Leads, Customers, or Desk | Role/DocPerm/User role drift | `npm run test:marketing-review-access` | `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_marketing_docperms` | `npm run test:public-access-guard` and `doc_events` guard |
-| New public write endpoint appears | Guest API surface drift | `python scripts\verify\allow_guest_surface_inventory.py --json` | Review endpoint, add/remove intentionally | Public-write allowlist still needed |
-| Cleanup/import wants broad data mutation | Unsafe destructive process | `python scripts\verify\product_import_readiness_gate.py` | Stop; require fresh backup and dry-run | Cleanup/import wrapper still needed |
+| New public write endpoint appears | Guest API surface drift | `python scripts/verify/allow_guest_surface_inventory.py --json` | Review endpoint, add/remove intentionally | Public-write allowlist still needed |
+| Cleanup/import wants broad data mutation | Unsafe destructive process | `python scripts/verify/product_import_readiness_gate.py` | Stop; require fresh backup and dry-run | Cleanup/import wrapper still needed |
 
 ## Current Restored State
 
@@ -71,7 +71,7 @@ Review lane recommendation:
 
 Trigger:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.break_public_signup_default_customer
 ```
 
@@ -92,9 +92,9 @@ Seriousness: Critical access exposure.
 
 Recovery:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_invite_only_portal
-python scripts\verify\customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
+python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
 npm run test:human-access
 ```
 
@@ -108,7 +108,7 @@ Prevention added:
 
 Trigger:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.break_supplier_routes_as_customer
 ```
 
@@ -131,9 +131,9 @@ Seriousness: High customer/supplier boundary drift.
 
 Recovery:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_supplier_routes
-python scripts\verify\customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
+python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
 ```
 
 Prevention added:
@@ -145,7 +145,7 @@ Prevention added:
 
 Trigger:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.break_marketing_docperm_lead_read
 ```
 
@@ -167,7 +167,7 @@ Seriousness: Critical data exposure.
 
 Recovery:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.public_access_break_lab.restore_marketing_docperms
 npm run test:marketing-review-access
 npm run test:human-access
@@ -199,7 +199,7 @@ Blocks normal Frappe document saves for:
 
 Verifier:
 
-```powershell
+```bash
 npm run test:public-access-guard
 ```
 
@@ -229,19 +229,19 @@ Those need capability/process wrappers:
 
 ## Verification Run
 
-```powershell
-python -B -m py_compile apps\locally_twisted\locally_twisted\public_access_guard.py apps\locally_twisted\locally_twisted\verify\public_access_guard_contract.py apps\locally_twisted\locally_twisted\verify\public_access_break_lab.py scripts\verify\public_access_guard_contract.py
-python scripts\dev\clear_website_cache.py
+```bash
+python -B -m py_compile apps/locally_twisted/locally_twisted/public_access_guard.py apps/locally_twisted/locally_twisted/verify/public_access_guard_contract.py apps/locally_twisted/locally_twisted/verify/public_access_break_lab.py scripts/verify/public_access_guard_contract.py
+python scripts/dev/clear_website_cache.py
 npm run test:public-access-guard
 npm run test:marketing-review-access
 npm run test:human-access
-python scripts\verify\customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
+python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
 npm run test:webshop-guest-party
 npm run test:ecommerce-open-mode
 npm run test:owner-catalog-guard
-python scripts\verify\allow_guest_surface_inventory.py --json
-python scripts\verify\ignore_permissions_justification_lint.py --json
-python scripts\verify\newsletter_concurrency_contract.py
+python scripts/verify/allow_guest_surface_inventory.py --json
+python scripts/verify/ignore_permissions_justification_lint.py --json
+python scripts/verify/newsletter_concurrency_contract.py
 ```
 
 Result:

@@ -43,14 +43,14 @@ The final checkout browser proof covered these products end to end:
 
 Final browser proof command:
 
-```powershell
-& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js
+```bash
+& "node" scripts/verify/post_import_checkout_proof.js
 ```
 
 Result:
 
 ```text
-[POST IMPORT CHECKOUT PROOF] PASS report=C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\output\playwright\post-import-checkout-proof.json
+[POST IMPORT CHECKOUT PROOF] PASS report=/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/output/playwright/post-import-checkout-proof.json
 ```
 
 The proof report is ignored runtime evidence under `output/`; rerun the command when fresh evidence is needed.
@@ -66,7 +66,7 @@ subtotal `$298.00`, tax `$22.20`, and total `$320.20`.
 
 Current green backend contracts for this slice:
 
-```powershell
+```bash
 python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.post_import_catalog_state.run
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.direct_checkout_target_contract.run

@@ -215,7 +215,7 @@ Minimum acceptance:
 
 Known relevant verifier commands:
 
-```powershell
+```bash
 python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py

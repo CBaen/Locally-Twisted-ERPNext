@@ -48,14 +48,14 @@ content-image alt text, or removed-route behavior.
    so every route emits `noindex, follow`.
 9. Run the verifier:
 
-```powershell
+```bash
 npm run test:seo-contract
 ```
 
 After a Frappe Cloud release and before Search Console reindex work, run the
 same contract against production:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```

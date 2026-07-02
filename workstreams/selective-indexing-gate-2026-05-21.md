@@ -87,12 +87,12 @@ gate ships this source and the live SEO contract passes against
 
 Commands run:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\ecommerce_pause.py apps\locally_twisted\locally_twisted\seo.py apps\locally_twisted\locally_twisted\www\sitemap.py apps\locally_twisted\locally_twisted\www\ready_to_order_paused.py
-node --check scripts\verify\seo_contract.spec.js
-python scripts\dev\clear_website_cache.py --restart
-npm.cmd run test:seo-contract
-python scripts\verify\ecommerce_expected_mode.py --expect open
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/ecommerce_pause.py apps/locally_twisted/locally_twisted/seo.py apps/locally_twisted/locally_twisted/www/sitemap.py apps/locally_twisted/locally_twisted/www/ready_to_order_paused.py
+node --check scripts/verify/seo_contract.spec.js
+python scripts/dev/clear_website_cache.py --restart
+npm run test:seo-contract
+python scripts/verify/ecommerce_expected_mode.py --expect open
 ```
 
 Focused helper proof:
@@ -111,7 +111,7 @@ Result:
 
 - Syntax proof passed.
 - Local cache clear/restart completed.
-- `npm.cmd run test:seo-contract` passed 13/13.
+- `npm run test:seo-contract` passed 13/13.
 - No staging/live/provider/indexing mutation was performed.
 
 ## Release Gate
@@ -124,7 +124,7 @@ Before Search Console submission:
 3. Clear Frappe Cloud website cache.
 4. Run:
 
-```powershell
+```bash
 $env:LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```

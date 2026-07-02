@@ -13,7 +13,7 @@ related_capabilities:
   - ../recipes/responsive-container-audit.md
 related_failures:
   - public-nav-seo-verifier-drift.md
-  - C:\Users\baenb\projects\Built_by_Cameron\capabilities\failures\client-public-header-contrast-safe-area-regression.md
+  - /home/guidingl/projects/Built_by_Cameron/capabilities/failures/client-public-header-contrast-safe-area-regression.md
 tags:
   - locally-twisted
   - header
@@ -85,7 +85,7 @@ review; rendered checks catch stale-cache or load-order failures.
 2. Keep banner text warm white; use brass only as focus/underline accent.
 3. Map CSS shorthand as top, right, bottom, left.
 4. Clear Frappe website cache after CSS/template changes.
-5. Run `python scripts\verify\nav_ia.py`.
+5. Run `python scripts/verify/nav_ia.py`.
 6. Run focused interactive header/drawer/mobile checks.
 7. Record the failure before removing review evidence from memory.
 
@@ -101,7 +101,7 @@ review; rendered checks catch stale-cache or load-order failures.
 - Related workstream: `../../workstreams/public-header-banner-contract-2026-05-10.md`
 - Related verifier: `../../scripts/verify/nav_ia.py`
 - Related CSS: `../../apps/locally_twisted/locally_twisted/public/css/lt-mega-menu.css`
-- Related agency failure: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\failures\client-public-header-contrast-safe-area-regression.md`
+- Related agency failure: `/home/guidingl/projects/Built_by_Cameron/capabilities/failures/client-public-header-contrast-safe-area-regression.md`
 
 ## Evidence quality
 

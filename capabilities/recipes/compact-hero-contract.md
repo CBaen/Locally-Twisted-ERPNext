@@ -84,13 +84,13 @@ below the fold.
 
 ## Verification
 
-```powershell
+```bash
 npm run test:interactive-layout -- --grep "compact hero height contract"
 ```
 
 For broad closeout, also run:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
 npm run test:interactive-layout

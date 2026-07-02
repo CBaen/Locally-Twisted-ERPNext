@@ -45,7 +45,7 @@ assets, and no invented visible label such as `reviews`.
 
 Use focused homepage review checks plus a screenshot or live DOM inspection:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 npm run test:interactive-layout -- --grep "homepage review marquee|mobile review proof" --workers=1
 npm run test:layout-fit -- --grep "home" --workers=1

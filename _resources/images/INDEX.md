@@ -55,7 +55,7 @@ Product **listing** pages (Slice 7) use blank / icon placeholders for cards — 
 The generator script and prompts are in `.scratch/generate-placeholder-images.py`. Re-run any time:
 
 ```
-python C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted/.scratch/generate-placeholder-images.py
+python /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/.scratch/generate-placeholder-images.py
 ```
 
 To regenerate ONE slot, pass a substring of its filename:
@@ -76,4 +76,4 @@ Recommended specs for replacements (per `_resources/STYLE-GUIDE.md` "Photography
 
 ## Capability used
 
-Built using the [`generate-client-image-set`](../../../../.claude/capabilities/recipes/generate-client-image-set.md) recipe and the [`together-image-gen`](../../../../.claude/capabilities/ingredients/together-image-gen.md) ingredient at the agency level.
+Built using the [`generate-client-image-set`](../../../../capabilities/recipes/generate-client-image-set.md) recipe and the [`together-image-gen`](../../../../capabilities/ingredients/together-image-gen.md) ingredient at the agency level.

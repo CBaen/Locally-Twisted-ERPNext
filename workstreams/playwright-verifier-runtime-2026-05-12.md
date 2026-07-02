@@ -40,7 +40,7 @@ default concurrency policy, not Playwright as a tool.
 
 Passed on 2026-05-12:
 
-```powershell
+```bash
 node --check playwright.config.js
 npm run test:quote-accept-experience
 npm run test:form-experience

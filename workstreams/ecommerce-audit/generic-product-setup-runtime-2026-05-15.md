@@ -81,19 +81,19 @@ closeout on 2026-05-17:
 - `python -m compileall ...` for Product Setup API/runtime/DocType modules.
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend migrate`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.sync_backend_workspaces.execute`
-- `python scripts\verify\product_blueprint_contract.py`
-- `python scripts\verify\product_page_runtime_contract.py`
-- `python scripts\verify\cart_checkout_contract.py`
-- `python scripts\verify\product_blueprint_live_contract.py`
-- `python scripts\verify\backend_workspace_parity.py`
-- `python scripts\verify\product_page_architecture_contract.py`
-- `python scripts\verify\checkout_product_family_contract.py`
-- `python scripts\verify\quote_event_checkout_boundary_contract.py`
-- `python scripts\verify\stripe_amount_parity_contract.py`
-- `python scripts\verify\payment_cascade_contract.py`
-- `python scripts\verify\variant_media_contract.py`
-- `python scripts\verify\verifier_cli_contract.py`
-- `python scripts\verify\ecommerce_pause_contract.py`
+- `python scripts/verify/product_blueprint_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/product_blueprint_live_contract.py`
+- `python scripts/verify/backend_workspace_parity.py`
+- `python scripts/verify/product_page_architecture_contract.py`
+- `python scripts/verify/checkout_product_family_contract.py`
+- `python scripts/verify/quote_event_checkout_boundary_contract.py`
+- `python scripts/verify/stripe_amount_parity_contract.py`
+- `python scripts/verify/payment_cascade_contract.py`
+- `python scripts/verify/variant_media_contract.py`
+- `python scripts/verify/verifier_cli_contract.py`
+- `python scripts/verify/ecommerce_pause_contract.py`
 
 ## 2026-05-17 Complex Variant Media And Payment Closeout
 
@@ -125,7 +125,7 @@ closeout on 2026-05-17:
   and cascades to cart, Sales Order payload, and receipt helpers; complex raw
   Item media remains held without Product Setup approval.
 - Guard:
-  `python scripts\verify\variant_media_contract.py`.
+  `python scripts/verify/variant_media_contract.py`.
 - Feature handoff:
   `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.
 

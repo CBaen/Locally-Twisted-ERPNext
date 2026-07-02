@@ -40,7 +40,7 @@ captures, and any terminal/tool output likely to truncate.
 1. Verify the current lane and source of truth first. For live ERPNext facts,
    the running site/database still wins over old documents.
 2. Use the global Codex skill:
-   `C:\Users\baenb\.codex\skills\large-document-intake\SKILL.md`
+   `/home/guidingl/.codex/skills/large-document-intake/SKILL.md`
 3. Put generated intake output in a temporary working directory unless GL
    explicitly asks to preserve it.
 4. For catalog, policy, checkout, payment, form, or customer-facing claims,

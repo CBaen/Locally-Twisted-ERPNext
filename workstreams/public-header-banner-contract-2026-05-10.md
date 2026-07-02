@@ -52,11 +52,11 @@ IA without explicit approval.
 
 Fresh checks from the closeout:
 
-```powershell
-python -m py_compile scripts\verify\nav_ia.py scripts\verify\smoke_shop.py apps\locally_twisted\locally_twisted\navbar_context.py
-python scripts\verify\nav_ia.py
-npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line
-python scripts\verify\smoke_shop.py
+```bash
+python -m py_compile scripts/verify/nav_ia.py scripts/verify/smoke_shop.py apps/locally_twisted/locally_twisted/navbar_context.py
+python scripts/verify/nav_ia.py
+npx playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line
+python scripts/verify/smoke_shop.py
 ```
 
 Results:

@@ -28,7 +28,7 @@ Canonical public anchors:
 
 Run after changing customer document, receipt, invoice, or policy-page copy:
 
-```powershell
+```bash
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/invoice_branding_contract.py
@@ -37,7 +37,7 @@ python scripts/verify/outbound_documents_contract.py
 
 For public page copy/layout changes, also run:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
 ```

@@ -26,11 +26,11 @@ Because `product_options.py` did not look at that app-local staged path, quote-f
 
 ## Verified Locally
 
-- `python -m py_compile apps\locally_twisted\locally_twisted\product_options.py apps\locally_twisted\locally_twisted\catalog_contract\color_rules.py`
-- `python scripts\dev\clear_website_cache.py`
-- `python scripts\verify\color_swatch_contract.py`
-- `node_modules\.bin\playwright.cmd test scripts\verify\product_quote_first_experience.spec.js --reporter=line --workers=1`
-- `node_modules\.bin\playwright.cmd test scripts\verify\product_options_experience.spec.js --reporter=line --workers=1`
+- `python -m py_compile apps/locally_twisted/locally_twisted/product_options.py apps/locally_twisted/locally_twisted/catalog_contract/color_rules.py`
+- `python scripts/dev/clear_website_cache.py`
+- `python scripts/verify/color_swatch_contract.py`
+- `npx playwright test scripts/verify/product_quote_first_experience.spec.js --reporter=line --workers=1`
+- `npx playwright test scripts/verify/product_options_experience.spec.js --reporter=line --workers=1`
 
 Current browser proof on `shop-items/arches/classic-arch`:
 
@@ -44,4 +44,4 @@ The source swatch contract still maps the legacy_source/owner color asset set an
 
 ## Separate Blocker
 
-`python scripts\verify\product_page_architecture_contract.py` still fails on a stale published Website Item count expectation: expected 53, found 51. Its payload-target evidence confirms the recovered color recipe path is present; the count mismatch needs a separate catalog/count gate update or source reconciliation pass.
+`python scripts/verify/product_page_architecture_contract.py` still fails on a stale published Website Item count expectation: expected 53, found 51. Its payload-target evidence confirms the recovered color recipe path is present; the count mismatch needs a separate catalog/count gate update or source reconciliation pass.

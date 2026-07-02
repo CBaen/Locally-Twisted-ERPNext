@@ -22,7 +22,7 @@ The concern is verifier completeness: two requested edge lenses are only partial
   - `apps/locally_twisted/locally_twisted/api/cart.py`
   - `apps/locally_twisted/locally_twisted/www/checkout.py`
 - Syntax gate run during review:
-  - `python -m py_compile apps\locally_twisted\locally_twisted\product_page_runtime.py apps\locally_twisted\locally_twisted\api\cart.py apps\locally_twisted\locally_twisted\verify\quote_event_checkout_boundary_contract.py scripts\verify\quote_event_checkout_boundary_contract.py` passed.
+  - `python -m py_compile apps/locally_twisted/locally_twisted/product_page_runtime.py apps/locally_twisted/locally_twisted/api\cart.py apps/locally_twisted/locally_twisted/verify\quote_event_checkout_boundary_contract.py scripts/verify/quote_event_checkout_boundary_contract.py` passed.
 
 ## Passing evidence
 

@@ -99,14 +99,14 @@ customer account visual shell.
 Run the full portal gate after account data, menu, route, permission, file, or
 visual-shell changes:
 
-```powershell
+```bash
 python scripts/verify/customer_portal_v1_contract.py
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
 npm run test:customer-login-visual
 npm run test:customer-portal-visual
-npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "logged-in public header exposes logout" --reporter=line --workers=1
+npx playwright test scripts/verify/interactive_layout.spec.js --grep "logged-in public header exposes logout" --reporter=line --workers=1
 ```
 
 After Jinja, Python route context, or CSS edits, clear website cache. If browser

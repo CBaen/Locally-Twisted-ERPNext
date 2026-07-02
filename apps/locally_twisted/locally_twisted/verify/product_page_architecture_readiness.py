@@ -119,7 +119,7 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
             PASS,
             "The lane is grounded in the ERPNext/Frappe receiving-architecture synthesis and OpenClaw/Codex handoff framing.",
             evidence=[
-                "C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md",
+                "retired local project path removed",
                 "research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md",
                 "workstreams/erpnext-ecommerce-receiving-architecture.md",
                 "capabilities/recipes/erpnext-ecommerce-receiving-architecture.md",

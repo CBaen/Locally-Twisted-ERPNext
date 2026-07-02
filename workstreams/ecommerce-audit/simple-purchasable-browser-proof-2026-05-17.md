@@ -23,8 +23,8 @@ widths, then restored the original Website Item contracts and
 
 Command:
 
-```powershell
-python scripts\verify\simple_purchasable_browser_proof.py
+```bash
+python scripts/verify/simple_purchasable_browser_proof.py
 ```
 
 Result:

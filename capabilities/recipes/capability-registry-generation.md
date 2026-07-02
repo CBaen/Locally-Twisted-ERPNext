@@ -37,15 +37,15 @@ Use this after adding, moving, promoting, or retrofitting capability files.
 
 From a repository root that contains `tools/capability_registry.py`, run:
 
-```powershell
-python tools\capability_registry.py --root capabilities --write-registry
+```bash
+python tools/capability_registry.py --root capabilities --write-registry
 ```
 
 For an installed project that copied only the `capabilities/` folder, run the
 tool from the framework source:
 
-```powershell
-python <framework-source>\tools\capability_registry.py --root <project>\capabilities --write-registry
+```bash
+python <framework-source>/tools/capability_registry.py --root <project>/capabilities --write-registry
 ```
 
 Read the terminal summary. `legacy` and `retrofit_needed` mean the file is still

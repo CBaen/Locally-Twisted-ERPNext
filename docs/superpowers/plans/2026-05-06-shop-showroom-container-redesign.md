@@ -43,7 +43,7 @@
 
 - [ ] Run the focused smoke verifier and confirm it fails for the expected layout reason:
 
-```powershell
+```bash
 python scripts/verify/smoke_shop.py
 ```
 
@@ -132,13 +132,13 @@ Expected: fail on shop/category showroom width or category sidebar/card collapse
 
 - [ ] Clear website cache:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 ```
 
 - [ ] Run focused verification:
 
-```powershell
+```bash
 python scripts/verify/smoke_shop.py
 npm run test:layout-fit
 npm run test:interactive-layout
@@ -146,19 +146,19 @@ npm run test:interactive-layout
 
 - [ ] Run broad public verification:
 
-```powershell
+```bash
 npm run test:public-verify
 ```
 
 - [ ] Capture desktop/mobile screenshots for `/shop`, `/shop-items/arches`, and a representative product detail:
 
-```powershell
-npx.cmd playwright screenshot --viewport-size=375,812 --full-page http://localhost:8081/shop output/playwright/shop-showroom-20260506/shop-mobile.png
-npx.cmd playwright screenshot --viewport-size=1366,900 --full-page http://localhost:8081/shop output/playwright/shop-showroom-20260506/shop-desktop.png
-npx.cmd playwright screenshot --viewport-size=375,812 --full-page http://localhost:8081/shop-items/arches output/playwright/shop-showroom-20260506/category-mobile.png
-npx.cmd playwright screenshot --viewport-size=1366,900 --full-page http://localhost:8081/shop-items/arches output/playwright/shop-showroom-20260506/category-desktop.png
-npx.cmd playwright screenshot --viewport-size=375,812 --full-page http://localhost:8081/shop-items/garlands/baby-shower-garland output/playwright/shop-showroom-20260506/product-mobile.png
-npx.cmd playwright screenshot --viewport-size=1366,900 --full-page http://localhost:8081/shop-items/garlands/baby-shower-garland output/playwright/shop-showroom-20260506/product-desktop.png
+```bash
+npx playwright screenshot --viewport-size=375,812 --full-page http://localhost:8081/shop output/playwright/shop-showroom-20260506/shop-mobile.png
+npx playwright screenshot --viewport-size=1366,900 --full-page http://localhost:8081/shop output/playwright/shop-showroom-20260506/shop-desktop.png
+npx playwright screenshot --viewport-size=375,812 --full-page http://localhost:8081/shop-items/arches output/playwright/shop-showroom-20260506/category-mobile.png
+npx playwright screenshot --viewport-size=1366,900 --full-page http://localhost:8081/shop-items/arches output/playwright/shop-showroom-20260506/category-desktop.png
+npx playwright screenshot --viewport-size=375,812 --full-page http://localhost:8081/shop-items/garlands/baby-shower-garland output/playwright/shop-showroom-20260506/product-mobile.png
+npx playwright screenshot --viewport-size=1366,900 --full-page http://localhost:8081/shop-items/garlands/baby-shower-garland output/playwright/shop-showroom-20260506/product-desktop.png
 ```
 
 - [ ] Update workstream docs with:

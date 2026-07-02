@@ -122,7 +122,7 @@ Resolved in this pass:
   repos;
 - marked the nested CBD checkout as stale/reference in its exposed docs and
   verifier manifest;
-- corrected the Memorial research brief so the historical Odoo backend line
+- corrected the Memorial research brief so the historical source-system backend line
   cannot be treated as current ERP truth.
 
 Still gated, not solved:

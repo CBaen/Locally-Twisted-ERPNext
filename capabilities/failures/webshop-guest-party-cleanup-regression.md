@@ -88,7 +88,7 @@ than it looks because the anonymous shopper still needs a party context.
 Every local fake-data cleanup that touches customer/contact/user-like data must
 run:
 
-```powershell
+```bash
 python scripts/verify/webshop_guest_party_contract.py
 npm run test:public-network -- --workers=1
 ```

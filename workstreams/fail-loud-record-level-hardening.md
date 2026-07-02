@@ -52,7 +52,7 @@ Implemented:
 
 Verification from this implementation pass:
 
-```powershell
+```bash
 python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
 python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json
 python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json
@@ -64,7 +64,7 @@ python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/customer_documents_contract.py
-python -m compileall apps\locally_twisted\locally_twisted\failure_recorder.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\www\thank_you.py apps\locally_twisted\locally_twisted\outbound_documents\send_readiness.py apps\locally_twisted\locally_twisted\verify\record_level_failure_contract.py apps\locally_twisted\locally_twisted\verify\inquiry_upload_failure_contract.py apps\locally_twisted\locally_twisted\verify\payment_success_reconciliation_contract.py apps\locally_twisted\locally_twisted\verify\outbound_document_send_readiness_contract.py apps\locally_twisted\locally_twisted\verify\business_automation_index.py apps\locally_twisted\locally_twisted\verify\synthetic_business_pipeline.py
+python -m compileall apps/locally_twisted/locally_twisted/failure_recorder.py apps/locally_twisted/locally_twisted/lead_cascade.py apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/www/checkout.py apps/locally_twisted/locally_twisted/www/payment_success.py apps/locally_twisted/locally_twisted/www/thank_you.py apps/locally_twisted/locally_twisted/outbound_documents/send_readiness.py apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py apps/locally_twisted/locally_twisted/verify/business_automation_index.py apps/locally_twisted/locally_twisted/verify/synthetic_business_pipeline.py
 ```
 
 Still open after this slice:
@@ -276,7 +276,7 @@ The implementation slice is not complete until there are witnesses for:
 
 Candidate commands to extend/run:
 
-```powershell
+```bash
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/lead_backend_intake_parity.py

@@ -85,7 +85,7 @@ leaving a lone orphan card or a ragged chip row.
 
 Run the focused showroom checks first:
 
-```powershell
+```bash
 python scripts/verify/smoke_shop.py
 npm run test:layout-fit -- --grep shop
 npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"

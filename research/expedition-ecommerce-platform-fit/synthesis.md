@@ -119,7 +119,7 @@ If GL accepts the recommendation, the next coding move is **NOT a platform pivot
    - Price approval batch for the Phase 1 ready-to-order family
    - Media classification batch for the Phase 1 ready-to-order family
 
-2. **Continue the existing OpenClaw cockpit work** at `C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md`. The audit packets are the source of truth; the architecture is correct.
+2. **Continue the existing OpenClaw cockpit work** at `retired local project path removed`. The audit packets are the source of truth; the architecture is correct.
 
 3. **Do NOT** purge/reimport catalog. **Do NOT** open public ecommerce checkout to live customers. **Do NOT** refactor the product page templates or the LT contract layer based on a perceived "platform is wrong" diagnosis. The diagnosis was wrong; the platform is right.
 

@@ -32,7 +32,7 @@ and workflow operations.
 
 Check availability before relying on it:
 
-```powershell
+```bash
 gh --version
 gh auth status
 ```

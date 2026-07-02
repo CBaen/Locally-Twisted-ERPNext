@@ -161,7 +161,7 @@ What this does not prove by itself:
 Run this after any cleanup, Webshop Settings change, guest checkout change,
 product page override change, or broad public-route verification:
 
-```powershell
+```bash
 python scripts/verify/webshop_guest_party_contract.py
 npm run test:public-network -- --workers=1
 ```
@@ -172,7 +172,7 @@ plain record-exists check is not enough.
 If public product pages or Webshop AJAX broke first, also clear website cache
 after repair:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 ```
 

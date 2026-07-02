@@ -50,7 +50,7 @@ of a static image stack.
 
 Run after portfolio route changes:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 npm run test:portfolio-reel
 npm run test:layout-fit -- --grep portfolio

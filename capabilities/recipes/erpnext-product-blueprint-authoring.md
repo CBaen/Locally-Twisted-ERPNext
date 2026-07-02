@@ -133,7 +133,7 @@ verifier work. For local build work, name the actual blocker.
 
 ## Verification
 
-```powershell
+```bash
 python scripts/verify/product_blueprint_contract.py
 python scripts/verify/product_blueprint_live_contract.py
 python scripts/verify/product_page_runtime_contract.py

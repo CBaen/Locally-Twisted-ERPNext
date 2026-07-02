@@ -32,7 +32,7 @@ AGENCY_ENV = REPO_ROOT.parents[1] / ".env"
 MODEL = "black-forest-labs/FLUX.2-pro"
 API_URL = "https://api.together.xyz/v1/images/generations"
 USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "Mozilla/5.0 (X11; Linux x86_64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 )
 

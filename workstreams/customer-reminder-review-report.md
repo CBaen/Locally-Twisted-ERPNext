@@ -20,7 +20,7 @@ It does not send reminders, queue email, create Communications, mutate invoices,
 
 Fresh local verification on 2026-05-09:
 
-```powershell
+```bash
 python scripts/setup/sync_finance_workspace.py
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/customer_reminder_review_report_contract.py

@@ -252,7 +252,7 @@ Steps:
    receipt label.
 5. Run proof and artifact generators to prove they no longer read stale JSON:
 
-```powershell
+```bash
 python scripts/verify/proof_product_contract.py
 python scripts/verify/catalog_purge_scope_dry_run.py
 python scripts/verify/v1_legacy_source_erpnext_import_manifest.py
@@ -300,7 +300,7 @@ Steps:
 
 Regression proof:
 
-```powershell
+```bash
 python scripts/verify/post_import_catalog_state_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.post_import_catalog_state.run
 ```
@@ -342,7 +342,7 @@ Steps:
 
 Regression proof:
 
-```powershell
+```bash
 node scripts/verify/post_import_checkout_proof.js
 ```
 
@@ -375,7 +375,7 @@ Steps:
 
 Regression proof:
 
-```powershell
+```bash
 python scripts/verify/product_import_readiness_gate_contract.py
 python scripts/verify/product_import_readiness_gate.py
 ```
@@ -391,7 +391,7 @@ Expected result:
 
 Run the smallest complete verifier set after implementation:
 
-```powershell
+```bash
 python scripts/verify/product_import_readiness_gate_contract.py
 python scripts/verify/post_import_catalog_state_contract.py
 python scripts/verify/proof_product_contract.py

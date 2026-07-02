@@ -51,7 +51,7 @@ Resolved in the local ERPNext database:
 
 Passing proof after repair:
 
-```powershell
+```bash
 python scripts/verify/catalog_variant_contract.py
 npm run test:product-prices
 npm run test:product-price-display
@@ -134,7 +134,7 @@ Related shop/cart verification:
 
 Passing after the broad local modifier repair:
 
-```powershell
+```bash
 npm run test:product-prices
 npm run test:product-price-display
 python scripts/verify/catalog_variant_contract.py
@@ -142,7 +142,7 @@ python scripts/verify/catalog_variant_contract.py
 
 Supporting checkout/cart proof for the reported Easter arch variants:
 
-```powershell
+```bash
 locally_twisted.api.cart.get_cart_items
 ```
 
@@ -159,40 +159,40 @@ price issue as source-price identity work:
 1. Stage the legacy_source catalog data for in-container repair commands when source data
    needs refreshing:
 
-   ```powershell
+   ```bash
    python scripts/setup/stage_seed_data.py
    ```
 
 2. Run the broad dry-run source-price guard before and after any catalog import,
    repair, seed, selector, or checkout-price change:
 
-   ```powershell
+   ```bash
    python scripts/verify/product_price_modifier_contract.py
    ```
 
 3. Prove visible customer behavior for non-first priced options:
 
-   ```powershell
+   ```bash
    npm run test:product-price-display
    ```
 
 4. If the broad guard fails, use the repair script in dry-run mode first:
 
-   ```powershell
+   ```bash
    docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_legacy_source.execute --kwargs "{'dry_run': True, 'strict': False}"
    ```
 
 5. Apply only after reviewing mismatches and confirming the target is local or a
    GL-approved staging/live maintenance window:
 
-   ```powershell
+   ```bash
    docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_legacy_source.execute --kwargs "{'strict': False}"
    ```
 
 6. Remove ignored staged seed data after repair work if it is no longer needed:
 
-   ```powershell
-   Remove-Item -LiteralPath apps\locally_twisted\locally_twisted\seed\_data -Recurse -Force
+   ```bash
+   Remove-Item -LiteralPath apps/locally_twisted/locally_twisted/seed/_data -Recurse -Force
    ```
 
 ## Rules For Future Agents

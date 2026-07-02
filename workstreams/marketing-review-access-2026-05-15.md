@@ -84,7 +84,7 @@ Protected route:
 
 ## Verification
 
-```powershell
+```bash
 python scripts/setup/sync_marketing_review_access.py
 python scripts/verify/marketing_review_access_boundary.py
 npm run test:marketing-review-access

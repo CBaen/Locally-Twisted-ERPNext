@@ -15,7 +15,7 @@ Prevent agents from silently removing, hiding, renaming, or replacing canonical 
 
 The route still existed, but public discovery was damaged. That counts as a significant service-removal regression.
 
-Forensic report: `C:/Users/baenb/.openclaw/workspace/reports/lt-btfp-menu-removal-forensics-2026-05-10.md`.
+Forensic report: `retired local report path removed`.
 
 ## Current Contract
 
@@ -52,7 +52,7 @@ Do not add this marker from inference. It requires direct GL approval naming the
 
 Minimum after nav/chrome work:
 
-```powershell
+```bash
 python scripts/verify/nav_ia.py
 python scripts/dev/clear_website_cache.py
 ```

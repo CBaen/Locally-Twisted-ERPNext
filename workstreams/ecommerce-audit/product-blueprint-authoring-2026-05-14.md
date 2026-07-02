@@ -49,14 +49,14 @@ not available from this local blueprint slice.
 
 Local commands run:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_blueprint_validation.py apps\locally_twisted\locally_twisted\verify\product_blueprint_contract.py scripts\verify\product_blueprint_contract.py scripts\verify\product_blueprint_live_contract.py
-python scripts\verify\product_blueprint_contract.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_validation.py apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py scripts/verify/product_blueprint_contract.py scripts/verify/product_blueprint_live_contract.py
+python scripts/verify/product_blueprint_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend migrate
-python scripts\verify\product_blueprint_live_contract.py
-python scripts\verify\product_page_architecture_contract_contract.py
-python scripts\verify\ecommerce_pause_contract.py
-python scripts\verify\verifier_cli_contract.py
+python scripts/verify/product_blueprint_live_contract.py
+python scripts/verify/product_page_architecture_contract_contract.py
+python scripts/verify/ecommerce_pause_contract.py
+python scripts/verify/verifier_cli_contract.py
 ```
 
 Results:
@@ -112,11 +112,11 @@ Guardrails:
 
 Additional verification:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_blueprint_apply_plan.py
-python scripts\verify\product_blueprint_contract.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_apply_plan.py
+python scripts/verify/product_blueprint_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend migrate
-python scripts\verify\product_blueprint_live_contract.py
+python scripts/verify/product_blueprint_live_contract.py
 ```
 
 Results:
@@ -168,15 +168,15 @@ Guardrails:
 
 Additional verification run after migration:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_blueprint_local_apply.py apps\locally_twisted\locally_twisted\verify\product_blueprint_contract.py scripts\verify\product_blueprint_contract.py scripts\verify\product_blueprint_live_contract.py
-python scripts\verify\product_blueprint_contract.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_local_apply.py apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py scripts/verify/product_blueprint_contract.py scripts/verify/product_blueprint_live_contract.py
+python scripts/verify/product_blueprint_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend migrate
-python scripts\verify\product_blueprint_live_contract.py
-python scripts\verify\product_page_architecture_contract_contract.py
-python scripts\verify\ecommerce_pause_contract.py
-python scripts\verify\product_page_architecture_readiness.py --json
-python scripts\verify\verifier_cli_contract.py
+python scripts/verify/product_blueprint_live_contract.py
+python scripts/verify/product_page_architecture_contract_contract.py
+python scripts/verify/ecommerce_pause_contract.py
+python scripts/verify/product_page_architecture_readiness.py --json
+python scripts/verify/verifier_cli_contract.py
 ```
 
 Results:
@@ -220,14 +220,14 @@ Server guardrails:
 
 Additional verification run:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\locally_twisted\doctype\lt_product_blueprint\lt_product_blueprint.py apps\locally_twisted\locally_twisted\product_blueprint_local_apply.py apps\locally_twisted\locally_twisted\verify\product_blueprint_contract.py scripts\verify\product_blueprint_contract.py scripts\verify\product_blueprint_live_contract.py
-node --check apps\locally_twisted\locally_twisted\locally_twisted\doctype\lt_product_blueprint\lt_product_blueprint.js
-python scripts\verify\product_blueprint_contract.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py apps/locally_twisted/locally_twisted/product_blueprint_local_apply.py apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py scripts/verify/product_blueprint_contract.py scripts/verify/product_blueprint_live_contract.py
+node --check apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.js
+python scripts/verify/product_blueprint_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend migrate
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend set-config lt_allow_local_blueprint_apply 1
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend clear-cache
-python scripts\verify\product_blueprint_live_contract.py
+python scripts/verify/product_blueprint_live_contract.py
 ```
 
 Results:
@@ -263,9 +263,9 @@ oversized add-on quantity.
 
 Additional verification run:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_page_runtime.py apps\locally_twisted\locally_twisted\product_options.py apps\locally_twisted\locally_twisted\verify\product_blueprint_contract.py scripts\verify\product_blueprint_live_contract.py
-python scripts\verify\product_blueprint_live_contract.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_page_runtime.py apps/locally_twisted/locally_twisted/product_options.py apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py scripts/verify/product_blueprint_live_contract.py
+python scripts/verify/product_blueprint_live_contract.py
 ```
 
 Results:

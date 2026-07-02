@@ -19,8 +19,8 @@ Purpose: single source map for the launch-critical legacy_source → ERPNext eco
 
 ## Local source repos verified
 
-- ERPNext/Frappe destination repo: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted` — present.
-- legacy_source source-witness repo: `C:\Users\baenb\projects\locally-twisted-legacy_source` — present.
+- ERPNext/Frappe destination repo: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted` — present.
+- legacy_source source-witness repo: `/home/guidingl/projects/locally-twisted-legacy_source/` — present.
 
 ## Core ecommerce audit artifacts verified on disk
 

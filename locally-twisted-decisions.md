@@ -5441,7 +5441,7 @@ Full rationale: `.planning/decisions/site-shape.md`. Cover story for Jeff: *"We 
 2. **Slice 2 chrome (header + footer)** — Jinja partial overrides at `templates/includes/{navbar,footer}/`, replaced Frappe's defaults with the approved legacy_source two-tier desktop / single-row mobile structure. GL iterated on logo size, footer centering, footer padding, and 3-column-on-mobile spec; technique held under those iterations. GL confirmed: *"so far so good! It's getting better."*
 3. **`/contact` form-bearing portal page** — full pipeline working: AJAX form → whitelisted controller → Lead + linked Communication created, zero console errors, smoke test confirmed `CRM-LEAD-2026-00001` persisted with the message body. GL confirmed: *"Holy shit! You did it!"*
 
-The two prior failed attempts on this stack failed by *technique*, not *architecture*. The codification work earlier this session (`frappe-portal-implementation.md`, `frappe-conventions.md` updates, `license-isolated-app-architecture.md`, plus the `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` meal) made the right technique discoverable and enforceable. The architecture was always sound.
+The two prior failed attempts on this stack failed by *technique*, not *architecture*. The codification work earlier this session (`frappe-portal-implementation.md`, `frappe-conventions.md` updates, `license-isolated-app-architecture.md`, plus the `Built_by_Cameron/capabilities/meals/build-frappe-portal-page.md` meal) made the right technique discoverable and enforceable. The architecture was always sound.
 
 **What this commits us to:**
 - All Phase 1 customer-facing surfaces continue on Frappe + webshop. The remaining slices (refund-policy, FAQ, BTFP service page, products browse, product detail, cart, checkout) build on the meal pattern.
@@ -5558,7 +5558,7 @@ The GL Proxy flagged the convergence's tendency to route past the platform quest
 - Per-page `<script>` tags injected into `main_section_html` (rejected — works but harder to maintain than the dedicated `javascript` field; loses the structural separation Frappe provides).
 - Custom controller per page (rejected — `context_script` does this natively without registering a controller).
 
-**Generalizable to agency tier:** This decision motivated promoting "System-native first" to a standing principle at the top of `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`, with a concrete rule: "before writing custom code, read the relevant DocType's full schema." Every BBC client benefits.
+**Generalizable to agency tier:** This decision motivated promoting "System-native first" to a standing principle at the top of `Built_by_Cameron/capabilities/recipes/frappe-conventions.md`, with a concrete rule: "before writing custom code, read the relevant DocType's full schema." Every BBC client benefits.
 
 **Decided by:** GL directive 2026-04-26 ("you can use java on these pages!") + framework verification by reading the Web Page DocType schema.
 

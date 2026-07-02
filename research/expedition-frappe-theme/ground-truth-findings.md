@@ -8,7 +8,7 @@
 
 ## Approved Jeff-Vetted Content From Local legacy_source Source
 
-This is the most load-bearing section. Every string below was pulled verbatim from XML in `C:/Users/baenb/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`. The legacy_source project contains far more view files than the brief anticipated. Full list of XML files found (43 total):
+This is the most load-bearing section. Every string below was pulled verbatim from XML in `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`. The legacy_source project contains far more view files than the brief anticipated. Full list of XML files found (43 total):
 
 - `views/header.xml` — two-tier header with utility strip
 - `views/footer.xml` — newsletter + 3-column footer + copyright bar
@@ -436,7 +436,7 @@ Commits relevant to the website build (newest first, from `git log --oneline -50
 
 ## Established LT Patterns / Voice / Visual Identity (from STYLE-GUIDE.md v2.1)
 
-**File:** `C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted/_resources/STYLE-GUIDE.md`
+**File:** `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/_resources/STYLE-GUIDE.md`
 
 ### Design principles
 1. Photography is the star — site is a frame
@@ -487,7 +487,7 @@ Commits relevant to the website build (newest first, from `git log --oneline -50
 
 ## Catalog State
 
-**File:** `C:/Users/baenb/projects/Built_by_Cameron/_CLIENTS/locally-twisted/_resources/legacy_source-export/catalog.json`
+**File:** `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/_resources/legacy_source-export/catalog.json`
 
 **Source:** `http://5.78.136.133` (live legacy_source), category `/shop/category/what-we-make-3`
 **Product count:** 51 products

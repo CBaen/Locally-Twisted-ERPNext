@@ -102,7 +102,7 @@ off-brand hero are not.
 
 Run these after editing portfolio layout, image metadata, source/reference translation, or the proof-gallery CSS/JS:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py --restart
 npm run test:portfolio-reel
 npm run test:layout-fit -- --grep portfolio

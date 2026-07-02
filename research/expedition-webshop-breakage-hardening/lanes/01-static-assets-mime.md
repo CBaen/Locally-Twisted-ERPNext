@@ -72,7 +72,7 @@ Current read-only checks run in this lane:
 
 Run after any Webshop asset, Docker image, app install, route, cache, or deploy-path change:
 
-```powershell
+```bash
 python scripts/dev/build_webshop_assets.py --durable-rebuild
 python scripts/verify/public_asset_integrity.py
 npm run test:public-network
@@ -80,7 +80,7 @@ npm run test:public-network
 
 Run after a deliberate forced recreate:
 
-```powershell
+```bash
 docker compose -p locally-twisted-erpnext-v15 -f Locally-Twisted-Backend/frappe_docker/pwd.yml up -d --force-recreate
 python scripts/dev/clear_website_cache.py
 python scripts/verify/public_asset_integrity.py
@@ -89,7 +89,7 @@ npm run test:public-network
 
 For staging/live, set the real base URL and retain command output:
 
-```powershell
+```bash
 $env:LT_BASE_URL = "https://<staging-or-live-host>"
 python scripts/verify/public_asset_integrity.py --base-url $env:LT_BASE_URL
 npm run test:public-network

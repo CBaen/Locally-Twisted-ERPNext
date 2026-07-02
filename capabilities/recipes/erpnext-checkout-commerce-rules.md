@@ -62,7 +62,7 @@ For the current LT contract:
 
 Run the focused contract first:
 
-```powershell
+```bash
 python scripts/verify/commerce_rules_contract.py
 python scripts/verify/checkout_fulfillment_contract.py
 python scripts/verify/cart_checkout_contract.py
@@ -73,7 +73,7 @@ npm run test:checkout-experience
 
 For broad launch confidence, add:
 
-```powershell
+```bash
 python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/payment_launch_readiness.py
 python scripts/verify/payment_cascade_contract.py
@@ -82,7 +82,7 @@ python scripts/verify/payment_webhook_contract.py
 
 If setup records changed, sync and test the patch path too:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.sync_commerce_rules.execute
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.patches.sync_commerce_rules.execute
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.sync_contact_intake_backend.execute

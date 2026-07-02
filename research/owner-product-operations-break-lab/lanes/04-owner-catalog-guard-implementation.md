@@ -157,17 +157,17 @@ explicit release gate.
 
 Commands run on 2026-05-21:
 
-```powershell
-python -m compileall .\apps\locally_twisted\locally_twisted\owner_catalog_guard.py .\apps\locally_twisted\locally_twisted\verify\owner_catalog_guard_contract.py .\scripts\verify\owner_catalog_guard_contract.py
+```bash
+python -m compileall ./apps/locally_twisted/locally_twisted/owner_catalog_guard.py ./apps/locally_twisted/locally_twisted/verify/owner_catalog_guard_contract.py ./scripts/verify/owner_catalog_guard_contract.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend clear-cache
-python .\scripts\verify\owner_catalog_guard_contract.py
-python .\scripts\dev\clear_website_cache.py --restart
-python .\scripts\verify\owner_catalog_guard_contract.py
-python .\scripts\verify\product_blueprint_contract.py
-python .\scripts\verify\webshop_guest_party_contract.py
-python .\scripts\verify\website_item_classification_contract.py --json
-python .\scripts\verify\owner_business_access_contract.py
-python .\scripts\verify\ecommerce_expected_mode.py --expect open
+python ./scripts/verify/owner_catalog_guard_contract.py
+python ./scripts/dev/clear_website_cache.py --restart
+python ./scripts/verify/owner_catalog_guard_contract.py
+python ./scripts/verify/product_blueprint_contract.py
+python ./scripts/verify/webshop_guest_party_contract.py
+python ./scripts/verify/website_item_classification_contract.py --json
+python ./scripts/verify/owner_business_access_contract.py
+python ./scripts/verify/ecommerce_expected_mode.py --expect open
 npm run test:product-prices
 npm run test:public-assets
 npm run test:public-network
@@ -198,19 +198,19 @@ Results:
 
 Follow-up break-lab verification on 2026-05-21:
 
-```powershell
-python .\scripts\verify\allow_guest_surface_inventory.py
-python .\scripts\dev\clear_website_cache.py --restart
-python .\scripts\verify\newsletter_concurrency_contract.py --base-url http://localhost:8081
-python .\scripts\verify\backend_workspace_parity.py
+```bash
+python ./scripts/verify/allow_guest_surface_inventory.py
+python ./scripts/dev/clear_website_cache.py --restart
+python ./scripts/verify/newsletter_concurrency_contract.py --base-url http://localhost:8081
+python ./scripts/verify/backend_workspace_parity.py
 npm run test:owner-product-safety
 npm run test:public-network
 npm run test:checkout-experience
-python .\scripts\verify\event_playground_gate.py
+python ./scripts/verify/event_playground_gate.py
 npm run test:event-playground
 npm run test:form-experience
-python .\scripts\verify\smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
-python .\scripts\verify\product_import_readiness_gate.py
+python ./scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
+python ./scripts/verify/product_import_readiness_gate.py
 ```
 
 Results:
@@ -242,13 +242,13 @@ Results:
 
 Owner-control correction on 2026-05-21:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bash -lc "cd /home/frappe/frappe-bench && bench --site frontend migrate"
-python .\scripts\setup\sync_product_blueprints_from_catalog.py
-python .\scripts\setup\sync_product_blueprints_from_catalog.py --write
-python .\scripts\verify\product_setup_catalog_coverage.py
-python .\scripts\verify\product_blueprint_live_contract.py
-python .\scripts\verify\cart_checkout_contract.py
+python ./scripts/setup/sync_product_blueprints_from_catalog.py
+python ./scripts/setup/sync_product_blueprints_from_catalog.py --write
+python ./scripts/verify/product_setup_catalog_coverage.py
+python ./scripts/verify/product_blueprint_live_contract.py
+python ./scripts/verify/cart_checkout_contract.py
 npm run test:owner-product-safety
 npm run test:public-network
 ```
@@ -290,11 +290,11 @@ staging/live.
 
 Triad closeout follow-up on 2026-05-22:
 
-```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\product_blueprint_local_apply.py apps\locally_twisted\locally_twisted\verify\product_blueprint_contract.py apps\locally_twisted\locally_twisted\seed\sync_product_blueprints_from_catalog.py apps\locally_twisted\locally_twisted\locally_twisted\doctype\lt_product_blueprint\lt_product_blueprint.py apps\locally_twisted\locally_twisted\verify\owner_catalog_guard_contract.py
-python .\scripts\verify\owner_catalog_guard_contract.py
-python .\scripts\verify\product_blueprint_live_contract.py
-python .\scripts\setup\sync_product_blueprints_from_catalog.py
+```bash
+python -m py_compile apps/locally_twisted/locally_twisted/product_blueprint_local_apply.py apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py apps/locally_twisted/locally_twisted/seed/sync_product_blueprints_from_catalog.py apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/lt_product_blueprint.py apps/locally_twisted/locally_twisted/verify/owner_catalog_guard_contract.py
+python ./scripts/verify/owner_catalog_guard_contract.py
+python ./scripts/verify/product_blueprint_live_contract.py
+python ./scripts/setup/sync_product_blueprints_from_catalog.py
 ```
 
 Results:

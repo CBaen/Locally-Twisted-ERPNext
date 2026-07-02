@@ -21,8 +21,8 @@ rolls everything back.
 
 Command:
 
-```powershell
-python scripts\verify\simple_purchasable_rehearsal_contract.py --report workstreams/ecommerce-audit/simple-purchasable-rehearsal-2026-05-17.json
+```bash
+python scripts/verify/simple_purchasable_rehearsal_contract.py --report workstreams/ecommerce-audit/simple-purchasable-rehearsal-2026-05-17.json
 ```
 
 Result:

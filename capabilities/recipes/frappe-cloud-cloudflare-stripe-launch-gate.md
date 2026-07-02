@@ -97,7 +97,7 @@ destructive final go/no-go.
 
 Run from repo root unless a staging/production URL is explicitly required.
 
-```powershell
+```bash
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/website_launch_verify.py --base-url <staging-url> --with-a11y --with-contact-smoke
 python scripts/verify/ecommerce_pause_contract.py
@@ -115,7 +115,7 @@ $env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 For live inquiry form release proof, include authenticated backend verification
 against the Frappe Cloud admin host:
 
-```powershell
+```bash
 $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter

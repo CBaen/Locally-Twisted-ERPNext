@@ -33,9 +33,9 @@ and need to surface unusually valuable combinations for GL review.
 Run the contest report after the growth index has enough metadata or edges to
 work with:
 
-```powershell
-python tools\capability_perfect_bite_contest.py --root capabilities --root-alias local --json
-python tools\capability_perfect_bite_contest.py --root capabilities --root-alias project --related-root shared=C:\Users\<user>\capabilities --json
+```bash
+python tools/capability_perfect_bite_contest.py --root capabilities --root-alias local --json
+python tools/capability_perfect_bite_contest.py --root capabilities --root-alias project --related-root shared=/home/guidingl/capabilities --json
 ```
 
 A candidate must include:

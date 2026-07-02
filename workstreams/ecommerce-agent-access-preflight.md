@@ -3,7 +3,7 @@
 Date: 2026-05-10
 Status: binding pre-dispatch checklist
 Related rollback: `lt-ecommerce-audit-pre-dispatch-20260510-0841`
-Rollback package: `C:\Users\baenb\.openclaw\workspace\reports\rollback\lt-ecommerce-audit-pre-dispatch-20260510-0841`
+Rollback package: `/home/guidingl/.openclaw/workspace/reports/rollback/lt-ecommerce-audit-pre-dispatch-20260510-0841`
 
 ## Purpose
 

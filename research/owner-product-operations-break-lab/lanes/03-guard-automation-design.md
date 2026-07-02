@@ -161,7 +161,7 @@ Developer evidence should include:
 
 Existing commands to keep in the closeout loop:
 
-```powershell
+```bash
 python scripts/verify/product_blueprint_contract.py
 python scripts/verify/website_item_classification_contract.py --json
 python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json
@@ -181,14 +181,14 @@ npm run test:public-verify
 
 Bench-backed app verifier commands:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.product_blueprint_contract.run
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.webshop_guest_party_contract.run
 ```
 
 New verifier to add before enforcing hooks:
 
-```powershell
+```bash
 python scripts/verify/owner_catalog_guard_contract.py --json
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.owner_catalog_guard_contract.run
 ```
@@ -208,7 +208,7 @@ The new verifier should prove:
 
 Import/destructive gates remain separate and must stay explicit:
 
-```powershell
+```bash
 python scripts/verify/catalog_state_snapshot_contract.py
 python scripts/verify/catalog_purge_scope_dry_run.py
 python scripts/setup/stage_seed_data.py

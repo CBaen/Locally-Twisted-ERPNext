@@ -183,7 +183,7 @@ Maintenance Admin:
 
 Commands passed locally on 2026-05-15:
 
-```powershell
+```bash
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
 python scripts/verify/custom_doctype_permission_boundary.py
 python scripts/verify/backend_workspace_parity.py
@@ -236,7 +236,7 @@ before giving out or changing a human login. It checks:
 
 Commands passed locally on 2026-05-21:
 
-```powershell
+```bash
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/human_access_silo_matrix.py
 npm run test:human-access

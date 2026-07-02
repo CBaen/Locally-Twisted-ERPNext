@@ -224,7 +224,7 @@ def check_github() -> Check:
 
 
 def check_ssh_public_keys() -> list[Check]:
-    ssh_dir = Path(os.environ.get("USERPROFILE", str(Path.home()))) / ".ssh"
+    ssh_dir = Path(os.environ.get("HOME", str(Path.home()))) / ".ssh"
     pub_keys = sorted(ssh_dir.glob("*.pub")) if ssh_dir.exists() else []
     checks: list[Check] = []
 
