@@ -67,10 +67,16 @@ Problem:
   `9`.
 - That made the customer page represent birthdays as one digit only and also
   contributed to variant explosion.
+- 2026-07-02 correction: the first emergency repair changed Product Setup, but
+  the native ERPNext variant selector still rendered the old `Add Foil Number`
+  dropdown because existing Birthday Deliveries variants still carry that SKU
+  axis. Customer-visible reality remained wrong until the native selector was
+  hidden/defaulted.
 
 Repair:
 
 - Updated live `LT Product Blueprint Option` `ac0ehl0540`:
+  - `axis_name`: `ADD BIRTHDAY AGE`
   - `control_type`: `Number`
   - `selection_behavior`: `Measurement/Text`
   - `payload_target`: `configuration_groups`
@@ -82,11 +88,18 @@ Repair:
   because the current server resolver still applies `values` as an allowed
   set even for `Number` controls. This is an emergency compatibility repair,
   not the desired long-term architecture.
+- Added an emergency route-scoped `Website Settings.head_html` bridge with
+  marker `lt-birthday-age-variant-axis-bridge-20260702`. The bridge only runs
+  on `/shop-items/bouquets/birthday-deliveries`, hides the legacy native
+  `Add Foil Number` variant selector from customers, and selects the first
+  currently valid hidden legacy value so ERPNext's existing variant resolver
+  can still reach a priced SKU while the visible `ADD BIRTHDAY AGE` number
+  field carries the customer's actual age.
 
 Verification:
 
 - Live Product Setup schema for `birthday-deliveries` now reports
-  `Add Foil Number` as:
+  `ADD BIRTHDAY AGE` as:
   - `control_type=Number`
   - `selection_behavior=Measurement/Text`
   - `sku_defining=false`
@@ -97,14 +110,23 @@ Verification:
   - `max_selections=1`
 - Public HTML for Birthday Deliveries returned `x-from-cache=False` and
   embedded the updated `Number` / `configuration_groups` schema.
-- Browser proof on the live public route found exactly one `Add Foil Number`
+- Browser proof on the live public route found exactly one `ADD BIRTHDAY AGE`
   configuration group rendered as `input type="number"` and found no competing
   dropdown/radio/checkbox choice inputs for that field.
 - Live resolver proof using real Birthday selected options:
   - age `25`: no blockers
   - age `100`: no blockers
-  - empty age: blocked with `Add Foil Number: choose at least 1.`
-  - `abc`: blocked with `Add Foil Number: abc is not an allowed choice.`
+  - empty age: blocked with a choose-at-least-one message for the birthday age
+    field
+  - `abc`: blocked as an invalid birthday age value
+- 2026-07-02 visible/browser proof after the bridge:
+  - desktop and mobile visible text includes `ADD BIRTHDAY AGE`;
+  - desktop and mobile visible text does not include `Add Foil Number`;
+  - the old native `Add Foil Number` selector still exists in HTML only as a
+    hidden compatibility axis with `display: none` and `aria-hidden=true`;
+  - customer-visible `ADD BIRTHDAY AGE` renders as one `input type="number"`;
+  - selecting Delivery Size, Delivery themes, Add Bouquet, and entering age
+    `25` enabled Add to Cart with a priced variant and `$ 90.00`.
 
 ## Follow-Up Architecture Required
 
@@ -120,6 +142,10 @@ Required reusable architecture work:
   - choice controls: allowed values.
 - Birthday age should remain a configuration/measurement input, not a
   SKU-defining variant axis and not an add-on.
+- The temporary `Website Settings.head_html` bridge must be retired after the
+  reusable architecture removes non-SKU human inputs from the Birthday
+  Deliveries variant axis model. Do not leave this as the final ecommerce
+  architecture.
 - Product Setup publish/apply or direct-runtime authority must still be built
   so owner saves reach Website Item, Item, Item Price, media, cart, checkout,
   and public route authority with explicit proof.
