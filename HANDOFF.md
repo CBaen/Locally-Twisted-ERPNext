@@ -201,7 +201,9 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - `/shop-items` and `/all-products` previously aliased to `/shop-by-category`; superseded 2026-05-02. They now route to `/shop`.
 - `/privacy` and `/terms-of-service` now exist and return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Dashboard wiring/legal approval still separate.
 - `scripts/verify/layout_fit.spec.js` is restored and verified. Latest command: `npm run test:layout-fit` -> 80 passed across 20 routes and 4 viewport families, including `/checkout` and `/thank-you`.
-- Playwright is installed as Node/CLI tooling in npm's npx cache, not as Python `playwright` for `C:\Python314\python.exe`. Working direct CLI path: `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd` (v1.59.1).
+- Playwright is installed as repo-local Node/CLI tooling. Use the current
+  Kubuntu wrapper `scripts/verify/run_playwright` or the package scripts; do
+  not restore prior-host npm cache paths.
 - `scripts/verify/nav_ia.py` now guards nav order, no duplicate Contact, no retired `/book` nav links, and product-backed occasion links.
 - Footer centering/balance was fixed through content/layout cleanup, not by shrinking below accessible sizes.
 - Desktop menu dropdowns are contained; mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing preserved.
@@ -331,16 +333,15 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 
 ## Reading order on arrival
 
-1. Global `C:/Users/baenb/.claude/CLAUDE.md` (auto-injected)
-2. `Built_by_Cameron/CLAUDE.md` (agency rules)
-3. `_CLIENTS/locally-twisted/CLAUDE.md`
-4. **This file**
-5. `MIRROR-REBUILD-PLAN.md` — full rebuild plan with Research Notes from /plan-deepen + GL Proxy review
-6. `MIRROR-REBUILD-COMPLETE.md` — last session's wrap report
-7. `_resources/STYLE-GUIDE.md` for all current visual guidance. The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 and must not be used for taste calibration.
-8. `lessons-learned.md` newest entries (chrome rebuild + catalog port stacked at top)
-9. `locally-twisted-decisions.md` newest entries
-10. `git log --oneline -50`
+1. Machine-injected AGENTS instructions.
+2. `../../AGENTS.md` for Built by Cameron agency rules.
+3. `AGENTS.md` for current LT repo rules.
+4. `CODING-HANDOFF.md` for compact current technical state.
+5. **This file** as legacy whole-project context only.
+6. `_resources/STYLE-GUIDE.md` for current visual guidance.
+7. `lessons-learned.md` newest entries.
+8. `locally-twisted-decisions.md` newest entries.
+9. `git log --oneline -50`
 
 ## Not in flight
 

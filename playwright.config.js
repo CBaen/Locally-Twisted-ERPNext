@@ -1,17 +1,13 @@
 const fs = require("node:fs");
 const { defineConfig } = require("@playwright/test");
 
-const WINDOWS_CHROME_PATHS = [
-	"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-	"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-];
 const LINUX_CHROME_PATHS = [
 	"/usr/bin/brave-browser",
 	"/usr/bin/chromium",
 	"/usr/bin/chromium-browser",
 	"/usr/bin/google-chrome",
 ];
-const BROWSER_PATHS = [...LINUX_CHROME_PATHS, ...WINDOWS_CHROME_PATHS];
+const BROWSER_PATHS = [...LINUX_CHROME_PATHS];
 
 function findBrowserExecutable() {
 	if (process.env.PLAYWRIGHT_CHROME_PATH) {

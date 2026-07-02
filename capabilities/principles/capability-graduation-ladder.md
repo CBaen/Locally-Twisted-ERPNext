@@ -13,7 +13,7 @@ used_by: [capability-graduation-sweep]
 graduation_stage: architecture_backed
 graduation_status: active
 graduation_required: false
-supporting_artifacts: [../SCHEMA.md, ../recipes/capability-graduation-sweep.md, C:/Users/baenb/projects/capabilities-framework/tools/capability_graduation_audit.py]
+supporting_artifacts: [../SCHEMA.md, ../recipes/capability-graduation-sweep.md, /home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py]
 graduation_reason: capabilities should become support systems when value or risk justifies it
 graduation_review: 2026-05-21
 tags:
@@ -72,8 +72,8 @@ graduation_review: 2026-05-21
 
 Run the graduation sweep before and after major capability work:
 
-```powershell
-python tools\capability_graduation_audit.py --root capabilities --json
+```bash
+python /home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py --root capabilities --json
 ```
 
 Use `--fail-on-required` in repo-local checks only after the project has marked

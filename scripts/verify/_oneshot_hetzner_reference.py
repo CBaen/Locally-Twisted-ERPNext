@@ -8,7 +8,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 URL = "http://5.78.136.133/"
-OUT = Path("C:/Users/baenb/.claude")
+OUT = Path("output/hetzner-reference")
 
 
 def capture(p, viewport, output, *, is_mobile=False):
@@ -37,6 +37,7 @@ def capture(p, viewport, output, *, is_mobile=False):
 
 
 def main():
+    OUT.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
         print("→ Hetzner desktop (1366x900)…")
         d = capture(p, {"width": 1366, "height": 900}, OUT / "hetzner-desktop.png")

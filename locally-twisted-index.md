@@ -8,7 +8,8 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Client project rules, voice & language, reading order, Reference Disposition |
+| `AGENTS.md` | Current client project rules, voice, startup order, and Kubuntu source-of-truth guidance |
+| `CLAUDE.md` | Retired pointer only; not active guidance |
 | `PROJECT-STATUS.md` | Current state + dated update log |
 | `HANDOFF.md` | Instance-to-instance handoff (overwrite, ~40 lines) |
 | `lessons-learned.md` | Append-only LT-specific lessons |
@@ -102,11 +103,12 @@ Built before the frame reset; some still active, some legacy reference.
 
 ## Reference Disposition (READ before citing anything outside this folder)
 
-The four reference surfaces below are **temporary** and will be retired. See `CLAUDE.md` "Reference Disposition" for full rule.
+The four reference surfaces below are **temporary** and will be retired. Use
+`AGENTS.md` and current `_resources/` files for active guidance.
 
 | Path / URL | Disposition |
 |------|------|
-| `C:\Users\baenb\projects\locally-twisted-legacy_source` | Local clone of prior platform attempt. Read-only. Will be archived to GitHub and removed from disk. |
+| Prior-platform local clone | Not an active Wardenclyffe dependency. Use only approved backup/source evidence for a narrow reference task. |
 | `http://5.78.136.133/` | Failed legacy_source/Hetzner test deployment of prior attempt. Not current public DNS. Keep read-only until archive/decommission proof is complete. |
 | `https://github.com/CBaen/locally-twisted-legacy_source` | Prior attempt's source repo. Will be archived as read-only. |
 | `https://locallytwisted.com` | Current customer-facing Frappe Cloud site served through Cloudflare. Source is this ERPNext project and the Frappe app mirror. |
@@ -117,8 +119,8 @@ The four reference surfaces below are **temporary** and will be retired. See `CL
 
 | Path | Relationship |
 |------|--------------|
-| `C:\Users\baenb\projects\Built_by_Cameron` | Parent agency folder. Holds cross-client rules, port allocations, agency decisions log |
-| `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\bbc-personal-website` | Peer client folder (BBC the agency's own ERPNext install). Pre-staged 2026-04-26; not started. Uses port `:8080`. |
+| `/home/guidingl/projects/Built_by_Cameron` | Parent agency folder. Holds cross-client rules, port allocations, agency decisions log |
+| `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/bbc-personal-website` | Peer client folder (BBC the agency's own ERPNext install). Pre-staged 2026-04-26; not started. Uses port `:8080`. |
 | `https://github.com/CBaen/Locally-Twisted-ERPNext` | This project's GitHub repo (canonical source for the migration destination) |
 
 ## External resources

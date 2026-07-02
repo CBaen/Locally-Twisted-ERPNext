@@ -12,14 +12,17 @@ Gives Codex agents a safe way to use the older Claude workspace as a reference l
 
 Use this when a Locally Twisted task may benefit from older cross-project procedures, especially Frappe/ERPNext safety work, launch checks, accessibility, code review, research workflows, or design guidance.
 
-## Safe reference paths
+## Current status
 
-- `C:\Users\baenb\.claude\skills\README.md` - older skill index.
-- `C:\Users\baenb\.claude\skills\<skill-name>\SKILL.md` - specific older skill guidance.
-- `C:\Users\baenb\.claude\rules\reach-paths.md` - older routing guide.
-- `C:\Users\baenb\.claude\templates\`, `plans\`, `research\`, and `briefings\` - reference only when the current task calls for them.
+The older Claude workspace is not active local project truth on Wardenclyffe
+Kubuntu. Do not use prior-host `.claude` paths as instructions, and do not
+restore them into LT docs.
 
-Do not broadly read `.claude`. It contains runtime state, logs, caches, session data, screenshots, and secret-named files.
+If GL explicitly restores a Claude-era reference library from external backup
+for a narrow task, treat the operator-provided Kubuntu path as read-only
+reference evidence only. Do not broadly read restored Claude folders. They may
+contain runtime state, logs, caches, session data, screenshots, and
+secret-named files.
 
 ## High-value LT references
 
@@ -38,7 +41,8 @@ For this ERPNext/Frappe launch, the most relevant older Claude skills are:
 2. Verify claims against current LT files, git state, the running ERPNext site, and source-of-truth business materials before acting.
 3. Do not read, print, move, or rewrite secrets, tokens, auth files, session IDs, runtime logs, cache data, or broad session history.
 4. Do not copy Claude-era guidance wholesale into Codex. Translate only the useful behavior into project `AGENTS.md`, workstreams, queue entries, Codex capabilities, tests, or implementation.
-5. Keep Claude as a parallel collaborator/reference, not a deprecated source to purge.
+5. Keep any restored Claude material as non-authoritative reference evidence,
+   not active LT guidance.
 
 ## Failure modes
 

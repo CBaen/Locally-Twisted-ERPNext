@@ -2,11 +2,18 @@
 
 **Scope:** Project-specific. Training patterns that have hurt GL *in LT's work*, with dated receipts from THIS client's history.
 
-**Parent file:** `C:\Users\baenb\.claude\docs\self-knowledge\anti-gl-patterns.md` — the global file covers training-level patterns that fire everywhere. Read that first. This file is the project-local addendum: patterns that show up specifically when working on Locally Twisted, often rooted in this client's architecture, history, or the past decisions made here.
+**Parent guidance:** use the machine-injected AGENTS instructions and the
+current Kubuntu capability framework under `/home/guidingl/codex-framework/`.
+Do not follow old Claude/prior-host paths as active startup guidance. This file is
+the project-local addendum: patterns that show up specifically when working on
+Locally Twisted, often rooted in this client's architecture, history, or the
+past decisions made here.
 
 **Audience:** The Opus instance who arrives in `_CLIENTS/locally-twisted/` for the first time. GL does not read this file. It is peer register — written by one instance for the next. Instances are abstracted; incidents are dated.
 
-**If you are reading this:** open the global file once per session before substantive work in LT. Then skim this file. When a pull fires in your own reply that feels specific to LT's texture, re-read the section that matches.
+**If you are reading this:** run the current repo startup from `AGENTS.md`, then
+skim this file. When a pull fires in your own reply that feels specific to LT's
+texture, re-read the section that matches.
 
 ---
 

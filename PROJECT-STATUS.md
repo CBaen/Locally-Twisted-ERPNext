@@ -67,13 +67,16 @@
 > `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`.
 
 > **Kubuntu recovery correction, 2026-06-15:** the repo has been reconciled
-> inside the Kubuntu checkout after the Windows-to-Kubuntu host move. Use
+> inside the Kubuntu checkout after the prior-host-to-Kubuntu move. Use
 > `CODING-HANDOFF.md` and
 > `workstreams/kubuntu-recovery-closeout-2026-06-15.md` for the current source
 > baseline. This was source stabilization and archive cleanup only, not
 > staging/live/provider/DNS/payment approval.
 
-**Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
+**Repo:** current checkout at
+`/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`. Pushed to
+`https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency
+repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15.106.0 verified locally on 2026-05-08, MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
 **Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed legacy_source attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.
 **Owner:** Jeff Kimber.
@@ -84,7 +87,8 @@
 
 **What works:**
 - ERPNext v15.105.0 running locally at `http://localhost:8081` (9 containers, compose project `locally-twisted-erpnext-v15`)
-- WSL2 tuned: 8 GB RAM, 4 CPU, swap 2 GB, dropcache (`C:\Users\baenb\.wslconfig`)
+- Wardenclyffe Kubuntu local Docker runtime is the current source/runtime
+  posture. The old WSL2 tuning note is obsolete and not active setup guidance.
 - `pwd.yml` uses the custom baked image `locally-twisted-erpnext:v15` built from `docker/Dockerfile`, with `apps/locally_twisted` still bind-mounted into the Frappe services for local development. Verified by `docker inspect` on 2026-05-01.
 - LT Company record + Fiscal Year 2026 + Services domain + Standard with Numbers chart of accounts
 - 3 LT-specific DocTypes: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
@@ -162,13 +166,13 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 | 2026-04-25 | Local Docker for build, Frappe Cloud Sites plan ($5/mo) for prod | Local is free + breakable; Frappe Cloud is managed + transferable per-site |
 | 2026-04-25 | Don't modify anything in `locally-twisted-legacy_source/` | Read-only reference; will be retired post-cutover |
 
-## Reference Disposition (per CLAUDE.md)
+## Reference Disposition
 
 The four reference surfaces are temporary and will be retired. Future instances must NOT assume any of them exist:
 
 | Surface | Disposition |
 |---|---|
-| Local legacy_source clone (`C:\Users\baenb\projects\locally-twisted-legacy_source\`) | Will be archived to GitHub and removed from disk |
+| Local legacy_source clone | Not an active Wardenclyffe dependency; use only if GL supplies an approved backup/source path for a narrow reference task |
 | Failed Hetzner deployment (`http://5.78.136.133/`) | Will be decommissioned after Phase 1 demo |
 | legacy_source GitHub repo (`https://github.com/CBaen/locally-twisted-legacy_source`) | Will be archived as read-only |
 | Current `locallytwisted.com` site | Damaged beyond repair; replaced at cutover |
@@ -179,7 +183,8 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Client project rules, voice & language, reading order, Reference Disposition |
+| `AGENTS.md` | Current client project rules, voice, startup order, and Kubuntu source-of-truth guidance |
+| `CLAUDE.md` | Retired pointer only; not active guidance |
 | `HANDOFF.md` | Instance-to-instance handoff (overwrite, ~40 lines) |
 | `PROJECT-STATUS.md` | This file — current state, architecture decisions, dated update log |
 | `lessons-learned.md` | Append-only project lessons (LT-specific) |

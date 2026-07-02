@@ -18,11 +18,11 @@ neutral coordination workflow before using LT for parallel edits.
 
 ## Contract
 
-- Read `C:\Users\baenb\agent-coordination\STARTUP-CHECKLIST.md`.
+- Read `/home/guidingl/agent-coordination/STARTUP-CHECKLIST.md`.
 - Check `LIVE-BOARD.md` and `SESSION-REGISTRY.md`.
 - Name the Six-Box target before writing.
 - Treat LT client work as Box 4: child/client repo.
-- Use `C:\Users\baenb\agent-worktrees\builtbycameron-lt` for LT task worktrees.
+- Use `/home/guidingl/agent-worktrees/builtbycameron-lt` for LT task worktrees.
 - Do not edit parent/company repo files during an LT task unless explicitly requested.
 - Do not treat local acceptance, GitHub archive, staging, and live release as the same gate.
 
@@ -30,5 +30,5 @@ neutral coordination workflow before using LT for parallel edits.
 
 - `AGENTS.md` routes LT worktrees and claims through the neutral hub.
 - `workstreams/coordination-safety-pilot-2026-05-21.md` records the pilot.
-- `C:\Users\baenb\agent-coordination\REPO-READINESS.md` classifies LT as the
+- `/home/guidingl/agent-coordination/REPO-READINESS.md` classifies LT as the
   protected clean child/client pilot.

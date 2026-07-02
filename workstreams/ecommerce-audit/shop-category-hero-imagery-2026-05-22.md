@@ -54,10 +54,10 @@ Research brief:
 
 ## Verification
 
-- `python scripts\verify\color_swatch_contract.py`
-- `python -m py_compile scripts\setup\generate_shop_category_heroes.py`
-- `python scripts\dev\clear_website_cache.py`
-- `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
+- `python scripts/verify/color_swatch_contract.py`
+- `python -m py_compile scripts/setup/generate_shop_category_heroes.py`
+- `python scripts/dev/clear_website_cache.py`
+- `scripts/verify/run_playwright test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
 - `npm run test:public-assets`
 - `npm run test:container-contract -- --grep "seasonal-category|shop"`
 - `npm run test:layout-fit -- --grep "seasonal-category|shop"`

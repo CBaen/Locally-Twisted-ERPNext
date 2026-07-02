@@ -67,20 +67,31 @@ The legacy_source work informs this build (forms, models, copy, business policie
 
 - **Trust state with Jeff.** Jeff has paid GL real money and watched the existing website crash in meetings repeatedly. Trust has been eroded but not lost. The recovery move is to deliver a working replacement before announcing the verdict — a finished thing, not a fresh apology. This is the Core Value translated into operational behavior.
 - **Jeff's working style.** Hyperactive + inattentive ADHD. Tangent-jumps in meetings. Won't audit code, won't read documentation. Will tell GL when something on the website confuses him but won't articulate why well. Meetings need to be tightly scoped and visually anchored. End results matter; infrastructure does not.
-- **GL's working style.** Inattentive ADHD. Designer / creator, not a coder. Needs Claude to take the lead on technical work, flag dependencies GL doesn't know to ask about, apply obvious companion features and report back. "Make me look good" was a stated request 2026-04-26 — the operating mode.
+- **GL's working style.** Inattentive ADHD. Designer / creator, not a coder.
+  Needs the agent to take the lead on technical work, flag dependencies GL
+  doesn't know to ask about, apply obvious companion features and report back.
+  "Make me look good" was a stated request 2026-04-26 — the operating mode.
 - **Why ERPNext.** Off-legacy_source expedition (2026-04, 5 source-separated researchers, MODERATE confidence) found ERPNext is the only viable open-source replacement for LT's feature surface. Critically: ERPNext fails *noisily* (loud crashes, fast detection) where the prior platform failed *silently* (the failure mode that did the trust damage). Frappe Cloud reduces upgrade risk vs. self-hosted.
-- **Reference material.** All canonical resources for this build live in `_resources/` (style guide, business policies, tax data). The legacy_source dir, the failed Hetzner site, and the legacy_source GitHub repo are reference-only and will be retired — see `CLAUDE.md` "Reference Disposition." After cutover, they don't exist.
+- **Reference material.** All canonical resources for this build live in
+  `_resources/` (style guide, business policies, tax data). The legacy_source
+  repo, the failed Hetzner site, and the legacy_source GitHub repo are
+  reference-only and will be retired. After cutover, they do not exist as active
+  sources.
 - **First BBC client.** Locally Twisted is BBC's first client. The work needs to be exemplary. Jeff plans to refer other businesses; the referral pipeline depends on him being delighted by the deliverable.
 
 ## Constraints
 
 - **Stack:** ERPNext v15.105.0 + Frappe v15.106.0 in the current local bench. Pinned ERPNext v15 image, no rolling major line.
-- **Local environment:** Windows 11 + Docker Desktop (WSL2 backend, 8 GB / 4 CPU). LT's stack runs on `:8081`.
+- **Local environment:** Wardenclyffe Kubuntu with local Docker Engine. LT's
+  stack runs on `:8081` when intentionally started.
 - **Cost:** $0 during build. Frappe Cloud Sites plan ($5/mo) only at deployment. Bill follows site ownership after transfer.
 - **Stealth on the verdict:** Jeff knows there's an audit; he does not yet know the audit's conclusion. No artifact on disk should leak that conclusion in a way that would surprise him. Internal planning docs (this file included) stay in BBC's hands.
 - **Verification before any client-visible work.** Verify in the actual UI before claiming anything is done. Repeats of "deployed without checking" failures are not acceptable.
 - **Compliance:** Per-business isolation is structural, not policy-based. Code-yes / data-no boundary verified post-transfer.
-- **Loud failure rule.** Per global rule at `C:\Users\baenb\.claude\rules\loud-failure.md`. Every form, every cross-system handoff, every external API call must fail loudly and be observable to user / developer / monitor.
+- **Loud failure rule.** Every form, every cross-system handoff, and every
+  external API call must fail loudly and be observable to user, developer, and
+  monitor. Current operating rules live in `AGENTS.md` and
+  `capabilities/recipes/fail-loud-operating-law.md`.
 
 ## Key Decisions
 

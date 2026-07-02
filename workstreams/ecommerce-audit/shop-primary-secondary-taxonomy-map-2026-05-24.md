@@ -175,14 +175,14 @@ Runtime projection:
 
 Verifier receipts:
 
-- `python scripts\verify\shop_taxonomy_contract.py`
-- `python scripts\verify\catalog_public_sellability_contract.py`
+- `python scripts/verify/shop_taxonomy_contract.py`
+- `python scripts/verify/catalog_public_sellability_contract.py`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.commerce_rules_contract.run`
-- `python scripts\verify\nav_ia.py`
-- `python scripts\verify\category_media_candidates.py --json output\category-media-candidates-taxonomy-smoke.json --markdown output\category-media-candidates-taxonomy-smoke.md --max-per-category 2`
-- `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line`
-- `python scripts\verify\public_asset_integrity.py`
-- `python scripts\verify\smoke_shop.py`
+- `python scripts/verify/nav_ia.py`
+- `python scripts/verify/category_media_candidates.py --json output/category-media-candidates-taxonomy-smoke.json --markdown output/category-media-candidates-taxonomy-smoke.md --max-per-category 2`
+- `scripts/verify/run_playwright test scripts/verify/shop_category_hero_images.spec.js --reporter=line`
+- `python scripts/verify/public_asset_integrity.py`
+- `python scripts/verify/smoke_shop.py`
 
 Related copy hardening:
 

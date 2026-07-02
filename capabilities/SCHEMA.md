@@ -177,8 +177,8 @@ used_by: [tesla-launch::meal-id]
 The alias before `::` is resolved by tooling when the caller supplies the
 related root path, for example:
 
-```powershell
-python tools\capability_dependency_report.py --root capabilities --related-root shared=C:\Users\<user>\capabilities --json
+```bash
+python tools/capability_dependency_report.py --root capabilities --related-root shared=/home/guidingl/capabilities --json
 ```
 
 If a root-qualified dependency fails, consuming cards in other roots inherit

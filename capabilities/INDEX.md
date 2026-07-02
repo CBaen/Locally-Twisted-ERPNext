@@ -85,7 +85,10 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-product-blueprint-authoring](recipes/erpnext-product-blueprint-authoring.md) - add staff-authored, local-only ERPNext product blueprints for highly customizable products, with validation, dry-run preview, guarded unpublished local apply, and fixed-price add-on runtime cascade proof.
 - [erpnext-live-product-visibility-retirement](recipes/erpnext-live-product-visibility-retirement.md) - retire exact approved products from live visibility by disabling target Items/variants, keeping Website Items unpublished as `needs_review`, and proving route and `/shop` absence without weakening owner catalog guards.
 
-- Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
+- Agency reference:
+  `/home/guidingl/projects/Built_by_Cameron/capabilities/recipes/frappe-default-surface-map.md`
+  maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS
+  defaults to the usual BBC override moves.
 - [ad-account-takeover-provider-control](recipes/ad-account-takeover-provider-control.md) - take control of Google Ads and Meta/Facebook/Instagram accounts from authenticated provider dashboards, keeping Gmail/Drive/report evidence as support only.
 - [meta-operations](recipes/meta-operations/INDEX.md) - supervised Facebook/Instagram operating framework for broad LT Meta ownership: ads, organic posts, messaging, leads, measurement, governance, and approval evidence.
 - [three-brand-dba-boundary-contract](recipes/three-brand-dba-boundary-contract.md) - guard the current one-accounting-company/three-brand-lane shape for Locally Twisted, Commercial Balloon Decor, and Memorial Balloons before changing websites, ERPNext, documents, portals, ads, or automations.
@@ -118,7 +121,7 @@ Workflows. Multi-step. Clear start and finish.
 - [lt-frappe-erpnext-quirks-library](recipes/lt-frappe-erpnext-quirks-library.md) - candidate triage card for LT stack quirks (status, symptom, cause, guardrail, verifier) to check before repeating old framework mistakes.
 - [large-source-document-intake](recipes/large-source-document-intake.md) - chunk and source-map large LT reference documents before using them for catalog, policy, checkout, or migration claims.
 - [launch-repo-cleanup-and-evidence-retention](recipes/launch-repo-cleanup-and-evidence-retention.md) - clean launch repo debris, raw drops, generated evidence, stale mirrors, and historical experiment output without deleting active source or other-agent work.
-- [kubuntu-repo-recovery-cleanup](recipes/kubuntu-repo-recovery-cleanup.md) - reconcile LT source after Windows-to-Kubuntu or similar host moves by preserving real diffs, removing CRLF/LF-only churn, pruning stale worktree metadata, and proving fast local contracts before source archive.
+- [kubuntu-repo-recovery-cleanup](recipes/kubuntu-repo-recovery-cleanup.md) - reconcile LT source after prior-host-to-Kubuntu or similar host moves by preserving real diffs, removing CRLF/LF-only churn, pruning stale worktree metadata, and proving fast local contracts before source archive.
 - Agency reference: `/home/guidingl/projects/Built_by_Cameron/capabilities/recipes/kubuntu-client-runtime-doctor.md` explains the cross-client doctor pattern. LT's concrete doctor is `scripts/verify/kubuntu_doctor.py` and its manifest bundle is `lt-kubuntu-doctor`.
 - [provider-release-surface-cleanup](recipes/provider-release-surface-cleanup.md) - inventory, label, retire, or delete Frappe Cloud sites/benches, app mirrors, temp clones, and release surfaces only after public-domain, provider, live-record, and source/app identity proof.
 - [frappe-cloud-cloudflare-stripe-launch-gate](recipes/frappe-cloud-cloudflare-stripe-launch-gate.md) - coordinate Frappe Cloud staging, Cloudflare DNS/security, Stripe live readiness, human account access, and ecommerce fallback without treating preflight as cutover approval.
@@ -157,7 +160,10 @@ Workflows. Multi-step. Clear start and finish.
 
 ## External Design-Studio Capabilities
 
-Moved on 2026-05-11: reusable Event Playground / Plan Custom Decor design capabilities now live in `C:\Users\baenb\projects\design-studio\capabilities\recipes\`. Do not recreate local LT copies unless GL explicitly wants a Frappe implementation contract fork.
+Moved on 2026-05-11: reusable Event Playground / Plan Custom Decor design
+capabilities live outside the LT repo and are not active LT guidance by
+default. On Kubuntu, only use an explicitly approved current source path if GL
+wants a Frappe implementation contract fork.
 
 - `balloon-material-visual-physics.md`
 - `event-playground-construction-truth.md`

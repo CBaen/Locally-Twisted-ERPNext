@@ -13,7 +13,7 @@ used_by: []
 graduation_stage: verifier_backed
 graduation_status: active
 graduation_required: false
-supporting_artifacts: [C:/Users/baenb/projects/capabilities-framework/tools/capability_graduation_audit.py]
+supporting_artifacts: [/home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py]
 graduation_reason: agents need a repeatable audit path for deciding what has become a skill verifier gate automation architecture or release gate
 graduation_review: 2026-05-21
 tags:
@@ -42,15 +42,15 @@ around a capability.
 Run the read-only audit from the framework source package or a project that has
 the tool available:
 
-```powershell
-python C:\Users\baenb\projects\capabilities-framework\tools\capability_graduation_audit.py --root <project>\capabilities --json
+```bash
+python /home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py --root <project>/capabilities --json
 ```
 
 For a project that has already marked some cards with
 `graduation_required: true`, use the blocking mode in local checks:
 
-```powershell
-python C:\Users\baenb\projects\capabilities-framework\tools\capability_graduation_audit.py --root <project>\capabilities --json --fail-on-required
+```bash
+python /home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py --root <project>/capabilities --json --fail-on-required
 ```
 
 Interpret the output this way:
@@ -68,7 +68,8 @@ Use the lightest graduation stage that reduces real future friction.
 ## What it depends on
 
 - [Capability Graduation Ladder](../principles/capability-graduation-ladder.md) - the support-stage model.
-- Source package tool: `C:\Users\baenb\projects\capabilities-framework\tools\capability_graduation_audit.py`.
+- Source package tool:
+  `/home/guidingl/projects/capabilities-framework/tools/capability_graduation_audit.py`.
 
 ## Failure modes
 

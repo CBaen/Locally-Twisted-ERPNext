@@ -45,8 +45,8 @@ Recent committed form behavior found:
 
 Latest local verification passed against `http://localhost:8081/contact`:
 
-- `python -m py_compile apps\locally_twisted\locally_twisted\www\contact.py scripts\verify\contact_service_logic.py scripts\verify\lead_backend_intake_parity.py`
-- `python scripts\dev\clear_website_cache.py`
+- `python -m py_compile apps/locally_twisted\locally_twisted\www\contact.py scripts/verify\contact_service_logic.py scripts/verify\lead_backend_intake_parity.py`
+- `python scripts/dev\clear_website_cache.py`
 - `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`
 - `python scripts/verify/lead_backend_intake_parity.py`
 - `npm run test:form-experience`
@@ -131,10 +131,10 @@ Resolution:
 Verification:
 
 - `python -m compileall ...`
-- `python scripts\verify\cart_checkout_contract.py`
+- `python scripts/verify/cart_checkout_contract.py`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.product_quote_customization_contract.run`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.product_page_runtime_contract.run`
-- `cmd /c scripts\verify\run_playwright.cmd test scripts/verify/product_quote_first_experience.spec.js --reporter=line`
+- `scripts/verify/run_playwright test scripts/verify/product_quote_first_experience.spec.js --reporter=line`
 
 ## Bucket 4 - Backend Workspace/Persona Permissions: Resolved Locally
 
@@ -165,11 +165,11 @@ Risk:
 
 Verification:
 
-- `python -m compileall apps\locally_twisted\locally_twisted\seed\sync_backend_workspaces.py apps\locally_twisted\locally_twisted\verify\persona_workspace_permissions.py scripts\verify\backend_workspace_parity.py`
-- `python scripts\verify\backend_workspace_parity.py`
+- `python -m compileall apps/locally_twisted\locally_twisted\seed\sync_backend_workspaces.py apps/locally_twisted\locally_twisted\verify\persona_workspace_permissions.py scripts/verify\backend_workspace_parity.py`
+- `python scripts/verify\backend_workspace_parity.py`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.persona_workspace_permissions.run`
-- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
-- `python scripts\verify\product_blueprint_contract.py`
+- `LT_DESK_TEST_PASSWORD='LocalTemp2026!' npm run test:desk-personas`
+- `python scripts/verify\product_blueprint_contract.py`
 
 ## Bucket 5 - Checkout Verifier Pause Override: Resolved Locally
 
@@ -195,7 +195,7 @@ Risk:
 
 Verification:
 
-- `python -m compileall apps\locally_twisted\locally_twisted\verify\checkout_lead_conversion_contract.py`
+- `python -m compileall apps/locally_twisted\locally_twisted\verify\checkout_lead_conversion_contract.py`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.checkout_lead_conversion_contract.run`
 
 ## Bucket 6 - Maintenance Heartbeat Role Change: Resolved Locally
@@ -219,8 +219,8 @@ Risk:
 Verification:
 
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.db.exists --args "['Role', 'LT Maintenance Admin Access']"`
-- `python scripts\verify\maintenance_heartbeat.py`
-- `python scripts\verify\maintenance_admin_boundary.py`
+- `python scripts/verify\maintenance_heartbeat.py`
+- `python scripts/verify\maintenance_admin_boundary.py`
 
 ## Bucket 7 - External legacy_source Project Concern
 
@@ -230,7 +230,7 @@ Concern:
 
 Read-only check performed:
 
-- external repo checked at `C:\Users\baenb\projects\locally-twisted-legacy_source`;
+- external prior-platform repo was checked read-only during the original audit;
 - no current tracked dirty changes were found there during this audit;
 - the repo is already ahead of origin and has an older untracked `CODEX_REPLY.md`
   from 2026-05-06, which should not be attributed to Paperclip without deeper
