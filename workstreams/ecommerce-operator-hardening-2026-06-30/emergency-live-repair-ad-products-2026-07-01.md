@@ -149,6 +149,46 @@ Verification:
     fixes on variant products must include at least one matrix proof across
     every customer-visible price-changing axis.
 
+## Temporary Live Stability Verifier
+
+Added `scripts/verify/ad_product_live_stability.spec.js` as a focused emergency
+guard for the two ad-facing live products. This verifier is intentionally
+public-route/browser based because the customer-facing site is the source of
+truth during this incident.
+
+Run from the LT repo root:
+
+```bash
+LT_BASE_URL=https://locallytwisted.com node node_modules/@playwright/test/cli.js test scripts/verify/ad_product_live_stability.spec.js --reporter=line
+```
+
+Coverage:
+
+- Large Head Missionary public route shows `$ 125.00`, does not show `$ 175.00`,
+  and the public cart pricing API returns `125` for
+  `large-head-missionary-ELD-BLU-BLA`.
+- Birthday Deliveries exposes `ADD BIRTHDAY AGE` as a visible number input and
+  hides the legacy native `Add Foil Number` compatibility axis.
+- Birthday Deliveries resolves all nine visible Delivery Size plus Add Bouquet
+  price combinations with Add to Cart enabled and the expected item code:
+  - Small + Small 3 balloon bouquet: `$ 90.00`
+  - Small + 5 balloon bouquet: `$ 100.00`
+  - Small + 7 balloon bouquet: `$ 110.00`
+  - Medium + Small 3 balloon bouquet: `$ 120.00`
+  - Medium + 5 balloon bouquet: `$ 130.00`
+  - Medium + 7 balloon bouquet: `$ 140.00`
+  - Large + Small 3 balloon bouquet: `$ 155.00`
+  - Large + 5 balloon bouquet: `$ 165.00`
+  - Large + 7 balloon bouquet: `$ 175.00`
+
+Latest proof:
+
+- 2026-07-02:
+  `LT_BASE_URL=https://locallytwisted.com node node_modules/@playwright/test/cli.js test scripts/verify/ad_product_live_stability.spec.js --reporter=line`
+- Result: `11 passed (1.2m)`.
+- This verifier does not click Add to Cart, create carts, create orders, change
+  Desk records, or mutate live data.
+
 ## Follow-Up Architecture Required
 
 Do not treat this repair as the ecommerce architecture fix.
