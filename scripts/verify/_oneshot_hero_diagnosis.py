@@ -67,11 +67,11 @@ def main():
         page.screenshot(path=str(OUT / "lt-hero-crop.png"), clip={"x": 0, "y": 0, "width": 1366, "height": 700})
         print(f"\nSaved hero crop: {OUT / 'lt-hero-crop.png'}")
 
-        # Same crop on Hetzner
-        page.goto("http://5.78.136.133/", wait_until="networkidle", timeout=20000)
+        # Same crop on current import capture
+        page.goto("", wait_until="networkidle", timeout=20000)
         page.wait_for_timeout(1000)
-        page.screenshot(path=str(OUT / "hetzner-hero-crop.png"), clip={"x": 0, "y": 0, "width": 1366, "height": 700})
-        print(f"Saved Hetzner hero crop: {OUT / 'hetzner-hero-crop.png'}")
+        page.screenshot(path=str(OUT / "current-import-capture-hero-crop.png"), clip={"x": 0, "y": 0, "width": 1366, "height": 700})
+        print(f"Saved current import capture hero crop: {OUT / 'current-import-capture-hero-crop.png'}")
 
         b.close()
 

@@ -112,8 +112,7 @@ def wait_for_site_ready(base_url: str, timeout_seconds: int = 90) -> bool:
 
 
 def local_playwright_command(workers: int, spec: str) -> list[str]:
-    bin_name = "playwright.cmd" if os.name == "nt" else "playwright"
-    local_bin = ROOT / "node_modules" / ".bin" / bin_name
+    local_bin = ROOT / "node_modules" / ".bin" / "playwright"
     executable = str(local_bin) if local_bin.exists() else "npx"
     command = [executable]
     if executable == "npx":
@@ -132,7 +131,7 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
     python = sys.executable
     workers = max(1, args.workers)
     steps = [
-        Step("Forbidden retired-source label gate", [python, "scripts/verify/forbidden_source_label_gate.py"], 120),
+        Step("Forbidden platform label gate", [python, "scripts/verify/forbidden_source_label_gate.py"], 120),
         Step("Verifier CLI safety contract", [python, "scripts/verify/verifier_cli_contract.py"], 120),
         Step("Navigation IA", [python, "scripts/verify/nav_ia.py"], 120),
         Step("Public homepage identity", [python, "scripts/verify/public_home_identity.py"], 120),

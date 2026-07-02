@@ -14,7 +14,7 @@ This handoff is written for peer GPT 5.5 agents working in the LT Frappe stack:
 - App order matters: `locally_twisted` must stay last in `installed_apps` so hooks, fixtures, and template overrides win.
 - Frappe Cloud target: Git-backed private bench deployment; repo changes must persist through hooks, fixtures, patches, and site config, not local Desk-only edits.
 - Technical code/verifier choices route to Leader. Ask the user only for business-owner approvals such as destructive catalog purge/import, real catalog approval, live payment tests, secrets/account access, DNS cutover, or production customer-record mutation.
-- legacy_source CE 19 remains a read-only source witness for product meaning. If source mapping goes beyond the existing approved packets, route it to the legacy_source-to-Frappe specialist instead of guessing.
+- catalog_data CE 19 remains a read-only source witness for product meaning. If source mapping goes beyond the existing approved packets, route it to the catalog_data-to-Frappe specialist instead of guessing.
 
 ## Gate Command
 
@@ -90,7 +90,7 @@ Before destructive import is allowed, the gate requires:
 
 ## V1 Product Re-Export/Re-Import Acceptance Proof
 
-Owner question: will the legacy_source CE 19 V1 product re-export/re-import path produce
+Owner question: will the catalog_data CE 19 V1 product re-export/re-import path produce
 correct ERPNext/Frappe Webshop product pages?
 
 Acceptance answer is **only yes after a post-import proof passes**. The proof
@@ -119,7 +119,7 @@ Post-import acceptance checks:
    content must be traceable to ERPNext/Frappe records or approved source
    packets.
 3. Variant behavior matches source meaning:
-   where legacy_source source says a selected variant changes image or price, the
+   where catalog_data source says a selected variant changes image or price, the
    ERPNext Item Variant / Item Price / media mapping must drive the visible
    change. If source says no public checkout variant exists, the product must
    stay quote-first or blocked from paid checkout.

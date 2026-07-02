@@ -159,7 +159,7 @@ def _assert_product_rehearsal(
     from locally_twisted.www.checkout import _resolve_sale_lines
 
     if not source_product:
-        raise ContractFail(f"{website_item_code} missing legacy_source source row")
+        raise ContractFail(f"{website_item_code} missing catalog_data source row")
     if get_checkout_add_on_options(website_item_code):
         raise ContractFail(f"{website_item_code} should not expose checkout add-ons in the multi-color rehearsal")
 
@@ -233,7 +233,7 @@ def _assert_product_rehearsal(
             "website_item_code": website_item_code,
             "source_name": spec["source_name"],
             "source_price": float(spec["source_price"]),
-            "source_price_basis": "legacy_source base price; color recipe choices do not change price",
+            "source_price_basis": "catalog_data base price; color recipe choices do not change price",
             "source_valid_variant_count": len(source_product.get("valid_variants") or []),
             "source_canonical_color_combo_count": len(source_combos),
             "color_axes": list(color_axes),

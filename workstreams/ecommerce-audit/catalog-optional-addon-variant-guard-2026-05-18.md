@@ -3,7 +3,7 @@
 ## Purpose
 
 Close the local catalog regression where stale `Add Foil Number` variants were
-enabled as if they were required SKU choices after the all-legacy_source sellable
+enabled as if they were required SKU choices after the all-catalog_data sellable
 reimport.
 
 This is a local/source repair only. No Frappe Cloud update, DNS change, Stripe

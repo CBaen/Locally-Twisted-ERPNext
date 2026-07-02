@@ -104,7 +104,7 @@ def _inventory_failures(rows: list[dict[str, Any]], source_products: dict[str, d
         failures.append("expected at least one published Website Item, found 0")
     missing_source = sorted(row["slug"] for row in rows if row["slug"] not in source_products)
     if missing_source:
-        failures.append(f"priced Website Items missing legacy_source source artifact rows: {missing_source}")
+        failures.append(f"priced Website Items missing catalog_data source artifact rows: {missing_source}")
     missing_routes = sorted(row["slug"] for row in rows if not row.get("route"))
     if missing_routes:
         failures.append(f"priced Website Items missing Website Item route: {missing_routes}")
@@ -162,7 +162,7 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
         or not row.get("source_pattern_contract")
     )
     if lost_mapper:
-        failures.append(f"products missing carried legacy_source mapper contract semantics: {lost_mapper}")
+        failures.append(f"products missing carried catalog_data mapper contract semantics: {lost_mapper}")
     missing_line_fields = line_field_status.get("missing") or {}
     if any(missing_line_fields.values()):
         failures.append(f"missing preservation line fields: {missing_line_fields}")
@@ -211,7 +211,7 @@ def _load_source_catalog(source_catalog_path: str | None = None) -> dict[str, An
         app_root = Path(frappe.get_app_path("locally_twisted")).parent
         path = app_root / "_resources" / "catalog-source" / "catalog.json"
     if not path.exists():
-        frappe.throw(f"Missing legacy_source source catalog artifact: {path}")
+        frappe.throw(f"Missing catalog_data source catalog artifact: {path}")
     return json.loads(path.read_text(encoding="utf-8"))
 
 

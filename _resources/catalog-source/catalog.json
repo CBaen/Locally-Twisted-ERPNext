@@ -1,6 +1,6 @@
 {
   "scraped_at": "2026-04-30T00:34:51.629348",
-  "source": "http://5.78.136.133",
+  "source": "",
   "category_roots": [
     "/shop/category/what-we-make-3",
     "/shop/category/special-occasions-4",
@@ -11,15 +11,15 @@
   "products": [
     {
       "slug": "baby-shower-combination-photo-opt",
-      "legacy_source_id": 14,
-      "url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14",
+      "catalog_data_id": 14,
+      "url": "shop/what-we-make-3/baby-shower-combination-photo-opt-14",
       "name": "Baby Shower Combination Photo opt",
       "base_price": 650.0,
       "currency": "USD",
       "description": "Baby Shower Combination Photo opt",
-      "image_url": "http://5.78.136.133/web/image/product.template/14/image_1920",
+      "image_url": "web/image/product.template/14/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/14/image_1024/Baby%20Shower%20Combination%20Photo%20opt?unique=75652bd"
+        "web/image/product.product/14/image_1024/Baby%20Shower%20Combination%20Photo%20opt?unique=75652bd"
       ],
       "attributes": {
         "latex colors": {
@@ -834,13 +834,13 @@
     },
     {
       "slug": "classic-organic-balloon-garland",
-      "legacy_source_id": 19,
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19",
+      "catalog_data_id": 19,
+      "url": "shop/what-we-make-3/classic-organic-balloon-garland-19",
       "name": "Classic Organic Balloon Garland",
       "base_price": 150.0,
       "currency": "USD",
       "description": "",
-      "image_url": "http://5.78.136.133/web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc",
+      "image_url": "web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc",
       "additional_image_urls": [],
       "attributes": {
         "Garland Length": {
@@ -2951,15 +2951,15 @@
     },
     {
       "slug": "basketball-arch",
-      "legacy_source_id": 21,
-      "url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21",
+      "catalog_data_id": 21,
+      "url": "shop/what-we-make-3/basketball-arch-21",
       "name": "Basketball Arch",
       "base_price": 340.0,
       "currency": "USD",
       "description": "A full-span arch in your birthday colors. We work with you on palette, size, and placement so it anchors the room exactly where you want it.",
-      "image_url": "http://5.78.136.133/web/image/product.template/21/image_1920",
+      "image_url": "web/image/product.template/21/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/150/image_1024/Basketball%20Arch%20%2820ft%29?unique=a3d28cd"
+        "web/image/product.product/150/image_1024/Basketball%20Arch%20%2820ft%29?unique=a3d28cd"
       ],
       "attributes": {
         "Arch Size": {
@@ -3009,15 +3009,15 @@
     },
     {
       "slug": "number-balloon-columns",
-      "legacy_source_id": 22,
-      "url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22",
+      "catalog_data_id": 22,
+      "url": "shop/what-we-make-3/number-balloon-columns-22",
       "name": "Number Balloon Columns",
       "base_price": 55.0,
       "currency": "USD",
       "description": "Two freestanding columns framing your entrance, stage, or photo area. Choose your colors and we handle the rest.",
-      "image_url": "http://5.78.136.133/web/image/product.template/22/image_1920",
+      "image_url": "web/image/product.template/22/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/153/image_1024/Number%20Balloon%20Columns%20%28Gold%29?unique=ef0de7c"
+        "web/image/product.product/153/image_1024/Number%20Balloon%20Columns%20%28Gold%29?unique=ef0de7c"
       ],
       "attributes": {
         "Number colors": {
@@ -7504,15 +7504,15 @@
     },
     {
       "slug": "easter-balloon-arch-bunny-ear",
-      "legacy_source_id": 30,
-      "url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
+      "catalog_data_id": 30,
+      "url": "shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
       "name": "Easter Balloon Arch - Bunny Ear",
       "base_price": 375.0,
       "currency": "USD",
       "description": "Soft pastels and spring greens in a garden-inspired arch. Designed for egg hunts, church socials, and family brunches.",
-      "image_url": "http://5.78.136.133/web/image/product.template/30/image_1920",
+      "image_url": "web/image/product.template/30/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/157/image_1024/Easter%20Balloon%20Arch%20-%20Bunny%20Ear%20%2820ft%29?unique=c4a0c37"
+        "web/image/product.product/157/image_1024/Easter%20Balloon%20Arch%20-%20Bunny%20Ear%20%2820ft%29?unique=c4a0c37"
       ],
       "attributes": {
         "Arch Size": {
@@ -7562,15 +7562,15 @@
     },
     {
       "slug": "graduation-grab-n-go",
-      "legacy_source_id": 38,
-      "url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38",
+      "catalog_data_id": 38,
+      "url": "shop/what-we-make-3/graduation-grab-n-go-38",
       "name": "Graduation Grab n Go",
       "base_price": 85.0,
       "currency": "USD",
       "description": "School colors with a cap topper that says it all. Frames the stage, the photo spot, or the front door.",
-      "image_url": "http://5.78.136.133/web/image/product.template/38/image_1920",
+      "image_url": "web/image/product.template/38/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/38/image_1024/Graduation%20Grab%20n%20Go?unique=d99d953"
+        "web/image/product.product/38/image_1024/Graduation%20Grab%20n%20Go?unique=d99d953"
       ],
       "attributes": {
         "latex colors": {
@@ -8385,15 +8385,15 @@
     },
     {
       "slug": "halloween-arch",
-      "legacy_source_id": 39,
-      "url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39",
+      "catalog_data_id": 39,
+      "url": "shop/what-we-make-3/halloween-arch-39",
       "name": "Halloween arch",
       "base_price": 300.0,
       "currency": "USD",
       "description": "Orange, black, and purple columns that set the mood. Built for trunk-or-treats, porch displays, and haunted house entrances.",
-      "image_url": "http://5.78.136.133/web/image/product.template/39/image_1920",
+      "image_url": "web/image/product.template/39/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/159/image_1024/Halloween%20arch%20%2820ft%29?unique=fc90a2b"
+        "web/image/product.product/159/image_1024/Halloween%20arch%20%2820ft%29?unique=fc90a2b"
       ],
       "attributes": {
         "Arch Size": {
@@ -11093,15 +11093,15 @@
     },
     {
       "slug": "large-head-missionary",
-      "legacy_source_id": 45,
-      "url": "http://5.78.136.133/shop/personalized-displays-4/large-head-missionary-45",
+      "catalog_data_id": 45,
+      "url": "shop/personalized-displays-4/large-head-missionary-45",
       "name": "Large head Missionary",
       "base_price": 175.0,
       "currency": "USD",
       "description": "Large head Missionary",
-      "image_url": "http://5.78.136.133/web/image/product.template/45/image_1920",
+      "image_url": "web/image/product.template/45/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1149/image_1024/Large%20head%20Missionary%20%28Elder%2C%20Blush%2C%20Black%29?unique=37b3302"
+        "web/image/product.product/1149/image_1024/Large%20head%20Missionary%20%28Elder%2C%20Blush%2C%20Black%29?unique=37b3302"
       ],
       "attributes": {
         "Missionary": {
@@ -11583,15 +11583,15 @@
     },
     {
       "slug": "premium-organic-garland",
-      "legacy_source_id": 52,
-      "url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52",
+      "catalog_data_id": 52,
+      "url": "shop/what-we-make-3/premium-organic-garland-52",
       "name": "Premium Organic Garland",
       "base_price": 216.0,
       "currency": "USD",
       "description": "Balloons up to 24 inches — bolder, more dramatic. The scale creates depth and dimension that a standard garland can’t.",
-      "image_url": "http://5.78.136.133/web/image/product.template/52/image_1920",
+      "image_url": "web/image/product.template/52/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/78/image_1024/Premium%20Organic%20Garland%20%286ft%29?unique=0f6bdad"
+        "web/image/product.product/78/image_1024/Premium%20Organic%20Garland%20%286ft%29?unique=0f6bdad"
       ],
       "attributes": {
         "Garland Length": {
@@ -13702,15 +13702,15 @@
     },
     {
       "slug": "premium-organic-arch",
-      "legacy_source_id": 53,
-      "url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+      "catalog_data_id": 53,
+      "url": "shop/what-we-make-3/premium-organic-arch-53",
       "name": "Premium Organic Arch",
       "base_price": 720.0,
       "currency": "USD",
       "description": "Balloons up to 24 inches, built into an organic arch. The scale adds depth and dimension that a standard arch doesn’t have.",
-      "image_url": "http://5.78.136.133/web/image/product.template/53/image_1920",
+      "image_url": "web/image/product.template/53/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/441/image_1024/Premium%20Organic%20Arch%20%2820ft%2C%20Foil%20stars%29?unique=ceae1d7"
+        "web/image/product.product/441/image_1024/Premium%20Organic%20Arch%20%2820ft%2C%20Foil%20stars%29?unique=ceae1d7"
       ],
       "attributes": {
         "Arch Size": {
@@ -19608,15 +19608,15 @@
     },
     {
       "slug": "pemium-organic-column",
-      "legacy_source_id": 54,
-      "url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+      "catalog_data_id": 54,
+      "url": "shop/what-we-make-3/pemium-organic-column-54",
       "name": "Pemium Organic Column",
       "base_price": 180.0,
       "currency": "USD",
       "description": "Balloons up to 24 inches, stacked into a column. The scale brings presence that a standard column doesn’t.",
-      "image_url": "http://5.78.136.133/web/image/product.template/54/image_1920",
+      "image_url": "web/image/product.template/54/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1052/image_1024/Pemium%20Organic%20Column%20%285ft%2C%20Foil%20stars%29?unique=af9caa1"
+        "web/image/product.product/1052/image_1024/Pemium%20Organic%20Column%20%285ft%2C%20Foil%20stars%29?unique=af9caa1"
       ],
       "attributes": {
         "Column Height": {
@@ -28282,15 +28282,15 @@
     },
     {
       "slug": "pride-progress-rainbow-balloon-arch",
-      "legacy_source_id": 55,
-      "url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+      "catalog_data_id": 55,
+      "url": "shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
       "name": "Pride progress Rainbow Balloon Arch",
       "base_price": 260.0,
       "currency": "USD",
       "description": "Full-spectrum rainbow in a statement arch. Bold, joyful, and built to celebrate exactly who you are.",
-      "image_url": "http://5.78.136.133/web/image/product.template/55/image_1920",
+      "image_url": "web/image/product.template/55/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/146/image_1024/Pride%20progress%20Rainbow%20Balloon%20Arch%20%2820ft%29?unique=1580db2"
+        "web/image/product.product/146/image_1024/Pride%20progress%20Rainbow%20Balloon%20Arch%20%2820ft%29?unique=1580db2"
       ],
       "attributes": {
         "Arch Size": {
@@ -28370,36 +28370,36 @@
     },
     {
       "slug": "classic-arch",
-      "legacy_source_id": 57,
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57",
+      "catalog_data_id": 57,
+      "url": "shop/what-we-make-3/classic-arch-57",
       "name": "Classic Arch",
       "base_price": 260.0,
       "currency": "USD",
       "description": "Every arch is built by hand, sized to your space, and designed around the colors you love. Structured spirals or layered bands — up to 4 colors, shaped to fit the entrance.",
-      "image_url": "http://5.78.136.133/web/image/product.template/57/image_1920",
+      "image_url": "web/image/product.template/57/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/91/image_128/Classic%20Arch%20%2820ft%29?unique=b34093d",
-        "http://5.78.136.133/web/image/product.image/4/image_128/20%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/5/image_128/35%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/6/image_128/30%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/7/image_128/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/8/image_128/light%20up%20standard%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/9/image_128/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/12/image_128/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/13/image_128/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/14/image_128/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/15/image_128/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.product/91/image_1024/Classic%20Arch%20%2820ft%29?unique=b34093d",
-        "http://5.78.136.133/web/image/product.image/4/image_1024/20%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/5/image_1024/35%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/6/image_1024/30%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/7/image_1024/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/8/image_1024/light%20up%20standard%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/9/image_1024/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/12/image_1024/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/13/image_1024/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/14/image_1024/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/15/image_1024/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
+        "web/image/product.product/91/image_128/Classic%20Arch%20%2820ft%29?unique=b34093d",
+        "web/image/product.image/4/image_128/20%27.webp?unique=8fde0c6",
+        "web/image/product.image/5/image_128/35%27.webp?unique=8fde0c6",
+        "web/image/product.image/6/image_128/30%27.webp?unique=8fde0c6",
+        "web/image/product.image/7/image_128/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/8/image_128/light%20up%20standard%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/9/image_128/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
+        "web/image/product.image/12/image_128/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/13/image_128/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/14/image_128/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
+        "web/image/product.image/15/image_128/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80",
+        "web/image/product.product/91/image_1024/Classic%20Arch%20%2820ft%29?unique=b34093d",
+        "web/image/product.image/4/image_1024/20%27.webp?unique=8fde0c6",
+        "web/image/product.image/5/image_1024/35%27.webp?unique=8fde0c6",
+        "web/image/product.image/6/image_1024/30%27.webp?unique=8fde0c6",
+        "web/image/product.image/7/image_1024/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/8/image_1024/light%20up%20standard%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/9/image_1024/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
+        "web/image/product.image/12/image_1024/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/13/image_1024/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/14/image_1024/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
+        "web/image/product.image/15/image_1024/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
       ],
       "attributes": {
         "Arch Size": {
@@ -41523,19 +41523,19 @@
     },
     {
       "slug": "classic-column",
-      "legacy_source_id": 58,
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58",
+      "catalog_data_id": 58,
+      "url": "shop/what-we-make-3/classic-column-58",
       "name": "Classic Column",
       "base_price": 65.0,
       "currency": "USD",
       "description": "",
-      "image_url": "http://5.78.136.133/web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
+      "image_url": "web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/110/image_128/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
-        "http://5.78.136.133/web/image/product.image/2/image_128/6%27%20logo%20standard.webp?unique=7923af4",
-        "http://5.78.136.133/web/image/product.image/3/image_128/6%27%20standard%20columns.webp?unique=7923af4",
-        "http://5.78.136.133/web/image/product.image/2/image_1024/6%27%20logo%20standard.webp?unique=7923af4",
-        "http://5.78.136.133/web/image/product.image/3/image_1024/6%27%20standard%20columns.webp?unique=7923af4"
+        "web/image/product.product/110/image_128/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
+        "web/image/product.image/2/image_128/6%27%20logo%20standard.webp?unique=7923af4",
+        "web/image/product.image/3/image_128/6%27%20standard%20columns.webp?unique=7923af4",
+        "web/image/product.image/2/image_1024/6%27%20logo%20standard.webp?unique=7923af4",
+        "web/image/product.image/3/image_1024/6%27%20standard%20columns.webp?unique=7923af4"
       ],
       "attributes": {
         "Column Height": {
@@ -66761,15 +66761,15 @@
     },
     {
       "slug": "classic-organic-columns",
-      "legacy_source_id": 65,
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65",
+      "catalog_data_id": 65,
+      "url": "shop/what-we-make-3/classic-organic-columns-65",
       "name": "Classic Organic columns",
       "base_price": 125.0,
       "currency": "USD",
       "description": "Classic Organic columns",
-      "image_url": "http://5.78.136.133/web/image/product.template/65/image_1920",
+      "image_url": "web/image/product.template/65/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/163/image_1024/Classic%20Organic%20columns%20%285ft%29?unique=6905265"
+        "web/image/product.product/163/image_1024/Classic%20Organic%20columns%20%285ft%29?unique=6905265"
       ],
       "attributes": {
         "Column Height": {
@@ -70647,15 +70647,15 @@
     },
     {
       "slug": "baby-shower-garland",
-      "legacy_source_id": 71,
-      "url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71",
+      "catalog_data_id": 71,
+      "url": "shop/what-we-make-3/baby-shower-garland-71",
       "name": "Baby Shower Garland",
       "base_price": 150.0,
       "currency": "USD",
       "description": "A flowing organic garland in soft tones. We design around your theme — gender reveal, woodland, safari, or classic pastels.",
-      "image_url": "http://5.78.136.133/web/image/product.template/71/image_1920",
+      "image_url": "web/image/product.template/71/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1049/image_1024/Baby%20Shower%20Garland%20%286ft%29?unique=2ade15f"
+        "web/image/product.product/1049/image_1024/Baby%20Shower%20Garland%20%286ft%29?unique=2ade15f"
       ],
       "attributes": {
         "Garland Length": {
@@ -72766,15 +72766,15 @@
     },
     {
       "slug": "balloon-drop",
-      "legacy_source_id": 74,
-      "url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74",
+      "catalog_data_id": 74,
+      "url": "shop/what-we-make-3/balloon-drop-74",
       "name": "Balloon Drop",
       "base_price": 375.0,
       "currency": "USD",
       "description": "Hundreds of balloons ready for the stroke of midnight. We build the net, you pull the cord. The room erupts.",
-      "image_url": "http://5.78.136.133/web/image/product.template/74/image_1920",
+      "image_url": "web/image/product.template/74/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/411/image_1024/Balloon%20Drop%20%28250%29?unique=78c60ed"
+        "web/image/product.product/411/image_1024/Balloon%20Drop%20%28250%29?unique=78c60ed"
       ],
       "attributes": {
         "Drop Size": {
@@ -74885,15 +74885,15 @@
     },
     {
       "slug": "classic-organic-arch",
-      "legacy_source_id": 99,
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+      "catalog_data_id": 99,
+      "url": "shop/what-we-make-3/classic-organic-arch-99",
       "name": "Classic Organic Arch",
       "base_price": 500.0,
       "currency": "USD",
       "description": "Balloons up to 11 inches, built into a classic organic arch. The scale adds depth and dimension that a standard arch doesn’t have.",
-      "image_url": "http://5.78.136.133/web/image/product.template/99/image_1920",
+      "image_url": "web/image/product.template/99/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/437/image_1024/Classic%20Organic%20Arch%20%2820ft%2C%20None%29?unique=c85d6b8"
+        "web/image/product.product/437/image_1024/Classic%20Organic%20Arch%20%2820ft%2C%20None%29?unique=c85d6b8"
       ],
       "attributes": {
         "Arch Size": {
@@ -83553,15 +83553,15 @@
     },
     {
       "slug": "unicorn-bouquet",
-      "legacy_source_id": 115,
-      "url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115",
+      "catalog_data_id": 115,
+      "url": "shop/what-we-make-3/unicorn-bouquet-115",
       "name": "Unicorn Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Unicorn Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/115/image_1920",
+      "image_url": "web/image/product.template/115/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/250/image_1024/Unicorn%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/250/image_1024/Unicorn%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -84015,15 +84015,15 @@
     },
     {
       "slug": "mickey-mouse-bouquet",
-      "legacy_source_id": 116,
-      "url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116",
+      "catalog_data_id": 116,
+      "url": "shop/what-we-make-3/mickey-mouse-bouquet-116",
       "name": "Mickey Mouse Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Mickey Mouse Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/116/image_1920",
+      "image_url": "web/image/product.template/116/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/253/image_1024/Mickey%20Mouse%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/253/image_1024/Mickey%20Mouse%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -84457,20 +84457,20 @@
     },
     {
       "slug": "minion-bouquet",
-      "legacy_source_id": 117,
-      "url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117",
+      "catalog_data_id": 117,
+      "url": "shop/what-we-make-3/minion-bouquet-117",
       "name": "Minion Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Minion Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/117/image_1920",
+      "image_url": "web/image/product.template/117/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/369/image_128/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
-        "http://5.78.136.133/web/image/product.image/16/image_128/Minion%20Bouquet?unique=ee8805a",
-        "http://5.78.136.133/web/image/product.image/17/image_128/Minion%20Bouquet?unique=86e0e06",
-        "http://5.78.136.133/web/image/product.product/369/image_1024/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
-        "http://5.78.136.133/web/image/product.image/16/image_1024/Minion%20Bouquet?unique=ee8805a",
-        "http://5.78.136.133/web/image/product.image/17/image_1024/Minion%20Bouquet?unique=86e0e06"
+        "web/image/product.product/369/image_128/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
+        "web/image/product.image/16/image_128/Minion%20Bouquet?unique=ee8805a",
+        "web/image/product.image/17/image_128/Minion%20Bouquet?unique=86e0e06",
+        "web/image/product.product/369/image_1024/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
+        "web/image/product.image/16/image_1024/Minion%20Bouquet?unique=ee8805a",
+        "web/image/product.image/17/image_1024/Minion%20Bouquet?unique=86e0e06"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -84904,15 +84904,15 @@
     },
     {
       "slug": "encanto-bouquet",
-      "legacy_source_id": 118,
-      "url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118",
+      "catalog_data_id": 118,
+      "url": "shop/what-we-make-3/encanto-bouquet-118",
       "name": "Encanto Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Encanto Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/118/image_1920",
+      "image_url": "web/image/product.template/118/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/372/image_1024/Encanto%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/372/image_1024/Encanto%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -85346,15 +85346,15 @@
     },
     {
       "slug": "stitch-bouquet",
-      "legacy_source_id": 119,
-      "url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119",
+      "catalog_data_id": 119,
+      "url": "shop/what-we-make-3/stitch-bouquet-119",
       "name": "Stitch Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Stitch Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/119/image_1920",
+      "image_url": "web/image/product.template/119/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/408/image_1024/Stitch%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/408/image_1024/Stitch%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -85788,15 +85788,15 @@
     },
     {
       "slug": "flamingo-bouquet",
-      "legacy_source_id": 120,
-      "url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120",
+      "catalog_data_id": 120,
+      "url": "shop/what-we-make-3/flamingo-bouquet-120",
       "name": "Flamingo Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Flamingo Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/120/image_1920",
+      "image_url": "web/image/product.template/120/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/414/image_1024/Flamingo%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/414/image_1024/Flamingo%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -86230,15 +86230,15 @@
     },
     {
       "slug": "football-bouquet",
-      "legacy_source_id": 121,
-      "url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121",
+      "catalog_data_id": 121,
+      "url": "shop/what-we-make-3/football-bouquet-121",
       "name": "Football Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Football Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/121/image_1920",
+      "image_url": "web/image/product.template/121/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/417/image_1024/Football%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/417/image_1024/Football%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -86692,15 +86692,15 @@
     },
     {
       "slug": "soccer-bouquet",
-      "legacy_source_id": 122,
-      "url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122",
+      "catalog_data_id": 122,
+      "url": "shop/what-we-make-3/soccer-bouquet-122",
       "name": "Soccer Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Soccer Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/122/image_1920",
+      "image_url": "web/image/product.template/122/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/420/image_1024/Soccer%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/420/image_1024/Soccer%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -87154,15 +87154,15 @@
     },
     {
       "slug": "space-bouquet",
-      "legacy_source_id": 123,
-      "url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123",
+      "catalog_data_id": 123,
+      "url": "shop/what-we-make-3/space-bouquet-123",
       "name": "Space Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Space Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/123/image_1920",
+      "image_url": "web/image/product.template/123/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/426/image_1024/Space%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/426/image_1024/Space%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -87616,15 +87616,15 @@
     },
     {
       "slug": "over-the-hill-bouquet",
-      "legacy_source_id": 124,
-      "url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124",
+      "catalog_data_id": 124,
+      "url": "shop/what-we-make-3/over-the-hill-bouquet-124",
       "name": "Over the Hill Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Over the Hill Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/124/image_1920",
+      "image_url": "web/image/product.template/124/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/423/image_1024/Over%20the%20Hill%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/423/image_1024/Over%20the%20Hill%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -88078,13 +88078,13 @@
     },
     {
       "slug": "7-butterfly-column",
-      "legacy_source_id": 125,
-      "url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125",
+      "catalog_data_id": 125,
+      "url": "shop/what-we-make-3/7-butterfly-column-125",
       "name": "7' Butterfly Column",
       "base_price": 120.0,
       "currency": "USD",
       "description": "",
-      "image_url": "http://5.78.136.133/web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48",
+      "image_url": "web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48",
       "additional_image_urls": [],
       "attributes": {
         "latex colors": {
@@ -88899,13 +88899,13 @@
     },
     {
       "slug": "7-epic-column",
-      "legacy_source_id": 126,
-      "url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126",
+      "catalog_data_id": 126,
+      "url": "shop/what-we-make-3/7-epic-column-126",
       "name": "7' Epic Column",
       "base_price": 100.0,
       "currency": "USD",
       "description": "",
-      "image_url": "http://5.78.136.133/web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9",
+      "image_url": "web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9",
       "additional_image_urls": [],
       "attributes": {
         "latex colors": {
@@ -89720,15 +89720,15 @@
     },
     {
       "slug": "organic-grab-n-go",
-      "legacy_source_id": 127,
-      "url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127",
+      "catalog_data_id": 127,
+      "url": "shop/what-we-make-3/organic-grab-n-go-127",
       "name": "Organic Grab n' Go",
       "base_price": 70.0,
       "currency": "USD",
       "description": "Organic Grab n&#39; Go",
-      "image_url": "http://5.78.136.133/web/image/product.template/127/image_1920",
+      "image_url": "web/image/product.template/127/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/661/image_1024/Organic%20Grab%20n%27%20Go%20%286ft%29?unique=b61edc4"
+        "web/image/product.product/661/image_1024/Organic%20Grab%20n%27%20Go%20%286ft%29?unique=b61edc4"
       ],
       "attributes": {
         "Garland Length": {
@@ -91800,28 +91800,28 @@
     },
     {
       "slug": "birthday-deliveries",
-      "legacy_source_id": 128,
-      "url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+      "catalog_data_id": 128,
+      "url": "shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
       "name": "Birthday Deliveries",
       "base_price": 70.0,
       "currency": "USD",
       "description": "Birthday Deliveries",
-      "image_url": "http://5.78.136.133/web/image/product.template/128/image_1920",
+      "image_url": "web/image/product.template/128/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/765/image_128/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
-        "http://5.78.136.133/web/image/product.image/21/image_128/IMG_0275.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/22/image_128/IMG_1862.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/23/image_128/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/24/image_128/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/25/image_128/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/26/image_128/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.product/765/image_1024/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
-        "http://5.78.136.133/web/image/product.image/21/image_1024/IMG_0275.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/22/image_1024/IMG_1862.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/23/image_1024/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/24/image_1024/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/25/image_1024/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/26/image_1024/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
+        "web/image/product.product/765/image_128/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
+        "web/image/product.image/21/image_128/IMG_0275.webp?unique=a75766f",
+        "web/image/product.image/22/image_128/IMG_1862.webp?unique=a75766f",
+        "web/image/product.image/23/image_128/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
+        "web/image/product.image/24/image_128/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
+        "web/image/product.image/25/image_128/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
+        "web/image/product.image/26/image_128/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58",
+        "web/image/product.product/765/image_1024/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
+        "web/image/product.image/21/image_1024/IMG_0275.webp?unique=a75766f",
+        "web/image/product.image/22/image_1024/IMG_1862.webp?unique=a75766f",
+        "web/image/product.image/23/image_1024/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
+        "web/image/product.image/24/image_1024/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
+        "web/image/product.image/25/image_1024/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
+        "web/image/product.image/26/image_1024/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
       ],
       "attributes": {
         "Delivery Size": {
@@ -128587,18 +128587,18 @@
     },
     {
       "slug": "easter-balloon-cups",
-      "legacy_source_id": 130,
-      "url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130",
+      "catalog_data_id": 130,
+      "url": "shop/what-we-make-3/easter-balloon-cups-130",
       "name": "Easter Balloon Cups",
       "base_price": 13.0,
       "currency": "USD",
       "description": "Easter Balloon Cups",
-      "image_url": "http://5.78.136.133/web/image/product.template/130/image_1920",
+      "image_url": "web/image/product.template/130/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/755/image_128/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
-        "http://5.78.136.133/web/image/product.image/20/image_128/Easter%20Balloon%20Cups?unique=20fdda3",
-        "http://5.78.136.133/web/image/product.product/755/image_1024/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
-        "http://5.78.136.133/web/image/product.image/20/image_1024/Easter%20Balloon%20Cups?unique=20fdda3"
+        "web/image/product.product/755/image_128/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
+        "web/image/product.image/20/image_128/Easter%20Balloon%20Cups?unique=20fdda3",
+        "web/image/product.product/755/image_1024/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
+        "web/image/product.image/20/image_1024/Easter%20Balloon%20Cups?unique=20fdda3"
       ],
       "attributes": {
         "Easter Designs": {
@@ -128723,13 +128723,13 @@
     },
     {
       "slug": "star-column",
-      "legacy_source_id": 131,
-      "url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+      "catalog_data_id": 131,
+      "url": "shop/what-we-make-3/star-column-131",
       "name": "Star Column",
       "base_price": 90.0,
       "currency": "USD",
       "description": "",
-      "image_url": "http://5.78.136.133/web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4",
+      "image_url": "web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4",
       "additional_image_urls": [],
       "attributes": {
         "Color Palette": {
@@ -144099,15 +144099,15 @@
     },
     {
       "slug": "sleepy-baby-column",
-      "legacy_source_id": 132,
-      "url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132",
+      "catalog_data_id": 132,
+      "url": "shop/what-we-make-3/sleepy-baby-column-132",
       "name": "Sleepy Baby Column",
       "base_price": 220.0,
       "currency": "USD",
       "description": "Sleepy Baby Column",
-      "image_url": "http://5.78.136.133/web/image/product.template/132/image_1920",
+      "image_url": "web/image/product.template/132/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1064/image_1024/Sleepy%20Baby%20Column?unique=4ad9a11"
+        "web/image/product.product/1064/image_1024/Sleepy%20Baby%20Column?unique=4ad9a11"
       ],
       "attributes": {
         "latex colors": {
@@ -144922,15 +144922,15 @@
     },
     {
       "slug": "baby-table-decor",
-      "legacy_source_id": 133,
-      "url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133",
+      "catalog_data_id": 133,
+      "url": "shop/what-we-make-3/baby-table-decor-133",
       "name": "Baby Table decor",
       "base_price": 30.0,
       "currency": "USD",
       "description": "Baby Table decor",
-      "image_url": "http://5.78.136.133/web/image/product.template/133/image_1920",
+      "image_url": "web/image/product.template/133/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1065/image_1024/Baby%20Table%20decor%20%28blue%29?unique=ff57d73"
+        "web/image/product.product/1065/image_1024/Baby%20Table%20decor%20%28blue%29?unique=ff57d73"
       ],
       "attributes": {
         "Baby color": {
@@ -144980,15 +144980,15 @@
     },
     {
       "slug": "logo-3-layered-bouquet",
-      "legacy_source_id": 134,
-      "url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134",
+      "catalog_data_id": 134,
+      "url": "shop/what-we-make-3/logo-3-layered-bouquet-134",
       "name": "Logo 3 layered bouquet",
       "base_price": 90.0,
       "currency": "USD",
       "description": "Logo 3 layered bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/134/image_1920",
+      "image_url": "web/image/product.template/134/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1067/image_1024/Logo%203%20layered%20bouquet?unique=f1c9116"
+        "web/image/product.product/1067/image_1024/Logo%203%20layered%20bouquet?unique=f1c9116"
       ],
       "attributes": {
         "latex colors": {
@@ -145803,15 +145803,15 @@
     },
     {
       "slug": "6-color-rainbow-arch",
-      "legacy_source_id": 135,
-      "url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135",
+      "catalog_data_id": 135,
+      "url": "shop/what-we-make-3/6-color-rainbow-arch-135",
       "name": "6 color rainbow arch",
       "base_price": 340.0,
       "currency": "USD",
       "description": "6 color rainbow arch",
-      "image_url": "http://5.78.136.133/web/image/product.template/135/image_1920",
+      "image_url": "web/image/product.template/135/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1068/image_1024/6%20color%20rainbow%20arch%20%2820ft%29?unique=de2e15b"
+        "web/image/product.product/1068/image_1024/6%20color%20rainbow%20arch%20%2820ft%29?unique=de2e15b"
       ],
       "attributes": {
         "Arch Size": {
@@ -145861,15 +145861,15 @@
     },
     {
       "slug": "mothers-day-front-yard-7-column",
-      "legacy_source_id": 137,
-      "url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137",
+      "catalog_data_id": 137,
+      "url": "shop/what-we-make-3/mothers-day-front-yard-7-column-137",
       "name": "Mother's day front yard 7' Column",
       "base_price": 140.0,
       "currency": "USD",
       "description": "Mother&#39;s day front yard 7&#39; Column",
-      "image_url": "http://5.78.136.133/web/image/product.template/137/image_1920",
+      "image_url": "web/image/product.template/137/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1072/image_1024/Mother%27s%20day%20front%20yard%207%27%20Column?unique=c91c160"
+        "web/image/product.product/1072/image_1024/Mother%27s%20day%20front%20yard%207%27%20Column?unique=c91c160"
       ],
       "attributes": {},
       "exclusions": {},
@@ -145879,15 +145879,15 @@
     },
     {
       "slug": "marble-table-decor",
-      "legacy_source_id": 140,
-      "url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+      "catalog_data_id": 140,
+      "url": "shop/what-we-make-3/marble-table-decor-140",
       "name": "Marble table decor",
       "base_price": 75.0,
       "currency": "USD",
       "description": "Marble table decor",
-      "image_url": "http://5.78.136.133/web/image/product.template/140/image_1920",
+      "image_url": "web/image/product.template/140/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1073/image_1024/Marble%20table%20decor%20%28Red%29?unique=1054a6a"
+        "web/image/product.product/1073/image_1024/Marble%20table%20decor%20%28Red%29?unique=1054a6a"
       ],
       "attributes": {
         "Orbz toppers": {
@@ -146057,15 +146057,15 @@
     },
     {
       "slug": "paw-patrol-bouquet",
-      "legacy_source_id": 141,
-      "url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141",
+      "catalog_data_id": 141,
+      "url": "shop/what-we-make-3/paw-patrol-bouquet-141",
       "name": "Paw Patrol Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Paw Patrol Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/141/image_1920",
+      "image_url": "web/image/product.template/141/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1083/image_1024/Paw%20Patrol%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/1083/image_1024/Paw%20Patrol%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -146519,15 +146519,15 @@
     },
     {
       "slug": "elsa-bouquet",
-      "legacy_source_id": 142,
-      "url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142",
+      "catalog_data_id": 142,
+      "url": "shop/what-we-make-3/elsa-bouquet-142",
       "name": "Elsa Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Elsa Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/142/image_1920",
+      "image_url": "web/image/product.template/142/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1086/image_1024/Elsa%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/1086/image_1024/Elsa%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -146981,15 +146981,15 @@
     },
     {
       "slug": "holy-cow-bouquet",
-      "legacy_source_id": 143,
-      "url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143",
+      "catalog_data_id": 143,
+      "url": "shop/what-we-make-3/holy-cow-bouquet-143",
       "name": "Holy COW!! Bouquet",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Holy COW!! Bouquet",
-      "image_url": "http://5.78.136.133/web/image/product.template/143/image_1920",
+      "image_url": "web/image/product.template/143/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1089/image_1024/Holy%20COW%21%21%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/1089/image_1024/Holy%20COW%21%21%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Bouquet Size": {
@@ -147443,15 +147443,15 @@
     },
     {
       "slug": "butterfly-get-well-bouquet-latex-free",
-      "legacy_source_id": 144,
-      "url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+      "catalog_data_id": 144,
+      "url": "shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
       "name": "Butterfly \"GET WELL\" Bouquet (Latex free)",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Butterfly &#34;GET WELL&#34; Bouquet (Latex free)",
-      "image_url": "http://5.78.136.133/web/image/product.template/144/image_1920",
+      "image_url": "web/image/product.template/144/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1092/image_1024/Butterfly%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+        "web/image/product.product/1092/image_1024/Butterfly%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
       ],
       "attributes": {
         "Plush add ons": {
@@ -147501,15 +147501,15 @@
     },
     {
       "slug": "bandage-get-well-bouquet-latex-free",
-      "legacy_source_id": 146,
-      "url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+      "catalog_data_id": 146,
+      "url": "shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
       "name": "Bandage \"GET WELL\" Bouquet (Latex free)",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Bandage &#34;GET WELL&#34; Bouquet (Latex free)",
-      "image_url": "http://5.78.136.133/web/image/product.template/146/image_1920",
+      "image_url": "web/image/product.template/146/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1094/image_1024/Bandage%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+        "web/image/product.product/1094/image_1024/Bandage%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
       ],
       "attributes": {
         "Plush add ons": {
@@ -147559,15 +147559,15 @@
     },
     {
       "slug": "shooting-star-get-well-bouquet-latex-free",
-      "legacy_source_id": 147,
-      "url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+      "catalog_data_id": 147,
+      "url": "shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
       "name": "Shooting star \"GET WELL\" Bouquet (Latex free)",
       "base_price": 35.0,
       "currency": "USD",
       "description": "Shooting star &#34;GET WELL&#34; Bouquet (Latex free)",
-      "image_url": "http://5.78.136.133/web/image/product.template/147/image_1920",
+      "image_url": "web/image/product.template/147/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1095/image_1024/Shooting%20star%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+        "web/image/product.product/1095/image_1024/Shooting%20star%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
       ],
       "attributes": {
         "Plush add ons": {
@@ -147617,15 +147617,15 @@
     },
     {
       "slug": "6-graduation-stands",
-      "legacy_source_id": 149,
-      "url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149",
+      "catalog_data_id": 149,
+      "url": "shop/what-we-make-3/6-graduation-stands-149",
       "name": "6' Graduation stands",
       "base_price": 45.0,
       "currency": "USD",
       "description": "These are for indoors use only as the base is balloons and can pop on grass or cement ",
-      "image_url": "http://5.78.136.133/web/image/product.template/149/image_1920",
+      "image_url": "web/image/product.template/149/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1115/image_1024/6%27%20Graduation%20stands%20%28Congrats%29?unique=23bd386"
+        "web/image/product.product/1115/image_1024/6%27%20Graduation%20stands%20%28Congrats%29?unique=23bd386"
       ],
       "attributes": {
         "Graduation stands": {
@@ -147675,15 +147675,15 @@
     },
     {
       "slug": "classic-organic-for-easel",
-      "legacy_source_id": 152,
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152",
+      "catalog_data_id": 152,
+      "url": "shop/what-we-make-3/classic-organic-for-easel-152",
       "name": "classic organic for easel",
       "base_price": 100.0,
       "currency": "USD",
       "description": "classic organic for easel",
-      "image_url": "http://5.78.136.133/web/image/product.template/152/image_1920",
+      "image_url": "web/image/product.template/152/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1181/image_1024/classic%20organic%20for%20easel?unique=56465fb"
+        "web/image/product.product/1181/image_1024/classic%20organic%20for%20easel?unique=56465fb"
       ],
       "attributes": {
         "latex colors": {
@@ -148498,15 +148498,15 @@
     },
     {
       "slug": "easter-arch",
-      "legacy_source_id": 158,
-      "url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158",
+      "catalog_data_id": 158,
+      "url": "shop/what-we-make-3/easter-arch-158",
       "name": "Easter Arch",
       "base_price": 250.0,
       "currency": "USD",
       "description": "Soft pastels and spring greens in a garden-inspired arch. Designed for egg hunts, church socials, and family brunches.",
-      "image_url": "http://5.78.136.133/web/image/product.template/158/image_1920",
+      "image_url": "web/image/product.template/158/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1190/image_1024/Easter%20Arch?unique=ea94776"
+        "web/image/product.product/1190/image_1024/Easter%20Arch?unique=ea94776"
       ],
       "attributes": {},
       "exclusions": {},
@@ -148516,15 +148516,15 @@
     },
     {
       "slug": "mothers-day-bouquet",
-      "legacy_source_id": 165,
-      "url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165",
+      "catalog_data_id": 165,
+      "url": "shop/what-we-make-3/mothers-day-bouquet-165",
       "name": "Mother's Day Bouquet",
       "base_price": 65.0,
       "currency": "USD",
       "description": "Soft pinks, lavenders, and whites in a bouquet that says what flowers say — but lasts longer.",
-      "image_url": "http://5.78.136.133/web/image/product.template/165/image_1920",
+      "image_url": "web/image/product.template/165/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1204/image_1024/Mother%27s%20Day%20Bouquet?unique=ea94776"
+        "web/image/product.product/1204/image_1024/Mother%27s%20Day%20Bouquet?unique=ea94776"
       ],
       "attributes": {},
       "exclusions": {},
@@ -148534,15 +148534,15 @@
     },
     {
       "slug": "large-garland",
-      "legacy_source_id": 177,
-      "url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177",
+      "catalog_data_id": 177,
+      "url": "shop/what-we-make-3/large-garland-177",
       "name": "Large Garland",
       "base_price": 216.0,
       "currency": "USD",
       "description": "Balloons up to 24 inches — bolder, more dramatic. The scale creates depth and dimension that a standard garland can’t.",
-      "image_url": "http://5.78.136.133/web/image/product.template/177/image_1920",
+      "image_url": "web/image/product.template/177/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1233/image_1024/Large%20Garland%20%286ft%29?unique=132b54e"
+        "web/image/product.product/1233/image_1024/Large%20Garland%20%286ft%29?unique=132b54e"
       ],
       "attributes": {
         "Garland Length": {
@@ -149717,15 +149717,15 @@
     },
     {
       "slug": "large-organic-column",
-      "legacy_source_id": 178,
-      "url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178",
+      "catalog_data_id": 178,
+      "url": "shop/what-we-make-3/large-organic-column-178",
       "name": "Large Organic Column",
       "base_price": 180.0,
       "currency": "USD",
       "description": "Balloons up to 24 inches, stacked into a column. The scale brings presence that a standard column doesn’t.",
-      "image_url": "http://5.78.136.133/web/image/product.template/178/image_1920",
+      "image_url": "web/image/product.template/178/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1237/image_1024/Large%20Organic%20Column%20%285ft%29?unique=132b54e"
+        "web/image/product.product/1237/image_1024/Large%20Organic%20Column%20%285ft%29?unique=132b54e"
       ],
       "attributes": {
         "Column Height": {
@@ -151875,15 +151875,15 @@
     },
     {
       "slug": "pride-arch",
-      "legacy_source_id": 179,
-      "url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179",
+      "catalog_data_id": 179,
+      "url": "shop/what-we-make-3/pride-arch-179",
       "name": "Pride Arch",
       "base_price": 325.0,
       "currency": "USD",
       "description": "Full-spectrum rainbow in a statement arch. Bold, joyful, and built to celebrate exactly who you are.",
-      "image_url": "http://5.78.136.133/web/image/product.template/179/image_1920",
+      "image_url": "web/image/product.template/179/image_1920",
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1243/image_1024/Pride%20Arch?unique=132b54e"
+        "web/image/product.product/1243/image_1024/Pride%20Arch?unique=132b54e"
       ],
       "attributes": {},
       "exclusions": {},

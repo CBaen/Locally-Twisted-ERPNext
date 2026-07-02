@@ -21,7 +21,7 @@ Keep the Locally Twisted launch repo light enough for client handoff while prese
 - Moved large raw photo drops out of the repo, without deleting them, to `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/`.
 - 2026-05-11 follow-up: removed the tracked duplicate raw launch photos from `assets/what we do photos/` after verifying exact blob-hash copies in `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/landing-page-pics-20260510/`.
 - Added `.gitignore` guards for raw/drop folders: `assets/landing page pics/`, `assets/landing page assets/`, `assets/hero assets/`, `balloon drop/`, and `balloon drop.zip`.
-- Removed old ignored legacy_source mirror/reference output, old Chrome/audit render output, upstream app clones, and research throwaways that were no longer source of truth.
+- Removed old ignored catalog_data mirror/reference output, old Chrome/audit render output, upstream app clones, and research throwaways that were no longer source of truth.
 - Removed the tracked `contests/audience-pages-2026-05-08/**` contest output from the launch repo. Use Git history if that old contest material is ever needed.
 - Updated launch docs that pointed to deleted `.tmp` evidence so future agents rerun the verifier instead of chasing a removed local snapshot.
 - 2026-05-11 follow-up: removed the forbidden linked worktree/branch `ecommerce-phase-1-4-hygiene-20260510` only after verifying the branch tip was already contained in `main` and the linked worktree had no unstaged or untracked files.

@@ -7,7 +7,7 @@ D:2026-05-10 | Check:local docs/source static audit 2026-05-10 | Confidence:[LOC
 
 Scope: read-only/static audit of Locally Twisted ready-to-order ecommerce Phases 1-4 from the import/schema/automation builder lens after GL's 2026-05-10 correction that current ERPNext products are test fixtures only.
 
-Non-scope: no branch, commit, push, staging, purge, reimport, legacy_source mutation, public ecommerce opening, live payment/customer messaging, or DB-mutating verifier execution.
+Non-scope: no branch, commit, push, staging, purge, reimport, catalog_data mutation, public ecommerce opening, live payment/customer messaging, or DB-mutating verifier execution.
 
 Lens question: can a future controlled purge/reupload/import safely build the receiving ecosystem, not merely recreate product records?
 

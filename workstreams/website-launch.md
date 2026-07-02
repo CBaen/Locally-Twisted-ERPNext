@@ -64,7 +64,7 @@ pass. New verifier:
 
 2026-05-19 domain/provider/reindex audit: current public web chain is GoDaddy
 registrar -> Cloudflare authoritative DNS/email routing -> Frappe Cloud ->
-ERPNext/Frappe. Hetzner/legacy_source is old reference/decommission scope and Bluehost
+ERPNext/Frappe. current import capture/catalog_data is old reference/decommission scope and Bluehost
 is the old nameserver/likely hosting cleanup target. Source handoff:
 `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
 
@@ -188,7 +188,7 @@ Latest verified controller baseline:
 - `python scripts/verify/variant_media_contract.py` passed after the first variant-media reconciliation pass.
 - `python scripts/verify/catalog_variant_contract.py` passed: 53 products checked, 10,227 expected active required-choice variants, 10,227 live active variants, 4 single-SKU products.
 - Current commerce rules no longer make product group the quote gate. Fixed-price products stay cartable; out-of-area delivery ZIPs redirect to a prefilled `/contact` quote path instead of Stripe. Current smoke coverage verifies product pages do not invent product-level quote gates and retail `unicorn-bouquet` option selection writes a selected variant into `LT_CART`.
-- ERPNext now has 1,712 variant `Item.image` mappings from `_resources/catalog-source/images/` where legacy_source image labels clearly matched product options; product detail pages swap to selected variant media when present.
+- ERPNext now has 1,712 variant `Item.image` mappings from `_resources/catalog-source/images/` where catalog_data image labels clearly matched product options; product detail pages swap to selected variant media when present.
 - Detailed media review was refreshed on 2026-05-06 with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`; latest report checked 49 products, flagged 45 for review, left 1,712 variant images unchanged, and skipped 6,831 unsafe-to-infer image assignments.
 - Category browse imagery is not assigned yet: the 2026-05-24 taxonomy pass keeps Item Group image fields unapproved while route hero art remains source-owned. The no-mutation category candidate packet now covers the 8 active primary categories, and the post-approval sync helper is dry-run-first.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with quote/retail lane rules on 2026-05-05: no per-attribute Jinja DB lookup, progressive invalid-option disabling is verified on a retail variant, and variant chips are radio/single-select where the product is checkout-enabled.
@@ -312,7 +312,7 @@ These are the best "more professional, more big business" upgrades before launch
 
 1. Review skipped/unmatched product/category media from `output/catalog-media-review.json` where source photos exist but labels were not safe enough to auto-map.
 2. Representative category media for `/shop-items/<group>` pages or a future image-rich mega menu, using `python scripts/verify/category_media_candidates.py` to regenerate the current approval packet without reviving the retired category-card index.
-3. Hetzner-faithful refresh of `/refund-policy` and `/accessibility`.
+3. current import capture-faithful refresh of `/refund-policy` and `/accessibility`.
 4. Webshop product-detail/layout cleanup after variant/media correctness.
 5. Visual QA pass across homepage, portfolio, contact, policy pages, shop, category, product detail, cart, and checkout.
 6. Accessibility pass focused on real customer paths, not theoretical coverage.
@@ -432,15 +432,15 @@ Primary references:
 - `workstreams/responsive-container-integrity.md`
 - `_resources/policies/`
 - `_resources/catalog-source/`
-- `/home/guidingl/projects/locally-twisted-legacy_source/` as the read-only business-detail source of truth for customer-facing business claims, policies, product/service details, voice, and legacy business decisions
+- `/home/guidingl/projects/external-catalog-data/` as the read-only business-detail source of truth for customer-facing business claims, policies, product/service details, voice, and legacy business decisions
 
 ## Dependencies And Collision Points
 
 - Form audit owns current `/contact` and Lead-submission review until handed off.
 - Shop lane owns catalog correctness, media, product detail, and browse-surface polish for V1.
 - Backend simplification owns Jeff-facing Desk and stale Lead/schema cleanup.
-- Policy/legal pages require the legacy_source business-detail source, approved current project resources that trace back to it, or GL/legal approval.
-- Business details from the old legacy_source project drive are source-of-truth evidence for business meaning, not app-build instructions. Do not modify `/home/guidingl/projects/locally-twisted-legacy_source/` from this repo.
+- Policy/legal pages require the catalog_data business-detail source, approved current project resources that trace back to it, or GL/legal approval.
+- Business details from the catalog_data project drive are source-of-truth evidence for business meaning, not app-build instructions. Do not modify `/home/guidingl/projects/external-catalog-data/` from this repo.
 - Media/render work must stay honest to balloon construction and product reality; do not attach generated concepts to products as factual photos.
 
 ## Do Not Do

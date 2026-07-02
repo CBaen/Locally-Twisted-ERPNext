@@ -5,7 +5,7 @@ D:2026-05-10 | Check:test/build/lint 2026-05-10 | Confidence:[LOCAL-PROOF]
 
 Goal Phase 1 only: repair rollback-safe checkout verifier foundation and add focused customer-note checkout preservation proof before any product/catalog edits.
 
-Non-scope honored: no legacy_source mutation, no public ecommerce opening, no product publish/catalog mutation, no live payment, no customer email send, no secrets/PII/tokens exposed.
+Non-scope honored: no catalog_data mutation, no public ecommerce opening, no product publish/catalog mutation, no live payment, no customer email send, no secrets/PII/tokens exposed.
 
 ## Files changed
 
@@ -86,5 +86,5 @@ Non-scope honored: no legacy_source mutation, no public ecommerce opening, no pr
 - Ecommerce pause bypass is an in-process monkeypatch restored in `finally`; public pause behavior remains safe by default.
 - Stripe checkout session creation is stubbed to `checkout.stripe.example.invalid`.
 - Test emails use `example.invalid`; Frappe email work is queued inside the rollback-only transaction.
-- No legacy_source files/systems were mutated.
+- No catalog_data files/systems were mutated.
 - No customer PII, tokens, raw sessions, or secrets were exposed in this artifact.

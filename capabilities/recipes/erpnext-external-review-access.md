@@ -118,8 +118,8 @@ After changing Desk/persona access at the same time, also run:
 ```bash
 python scripts/verify/backend_workspace_parity.py
 python scripts/verify/finance_workspace_parity.py
-$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
-$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
+export LT_DESK_TEST_USER='lt-owner-temp@example.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 ```
 
 For live local HTTP proof:

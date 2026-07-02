@@ -8,13 +8,13 @@ Verdict: PASS
 - Inspected verifier implementation: `apps/locally_twisted/locally_twisted/verify/checkout_product_family_contract.py`.
 - Inspected wrapper: `scripts/verify/checkout_product_family_contract.py`.
 - Inspected runtime checkout preservation logic: `apps/locally_twisted/locally_twisted/product_page_runtime.py`.
-- Searched inspected files for commit/rollback, payment, messaging/email, legacy_source, customer, and survivor-cleanup indicators.
+- Searched inspected files for commit/rollback, payment, messaging/email, catalog_data, customer, and survivor-cleanup indicators.
 
 ## Commands run
 
 - `Get-Item output/phase-3-checkout-product-family-contract-20260510.json | Format-List FullName,Length,LastWriteTime`
 - `python -c "...json artifact assertions..."`
-- `rg -n "payment|stripe|checkout session|email|sendmail|msgprint|frappe\.db\.commit|commit\(|rollback|mute_email|legacy_source|requests|webhook|customer|survivor|delete|cancel|submit\(" apps/locally_twisted/locally_twisted/verify/checkout_product_family_contract.py scripts/verify/checkout_product_family_contract.py apps/locally_twisted/locally_twisted/product_page_runtime.py`
+- `rg -n "payment|stripe|checkout session|email|sendmail|msgprint|frappe\.db\.commit|commit\(|rollback|mute_email|catalog_data|requests|webhook|customer|survivor|delete|cancel|submit\(" apps/locally_twisted/locally_twisted/verify/checkout_product_family_contract.py scripts/verify/checkout_product_family_contract.py apps/locally_twisted/locally_twisted/product_page_runtime.py`
 
 ## Findings
 

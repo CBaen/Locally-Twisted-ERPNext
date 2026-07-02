@@ -18,7 +18,7 @@ portal surfaces, or Meta/ad creative unless a later source explicitly maps a
 specific rule across lanes. Read `../BRAND-BOUNDARY.md` before using this file
 for anything outside the LT public brand lane.
 
-The older legacy_source guide is reference material only. Claude-era notes and design
+The older catalog_data guide is reference material only. Claude-era notes and design
 competition files can provide useful history, but they are not authority unless
 their claims are verified against this repo and the running ERPNext site.
 The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 because
@@ -101,8 +101,8 @@ Practical translation:
 - Treat `If it can fail, it must fail loudly` as the operating law. A route,
   form, document, automation, container, or claim is not done if failure can
   look like success.
-- Treat old legacy_source, Claude, handoff, and design-competition files as claims to verify.
-- Do not copy implementation language from the legacy_source guide into ERPNext work.
+- Treat catalog_data, Claude, handoff, and design-competition files as claims to verify.
+- Do not copy implementation language from the catalog_data guide into ERPNext work.
 - When this file conflicts with current verified route/form decisions, check
   `locally-twisted-decisions.md` and the running site before editing.
 - Do not use the deleted `_resources/design-guide/` synthesis, old light-blue/blush screenshots, or its Next.js TSX files as current visual guidance.

@@ -167,14 +167,14 @@ Important behavior:
   branded account shell plus in-page nav. Organization Portal appears in the
   account nav because it is one of the eight customer-facing value surfaces.
 
-## legacy_source Reference Signals
+## catalog_data Reference Signals
 
 Reference files inspected read-only:
 
-- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/controllers/portal.py`
-- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/views/portal_templates.xml`
-- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/security/lt_groups.xml`
-- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/security/lt_rules.xml`
+- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/controllers/portal.py`
+- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/views/portal_templates.xml`
+- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/security/lt_groups.xml`
+- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/security/lt_rules.xml`
 
 Translated intent:
 
@@ -186,7 +186,7 @@ Translated intent:
 - Company/crew photos excluded from customer visibility.
 - Portal controller/service ownership instead of backend record exposure.
 
-Do not port legacy_source code or schema directly.
+Do not port catalog_data code or schema directly.
 
 ## Verifier Contract
 

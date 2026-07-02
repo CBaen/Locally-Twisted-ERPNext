@@ -94,7 +94,7 @@
       "category": "advisory",
       "severity": "advisory",
       "location": "apps/locally_twisted/locally_twisted/public/css/lt-theme.css:1804",
-      "problem": "CSS block '.lt-footer-bar { ... }' at lines 1804-1834 (added by Builder CSS as a 'Hetzner markup class name alias') is dead code. The template uses class='lt-footer__bar' (double-underscore BEM), which matches the existing rules at lt-theme.css:808. The '.lt-footer-bar' rules will never match any element in the rendered DOM.",
+      "problem": "CSS block '.lt-footer-bar { ... }' at lines 1804-1834 (added by Builder CSS as a 'current import capture markup class name alias') is dead code. The template uses class='lt-footer__bar' (double-underscore BEM), which matches the existing rules at lt-theme.css:808. The '.lt-footer-bar' rules will never match any element in the rendered DOM.",
       "evidence": "footer.html:203 has class='lt-footer__bar'; lt-theme.css:808 targets '.lt-footer__bar'; lt-theme.css:1804 targets '.lt-footer-bar' (hyphen, not double-underscore). Confirmed by Builder CSS self-review concern item 2.",
       "suggested_fix": "Remove the .lt-footer-bar, .lt-footer-bar__legal, .lt-footer-bar__link blocks (lines 1804-1834) to avoid maintenance confusion. The existing .lt-footer__bar rules already cover the same element."
     },

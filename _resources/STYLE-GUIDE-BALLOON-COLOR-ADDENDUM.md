@@ -11,7 +11,7 @@ This addendum belongs to the main style guide. It exists because balloon colors 
 2. **Supplier-style balloon color naming.** Names such as `Reflex Champagne`, `Dusk Green Tea`, and `Pastel Melon` must be passed to image prompts in text. Do not brief only with hex.
 3. **Best web-match hex.** Hex is a CSS/customer approximation sampled from the local color swatch image. It helps businesses match closely on screens and documents, but it is not the balloon authority.
 
-External vendor context: Sempertex's public product pages use the same kind of texture/color naming, including [Reflex Champagne](https://sempertex.com/en/products/globo-para-fiesta-latex-redondo-reflex-champana), and its color articles name lines such as [Dusk Green Tea](https://sempertex.com/en/blogs/enterate/verde-te-y-verde-aurora). The LT source of truth remains the local legacy_source export and owner swatch map.
+External vendor context: Sempertex's public product pages use the same kind of texture/color naming, including [Reflex Champagne](https://sempertex.com/en/products/globo-para-fiesta-latex-redondo-reflex-champana), and its color articles name lines such as [Dusk Green Tea](https://sempertex.com/en/blogs/enterate/verde-te-y-verde-aurora). The LT source of truth remains the local catalog_data export and owner swatch map.
 
 ## Verified Source
 

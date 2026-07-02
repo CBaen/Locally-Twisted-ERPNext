@@ -10,15 +10,15 @@
 
 ## What This Is
 
-Locally Twisted is a 27-year-old Utah balloon-decor and event-services business owned by Jeff Kimber. Until now, LT has run on improvisation — manual records, paper notes, QuickBooks for accounting, a website built years ago that customers still reach but that has degraded beyond practical repair. A prior attempt to give LT a backend (an legacy_source build) failed in testing — never went live to customers and Jeff was never told the audit's verdict.
+Locally Twisted is a 27-year-old Utah balloon-decor and event-services business owned by Jeff Kimber. Until now, LT has run on improvisation — manual records, paper notes, QuickBooks for accounting, and a website built years ago that customers still reach but that has degraded beyond practical repair.
 
-**This project is a migration of LT's business intent + catalog data into a fresh ERPNext v15 install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`; supersedes the 2026-04-26 "first professional business platform / new build, not a migration" reframe). "Fresh install" because ERPNext was greenfield — no auto-translated legacy_source modules, no DB dumps imported, no legacy_source configuration carried across; everything was hand-built informed by legacy_source discovery. "Migration" because the catalog data (53 Website Items / 10,578 variants / 10,613 original catalog Item Prices, ported 2026-04-30; current live DB totals should be rechecked before use), the 45-field Lead schema, the `/book` and `/contact` form intent, the business policies, the brand identity, and the voice rules were all carried across from the legacy_source attempt — and at cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain.
+**This project is a migration of LT's business intent + catalog data into a fresh ERPNext v15 install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`; supersedes the 2026-04-26 "first professional business platform / new build, not a migration" reframe). "Fresh install" because ERPNext was greenfield — no translated modules, no database dump import, and no inherited configuration. "Migration" because catalog records, the Lead schema, the `/book` and `/contact` form intent, business policies, brand identity, and voice rules were rebuilt from approved source evidence for the ERPNext destination. Current database totals must be rechecked before use. At cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain.
 
 End-to-end destination scope: customer-facing website + ecommerce storefront + lead intake forms + operator workflow (lead → quote → booking → calendar → project) + invoicing + Stripe payments + Utah tax compliance + native ERPNext accounting + native ERPNext HRMS payroll + customer self-service portal.
 
 The build runs locally on `:8081` until it's ready to show Jeff. At cutover it deploys to Frappe Cloud and ownership transfers to Jeff Kimber's own account.
 
-The legacy_source work informs this build (forms, models, copy, business policies all came out of that attempt's discovery work) but the destination doesn't depend on the legacy_source system continuing to exist. See `CLAUDE.md` "Reference Disposition" for how the legacy_source references will be retired.
+The destination is self-contained inside ERPNext/Frappe and the committed LT source resources.
 
 ## Core Value
 
@@ -50,18 +50,17 @@ The legacy_source work informs this build (forms, models, copy, business policie
 
 <!-- Explicit boundaries. Reasoning included so they don't get re-added. -->
 
-- **Automated legacy_source→ERPNext translation tooling** — the legacy_source dir is reference material; we hand-build informed by what was learned. The migration carries business intent + catalog data, not modules or schemas. (Catalog port 2026-04-30 was a record-by-record port from the live legacy_source site, not an automated module/data conversion.)
+- **Automated translation tooling into ERPNext** — the migration carries approved business intent and catalog data, not imported modules, inherited schemas, or blind field mapping. Product and form work must be hand-built for the ERPNext/Frappe destination.
 - **Standalone Services index page** — redundant. Service info lives on individual service pages and on the homepage. (GL directive 2026-04-26)
 - **Standalone About page** — about info distributes across the site (homepage, service pages); a brief summary lands on the contact page. (GL directive 2026-04-26)
 - **Gusto / third-party payroll** — agency standard is ERPNext native HRMS for all clients. (Decision 2026-04-26)
-- **Surfacing the failed legacy_source attempt to Jeff** — Jeff knows there's an audit; he doesn't yet know the prior legacy_source attempt failed in testing. Internal docs use the migration framing freely; Jeff-facing communications still don't leak that context until Phase 1 is in a state GL can demo. (Was framed as "no migration framing of any kind" pre-2026-04-30; the actual constraint is Jeff-disclosure, not internal vocabulary.)
 - **Unapproved multi-company or multi-client mixing in one ERPNext site** —
   rejected; per-client isolation remains structural. This does not reject the
   2026-06-28 approved LT DBA/service-brand lane model for Locally Twisted,
   Commercial Balloon Decor, and Memorial Balloons under the same LT accounting
   operation.
-- **Hosting on Hetzner / self-hosted** — superseded by Frappe Cloud (managed, transferable per-site).
-- **Telling Jeff before there's a working replacement to show** — Jeff has been told there's an audit / debug / stress test of his existing system. The audit's conclusion (that the prior platform isn't sufficient) is not surfaced to him until Phase 1 is in a state GL can demo. Until then, all docs that mention the verdict stay internal to this folder.
+- **Hosting on current import capture / self-hosted** — superseded by Frappe Cloud (managed, transferable per-site).
+- **Client-facing replacement talk before there is a working system to show** — Jeff-facing communication stays focused on the usable ERPNext replacement GL can demo.
 
 ## Context
 
@@ -71,12 +70,11 @@ The legacy_source work informs this build (forms, models, copy, business policie
   Needs the agent to take the lead on technical work, flag dependencies GL
   doesn't know to ask about, apply obvious companion features and report back.
   "Make me look good" was a stated request 2026-04-26 — the operating mode.
-- **Why ERPNext.** Off-legacy_source expedition (2026-04, 5 source-separated researchers, MODERATE confidence) found ERPNext is the only viable open-source replacement for LT's feature surface. Critically: ERPNext fails *noisily* (loud crashes, fast detection) where the prior platform failed *silently* (the failure mode that did the trust damage). Frappe Cloud reduces upgrade risk vs. self-hosted.
+- **Why ERPNext.** The 2026-04 open-source ERP expedition (5 source-separated researchers, MODERATE confidence) found ERPNext is the only viable open-source replacement for LT's feature surface. Critically: ERPNext gives BBC room to build loud failures, visible records, and fast detection into the workflows. Frappe Cloud reduces upgrade risk vs. self-hosted.
 - **Reference material.** All canonical resources for this build live in
-  `_resources/` (style guide, business policies, tax data). The legacy_source
-  repo, the failed Hetzner site, and the legacy_source GitHub repo are
-  reference-only and will be retired. After cutover, they do not exist as active
-  sources.
+  `_resources/` (style guide, business policies, tax data) and current
+  ERPNext/Frappe source docs. Retired research material is not an active source
+  after cutover.
 - **First BBC client.** Locally Twisted is BBC's first client. The work needs to be exemplary. Jeff plans to refer other businesses; the referral pipeline depends on him being delighted by the deliverable.
 
 ## Constraints
@@ -97,16 +95,15 @@ The legacy_source work informs this build (forms, models, copy, business policie
 
 | Date | Decision | Why |
 |---|---|---|
-| 2026-04-30 | Project frame revised to "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe; the technical reality (catalog data ported 2026-04-30, form intent + policies carried across, domain cutover at Phase 6) is migration shape. Jeff-disclosure stealth and hand-build-not-auto-translate are the constraints that survive — not the language. (See decisions log 2026-04-30 frame entry.) |
-| 2026-04-26 | Earlier reframe from "legacy_source → ERPNext migration" to "first professional business platform / new build" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30 — those concerns survive as constraints, not as a denial of migration reality. |
+| 2026-04-30 | Project frame revised to "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe; the technical reality (catalog data ported 2026-04-30, form intent + policies carried across, domain cutover at Phase 6) is migration shape. Hand-build-not-auto-translate is the constraint that survives. (See decisions log 2026-04-30 frame entry.) |
+| 2026-04-26 | Earlier reframe to "first professional business platform / new build" | Superseded 2026-04-30; the useful part that remains is avoiding too-mechanical translation framing. |
 | 2026-04-26 | Customer-facing website + storefront is Phase 1 | Visual + UX proof point. If ERPNext can't deliver this, GL pivots before building backend |
 | 2026-04-26 | All clients default to ERPNext native HRMS payroll (no third-party payroll integration) | Agency-wide standard; one less integration to learn / configure / hand off |
 | 2026-04-26 | Drop standalone About page and standalone Services index | Redundant; info distributes across homepage + service pages; brief about summary lands on contact page |
-| 2026-04-26 | All policy and brand resources live in `_resources/` and are scrubbed of platform-specific references | Project must stand alone; legacy_source dir will be retired |
+| 2026-04-26 | All policy and brand resources live in `_resources/` and are scrubbed of platform-specific references | Project must stand alone |
 | 2026-04-25 | ERPNext v15.105.0 (latest stable v15 patch) pinned | Past Stripe-broken window; latest patch on a mature line |
 | 2026-04-25 | Local Docker for build, Frappe Cloud Sites plan for production | Local is free + breakable; Frappe Cloud is managed + transferable per-site |
 | 2026-04-25 | Site-level transfer (not bench-level or server-level) | Self-service in Frappe Cloud dashboard |
-| 2026-04-25 | Don't modify anything in `locally-twisted-legacy_source/` | Read-only reference; preserves prior project's own gates and history |
 
 ## Evolution
 

@@ -5,7 +5,7 @@ Status: Approved design, pending implementation plan
 
 ## Goal
 
-Create one customer inquiry surface for Locally Twisted while refreshing the Balloon Twisting & Face Painting page with real content from the Hetzner reference and the current ERPNext design direction.
+Create one customer inquiry surface for Locally Twisted while refreshing the Balloon Twisting & Face Painting page with real content from the current import capture reference and the current ERPNext design direction.
 
 The customer-facing entry point is `/contact`. ERPNext still keeps the internal Lead, Contact, Communication, and later CRM cascade architecture.
 
@@ -52,7 +52,7 @@ No second form pipeline should be introduced for BTFP.
 
 It should use a hybrid direction:
 
-- real content and facts from `http://5.78.136.133/balloon-twisting-and-face-painting`
+- real content and facts from `balloon-twisting-and-face-painting`
 - current ERPNext visual direction already present locally
 - relevant design-contest influence: editorial layout, spec tables, quiet CTAs, restrained accents
 
@@ -64,12 +64,12 @@ It should use a hybrid direction:
 4. Spec-table facts replacing placeholder text.
 5. Booking/process section that explains what happens next.
 6. Event-type section.
-7. FAQ section using concrete Hetzner content.
+7. FAQ section using concrete current import capture content.
 8. CTAs pointing to `/contact?service=btfp`.
 
 ### Facts To Carry Forward
 
-Use verified Hetzner content where specific:
+Use verified current import capture content where specific:
 
 - `$130 first hour, $115 each additional hour - per artist`
 - `$50 deposit per artist at booking`

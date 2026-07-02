@@ -173,7 +173,7 @@ website_route_rules = [
 # ---------------------------------------------------------------
 # Lead create cascade â€” auto-title + Contact dedup + auto-ack email.
 # Module: locally_twisted/lead_cascade.py
-# Receipts: 2026-04-29 Hetzner /book spec session.
+# Receipts: 2026-04-29 current import capture /book spec session.
 # ---------------------------------------------------------------
 doc_events = {
     "Lead": {
@@ -207,7 +207,7 @@ update_website_context = [
 # Per BBC fixture-discipline: Item Group children + Item Attribute
 # records are SEED state. At Phase 6 cutover the operator-owned
 # subset gets removed from this list (per NOUPDATE-DRIFT.md, TBD).
-# Receipts: 2026-04-30 catalog rebuild from the retired catalog reference.
+# Receipts: 2026-04-30 catalog rebuild from the retired catalog data.
 # ---------------------------------------------------------------
 fixtures = [
     {

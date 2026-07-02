@@ -1,18 +1,18 @@
-D:2026-05-10 | Check:live legacy_source read-only extraction + local legacy_source source + ERPNext verifier 2026-05-10 | Confidence:high
-# Lane E — legacy_source / docs / agent-action convergence
+D:2026-05-10 | Check:live catalog_data read-only extraction + local catalog_data source + ERPNext verifier 2026-05-10 | Confidence:high
+# Lane E — catalog_data / docs / agent-action convergence
 
 ## Status
 
-Recovered parent-created Lane E artifact. This replaces the previous missing `[NO EVIDENCE]` lane with directly verified sources and live read-only legacy_source observations.
+Recovered parent-created Lane E artifact. This replaces the previous missing `[NO EVIDENCE]` lane with directly verified sources and live read-only catalog_data observations.
 
-This is not permission to copy legacy_source code. legacy_source is the source witness for business behavior; ERPNext/Frappe receives the behavior through native DocTypes, custom fields, services, templates, and verifiers.
+This is not permission to copy catalog_data code. catalog_data is the source witness for business behavior; ERPNext/Frappe receives the behavior through native DocTypes, custom fields, services, templates, and verifiers.
 
 ## Inputs checked
 
-- Live legacy_source backend/public read-only witness:
-  - `workstreams/ecommerce-audit/legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md`
-- Local legacy_source addon source:
-  - `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/__manifest__.py`
+- Live catalog_data backend/public read-only witness:
+  - `workstreams/ecommerce-audit/catalog_data-backend-architecture-and-checkout-logic-2026-05-10.md`
+- Local catalog_data addon source:
+  - `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/__manifest__.py`
   - `models/product_template.py`
   - `models/crm_lead.py`
   - `models/project_task.py`
@@ -39,13 +39,13 @@ This is not permission to copy legacy_source code. legacy_source is the source w
 
 The evidence converges on one architecture:
 
-> ERPNext/Frappe should not recreate legacy_source's exact backend. It should recreate the business invariants: small true variant axes, structured no-variant customer options, line-level cart/order intent preservation, quote-first escape hatches, guarded checkout/payment boundaries, and CRM/project fulfillment handoff.
+> ERPNext/Frappe should not recreate catalog_data's exact backend. It should recreate the business invariants: small true variant axes, structured no-variant customer options, line-level cart/order intent preservation, quote-first escape hatches, guarded checkout/payment boundaries, and CRM/project fulfillment handoff.
 
 Native ERPNext Webshop alone is not enough for Locally Twisted's meaning. The `locally_twisted` custom app must remain the contract/runtime layer around Webshop.
 
 ## Convergence matrix
 
-| legacy_source behavior witnessed | Source proof | ERPNext/Frappe receiving action | Gate |
+| catalog_data behavior witnessed | Source proof | ERPNext/Frappe receiving action | Gate |
 |---|---|---|---|
 | Classic Arch has only 4 real variants despite 53 colors. | Live product template id 57; variants 91-94; attribute line 115 has 53 no-variant color PTAVs. | Use ERPNext Item Variants only for SKU/price identity. Store colors in product option/configuration tables. | A 50+ color product must not create 50+ SKU variants. |
 | Size changes variant and price. | Arch Size PTAVs 201-204 map to variants 91-94; extras $0/$65/$130/$195. | Variant selection drives item identity and canonical price. | Product page and backend item resolution agree. |
@@ -64,8 +64,8 @@ Native ERPNext Webshop alone is not enough for Locally Twisted's meaning. The `l
 
 Earlier child-agent lane completion without a durable artifact is not acceptable evidence. The parent action now is:
 
-1. Directly inspect live legacy_source backend/public read-only.
-2. Read local legacy_source source files.
+1. Directly inspect live catalog_data backend/public read-only.
+2. Read local catalog_data source files.
 3. Write durable source-witness artifact.
 4. Re-run ERPNext readiness verifier directly.
 5. Converge the decision in this Lane E artifact.
@@ -102,6 +102,6 @@ Implement/review ERPNext ecommerce as a receiving ecosystem, not as product-row 
 
 ## Final Lane E conclusion
 
-Lane E is now present and converged: legacy_source, source files, live checkout observation, existing ERPNext artifacts, and the latest readiness verifier agree on the same infrastructure-first path.
+Lane E is now present and converged: catalog_data, source files, live checkout observation, existing ERPNext artifacts, and the latest readiness verifier agree on the same infrastructure-first path.
 
 Full catalog import/reimport and public launch remain product/business approval decisions downstream of these gates, not automatic consequences of this artifact.

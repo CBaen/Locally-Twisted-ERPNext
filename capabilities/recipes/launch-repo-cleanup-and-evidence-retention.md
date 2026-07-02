@@ -71,7 +71,7 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 
 - `.tmp/`, `output/`, `test-results/`, `test invoices/`, `__pycache__/`, compiled frontend `dist/`, and local `node_modules/` only when safe to regenerate.
 - Raw local image/drop folders under `assets/` unless they are intentionally curated and committed as source.
-- Stale legacy_source mirrors, browser render galleries, contest outputs, and prototype/research folders after the relevant production translation lands.
+- Stale catalog_data mirrors, browser render galleries, contest outputs, and prototype/research folders after the relevant production translation lands.
 
 ## 2026-05-10 Receipt
 
@@ -92,3 +92,15 @@ registry. Closeout proof showed `HEAD == origin/main == d541a0c`, no staged or
 unstaged changes, no untracked files, no conflict markers, and only the main
 LT worktree remaining. Handoff:
 `workstreams/repo-history-and-worktree-cleanup-2026-05-17.md`.
+
+## 2026-07-02 Receipt
+
+Kubuntu/repo hygiene cleanup removed retired-platform labels, placeholder
+aliases, old-host labels, stale mirror/snapshot pointers, local archive
+artifacts, and generated output that only preserved old reference material.
+Active implementation identifiers were renamed to neutral catalog-data/import
+terms where code still needs a stable field or verifier handle. The launch
+gate includes `scripts/verify/forbidden_source_label_gate.py` to prevent the
+forbidden platform label from returning without storing the label in tracked
+docs. Verification passed strict text scans, filename scans, stale-reference
+scans, euphemism scans, and `git diff --check`.

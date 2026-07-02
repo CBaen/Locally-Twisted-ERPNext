@@ -38,8 +38,8 @@ Use this when Jeff/business-owner access needs fewer taps, mobile-friendly conta
 Run the focused owner gate after touching this lane:
 
 ```bash
-$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'
-$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'
+export LT_DESK_TEST_USER='locallytwisted@gmail.com'
+export LT_DESK_TEST_PASSWORD='LocalTemp2026!'
 npm run test:owner-actions
 python scripts/verify/backend_workspace_parity.py
 npm run test:desk-owner

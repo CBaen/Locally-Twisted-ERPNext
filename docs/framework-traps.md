@@ -149,13 +149,13 @@ These have been observed in the LT build itself. They are receipts, not predicti
 
 ---
 
-### Trap LT-3: `/book` form silent-failure pattern (the founding receipt for the loud-failure rule)
+### Trap LT-3: Public inquiry form silent-failure pattern
 
-**Status:** VERIFIED — receipt: prior legacy_source platform incident 2026-04-22 ("the /book form bug"). Documented in global `loud-failure.md` rule. The smoke test gate (`scripts/verify/smoke_forms.py`) exists specifically to prevent this on the new ERPNext build.
+**Status:** VERIFIED — receipt: internal incident review 2026-04-22 ("the /book form bug"). Documented in global `loud-failure.md` rule. The smoke test gate (`scripts/verify/smoke_forms.py`) exists specifically to prevent silent inquiry loss on the ERPNext build.
 
-**Mechanism:** On the prior legacy_source platform, customers filled in the booking form. legacy_source's website form widget crashed on init with `TypeError: Cannot read properties of null`. The browser fell back to a plain HTML POST. The server returned `text/html` with an empty body. The customer saw a blank white page. No CRM lead was created. No acknowledgment email fired. Jeff was not notified. The form dropped customer submissions for ~10 days before Jeff asked about missing leads. **None of this was visible to Jeff until he asked** — every customer who hit this form had no way to reach him during the silence.
+**Mechanism:** Customers filled in the booking form, but the form widget crashed on init with `TypeError: Cannot read properties of null`. The browser fell back to a plain HTML POST. The server returned `text/html` with an empty body. The customer saw a blank white page. No CRM lead was created. No acknowledgment email fired. Jeff was not notified. The form dropped customer submissions for about 10 days before Jeff asked about missing leads. **None of this was visible to Jeff until he asked** — every customer who hit this form had no way to reach him during the silence.
 
-**Defense:** Build the new `/book` form (Phase 2 — Lead Intake) as custom HTML/Jinja with REST API submission, AJAX error handling, and the three-audience loud-failure check (user-visible error state, developer log entry, monitor alert). NEVER use the deprecated Frappe Web Form DocType (Trap 5 above). On the day the form ships, exercise `python scripts/verify/smoke_forms.py --base-url <url> --form-path /book` (full submission, not `--shape-only`) and confirm it creates a Lead in the backend.
+**Defense:** Build customer inquiry forms as custom HTML/Jinja with REST API submission, AJAX error handling, and the three-audience loud-failure check (user-visible error state, developer log entry, monitor alert). NEVER use the deprecated Frappe Web Form DocType (Trap 5 above). On the day a form ships, exercise `python scripts/verify/smoke_forms.py --base-url <url> --form-path <path>` (full submission, not `--shape-only`) and confirm it creates a Lead in the backend.
 
 **Verification:** After deploy, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /book` exits 0 and reports `BACKEND VERIFIED — record exists`. In ERPNext UI: navigate to CRM > Lead and find the `SMOKE-TEST-<timestamp>` record created within the last 5 minutes.
 

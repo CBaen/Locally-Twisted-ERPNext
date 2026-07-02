@@ -8,7 +8,7 @@
 
 ## What this index is for
 
-You showed Jeff legacy_source and it broke. The recovery move is to show him a system that **doesn't break** — and the way it doesn't break is by standing on Frappe's tested foundation rather than on our own scaffolding.
+You showed Jeff catalog_data and it broke. The recovery move is to show him a system that **doesn't break** — and the way it doesn't break is by standing on Frappe's tested foundation rather than on our own scaffolding.
 
 This index sorts every page we need into four tiers based on **how much we're modifying Frappe's code** (not how much visual customization we want):
 
@@ -32,7 +32,7 @@ The **goal of this index** is to push every page as low in the tier list as poss
 | Item | Tier | Native source | What we add | Notes |
 |---|---|---|---|---|
 | Header (logo, nav, sign-in, cart) | **1** | Frappe's standard navbar (`apps/frappe/frappe/templates/includes/navbar/navbar.html`) renders from `Website Settings.top_bar_items` + `brand_html` + `banner_image` | Set `brand_html` to the LT logo PNG; populate `top_bar_items` per the resolved nav decision (Option B); LT theme CSS styles colors/typography | We already have the data wired (from the prior Slice 2 attempt's setup script). Strip the `!important` chains from `lt-theme.css` and the header is done. |
-| Footer (columns, brand block, copyright) | **1** | Frappe's standard footer (`templates/includes/footer/footer.html`) renders from `Website Settings.footer_items` + `footer_address` + `copyright` | Configure `footer_items` for Shop / Company / Get In Touch columns; set `footer_address`; set `copyright` (without leading `©`); LT theme CSS for colors | Same — data is mostly wired. **What it WON'T have natively:** the centered brand block + 3 social icons + hours block in the exact legacy_source layout. **My recommendation: live with Frappe's default footer layout.** Per your directive, this is exactly the "doesn't need to look special, needs to be natively functional" call. |
+| Footer (columns, brand block, copyright) | **1** | Frappe's standard footer (`templates/includes/footer/footer.html`) renders from `Website Settings.footer_items` + `footer_address` + `copyright` | Configure `footer_items` for Shop / Company / Get In Touch columns; set `footer_address`; set `copyright` (without leading `©`); LT theme CSS for colors | Same — data is mostly wired. **What it WON'T have natively:** the centered brand block + 3 social icons + hours block in the exact catalog_data layout. **My recommendation: live with Frappe's default footer layout.** Per your directive, this is exactly the "doesn't need to look special, needs to be natively functional" call. |
 
 **Outcome:** Header and footer are tier 1. The previous Slice 2 attempt was overcomplicated. Reset to native + colors and stop.
 
@@ -149,11 +149,11 @@ When the time comes for the demo, the Jeff-facing value sentence per area is:
 
 ## GL-confirmed answers (2026-04-26)
 
-1. **Footer layout — RESOLVED.** Use whatever native Frappe footer template natively supports as close to the prior legacy_source design as possible; accept Frappe's default for everything else. **Specifically:** native footer supports columns (`footer_items`), address (`footer_address`), copyright (`copyright`), powered-by (`footer_powered`). Native footer does NOT have: centered brand block, hours block, social icon row. Per GL: skip those. Configure the natives, don't override the template.
+1. **Footer layout — RESOLVED.** Use whatever native Frappe footer template natively supports as close to the catalog_data design as possible; accept Frappe's default for everything else. **Specifically:** native footer supports columns (`footer_items`), address (`footer_address`), copyright (`copyright`), powered-by (`footer_powered`). Native footer does NOT have: centered brand block, hours block, social icon row. Per GL: skip those. Configure the natives, don't override the template.
 2. **Pricing calculator — RESOLVED.** Confirmed: only tier-4 piece in Phase 1. Embedded in BTFP service page.
-3. **Product catalog scope — RESOLVED via inventory.** Roughly **~50 products across ~20 categories**, scraped from legacy_source `What We Make` (3 paginated pages). Categories include: Backdrops, Balloon Arches, Balloon Cups, Balloon Drops, Classic Columns, Premium Garlands/Arches/Columns, Number Columns, Photo Frames, Bouquets (Unicorn, Mickey Mouse, etc.), themed event categories (Baby Shower, Graduation, Halloween, Easter, Pride). Sample products: Classic Organic Arch, Classic Organic Garland, Premium Organic Arch, Number Balloon Columns, Easter Bunny Ear Arch, Pride Progress Rainbow Arch, Mickey Mouse Bouquet, Balloon Drop. **Implication:** manual entry is impractical; an legacy_source data export is now a load-bearing deliverable.
+3. **Product catalog scope — RESOLVED via inventory.** Roughly **~50 products across ~20 categories**, scraped from catalog_data `What We Make` (3 paginated pages). Categories include: Backdrops, Balloon Arches, Balloon Cups, Balloon Drops, Classic Columns, Premium Garlands/Arches/Columns, Number Columns, Photo Frames, Bouquets (Unicorn, Mickey Mouse, etc.), themed event categories (Baby Shower, Graduation, Halloween, Easter, Pride). Sample products: Classic Organic Arch, Classic Organic Garland, Premium Organic Arch, Number Balloon Columns, Easter Bunny Ear Arch, Pride Progress Rainbow Arch, Mickey Mouse Bouquet, Balloon Drop. **Implication:** manual entry is impractical; an catalog_data data export is now a load-bearing deliverable.
 4. **Color swatches vs pills — DEFERRED to mock comparison.** Confirmed `Item Attribute Value` DocType has no native swatch field (only `attribute_value` Data + `abbr` Data). Swatches require: custom field via Customize Form (e.g., `swatch_hex` Color field) + custom Web Template that renders swatch grid. **Pills = tier 1, swatches = tier 4.** Render both as mock pages with a 5-color test product so GL can decide before catalog seed.
-5. **Product photography — RESOLVED.** Real photos exist in legacy_source. Export script will pull product assets (images), product list, attributes, variants, and customer list (customers deferred but captured opportunistically for Phase 6 cutover).
+5. **Product photography — RESOLVED.** Real photos exist in catalog_data. Export script will pull product assets (images), product list, attributes, variants, and customer list (customers deferred but captured opportunistically for Phase 6 cutover).
 6. **Blog content — DEFERRED.** Instances will write blog posts. **Blog is OUT of Phase 1 scope per GL: "Blogs don't matter right now."** Slice 5b removed from active work; deferred until Phase 1 ships.
 
 ## Build order (LOCKED — GL directive 2026-04-26)
@@ -165,7 +165,7 @@ Per GL: *"I need the landing page, balloon twisting and face painting, ecommerce
 | 0 | **Reset to native baseline** (prereq) | — | Strip `!important` chains from `lt-theme.css` (lines 477-526). Retire `scripts/setup/setup_slice2_header_footer.py` from active use. Verify home + webshop pages render cleanly with native Frappe + LT theme colors only. |
 | 1 | **Landing page** `/` | 2 | Web Page record with `content_type="Page Builder"`, route="home", set as `Website Settings.home_page`. Page Builder blocks. Placeholders from `_resources/images/`. |
 | 2 | **Balloon Twisting + Face Painting** `/balloon-twisting-and-face-painting` | 2 + 4 | Page Builder for layout. Pricing calculator embedded — the one tier-4 piece in Phase 1. |
-| 3a | Run **legacy_source data export** | tooling | Script-based: products + attributes + variants + photos + customers. Output to `_resources/legacy_source-export/`. |
+| 3a | Run **catalog_data data export** | tooling | Script-based: products + attributes + variants + photos + customers. Output to `_resources/catalog_data-export/`. |
 | 3b | **Decide pills vs swatches** | — | After mock render comparison. |
 | 3c | Seed **catalog data** (categories, products, attributes, variants, photos) into ERPNext | 1 (data only) | Bulk import via script. |
 | 3d–f | Verify **`/all-products`, product detail, cart, checkout** flow | 1 | Native webshop pages. Theme CSS for visual polish only. No template overrides. |
@@ -181,10 +181,10 @@ Per GL: *"I need the landing page, balloon twisting and face painting, ecommerce
 
 - All 6 open questions resolved.
 - Build order now reflects GL's exact priority sequence (landing → BTFP → ecommerce → contact, blog out).
-- Catalog scope confirmed as ~50 products / ~20 categories — legacy_source export is now load-bearing infrastructure (not a "nice to have").
+- Catalog scope confirmed as ~50 products / ~20 categories — catalog_data export is now load-bearing infrastructure (not a "nice to have").
 - Footer decision locked as native-config-only (accept Frappe's defaults for what isn't natively supported).
 - Color swatches confirmed tier 4 because Frappe's `Item Attribute Value` schema has no native swatch field.
 
 ---
 
-*v2 — 2026-04-26 — GL-confirmed. Build order locked. Tasks created in current session: #7 (this update), #8 (Step 0 reset), #9 (legacy_source export), #10 (mock pills/swatches render), #11 (landing), #12 (BTFP), #13 (ecommerce), #14 (contact).*
+*v2 — 2026-04-26 — GL-confirmed. Build order locked. Tasks created in current session: #7 (this update), #8 (Step 0 reset), #9 (catalog_data export), #10 (mock pills/swatches render), #11 (landing), #12 (BTFP), #13 (ecommerce), #14 (contact).*

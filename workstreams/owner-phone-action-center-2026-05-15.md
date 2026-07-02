@@ -78,9 +78,9 @@ python scripts/setup/sync_owner_demo_data.py
 python scripts/verify/backend_workspace_parity.py
 python scripts/verify/owner_business_access_contract.py
 python scripts/dev/clear_website_cache.py
-$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:owner-actions
-$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
-$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
+export LT_DESK_TEST_USER='locallytwisted@gmail.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:owner-actions
+export LT_DESK_TEST_USER='locallytwisted@gmail.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
 python scripts/verify/synthetic_business_pipeline.py
 ```
 

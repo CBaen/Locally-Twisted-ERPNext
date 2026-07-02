@@ -230,10 +230,10 @@ def _option_modifiers(
     normalize_map: dict[str, dict[str, str]],
 ) -> tuple[dict[tuple[str, str], Decimal], list[dict[str, Any]]]:
     slug = prod.get("slug")
-    legacy_source_id = prod.get("legacy_source_id")
+    catalog_data_id = prod.get("catalog_data_id")
     url = prod.get("url")
-    if not slug or not legacy_source_id or not url:
-        raise CatalogSourceVariantModifierRepairError(f"Product is missing slug, legacy_source_id, or url: {prod}")
+    if not slug or not catalog_data_id or not url:
+        raise CatalogSourceVariantModifierRepairError(f"Product is missing slug, catalog_data_id, or url: {prod}")
 
     base_price = _money(prod.get("base_price") or 0)
     opener = _opener()
@@ -251,7 +251,7 @@ def _option_modifiers(
             info = _post_price(
                 opener,
                 csrf_token=csrf,
-                product_template_id=int(legacy_source_id),
+                product_template_id=int(catalog_data_id),
                 ptav_ids=[ptav_id],
             )
             option_price = _money(info["price"])

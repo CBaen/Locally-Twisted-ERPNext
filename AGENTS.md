@@ -133,12 +133,12 @@ do not queue, and agent replies that imply success without verification.
   `capabilities/recipes/three-brand-dba-boundary-contract.md` before any work
   that can cross brand lanes.
 - Build: Locally Twisted's ERPNext v15 install — the destination of a migration of LT's business intent + catalog data into a fresh ERPNext install (frame revised 2026-04-30 — see `locally-twisted-decisions.md`).
-- "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps.
-- "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
-- The failed legacy_source test deployment is reference material only. It never served customers.
-- The old local `locally-twisted-legacy_source` checkout is not an active local dependency on Wardenclyffe. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to committed `_resources/` source material, restored external backup evidence that GL explicitly approves for use, or GL/legal approval.
-- The live legacy_source test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
-- Do not recreate, modify, or depend on an unverified legacy_source checkout from this project.
+- "Fresh install" — destination is greenfield ERPNext; no auto-translated catalog_data modules or DB dumps.
+- "Migration" — catalog records, form intent, policies, voice/brand were carried across from the catalog_data attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
+- The failed catalog_data test deployment is reference material only. It never served customers.
+- The old local `external-catalog-data` checkout is not an active local dependency on Wardenclyffe. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to committed `_resources/` source material, restored external backup evidence that GL explicitly approves for use, or GL/legal approval.
+- The live catalog_data test shop at `shop` was the catalog source/reference for the 2026-04-30 catalog port.
+- Do not recreate, modify, or depend on an unverified catalog_data checkout from this project.
 
 ## Catalog Authority And Product Scope
 
@@ -336,12 +336,14 @@ Do not invent business facts, policy terms, product details, or legal language. 
 - Style guide: `_resources/STYLE-GUIDE.md`
 - Business policies: `_resources/policies/`
 - Utah tax research: `_resources/utah-tax-rates-2026q2.md`
-- Live legacy_source catalog scrape output: `_resources/catalog-source/`
-- `/book` and `/contact` snapshots: `_resources/retired-source-snapshot/hetzner-book.html` and `hetzner-contact.html`
+- Live catalog_data catalog scrape output: `_resources/catalog-source/`
 
 The old `_resources/design-guide/` design-competition synthesis was deleted on 2026-05-05 because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction visual contract and kept reintroducing light-blue/blush styling. Do not recreate it or treat old screenshots/TSX from that direction as current design guidance.
 
-The legacy_source snapshots are canonical for the rebuilt `/book` and `/contact` form shape where explicitly stated. They are not blanket authority for the rest of the system.
+The retained current-source docs and git history are canonical for the rebuilt
+`/book` and `/contact` form shape where explicitly stated. Deleted local
+snapshots are not active Kubuntu sources, and old catalog-data material is
+not blanket authority for the rest of the system.
 
 ## Current Work Selection
 

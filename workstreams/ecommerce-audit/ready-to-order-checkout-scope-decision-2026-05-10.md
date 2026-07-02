@@ -1,9 +1,9 @@
-D:2026-05-10 | Check:GL scope correction 2026-05-10 14:48 MDT + live legacy_source architecture witness | Confidence:high
+D:2026-05-10 | Check:GL scope correction 2026-05-10 14:48 MDT + live catalog_data architecture witness | Confidence:high
 # Ready-to-order checkout scope decision
 
 ## Decision
 
-Locally Twisted should **not** try to launch all legacy_source-style configurable products as direct checkout products in ERPNext right now.
+Locally Twisted should **not** try to launch all catalog_data-style configurable products as direct checkout products in ERPNext right now.
 
 Launch checkout only for simple / ready-to-order products where:
 
@@ -28,7 +28,7 @@ This narrows the ERPNext ecommerce receiving problem.
 
 The launch target is no longer:
 
-> recreate every legacy_source product option path as direct checkout.
+> recreate every catalog_data product option path as direct checkout.
 
 The launch target is:
 
@@ -59,9 +59,9 @@ A product should be quote-first / invoice-first if any of these are true:
 
 Quote-first is a success state, not a failure state.
 
-## What we still need from legacy_source
+## What we still need from catalog_data
 
-For **ready-to-order checkout products**, we still need a narrow legacy_source witness slice:
+For **ready-to-order checkout products**, we still need a narrow catalog_data witness slice:
 
 - product identity and public category,
 - base price and price list behavior,
@@ -74,7 +74,7 @@ For **ready-to-order checkout products**, we still need a narrow legacy_source w
 - tax/payment boundary,
 - operator fulfillment fields needed after purchase.
 
-For **complex decor / major variant products**, we do not need exhaustive direct-checkout parity right now. We only need enough legacy_source evidence to route them safely:
+For **complex decor / major variant products**, we do not need exhaustive direct-checkout parity right now. We only need enough catalog_data evidence to route them safely:
 
 - product page exists,
 - why it is quote-first/invoice-first,
@@ -132,7 +132,7 @@ Current ERPNext code already has checkout-level `order_notes` UI and Sales Order
 
 ## Immediate next action
 
-Create a ready-to-order product candidate list from legacy_source/ERPNext and classify each candidate as:
+Create a ready-to-order product candidate list from catalog_data/ERPNext and classify each candidate as:
 
 - `checkout_ready_now`,
 - `checkout_ready_after_small_fix`,

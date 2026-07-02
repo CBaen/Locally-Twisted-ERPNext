@@ -1,14 +1,14 @@
 # Catalog Variant Price Recovery
 
-Active feature handoff for ERPNext Item Price parity against the old legacy_source shop.
+Active feature handoff for ERPNext Item Price parity against the catalog_data shop.
 
 ## Outcome
 
 Every sellable ERPNext product variant should carry the same customer price the
-old legacy_source shop would have charged for the equivalent required option selection.
+catalog_data shop would have charged for the equivalent required option selection.
 
 This is not the same as variant-count correctness. `catalog_variant_contract.py`
-proves active ERPNext variants match the normalized legacy_source option combinations.
+proves active ERPNext variants match the normalized catalog_data option combinations.
 It does not prove the `Item Price` values are right.
 
 ## Current State - 2026-05-19
@@ -20,16 +20,16 @@ Resolved in the local ERPNext database:
 - Root cause confirmed: non-bouquet variant families still had flattened
   ERPNext `Item Price` rows from the original base-price import. The product
   page was mostly displaying the backend value it was given.
-- Source of truth confirmed again: the old legacy_source shop at
-  `http://5.78.136.133/shop` and its `/website_sale/get_combination_info`
-  endpoint. For `easter-balloon-arch-bunny-ear`, legacy_source returns:
+- Source of truth confirmed again: the catalog_data shop at
+  `shop` and its `/website_sale/get_combination_info`
+  endpoint. For `easter-balloon-arch-bunny-ear`, catalog_data returns:
   - `20ft`: `$375`
   - `25ft`: `$440`
 - Local ERPNext now matches those prices:
   - `easter-balloon-arch-bunny-ear-20F`: `$375`
   - `easter-balloon-arch-bunny-ear-25F`: `$440`
-- Added `locally_twisted.seed.repair_variant_price_modifiers_from_legacy_source` to
-  recover legacy_source option price modifiers and apply them across active ERPNext
+- Added `locally_twisted.seed.repair_variant_price_modifiers_from_catalog_data` to
+  recover catalog_data option price modifiers and apply them across active ERPNext
   variants without stopping on large color/customizer families.
 - Applied the modifier repair locally across 49 variant products:
   - 10,186 active variants inspected.
@@ -37,7 +37,7 @@ Resolved in the local ERPNext database:
   - Post-apply dry-run reported 0 remaining variant prices that would change.
 - Added `scripts/verify/product_price_modifier_contract.py` and included it in
   `npm run test:product-prices`, so bouquet-specific price checks are now paired
-  with the broad legacy_source modifier parity gate.
+  with the broad catalog_data modifier parity gate.
 - Added `scripts/verify/product_price_display.spec.js` and
   `npm run test:product-price-display` to prove the actual product page updates
   the visible price and selected variant item code for the reported arch.
@@ -75,9 +75,9 @@ Known separate drift:
 
 Resolved:
 
-- Root cause found: the original legacy_source scraper trusted product page base price /
+- Root cause found: the original catalog_data scraper trusted product page base price /
   JSON-LD price, then `seed_catalog.py` copied that price to every variant.
-- legacy_source's source of truth for variant pricing is
+- catalog_data's source of truth for variant pricing is
   `/website_sale/get_combination_info`.
 - The bouquet-size family is repaired in live ERPNext:
   - Small: `$35`
@@ -99,9 +99,9 @@ Not resolved:
 - 36 non-bouquet variant templates still show one live active price point each.
   Some are legitimately flat; others are already proven wrong.
 
-Fresh sample evidence from legacy_source dry-run probes:
+Fresh sample evidence from catalog_data dry-run probes:
 
-| Template | ERPNext | legacy_source resolver | Status |
+| Template | ERPNext | catalog_data resolver | Status |
 |---|---:|---:|---|
 | `6-color-rainbow-arch-20F` | `$340` | `$340` | ok |
 | `6-color-rainbow-arch-25F` | `$340` | `$425` | wrong |
@@ -118,8 +118,8 @@ Fresh sample evidence from legacy_source dry-run probes:
 Production and repair path:
 
 - `apps/locally_twisted/locally_twisted/seed/seed_catalog.py`
-- `apps/locally_twisted/locally_twisted/seed/repair_variant_prices_from_legacy_source.py`
-- `scripts/setup/scrape_legacy_source_live.py`
+- `apps/locally_twisted/locally_twisted/seed/repair_variant_prices_from_catalog_source.py`
+- `scripts/setup/scrape_catalog_data_live.py`
 - `scripts/setup/stage_seed_data.py`
 - `scripts/verify/product_variant_price_contract.py`
 - `package.json`
@@ -156,7 +156,7 @@ checkout/color-recipe lane.
 For this lane, the next work is not another narrow product patch. Treat any
 price issue as source-price identity work:
 
-1. Stage the legacy_source catalog data for in-container repair commands when source data
+1. Stage the catalog_data catalog data for in-container repair commands when source data
    needs refreshing:
 
    ```bash
@@ -179,14 +179,14 @@ price issue as source-price identity work:
 4. If the broad guard fails, use the repair script in dry-run mode first:
 
    ```bash
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_legacy_source.execute --kwargs "{'dry_run': True, 'strict': False}"
+   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_catalog_data.execute --kwargs "{'dry_run': True, 'strict': False}"
    ```
 
 5. Apply only after reviewing mismatches and confirming the target is local or a
    GL-approved staging/live maintenance window:
 
    ```bash
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_legacy_source.execute --kwargs "{'strict': False}"
+   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_catalog_data.execute --kwargs "{'strict': False}"
    ```
 
 6. Remove ignored staged seed data after repair work if it is no longer needed:
@@ -203,15 +203,15 @@ price issue as source-price identity work:
 - Do not use `_resources/catalog-source/catalog.json` row `price` from the old
   snapshot as proof by itself; older snapshots were generated before dynamic
   price recovery.
-- When LT intentionally drops optional legacy_source axes from ERPNext variants, query
-  legacy_source with only the required attribute IDs for the ERPNext variant price.
+- When LT intentionally drops optional catalog_data axes from ERPNext variants, query
+  catalog_data with only the required attribute IDs for the ERPNext variant price.
 - Treat full optional combos as add-on/customizer evidence, not necessarily the
   ERPNext Item Price.
 - Do not keep `seed/_data/` in git. It is an ignored staging copy only.
 
 ## Latest Published Commits
 
-- `c7f9da3 Fix legacy_source variant price import` - repaired bouquet-size live prices,
+- `c7f9da3 Fix catalog_data variant price import` - repaired bouquet-size live prices,
   added dynamic-price repair path, updated scraper/seed behavior, and added the
   bouquet price contract.
 - For newer docs/cleanup commits, check `git log --oneline -5` because this

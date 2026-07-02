@@ -1,7 +1,7 @@
 # Ecommerce Finished Experience Roadmap
 
 Date: 2026-05-11
-Current update: 2026-05-17 all-legacy_source sellable local reimport supersedes the
+Current update: 2026-05-17 all-catalog_data sellable local reimport supersedes the
 old 18-checkout / 35-quote-first product baseline. Keep the layer standard, but
 use the 2026-05-17 handoff for current product scope.
 Scope: Locally Twisted ERPNext/Frappe ecommerce architecture, storefront runtime, checkout, ERPNext documents, and proof gates.
@@ -26,7 +26,7 @@ Verified gates at the time this plan was written:
 Current ProductPatternContract summary:
 
 - Source products: 53.
-- Local all-legacy_source sellable import target products: 53.
+- Local all-catalog_data sellable import target products: 53.
 - Excluded products: 0.
 - Priced sale units: 290.
 - Older staged-contract baseline: 18 direct-checkout / 35 quote-first was a
@@ -60,18 +60,18 @@ Important boundary:
 ### Data And Source Contract
 
 - Evidence checked:
-  - legacy_source option-pattern mapper contract.
+  - catalog_data option-pattern mapper contract.
   - ProductPatternContract report.
   - Checkout guard proving no source mapper slug checkout override.
 - Risks found:
-  - Import can lose legacy_source source semantics if source IDs, axis hashes, variant pointers, and pattern classes are not preserved.
+  - Import can lose catalog_data source semantics if source IDs, axis hashes, variant pointers, and pattern classes are not preserved.
   - Historical quote-first architecture language can be misread as the current
     business product model.
   - Add-ons, media, and conditional prices can be silently flattened into variants.
 - Plan adjustment:
   - Make source pattern preservation a permanent import gate.
   - Keep required sale-unit axes, customization axes, add-ons, review-only axes, media roles, and pricing provenance separate.
-  - Treat every legacy_source-imported product as a product unless GL explicitly
+  - Treat every catalog_data-imported product as a product unless GL explicitly
     excludes it; unclear pricing/media/add-ons should fail loudly inside the
     sellable product contract, not remove the product from scope.
 - Open question or escalation:

@@ -22,7 +22,7 @@ CONFIRMED_ADD_ONS = {
     ),
 }
 
-# legacy_source axes that smell like add-ons but need product-family review before import.
+# catalog_data axes that smell like add-ons but need product-family review before import.
 REVIEW_ADD_ONS = {
     "Add ons": "Potential optional add-ons; needs product-family mapping.",
     "Plush add ons": "Potential optional plush upgrades; needs product-family mapping.",

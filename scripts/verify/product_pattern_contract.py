@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build ERPNext/Frappe ProductPatternContract architecture report.
 
-This verifier is read-only. It joins the reusable legacy_source option-pattern mapper
+This verifier is read-only. It joins the reusable catalog_data option-pattern mapper
 with current ERPNext Website Item, Item, Item Price, and variant-attribute rows.
 It classifies all source product pages by generic architecture capability, not
 by product-name exceptions.

@@ -14,7 +14,7 @@ compact hero ratio and using the real LT balloon color system.
 
 ## Source Decision
 
-Use generated representative hero images, not real/proof photos and not legacy_source product-photo crops. The generation prompt authority is:
+Use generated representative hero images, not real/proof photos and not catalog_data product-photo crops. The generation prompt authority is:
 
 1. category shape;
 2. exact owner-approved balloon color names;

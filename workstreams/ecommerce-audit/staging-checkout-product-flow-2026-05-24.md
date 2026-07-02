@@ -60,7 +60,7 @@ Covered issues:
 Fresh staging command during this documentation pass:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 ```
 
@@ -122,7 +122,7 @@ still confirm inbox receipt if that experience matters for owner review.
 Before live approval:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py

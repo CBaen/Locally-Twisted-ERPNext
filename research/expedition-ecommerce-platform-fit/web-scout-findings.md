@@ -82,7 +82,7 @@ This is the most important baseline finding. The research brief describes Websho
 - One prior-art integration exists: `aerele/medusa_integration` (27 stars, 5 forks, MIT license, no published releases — experimental). Source: https://github.com/aerele/medusa_integration
 - A second integration: `bitspur/medusa-erpnext-sync` on GitLab (created July 2024, 34 commits, license unclear). Source: https://gitlab.com/bitspur/community/medusa-erpnext-sync
 - A third partial implementation: `clayrisser/medusa-erpnext-sync` mentioned in Frappe forum thread (July 2024, developer called it incomplete).
-- Medusa's official ERP recipe covers the integration pattern (modules + workflows + scheduled jobs) but names only legacy_source as the reference example, not ERPNext specifically.
+- Medusa's official ERP recipe covers the integration pattern (modules + workflows + scheduled jobs) but names only catalog_data as the reference example, not ERPNext specifically.
 - Source: https://discuss.frappe.io/t/request-for-full-frappe-erpnext-integration-with-medusajs/116557
 - **Jeff's admin burden:** Running Medusa means two systems to maintain (ERPNext + Medusa). Jeff as a non-technical operator would need all order/customer data flowing back to ERPNext automatically. None of the existing integrations are production-hardened or officially supported. This is a real risk.
 

@@ -83,14 +83,14 @@ Built before the frame reset; some still active, some legacy reference.
 | `workstreams/external-marketing-builder-access-reset-2026-06-13.md` | ENB/marketing controlled builder access and branded password-reset closeout: source/app deploy hashes, Email Queue `e4aqh31606`, reset-page non-consuming proof, and future stop rules. |
 | `workstreams/coordination-safety-pilot-2026-05-21.md` | Protected child/client repo pilot for the neutral multi-agent coordination workflow; no product or release approval. |
 | `workstreams/website-launch.md` | Launch controller board and verification gates. |
-| `workstreams/domain-provider-reindex-cleanup-2026-05-19.md` | Current provider-chain and reindex cleanup handoff: GoDaddy registrar, Cloudflare authoritative DNS/email routing, Frappe Cloud hosting, Hetzner/legacy_source old-reference status, Bluehost cleanup target, and live sitemap/canonical vanity-host blocker. |
+| `workstreams/domain-provider-reindex-cleanup-2026-05-19.md` | Current provider-chain and reindex cleanup handoff: GoDaddy registrar, Cloudflare authoritative DNS/email routing, Frappe Cloud hosting, current import capture/catalog_data old-reference status, Bluehost cleanup target, and live sitemap/canonical vanity-host blocker. |
 | `workstreams/meta-missionary-sales-campaign-2026-06-30.md` | Canonical product-specific marketing/ad rail for the Large head Missionary Meta Sales campaign; currently source-prep only and blocked from live spend while website work is in progress. |
 | `workstreams/meta-ads-connection-2026-06-26.md` | General Meta/Facebook/Instagram connection and read-only API inventory handoff; not the product-specific Missionary campaign packet. |
 | `workstreams/launch-repo-cleanup-2026-05-10.md` | Launch cleanup handoff for raw drops, stale generated evidence, removed contest output, and repo-light client handoff rules. |
-| `workstreams/ecommerce-audit/README.md` | Front-door ecommerce infrastructure/evidence map, including the 2026-05-17 all-legacy_source sellable reimport proof, product repair map, and local-only launch gates. |
-| `workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md` | Current all-legacy_source local import closeout: 53/53 legacy_source products included as sellable checkout targets, 0 exclusions, 290 priced sale units, all 53 routes browser-proved in batches, no live deploy. |
-| `workstreams/ecommerce-audit/product-family-certification-truth-table-2026-05-17.md` | Historical staged certification truth table, superseded by the all-legacy_source sellable reimport closeout for current product scope. |
-| `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md` | legacy_source-export-backed repair queue for all 53 products; every product targets purchasable behavior and held products are blocked until certified. |
+| `workstreams/ecommerce-audit/README.md` | Front-door ecommerce infrastructure/evidence map, including the 2026-05-17 all-catalog_data sellable reimport proof, product repair map, and local-only launch gates. |
+| `workstreams/ecommerce-audit/catalog-data-sellable-product-reimport-2026-05-17.md` | Current all-catalog_data local import closeout: 53/53 catalog_data products included as sellable checkout targets, 0 exclusions, 290 priced sale units, all 53 routes browser-proved in batches, no live deploy. |
+| `workstreams/ecommerce-audit/product-family-certification-truth-table-2026-05-17.md` | Historical staged certification truth table, superseded by the all-catalog_data sellable reimport closeout for current product scope. |
+| `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md` | catalog_data-export-backed repair queue for all 53 products; every product targets purchasable behavior and held products are blocked until certified. |
 | `workstreams/ecommerce-audit/simple-purchasable-rehearsal-2026-05-17.md` | Rollback-safe backend proof for the first simple repair tranche: four products, 33 source-backed sale SKU lines, SO/SI preservation, no browser/payment/live approval yet. |
 | `workstreams/ecommerce-audit/simple-purchasable-browser-proof-2026-05-17.md` | Local open-mode browser proof for the first simple repair tranche: desktop/mobile product pages, cart, checkout preview, and restoration verified; payment/live approval still pending. |
 | `workstreams/ecommerce-audit/simple-purchasable-payment-cascade-2026-05-17.md` | Rollback-safe payment cascade proof for the first simple repair tranche: all 33 sale lines through PR/PE/SI/receipt/operator/welcome/idempotency; final approval still pending. |
@@ -109,8 +109,8 @@ The four reference surfaces below are **temporary** and will be retired. Use
 | Path / URL | Disposition |
 |------|------|
 | Prior-platform local clone | Not an active Wardenclyffe dependency. Use only approved backup/source evidence for a narrow reference task. |
-| `http://5.78.136.133/` | Failed legacy_source/Hetzner test deployment of prior attempt. Not current public DNS. Keep read-only until archive/decommission proof is complete. |
-| `https://github.com/CBaen/locally-twisted-legacy_source` | Prior attempt's source repo. Will be archived as read-only. |
+| `` | Failed catalog_data/current import capture test deployment of prior attempt. Not current public DNS. Keep read-only until archive/decommission proof is complete. |
+| `https://github.com/CBaen/external-catalog-data` | Prior attempt's source repo. Will be archived as read-only. |
 | `https://locallytwisted.com` | Current customer-facing Frappe Cloud site served through Cloudflare. Source is this ERPNext project and the Frappe app mirror. |
 
 **Future instances:** if you reach into the prior-platform dir for anything other than the resources already copied to `_resources/`, stop. The thing you need lives here, or it's not needed.

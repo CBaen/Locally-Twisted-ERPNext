@@ -1,14 +1,14 @@
-# Ground Truth Findings: LT Codebase + Frappe Container + legacy_source Source
+# Ground Truth Findings: LT Codebase + Frappe Container + catalog_data Source
 ## Date: 2026-04-26
-## Source Type: Codebase, Git History, Container Inspection, legacy_source Source XML
+## Source Type: Codebase, Git History, Container Inspection, catalog_data Source XML
 ## Project: Locally Twisted
 ## Files Examined: 47
 
 ---
 
-## Approved Jeff-Vetted Content From Local legacy_source Source
+## Approved Jeff-Vetted Content From Local catalog_data Source
 
-This is the most load-bearing section. Every string below was pulled verbatim from XML in `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`. The legacy_source project contains far more view files than the brief anticipated. Full list of XML files found (43 total):
+This is the most load-bearing section. Every string below was pulled verbatim from XML in `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/views/`. The catalog_data project contains far more view files than the brief anticipated. Full list of XML files found (43 total):
 
 - `views/header.xml` — two-tier header with utility strip
 - `views/footer.xml` — newsletter + 3-column footer + copyright bar
@@ -85,7 +85,7 @@ Column 3 — "Get In Touch":
 - "© 2026 Locally Twisted. All rights reserved. | Refund Policy | Accessibility"
 - Links: `/refund-policy`, `/accessibility`
 
-**NOTE:** The footer does NOT include a Twitter/X social link. The `setup_slice2_header_footer.py` script added Twitter — that was wrong per the legacy_source source.
+**NOTE:** The footer does NOT include a Twitter/X social link. The `setup_slice2_header_footer.py` script added Twitter — that was wrong per the catalog_data source.
 
 ### HOMEPAGE (`views/homepage.xml` + snippet files)
 
@@ -140,7 +140,7 @@ Static display:
 - Body para 1: "Add unforgettable entertainment to any event. Our skilled artists create balloon animals, swords, crowns, and custom designs on the spot — plus professional face painting that transforms kids (and adults!) into their favorite characters."
 - Body para 2: "Perfect for birthday parties, school events, corporate family days, and festivals."
 - CTA: "Book Entertainment" → `/balloon-twisting-and-face-painting`
-- Photo carousel: 10 slides, legacy_source ir.attachment IDs 1209–1227 (odd numbers alternating twisting/face painting). These are production legacy_source attachment IDs — NOT transferable directly to ERPNext.
+- Photo carousel: 10 slides, catalog_data ir.attachment IDs 1209–1227 (odd numbers alternating twisting/face painting). These are production catalog_data attachment IDs — NOT transferable directly to ERPNext.
 
 #### Trust Bar (`s_lt_trust_bar.xml`)
 
@@ -162,7 +162,7 @@ Section heading: "Custom Creations"
 4. Picture Perfect Backdrops → `/shop/category/backdrops-32` (FA: `fa-photo`)
 5. Balloon Drops → `/shop/category/balloon-drops-33` (FA: `fa-arrow-down`)
 
-Note: These use legacy_source category slugs with legacy_source numeric IDs. ERPNext Item Group routes will be different.
+Note: These use catalog_data category slugs with catalog_data numeric IDs. ERPNext Item Group routes will be different.
 
 #### Client Logo Crawl (`s_lt_client_crawl.xml`)
 
@@ -197,12 +197,12 @@ FanX, Chick-fil-A, Texas Roadhouse, Applebee's, Chili's, Utah Art Alliance, Ance
 Face Painting card:
 - H2: "Face Painting"
 - Bullets: "Butterflies, superheroes, tigers, princesses" | "FDA-approved, skin-safe paints" | "Faces, arms, and hands" | "Kids, teens, and adults"
-- Photo carousel: 10 slides, legacy_source ir.attachment IDs 1188–1197
+- Photo carousel: 10 slides, catalog_data ir.attachment IDs 1188–1197
 
 Balloon Twisting card:
 - H2: "Balloon Twisting"
 - Bullets: "Animals, swords, crowns, flowers" | "Custom designs on the spot" | "Guests watch the designs come together"
-- Photo carousel: 9 slides, legacy_source ir.attachment IDs 1198–1206
+- Photo carousel: 9 slides, catalog_data ir.attachment IDs 1198–1206
 
 **Section 3 — Event Type Crawl (Blush band):**
 Event types (with FA icons): Birthday Parties, School Carnivals, Corporate Events, Festivals, Church Events, Grand Openings, Family Reunions, Holiday Parties
@@ -430,7 +430,7 @@ Commits relevant to the website build (newest first, from `git log --oneline -50
 
 **Approach 1 — `setup_slice2_header_footer.py`:** Configured `Website Settings.head_html` with a CSS style block containing `!important` chains. CSS loaded BEFORE Frappe's bundle (wrong), Frappe's bundle rules won at equal specificity. Footer brand block rendered invisibly. Script is still present but retired from active use.
 
-**Approach 2 — `setup_pages/landing.py` `build()` function:** Built a Web Page record with `content_type="Page Builder"` and 4 Frappe default Web Templates ("Hero with Right Image", "Section with Cards", "Section with CTA"). Used invented copy (not legacy_source-sourced). Page not visible to GL when opened in their real browser. Not mobile-responsive. Rolled back to placeholder via `rollback()`. The `build()` function is kept for reference but marked NOT TO RUN.
+**Approach 2 — `setup_pages/landing.py` `build()` function:** Built a Web Page record with `content_type="Page Builder"` and 4 Frappe default Web Templates ("Hero with Right Image", "Section with Cards", "Section with CTA"). Used invented copy (not catalog_data-sourced). Page not visible to GL when opened in their real browser. Not mobile-responsive. Rolled back to placeholder via `rollback()`. The `build()` function is kept for reference but marked NOT TO RUN.
 
 ---
 
@@ -487,9 +487,9 @@ Commits relevant to the website build (newest first, from `git log --oneline -50
 
 ## Catalog State
 
-**File:** `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/_resources/legacy_source-export/catalog.json`
+**File:** `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted/_resources/catalog_data-export/catalog.json`
 
-**Source:** `http://5.78.136.133` (live legacy_source), category `/shop/category/what-we-make-3`
+**Source:** `` (live catalog_data), category `/shop/category/what-we-make-3`
 **Product count:** 51 products
 **Products with image_url:** 48 of 51 (94%)
 **Products with attributes:** 47 of 51 (92%)
@@ -504,9 +504,9 @@ slug_with_id, slug, name, url, base_price, currency, description, image_url, att
 
 **Variants:** ALL 51 products have empty `variants` list and `variant_count: 0`. The catalog export captured attributes but not pre-generated variant combinations. ERPNext will need to generate variants from the attribute lists.
 
-**Images:** image_url format is `http://5.78.136.133/web/image/product.product/{id}/image_1920?unique={hash}` — these are legacy_source attachment URLs, NOT local files. They require fetching from the live legacy_source server. Live legacy_source stack is still running (`locally-twisted-legacy_source-web-1 Up 30 hours`).
+**Images:** image_url format is `web/image/product.product/{id}/image_1920?unique={hash}` — these are catalog_data attachment URLs, NOT local files. They require fetching from the live catalog_data server. Live catalog_data stack is still running (`external-catalog-data-web-1 Up 30 hours`).
 
-**Description:** Most products have `description: null` (no descriptions in the legacy_source catalog).
+**Description:** Most products have `description: null` (no descriptions in the catalog_data catalog).
 
 **Currency:** All USD.
 
@@ -533,7 +533,7 @@ From `_resources/website-page-index.md` (v2, GL-confirmed 2026-04-26):
 
 **Color swatches vs pills:** Pills = tier 1 (native). Swatches = tier 4 (custom field on Item Attribute Value + custom Web Template). Decision deferred to mock comparison.
 
-**Footer social icons:** Only 3 (Facebook, Instagram, Pinterest). The `setup_slice2_header_footer.py` script erroneously added Twitter. legacy_source source is authoritative.
+**Footer social icons:** Only 3 (Facebook, Instagram, Pinterest). The `setup_slice2_header_footer.py` script erroneously added Twitter. catalog_data source is authoritative.
 
 **Step 0 (prerequisite, not yet done):** Strip `!important` chains from `lt-theme.css` (specifically navbar toggler block lines 385-415 which use broken data URI SVG). Retire `setup_slice2_header_footer.py` from active use. Verify pages render cleanly.
 
@@ -545,13 +545,13 @@ From `_resources/website-page-index.md` (v2, GL-confirmed 2026-04-26):
 28 occurrences. Lines 388-398 contain the known-broken data URI SVG pattern for the navbar toggler. `lessons-learned.md` 2026-04-26 explicitly names this pattern as silently failing in real browsers ("real Chromium, Firefox silently rendered the circles with no icon"). **This is still in the codebase and has NOT been fixed despite being in the hot direction.**
 
 ### Webshop Hero Slider uses Bootstrap 4 API
-`hero_slider.html` uses `data-ride="carousel"` (Bootstrap 4). The LT ERPNext stack uses Bootstrap 5 (`data-bs-*`). Bootstrap 5 does NOT respond to `data-ride`. The `frappe.ready(function() { $('.carousel').carousel({...}) })` JS initialization at the bottom of the template requires jQuery's `.carousel()` — which Bootstrap 5 ALSO removed (native JS only). **If Page Builder is used with the Hero Slider web template, carousel autoplay will not work.** The legacy_source `s_lt_hero.xml` uses Bootstrap 5 syntax (`data-bs-ride="carousel"`, `data-bs-interval`, `data-bs-target`) which is correct for ERPNext v15.
+`hero_slider.html` uses `data-ride="carousel"` (Bootstrap 4). The LT ERPNext stack uses Bootstrap 5 (`data-bs-*`). Bootstrap 5 does NOT respond to `data-ride`. The `frappe.ready(function() { $('.carousel').carousel({...}) })` JS initialization at the bottom of the template requires jQuery's `.carousel()` — which Bootstrap 5 ALSO removed (native JS only). **If Page Builder is used with the Hero Slider web template, carousel autoplay will not work.** The catalog_data `s_lt_hero.xml` uses Bootstrap 5 syntax (`data-bs-ride="carousel"`, `data-bs-interval`, `data-bs-target`) which is correct for ERPNext v15.
 
 ### The landing.py `build()` function still exists
 `apps/locally_twisted/locally_twisted/setup_pages/landing.py:15` says "STATUS 2026-04-26: This script's `build()` produced a non-visible / non-responsive page... It is RETIRED." But the function itself still exists in the file. Any instance that runs `build()` without reading the docstring will recreate the broken state. The `rollback()` function is safe to run.
 
-### legacy_source image URLs are not local
-The catalog.json images are legacy_source server URLs (`http://5.78.136.133/...`). The local legacy_source stack is currently running, so they're fetchable now. But when the legacy_source server is decommissioned (planned after ERPNext replacement is ready), all 48 image URLs become 404. An export-before-decommission step is essential.
+### catalog_data image URLs are not local
+The catalog.json images are catalog_data server URLs (`...`). The local catalog_data stack is currently running, so they're fetchable now. But when the catalog_data server is decommissioned (planned after ERPNext replacement is ready), all 48 image URLs become 404. An export-before-decommission step is essential.
 
 ### Catalog has no descriptions
 48 of 51 products have `description: null`. Product pages on the ERPNext webshop will have no body copy unless descriptions are written or imported separately.
@@ -568,13 +568,13 @@ Nothing in this codebase, the running container, or the git history shows eviden
 
 1. **No Jinja template overrides exist yet** — the `locally_twisted` app has no `templates/` directory. Every instance of "we'll override the footer Jinja partial" in the HANDOFF is a plan, not a fact.
 
-2. **Hero images do not exist locally** — the `s_lt_hero.xml` hero carousel references images by legacy_source attachment IDs (production DB records). No hero image files exist in `_resources/images/`. The `_resources/images/` folder contains 15 AI-generated placeholder PNGs, but none appear to be hero carousel slides.
+2. **Hero images do not exist locally** — the `s_lt_hero.xml` hero carousel references images by catalog_data attachment IDs (production DB records). No hero image files exist in `_resources/images/`. The `_resources/images/` folder contains 15 AI-generated placeholder PNGs, but none appear to be hero carousel slides.
 
-3. **Trust bar SVG icons are not in the ERPNext app** — `trust-trophy.svg`, `trust-palette.svg`, `trust-heart.svg` are referenced at `/locally_twisted/static/src/img/` (legacy_source path). The ERPNext app's `public/icons/` directory exists but these specific SVGs have not been copied over.
+3. **Trust bar SVG icons are not in the ERPNext app** — `trust-trophy.svg`, `trust-palette.svg`, `trust-heart.svg` are referenced at `/locally_twisted/static/src/img/` (catalog_data path). The ERPNext app's `public/icons/` directory exists but these specific SVGs have not been copied over.
 
 4. **No Web Page records beyond the placeholder** — the live site has one Web Page ("home") in placeholder state. No BTFP page, no contact page, nothing built yet.
 
-5. **Pricing calculator has no implementation** — the BTFP service page plan calls for a pricing calculator in the `javascript` field, but no implementation exists. The legacy_source version (`page_balloon_twisting.xml`) also has no calculator — it has a booking form, not a pricing calculator.
+5. **Pricing calculator has no implementation** — the BTFP service page plan calls for a pricing calculator in the `javascript` field, but no implementation exists. The catalog_data version (`page_balloon_twisting.xml`) also has no calculator — it has a booking form, not a pricing calculator.
 
 6. **`locally_twisted` app pip install durability** — per `lessons-learned.md`, the editable pip install is lost on container recreation. The `scripts/setup/install_webshop.py` re-applies it, but this is a manual step.
 
@@ -596,15 +596,15 @@ Nothing in this codebase, the running container, or the git history shows eviden
 - No Jinja template overrides implemented despite HANDOFF saying they're the path forward
 - Homepage is a placeholder ("Site under construction")
 - No content pages exist
-- All hero images are legacy_source attachment URL references, not local files
+- All hero images are catalog_data attachment URL references, not local files
 
-**What is fully ready (from legacy_source source):**
+**What is fully ready (from catalog_data source):**
 - ALL approved copy and structure for: homepage sections, header two-tier layout, footer 3-column layout, BTFP service page, about page, category circles, client crawl list (52 names), trust bar copy, CTA copy, Google reviews badge copy
-- This copy has been through the legacy_source build process and represents the Jeff-approved content intent
+- This copy has been through the catalog_data build process and represents the Jeff-approved content intent
 
 ### Path of least resistance for the landing page
 
-The approved legacy_source content maps cleanly to Frappe's native Web Page Page Builder PLUS some custom HTML in the `header` field or `main_section_html`. Specifically:
+The approved catalog_data content maps cleanly to Frappe's native Web Page Page Builder PLUS some custom HTML in the `header` field or `main_section_html`. Specifically:
 
 1. **Hero:** Frappe's `hero_with_right_image` or `hero` Web Template works for a simple text+CTA. For the 3-slide carousel, the webshop's `hero_slider` template exists but has the Bootstrap 4 API bug. The safest approach: use `main_section_html` to embed a properly-coded Bootstrap 5 carousel.
 
@@ -618,12 +618,12 @@ The approved legacy_source content maps cleanly to Frappe's native Web Page Page
 
 6. **Client crawl:** No native Web Template matches a marquee animation. This is tier 4 (custom HTML in `main_section_html` or a custom block), but it's pure HTML/CSS with no back-end dependency.
 
-### What the approved legacy_source content tells us about Jeff's actual taste
+### What the approved catalog_data content tells us about Jeff's actual taste
 
-The legacy_source codebase was built carefully — it has WCAG-correct aria attributes, accessibility structure, Bootstrap 5 syntax, and Quiet Confidence voice. The hero copy ("Utah's Balloon Specialists", "Making celebrations unforgettable since 1998") IS on-brand per the STYLE-GUIDE. The CTA copy ("Make Your Celebration Unforgettable") IS on-brand. The client crawl list (52 names including Utah Jazz, Ancestry, University of Utah) tells a strong social proof story.
+The catalog_data codebase was built carefully — it has WCAG-correct aria attributes, accessibility structure, Bootstrap 5 syntax, and Quiet Confidence voice. The hero copy ("Utah's Balloon Specialists", "Making celebrations unforgettable since 1998") IS on-brand per the STYLE-GUIDE. The CTA copy ("Make Your Celebration Unforgettable") IS on-brand. The client crawl list (52 names including Utah Jazz, Ancestry, University of Utah) tells a strong social proof story.
 
 **Jeff's taste (from what he built):** He values specificity (114 reviews at 4.9 stars, not vague claims), real client names, the 1998 founding year, and the Wasatch Front as the geographic anchor. The site should feel local and trusted, not generic balloon-company.
 
 ### The one finding that most changes the build plan
 
-The legacy_source content is MORE complete than any instance has acknowledged. Previous instances used placeholder copy ("Make Your Celebration Unforgettable" was invented) when the exact approved copy was sitting in `s_lt_cta.xml`. The research brief correctly identified this as the primary gap — but the solution is simpler than it looks: the XML files are a complete, buildable blueprint. They even have the correct Bootstrap 5 aria patterns and accessibility structure. A build that converts these XML structures to Frappe Page Builder blocks (or `main_section_html`) would produce the approved content immediately, without guessing.
+The catalog_data content is MORE complete than any instance has acknowledged. Previous instances used placeholder copy ("Make Your Celebration Unforgettable" was invented) when the exact approved copy was sitting in `s_lt_cta.xml`. The research brief correctly identified this as the primary gap — but the solution is simpler than it looks: the XML files are a complete, buildable blueprint. They even have the correct Bootstrap 5 aria patterns and accessibility structure. A build that converts these XML structures to Frappe Page Builder blocks (or `main_section_html`) would produce the approved content immediately, without guessing.

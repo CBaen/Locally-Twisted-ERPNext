@@ -1,5 +1,14 @@
 # Locally Twisted — Project Status
 
+> **Repo hygiene correction, 2026-07-02:** this repo was purged of retired
+> platform labels, old placeholder labels, old host labels, stale mirror/snapshot
+> pointers, and local archive artifacts. Active guidance should describe the
+> current ERPNext/Frappe implementation, current approved `_resources/`, and
+> current live/provider proof when authorized. External backups and git history
+> are the archive. Do not restore local mirrors, snapshots, or retrospective
+> packets into the active repo unless GL explicitly asks for a bounded recovery
+> task.
+
 > **Live homepage and Birthday Deliveries media repair, 2026-06-24:** current
 > `https://locallytwisted.com/` returns `200` with `x-page-name: home`,
 > `x-from-cache: False`, and `Server: Frappe Cloud`; the root is the landing
@@ -57,7 +66,7 @@
 
 > **Public ecommerce correction, 2026-05-17; taxonomy refreshed 2026-06-21; live product hide verified 2026-06-23:** Local ecommerce may be temporarily opened for proof runs, but local dev uses Stripe test records and is not live-payment proof. Production checkout/Stripe lives on the Frappe Cloud site. Current category/count proof is 47 published products, 4 requested products retired/unpublished, 8 active primary categories, and 9 hidden secondary occasion categories. The four retired product hides are live as of 2026-06-23; broader taxonomy/category changes still need their own release and live proof before being claimed on `locallytwisted.com`.
 
-> **Domain/reindex correction, 2026-05-19:** Public pages/forms now serve through Cloudflare DNS and Frappe Cloud. Current chain is GoDaddy registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe. Hetzner/legacy_source is old reference/decommission scope. Reindex work is blocked until the live sitemap/canonical fix is released because current live discovery URLs still advertise `locallytwisted.v.frappe.cloud`. Use `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
+> **Domain/reindex correction, 2026-05-19:** Public pages/forms now serve through Cloudflare DNS and Frappe Cloud. Current chain is GoDaddy registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe. current import capture/catalog_data is old reference/decommission scope. Reindex work is blocked until the live sitemap/canonical fix is released because current live discovery URLs still advertise `locallytwisted.v.frappe.cloud`. Use `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
 
 > **Category hero/color correction, 2026-05-22:** `/shop-items/<group>`
 > compact heroes now use generated, category-specific WebP crops sourced from
@@ -78,7 +87,7 @@
 `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency
 repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15.106.0 verified locally on 2026-05-08, MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
-**Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed legacy_source attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.
+**Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed catalog_data attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.
 **Owner:** Jeff Kimber.
 
 ---
@@ -108,7 +117,7 @@ repo per the agency isolation rule.
 - Item Group hierarchy: `Shop Items` (parent, `is_group=1`) → 8 children with `show_in_website=1`: Arches, Balloon Drops, Bouquets, Columns, Garlands, Photo Ops & Backdrops, Stands & Easels, and Table Decor. Secondary occasions live under hidden `Shop Occasions`. Captured as fixture at `apps/locally_twisted/locally_twisted/fixtures/item_group.json`.
 - Item Attribute records: verified DB count is 26 as of 2026-05-01. Older docs that say 24 attributes are stale; fixture scope and the extra two DB records should be inspected before changing seed/fixture logic. Fixture at `apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`.
 - Webshop Settings flags: `enable_variants=1`, `enable_attribute_filters=1`, `show_attribute_dropdowns=1` (set via `scripts/setup/enable_webshop_variants.py`, NOT fixtured per fixture-discipline — Singles doctype with operator-edited fields).
-- Bulk import: `apps/locally_twisted/locally_twisted/seed/seed_catalog.py` (idempotent, loud-fail, runs in-process via `bench execute locally_twisted.seed.seed_catalog.execute`). Honors legacy_source's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product.
+- Bulk import: `apps/locally_twisted/locally_twisted/seed/seed_catalog.py` (idempotent, loud-fail, runs in-process via `bench execute locally_twisted.seed.seed_catalog.execute`). Honors catalog_data's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product.
 - **Current header/nav** uses the deliberate premium two-level mega-menu: `Event Balloons` and `Pickups & Deliveries` mega panels, `Twisting & Face Painting`, `Portfolio`, `About Us`, `FAQ`, search/cart, top short-notice banner, full-height logo image treatment, and mobile drawer accordions. The desktop top banner keeps `Free Event Quote` top-banner-only and links the short-notice message to `/contact`; the menu/drawer CTA is `Contact Us`. `/process` is not a public launch route unless GL reopens it. Menu data lives in `navbar_context.py`; shop/sidebar defaults live in `website_context.py`; both are active website context hooks.
 - **Product detail templates** overridden at `apps/locally_twisted/locally_twisted/templates/generators/item/{item_details,item_add_to_cart,item_configure}.html`. "Item Code" jargon stripped, "/Nos" UoM stripped, **inline variant selectors** (chips ≤8 values, dropdown 9+) replacing webshop's "Select Variant" dialog button. `item_configure.html` uses `get_variant_attribute_options` for prepared option data, consumes `valid_options_for_attributes` on partial selection to disable invalid later choices, and keeps chips as radio/single-select controls.
 - **`/shop-by-category`** compatibility override at `apps/locally_twisted/locally_twisted/www/shop-by-category/{index.py,index.html}` — redirects to `/shop` so the old placeholder-card index is not customer-facing.
@@ -152,7 +161,7 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 | 2026-05-01 | Website inquiries populate Lead `custom_event_type` child rows | Desk conditional sections depend on the Table MultiSelect, so CSV/text-only service storage is not enough for backend CRM usability. |
 | 2026-05-01 | Contact service choices are stackable; Events Inquiry is the package planning path | "Only" implies mutual exclusion. GL wants large multi-piece/corporate event packages to be the ideal path, with structured package-piece choices and fewer irrelevant conditional questions. |
 | 2026-04-30 | Frame revised: "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe. Catalog port + form intent + policies + domain cutover are migration shape. Jeff-disclosure stealth and hand-build-not-auto-translate survive as constraints, not as a denial of migration reality. (See decisions log 2026-04-30 frame entry.) |
-| 2026-04-26 | Earlier reframe: "first professional business platform," not "legacy_source migration" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30. |
+| 2026-04-26 | Earlier reframe: "first professional business platform," not "catalog_data migration" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30. |
 | 2026-04-26 | Phase 1 = customer-facing site + storefront (the proof point) | If ERPNext can't deliver this, GL pivots before building backend |
 | 2026-04-26 | Pricing calculator embedded in BTFP service page (no standalone /pricing) | Customers on the service page are already asking the cost question |
 | 2026-04-26 | Header navigation Option B: single What-We-Make + occasion landing pages | Eliminates SEO duplication, customer confusion, mega-menu mobile complexity |
@@ -161,10 +170,10 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 | 2026-04-26 | Photography: 15 placeholders generated via Together API FLUX.1-schnell | Real photos arrive in a future iteration; placeholders close the visual gap |
 | 2026-04-26 | All clients default to ERPNext native HRMS payroll (agency standard) | One less third-party integration; simpler transfer |
 | 2026-04-26 | Drop standalone About + Services index pages | Info distributes; About summary lands on contact page |
-| 2026-04-26 | All policy + brand resources live in `_resources/` (scrubbed of platform refs) | Project must stand alone; legacy_source dir will be retired |
+| 2026-04-26 | All policy + brand resources live in `_resources/` (scrubbed of platform refs) | Project must stand alone; catalog_data dir will be retired |
 | 2026-04-25 | ERPNext v15.105.0 pinned (latest stable v15 patch) | Past Stripe-broken window; latest patch on a mature line |
 | 2026-04-25 | Local Docker for build, Frappe Cloud Sites plan ($5/mo) for prod | Local is free + breakable; Frappe Cloud is managed + transferable per-site |
-| 2026-04-25 | Don't modify anything in `locally-twisted-legacy_source/` | Read-only reference; will be retired post-cutover |
+| 2026-04-25 | Don't modify anything in `external-catalog-data/` | Read-only reference; will be retired post-cutover |
 
 ## Reference Disposition
 
@@ -172,9 +181,9 @@ The four reference surfaces are temporary and will be retired. Future instances 
 
 | Surface | Disposition |
 |---|---|
-| Local legacy_source clone | Not an active Wardenclyffe dependency; use only if GL supplies an approved backup/source path for a narrow reference task |
-| Failed Hetzner deployment (`http://5.78.136.133/`) | Will be decommissioned after Phase 1 demo |
-| legacy_source GitHub repo (`https://github.com/CBaen/locally-twisted-legacy_source`) | Will be archived as read-only |
+| Local catalog_data clone | Not an active Wardenclyffe dependency; use only if GL supplies an approved backup/source path for a narrow reference task |
+| Failed current import capture deployment (``) | Will be decommissioned after Phase 1 demo |
+| catalog_data GitHub repo (`https://github.com/CBaen/external-catalog-data`) | Will be archived as read-only |
 | Current `locallytwisted.com` site | Damaged beyond repair; replaced at cutover |
 
 Canonical resources for the migration destination live in `_resources/` and are platform-agnostic.
@@ -198,7 +207,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 | `_resources/utah-tax-rates-2026q2.md` | Utah destination-based sales tax research |
 | `_resources/competitor-survey-2026-04-26.md` | 9 competitor sites surveyed; receipt for the lookbook-forward decision |
 | `_resources/images/INDEX.md` + 15 placeholder PNGs | Phase 1 image set |
-| `_resources/legacy_source-export/catalog.json` + 48 image PNGs | 51-product catalog from prior legacy_source attempt; reference for webshop seeding |
+| `_resources/catalog_data-export/catalog.json` + 48 image PNGs | 51-product catalog from catalog_data attempt; reference for webshop seeding |
 | `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` | Brand foundation CSS (canonical, served via `web_include_css` in `hooks.py`) |
 | `.planning/PROJECT.md` | Source-of-truth project context, requirements, decisions |
 | `.planning/ROADMAP.md` | 6 workflow-centric phases |
@@ -213,9 +222,9 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 ## Rules
 
-- **Frame (revised 2026-04-30):** This is a **migration of LT's business intent + catalog data into a fresh ERPNext install**. "Fresh install" — destination is greenfield ERPNext, hand-built informed by legacy_source discovery; no auto-translated modules or DB dumps. "Migration" — catalog records, form intent, policies, voice/brand, and the eventual domain cutover are real ports from the prior legacy_source attempt + the legacy `locallytwisted.com` site. Supersedes the 2026-04-26 "new build, not a migration" reframe. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
+- **Frame (revised 2026-04-30):** This is a **migration of LT's business intent + catalog data into a fresh ERPNext install**. "Fresh install" — destination is greenfield ERPNext, hand-built informed by catalog_data discovery; no auto-translated modules or DB dumps. "Migration" — catalog records, form intent, policies, voice/brand, and the eventual domain cutover are real ports from the catalog_data attempt + the legacy `locallytwisted.com` site. Supersedes the 2026-04-26 "new build, not a migration" reframe. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
 - **Stealth on the verdict.** Jeff knows there's an audit; he doesn't know the conclusion. Internal docs stay internal until Phase 1 is demo-ready.
-- **`_resources/` is canonical.** Anything from the legacy_source dir that applies has been copied + scrubbed. Don't reach back into the legacy_source dir for new content.
+- **`_resources/` is canonical.** Anything from the catalog_data dir that applies has been copied + scrubbed. Don't reach back into the catalog_data dir for new content.
 - **Voice & Language.** Plain language, no jargon. See `_resources/STYLE-GUIDE.md` voice section.
 - **Verify in UI before claiming done.** GL has caught bugs by opening the form themselves. Take screenshots; don't self-report.
 - **Loud failure rule.** Per global rule. Every form / cross-system handoff / external API call must fail loudly and be observable.
@@ -228,7 +237,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 ### 2026-05-01 (contact/BTFP inquiry consolidation) — canonical contact form + service-specific logic
 
-- **BTFP page refreshed:** `/balloon-twisting-and-face-painting` is now a contact-led service page using actual Hetzner content and current LT styling. Service CTAs prefill `/contact`.
+- **BTFP page refreshed:** `/balloon-twisting-and-face-painting` is now a contact-led service page using actual current import capture content and current LT styling. Service CTAs prefill `/contact`.
 - **Book route retired:** `/book` redirects to `/contact?intent=quick`; it is not a separate public form and not a legacy alias to preserve as its own experience.
 - **Service taxonomy cleaned:** `Event Package` became `Events Inquiry`; `Delivery Only` and `Pickup Only` became stackable `Delivery` and `Pickup`.
 - **Backend CRM parity synced:** the live ERPNext Lead form now uses the revised service records and conditional logic, and public submissions populate the Lead `custom_event_type` Table MultiSelect.
@@ -253,15 +262,15 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 ### 2026-04-30 (evening, autonomous nap session) — Mirror rebuild Phase 1 chrome shipped via /triadic-construction-v2
 
-**See `HANDOFF.md` and `MIRROR-REBUILD-COMPLETE.md` for full session report.** Summary:
+**See `HANDOFF.md`, `locally-twisted-decisions.md`, and
+`research/triadic-build-chrome-rebuild/` for retained session context.** Summary:
 
 - **Project frame revised** from "new build, not a migration" → "migration of business intent + catalog data into a fresh ERPNext install" per GL directive at session open. 8 docs updated to reflect.
-- **Hetzner mirror landed** at `_resources/retired-source-mirror/` — 346 pages + 510 assets via `crawl4ai` (chosen over httrack/wget for JS-rendering). Mirror script reusable at `scripts/mirror/mirror_hetzner.py`. Tool research at `research/website-mirror-tool-discovery.md`.
 - **/book unblocked** — was 404 every prior session. Files existed; root cause was stale Frappe website cache + nginx upstream-IP staleness after backend restart. Pre-task chain (cache flush + frontend container restart) made it HTTP 200 with the full form rendering.
 - **6 pre-task fixes shipped** before the chrome dispatch: `max_file_size = 25 MB` verified, smoke_forms.py selector aligned (`contact_name` vs `lead_name`), `lead.insert()` wrapped in try/except + `frappe.log_error` (loud-failure rule), `/contactus → /contact` redirect added, shop card `data-category` typo fixed (silently broken filter since launch), cache flush + `/book` verify.
 - **Phase 1 chrome rebuild via /triadic-construction-v2** — 3 builders (Jinja / CSS / JS) + 3 reviewers (Architect / SecOps / Execution Engine) + GL Proxy + fix round + audit pass. Deliverables:
-  - Hetzner-shaped header (utility bar + logo + 3 desktop mega menus + mobile drawer + accordion)
-  - Hetzner-shaped footer (newsletter strip + 3-col + social + legal bar)
+  - current import capture-shaped header (utility bar + logo + 3 desktop mega menus + mobile drawer + accordion)
+  - current import capture-shaped footer (newsletter strip + 3-col + social + legal bar)
   - `lt-newsletter.js` (vanilla JS, no jQuery). Historical note: `lt-megamenu.js` was later removed during a simple-header pass, then restored deliberately on 2026-05-05 when GL chose the premium mega-menu architecture.
   - `LT Newsletter Signup` DocType + `api/newsletter.py` whitelisted endpoint (rate-limited 10/hr per email, idempotent)
   - `lt-theme.css` overhauled — ~340 lines of dead `.navbar.*` and `.web-footer` blocks deleted, ~163 lines of new BEM blocks added (`.lt-utility-bar__*`, `.lt-footer-newsletter__*`). Final 1,959 lines.
@@ -270,7 +279,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Architectural decisions logged (reversible):** (A) mega menu IA — the old flat 11-group model was superseded on 2026-05-24 by 8 active primary categories plus hidden secondary occasions. (B) Category URLs — ERPNext-native `/shop-items/<slug>` retained. (C) Blog — use Frappe's NATIVE `Blog Post` DocType (plan-deepen caught a planned regression to a custom DocType). See `locally-twisted-decisions.md` entries for historical context and supersession notes.
 - **Audit screenshots** at `_resources/audit-2026-04-30-chrome/` (6 PNGs at desktop 1280 + mobile 375 for /, /book, /shop). Zero console errors. Mobile chrome looks good. **Desktop chrome flagged for polish:** centered logo dominates utility bar (intrinsic 1050×300 from brand image), tagline wraps vertically — short CSS fix needed. GL named this at session close: *"There's serious issues with the bleed and container issues on desktop but you've done a really good job so far."*
 - **GL trust state at close:** *"This looks like it could be usable... you've done a really good job so far."* Session was autonomous (GL napping). All architectural calls logged as reversible. Phase 2 page rebuilds (~12 routes) deferred to next session.
-- **Cleanup:** Deleted `legacy_source Migration/5.78.136.133.har` (turned out to be DevTools-filtered to CSS/JS only — no HTML pages, useless) + `legacy_source Migration/book initial state.jpg` (superseded by full mirror at `pages/book.html`). Empty `legacy_source Migration/` dir removed.
+- **Cleanup:** Deleted `catalog_data Migration/.har` (turned out to be DevTools-filtered to CSS/JS only — no HTML pages, useless) + `catalog_data Migration/book initial state.jpg` (superseded by full mirror at `pages/book.html`). Empty `catalog_data Migration/` dir removed.
 - **Agency-tier additions** at `Built_by_Cameron/`: `built-by-cameron-decisions.md` 2026-04-30 entries (rate_limit composite-identity + nginx-resolver-cache + crawl4ai-as-mirror-tool); `HOW-TO-WIN-AT-FRAPPE/auto-behaviors.md` new traps B5 + B6; kitchen note for crawl4ai mirror pattern.
 
 ### 2026-04-29 (mobile-responsiveness + now-retired design-guide-import session) — Mobile responsive at 320/375/414, hamburger fits, design contest synthesis imported then later deleted
@@ -302,7 +311,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **GL completed first real `4242` test purchase end-to-end** — SAL-ORD-2026-00019. The pending verification from prior session is now closed.
 - **ERPNext cascade wired into `/payment-success`.** Beyond marking PR paid: now also creates Sales Invoice from SO (idempotent, ERPNext's `make_sales_invoice`), sends transactional receipt email, sends operator notification to `locallytwisted@gmail.com` with desk deep link, sends welcome email if first-time customer. All four wrapped in try/except so backend hiccups don't block /thank-you redirect. All three emails idempotent via Communication-by-subject lookup.
 - **Lead-aware Customer dedup** in `submit_guest_order`. Three cases: returning customer (reuse), Contact-from-Lead (attach Customer to existing Contact + mark Lead Converted with back-pointer), or fresh (create Customer + Contact). Closes the orphan-customer hole when the same email submits /contact then /shop.
-- **Email Account configured.** `Locally Twisted` Email Account on smtp.gmail.com:587 TLS, default outgoing. Reads App Password from `.env` `GMAIL_APP_PASSWORD` (was already there from the legacy_source days). Backfill of order #19 sent all three emails successfully.
+- **Email Account configured.** `Locally Twisted` Email Account on smtp.gmail.com:587 TLS, default outgoing. Reads App Password from `.env` `GMAIL_APP_PASSWORD` (was already there from the catalog_data days). Backfill of order #19 sent all three emails successfully.
 - **Cart-clear bug fixed.** First fix in `payment_success.html` was inert because that template never renders (`_redirect()` raises `frappe.Redirect` before Jinja). Moved `LT_CART.clear()` to `thank_you.html`.
 - **Removed "Questions? Call (801) 285-0860..." contact line** from `/thank-you` per GL.
 - **Files added:** `apps/locally_twisted/locally_twisted/public/js/lt-guest-cart.js`, `api/__init__.py`, `api/cart.py`, `www/lt_cart.py`, `www/lt_cart.html`. PMC `pmc_1TRZH2DfnlZQv66ncb001soG` on LT's Stripe account. `Locally Twisted` Email Account.
@@ -317,7 +326,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **`/payment-success` override SHIPPED.** Fixes the Frappe `payments` app upstream URL bug at `stripe_settings.py:272` (appends `?redirect_to=None` even when None) AND the guest 403 (Frappe's bundled controller calls `frappe.get_doc("Payment Request", ...)` as guest). Our override at `www/payment_success.py` handles both `?session_id=cs_test_...` (modern) and `?doctype=Payment%20Request&docname=...` (legacy fallback). Route registered via `website_route_rules` in `hooks.py`.
 - **Server-side reconciliation on `/payment-success`** marks the PR paid synchronously when the customer's browser lands — uses `stripe.checkout.Session.retrieve()` to verify `payment_status == 'paid'` then calls `pr.set_as_paid()`. Idempotent: webhook also fires async, second path no-ops.
 - **Webhook handler shipped** at `apps/locally_twisted/locally_twisted/payments/stripe_webhook.py`. Signature-verified, reads secret from `frappe.conf.get('stripe_webhook_signing_secret')` (which lives in `site_config.json`, not in a doctype). Currently dormant (success-page reconciliation handles the demo flow); ready for production where it's the safety net for browser-closed-before-redirect.
-- **`/checkout` page got two-column layout with persistent right-side order summary** (item thumbnail + name + qty + line total + grand total + "Secure payment — payment is processed by Stripe" notice). On mobile, summary stacks above form. Matches the legacy_source `/shop/cart`/`/shop/address` pattern GL referenced.
+- **`/checkout` page got two-column layout with persistent right-side order summary** (item thumbnail + name + qty + line total + grand total + "Secure payment — payment is processed by Stripe" notice). On mobile, summary stacks above form. Matches the catalog_data `/shop/cart`/`/shop/address` pattern GL referenced.
 - **Agency-tier decision logged + kitchen note dropped** at `Built_by_Cameron/built-by-cameron-decisions.md` (per-client Stripe accounts; Charges API forbidden for new builds; webhook secrets in `site_config.json`) and `Built_by_Cameron/capabilities/kitchen/2026-04-29-stripe-checkout-sessions-for-frappe.md` (full pattern). Promote kitchen note to recipe when client #2 adopts.
 - **Local dev webhook listener pattern:** `stripe listen --api-key "$STRIPE_TEST_SECRET_KEY" --forward-to <url>` bypasses `stripe login` 2FA when client account isn't accessible. Stripe CLI's stored auth (`stripe config --list`) is a separate context from ERPNext's runtime auth (Stripe Settings doctype, populated from `.env`).
 - **NOT verified by GL with a real `4242` card.** All my checks were curl + Playwright + simulated session_id. The actual customer flow — fill form → land on Stripe's page → submit `4242` → land on `/thank-you` → SO marked Paid in desk — is GL's first task on resume.
@@ -362,7 +371,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Competitor survey** at `_resources/competitor-survey-2026-04-26.md` — 9 verified live competitor sites (4 balloon decor + 3 wedding florists + 1 mixed + 1 enterprise tier). Five patterns observed across all 9: every custom-decor offering uses inquiry/quote, never configurator; portfolio is a nav item not a homepage feature; shops are sidebars; "Inquire" beats "Buy" above ~$30; social proof tier matches business tier. The survey is the receipt for the lookbook-forward decision.
 - **ROADMAP.md and PLAN.md updated** to reflect the site shape and the slice reorder. `/book` moved from Phase 2 → Phase 1 (Slice 10) since the lookbook-forward shape requires the inquiry conversion path live in Phase 1. Phase 2 reframed to "form-handling depth" (Contact dedup, ack email, loud-failure audit, monitor alerts).
 - **About snippet removed** from homepage. Defer until Jeff is ready (per GL).
-- **5 real photos copied** from `locally-twisted-legacy_source/assets/image assets/photos for website/` (and `balloon twisting pics/`) to `apps/locally_twisted/locally_twisted/public/images/home/`: hero (Celebrate backdrop), featured-arches (Knight & Dragon), featured-garlands (Celebrate organic arch), featured-corporate (Logo arch), twisting (Twisting photo).
+- **5 real photos copied** from `external-catalog-data/assets/image assets/photos for website/` (and `balloon twisting pics/`) to `apps/locally_twisted/locally_twisted/public/images/home/`: hero (Celebrate backdrop), featured-arches (Knight & Dragon), featured-garlands (Celebrate organic arch), featured-corporate (Logo arch), twisting (Twisting photo).
 - **Web Page record `locally-twisted` (route="home")** set to `published=0` — was the placeholder "Site under construction" content. Deactivating let the new `www/home.html` take precedence.
 - **Reviews wired into the carousel** — 19 real 5-star Google reviews verbatim from GL's paste, mix of birthday / wedding / corporate / ribbon-cutting / school / face-painting / Mother's Day / church-picnic / funeral-stand / longtime-client. Names, dates, event tags preserved. Verbatim including KJSCOTT's "Totally Twisted" typo (authenticity over correction).
 - **Carousel slowed to 270s** (was 90s → 180s → 270s after iterations) for the client logo crawl. Reviews carousel runs 360s.
@@ -381,7 +390,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 **Standing rules added/refined this session:**
 - Reviews carousel > client logo crawl as primary social proof. Words from real customers persuade more than corporate logos for high-touch event services.
 - `/contact` is the primary inquiry conversion path. Older `/book`-primary claims are stale; `/book` redirects to `/contact?intent=quick`.
-- Bouquets join the customizable categories list (6 total). Originally only 5 in the approved legacy_source XML; bouquets are also customizable in Jeff's actual business.
+- Bouquets join the customizable categories list (6 total). Originally only 5 in the approved catalog_data XML; bouquets are also customizable in Jeff's actual business.
 - About page deferred until Jeff is ready — no pressure.
 
 **Code/file changes this session:**
@@ -409,7 +418,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Platform direction RESOLVED.** Frappe-native confirmed by demonstration. Logged at `locally-twisted-decisions.md` 2026-04-26 (later, after Slice 2 + accessibility + contact build).
 
 **What's NOT done (next session candidates):**
-- Slice 3 (homepage) — content exists in legacy_source XML; meal applies cleanly
+- Slice 3 (homepage) — content exists in catalog_data XML; meal applies cleanly
 - Slice 6 remainder (`/refund-policy`, `/faq`) — small static portal pages; ~15 min each
 - Slice 7-9 (products + cart + checkout) — different shape than the meal; webshop-driven; needs Website Item seeding first
 - BTFP first-ship omissions: carousels, event-crawl, modal
@@ -445,24 +454,24 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 **What landed:**
 - **Webshop foundation locked.** Historical install path: `frappe/payments` + `frappe/webshop` were first cloned to `apps/`, bind-mounted in `pwd.yml` across 8 services, and gitignored. Current runtime supersedes that with the custom image; do not use `install_webshop.py` as a routine post-recreate step. Webshop public routes live (`/all-products` 200, `/cart` 301).
-- **legacy_source catalog exported.** 51 products / 47 with attributes / 48 with images. `_resources/legacy_source-export/catalog.json` + 48 image files. `export_legacy_source_catalog.py` is idempotent and re-runnable.
+- **catalog_data catalog exported.** 51 products / 47 with attributes / 48 with images. `_resources/catalog_data-export/catalog.json` + 48 image files. `export_catalog_data_catalog.py` is idempotent and re-runnable.
 - **Step 0 fully completed.** Stripped the broken navbar toggler block (lines 388-415 — used a `data:image/svg+xml;utf8,...` data URI that silently failed in real browsers). Replaced with a real SVG file at `apps/locally_twisted/locally_twisted/public/icons/menu.svg`. lt-theme.css now 608 lines (was 770). Two `!important` blocks intentionally retired this session.
 - **Jinja override path validated.** Two prior HANDOFFs claimed it would work; nobody had verified. This session: dropped one test file, confirmed it resolved in served HTML, removed the test. Slice 2 redo path is now unblocked architecturally (only relevant if GL's platform direction stays Frappe).
-- **Reproducible scripts.** `install_webshop.py`, `clear_website_cache.py`, `export_legacy_source_catalog.py`, `scripts/README.md`.
+- **Reproducible scripts.** `install_webshop.py`, `clear_website_cache.py`, `export_catalog_data_catalog.py`, `scripts/README.md`.
 - **Agency conventions doc substantially upgraded.** "System-native first" standing principle added at the top. Web Page DocType complete tab map (Script + Style + Page Builder + Context). Webshop module map for Slices 7-9. Webshop+payments install pattern with `--skip-assets`. "Verified against source — 2026-04-26" appendix.
 - **Full expedition completed.** 3 source-separated researchers (Web Scout / Docs & Standards / Ground Truth) → convergence analyst → devil's advocate → GL Proxy review → synthesis. Eight files in `research/expedition-frappe-theme/`.
 
 **What FAILED (be honest):**
 - **Landing page build.** Instance built with Page Builder + 4 default Web Templates + invented copy. Looked fine from DOM facts, broken in GL's actual browser, not mobile-responsive. Rolled back to "Site under construction" placeholder. Same anti-pattern as the prior Slice 2 failure: invent + band-aid + claim-done-off-DOM-facts.
 - **Slice 2 visual remains in the broken-honest state from the prior session.** Website Settings has data populated; visual is still Frappe's default styling. No Jinja partial overrides built (only the test override, which was removed).
-- **Catalog has not been seeded into ERPNext.** Data exists in `_resources/legacy_source-export/`; no Item / Item Group / Website Item records exist on the LT site yet.
+- **Catalog has not been seeded into ERPNext.** Data exists in `_resources/catalog_data-export/`; no Item / Item Group / Website Item records exist on the LT site yet.
 - **Mock comparison of pills vs swatches not built.** Deferred until platform direction resolves.
 
 **Key decision OPEN at session end (load-bearing):**
 - **Platform direction.** Stay on Frappe (custom Jinja + custom CSS) OR put a different front door (WordPress / Webflow / Next.js + Medusa/Saleor) on it with ERPNext quietly running the back office. The expedition synthesis is the briefing. GL is collecting more information before deciding — they want to compare Vercel Commerce demo + Frappe Builder + Webflow templates side by side first. See `research/expedition-frappe-theme/synthesis.md`.
 
 **Standing rules added this session (in `locally-twisted-decisions.md`):**
-- All customer-facing copy comes from the legacy_source XML or live locallytwisted.com — NEVER invented.
+- All customer-facing copy comes from the catalog_data XML or live locallytwisted.com — NEVER invented.
 - GL's eyes on the actual page > any DOM fact extraction.
 - Per-page interactivity belongs in the Web Page DocType's Script/Style tabs, not in custom Web Templates.
 - "System-native first" is the agency-tier rule for all BBC clients on Frappe (codified in agency conventions doc).
@@ -472,11 +481,11 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - New: `apps/locally_twisted/locally_twisted/templates/includes/footer/` (directory; empty after test removal)
 - New: `apps/locally_twisted/locally_twisted/public/icons/menu.svg`
 - New: `scripts/setup/install_webshop.py`
-- New: `scripts/setup/export_legacy_source_catalog.py`
+- New: `scripts/setup/export_catalog_data_catalog.py`
 - New: `scripts/dev/clear_website_cache.py`
 - New: `scripts/README.md`
 - New: `_resources/website-page-index.md` (v2 — note: tier classifications assume Frappe path; partially invalidated if GL's platform direction goes elsewhere)
-- New: `_resources/legacy_source-export/catalog.json` + `_resources/legacy_source-export/images/` (48 PNGs)
+- New: `_resources/catalog_data-export/catalog.json` + `_resources/catalog_data-export/images/` (48 PNGs)
 - New: `research/expedition-frappe-theme/` (8 files)
 - New: `apps/payments/` + `apps/webshop/` (bind-mounted; gitignored)
 - Modified: `pwd.yml` (added bind-mounts for payments + webshop in all 8 services)
@@ -517,7 +526,7 @@ This session produced more documentation than working code, by design. The insta
 - Custom Frappe app `locally_twisted` scaffolded via `bench new-app` inside the backend container, copied to host at `apps/locally_twisted/`, and bind-mounted into 8 frappe-image services via `pwd.yml` (so future edits flow through and survive container recreations).
 - App installed on the LT site (`bench --site frontend install-app locally_twisted`).
 - Theme CSS migrated from `Website Settings.head_html` (push-via-API anti-pattern) to a real bundled asset at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css`, registered via `web_include_css` in app's `hooks.py`.
-- LT logo PNG copied from legacy_source source to `apps/locally_twisted/locally_twisted/public/icons/lt-logo.png` and wired via `Website Settings.brand_html`.
+- LT logo PNG copied from catalog_data source to `apps/locally_twisted/locally_twisted/public/icons/lt-logo.png` and wired via `Website Settings.brand_html`.
 - Social icons converted from inline-HTML SVGs (Frappe's HTML sanitizer was stripping `<path d=...>` attributes) to real SVG files in `apps/locally_twisted/locally_twisted/public/icons/{instagram,facebook,pinterest,twitter}.svg` referenced via CSS background-image.
 - Removed redundant `_resources/lt-theme.css` source-of-truth file; canonical is now the file in the app.
 - Updated `scripts/setup/setup_slice2_header_footer.py` to no longer push CSS to head_html (CSS is now served by the app).
@@ -530,7 +539,7 @@ This session produced more documentation than working code, by design. The insta
 - `Built_by_Cameron/lessons-learned.md` — cross-client Frappe gotchas with a generalizable "study the source first" rule.
 - `Built_by_Cameron/capabilities/recipes/frappe-conventions.md` — agency-tier reference for Frappe v15 customization primitives, the right way to override theme CSS / navbar / footer / pages, and the v15 ecommerce surprise.
 - `_CLIENTS/locally-twisted/CLAUDE.md` + `Built_by_Cameron/CLAUDE.md` — added "Stack & code conventions" blocks pointing at the conventions reference.
-- `<memory>/jeff_trust_and_phase_1_demo_stakes.md` — project memory: Jeff knows about the legacy_source attempt and lived its struggles; what he doesn't know is the full platform pivot to ERPNext.
+- `<memory>/jeff_trust_and_phase_1_demo_stakes.md` — project memory: Jeff knows about the catalog_data attempt and lived its struggles; what he doesn't know is the full platform pivot to ERPNext.
 
 **Decisions logged (in `locally-twisted-decisions.md`):**
 - Custom Frappe app scaffolding moved from "deferred until critical mass" to "active build" status. Only Frappe Cloud cutover stays deferred until Phase 6.
@@ -539,13 +548,13 @@ This session produced more documentation than working code, by design. The insta
 
 **Known broken at session end:**
 - Historical Slice 2 footer bug: footer brand block / social icons / address / copyright bar rendered outside the painted footer area due to `.web-footer`'s computed height being constrained to ~305 px. Root cause was not identified in that session; current footer treatment is governed by `_resources/STYLE-GUIDE.md`.
-- Approved legacy_source structure (two-tier centered-logo header, 3-column footer, 3 social icons, hours block, etc.) substantively differs from what's currently wired up.
+- Approved catalog_data structure (two-tier centered-logo header, 3-column footer, 3 social icons, hours block, etc.) substantively differs from what's currently wired up.
 
 ### 2026-04-26 (late) — Phase 1 Slice 1 done; reframe complete; image set generated
 
-- Project reframed from "legacy_source → ERPNext migration" to "First professional business platform for LT, built on ERPNext" (PROJECT.md, ROADMAP.md, HANDOFF.md, STATE.md, queue, decisions log, all corresponding sections of CLAUDE.md updated)
-- Reference Disposition section added to CLAUDE.md — legacy_source dir, Hetzner deployment, GitHub legacy_source repo, current `locallytwisted.com` all documented as temporary references that will be retired
-- Resources brought into the project from the legacy_source dir + scrubbed of platform-specific references: `_resources/STYLE-GUIDE.md`, `_resources/utah-tax-rates-2026q2.md`, `_resources/policies/` (6 files including the legal interview answers from Jeff's contract-design sessions)
+- Project reframed from "catalog_data → ERPNext migration" to "First professional business platform for LT, built on ERPNext" (PROJECT.md, ROADMAP.md, HANDOFF.md, STATE.md, queue, decisions log, all corresponding sections of CLAUDE.md updated)
+- Reference Disposition section added to CLAUDE.md — catalog_data dir, current import capture deployment, GitHub catalog_data repo, current `locallytwisted.com` all documented as temporary references that will be retired
+- Resources brought into the project from the catalog_data dir + scrubbed of platform-specific references: `_resources/STYLE-GUIDE.md`, `_resources/utah-tax-rates-2026q2.md`, `_resources/policies/` (6 files including the legal interview answers from Jeff's contract-design sessions)
 - **Phase 1 Slice 1 — brand foundation — DONE, later superseded.** LT theme CSS installed the first full design system. Current active CSS uses the 2026-05-05 Cormorant Garamond + Lato and Civic Celebration + Slate Blue/Berry + Brand Direction reset instead of this original Slice 1 font/palette contract.
 - All Phase 1 decision gates resolved (header nav B, accessibility B, blog yes, photography placeholders, customer-inquiry email = locallytwisted@gmail.com, pricing calc embedded in BTFP page)
 - 15 brand-aligned placeholder images generated via Together API FLUX.1-schnell (~$0.05). Mapped slot → file → use in `_resources/images/INDEX.md`
@@ -567,4 +576,4 @@ This session produced more documentation than working code, by design. The insta
 
 - Installed LT ERPNext at `:8081` (compose project `locally-twisted-erpnext-v15`, frappe_docker pwd.yml pinned to v15.105.0)
 - LT Company record seeded with real address, phone, email, website
-- Off-legacy_source expedition findings reviewed (5-researcher convergence; ERPNext recommended)
+- Off-catalog_data expedition findings reviewed (5-researcher convergence; ERPNext recommended)

@@ -1,7 +1,7 @@
 {
   "approved": true,
   "approved_at": "2026-05-17T21:27:00Z",
-  "approval_text": "EVERY PRODUCT THAT WAS IMPORTED FROM legacy_source IS A PRODUCT. REIMPORT ALL PRODUCTS AS SELLABLE PRODUCTS",
+  "approval_text": "EVERY PRODUCT THAT WAS IMPORTED FROM catalog_data IS A PRODUCT. REIMPORT ALL PRODUCTS AS SELLABLE PRODUCTS",
   "approved_by": "user via Codex",
   "scope": "local_erpnext_container_site_frontend",
   "site": "frontend",
@@ -10,5 +10,5 @@
   "included_products": 53,
   "excluded_products": 0,
   "explicit_excluded_slugs": [],
-  "business_rule": "Every legacy_source-imported product is a product and should target sellable checkout behavior; no product is intentionally quote-first."
+  "business_rule": "Every catalog_data-imported product is a product and should target sellable checkout behavior; no product is intentionally quote-first."
 }

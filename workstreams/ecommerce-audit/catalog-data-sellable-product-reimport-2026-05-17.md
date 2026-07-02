@@ -1,18 +1,18 @@
-# legacy_source Sellable Product Reimport - 2026-05-17
+# catalog_data Sellable Product Reimport - 2026-05-17
 
 ## Purpose
 
 Closeout handoff for the local-only correction that treats every
-legacy_source-imported Locally Twisted product as a sellable product target.
+catalog_data-imported Locally Twisted product as a sellable product target.
 
 This is not a live-release approval. Local ecommerce was temporarily opened
 only for proof and then restored to `lt_ecommerce_paused=1`.
 
 ## Owner Correction
 
-GL corrected the model: every product imported from legacy_source is a product. There
+GL corrected the model: every product imported from catalog_data is a product. There
 are no business "quote-first products." If product detail or pricing is unclear,
-repair or repull the legacy_source source/import path instead of preserving a
+repair or repull the catalog_data source/import path instead of preserving a
 non-purchasable product category.
 
 Legacy `quote_first` wording may still exist where it names a stored field or
@@ -25,7 +25,7 @@ hold only. It is not a business lane.
   `owner-blueprint-smoke-20260517-101250` and
   `release-proof-complex-product-1779036020`.
 - Created clean local snapshot:
-  `audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-17-2132-clean-legacy_source-products/`.
+  `audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-17-2132-clean-catalog-products/`.
 - Took fresh local Frappe backups before destructive local reimport:
   `20260517_153250-frontend-database.sql.gz` and
   `20260517_160858-frontend-database.sql.gz`.
@@ -36,7 +36,7 @@ hold only. It is not a business lane.
   and making `seed_catalog.py` prefer approved sale-unit enrichment before
   scraped page-level fallback prices.
 - Follow-up 2026-05-19: GL caught that this was still too narrow. Easter Bunny
-  Ear Arch `20ft` and `25ft` still shared the same local price even though legacy_source
+  Ear Arch `20ft` and `25ft` still shared the same local price even though catalog_data
   charged `$375` and `$440`. Treat the reimport proof's price claims as
   superseded by the price-identity incident lane:
   `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`.
@@ -59,7 +59,7 @@ hold only. It is not a business lane.
   valid runtime state.
 - `product_page_labels.py`: operator labels now frame complex pages as
   configurable product pages and `quote_first` as an internal hold.
-- `catalog_import_subset.py`: no owner-excluded legacy_source product slugs.
+- `catalog_import_subset.py`: no owner-excluded catalog_data product slugs.
 - `seed/seed_catalog.py` and `scripts/setup/stage_seed_data.py`: stage and use
   price enrichment for sale-unit prices during import; `seed_catalog.py` now
   also runs the optional-add-on variant repair and school/seasonal color-preset
@@ -86,7 +86,7 @@ hold only. It is not a business lane.
 Backend/source gates passed locally:
 
 - `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
-- `python scripts/verify/v1_legacy_source_erpnext_import_manifest.py`
+- `python scripts/verify/post_import_catalog_state_contract.py`
 - `python scripts/verify/catalog_purge_scope_dry_run.py`
 - `python scripts/verify/product_source_repair_map.py`
 - `python scripts/verify/complex_checkout_scaffold.py`
@@ -115,7 +115,7 @@ Safety proof:
 ## Current State
 
 - Published local Website Items: 53.
-- legacy_source-imported product exclusions: 0.
+- catalog_data-imported product exclusions: 0.
 - Import manifest sale units: 290.
 - Import readiness blockers: 0.
 - Product-page architecture: all 53 imported rows remain products, but checkout

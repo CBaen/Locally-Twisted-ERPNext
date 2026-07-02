@@ -6,17 +6,17 @@
 
 ---
 
-**FLAG 1 — The legacy_source server conflict is unresolved and the catalog images are probably already broken (CRITICAL)**
+**FLAG 1 — The catalog_data server conflict is unresolved and the catalog images are probably already broken (CRITICAL)**
 
-The Convergence (D1) identifies that Web Scout got ECONNREFUSED on `http://5.78.136.133/` while Ground Truth saw the local Docker legacy_source container running. These are two different instances of legacy_source. The convergence calls this "resolved" by naming the distinction, but the practical consequence is NOT resolved: the `catalog.json` image URLs are Hetzner-pointing (`http://5.78.136.133/web/image/product.product/{id}/image_1920?...`). If the Hetzner server is down (as Web Scout found), those 48 image URLs are already 404. Ground Truth flags this in S5 and recommends export-before-decommission, but nobody verified whether the images are currently fetchable. Before any instance declares the catalog usable, someone needs to run one test fetch against an image URL in catalog.json. If the Hetzner server is truly down, product images need to be recovered from the local legacy_source Docker stack before it is decommissioned. This is time-sensitive. If this window closes, 48 product images are gone.
+The Convergence (D1) identifies that Web Scout got ECONNREFUSED on `` while Ground Truth saw the local Docker catalog_data container running. These are two different instances of catalog_data. The convergence calls this "resolved" by naming the distinction, but the practical consequence is NOT resolved: the `catalog.json` image URLs are current import capture-pointing (`web/image/product.product/{id}/image_1920?...`). If the current import capture server is down (as Web Scout found), those 48 image URLs are already 404. Ground Truth flags this in S5 and recommends export-before-decommission, but nobody verified whether the images are currently fetchable. Before any instance declares the catalog usable, someone needs to run one test fetch against an image URL in catalog.json. If the current import capture server is truly down, product images need to be recovered from the local catalog_data Docker stack before it is decommissioned. This is time-sensitive. If this window closes, 48 product images are gone.
 
-**Action needed:** Fetch one catalog image URL against the Hetzner address. If 404, pivot to fetching all 48 images from the local Docker legacy_source stack immediately, before that stack is taken down.
+**Action needed:** Fetch one catalog image URL against the current import capture address. If 404, pivot to fetching all 48 images from the local Docker catalog_data stack immediately, before that stack is taken down.
 
 ---
 
 **FLAG 2 — The founding year discrepancy is stated as resolved but the source of truth decision was not verified with GL**
 
-Convergence "Approved Content" section states: "The founding year has a discrepancy: locallytwisted.com says 'Over 22 years' (≈ 2002 founding). legacy_source XML says 'since 1998' (28 years). The CLAUDE.md project brief confirms '27-year-old Utah balloon decor business' which corroborates 1998."
+Convergence "Approved Content" section states: "The founding year has a discrepancy: locallytwisted.com says 'Over 22 years' (≈ 2002 founding). catalog_data XML says 'since 1998' (28 years). The CLAUDE.md project brief confirms '27-year-old Utah balloon decor business' which corroborates 1998."
 
 This is correctly resolved for the new build (use 1998). However: "22 years" on the live site is not wrong — it appears stale relative to the current date. The resolution relies on the CLAUDE.md brief, which was written based on information from GL. It is not a GL-confirmed correction in this session. Given that GL has ADHD and this is the kind of detail that can absorb incorrectly at speed, the year 1998 should be confirmed once with GL before it goes live on a public page. This is low priority but non-zero risk.
 
@@ -24,7 +24,7 @@ This is correctly resolved for the new build (use 1998). However: "22 years" on 
 
 **FLAG 3 — The Twitter social icon conflict is marked "requires GL clarification" but is treated as resolved by the Convergence**
 
-Convergence D2 correctly names the conflict: locallytwisted.com shows 4 icons (including Twitter); legacy_source XML shows 3 (no Twitter). The Convergence recommends using 3 icons per the legacy_source XML and then adds "Verify with GL." The recommendation is reasonable, but the resolution is not complete until GL actually confirms it. This one is specifically sensitive because: (a) the prior setup script erroneously added Twitter and this is known; (b) GL would need to know that choice was made. Neither is blocking work but both should surface in the report to GL before the footer gets built.
+Convergence D2 correctly names the conflict: locallytwisted.com shows 4 icons (including Twitter); catalog_data XML shows 3 (no Twitter). The Convergence recommends using 3 icons per the catalog_data XML and then adds "Verify with GL." The recommendation is reasonable, but the resolution is not complete until GL actually confirms it. This one is specifically sensitive because: (a) the prior setup script erroneously added Twitter and this is known; (b) GL would need to know that choice was made. Neither is blocking work but both should surface in the report to GL before the footer gets built.
 
 ---
 
@@ -74,11 +74,11 @@ Before this expedition output reaches GL as "here's the plan," the platform ques
 
 **FLAG 7 — The "approved content" source-of-truth question appears resolved but has a live ambiguity the instance needs to confirm**
 
-CLAUDE.md states the legacy_source XML is the canonical source for the new build. The convergence correctly applies this. However: the legacy_source XML category URLs contain legacy_source numeric IDs (`/shop/category/balloon-arches-27`, `/shop/category/organic-garlands-31`, etc.) that will not match ERPNext Item Group routes. The client crawl works. The hero copy works. The trust bar works. But the category circles and any product-linked content require mapping legacy_source slugs → ERPNext Item Group names before the content is "ready to use."
+CLAUDE.md states the catalog_data XML is the canonical source for the new build. The convergence correctly applies this. However: the catalog_data XML category URLs contain catalog_data numeric IDs (`/shop/category/balloon-arches-27`, `/shop/category/organic-garlands-31`, etc.) that will not match ERPNext Item Group routes. The client crawl works. The hero copy works. The trust bar works. But the category circles and any product-linked content require mapping catalog_data slugs → ERPNext Item Group names before the content is "ready to use."
 
-Ground Truth surfaces this but it does not appear in the convergence recommendations as a pre-build step. The next instance may treat "content is ready from legacy_source XML" as meaning everything is plug-and-play, when the links within category-touching content need a translation pass first.
+Ground Truth surfaces this but it does not appear in the convergence recommendations as a pre-build step. The next instance may treat "content is ready from catalog_data XML" as meaning everything is plug-and-play, when the links within category-touching content need a translation pass first.
 
-**Action needed:** Before using legacy_source XML category content, map legacy_source category slugs to their corresponding ERPNext Item Group routes. This is probably a 15-minute exercise once Item Groups are configured, but it is not trivial and should not be assumed done.
+**Action needed:** Before using catalog_data XML category content, map catalog_data category slugs to their corresponding ERPNext Item Group routes. This is probably a 15-minute exercise once Item Groups are configured, but it is not trivial and should not be assumed done.
 
 ---
 
@@ -135,7 +135,7 @@ The recommended action is one decision: before the next build session starts, le
 
 **Priority order for the instance:**
 
-1. Flag 1 — verify catalog image URLs against Hetzner; if down, export images from local legacy_source Docker now
+1. Flag 1 — verify catalog image URLs against current import capture; if down, export images from local catalog_data Docker now
 2. Flag 4 — Step 0: strip lt-theme.css lines 388-415; verify in Playwright at 375px before any other visible work
 3. Flag 5 — test the Jinja override path with a minimal file before building the full footer
 4. Flag 6 — surface platform direction question to GL as a clear choice (not buried in research docs)

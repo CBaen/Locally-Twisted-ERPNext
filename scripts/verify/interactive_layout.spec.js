@@ -9,7 +9,7 @@ const {
 	expectNoLayoutFailures,
 } = require("./layout_helpers");
 
-const PLATFORM_WORDS = /\b(?:ERPNext|Frappe|legacy_source)\b/i;
+const PLATFORM_WORDS = /\b(?:ERPNext|Frappe|catalog_data)\b/i;
 const DESK_USER = process.env.LT_DESK_TEST_USER;
 const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
 

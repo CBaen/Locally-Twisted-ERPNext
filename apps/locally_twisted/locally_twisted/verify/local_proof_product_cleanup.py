@@ -1,7 +1,7 @@
 """Remove known local-only proof products from the ERPNext catalog.
 
 This is intentionally narrow. It is for cleaning verifier-created products that
-are not part of the legacy_source source catalog before catalog import/reimport proof.
+are not part of the catalog_data source catalog before catalog import/reimport proof.
 """
 from __future__ import annotations
 

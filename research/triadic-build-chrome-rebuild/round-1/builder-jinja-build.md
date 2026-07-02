@@ -6,12 +6,12 @@
 
 ### Tasks Completed
 
-#### Task 1 — Replace `navbar.html` with Hetzner-faithful 3-mega-menu structure
+#### Task 1 — Replace `navbar.html` with current import capture-faithful 3-mega-menu structure
 
 - **Files Changed:**
   - `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html` — full replacement (384 lines → ~290 lines of clean Jinja; the prior 140 lines of inline `<style>` + `<script>` are gone)
 
-- **Approach:** Wholesale replacement of the prior single-flat-Shop-mega-menu template with a two-tier desktop nav (utility bar + primary nav row with 3 mega menus) and a mobile single-row + offcanvas drawer. All legacy_source `data-bs-*` attributes replaced with custom `data-lt-megamenu-trigger` / `data-lt-accordion-trigger` data attributes per the API contract. No inline `<style>` or `<script>` blocks; both removed as required by Build Brief §Hard Constraints 4+5. Inline SVG path data used only in template files (not CMS fields) for caret icons — all other icons reference external `.svg` files via `<img src>`.
+- **Approach:** Wholesale replacement of the prior single-flat-Shop-mega-menu template with a two-tier desktop nav (utility bar + primary nav row with 3 mega menus) and a mobile single-row + offcanvas drawer. All catalog_data `data-bs-*` attributes replaced with custom `data-lt-megamenu-trigger` / `data-lt-accordion-trigger` data attributes per the API contract. No inline `<style>` or `<script>` blocks; both removed as required by Build Brief §Hard Constraints 4+5. Inline SVG path data used only in template files (not CMS fields) for caret icons — all other icons reference external `.svg` files via `<img src>`.
 
 - **New Interfaces exposed to Builder JS:**
   - Desktop mega triggers: `<button data-lt-megamenu-trigger="<panel-id>" aria-expanded="false" aria-controls="<panel-id>">` — three triggers, panel IDs: `lt-mega-special-occasions`, `lt-mega-holidays-seasons`, `lt-mega-what-we-make`
@@ -22,12 +22,12 @@
   - Cart badges: `<span class="lt-cart-count">` (desktop, inside `.lt-utility-bar__cart`) and `<span class="lt-cart-count lt-cart-count--mobile">` (mobile, inside `.lt-header__mobile-cart`) — `lt-guest-cart.js` targets `.lt-cart-count` via `querySelectorAll`, both instances will be updated by existing JS
 
 
-#### Task 2 — Replace `footer.html` with Hetzner structure + newsletter strip
+#### Task 2 — Replace `footer.html` with current import capture structure + newsletter strip
 
 - **Files Changed:**
   - `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` — full replacement (101 lines → ~160 lines)
 
-- **Approach:** Added newsletter strip as Section 1 (was entirely absent from prior footer). Preserved existing brand band + social icons + 3-column links + legal bar structure. Changed column classes from `col-4` (always-3-across) to `col-12 col-md-4` (stacks on mobile, 3-across at md+) per Build Brief direction to default to Hetzner-faithful layout. Renamed legacy_source `s_lt_*` class names to `lt-footer__*` BEM namespace. Switched "Get In Touch" icons from Unicode emoji to FontAwesome classes (`fa-map-marker`, `fa-phone`, `fa-clock-o`) matching Hetzner source. Updated footer Shop column links: "Special Occasions" → `/shop/category/special-occasions-1`, "Holidays & Seasons" → `/shop/category/holidays-seasons-2`, "What We Make" → `/{{ shop_root_route }}` (live ERPNext route). Loud-failure rule honored: error container includes phone fallback `(801) 285-0860`.
+- **Approach:** Added newsletter strip as Section 1 (was entirely absent from prior footer). Preserved existing brand band + social icons + 3-column links + legal bar structure. Changed column classes from `col-4` (always-3-across) to `col-12 col-md-4` (stacks on mobile, 3-across at md+) per Build Brief direction to default to current import capture-faithful layout. Renamed catalog_data `s_lt_*` class names to `lt-footer__*` BEM namespace. Switched "Get In Touch" icons from Unicode emoji to FontAwesome classes (`fa-map-marker`, `fa-phone`, `fa-clock-o`) matching current import capture source. Updated footer Shop column links: "Special Occasions" → `/shop/category/special-occasions-1`, "Holidays & Seasons" → `/shop/category/holidays-seasons-2`, "What We Make" → `/{{ shop_root_route }}` (live ERPNext route). Loud-failure rule honored: error container includes phone fallback `(801) 285-0860`.
 
 - **New Interfaces exposed to Builder JS:**
   - `<form data-lt-newsletter novalidate>` — JS reads this to wire the submit handler
@@ -164,19 +164,19 @@ Footer chrome BEM blocks:
 
 ### Decisions Made
 
-1. **Search: `/search` fallback route used.** Hetzner used `data-bs-target="#o_search_modal"` (legacy_source's modal). ERPNext has no equivalent modal wired by default. The desktop search button links to `/search` (Frappe's built-in search route). Mobile drawer has an inline search form posting to `/search`. This degrades gracefully — if no search page is wired, it 404s, but at least no JS error. Builder JS can upgrade the desktop button to open a modal later if wired. Documented in build report rather than silently omitting search.
+1. **Search: `/search` fallback route used.** current import capture used `data-bs-target="#o_search_modal"` (catalog_data's modal). ERPNext has no equivalent modal wired by default. The desktop search button links to `/search` (Frappe's built-in search route). Mobile drawer has an inline search form posting to `/search`. This degrades gracefully — if no search page is wired, it 404s, but at least no JS error. Builder JS can upgrade the desktop button to open a modal later if wired. Documented in build report rather than silently omitting search.
 
-2. **Footer Shop links: legacy_source category slugs retained.** The footer "Special Occasions" and "Holidays & Seasons" links point to `/shop/category/special-occasions-1` and `/shop/category/holidays-seasons-2` (legacy_source-style slugs). These are content-only routes in ERPNext — they will 404 until Phase 2 redirects are added. "What We Make" uses the live ERPNext `shop_root_route`. This matches the Hetzner footer links verbatim and is flagged for Phase 2.
+2. **Footer Shop links: catalog_data category slugs retained.** The footer "Special Occasions" and "Holidays & Seasons" links point to `/shop/category/special-occasions-1` and `/shop/category/holidays-seasons-2` (catalog_data-style slugs). These are content-only routes in ERPNext — they will 404 until Phase 2 redirects are added. "What We Make" uses the live ERPNext `shop_root_route`. This matches the current import capture footer links verbatim and is flagged for Phase 2.
 
-3. **Column layout: `col-12 col-md-4` (stacks on mobile).** Prior footer used `col-4` (always 3-across). Build Brief defaulted to Hetzner-faithful stacking. GL may override to `col-4` after visual review.
+3. **Column layout: `col-12 col-md-4` (stacks on mobile).** Prior footer used `col-4` (always 3-across). Build Brief defaulted to current import capture-faithful stacking. GL may override to `col-4` after visual review.
 
-4. **`mega_what_we_make` column mapping to 3 groups.** Hetzner's What We Make panel had three columns: Arrangements (Arches, Columns, Centerpieces, Bouquets), Installations (Garlands, Backdrops, Drops, Grab N Go), Accents (Cups → mapped to Stands & Easels, Photo Frames, Table Decor → Table Decor, Deliveries). "Backdrops" has no ERPNext Item Group — mapped to `seasonal-specialty` (content-only, flagged). "Photo Frames" has no ERPNext equivalent — dropped from the Accents column; replaced with "Stands & Easels" which does exist.
+4. **`mega_what_we_make` column mapping to 3 groups.** current import capture's What We Make panel had three columns: Arrangements (Arches, Columns, Centerpieces, Bouquets), Installations (Garlands, Backdrops, Drops, Grab N Go), Accents (Cups → mapped to Stands & Easels, Photo Frames, Table Decor → Table Decor, Deliveries). "Backdrops" has no ERPNext Item Group — mapped to `seasonal-specialty` (content-only, flagged). "Photo Frames" has no ERPNext equivalent — dropped from the Accents column; replaced with "Stands & Easels" which does exist.
 
-5. **`mega_special_occasions` single column.** Hetzner's Special Occasions panel has only a single "Life Events" column. Maintained single-column layout in the Jinja template. The panel renders at `col-lg-4 text-center`.
+5. **`mega_special_occasions` single column.** current import capture's Special Occasions panel has only a single "Life Events" column. Maintained single-column layout in the Jinja template. The panel renders at `col-lg-4 text-center`.
 
 6. **Mobile drawer: custom `<aside role="dialog">` pattern preserved.** The prior navbar used this pattern. Build Brief required it. NOT using Bootstrap's `offcanvas` component or `data-bs-toggle="offcanvas"` — all JS state management is deferred to Builder JS's `lt-megamenu.js`.
 
-7. **Footer "Get In Touch" icons: FontAwesome.** Prior footer used Unicode emoji (`📍`, `☎`, `🕒`). Hetzner uses FontAwesome (`fa-map-marker`, `fa-phone`, `fa-clock-o`). Switched to FontAwesome since it's available in Frappe's bundle and matches Hetzner's visual style. Builder CSS does not need to add icon fonts.
+7. **Footer "Get In Touch" icons: FontAwesome.** Prior footer used Unicode emoji (`📍`, `☎`, `🕒`). current import capture uses FontAwesome (`fa-map-marker`, `fa-phone`, `fa-clock-o`). Switched to FontAwesome since it's available in Frappe's bundle and matches current import capture's visual style. Builder CSS does not need to add icon fonts.
 
 8. **Inline SVG caret icons in template.** Build Brief says "no inline SVG with `<path d=...>` in any CMS-editable field." These carets are in Jinja template files, not CMS fields — convention still applied, but small inline carets in templates are acceptable per the Build Brief's parenthetical ("doesn't apply to template files but we keep the convention for portability"). Kept the carets inline because there are no SVG caret icon files in `public/icons/` to reference.
 
@@ -225,11 +225,11 @@ book 200
 
 2. **Desktop mega menus are also non-functional until Builder JS ships.** The `hidden` attribute is set on all three panels at render time. Without `lt-megamenu.js` toggling them, no mega menu opens on hover or click. Desktop nav link items (Balloon Twisting, Contact, Blog) work normally as they're plain `<a>` tags.
 
-3. **Footer Shop column `/shop/category/*` links will 404 in ERPNext.** These are legacy_source-style category routes. ERPNext's webshop uses `/shop-items/<slug>`. Phase 2 must add redirects or update the footer links to ERPNext-native routes.
+3. **Footer Shop column `/shop/category/*` links will 404 in ERPNext.** These are catalog_data-style category routes. ERPNext's webshop uses `/shop-items/<slug>`. Phase 2 must add redirects or update the footer links to ERPNext-native routes.
 
 4. **`mega_special_occasions` Birthday Parties, Graduations route to `seasonal-specialty` — not a dedicated category.** This is technically correct given the current ERPNext Item Group tree (no "Birthday Parties" group), but clicking "Birthday Parties" in the mega menu lands the user on a page showing all seasonal items. This is a Phase 2 content/category concern, not a chrome bug.
 
-5. **`mega_what_we_make` "Backdrops" maps to `seasonal-specialty`.** Hetzner has a Backdrops category. ERPNext does not. Flagged `content_only: True` in context — the link renders but destination is imprecise.
+5. **`mega_what_we_make` "Backdrops" maps to `seasonal-specialty`.** current import capture has a Backdrops category. ERPNext does not. Flagged `content_only: True` in context — the link renders but destination is imprecise.
 
 6. **Mobile drawer has no sign-in state for logged-in users beyond "My Account" link.** Prior navbar showed "Account" + "Sign Out" for logged-in users. This build shows only "My Account". Builder JS could add a logout button but that's outside Jinja domain; documented here.
 
@@ -237,6 +237,6 @@ book 200
 
 8. **`lt-cart-count` CSS is now missing.** The rules that made the badge display correctly (position absolute, red background, 18px height) were in the navbar's inline `<style>` block. That block is now removed. Until Builder CSS adds those rules to `lt-theme.css`, the cart badge will be invisible (display: none) even when `is-populated` is added by `lt-guest-cart.js`. This is the highest-priority cross-domain dependency for visual correctness. The exact rules are documented in the Cross-Domain Dependencies section above.
 
-9. **`navbar_context.py` `mega_what_we_make` "Centerpieces" → `table-decor`.** Hetzner's "Centerpieces" category maps to `what-we-make-centerpieces-28`. ERPNext has no "Centerpieces" Item Group. Mapped to "Table Decor" as the nearest equivalent. This is a label/route mismatch — the link says "Centerpieces" but lands on the Table Decor item group page. Phase 2 should either rename the Item Group or add a "Centerpieces" group.
+9. **`navbar_context.py` `mega_what_we_make` "Centerpieces" → `table-decor`.** current import capture's "Centerpieces" category maps to `what-we-make-centerpieces-28`. ERPNext has no "Centerpieces" Item Group. Mapped to "Table Decor" as the nearest equivalent. This is a label/route mismatch — the link says "Centerpieces" but lands on the Table Decor item group page. Phase 2 should either rename the Item Group or add a "Centerpieces" group.
 
 10. **No smoke test entry added for newsletter form.** Per `frappe-form-integrity` skill, a smoke test entry should be added to `scripts/verify/smoke_forms.py` for the newsletter form. This is Builder JS's domain (they own the API endpoint and the form wiring). Flagging here so it's not missed.

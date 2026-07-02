@@ -9,10 +9,10 @@ This is a business/customer/operator acceptance gate, not an implementation desi
 
 Evidence basis:
 
-- `workstreams/ecommerce-audit/README.md` says Lane B/C/D artifacts exist, but Lane A legacy_source source map and Lane E docs/action convergence are missing and must be `[NO EVIDENCE]`.
+- `workstreams/ecommerce-audit/README.md` says Lane B/C/D artifacts exist, but Lane A catalog_data source map and Lane E docs/action convergence are missing and must be `[NO EVIDENCE]`.
 - `workstreams/ecommerce-audit/erpnext-receiving-parity-matrix-2026-05-10.md` says the native receiving architecture preserves proof-slice meaning, but destructive import/reimport remains blocked by source audit/media/pricing/version gates.
 - `workstreams/ecommerce-audit/cart-checkout-intent-preservation-audit-2026-05-10.md` proves selected Unicorn Bouquet + foil-number and Classic Arch quote-first handoff paths, while noting all 53 published Website Items still store `needs_review` page/lane fields.
-- `workstreams/ecommerce-audit/native-frappe-product-template-architecture-2026-05-10.md` recommends a native ERPNext/Frappe contract layer, not legacy_source code copying.
+- `workstreams/ecommerce-audit/native-frappe-product-template-architecture-2026-05-10.md` recommends a native ERPNext/Frappe contract layer, not catalog_data code copying.
 - `audits/catalog-import-audit-2026-05-08/15-product-page-contract-source-audit.md` classifies 53 source products as 15 ready-to-order and 38 quote-first, but says destructive purge/import is blocked.
 - Add-on, media, and price packets show 4 review-only add-on axes, 95 unclassified extra images, and 273 price review units with 0 approved public prices in those packets.
 
@@ -112,31 +112,31 @@ An operator must be able to open records and understand the order/request withou
 
 ## Not-go-live blockers
 
-1. **Lane A legacy_source source map is missing** — no named artifact exists for refreshed legacy_source source product behavior, source axes, photos, option-changing photos, cart/quote behavior, and backend sales surfaces.
-2. **Lane E docs/action convergence is missing** — no named artifact reconciles legacy_source docs/source/admin surfaces with current agent action plan.
+1. **Lane A catalog_data source map is missing** — no named artifact exists for refreshed catalog_data source product behavior, source axes, photos, option-changing photos, cart/quote behavior, and backend sales surfaces.
+2. **Lane E docs/action convergence is missing** — no named artifact reconciles catalog_data docs/source/admin surfaces with current agent action plan.
 3. **All 53 published Website Items still stored `needs_review` page/lane fields in Lane C evidence** — runtime inference is not enough for go-live because Jeff/operator cannot verify product intent record-by-record.
 4. **Destructive purge/import is explicitly blocked** by the source audit: 53 products have blockers/warnings; warning buckets include `axis_needs_review: 9`, `color_axis_customization: 25`, `missing_resolver_prices: 49`, and `unclassified_gallery_images: 49`.
 5. **Price public approval is not complete** — price review packet has 273 review units and 0 approved public prices in that packet. Current checkout proof is useful, but not full-catalog price approval.
 6. **Media/gallery mapping is not complete** — 95 source extra images across 49 products are unclassified; approved parent-gallery images and assigned variant images in the packet are 0.
 7. **Add-ons beyond `foil_number` are not approved checkout features** — 4 review-only source add-on families affect 9 products and must stay quote-first unless GL/Jeff approve mapping, pricing, eligibility, media, and fulfillment behavior.
-8. **Version/source mismatch remains unresolved** — destination image label and legacy_source local/prod module version mismatch must be resolved or explicitly accepted before import claims.
+8. **Version/source mismatch remains unresolved** — destination image label and catalog_data local/prod module version mismatch must be resolved or explicitly accepted before import claims.
 9. **Aggregate architecture readiness had a Lane B live-mismatch/deadlock note** — direct contracts passed, but a clean aggregate run in the intended ecommerce mode is required before launch claims.
 10. **Finance/payment live cutover remains separate** — local checkout testing is not live Stripe, DNS, Frappe Cloud, bank/accounting, owner review, or production approval.
 
-## Questions legacy_source source mapping must answer
+## Questions catalog_data source mapping must answer
 
 Lane A must produce a named artifact that answers, product-by-product:
 
-1. What is the canonical legacy_source source product/template/variant identity, and which ERPNext Website Item should receive it?
+1. What is the canonical catalog_data source product/template/variant identity, and which ERPNext Website Item should receive it?
 2. Which choices are required variant axes, optional add-ons, color/customization prompts, backend-only fields, or source artifacts to drop?
 3. Which combinations are valid, invalid, or conditionally available?
 4. Which option changes should change product photos, and which photos are parent gallery/proof/reference only?
 5. Which products are safe ready-to-order checkout, and which must be quote-first?
-6. What is the price source for each sale unit: legacy_source resolver, legacy_source base/list price, live ERPNext snapshot, or human-approved override?
+6. What is the price source for each sale unit: catalog_data resolver, catalog_data base/list price, live ERPNext snapshot, or human-approved override?
 7. Which add-ons become priced checkout lines, included choices, quote-only prompts, separate bundle Items, inventory-managed SKUs, or removed options?
 8. What must appear on cart, quote, Sales Order, invoice, and fulfillment records for each product family?
-9. What did legacy_source show in product/sales/backend admin surfaces that ERPNext must preserve for Jeff/operator meaning?
-10. What source version controlled the answer: local legacy_source `19.0.2.15.0`, possible production `19.0.2.14.0`, live shop scrape, or GL/Jeff decision?
+9. What did catalog_data show in product/sales/backend admin surfaces that ERPNext must preserve for Jeff/operator meaning?
+10. What source version controlled the answer: local catalog_data `19.0.2.15.0`, possible production `19.0.2.14.0`, live shop scrape, or GL/Jeff decision?
 
 ## Decisions GL/Jeff must make before rebuild/purge
 
@@ -150,8 +150,8 @@ Lane A must produce a named artifact that answers, product-by-product:
 
 ## Concise actionable next steps
 
-1. **Rerun Lane A artifact-first** using legacy_source source/admin/product/sales surfaces; no writes, no code copying, no secrets.
-2. **Rerun Lane E artifact-first** to reconcile legacy_source source/docs/admin observations with ERPNext-native action plan.
+1. **Rerun Lane A artifact-first** using catalog_data source/admin/product/sales surfaces; no writes, no code copying, no secrets.
+2. **Rerun Lane E artifact-first** to reconcile catalog_data source/docs/admin observations with ERPNext-native action plan.
 3. **Create a single product-family acceptance matrix** with 53 rows: lane, required axes, add-ons, price status, media status, operator record requirements, blocker, decision owner.
 4. **Require saved ERPNext page/lane fields** for every published Website Item before go-live; no saved `needs_review` product may expose paid checkout.
 5. **Run a clean top-level architecture readiness gate** in the intended ecommerce mode after Lane A/E and product matrix updates.
@@ -163,13 +163,13 @@ Lane A must produce a named artifact that answers, product-by-product:
 ### What GL would not be able to verify unaided
 
 - Whether selected customer options survive into Sales Order/Invoice rows.
-- Whether current prices came from legacy_source resolver, ERPNext snapshot, or manual fallback.
+- Whether current prices came from catalog_data resolver, ERPNext snapshot, or manual fallback.
 - Whether source photos are variant-changing, parent-gallery, category/reference, or unsafe to show.
 - Whether an add-on is truly priced/fulfillable or just visually present.
 
 ### Bare claims or missing witnesses
 
-- Any statement that full legacy_source source parity is known while Lane A is missing.
+- Any statement that full catalog_data source parity is known while Lane A is missing.
 - Any statement that public product photos/galleries are complete while the media packet holds 95 unclassified images.
 - Any statement that full catalog pricing is approved while the price packet marks 273 review units and 0 approved public prices.
 - Any statement that product import/purge is safe while source audit says blocked for destructive purge/import.

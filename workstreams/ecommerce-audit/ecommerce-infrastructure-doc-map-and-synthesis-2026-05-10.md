@@ -4,13 +4,13 @@ D:2026-05-10 | Check:indexed memory + local artifact existence/readback + offici
 
 ## Why this exists
 
-GL corrected the lane: this is not a product-row conversation. The real launch blocker is infrastructure: whether ERPNext/Frappe can safely receive, preserve, reject, price, quote, order, invoice, and expose legacy_source-derived ecommerce meaning without silent loss.
+GL corrected the lane: this is not a product-row conversation. The real launch blocker is infrastructure: whether ERPNext/Frappe can safely receive, preserve, reject, price, quote, order, invoice, and expose catalog_data-derived ecommerce meaning without silent loss.
 
 This document is the clear map of the infrastructure docs already made, the plan that was supposed to guide the work, what each artifact is for, and what remains to research/prove before any launch/import/purge decision.
 
 ## The plan we were supposed to stay on
 
-Found in `workstreams/legacy_source-erpnext-ecommerce-parity-plan-deepen-2026-05-10.md`:
+Found in `workstreams/catalog_data-erpnext-ecommerce-parity-plan-deepen-2026-05-10.md`:
 
 > The audit must prove the receiving architecture, not the migration. A product is not "migrated" until ERPNext can preserve or intentionally reject every customer-facing and operator-facing unit of meaning that product can generate.
 
@@ -20,8 +20,8 @@ The plan's seven guardrails:
 2. Require durable named artifacts from every lane.
 3. Treat quote-first / hold / blocked outcomes as first-class success states, not hidden failures.
 4. Use cart, checkout, order, invoice, and operator records as the proof path, not just product pages.
-5. Do not copy legacy_source code or blindly reproduce legacy_source data-model quirks.
-6. Require exact legacy_source / ERPNext / Frappe / Webshop version evidence before version-sensitive claims.
+5. Do not copy catalog_data code or blindly reproduce catalog_data data-model quirks.
+6. Require exact catalog_data / ERPNext / Frappe / Webshop version evidence before version-sensitive claims.
 7. Keep product import and public launch blocked until synthesis names what is safe.
 
 This is the operating plan. Product rows are downstream evidence. Infrastructure proof is the main lane.
@@ -65,8 +65,8 @@ Therefore LT needs an owned receiving layer around ERPNext/Webshop:
 
 | Artifact | Status | Role | What it contributes |
 |---|---:|---|---|
-| `workstreams/legacy_source-erpnext-ecommerce-parity-research-brief.md` | present | Research brief | Defines the launch-blocker question: can native ERPNext/Frappe preserve product-page depth, add-ons, customer intent, operator meaning, pricing, media, cart/checkout, and backend records before deletion/reimport/public launch. |
-| `workstreams/legacy_source-erpnext-ecommerce-parity-plan-deepen-2026-05-10.md` | present | Stress-tested plan | The plan GL is asking us to recover: prove receiving architecture, not migration; require lane artifacts; make quote/hold/blocked first-class outcomes. |
+| `workstreams/catalog_data-erpnext-ecommerce-parity-research-brief.md` | present | Research brief | Defines the launch-blocker question: can native ERPNext/Frappe preserve product-page depth, add-ons, customer intent, operator meaning, pricing, media, cart/checkout, and backend records before deletion/reimport/public launch. |
+| `workstreams/catalog_data-erpnext-ecommerce-parity-plan-deepen-2026-05-10.md` | present | Stress-tested plan | The plan GL is asking us to recover: prove receiving architecture, not migration; require lane artifacts; make quote/hold/blocked first-class outcomes. |
 | `research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md` | present | Original infrastructure synthesis | Establishes the backend gap: ERPNext can sell concrete variants, but LT needs line-level configuration preservation and quote-first infrastructure. |
 | `workstreams/erpnext-ecommerce-receiving-architecture.md` | present | Running handoff / architecture ledger | Long-lived implementation/research handoff that records the prime directive, current slice, verified commands, remaining gaps, and immediate safe work. |
 | `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md` | present | Reusable capability/operating law | Encodes the rule: do not treat product transfer as the goal; every imported concept needs an ERPNext/custom destination, runtime owner, and verifier. |
@@ -107,8 +107,8 @@ Therefore LT needs an owned receiving layer around ERPNext/Webshop:
 
 | Artifact | Status | Role | What it contributes |
 |---|---:|---|---|
-| `workstreams/ecommerce-audit/legacy_source-source-commerce-map-2026-05-10.md` | present, parent-verified earlier | legacy_source source witness map | Maps legacy_source commerce meaning into ERPNext requirements. Use as source witness, not implementation source. |
-| `workstreams/ecommerce-audit/legacy_source-docs-agent-action-convergence-2026-05-10.md` | missing / `[NO EVIDENCE]` | Docs/observed convergence | Still missing. Needed to reconcile legacy_source docs, observed legacy_source behavior, ERPNext docs/current behavior, and agent actions. |
+| `workstreams/ecommerce-audit/catalog_data-source-commerce-map-2026-05-10.md` | present, parent-verified earlier | catalog_data source witness map | Maps catalog_data commerce meaning into ERPNext requirements. Use as source witness, not implementation source. |
+| `workstreams/ecommerce-audit/catalog_data-docs-agent-action-convergence-2026-05-10.md` | missing / `[NO EVIDENCE]` | Docs/observed convergence | Still missing. Needed to reconcile catalog_data docs, observed catalog_data behavior, ERPNext docs/current behavior, and agent actions. |
 
 ### G. Downstream-only product/source matrices
 
@@ -147,14 +147,14 @@ Therefore LT needs an owned receiving layer around ERPNext/Webshop:
 - `output/product-page-architecture-readiness-current.json` is an existing current-day artifact, not a fresh rerun from this moment.
 - A later fresh attempt to run `product_page_architecture_readiness.py` failed before report generation with `bench execute failed` after CSS parser messages. Do not claim fresh current architecture readiness until this is diagnosed and rerun cleanly.
 - Lane E remains `[NO EVIDENCE]` unless created.
-- legacy_source and destination version mismatches remain material:
+- catalog_data and destination version mismatches remain material:
   - destination runtime evidence includes ERPNext `15.105.0`, Frappe `15.106.0`, apps `payments`, `webshop`, `locally_twisted`, but image naming/version anchoring had mismatch risk;
-  - legacy_source source module local `19.0.2.15.0`, prior warning production DB may still be `19.0.2.14.0`.
+  - catalog_data source module local `19.0.2.15.0`, prior warning production DB may still be `19.0.2.14.0`.
 
 ## Infrastructure layers that must exist before any safe import/reopen claim
 
 1. **Source authority decision**
-   - Which legacy_source witness controls: local source, production DB, public page capture, export, or some reconciled bundle.
+   - Which catalog_data witness controls: local source, production DB, public page capture, export, or some reconciled bundle.
    - Version mismatch must be labeled or resolved.
 
 2. **Receiving staging register**
@@ -212,11 +212,11 @@ Diagnose the fresh `product_page_architecture_readiness.py` / `bench execute fai
 
 ### Stage 2 - Finish missing convergence lane
 
-Create or explicitly block `legacy_source-docs-agent-action-convergence-2026-05-10.md`. This should reconcile:
+Create or explicitly block `catalog_data-docs-agent-action-convergence-2026-05-10.md`. This should reconcile:
 
-- official legacy_source ecommerce docs/behavior model,
-- local legacy_source source witness,
-- public/captured legacy_source behavior where safe,
+- official catalog_data ecommerce docs/behavior model,
+- local catalog_data source witness,
+- public/captured catalog_data behavior where safe,
 - official ERPNext/Frappe docs,
 - current LT ERPNext runtime behavior,
 - discrepancy labels: `[DOCS-MISMATCH]`, `[SOURCE-MISMATCH]`, `[LIVE-MISMATCH]`, `[ERPNext-GAP]`, `[UNKNOWN]`.
@@ -248,8 +248,8 @@ Lane F must cite artifact paths per claim. Missing artifacts lower confidence or
 - “Products are ready” based on a matrix.
 - “Checkout works” based only on browser/cart display.
 - “ERPNext ecommerce works” without line-level SO/SI/Quotation evidence.
-- “legacy_source parity” as a goal.
-- Copying legacy_source code or schema without ERPNext destination ownership.
+- “catalog_data parity” as a goal.
+- Copying catalog_data code or schema without ERPNext destination ownership.
 - Treating live-snapshot prices as business-approved.
 - Treating unclassified media as gallery/variant-photo ready.
 - Treating quote-first placeholder `$0` records as customer pricing.

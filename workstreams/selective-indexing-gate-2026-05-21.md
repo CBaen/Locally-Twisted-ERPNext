@@ -125,7 +125,7 @@ Before Search Console submission:
 4. Run:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted.com'
+export LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```
 

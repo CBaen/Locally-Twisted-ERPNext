@@ -1,7 +1,7 @@
 {
   "affected_product_count": 9,
   "approved_for_checkout_count": 0,
-  "purpose": "Source-backed approval packet for legacy_source-derived add-on axes before ERPNext import/reopen.",
+  "purpose": "Source-backed approval packet for catalog_data-derived add-on axes before ERPNext import/reopen.",
   "review_axes": [
     {
       "approval_required_for_checkout": true,
@@ -20,7 +20,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "birthday-deliveries",
-          "source_url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+          "source_url": "shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
           "source_values": [
             "5 balloon bouquet",
             "7 balloon bouquet",
@@ -57,7 +57,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "premium-organic-arch",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+          "source_url": "shop/what-we-make-3/premium-organic-arch-53",
           "source_values": [
             "Foil stars",
             "themed foils"
@@ -75,7 +75,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "pemium-organic-column",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+          "source_url": "shop/what-we-make-3/pemium-organic-column-54",
           "source_values": [
             "Foil stars",
             "themed foils"
@@ -93,7 +93,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "classic-organic-arch",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+          "source_url": "shop/what-we-make-3/classic-organic-arch-99",
           "source_values": [
             "Foil stars",
             "themed foils",
@@ -130,7 +130,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "star-column",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+          "source_url": "shop/what-we-make-3/star-column-131",
           "source_values": [
             "Black/gold",
             "Blue Marble",
@@ -156,7 +156,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "marble-table-decor",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+          "source_url": "shop/what-we-make-3/marble-table-decor-140",
           "source_values": [
             "Black/gold",
             "Blue Marble",
@@ -207,7 +207,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "butterfly-get-well-bouquet-latex-free",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+          "source_url": "shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
           "source_values": [
             "Teddy Bear",
             "None"
@@ -225,7 +225,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "bandage-get-well-bouquet-latex-free",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+          "source_url": "shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
           "source_values": [
             "Teddy Bear",
             "None"
@@ -243,7 +243,7 @@
           "product_page_type": "complex_custom_product",
           "product_page_type_label": "Custom quote page",
           "slug": "shooting-star-get-well-bouquet-latex-free",
-          "source_url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+          "source_url": "shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
           "source_values": [
             "Teddy Bear",
             "None"

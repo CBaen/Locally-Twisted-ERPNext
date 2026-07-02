@@ -3,13 +3,13 @@
     "add_ons": "9 corrected V1 products have review-only add-on axes. Those add-on controls stay hidden until mapped; the products themselves remain sellable targets. Confirmed foil_number add-on remains available where eligible.",
     "media": "95 global extra image rows apply to corrected V1; 0 belong to products outside this generated subset. Primary images are source-backed and extras are held unless approved.",
     "price_review": "Corrected V1 prices are derived from source artifacts where possible. Resolution counts: {'source_price_ready': 290}. Excluded live-snapshot review units: 0.",
-    "source_contract": "Corrected V1 includes legacy_source-imported products as sellable product targets when source trace and backend schema are present. Warning counts inside V1: {'axis_needs_review': 9, 'color_axis_customization': 24, 'missing_resolver_prices': 49, 'unclassified_gallery_images': 49}."
+    "source_contract": "Corrected V1 includes catalog_data-imported products as sellable product targets when source trace and backend schema are present. Warning counts inside V1: {'axis_needs_review': 9, 'color_axis_customization': 24, 'missing_resolver_prices': 49, 'unclassified_gallery_images': 49}."
   },
   "destructive_allowed": false,
   "excluded_products": [],
   "generated_at": "2026-05-17T23:10:00Z",
   "next_command_sequence": [
-    "python scripts/verify/v1_legacy_source_erpnext_import_manifest.py",
+    "python scripts/verify/post_import_catalog_state_contract.py",
     "python scripts/verify/catalog_purge_scope_dry_run.py",
     "python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json",
     "python scripts/setup/stage_seed_data.py",
@@ -73,13 +73,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/14/image_1024/Baby%20Shower%20Combination%20Photo%20opt?unique=75652bd"
+            "url": "web/image/product.product/14/image_1024/Baby%20Shower%20Combination%20Photo%20opt?unique=75652bd"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/14/image_1920"
+        "primary_image_url": "web/image/product.template/14/image_1920"
       },
-      "legacy_source_id": 14,
+      "catalog_data_id": 14,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -127,7 +127,7 @@
       "slug": "baby-shower-combination-photo-opt",
       "source_name": "Baby Shower Combination Photo opt",
       "source_trace": {
-        "legacy_source_product_id": 14,
+        "catalog_data_product_id": 14,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -149,7 +149,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "14",
+          "catalog_data_product_id": "14",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "3f80b60e35fa5e3e5f61cfd1ba321c18cc5c9fd54aa3f93fc6a9fabb89275687",
@@ -160,7 +160,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14",
+        "source_url": "shop/what-we-make-3/baby-shower-combination-photo-opt-14",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "26513ea8e656111c59243b9f1bccf100cf2035efd2fc335376e66ffb7d7bffff",
@@ -278,7 +278,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14",
+      "source_url": "shop/what-we-make-3/baby-shower-combination-photo-opt-14",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -314,9 +314,9 @@
         "extra_image_decision": "hold_until_classified",
         "extra_images": [],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc"
+        "primary_image_url": "web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc"
       },
-      "legacy_source_id": 19,
+      "catalog_data_id": 19,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -406,7 +406,7 @@
       "slug": "classic-organic-balloon-garland",
       "source_name": "Classic Organic Balloon Garland",
       "source_trace": {
-        "legacy_source_product_id": 19,
+        "catalog_data_product_id": 19,
         "source_axis_hashes": [
           {
             "name": "Garland Length",
@@ -441,7 +441,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "19",
+          "catalog_data_product_id": "19",
           "source_declared_variant_count": 159,
           "source_valid_variant_count": 159,
           "valid_variant_hash": "f022aa310d42fee792ddad814157e6aadd8724663489c57cc4eabddefe8ab4b3",
@@ -454,7 +454,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19",
+        "source_url": "shop/what-we-make-3/classic-organic-balloon-garland-19",
         "source_variant_pointers": {
           "source_variant_count": 159,
           "source_variant_pointer_hash": "9c1c090379c64b40f8f937ed3a3f38bf9a3ef1b0ea86c84130717c10c0e43caa",
@@ -592,7 +592,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19",
+      "source_url": "shop/what-we-make-3/classic-organic-balloon-garland-19",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -630,13 +630,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/150/image_1024/Basketball%20Arch%20%2820ft%29?unique=a3d28cd"
+            "url": "web/image/product.product/150/image_1024/Basketball%20Arch%20%2820ft%29?unique=a3d28cd"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/21/image_1920"
+        "primary_image_url": "web/image/product.template/21/image_1920"
       },
-      "legacy_source_id": 21,
+      "catalog_data_id": 21,
       "price_manifest": {
         "candidate_units": 2,
         "decision": "source_price_ready",
@@ -707,7 +707,7 @@
       "slug": "basketball-arch",
       "source_name": "Basketball Arch",
       "source_trace": {
-        "legacy_source_product_id": 21,
+        "catalog_data_product_id": 21,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -729,7 +729,7 @@
             "Arch Size": "0dc28b4fff9d90f6c9e6766bea7aeb60e2351b8f563f001f116dd9c65b0cf6a2"
           },
           "currency": "USD",
-          "legacy_source_product_id": "21",
+          "catalog_data_product_id": "21",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "2ff155298724879e296a9c75d36012e540760106525538c9a2063b8a99bde3c1",
@@ -740,7 +740,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21",
+        "source_url": "shop/what-we-make-3/basketball-arch-21",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "6a6b602916eae39761a06e67b5aefa70da1fc5b059c6b1ac863945bff38c2fe8",
@@ -770,7 +770,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21",
+      "source_url": "shop/what-we-make-3/basketball-arch-21",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -808,13 +808,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/153/image_1024/Number%20Balloon%20Columns%20%28Gold%29?unique=ef0de7c"
+            "url": "web/image/product.product/153/image_1024/Number%20Balloon%20Columns%20%28Gold%29?unique=ef0de7c"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/22/image_1920"
+        "primary_image_url": "web/image/product.template/22/image_1920"
       },
-      "legacy_source_id": 22,
+      "catalog_data_id": 22,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -863,7 +863,7 @@
       "slug": "number-balloon-columns",
       "source_name": "Number Balloon Columns",
       "source_trace": {
-        "legacy_source_product_id": 22,
+        "catalog_data_product_id": 22,
         "source_axis_hashes": [
           {
             "name": "Number colors",
@@ -897,7 +897,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "22",
+          "catalog_data_product_id": "22",
           "source_declared_variant_count": 371,
           "source_valid_variant_count": 371,
           "valid_variant_hash": "9e2100b447c8cb60cd34744693eb96cb902c30e2acd5c21c1c45ea48c1965579",
@@ -908,7 +908,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22",
+        "source_url": "shop/what-we-make-3/number-balloon-columns-22",
         "source_variant_pointers": {
           "source_variant_count": 371,
           "source_variant_pointer_hash": "b622f89b061a9361855c600d61fffdf7ffa33c464f8a64c8d1d1151d3990aa61",
@@ -1046,7 +1046,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22",
+      "source_url": "shop/what-we-make-3/number-balloon-columns-22",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -1084,13 +1084,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/157/image_1024/Easter%20Balloon%20Arch%20-%20Bunny%20Ear%20%2820ft%29?unique=c4a0c37"
+            "url": "web/image/product.product/157/image_1024/Easter%20Balloon%20Arch%20-%20Bunny%20Ear%20%2820ft%29?unique=c4a0c37"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/30/image_1920"
+        "primary_image_url": "web/image/product.template/30/image_1920"
       },
-      "legacy_source_id": 30,
+      "catalog_data_id": 30,
       "price_manifest": {
         "candidate_units": 2,
         "decision": "source_price_ready",
@@ -1161,7 +1161,7 @@
       "slug": "easter-balloon-arch-bunny-ear",
       "source_name": "Easter Balloon Arch - Bunny Ear",
       "source_trace": {
-        "legacy_source_product_id": 30,
+        "catalog_data_product_id": 30,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -1183,7 +1183,7 @@
             "Arch Size": "0dc28b4fff9d90f6c9e6766bea7aeb60e2351b8f563f001f116dd9c65b0cf6a2"
           },
           "currency": "USD",
-          "legacy_source_product_id": "30",
+          "catalog_data_product_id": "30",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "506317c6efbc18e9dee02e2cf525c36df8b3795642035f545473faef0e82d06a",
@@ -1194,7 +1194,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
+        "source_url": "shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "d7ab5abbb2fbe0fdadb940e99f5efd0521e58ab0c5d5900b628e94f17653c0f2",
@@ -1224,7 +1224,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
+      "source_url": "shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -1262,13 +1262,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/38/image_1024/Graduation%20Grab%20n%20Go?unique=d99d953"
+            "url": "web/image/product.product/38/image_1024/Graduation%20Grab%20n%20Go?unique=d99d953"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/38/image_1920"
+        "primary_image_url": "web/image/product.template/38/image_1920"
       },
-      "legacy_source_id": 38,
+      "catalog_data_id": 38,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -1317,7 +1317,7 @@
       "slug": "graduation-grab-n-go",
       "source_name": "Graduation Grab n Go",
       "source_trace": {
-        "legacy_source_product_id": 38,
+        "catalog_data_product_id": 38,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -1339,7 +1339,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "38",
+          "catalog_data_product_id": "38",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "b0840fd4cdd5e3f11cca6beee19d64f59ab72fae29f9d29cb59ab5fd1e6fd710",
@@ -1351,7 +1351,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38",
+        "source_url": "shop/what-we-make-3/graduation-grab-n-go-38",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "691706f2a262ca9709c86c260bfe51aa4703b16a2362d83e8d642e0d43226ec5",
@@ -1469,7 +1469,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38",
+      "source_url": "shop/what-we-make-3/graduation-grab-n-go-38",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -1507,13 +1507,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/159/image_1024/Halloween%20arch%20%2820ft%29?unique=fc90a2b"
+            "url": "web/image/product.product/159/image_1024/Halloween%20arch%20%2820ft%29?unique=fc90a2b"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/39/image_1920"
+        "primary_image_url": "web/image/product.template/39/image_1920"
       },
-      "legacy_source_id": 39,
+      "catalog_data_id": 39,
       "price_manifest": {
         "candidate_units": 4,
         "decision": "source_price_ready",
@@ -1619,7 +1619,7 @@
       "slug": "halloween-arch",
       "source_name": "Halloween arch",
       "source_trace": {
-        "legacy_source_product_id": 39,
+        "catalog_data_product_id": 39,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -1654,7 +1654,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "39",
+          "catalog_data_product_id": "39",
           "source_declared_variant_count": 212,
           "source_valid_variant_count": 212,
           "valid_variant_hash": "b508f998ba42ad0febd05e84bbd8524be7835a88197f7f1f2aa1ecba287e6975",
@@ -1667,7 +1667,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39",
+        "source_url": "shop/what-we-make-3/halloween-arch-39",
         "source_variant_pointers": {
           "source_variant_count": 212,
           "source_variant_pointer_hash": "6b13f942d0c00c55feb8e52ce02d5a8981c0328fd87548bc39896d1deb4fafaa",
@@ -1805,7 +1805,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39",
+      "source_url": "shop/what-we-make-3/halloween-arch-39",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -1843,13 +1843,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1149/image_1024/Large%20head%20Missionary%20%28Elder%2C%20Blush%2C%20Black%29?unique=37b3302"
+            "url": "web/image/product.product/1149/image_1024/Large%20head%20Missionary%20%28Elder%2C%20Blush%2C%20Black%29?unique=37b3302"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/45/image_1920"
+        "primary_image_url": "web/image/product.template/45/image_1920"
       },
-      "legacy_source_id": 45,
+      "catalog_data_id": 45,
       "price_manifest": {
         "candidate_units": 30,
         "decision": "source_price_ready",
@@ -2394,7 +2394,7 @@
       "slug": "large-head-missionary",
       "source_name": "Large head Missionary",
       "source_trace": {
-        "legacy_source_product_id": 45,
+        "catalog_data_product_id": 45,
         "source_axis_hashes": [
           {
             "name": "Missionary",
@@ -2439,7 +2439,7 @@
             "skin color": "46e9faccd23c0bc61404c7de986718a0a4dd74014af6ed43030ed9cbf61a3e45"
           },
           "currency": "USD",
-          "legacy_source_product_id": "45",
+          "catalog_data_product_id": "45",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "5233df17fb250c48dc74acd4d410e6dea291b55a2058e41a64cbacac6b9b8fa2",
@@ -2450,7 +2450,7 @@
           "multi_axis_priced_variants",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/personalized-displays-4/large-head-missionary-45",
+        "source_url": "shop/personalized-displays-4/large-head-missionary-45",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "37fec271d598e12088d82416e38d7a53a8875be4739f7754fb83ac814fa91dab",
@@ -2608,7 +2608,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/personalized-displays-4/large-head-missionary-45",
+      "source_url": "shop/personalized-displays-4/large-head-missionary-45",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -2646,13 +2646,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/78/image_1024/Premium%20Organic%20Garland%20%286ft%29?unique=0f6bdad"
+            "url": "web/image/product.product/78/image_1024/Premium%20Organic%20Garland%20%286ft%29?unique=0f6bdad"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/52/image_1920"
+        "primary_image_url": "web/image/product.template/52/image_1920"
       },
-      "legacy_source_id": 52,
+      "catalog_data_id": 52,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -2743,7 +2743,7 @@
       "slug": "premium-organic-garland",
       "source_name": "Premium Organic Garland",
       "source_trace": {
-        "legacy_source_product_id": 52,
+        "catalog_data_product_id": 52,
         "source_axis_hashes": [
           {
             "name": "Garland Length",
@@ -2778,7 +2778,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "52",
+          "catalog_data_product_id": "52",
           "source_declared_variant_count": 159,
           "source_valid_variant_count": 159,
           "valid_variant_hash": "6828ac1abeccd8eca2a255266f9531f8fdd58e32b7084ccbd3c7a82d705e8e60",
@@ -2791,7 +2791,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52",
+        "source_url": "shop/what-we-make-3/premium-organic-garland-52",
         "source_variant_pointers": {
           "source_variant_count": 159,
           "source_variant_pointer_hash": "176696142aeb34b3f78c0c0f8e552e2f1b07e0f0c3d8f73f0a20e21d1819f953",
@@ -2929,7 +2929,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52",
+      "source_url": "shop/what-we-make-3/premium-organic-garland-52",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -2969,13 +2969,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/441/image_1024/Premium%20Organic%20Arch%20%2820ft%2C%20Foil%20stars%29?unique=ceae1d7"
+            "url": "web/image/product.product/441/image_1024/Premium%20Organic%20Arch%20%2820ft%2C%20Foil%20stars%29?unique=ceae1d7"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/53/image_1920"
+        "primary_image_url": "web/image/product.template/53/image_1920"
       },
-      "legacy_source_id": 53,
+      "catalog_data_id": 53,
       "price_manifest": {
         "candidate_units": 4,
         "decision": "source_price_ready",
@@ -3084,7 +3084,7 @@
       "slug": "premium-organic-arch",
       "source_name": "Premium Organic Arch",
       "source_trace": {
-        "legacy_source_product_id": 53,
+        "catalog_data_product_id": 53,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -3132,7 +3132,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "53",
+          "catalog_data_product_id": "53",
           "source_declared_variant_count": 424,
           "source_valid_variant_count": 424,
           "valid_variant_hash": "a44614b58cb3e30dc351d3f22a14fd605c982512c78ed3fffe418684df9362b7",
@@ -3147,7 +3147,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+        "source_url": "shop/what-we-make-3/premium-organic-arch-53",
         "source_variant_pointers": {
           "source_variant_count": 424,
           "source_variant_pointer_hash": "7e2271ce774bb20a9aff72310f506e18900a16622a9fd65feed134914c2cefa1",
@@ -3305,7 +3305,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+      "source_url": "shop/what-we-make-3/premium-organic-arch-53",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -3345,13 +3345,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1052/image_1024/Pemium%20Organic%20Column%20%285ft%2C%20Foil%20stars%29?unique=af9caa1"
+            "url": "web/image/product.product/1052/image_1024/Pemium%20Organic%20Column%20%285ft%2C%20Foil%20stars%29?unique=af9caa1"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/54/image_1920"
+        "primary_image_url": "web/image/product.template/54/image_1920"
       },
-      "legacy_source_id": 54,
+      "catalog_data_id": 54,
       "price_manifest": {
         "candidate_units": 6,
         "decision": "source_price_ready",
@@ -3490,7 +3490,7 @@
       "slug": "pemium-organic-column",
       "source_name": "Pemium Organic Column",
       "source_trace": {
-        "legacy_source_product_id": 54,
+        "catalog_data_product_id": 54,
         "source_axis_hashes": [
           {
             "name": "Column Height",
@@ -3538,7 +3538,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "54",
+          "catalog_data_product_id": "54",
           "source_declared_variant_count": 636,
           "source_valid_variant_count": 636,
           "valid_variant_hash": "767c8540dde61044a32ed7f742834014296ce2cd3f4fcc3a05135e9a5c6842d9",
@@ -3553,7 +3553,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+        "source_url": "shop/what-we-make-3/pemium-organic-column-54",
         "source_variant_pointers": {
           "source_variant_count": 636,
           "source_variant_pointer_hash": "47a11c7a18048e6f970a5873de6b85019dc1aef3a128b60101b5b730ec700508",
@@ -3711,7 +3711,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+      "source_url": "shop/what-we-make-3/pemium-organic-column-54",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -3749,13 +3749,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/146/image_1024/Pride%20progress%20Rainbow%20Balloon%20Arch%20%2820ft%29?unique=1580db2"
+            "url": "web/image/product.product/146/image_1024/Pride%20progress%20Rainbow%20Balloon%20Arch%20%2820ft%29?unique=1580db2"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/55/image_1920"
+        "primary_image_url": "web/image/product.template/55/image_1920"
       },
-      "legacy_source_id": 55,
+      "catalog_data_id": 55,
       "price_manifest": {
         "candidate_units": 4,
         "decision": "source_price_ready",
@@ -3856,7 +3856,7 @@
       "slug": "pride-progress-rainbow-balloon-arch",
       "source_name": "Pride progress Rainbow Balloon Arch",
       "source_trace": {
-        "legacy_source_product_id": 55,
+        "catalog_data_product_id": 55,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -3878,7 +3878,7 @@
             "Arch Size": "c17f4a977552009eca2f214bbfbf04e1dec9e3a030a496f4dfc361e2e0f4d5ab"
           },
           "currency": "USD",
-          "legacy_source_product_id": "55",
+          "catalog_data_product_id": "55",
           "source_declared_variant_count": 4,
           "source_valid_variant_count": 4,
           "valid_variant_hash": "c30f21b1ca172f6bae03130ab5895c9a3c9d54653a91a314483ad528c0d34e63",
@@ -3889,7 +3889,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+        "source_url": "shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
         "source_variant_pointers": {
           "source_variant_count": 4,
           "source_variant_pointer_hash": "7980b7e9063816b1b3e42df44b08bed6c9b4f973171cc453d680d4db85c7db2a",
@@ -3941,7 +3941,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+      "source_url": "shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -3979,118 +3979,118 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/91/image_128/Classic%20Arch%20%2820ft%29?unique=b34093d"
+            "url": "web/image/product.product/91/image_128/Classic%20Arch%20%2820ft%29?unique=b34093d"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 2,
-            "url": "http://5.78.136.133/web/image/product.image/4/image_128/20%27.webp?unique=8fde0c6"
+            "url": "web/image/product.image/4/image_128/20%27.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 3,
-            "url": "http://5.78.136.133/web/image/product.image/5/image_128/35%27.webp?unique=8fde0c6"
+            "url": "web/image/product.image/5/image_128/35%27.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 4,
-            "url": "http://5.78.136.133/web/image/product.image/6/image_128/30%27.webp?unique=8fde0c6"
+            "url": "web/image/product.image/6/image_128/30%27.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 5,
-            "url": "http://5.78.136.133/web/image/product.image/7/image_128/WSU%2035%20standand%20arch.webp?unique=8fde0c6"
+            "url": "web/image/product.image/7/image_128/WSU%2035%20standand%20arch.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 6,
-            "url": "http://5.78.136.133/web/image/product.image/8/image_128/light%20up%20standard%20arch.webp?unique=8fde0c6"
+            "url": "web/image/product.image/8/image_128/light%20up%20standard%20arch.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 7,
-            "url": "http://5.78.136.133/web/image/product.image/9/image_128/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6"
+            "url": "web/image/product.image/9/image_128/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 8,
-            "url": "http://5.78.136.133/web/image/product.image/12/image_128/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80"
+            "url": "web/image/product.image/12/image_128/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 9,
-            "url": "http://5.78.136.133/web/image/product.image/13/image_128/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80"
+            "url": "web/image/product.image/13/image_128/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 10,
-            "url": "http://5.78.136.133/web/image/product.image/14/image_128/No%20Lights%20%28LED%20Lights%29?unique=5dffa80"
+            "url": "web/image/product.image/14/image_128/No%20Lights%20%28LED%20Lights%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 11,
-            "url": "http://5.78.136.133/web/image/product.image/15/image_128/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
+            "url": "web/image/product.image/15/image_128/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 12,
-            "url": "http://5.78.136.133/web/image/product.product/91/image_1024/Classic%20Arch%20%2820ft%29?unique=b34093d"
+            "url": "web/image/product.product/91/image_1024/Classic%20Arch%20%2820ft%29?unique=b34093d"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 13,
-            "url": "http://5.78.136.133/web/image/product.image/4/image_1024/20%27.webp?unique=8fde0c6"
+            "url": "web/image/product.image/4/image_1024/20%27.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 14,
-            "url": "http://5.78.136.133/web/image/product.image/5/image_1024/35%27.webp?unique=8fde0c6"
+            "url": "web/image/product.image/5/image_1024/35%27.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 15,
-            "url": "http://5.78.136.133/web/image/product.image/6/image_1024/30%27.webp?unique=8fde0c6"
+            "url": "web/image/product.image/6/image_1024/30%27.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 16,
-            "url": "http://5.78.136.133/web/image/product.image/7/image_1024/WSU%2035%20standand%20arch.webp?unique=8fde0c6"
+            "url": "web/image/product.image/7/image_1024/WSU%2035%20standand%20arch.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 17,
-            "url": "http://5.78.136.133/web/image/product.image/8/image_1024/light%20up%20standard%20arch.webp?unique=8fde0c6"
+            "url": "web/image/product.image/8/image_1024/light%20up%20standard%20arch.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 18,
-            "url": "http://5.78.136.133/web/image/product.image/9/image_1024/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6"
+            "url": "web/image/product.image/9/image_1024/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 19,
-            "url": "http://5.78.136.133/web/image/product.image/12/image_1024/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80"
+            "url": "web/image/product.image/12/image_1024/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 20,
-            "url": "http://5.78.136.133/web/image/product.image/13/image_1024/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80"
+            "url": "web/image/product.image/13/image_1024/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 21,
-            "url": "http://5.78.136.133/web/image/product.image/14/image_1024/No%20Lights%20%28LED%20Lights%29?unique=5dffa80"
+            "url": "web/image/product.image/14/image_1024/No%20Lights%20%28LED%20Lights%29?unique=5dffa80"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 22,
-            "url": "http://5.78.136.133/web/image/product.image/15/image_1024/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
+            "url": "web/image/product.image/15/image_1024/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/57/image_1920"
+        "primary_image_url": "web/image/product.template/57/image_1920"
       },
-      "legacy_source_id": 57,
+      "catalog_data_id": 57,
       "price_manifest": {
         "candidate_units": 16,
         "decision": "source_price_ready",
@@ -4415,7 +4415,7 @@
       "slug": "classic-arch",
       "source_name": "Classic Arch",
       "source_trace": {
-        "legacy_source_product_id": 57,
+        "catalog_data_product_id": 57,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -4475,7 +4475,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "57",
+          "catalog_data_product_id": "57",
           "source_declared_variant_count": 848,
           "source_valid_variant_count": 848,
           "valid_variant_hash": "2bebe808d74b23f514c57ef1e9eacbfbc0729c3ff7c807bb68880718b22d3bdc",
@@ -4489,7 +4489,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57",
+        "source_url": "shop/what-we-make-3/classic-arch-57",
         "source_variant_pointers": {
           "source_variant_count": 848,
           "source_variant_pointer_hash": "4437c48e2b822f487b826afd68fc2c7ea425e3bff5e94832108af40c428fbbc7",
@@ -4667,7 +4667,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57",
+      "source_url": "shop/what-we-make-3/classic-arch-57",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -4705,33 +4705,33 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/110/image_128/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd"
+            "url": "web/image/product.product/110/image_128/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 2,
-            "url": "http://5.78.136.133/web/image/product.image/2/image_128/6%27%20logo%20standard.webp?unique=7923af4"
+            "url": "web/image/product.image/2/image_128/6%27%20logo%20standard.webp?unique=7923af4"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 3,
-            "url": "http://5.78.136.133/web/image/product.image/3/image_128/6%27%20standard%20columns.webp?unique=7923af4"
+            "url": "web/image/product.image/3/image_128/6%27%20standard%20columns.webp?unique=7923af4"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 4,
-            "url": "http://5.78.136.133/web/image/product.image/2/image_1024/6%27%20logo%20standard.webp?unique=7923af4"
+            "url": "web/image/product.image/2/image_1024/6%27%20logo%20standard.webp?unique=7923af4"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 5,
-            "url": "http://5.78.136.133/web/image/product.image/3/image_1024/6%27%20standard%20columns.webp?unique=7923af4"
+            "url": "web/image/product.image/3/image_1024/6%27%20standard%20columns.webp?unique=7923af4"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd"
+        "primary_image_url": "web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd"
       },
-      "legacy_source_id": 58,
+      "catalog_data_id": 58,
       "price_manifest": {
         "candidate_units": 36,
         "decision": "source_price_ready",
@@ -5338,7 +5338,7 @@
       "slug": "classic-column",
       "source_name": "Classic Column",
       "source_trace": {
-        "legacy_source_product_id": 58,
+        "catalog_data_product_id": 58,
         "source_axis_hashes": [
           {
             "name": "Column Height",
@@ -5386,7 +5386,7 @@
             "topper": "663b8b6a4d9dbf5cf14e4391db9aa328598af0aab14fed8d9f03abccb191ec4b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "58",
+          "catalog_data_product_id": "58",
           "source_declared_variant_count": 1908,
           "source_valid_variant_count": 1908,
           "valid_variant_hash": "fb3fce5f90370fedd2c96f0323bf85174a628c857095bb39599804ff4e59447d",
@@ -5401,7 +5401,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58",
+        "source_url": "shop/what-we-make-3/classic-column-58",
         "source_variant_pointers": {
           "source_variant_count": 1908,
           "source_variant_pointer_hash": "6c0c733848c3e9f80520d812d358e52bfbfc96dbf93695c59f54bc24bbb2c5f9",
@@ -5559,7 +5559,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58",
+      "source_url": "shop/what-we-make-3/classic-column-58",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -5597,13 +5597,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/163/image_1024/Classic%20Organic%20columns%20%285ft%29?unique=6905265"
+            "url": "web/image/product.product/163/image_1024/Classic%20Organic%20columns%20%285ft%29?unique=6905265"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/65/image_1920"
+        "primary_image_url": "web/image/product.template/65/image_1920"
       },
-      "legacy_source_id": 65,
+      "catalog_data_id": 65,
       "price_manifest": {
         "candidate_units": 6,
         "decision": "source_price_ready",
@@ -5739,7 +5739,7 @@
       "slug": "classic-organic-columns",
       "source_name": "Classic Organic columns",
       "source_trace": {
-        "legacy_source_product_id": 65,
+        "catalog_data_product_id": 65,
         "source_axis_hashes": [
           {
             "name": "Column Height",
@@ -5774,7 +5774,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "65",
+          "catalog_data_product_id": "65",
           "source_declared_variant_count": 318,
           "source_valid_variant_count": 318,
           "valid_variant_hash": "581d6ec3ce0957e58a51b12e6117a401b855ca3736cabab266f1044249ca5c93",
@@ -5787,7 +5787,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65",
+        "source_url": "shop/what-we-make-3/classic-organic-columns-65",
         "source_variant_pointers": {
           "source_variant_count": 318,
           "source_variant_pointer_hash": "126bc109b1be9fb6bf691c67b594a469aa4c767396dcd74d9593597b0fa4f06b",
@@ -5925,7 +5925,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65",
+      "source_url": "shop/what-we-make-3/classic-organic-columns-65",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -5963,13 +5963,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1049/image_1024/Baby%20Shower%20Garland%20%286ft%29?unique=2ade15f"
+            "url": "web/image/product.product/1049/image_1024/Baby%20Shower%20Garland%20%286ft%29?unique=2ade15f"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/71/image_1920"
+        "primary_image_url": "web/image/product.template/71/image_1920"
       },
-      "legacy_source_id": 71,
+      "catalog_data_id": 71,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -6061,7 +6061,7 @@
       "slug": "baby-shower-garland",
       "source_name": "Baby Shower Garland",
       "source_trace": {
-        "legacy_source_product_id": 71,
+        "catalog_data_product_id": 71,
         "source_axis_hashes": [
           {
             "name": "Garland Length",
@@ -6096,7 +6096,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "71",
+          "catalog_data_product_id": "71",
           "source_declared_variant_count": 159,
           "source_valid_variant_count": 159,
           "valid_variant_hash": "a0ebd7b12badc9799a996fb29ed2c2cb10153f599f0634bce6b442858c5f61b2",
@@ -6110,7 +6110,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71",
+        "source_url": "shop/what-we-make-3/baby-shower-garland-71",
         "source_variant_pointers": {
           "source_variant_count": 159,
           "source_variant_pointer_hash": "071da0b3268bb9e06820ac59feada2ac596c50526b683be1c605b7b2cd52c5f4",
@@ -6248,7 +6248,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71",
+      "source_url": "shop/what-we-make-3/baby-shower-garland-71",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -6286,13 +6286,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/411/image_1024/Balloon%20Drop%20%28250%29?unique=78c60ed"
+            "url": "web/image/product.product/411/image_1024/Balloon%20Drop%20%28250%29?unique=78c60ed"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/74/image_1920"
+        "primary_image_url": "web/image/product.template/74/image_1920"
       },
-      "legacy_source_id": 74,
+      "catalog_data_id": 74,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -6383,7 +6383,7 @@
       "slug": "balloon-drop",
       "source_name": "Balloon Drop",
       "source_trace": {
-        "legacy_source_product_id": 74,
+        "catalog_data_product_id": 74,
         "source_axis_hashes": [
           {
             "name": "Drop Size",
@@ -6418,7 +6418,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "74",
+          "catalog_data_product_id": "74",
           "source_declared_variant_count": 159,
           "source_valid_variant_count": 159,
           "valid_variant_hash": "a27fd5f68d283000a39fa4168e3c1c4d1793e6b11d807a2fb17530495ede1ee4",
@@ -6431,7 +6431,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74",
+        "source_url": "shop/what-we-make-3/balloon-drop-74",
         "source_variant_pointers": {
           "source_variant_count": 159,
           "source_variant_pointer_hash": "08fa1ce1a7b91dfc8e0e91e8fb369dc5372bd98fec122d86c8979f20d9dc5636",
@@ -6569,7 +6569,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74",
+      "source_url": "shop/what-we-make-3/balloon-drop-74",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -6609,13 +6609,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/437/image_1024/Classic%20Organic%20Arch%20%2820ft%2C%20None%29?unique=c85d6b8"
+            "url": "web/image/product.product/437/image_1024/Classic%20Organic%20Arch%20%2820ft%2C%20None%29?unique=c85d6b8"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/99/image_1920"
+        "primary_image_url": "web/image/product.template/99/image_1920"
       },
-      "legacy_source_id": 99,
+      "catalog_data_id": 99,
       "price_manifest": {
         "candidate_units": 4,
         "decision": "source_price_ready",
@@ -6724,7 +6724,7 @@
       "slug": "classic-organic-arch",
       "source_name": "Classic Organic Arch",
       "source_trace": {
-        "legacy_source_product_id": 99,
+        "catalog_data_product_id": 99,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -6772,7 +6772,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "99",
+          "catalog_data_product_id": "99",
           "source_declared_variant_count": 636,
           "source_valid_variant_count": 636,
           "valid_variant_hash": "ebd5df66f93b67480a7242a0e1f7dd1b782ab757c5e936b236261cccfe4242f4",
@@ -6787,7 +6787,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+        "source_url": "shop/what-we-make-3/classic-organic-arch-99",
         "source_variant_pointers": {
           "source_variant_count": 636,
           "source_variant_pointer_hash": "3205b8886be88ec1358443eb23631a926ecdc75322071bbff4cc08607365eb9a",
@@ -6945,7 +6945,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+      "source_url": "shop/what-we-make-3/classic-organic-arch-99",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -6996,13 +6996,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/250/image_1024/Unicorn%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/250/image_1024/Unicorn%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/115/image_1920"
+        "primary_image_url": "web/image/product.template/115/image_1920"
       },
-      "legacy_source_id": 115,
+      "catalog_data_id": 115,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -7089,7 +7089,7 @@
       "slug": "unicorn-bouquet",
       "source_name": "Unicorn Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 115,
+        "catalog_data_product_id": 115,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -7123,7 +7123,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "115",
+          "catalog_data_product_id": "115",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "fe1f012d9cc91d11a2fc73f7c1a162a9efbaa70e50efce92057d2fc18c7aab13",
@@ -7135,7 +7135,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115",
+        "source_url": "shop/what-we-make-3/unicorn-bouquet-115",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "cdfb1b314ab0711a2c963ba3edffd99bfde2d474b566b92a6f34875f14e69a01",
@@ -7273,7 +7273,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115",
+      "source_url": "shop/what-we-make-3/unicorn-bouquet-115",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -7324,13 +7324,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/253/image_1024/Mickey%20Mouse%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/253/image_1024/Mickey%20Mouse%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/116/image_1920"
+        "primary_image_url": "web/image/product.template/116/image_1920"
       },
-      "legacy_source_id": 116,
+      "catalog_data_id": 116,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -7417,7 +7417,7 @@
       "slug": "mickey-mouse-bouquet",
       "source_name": "Mickey Mouse Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 116,
+        "catalog_data_product_id": 116,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -7451,7 +7451,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "116",
+          "catalog_data_product_id": "116",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "51a5f1d19a75bfa899690c477ab6e5c016091aedb2dd1f33712d32e4dc449405",
@@ -7463,7 +7463,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116",
+        "source_url": "shop/what-we-make-3/mickey-mouse-bouquet-116",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "006325bb9399dca6a69ac9be786faa251b6afec13d0b2930d35c610eac735443",
@@ -7601,7 +7601,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116",
+      "source_url": "shop/what-we-make-3/mickey-mouse-bouquet-116",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -7652,38 +7652,38 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/369/image_128/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/369/image_128/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 2,
-            "url": "http://5.78.136.133/web/image/product.image/16/image_128/Minion%20Bouquet?unique=ee8805a"
+            "url": "web/image/product.image/16/image_128/Minion%20Bouquet?unique=ee8805a"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 3,
-            "url": "http://5.78.136.133/web/image/product.image/17/image_128/Minion%20Bouquet?unique=86e0e06"
+            "url": "web/image/product.image/17/image_128/Minion%20Bouquet?unique=86e0e06"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 4,
-            "url": "http://5.78.136.133/web/image/product.product/369/image_1024/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/369/image_1024/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 5,
-            "url": "http://5.78.136.133/web/image/product.image/16/image_1024/Minion%20Bouquet?unique=ee8805a"
+            "url": "web/image/product.image/16/image_1024/Minion%20Bouquet?unique=ee8805a"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 6,
-            "url": "http://5.78.136.133/web/image/product.image/17/image_1024/Minion%20Bouquet?unique=86e0e06"
+            "url": "web/image/product.image/17/image_1024/Minion%20Bouquet?unique=86e0e06"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/117/image_1920"
+        "primary_image_url": "web/image/product.template/117/image_1920"
       },
-      "legacy_source_id": 117,
+      "catalog_data_id": 117,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -7770,7 +7770,7 @@
       "slug": "minion-bouquet",
       "source_name": "Minion Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 117,
+        "catalog_data_product_id": 117,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -7804,7 +7804,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "117",
+          "catalog_data_product_id": "117",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "d5ebde6963ac65079c5ac7030a5e6014f1e5662535bc24b147bafe1c8effb131",
@@ -7816,7 +7816,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117",
+        "source_url": "shop/what-we-make-3/minion-bouquet-117",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "a2c898cffd52bed4f557c1b52534302703aa77c6eee5e66cdb893c252752d122",
@@ -7954,7 +7954,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117",
+      "source_url": "shop/what-we-make-3/minion-bouquet-117",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -8005,13 +8005,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/372/image_1024/Encanto%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/372/image_1024/Encanto%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/118/image_1920"
+        "primary_image_url": "web/image/product.template/118/image_1920"
       },
-      "legacy_source_id": 118,
+      "catalog_data_id": 118,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -8098,7 +8098,7 @@
       "slug": "encanto-bouquet",
       "source_name": "Encanto Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 118,
+        "catalog_data_product_id": 118,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -8132,7 +8132,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "118",
+          "catalog_data_product_id": "118",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "e001a00108986ad503d3343a2917ca0cd6334d908d37ce84562a25d02f576f9f",
@@ -8144,7 +8144,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118",
+        "source_url": "shop/what-we-make-3/encanto-bouquet-118",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "9d98a8541a18f6a906ed1e55a40ca875940e45b134b37a53124d92994c5ebbf0",
@@ -8282,7 +8282,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118",
+      "source_url": "shop/what-we-make-3/encanto-bouquet-118",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -8333,13 +8333,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/408/image_1024/Stitch%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/408/image_1024/Stitch%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/119/image_1920"
+        "primary_image_url": "web/image/product.template/119/image_1920"
       },
-      "legacy_source_id": 119,
+      "catalog_data_id": 119,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -8426,7 +8426,7 @@
       "slug": "stitch-bouquet",
       "source_name": "Stitch Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 119,
+        "catalog_data_product_id": 119,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -8460,7 +8460,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "119",
+          "catalog_data_product_id": "119",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "723d22f9b08274239a473d711bc98ad34813d7871fb1d1c423f1bc47ae41bd3b",
@@ -8472,7 +8472,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119",
+        "source_url": "shop/what-we-make-3/stitch-bouquet-119",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "938312da657fd545b4edb1c727525b4839d1916ae1ca7c604a64deb91b2c8b1e",
@@ -8610,7 +8610,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119",
+      "source_url": "shop/what-we-make-3/stitch-bouquet-119",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -8661,13 +8661,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/414/image_1024/Flamingo%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/414/image_1024/Flamingo%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/120/image_1920"
+        "primary_image_url": "web/image/product.template/120/image_1920"
       },
-      "legacy_source_id": 120,
+      "catalog_data_id": 120,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -8754,7 +8754,7 @@
       "slug": "flamingo-bouquet",
       "source_name": "Flamingo Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 120,
+        "catalog_data_product_id": 120,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -8788,7 +8788,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "120",
+          "catalog_data_product_id": "120",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "582babb317214bdd35d446591816e006a94bc548a7b71edcb551e0aab9b04422",
@@ -8800,7 +8800,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120",
+        "source_url": "shop/what-we-make-3/flamingo-bouquet-120",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "b5aed28b43c9a2235d39ffac7d4c86a44bc7009db3ee32ed9ad45b39100439f5",
@@ -8938,7 +8938,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120",
+      "source_url": "shop/what-we-make-3/flamingo-bouquet-120",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -8989,13 +8989,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/417/image_1024/Football%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/417/image_1024/Football%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/121/image_1920"
+        "primary_image_url": "web/image/product.template/121/image_1920"
       },
-      "legacy_source_id": 121,
+      "catalog_data_id": 121,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -9082,7 +9082,7 @@
       "slug": "football-bouquet",
       "source_name": "Football Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 121,
+        "catalog_data_product_id": 121,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -9116,7 +9116,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "121",
+          "catalog_data_product_id": "121",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "6f627c64ab473f729dc0b01214e7d35f84b9d0985ed7e4ecd9410f5048e5625c",
@@ -9128,7 +9128,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121",
+        "source_url": "shop/what-we-make-3/football-bouquet-121",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "0c49547ad32080b88ecd7157fdfa3d9d8a39551a69d7751268c0bc7e0df80874",
@@ -9266,7 +9266,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121",
+      "source_url": "shop/what-we-make-3/football-bouquet-121",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -9317,13 +9317,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/420/image_1024/Soccer%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/420/image_1024/Soccer%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/122/image_1920"
+        "primary_image_url": "web/image/product.template/122/image_1920"
       },
-      "legacy_source_id": 122,
+      "catalog_data_id": 122,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -9410,7 +9410,7 @@
       "slug": "soccer-bouquet",
       "source_name": "Soccer Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 122,
+        "catalog_data_product_id": 122,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -9444,7 +9444,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "122",
+          "catalog_data_product_id": "122",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "03d719a2638748d81cd2afea0ec0d26de81425c9cd5447a6486e8ced805b29ec",
@@ -9456,7 +9456,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122",
+        "source_url": "shop/what-we-make-3/soccer-bouquet-122",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "af89cc2927fd0c9e94cfb9f3f65168c21b08e8519d290764d4bf9a46e2fd5ad1",
@@ -9594,7 +9594,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122",
+      "source_url": "shop/what-we-make-3/soccer-bouquet-122",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -9645,13 +9645,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/426/image_1024/Space%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/426/image_1024/Space%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/123/image_1920"
+        "primary_image_url": "web/image/product.template/123/image_1920"
       },
-      "legacy_source_id": 123,
+      "catalog_data_id": 123,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -9738,7 +9738,7 @@
       "slug": "space-bouquet",
       "source_name": "Space Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 123,
+        "catalog_data_product_id": 123,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -9772,7 +9772,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "123",
+          "catalog_data_product_id": "123",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "a6a87480705200e1279aff823318cabb19ccdd44c3ff2c3300a4ca914c5d13a2",
@@ -9784,7 +9784,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123",
+        "source_url": "shop/what-we-make-3/space-bouquet-123",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "67fe9a64d2859bf3d69af85f1e9cc092f5f86035cbbf506539d74489e724b25b",
@@ -9922,7 +9922,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123",
+      "source_url": "shop/what-we-make-3/space-bouquet-123",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -9973,13 +9973,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/423/image_1024/Over%20the%20Hill%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/423/image_1024/Over%20the%20Hill%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/124/image_1920"
+        "primary_image_url": "web/image/product.template/124/image_1920"
       },
-      "legacy_source_id": 124,
+      "catalog_data_id": 124,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -10066,7 +10066,7 @@
       "slug": "over-the-hill-bouquet",
       "source_name": "Over the Hill Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 124,
+        "catalog_data_product_id": 124,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -10100,7 +10100,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "124",
+          "catalog_data_product_id": "124",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "a37bff6e4f3b0577610d627f90f288cc88a955416268b9f879e17965b57bedc9",
@@ -10112,7 +10112,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124",
+        "source_url": "shop/what-we-make-3/over-the-hill-bouquet-124",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "1ad0c607f0735900ef89a2c95848e8ea311249176ad141fac31ab2cf5eb9af87",
@@ -10250,7 +10250,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124",
+      "source_url": "shop/what-we-make-3/over-the-hill-bouquet-124",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -10286,9 +10286,9 @@
         "extra_image_decision": "hold_until_classified",
         "extra_images": [],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48"
+        "primary_image_url": "web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48"
       },
-      "legacy_source_id": 125,
+      "catalog_data_id": 125,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -10335,7 +10335,7 @@
       "slug": "7-butterfly-column",
       "source_name": "7' Butterfly Column",
       "source_trace": {
-        "legacy_source_product_id": 125,
+        "catalog_data_product_id": 125,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -10357,7 +10357,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "125",
+          "catalog_data_product_id": "125",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "48edfbd2853333f7a26d63b13e8868a521379dab4dcd19b2efa1b8d6affb47d6",
@@ -10368,7 +10368,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125",
+        "source_url": "shop/what-we-make-3/7-butterfly-column-125",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "63c2e2948dc15c994d4d29387e25a142a964cfdc6a16249a1f438c4ca8bf93a9",
@@ -10486,7 +10486,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125",
+      "source_url": "shop/what-we-make-3/7-butterfly-column-125",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -10522,9 +10522,9 @@
         "extra_image_decision": "hold_until_classified",
         "extra_images": [],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9"
+        "primary_image_url": "web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9"
       },
-      "legacy_source_id": 126,
+      "catalog_data_id": 126,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -10571,7 +10571,7 @@
       "slug": "7-epic-column",
       "source_name": "7' Epic Column",
       "source_trace": {
-        "legacy_source_product_id": 126,
+        "catalog_data_product_id": 126,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -10593,7 +10593,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "126",
+          "catalog_data_product_id": "126",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "c99056a9fe317d45c18c685b51a11639cb31a839874c22691eefcde1eb2808f2",
@@ -10604,7 +10604,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126",
+        "source_url": "shop/what-we-make-3/7-epic-column-126",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "f9f48a50780e73fd0f4227c26e4d850e4c365b47786c77430660136558c40621",
@@ -10722,7 +10722,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126",
+      "source_url": "shop/what-we-make-3/7-epic-column-126",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -10760,13 +10760,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/661/image_1024/Organic%20Grab%20n%27%20Go%20%286ft%29?unique=b61edc4"
+            "url": "web/image/product.product/661/image_1024/Organic%20Grab%20n%27%20Go%20%286ft%29?unique=b61edc4"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/127/image_1920"
+        "primary_image_url": "web/image/product.template/127/image_1920"
       },
-      "legacy_source_id": 127,
+      "catalog_data_id": 127,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -10857,7 +10857,7 @@
       "slug": "organic-grab-n-go",
       "source_name": "Organic Grab n' Go",
       "source_trace": {
-        "legacy_source_product_id": 127,
+        "catalog_data_product_id": 127,
         "source_axis_hashes": [
           {
             "name": "Garland Length",
@@ -10892,7 +10892,7 @@
             "latex colors": "1791ec1f154f23c94079c6969e90af499f9835be0d73d27f8c880138bdc4a8cc"
           },
           "currency": "USD",
-          "legacy_source_product_id": "127",
+          "catalog_data_product_id": "127",
           "source_declared_variant_count": 156,
           "source_valid_variant_count": 156,
           "valid_variant_hash": "8a25a04de7b151d506d818b15280d6bc4696901c38529e6d22c83242dc9a411c",
@@ -10905,7 +10905,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127",
+        "source_url": "shop/what-we-make-3/organic-grab-n-go-127",
         "source_variant_pointers": {
           "source_variant_count": 156,
           "source_variant_pointer_hash": "88524ab78132095f81e47499ffc507ac201f34cabf6f1a418b1b052ab77c33da",
@@ -11043,7 +11043,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127",
+      "source_url": "shop/what-we-make-3/organic-grab-n-go-127",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -11096,78 +11096,78 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/765/image_128/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe"
+            "url": "web/image/product.product/765/image_128/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 2,
-            "url": "http://5.78.136.133/web/image/product.image/21/image_128/IMG_0275.webp?unique=a75766f"
+            "url": "web/image/product.image/21/image_128/IMG_0275.webp?unique=a75766f"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 3,
-            "url": "http://5.78.136.133/web/image/product.image/22/image_128/IMG_1862.webp?unique=a75766f"
+            "url": "web/image/product.image/22/image_128/IMG_1862.webp?unique=a75766f"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 4,
-            "url": "http://5.78.136.133/web/image/product.image/23/image_128/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58"
+            "url": "web/image/product.image/23/image_128/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 5,
-            "url": "http://5.78.136.133/web/image/product.image/24/image_128/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58"
+            "url": "web/image/product.image/24/image_128/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 6,
-            "url": "http://5.78.136.133/web/image/product.image/25/image_128/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58"
+            "url": "web/image/product.image/25/image_128/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 7,
-            "url": "http://5.78.136.133/web/image/product.image/26/image_128/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
+            "url": "web/image/product.image/26/image_128/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 8,
-            "url": "http://5.78.136.133/web/image/product.product/765/image_1024/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe"
+            "url": "web/image/product.product/765/image_1024/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 9,
-            "url": "http://5.78.136.133/web/image/product.image/21/image_1024/IMG_0275.webp?unique=a75766f"
+            "url": "web/image/product.image/21/image_1024/IMG_0275.webp?unique=a75766f"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 10,
-            "url": "http://5.78.136.133/web/image/product.image/22/image_1024/IMG_1862.webp?unique=a75766f"
+            "url": "web/image/product.image/22/image_1024/IMG_1862.webp?unique=a75766f"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 11,
-            "url": "http://5.78.136.133/web/image/product.image/23/image_1024/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58"
+            "url": "web/image/product.image/23/image_1024/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 12,
-            "url": "http://5.78.136.133/web/image/product.image/24/image_1024/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58"
+            "url": "web/image/product.image/24/image_1024/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 13,
-            "url": "http://5.78.136.133/web/image/product.image/25/image_1024/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58"
+            "url": "web/image/product.image/25/image_1024/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 14,
-            "url": "http://5.78.136.133/web/image/product.image/26/image_1024/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
+            "url": "web/image/product.image/26/image_1024/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/128/image_1920"
+        "primary_image_url": "web/image/product.template/128/image_1920"
       },
-      "legacy_source_id": 128,
+      "catalog_data_id": 128,
       "price_manifest": {
         "candidate_units": 81,
         "decision": "source_price_ready",
@@ -12464,7 +12464,7 @@
       "slug": "birthday-deliveries",
       "source_name": "Birthday Deliveries",
       "source_trace": {
-        "legacy_source_product_id": 128,
+        "catalog_data_product_id": 128,
         "source_axis_hashes": [
           {
             "name": "Delivery Size",
@@ -12524,7 +12524,7 @@
             "Delivery themes": "c95b88773e7e4b49a6ed9201a2988febc77dcfd388e5011bb54d3bcb02c953fd"
           },
           "currency": "USD",
-          "legacy_source_product_id": "128",
+          "catalog_data_product_id": "128",
           "source_declared_variant_count": 2430,
           "source_valid_variant_count": 2430,
           "valid_variant_hash": "99a2d7c3c5a73706d048edd106dbc49d256cc7a93bcd5d89681fb342c432f49e",
@@ -12538,7 +12538,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+        "source_url": "shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
         "source_variant_pointers": {
           "source_variant_count": 2430,
           "source_variant_pointer_hash": "904eaf4c1be7326511884e85b22c59da0652464598e33f905316d5f5c9f7cea4",
@@ -12716,7 +12716,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+      "source_url": "shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -12754,28 +12754,28 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/755/image_128/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3"
+            "url": "web/image/product.product/755/image_128/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 2,
-            "url": "http://5.78.136.133/web/image/product.image/20/image_128/Easter%20Balloon%20Cups?unique=20fdda3"
+            "url": "web/image/product.image/20/image_128/Easter%20Balloon%20Cups?unique=20fdda3"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 3,
-            "url": "http://5.78.136.133/web/image/product.product/755/image_1024/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3"
+            "url": "web/image/product.product/755/image_1024/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3"
           },
           {
             "decision": "hold_until_classified",
             "source_index": 4,
-            "url": "http://5.78.136.133/web/image/product.image/20/image_1024/Easter%20Balloon%20Cups?unique=20fdda3"
+            "url": "web/image/product.image/20/image_1024/Easter%20Balloon%20Cups?unique=20fdda3"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/130/image_1920"
+        "primary_image_url": "web/image/product.template/130/image_1920"
       },
-      "legacy_source_id": 130,
+      "catalog_data_id": 130,
       "price_manifest": {
         "candidate_units": 7,
         "decision": "source_price_ready",
@@ -12920,7 +12920,7 @@
       "slug": "easter-balloon-cups",
       "source_name": "Easter Balloon Cups",
       "source_trace": {
-        "legacy_source_product_id": 130,
+        "catalog_data_product_id": 130,
         "source_axis_hashes": [
           {
             "name": "Easter Designs",
@@ -12941,7 +12941,7 @@
             "Easter Designs": "b0af07dc4160f91916580ed6d41abaf76a442335b68ca9b86eddb63b64f2e01b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "130",
+          "catalog_data_product_id": "130",
           "source_declared_variant_count": 7,
           "source_valid_variant_count": 7,
           "valid_variant_hash": "0cd765194351152003fe38cb505a048aebf30d5a9b54a16d61c6a5b8363c371a",
@@ -12951,7 +12951,7 @@
           "finite_variants",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130",
+        "source_url": "shop/what-we-make-3/easter-balloon-cups-130",
         "source_variant_pointers": {
           "source_variant_count": 7,
           "source_variant_pointer_hash": "cca8bd5c28a0f884029e9637d0c8142fcf84721fda18a11645a409d00007d830",
@@ -13036,7 +13036,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130",
+      "source_url": "shop/what-we-make-3/easter-balloon-cups-130",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -13074,9 +13074,9 @@
         "extra_image_decision": "hold_until_classified",
         "extra_images": [],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4"
+        "primary_image_url": "web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4"
       },
-      "legacy_source_id": 131,
+      "catalog_data_id": 131,
       "price_manifest": {
         "candidate_units": 4,
         "decision": "source_price_ready",
@@ -13183,7 +13183,7 @@
       "slug": "star-column",
       "source_name": "Star Column",
       "source_trace": {
-        "legacy_source_product_id": 131,
+        "catalog_data_product_id": 131,
         "source_axis_hashes": [
           {
             "name": "Color Palette",
@@ -13230,7 +13230,7 @@
             "Orbz toppers": "dc79aa916ba7fba06442b9cdf9a3c3c08541aeed61a374150c4e171d10126f93"
           },
           "currency": "USD",
-          "legacy_source_product_id": "131",
+          "catalog_data_product_id": "131",
           "source_declared_variant_count": 1160,
           "source_valid_variant_count": 1160,
           "valid_variant_hash": "5f1957202a1e9c531bc5138de1f2ff2537e3cfe596b9f75f62b8198b4eef2225",
@@ -13244,7 +13244,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+        "source_url": "shop/what-we-make-3/star-column-131",
         "source_variant_pointers": {
           "source_variant_count": 1160,
           "source_variant_pointer_hash": "bc855e310a5fb610cf0aed01df1b827e27023afda291b8c80e543082e61cc7f1",
@@ -13402,7 +13402,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+      "source_url": "shop/what-we-make-3/star-column-131",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -13440,13 +13440,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1064/image_1024/Sleepy%20Baby%20Column?unique=4ad9a11"
+            "url": "web/image/product.product/1064/image_1024/Sleepy%20Baby%20Column?unique=4ad9a11"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/132/image_1920"
+        "primary_image_url": "web/image/product.template/132/image_1920"
       },
-      "legacy_source_id": 132,
+      "catalog_data_id": 132,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -13494,7 +13494,7 @@
       "slug": "sleepy-baby-column",
       "source_name": "Sleepy Baby Column",
       "source_trace": {
-        "legacy_source_product_id": 132,
+        "catalog_data_product_id": 132,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -13516,7 +13516,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "132",
+          "catalog_data_product_id": "132",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "2278f31ddfa970ce704b95702c3ddd0aae01cb595d50fe4afacf9021c778d771",
@@ -13527,7 +13527,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132",
+        "source_url": "shop/what-we-make-3/sleepy-baby-column-132",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "17157a153731d12e99fb07757c2205c05b0ba85578b8bea1534811a6123c2b73",
@@ -13645,7 +13645,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132",
+      "source_url": "shop/what-we-make-3/sleepy-baby-column-132",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -13683,13 +13683,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1065/image_1024/Baby%20Table%20decor%20%28blue%29?unique=ff57d73"
+            "url": "web/image/product.product/1065/image_1024/Baby%20Table%20decor%20%28blue%29?unique=ff57d73"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/133/image_1920"
+        "primary_image_url": "web/image/product.template/133/image_1920"
       },
-      "legacy_source_id": 133,
+      "catalog_data_id": 133,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -13736,7 +13736,7 @@
       "slug": "baby-table-decor",
       "source_name": "Baby Table decor",
       "source_trace": {
-        "legacy_source_product_id": 133,
+        "catalog_data_product_id": 133,
         "source_axis_hashes": [
           {
             "name": "Baby color",
@@ -13757,7 +13757,7 @@
             "Baby color": "8af58058db2b64af1dd436ee9926cdfa9bc1c069657492b5f3d34167551a9565"
           },
           "currency": "USD",
-          "legacy_source_product_id": "133",
+          "catalog_data_product_id": "133",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "1157b999b69e6b84d67051828d83d3e719b758fd6e73d0f12a197ce0b1a33fcf",
@@ -13767,7 +13767,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133",
+        "source_url": "shop/what-we-make-3/baby-table-decor-133",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "ef82aa28a526577fb285c98dd6bdc0c72df931a27ccb51b06ce2ae4030f04eb6",
@@ -13797,7 +13797,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133",
+      "source_url": "shop/what-we-make-3/baby-table-decor-133",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -13835,13 +13835,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1067/image_1024/Logo%203%20layered%20bouquet?unique=f1c9116"
+            "url": "web/image/product.product/1067/image_1024/Logo%203%20layered%20bouquet?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/134/image_1920"
+        "primary_image_url": "web/image/product.template/134/image_1920"
       },
-      "legacy_source_id": 134,
+      "catalog_data_id": 134,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -13890,7 +13890,7 @@
       "slug": "logo-3-layered-bouquet",
       "source_name": "Logo 3 layered bouquet",
       "source_trace": {
-        "legacy_source_product_id": 134,
+        "catalog_data_product_id": 134,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -13912,7 +13912,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "134",
+          "catalog_data_product_id": "134",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "0eb4978e013005745623d1f2632903c5f851fb8ccb884227533925915e9184c2",
@@ -13924,7 +13924,7 @@
           "freeform_customer_text",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134",
+        "source_url": "shop/what-we-make-3/logo-3-layered-bouquet-134",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "eae0aea9f4b27f990a5d3a765e5ac0159b771ed909fa5344ad98419108ea13a6",
@@ -14042,7 +14042,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134",
+      "source_url": "shop/what-we-make-3/logo-3-layered-bouquet-134",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -14080,13 +14080,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1068/image_1024/6%20color%20rainbow%20arch%20%2820ft%29?unique=de2e15b"
+            "url": "web/image/product.product/1068/image_1024/6%20color%20rainbow%20arch%20%2820ft%29?unique=de2e15b"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/135/image_1920"
+        "primary_image_url": "web/image/product.template/135/image_1920"
       },
-      "legacy_source_id": 135,
+      "catalog_data_id": 135,
       "price_manifest": {
         "candidate_units": 2,
         "decision": "source_price_ready",
@@ -14157,7 +14157,7 @@
       "slug": "6-color-rainbow-arch",
       "source_name": "6 color rainbow arch",
       "source_trace": {
-        "legacy_source_product_id": 135,
+        "catalog_data_product_id": 135,
         "source_axis_hashes": [
           {
             "name": "Arch Size",
@@ -14179,7 +14179,7 @@
             "Arch Size": "0dc28b4fff9d90f6c9e6766bea7aeb60e2351b8f563f001f116dd9c65b0cf6a2"
           },
           "currency": "USD",
-          "legacy_source_product_id": "135",
+          "catalog_data_product_id": "135",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "da3e3e323d6667d66bc36838c81b3a4e59e0269adfaece3b2b2f3cc61a908dc1",
@@ -14190,7 +14190,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135",
+        "source_url": "shop/what-we-make-3/6-color-rainbow-arch-135",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "ff444859291603fc189eadeeff18a226e0f5ae4c34211a15cad0315572e6edee",
@@ -14220,7 +14220,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135",
+      "source_url": "shop/what-we-make-3/6-color-rainbow-arch-135",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -14258,13 +14258,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1072/image_1024/Mother%27s%20day%20front%20yard%207%27%20Column?unique=c91c160"
+            "url": "web/image/product.product/1072/image_1024/Mother%27s%20day%20front%20yard%207%27%20Column?unique=c91c160"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/137/image_1920"
+        "primary_image_url": "web/image/product.template/137/image_1920"
       },
-      "legacy_source_id": 137,
+      "catalog_data_id": 137,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -14307,13 +14307,13 @@
       "slug": "mothers-day-front-yard-7-column",
       "source_name": "Mother's day front yard 7' Column",
       "source_trace": {
-        "legacy_source_product_id": 137,
+        "catalog_data_product_id": 137,
         "source_axis_hashes": [],
         "source_integrity": {
           "axis_value_counts": {},
           "axis_value_hashes": {},
           "currency": "USD",
-          "legacy_source_product_id": "137",
+          "catalog_data_product_id": "137",
           "source_declared_variant_count": 0,
           "source_valid_variant_count": 0,
           "valid_variant_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -14323,14 +14323,14 @@
           "simple_single_sku",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137",
+        "source_url": "shop/what-we-make-3/mothers-day-front-yard-7-column-137",
         "source_variant_pointers": {
           "source_variant_count": 0,
           "source_variant_pointer_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "source_variant_pointer_samples": []
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137",
+      "source_url": "shop/what-we-make-3/mothers-day-front-yard-7-column-137",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -14370,13 +14370,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1073/image_1024/Marble%20table%20decor%20%28Red%29?unique=1054a6a"
+            "url": "web/image/product.product/1073/image_1024/Marble%20table%20decor%20%28Red%29?unique=1054a6a"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/140/image_1920"
+        "primary_image_url": "web/image/product.template/140/image_1920"
       },
-      "legacy_source_id": 140,
+      "catalog_data_id": 140,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -14421,7 +14421,7 @@
       "slug": "marble-table-decor",
       "source_name": "Marble table decor",
       "source_trace": {
-        "legacy_source_product_id": 140,
+        "catalog_data_product_id": 140,
         "source_axis_hashes": [
           {
             "name": "Orbz toppers",
@@ -14442,7 +14442,7 @@
             "Orbz toppers": "dc79aa916ba7fba06442b9cdf9a3c3c08541aeed61a374150c4e171d10126f93"
           },
           "currency": "USD",
-          "legacy_source_product_id": "140",
+          "catalog_data_product_id": "140",
           "source_declared_variant_count": 10,
           "source_valid_variant_count": 10,
           "valid_variant_hash": "cf87f38a5426f3b3461c0458c578fb443028065ed542a2eb451ec881e3eaa313",
@@ -14452,7 +14452,7 @@
           "add_ons",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+        "source_url": "shop/what-we-make-3/marble-table-decor-140",
         "source_variant_pointers": {
           "source_variant_count": 10,
           "source_variant_pointer_hash": "cb49c7e23a5c53b0d8e11bd6b24aea735d7a838e5d58fe20755280192da65348",
@@ -14570,7 +14570,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+      "source_url": "shop/what-we-make-3/marble-table-decor-140",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -14621,13 +14621,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1083/image_1024/Paw%20Patrol%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/1083/image_1024/Paw%20Patrol%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/141/image_1920"
+        "primary_image_url": "web/image/product.template/141/image_1920"
       },
-      "legacy_source_id": 141,
+      "catalog_data_id": 141,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -14714,7 +14714,7 @@
       "slug": "paw-patrol-bouquet",
       "source_name": "Paw Patrol Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 141,
+        "catalog_data_product_id": 141,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -14748,7 +14748,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "141",
+          "catalog_data_product_id": "141",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "ece99c28f154ce266b97ed18aaa06ce294b3ae621770a77930f1799f6a6b3243",
@@ -14760,7 +14760,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141",
+        "source_url": "shop/what-we-make-3/paw-patrol-bouquet-141",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "252e032d199ce849cb4e027895e7ba18a7afcf2a33f9752c46a114ddec4dc9d1",
@@ -14898,7 +14898,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141",
+      "source_url": "shop/what-we-make-3/paw-patrol-bouquet-141",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -14949,13 +14949,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1086/image_1024/Elsa%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/1086/image_1024/Elsa%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/142/image_1920"
+        "primary_image_url": "web/image/product.template/142/image_1920"
       },
-      "legacy_source_id": 142,
+      "catalog_data_id": 142,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -15042,7 +15042,7 @@
       "slug": "elsa-bouquet",
       "source_name": "Elsa Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 142,
+        "catalog_data_product_id": 142,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -15076,7 +15076,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "142",
+          "catalog_data_product_id": "142",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "157128a1e37714ed484860cdb68670f799eb2b6f6c18e55a3224b96420fe65c3",
@@ -15088,7 +15088,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142",
+        "source_url": "shop/what-we-make-3/elsa-bouquet-142",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "c03a017d498e7a9144b098ca1b8cc1e66c9c6e4d0f4f9f6864f4fe4b77b102f5",
@@ -15226,7 +15226,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142",
+      "source_url": "shop/what-we-make-3/elsa-bouquet-142",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -15277,13 +15277,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1089/image_1024/Holy%20COW%21%21%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+            "url": "web/image/product.product/1089/image_1024/Holy%20COW%21%21%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/143/image_1920"
+        "primary_image_url": "web/image/product.template/143/image_1920"
       },
-      "legacy_source_id": 143,
+      "catalog_data_id": 143,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -15370,7 +15370,7 @@
       "slug": "holy-cow-bouquet",
       "source_name": "Holy COW!! Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 143,
+        "catalog_data_product_id": 143,
         "source_axis_hashes": [
           {
             "name": "Bouquet Size",
@@ -15404,7 +15404,7 @@
             "Bouquet Size": "66509bead146a0fdc7fbf098148f5e148691ae84185edf3a5d6008a6970b8fd5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "143",
+          "catalog_data_product_id": "143",
           "source_declared_variant_count": 30,
           "source_valid_variant_count": 30,
           "valid_variant_hash": "781ea9d400853f69f808df22a55e591bc55f5577f7420adb6042bf4aacb953b1",
@@ -15416,7 +15416,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143",
+        "source_url": "shop/what-we-make-3/holy-cow-bouquet-143",
         "source_variant_pointers": {
           "source_variant_count": 30,
           "source_variant_pointer_hash": "4a4ebe13339604e6d6ec35882c42d4bf61101c4abd59bd7b3f41aa48450483ac",
@@ -15554,7 +15554,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143",
+      "source_url": "shop/what-we-make-3/holy-cow-bouquet-143",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -15594,13 +15594,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1092/image_1024/Butterfly%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+            "url": "web/image/product.product/1092/image_1024/Butterfly%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/144/image_1920"
+        "primary_image_url": "web/image/product.template/144/image_1920"
       },
-      "legacy_source_id": 144,
+      "catalog_data_id": 144,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -15645,7 +15645,7 @@
       "slug": "butterfly-get-well-bouquet-latex-free",
       "source_name": "Butterfly \"GET WELL\" Bouquet (Latex free)",
       "source_trace": {
-        "legacy_source_product_id": 144,
+        "catalog_data_product_id": 144,
         "source_axis_hashes": [
           {
             "name": "Plush add ons",
@@ -15666,7 +15666,7 @@
             "Plush add ons": "f88f80e42c96071e1d55e2091a7cebcfc0094ada91bfed6e90e4892008a4a63f"
           },
           "currency": "USD",
-          "legacy_source_product_id": "144",
+          "catalog_data_product_id": "144",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "869ccb487e3e4d0477460e84e81c929635793ca7e0df11f07e2e52e46956147d",
@@ -15676,7 +15676,7 @@
           "add_ons",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+        "source_url": "shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "11de283845236cfa037574f77d62a94ee5fbbc4581e05ad57dc809556ed5705a",
@@ -15706,7 +15706,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+      "source_url": "shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -15746,13 +15746,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1094/image_1024/Bandage%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+            "url": "web/image/product.product/1094/image_1024/Bandage%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/146/image_1920"
+        "primary_image_url": "web/image/product.template/146/image_1920"
       },
-      "legacy_source_id": 146,
+      "catalog_data_id": 146,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -15797,7 +15797,7 @@
       "slug": "bandage-get-well-bouquet-latex-free",
       "source_name": "Bandage \"GET WELL\" Bouquet (Latex free)",
       "source_trace": {
-        "legacy_source_product_id": 146,
+        "catalog_data_product_id": 146,
         "source_axis_hashes": [
           {
             "name": "Plush add ons",
@@ -15818,7 +15818,7 @@
             "Plush add ons": "f88f80e42c96071e1d55e2091a7cebcfc0094ada91bfed6e90e4892008a4a63f"
           },
           "currency": "USD",
-          "legacy_source_product_id": "146",
+          "catalog_data_product_id": "146",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "f5443a6a08d37a0b6b1d6fd5ba08ea411fd797836cafc8ba9808744189e3d631",
@@ -15828,7 +15828,7 @@
           "add_ons",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+        "source_url": "shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "8c094bcb72eb18cb068e2b671481ae044b46310a9b4970ec3d55478fa4dfc6bd",
@@ -15858,7 +15858,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+      "source_url": "shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -15898,13 +15898,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1095/image_1024/Shooting%20star%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+            "url": "web/image/product.product/1095/image_1024/Shooting%20star%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/147/image_1920"
+        "primary_image_url": "web/image/product.template/147/image_1920"
       },
-      "legacy_source_id": 147,
+      "catalog_data_id": 147,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -15949,7 +15949,7 @@
       "slug": "shooting-star-get-well-bouquet-latex-free",
       "source_name": "Shooting star \"GET WELL\" Bouquet (Latex free)",
       "source_trace": {
-        "legacy_source_product_id": 147,
+        "catalog_data_product_id": 147,
         "source_axis_hashes": [
           {
             "name": "Plush add ons",
@@ -15970,7 +15970,7 @@
             "Plush add ons": "f88f80e42c96071e1d55e2091a7cebcfc0094ada91bfed6e90e4892008a4a63f"
           },
           "currency": "USD",
-          "legacy_source_product_id": "147",
+          "catalog_data_product_id": "147",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "1733149aba3bef64f18df3b042c670d80dc836bf1137367118fcbc7f5ce7572b",
@@ -15980,7 +15980,7 @@
           "add_ons",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+        "source_url": "shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "dc7d6d5da910c9c9f7f29c37c9df1ba2bc8a7ee9e4a06f956631aae1fb624e38",
@@ -16010,7 +16010,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+      "source_url": "shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
       "status_reasons": [
         "review-only add-on axis hidden until mapped"
       ]
@@ -16048,13 +16048,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1115/image_1024/6%27%20Graduation%20stands%20%28Congrats%29?unique=23bd386"
+            "url": "web/image/product.product/1115/image_1024/6%27%20Graduation%20stands%20%28Congrats%29?unique=23bd386"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/149/image_1920"
+        "primary_image_url": "web/image/product.template/149/image_1920"
       },
-      "legacy_source_id": 149,
+      "catalog_data_id": 149,
       "price_manifest": {
         "candidate_units": 2,
         "decision": "source_price_ready",
@@ -16124,7 +16124,7 @@
       "slug": "6-graduation-stands",
       "source_name": "6' Graduation stands",
       "source_trace": {
-        "legacy_source_product_id": 149,
+        "catalog_data_product_id": 149,
         "source_axis_hashes": [
           {
             "name": "Graduation stands",
@@ -16145,7 +16145,7 @@
             "Graduation stands": "d2b1893662942c8a1dd92e364edb0c10c4b33e72891e7df850f105d627c4c764"
           },
           "currency": "USD",
-          "legacy_source_product_id": "149",
+          "catalog_data_product_id": "149",
           "source_declared_variant_count": 2,
           "source_valid_variant_count": 2,
           "valid_variant_hash": "e68f466aa576af3d9c6b736825957d2243c461cb0d13d8632b04379078933e73",
@@ -16155,7 +16155,7 @@
           "finite_variants",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149",
+        "source_url": "shop/what-we-make-3/6-graduation-stands-149",
         "source_variant_pointers": {
           "source_variant_count": 2,
           "source_variant_pointer_hash": "009957556363974de34f3261816794b8ce9e3f6ee1afce7d3ba8376d812e62b1",
@@ -16185,7 +16185,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149",
+      "source_url": "shop/what-we-make-3/6-graduation-stands-149",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -16223,13 +16223,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1181/image_1024/classic%20organic%20for%20easel?unique=56465fb"
+            "url": "web/image/product.product/1181/image_1024/classic%20organic%20for%20easel?unique=56465fb"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/152/image_1920"
+        "primary_image_url": "web/image/product.template/152/image_1920"
       },
-      "legacy_source_id": 152,
+      "catalog_data_id": 152,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -16277,7 +16277,7 @@
       "slug": "classic-organic-for-easel",
       "source_name": "classic organic for easel",
       "source_trace": {
-        "legacy_source_product_id": 152,
+        "catalog_data_product_id": 152,
         "source_axis_hashes": [
           {
             "name": "latex colors",
@@ -16299,7 +16299,7 @@
             "latex colors": "050ef615cf5ecb9dcb7ce37b156e63a74cddb18fd5ec91fc5d51da5a5832c57b"
           },
           "currency": "USD",
-          "legacy_source_product_id": "152",
+          "catalog_data_product_id": "152",
           "source_declared_variant_count": 53,
           "source_valid_variant_count": 53,
           "valid_variant_hash": "5de30189120789906015cddd5ec247c0099cfb50e4490aef69d94b19a38de7cf",
@@ -16310,7 +16310,7 @@
           "multi_color_recipes",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152",
+        "source_url": "shop/what-we-make-3/classic-organic-for-easel-152",
         "source_variant_pointers": {
           "source_variant_count": 53,
           "source_variant_pointer_hash": "f60afb6c7fa45648063f0264274f63cfe9a3be2dcb8f3d324f31e88ac460cb04",
@@ -16428,7 +16428,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152",
+      "source_url": "shop/what-we-make-3/classic-organic-for-easel-152",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -16466,13 +16466,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1190/image_1024/Easter%20Arch?unique=ea94776"
+            "url": "web/image/product.product/1190/image_1024/Easter%20Arch?unique=ea94776"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/158/image_1920"
+        "primary_image_url": "web/image/product.template/158/image_1920"
       },
-      "legacy_source_id": 158,
+      "catalog_data_id": 158,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -16515,13 +16515,13 @@
       "slug": "easter-arch",
       "source_name": "Easter Arch",
       "source_trace": {
-        "legacy_source_product_id": 158,
+        "catalog_data_product_id": 158,
         "source_axis_hashes": [],
         "source_integrity": {
           "axis_value_counts": {},
           "axis_value_hashes": {},
           "currency": "USD",
-          "legacy_source_product_id": "158",
+          "catalog_data_product_id": "158",
           "source_declared_variant_count": 0,
           "source_valid_variant_count": 0,
           "valid_variant_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -16531,14 +16531,14 @@
           "simple_single_sku",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158",
+        "source_url": "shop/what-we-make-3/easter-arch-158",
         "source_variant_pointers": {
           "source_variant_count": 0,
           "source_variant_pointer_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "source_variant_pointer_samples": []
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158",
+      "source_url": "shop/what-we-make-3/easter-arch-158",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -16576,13 +16576,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1204/image_1024/Mother%27s%20Day%20Bouquet?unique=ea94776"
+            "url": "web/image/product.product/1204/image_1024/Mother%27s%20Day%20Bouquet?unique=ea94776"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/165/image_1920"
+        "primary_image_url": "web/image/product.template/165/image_1920"
       },
-      "legacy_source_id": 165,
+      "catalog_data_id": 165,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -16625,13 +16625,13 @@
       "slug": "mothers-day-bouquet",
       "source_name": "Mother's Day Bouquet",
       "source_trace": {
-        "legacy_source_product_id": 165,
+        "catalog_data_product_id": 165,
         "source_axis_hashes": [],
         "source_integrity": {
           "axis_value_counts": {},
           "axis_value_hashes": {},
           "currency": "USD",
-          "legacy_source_product_id": "165",
+          "catalog_data_product_id": "165",
           "source_declared_variant_count": 0,
           "source_valid_variant_count": 0,
           "valid_variant_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -16641,14 +16641,14 @@
           "simple_single_sku",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165",
+        "source_url": "shop/what-we-make-3/mothers-day-bouquet-165",
         "source_variant_pointers": {
           "source_variant_count": 0,
           "source_variant_pointer_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "source_variant_pointer_samples": []
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165",
+      "source_url": "shop/what-we-make-3/mothers-day-bouquet-165",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -16686,13 +16686,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1233/image_1024/Large%20Garland%20%286ft%29?unique=132b54e"
+            "url": "web/image/product.product/1233/image_1024/Large%20Garland%20%286ft%29?unique=132b54e"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/177/image_1920"
+        "primary_image_url": "web/image/product.template/177/image_1920"
       },
-      "legacy_source_id": 177,
+      "catalog_data_id": 177,
       "price_manifest": {
         "candidate_units": 3,
         "decision": "source_price_ready",
@@ -16783,7 +16783,7 @@
       "slug": "large-garland",
       "source_name": "Large Garland",
       "source_trace": {
-        "legacy_source_product_id": 177,
+        "catalog_data_product_id": 177,
         "source_axis_hashes": [
           {
             "name": "Garland Length",
@@ -16818,7 +16818,7 @@
             "Garland Length": "0896e0422ac372538be883c2c0cb639efbe925b1554c7041d70c2ac167d289c5"
           },
           "currency": "USD",
-          "legacy_source_product_id": "177",
+          "catalog_data_product_id": "177",
           "source_declared_variant_count": 87,
           "source_valid_variant_count": 87,
           "valid_variant_hash": "85e60b9336e7de64b2d22188d06007b3e04bb22320f70e385dbd6144e537b23e",
@@ -16831,7 +16831,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177",
+        "source_url": "shop/what-we-make-3/large-garland-177",
         "source_variant_pointers": {
           "source_variant_count": 87,
           "source_variant_pointer_hash": "83608bb11291a2a8912361d6412aac39b7f714e2931c7199d0323d85fba01f45",
@@ -16969,7 +16969,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177",
+      "source_url": "shop/what-we-make-3/large-garland-177",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -17007,13 +17007,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1237/image_1024/Large%20Organic%20Column%20%285ft%29?unique=132b54e"
+            "url": "web/image/product.product/1237/image_1024/Large%20Organic%20Column%20%285ft%29?unique=132b54e"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/178/image_1920"
+        "primary_image_url": "web/image/product.template/178/image_1920"
       },
-      "legacy_source_id": 178,
+      "catalog_data_id": 178,
       "price_manifest": {
         "candidate_units": 6,
         "decision": "source_price_ready",
@@ -17149,7 +17149,7 @@
       "slug": "large-organic-column",
       "source_name": "Large Organic Column",
       "source_trace": {
-        "legacy_source_product_id": 178,
+        "catalog_data_product_id": 178,
         "source_axis_hashes": [
           {
             "name": "Column Height",
@@ -17184,7 +17184,7 @@
             "Column Height": "78da44243047264dfb9c1b7ef6178627ba3c1b170d6c05b6ac5f6646890ebc6a"
           },
           "currency": "USD",
-          "legacy_source_product_id": "178",
+          "catalog_data_product_id": "178",
           "source_declared_variant_count": 174,
           "source_valid_variant_count": 174,
           "valid_variant_hash": "23e39a5fce7678b3739bab27006d950dfe6db5fbf05431c2fdd61b877b3c5ccc",
@@ -17197,7 +17197,7 @@
           "conditional_pricing",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178",
+        "source_url": "shop/what-we-make-3/large-organic-column-178",
         "source_variant_pointers": {
           "source_variant_count": 174,
           "source_variant_pointer_hash": "e2862431907ccfede33f63c8559e4aac8328f24a6577dff864a162b3f03ed530",
@@ -17335,7 +17335,7 @@
           ]
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178",
+      "source_url": "shop/what-we-make-3/large-organic-column-178",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -17373,13 +17373,13 @@
           {
             "decision": "hold_until_classified",
             "source_index": 1,
-            "url": "http://5.78.136.133/web/image/product.product/1243/image_1024/Pride%20Arch?unique=132b54e"
+            "url": "web/image/product.product/1243/image_1024/Pride%20Arch?unique=132b54e"
           }
         ],
         "primary_decision": "import_as_primary_image",
-        "primary_image_url": "http://5.78.136.133/web/image/product.template/179/image_1920"
+        "primary_image_url": "web/image/product.template/179/image_1920"
       },
-      "legacy_source_id": 179,
+      "catalog_data_id": 179,
       "price_manifest": {
         "candidate_units": 1,
         "decision": "source_price_ready",
@@ -17422,13 +17422,13 @@
       "slug": "pride-arch",
       "source_name": "Pride Arch",
       "source_trace": {
-        "legacy_source_product_id": 179,
+        "catalog_data_product_id": 179,
         "source_axis_hashes": [],
         "source_integrity": {
           "axis_value_counts": {},
           "axis_value_hashes": {},
           "currency": "USD",
-          "legacy_source_product_id": "179",
+          "catalog_data_product_id": "179",
           "source_declared_variant_count": 0,
           "source_valid_variant_count": 0,
           "valid_variant_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -17438,14 +17438,14 @@
           "simple_single_sku",
           "media_gallery_variant_media"
         ],
-        "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179",
+        "source_url": "shop/what-we-make-3/pride-arch-179",
         "source_variant_pointers": {
           "source_variant_count": 0,
           "source_variant_pointer_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "source_variant_pointer_samples": []
         }
       },
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179",
+      "source_url": "shop/what-we-make-3/pride-arch-179",
       "status_reasons": [
         "product data maps to current ERPNext backend contract"
       ]
@@ -17462,15 +17462,15 @@
       "version": "custom_lt_configuration_version"
     }
   },
-  "schema_version": "lt-v1-legacy_source-erpnext-import-manifest-v1",
+  "schema_version": "lt-v1-catalog_data-erpnext-import-manifest-v1",
   "source_artifacts": {
-    "add_on_packet": "audits\\catalog-import-audit-2026-05-08\\22-product-add-on-approval-packet.json",
-    "media_packet": "audits\\catalog-import-audit-2026-05-08\\23-product-page-media-classification-packet.json",
-    "price_enrichment": "audits\\catalog-import-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
-    "price_review": "audits\\catalog-import-audit-2026-05-08\\24-product-page-price-review-packet.json",
-    "purge_scope": "audits\\catalog-import-audit-2026-05-08\\16-catalog-purge-scope-dry-run.json",
-    "slug_to_group": "_resources\\catalog-source\\slug_to_group.json",
-    "source_catalog": "_resources\\catalog-source\\catalog.json"
+    "add_on_packet": "audits/catalog-import-audit-2026-05-08/22-product-add-on-approval-packet.json",
+    "media_packet": "audits/catalog-import-audit-2026-05-08/23-product-page-media-classification-packet.json",
+    "price_enrichment": "audits/catalog-import-audit-2026-05-08/21-product-page-price-enrichment-candidates.json",
+    "price_review": "audits/catalog-import-audit-2026-05-08/24-product-page-price-review-packet.json",
+    "purge_scope": "audits/catalog-import-audit-2026-05-08/16-catalog-purge-scope-dry-run.json",
+    "slug_to_group": "_resources/catalog-source/slug_to_group.json",
+    "source_catalog": "_resources/catalog-source/catalog.json"
   },
   "summary": {
     "excluded_by_primary_reason": {},
@@ -17502,7 +17502,7 @@
       "no_owner_exclusions_active",
       "owner_must_work_products_are_included",
       "no_needs_review_backend_contracts",
-      "legacy_source_products_allowed_when_backend_contract_exists",
+      "catalog_data_products_allowed_when_backend_contract_exists",
       "source_ids_axis_hashes_variant_pointers_and_pattern_class_preserved"
     ],
     "errors": [],

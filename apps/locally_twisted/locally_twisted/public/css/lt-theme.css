@@ -1770,7 +1770,7 @@ body.product-page {
 
 /* ====================================================================
    Footer — Newsletter strip
-   Hetzner-faithful: "Stay in the loop" heading, subhead, email input
+   current import capture-faithful: "Stay in the loop" heading, subhead, email input
    + Join button, error/success feedback states.
    Builder JS owns the submit handler and frappe.call wiring.
    2026-04-30 chrome rebuild.
@@ -2519,8 +2519,8 @@ body.lt-filter-open {
     }
 }
 
-/* ── Card refinement to match Hetzner spec ─────────────────────────────
-   GL feedback 2026-04-30: cards looked tacky. Hetzner cards have NO border,
+/* ── Card refinement to match current import capture spec ─────────────────────────────
+   GL feedback 2026-04-30: cards looked tacky. current import capture cards have NO border,
    NO shadow, NO hover transforms — just clean image + name + description +
    price. Strip the chrome and add the description text. JS patch in
    templates/generators/item_group.html replaces .product-category with
@@ -2557,7 +2557,7 @@ body.lt-filter-open {
     display: none;
 }
 
-/* Description line — Hetzner's muted small text under the title */
+/* Description line — current import capture's muted small text under the title */
 #products-grid-area .lt-card-desc {
     font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
@@ -2610,7 +2610,7 @@ body.lt-filter-open {
     gap: 2rem 1.75rem;
 }
 
-/* Pagination — centered like Hetzner, with gap between buttons, contained */
+/* Pagination — centered like current import capture, with gap between buttons, contained */
 .lt-shop__pagination {
     justify-content: center;
     gap: 1rem;

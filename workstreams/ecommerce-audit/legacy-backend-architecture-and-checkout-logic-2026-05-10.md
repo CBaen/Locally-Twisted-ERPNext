@@ -1,31 +1,31 @@
-# legacy_source Backend Architecture and Checkout Logic Source Witness
+# catalog_data Backend Architecture and Checkout Logic Source Witness
 
-D:2026-05-10 | Check:live legacy_source backend/public read-only inspection + local legacy_source module source 2026-05-10 | Confidence:high
+D:2026-05-10 | Check:live catalog_data backend/public read-only inspection + local catalog_data module source 2026-05-10 | Confidence:high
 
 ## Scope and guardrail
 
-This is a read-only source-witness artifact. legacy_source is being used as the behavioral reference for ERPNext/Frappe ecommerce receiving-layer design.
+This is a read-only source-witness artifact. catalog_data is being used as the behavioral reference for ERPNext/Frappe ecommerce receiving-layer design.
 
 Allowed during this pass: backend navigation, browser inspection, JSON-RPC reads, public cart/checkout/payment page reads, local source reads.
 
 Not performed: save, create, delete, submit product inquiry, submit checkout, create transaction, pay, publish, import, purge.
 
-Sensitive checkout values observed in the browser were redacted from this artifact. Do not copy legacy_source code/schema blindly; preserve business meaning and guardrails.
+Sensitive checkout values observed in the browser were redacted from this artifact. Do not copy catalog_data code/schema blindly; preserve business meaning and guardrails.
 
 ## Evidence sources
 
-### Live legacy_source backend / public site
+### Live catalog_data backend / public site
 
-- Backend product: `http://5.78.136.133/legacy_source/products/57` (`Classic Arch`).
-- Public product: `http://5.78.136.133/shop/classic-arch-57`.
+- Backend product: `catalog_data/products/57` (`Classic Arch`).
+- Public product: `shop/classic-arch-57`.
 - Public cart, checkout, payment pages observed read-only.
-- Live legacy_source module: `locally_twisted`, installed version `19.0.2.15.0`.
+- Live catalog_data module: `locally_twisted`, installed version `19.0.2.15.0`.
 - Live Classic Arch product template id: `57`.
 - Live payment page was observed only up to the payment method selection screen; `Pay now` was not clicked.
 
 ### Local source files checked
 
-- `/home/guidingl/projects/locally-twisted-legacy_source/addons/locally_twisted/__manifest__.py`
+- `/home/guidingl/projects/external-catalog-data/addons/locally_twisted/__manifest__.py`
 - `.../models/product_template.py`
 - `.../models/crm_lead.py`
 - `.../models/project_task.py`
@@ -38,9 +38,9 @@ Sensitive checkout values observed in the browser were redacted from this artifa
 - `.../static/src/js/payment_post_processing.js`
 - `.../controllers/main.py`
 
-## 1. legacy_source module architecture: this is not only ecommerce
+## 1. catalog_data module architecture: this is not only ecommerce
 
-The legacy_source addon is a business system module, not just shop styling. Its manifest depends on website/shop, delivery, Stripe payments, portal/auth, CRM, calendar, account, purchase, MRP, project/sale_project, HR/timesheets/expenses, surveys, mass mailing, loyalty, base automation, and privacy lookup.
+The catalog_data addon is a business system module, not just shop styling. Its manifest depends on website/shop, delivery, Stripe payments, portal/auth, CRM, calendar, account, purchase, MRP, project/sale_project, HR/timesheets/expenses, surveys, mass mailing, loyalty, base automation, and privacy lookup.
 
 ERPNext implication: the ecommerce build cannot be treated as isolated product cards. Shop decisions touch CRM, customer accounts, payments, tax/delivery, project/task execution, follow-up automation, and privacy exposure.
 
@@ -86,7 +86,7 @@ Price extras observed:
 - Add LED Lights: +$50.
 - latex colors: 53 values, no price extras observed.
 
-Critical pattern: **legacy_source keeps the combinatorial dimension out of SKU variants**. Size creates the product identity; colors/design/lights are option payload attached to the cart/order line.
+Critical pattern: **catalog_data keeps the combinatorial dimension out of SKU variants**. Size creates the product identity; colors/design/lights are option payload attached to the cart/order line.
 
 ERPNext receiving requirement:
 
@@ -120,7 +120,7 @@ ERPNext receiving requirement:
 
 ## 4. Media and product description logic
 
-legacy_source product media:
+catalog_data product media:
 
 - Live Classic Arch has 10 product template images.
 - Local backend view adds a dedicated product Images tab for `product_template_image_ids` (`product_views.xml:11`).
@@ -141,7 +141,7 @@ ERPNext receiving requirement:
 
 ## 5. Product inquiry / quote-first path
 
-legacy_source injects a product inquiry form below product description on every product page (`website_sale_templates.xml:114-123`).
+catalog_data injects a product inquiry form below product description on every product page (`website_sale_templates.xml:114-123`).
 
 The form:
 
@@ -220,7 +220,7 @@ Cart page showed:
 Checkout/address page showed:
 
 - Delivery method options:
-  - Standard delivery / free observed default label from legacy_source native option,
+  - Standard delivery / free observed default label from catalog_data native option,
   - Pickup (Free),
   - Standard Delivery $15,
   - Park City Delivery $50,
@@ -259,7 +259,7 @@ Carriers:
 - Pickup (Free): `delivery_data.xml:92`.
 - Standard Delivery: `delivery_data.xml:101`, fixed `$15`, zip prefixes for Wasatch Front.
 - Park City Delivery: `delivery_data.xml:119`, fixed `$50`, zip prefixes `84060`, `84068`, `84098`.
-- Out-of-Area Quote: `delivery_data.xml:133`, fixed `$35` in current legacy_source source.
+- Out-of-Area Quote: `delivery_data.xml:133`, fixed `$35` in current catalog_data source.
 
 Source note says zone overlap is intentional and business review happens at invoice time.
 
@@ -316,7 +316,7 @@ ERPNext receiving requirement:
 
 ## 10. Project/task fulfillment architecture
 
-legacy_source uses sale/project/CRM links for fulfillment:
+catalog_data uses sale/project/CRM links for fulfillment:
 
 - `project.task` has event location, venue, crew size, setup duration, materials notes, onsite contacts, gate instructions, special instructions, CRM lead link, calendar event link, internal company photos, bin status, missing items, pickup tracking (`project_task.py`).
 - Automation copies CRM lead fields to new tasks when sale_project creates tasks from confirmed sales order lines.
@@ -328,7 +328,7 @@ ERPNext receiving requirement:
 - Ecommerce/order handoff must create enough structured fulfillment context for operations, not just collect money.
 - Customer-facing portal fields and internal crew/proof fields must be separated.
 
-## 11. Public/security hardening observed in legacy_source source
+## 11. Public/security hardening observed in catalog_data source
 
 Public-route hardening exists:
 
@@ -413,13 +413,13 @@ Before importing or launching product rows, ERPNext must prove:
 
 - ERPNext implementation still needs to be mapped against this blueprint.
 - Prior ERPNext verifier failure `bench execute failed` was rechecked at 2026-05-10 14:06 MDT and no longer reproduces; latest readiness report is passing with 14 pass / 0 blocked / 1 deferred. Treat the original failure as a transient runtime issue unless it recurs with stdout/stderr preserved.
-- Lane E convergence artifact is required in the packet; it should cite this live legacy_source witness rather than the earlier artifactless child completion.
-- This pass observed legacy_source payment page but did not submit payment; no end-to-end payment claim is made.
+- Lane E convergence artifact is required in the packet; it should cite this live catalog_data witness rather than the earlier artifactless child completion.
+- This pass observed catalog_data payment page but did not submit payment; no end-to-end payment claim is made.
 - Existing current cart was observed read-only; this pass did not create a fresh cart/order.
 
 ## Bottom line
 
-legacy_source's architecture is not “every customer choice becomes a variant.” The survival pattern is:
+catalog_data's architecture is not “every customer choice becomes a variant.” The survival pattern is:
 
 > true variant for SKU/price identity + no-variant structured options for customer meaning + backend-preserved cart/order-line intent + quote-first escape hatch + guarded automations.
 
@@ -427,9 +427,9 @@ ERPNext should receive that pattern directly instead of trying to make native We
 
 ---
 
-## Addendum: deeper live legacy_source extraction, 2026-05-10 14:05 MDT
+## Addendum: deeper live catalog_data extraction, 2026-05-10 14:05 MDT
 
-D:2026-05-10 | Check:live legacy_source JSON-RPC read-only extraction 2026-05-10T20:05Z | Confidence:high
+D:2026-05-10 | Check:live catalog_data JSON-RPC read-only extraction 2026-05-10T20:05Z | Confidence:high
 
 This addendum captures the specific backend records GL asked for: product page, variant records, variant/no-variant attribute pages, delivery/payment choices, automations, custom CRM/task fields, and checkout/order-line preservation. No write routes were called.
 
@@ -569,7 +569,7 @@ Live `delivery.carrier` records matching checkout:
 | 7 | Out-of-Area Quote | fixed | `[DELIVERY_OUT_OF_AREA] Out-of-Area Delivery Quote` | $35 | true |
 | 1 | Standard delivery | fixed | `[Delivery_007] Standard delivery` | $0 | true |
 
-The fifth `Standard delivery` is an legacy_source/default-ish published carrier observed in the live DB, while the local LT data file defines the capitalized Standard Delivery/Pickup/Park City/Out-of-Area carriers. ERPNext needs an explicit delivery-service mapping and a rule to avoid duplicate/confusing checkout choices.
+The fifth `Standard delivery` is an catalog_data/default-ish published carrier observed in the live DB, while the local LT data file defines the capitalized Standard Delivery/Pickup/Park City/Out-of-Area carriers. ERPNext needs an explicit delivery-service mapping and a rule to avoid duplicate/confusing checkout choices.
 
 ### E. Payment provider state observed without submitting payment
 
@@ -630,13 +630,13 @@ Result at 2026-05-10 14:06 MDT:
 - Summary: `pass=14`, `blocked=0`, `partial=0`, `deferred=1`, `info=0`.
 - Deferred item: finance/bank/payment integration remains explicitly backburnered.
 
-This clears the specific stale `bench execute failed` blocker for now. It does not clear the no-payment-submission legacy_source boundary and does not authorize product purge/import/public launch by itself.
+This clears the specific stale `bench execute failed` blocker for now. It does not clear the no-payment-submission catalog_data boundary and does not authorize product purge/import/public launch by itself.
 
 ---
 
 ## Addendum: catalog-wide backend pattern extraction, 2026-05-10 14:12 MDT
 
-D:2026-05-10 | Check:live legacy_source JSON-RPC catalog summary 2026-05-10T20:12Z | Confidence:high
+D:2026-05-10 | Check:live catalog_data JSON-RPC catalog summary 2026-05-10T20:12Z | Confidence:high
 
 To verify Classic Arch is not a one-off, a live read-only catalog summary was extracted from `product.template`, `product.template.attribute.line`, and `product.attribute`.
 
@@ -669,13 +669,13 @@ Representative option-heavy products:
 | 104 | Missionary Homecoming Display | yes | 1 | `latex colors`: 53, multi, no-variant |
 | 115-119 | Character bouquets | yes | 3 each | `Bouquet Size`: 3 variants + `Add Foil Number`: 10 no-variant |
 
-Conclusion: legacy_source's catalog architecture repeatedly uses the same pattern, not just Classic Arch. Variant axes stay small and commercially meaningful; large/customer-choice dimensions are no-variant option payloads.
+Conclusion: catalog_data's catalog architecture repeatedly uses the same pattern, not just Classic Arch. Variant axes stay small and commercially meaningful; large/customer-choice dimensions are no-variant option payloads.
 
 ERPNext implication: the receiving layer must be generalized across the catalog, not hard-coded for Classic Arch.
 
 ## Addendum: cart/checkout/payment DOM route proof, 2026-05-10 14:13 MDT
 
-D:2026-05-10 | Check:live legacy_source public cart/checkout/payment DOM read-only 2026-05-10T20:13Z | Confidence:high
+D:2026-05-10 | Check:live catalog_data public cart/checkout/payment DOM read-only 2026-05-10T20:13Z | Confidence:high
 
 The current browser session has an existing draft cart/order. It was inspected without mutating it. Customer/account/address specifics are redacted here.
 

@@ -161,10 +161,10 @@ A search across Wappalyzer's 6,400 Frappe installations found that most high-tra
 
 ---
 
-## Approved LT Content from Live legacy_source
+## Approved LT Content from Live catalog_data
 
-**legacy_source server at http://5.78.136.133/ — CONNECTION REFUSED**
-The Hetzner server did not respond to any fetch attempts (ECONNREFUSED). This server may be down, firewalled, or decommissioned. Attempted twice with no response.
+**catalog_data server at  — CONNECTION REFUSED**
+The current import capture server did not respond to any fetch attempts (ECONNREFUSED). This server may be down, firewalled, or decommissioned. Attempted twice with no response.
 
 **Content captured from LIVE WEBSITE: locallytwisted.com (the actual customer-facing site)**
 This is the site customers currently use. Content is Jeff-approved and in active use.
@@ -306,7 +306,7 @@ This is the site customers currently use. Content is Jeff-approved and in active
 
 ## Gaps and Unknowns
 
-1. **legacy_source server inaccessible.** http://5.78.136.133/ returned ECONNREFUSED on both attempts. The Hetzner deployment appears to be down or firewalled. The approved copy was sourced from the live locallytwisted.com instead, which is Jeff's actual customer-facing site and equally authoritative.
+1. **catalog_data server inaccessible.**  returned ECONNREFUSED on both attempts. The current import capture deployment appears to be down or firewalled. The approved copy was sourced from the live locallytwisted.com instead, which is Jeff's actual customer-facing site and equally authoritative.
 
 2. **Frappe Builder + webshop coexistence — no definitive answer.** No official documentation confirms or denies routing conflicts between Builder pages and webshop routes. This is a real gap that requires testing in the LT docker environment before committing to Builder as an approach.
 

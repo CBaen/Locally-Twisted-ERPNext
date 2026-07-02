@@ -1,7 +1,7 @@
 """Source price enrichment candidates for product-page imports.
 
 This module is pure/reporting code. It does not mutate ERPNext or the saved
-legacy_source scrape. Its job is to make price provenance explicit before any catalog
+catalog_data scrape. Its job is to make price provenance explicit before any catalog
 purge/reimport can use the source artifact.
 """
 
@@ -105,7 +105,7 @@ class PriceCandidate:
 @dataclass(frozen=True)
 class PriceEnrichmentRow:
     slug: str
-    legacy_source_id: str
+    catalog_data_id: str
     name: str
     source_url: str
     product_page_type: str
@@ -157,7 +157,7 @@ class PriceEnrichmentRow:
     def to_dict(self) -> dict[str, Any]:
         return {
             "slug": self.slug,
-            "legacy_source_id": self.legacy_source_id,
+            "catalog_data_id": self.catalog_data_id,
             "name": self.name,
             "source_url": self.source_url,
             "product_page_type": self.product_page_type,
@@ -365,7 +365,7 @@ def build_price_enrichment_report(
         rows.append(
             PriceEnrichmentRow(
                 slug=contract.slug,
-                legacy_source_id=str(product.get("legacy_source_id") or ""),
+                catalog_data_id=str(product.get("catalog_data_id") or ""),
                 name=str(product.get("name") or contract.source_name or contract.slug),
                 source_url=str(product.get("url") or ""),
                 product_page_type=contract.product_page_type,

@@ -1,7 +1,7 @@
 """Verify Phase 3 ready-to-order checkout product-family preservation.
 
 This is a rollback-only backend proof. It does not open public ecommerce, does
-not touch legacy_source, does not create live payment sessions, and does not send
+not touch catalog_data, does not create live payment sessions, and does not send
 customer messages. It proves the first direct-checkout product family at the
 ERPNext/Frappe receiving layer: selected bouquet size + confirmed foil-number
 add-on survive cart/checkout resolution, submitted Sales Order rows, and copied

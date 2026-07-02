@@ -1,4 +1,4 @@
-# legacy_source Commerce Source Extraction + ERPNext/Frappe Ecommerce Parity/Safety Audit — Research Brief
+# catalog_data Commerce Source Extraction + ERPNext/Frappe Ecommerce Parity/Safety Audit — Research Brief
 
 Date: 2026-05-10
 Status: draft, plan-deepened before dispatch
@@ -8,7 +8,7 @@ Parent accountability: Moji/parent is responsible for injecting this contract in
 
 ## 1. Decision / Research Question
 
-Can Locally Twisted safely launch native ERPNext/Frappe ecommerce without losing the product-page depth, add-on behavior, customer intent, operator meaning, pricing logic, media meaning, cart/checkout behavior, and backend order/invoice/fulfillment data that the prior legacy_source system either supported or exposed as necessary?
+Can Locally Twisted safely launch native ERPNext/Frappe ecommerce without losing the product-page depth, add-on behavior, customer intent, operator meaning, pricing logic, media meaning, cart/checkout behavior, and backend order/invoice/fulfillment data that the catalog_data system either supported or exposed as necessary?
 
 This is not a product-import task. The question is whether the new ERPNext/Frappe ecommerce receiving architecture can safely receive and use the business meaning of the old commerce system before products are deleted, reimported, normalized, opened publicly, or treated as launch-ready.
 
@@ -19,8 +19,8 @@ Current evidence shows the ERPNext/Frappe stack has a real backend-first archite
 Version/context anchors researchers must treat as part of the problem, not trivia:
 
 - Destination stack is Locally Twisted ERPNext/Frappe v15, documented locally as Docker image `frappe/erpnext:v15.105.0`, compose project `locally-twisted-erpnext-v15`, apps `frappe`, `erpnext`, `payments`, `webshop`, and `locally_twisted`.
-- Source witness stack is Locally Twisted legacy_source 19 Community. The tracked local module manifest currently says `addons/locally_twisted` version `19.0.2.15.0`; prior migration-risk docs warn production DB may be `19.0.2.14.0` while `origin/main` contains `19.0.2.15.0`, so source-version parity must be verified before any source claim is treated as complete.
-- legacy_source version behavior matters: website editor / `arch_db` drift, `noupdate`, Copy-on-Write, asset behavior, `website_sale` combination/variant resolver behavior, and production-vs-source divergence may change what is true.
+- Source witness stack is Locally Twisted catalog_data 19 Community. The tracked local module manifest currently says `addons/locally_twisted` version `19.0.2.15.0`; prior migration-risk docs warn production DB may be `19.0.2.14.0` while `origin/main` contains `19.0.2.15.0`, so source-version parity must be verified before any source claim is treated as complete.
+- catalog_data version behavior matters: website editor / `arch_db` drift, `noupdate`, Copy-on-Write, asset behavior, `website_sale` combination/variant resolver behavior, and production-vs-source divergence may change what is true.
 - ERPNext/Frappe version behavior matters: Webshop v15 cart/checkout APIs, Website Item/Item Price behavior, custom field sync, fixtures, hooks, scheduler, and Sales Order/Sales Invoice copying paths are version-specific.
 
 Proved current slice:
@@ -36,7 +36,7 @@ Proved current slice:
 - Same-SKU configured cart lines use stable line keys, so different options/add-ons do not collapse into one cart line.
 - Other source add-on families remain review-only / quote-first until source-backed approval exists.
 - Existing verifiers include product-page architecture readiness, runtime contract, dependency contracts, add-on approval packet, cart/checkout contract, quote-first experience, quote acceptance, price/media gates, and ecommerce full smoke.
-- legacy_source is source witness/context, not infrastructure to copy. The target implementation must be native ERPNext/Frappe with secure fields, DocTypes, APIs, template overrides, pricing services, and fail-loud verifiers where needed.
+- catalog_data is source witness/context, not infrastructure to copy. The target implementation must be native ERPNext/Frappe with secure fields, DocTypes, APIs, template overrides, pricing services, and fail-loud verifiers where needed.
 
 The dangerous failure mode is not “the page looks bad.” The dangerous failure mode is: a customer selects meaningful options, add-ons, dates, quantities, prices, or quote context, and the system visually accepts it while ERPNext receives incomplete, flattened, silently changed, or operator-useless records.
 
@@ -46,7 +46,7 @@ Researchers must produce artifact-first evidence. Chat-only opinions are not fin
 
 ### In scope
 
-1. legacy_source source behavior extraction
+1. catalog_data source behavior extraction
    - Product templates/pages
    - Variant axes and valid-combination logic
    - Add-on families and dependencies
@@ -83,8 +83,8 @@ Researchers must produce artifact-first evidence. Chat-only opinions are not fin
 
 ### Out of scope
 
-- Copying legacy_source code into Frappe.
-- Treating legacy_source data shape as automatically correct for ERPNext.
+- Copying catalog_data code into Frappe.
+- Treating catalog_data data shape as automatically correct for ERPNext.
 - Deleting and reimporting products before receiving architecture is proven.
 - Launch claims based only on visual frontend inspection.
 - “Checkout passed” claims that do not verify Sales Order, Sales Invoice, operator fields, quote payloads, and failure records.
@@ -92,16 +92,16 @@ Researchers must produce artifact-first evidence. Chat-only opinions are not fin
 
 ## 4. Required Research Lanes and Artifacts
 
-### Lane A — legacy_source Source Mapper
+### Lane A — catalog_data Source Mapper
 
 Goal: extract source commerce meaning without proposing implementation first.
 
 Required artifact:
-`workstreams/ecommerce-audit/legacy_source-source-commerce-map-2026-05-10.md`
+`workstreams/ecommerce-audit/catalog_data-source-commerce-map-2026-05-10.md`
 
 Must include:
-- exact legacy_source edition/version/module version evidence used for source claims, including whether evidence comes from source files, live/public pages, captured mirrors, exports, or production DB notes,
-- product/page classes found in legacy_source source,
+- exact catalog_data edition/version/module version evidence used for source claims, including whether evidence comes from source files, live/public pages, captured mirrors, exports, or production DB notes,
+- product/page classes found in catalog_data source,
 - variant axes and valid-combination rules,
 - add-on families and affected products,
 - pricing source(s) and gaps,
@@ -161,20 +161,20 @@ Must include:
 - quote-first vs checkout decision tree,
 - migration/import staging plan with rollback/fail-loud gates.
 
-### Lane E — legacy_source Documentation / Agent-Action Convergence Researcher
+### Lane E — catalog_data Documentation / Agent-Action Convergence Researcher
 
-Goal: compare what legacy_source's official/user-facing ecommerce model says should happen with what agents observe by clicking through the Locally Twisted legacy_source witness surfaces and current ERPNext/Frappe surfaces.
+Goal: compare what catalog_data's official/user-facing ecommerce model says should happen with what agents observe by clicking through the Locally Twisted catalog_data witness surfaces and current ERPNext/Frappe surfaces.
 
-This lane is not allowed to copy legacy_source code. It is allowed to read legacy_source documentation, local source structure, public/live/captured pages, and current ERPNext/Frappe behavior to understand concepts, blast radius, and mismatch risk.
+This lane is not allowed to copy catalog_data code. It is allowed to read catalog_data documentation, local source structure, public/live/captured pages, and current ERPNext/Frappe behavior to understand concepts, blast radius, and mismatch risk.
 
 Required artifact:
-`workstreams/ecommerce-audit/legacy_source-docs-agent-action-convergence-2026-05-10.md`
+`workstreams/ecommerce-audit/catalog_data-docs-agent-action-convergence-2026-05-10.md`
 
 Must include:
-- exact legacy_source documentation pages/versions consulted,
-- exact legacy_source local/source/live/captured surfaces clicked or inspected,
+- exact catalog_data documentation pages/versions consulted,
+- exact catalog_data local/source/live/captured surfaces clicked or inspected,
 - exact ERPNext/Frappe pages/actions clicked or inspected,
-- a convergence table: documented behavior / observed legacy_source behavior / observed ERPNext behavior / discrepancy / risk / required decision,
+- a convergence table: documented behavior / observed catalog_data behavior / observed ERPNext behavior / discrepancy / risk / required decision,
 - special attention to product variants, `website_sale` combination behavior, add-ons/accessories/options, cart preservation, checkout payloads, order/invoice semantics, and customer-visible promises,
 - every discrepancy labeled `[DOCS-MISMATCH]`, `[SOURCE-MISMATCH]`, `[LIVE-MISMATCH]`, `[ERPNext-GAP]`, or `[UNKNOWN]`.
 
@@ -194,7 +194,7 @@ Must include:
 - what blocks public launch,
 - exact verifier commands that must pass,
 - exact GL decisions needed,
-- discrepancies between legacy_source documentation, legacy_source observed behavior, and ERPNext observed behavior.
+- discrepancies between catalog_data documentation, catalog_data observed behavior, and ERPNext observed behavior.
 
 ## 5. Acceptance Bar / Definition of Done
 
@@ -205,8 +205,8 @@ Minimum acceptance:
 - Every source claim cites a file, record export, script output, or current code path.
 - Every ERPNext claim cites a current code path, verifier, database metadata check, or browser/runtime proof.
 - Every unknown is labeled `[UNKNOWN]`, `[UNVERIFIED]`, or `[BLOCKED]` instead of smoothed over.
-- Exact legacy_source and ERPNext/Frappe versions are verified and cited before version-sensitive claims are trusted.
-- legacy_source code is not copied; legacy_source is used only as a source witness.
+- Exact catalog_data and ERPNext/Frappe versions are verified and cited before version-sensitive claims are trusted.
+- catalog_data code is not copied; catalog_data is used only as a source witness.
 - Full product import remains blocked unless every required source behavior has a safe ERPNext receiving destination or explicit quote-first/hold behavior.
 - Public ecommerce launch remains blocked unless customer intent preservation is verified through backend order/invoice/operator surfaces.
 - Existing verifier suite is named, run where appropriate, and extended where it cannot catch a silent drop.

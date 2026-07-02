@@ -10,7 +10,7 @@ Build a narrow, rollback-safe verifier proving the first direct-checkout product
 
 ## Guardrails
 
-- No legacy_source mutation.
+- No catalog_data mutation.
 - No catalog purge/delete/reimport/publish/opening.
 - No public ecommerce opening; test-mode pause bypass may only exist inside verifier execution and must roll back/restore.
 - No live payment or customer messaging.

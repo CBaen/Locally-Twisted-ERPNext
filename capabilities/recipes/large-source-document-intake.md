@@ -18,7 +18,7 @@ used_by: []
 tags:
   - Locally Twisted
   - source documents
-  - legacy_source reference
+  - catalog_data reference
   - ERPNext
   - truncation
 ---
@@ -31,7 +31,7 @@ migrates, or implements from the material.
 
 ## When to reach for it
 
-Use for legacy_source scrapes, Hetzner snapshots, policy files, catalog exports,
+Use for catalog_data scrapes, current import capture snapshots, policy files, catalog exports,
 QuickBooks/accounting packets, long handoffs, logs, PDFs, spreadsheets, HTML
 captures, and any terminal/tool output likely to truncate.
 
@@ -54,7 +54,7 @@ captures, and any terminal/tool output likely to truncate.
 
 ## Failure modes
 
-- Treating an old legacy_source/Hetzner artifact as current ERPNext proof.
+- Treating an catalog_data/current import capture artifact as current ERPNext proof.
 - Trusting a stale handoff because it was readable in the first terminal page.
 - Missing rows in catalog/accounting exports due to truncation.
 - Committing generated chunk output as a second source of truth.

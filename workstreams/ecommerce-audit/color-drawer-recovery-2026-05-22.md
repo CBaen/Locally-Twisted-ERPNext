@@ -4,7 +4,7 @@ Status: local recovery verified and published as a scoped GitHub commit; broader
 
 ## What Guiding Light Reported
 
-The product color system appeared to have lost the balloon colors Jeff provided and the legacy_source export preserved: grouped drawers by style/type, real owner-approved swatch images, and matching hex labels for business color matching.
+The product color system appeared to have lost the balloon colors Jeff provided and the catalog_data export preserved: grouped drawers by style/type, real owner-approved swatch images, and matching hex labels for business color matching.
 
 ## What Actually Broke
 
@@ -19,7 +19,7 @@ Because `product_options.py` did not look at that app-local staged path, quote-f
 ## Recovery Applied
 
 - Added the app-local seed catalog paths to `product_options._source_catalog_paths()`.
-- Kept source authority intact: color-looking ERPNext axes still need legacy_source/backend source evidence before becoming recipe drawers.
+- Kept source authority intact: color-looking ERPNext axes still need catalog_data/backend source evidence before becoming recipe drawers.
 - Restored visible hex labels even when an owner-approved swatch image exists.
 - Added missing approximate hex entries for active classic-arch color values that had owner swatches but no local hex fallback.
 - Strengthened the quote-first browser verifier so `classic-arch` must render as a color recipe drawer with grouped swatches and hex labels.
@@ -40,7 +40,7 @@ Current browser proof on `shop-items/arches/classic-arch`:
 - active rendered color swatch images: 51
 - active rendered hex labels: 51
 
-The source swatch contract still maps the legacy_source/owner color asset set and reports 53 unique source assets. The rendered page currently shows 51 active normalized values because duplicate-case source values collapse in ERPNext.
+The source swatch contract still maps the catalog_data/owner color asset set and reports 53 unique source assets. The rendered page currently shows 51 active normalized values because duplicate-case source values collapse in ERPNext.
 
 ## Separate Blocker
 

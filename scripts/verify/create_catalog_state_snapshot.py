@@ -221,7 +221,7 @@ def _parse_bench_json(stdout: str) -> list[dict[str, Any]]:
 
 def _copy_source_reference(snapshot_dir: Path) -> None:
     source_pairs = {
-        "source_catalog_reference.json": SOURCE_ROOT / "catalog.json",
+        "source_catalog_data.json": SOURCE_ROOT / "catalog.json",
         "source_slug_to_group.json": SOURCE_ROOT / "slug_to_group.json",
     }
     for output_name, source_path in source_pairs.items():

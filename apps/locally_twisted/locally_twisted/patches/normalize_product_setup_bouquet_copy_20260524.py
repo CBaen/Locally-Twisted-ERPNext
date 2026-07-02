@@ -44,6 +44,6 @@ def _remove_source_shorthand_note() -> None:
         """,
         (
             "Backfilled from source-approved product gallery media.",
-            "Backfilled from source-approved legacy_source product gallery media.",
+            "Backfilled from source-approved catalog_data product gallery media.",
         ),
     )

@@ -185,7 +185,7 @@ def _assert_artifact_shape(artifact: dict) -> None:
         raise RuntimeError("price enrichment artifact has no product rows")
     required_product = {
         "slug",
-        "legacy_source_id",
+        "catalog_data_id",
         "name",
         "source_url",
         "product_page_type",

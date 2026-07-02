@@ -2,7 +2,7 @@
 
 This script does not connect to ERPNext and does not delete anything. It uses the
 snapshot as evidence to identify product-catalog rows in the corrected import
-subset. legacy_source-imported products are product targets; variants and high-variant
+subset. catalog_data-imported products are product targets; variants and high-variant
 products are allowed when the current backend schema can preserve their meaning.
 """
 
@@ -162,7 +162,7 @@ def _import_subset() -> dict:
         raise SystemExit("FATAL: " + "; ".join(validation_errors))
 
     return {
-        "rule": "include legacy_source-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers",
+        "rule": "include catalog_data-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers",
         "included_slugs": included,
         "included_count": len(included),
         "excluded_products": excluded,

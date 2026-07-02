@@ -92,7 +92,7 @@ App-mirror commits after the staging restore point:
 Fresh public staging proof during the documentation pass:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 npm run test:product-gallery-experience
 ```
@@ -168,7 +168,7 @@ staging test checkout is usable; live checkout is not approved by this proof.
 Rerun the route proof if more source or provider settings change:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 npm run test:product-gallery-experience
 python scripts/verify/payment_backend_config_contract.py

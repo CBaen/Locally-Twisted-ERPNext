@@ -4,7 +4,7 @@ Last updated: 2026-05-21 by Codex after local fake-data cleanup and access gate 
 
 ## Outcome
 
-Make the ERPNext backend simple enough for Jeff to run without needing to understand ERPNext jargon or the history of the legacy_source attempt.
+Make the ERPNext backend simple enough for Jeff to run without needing to understand ERPNext jargon or the history of the catalog_data attempt.
 
 The target backend is not "all possible ERPNext modules." It is a small operating system for Locally Twisted:
 
@@ -14,7 +14,7 @@ The target backend is not "all possible ERPNext modules." It is a small operatin
 - Quote/order/payment records connect cleanly when a customer buys.
 - Backend labels use plain business language.
 - Seed/fixture code does not overwrite future operator edits.
-- Stale legacy_source-era schema and scripts are either retired, documented as historical, or deliberately kept.
+- Stale catalog_data-era schema and scripts are either retired, documented as historical, or deliberately kept.
 
 ## Current Stage
 
@@ -77,7 +77,7 @@ The real user-facing outcome is operational:
 - Jeff sees fewer confusing fields.
 - Leads are easier to process.
 - Sample records can support a backend tour.
-- Future agents stop treating old `/book`, legacy_source, and experimental Lead-schema notes as current product direction.
+- Future agents stop treating old `/book`, catalog_data, and experimental Lead-schema notes as current product direction.
 - Cameron/Built by Cameron can still maintain the system without turning
   support access into the normal client/operator experience.
 
@@ -255,8 +255,8 @@ Verification receipt on 2026-05-11:
 - `python scripts/verify/finance_workspace_parity.py`
 - `python scripts/verify/maintenance_admin_boundary.py`
 - `python scripts/verify/maintenance_heartbeat.py`
-- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
-- `$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
+- `export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `export LT_DESK_TEST_USER='lt-owner-temp@example.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
 
 Next permission work should not start from custom Frappe `User Type` records.
 Frappe still uses standard `System User` and `Website User`; LT's backend
@@ -315,8 +315,8 @@ Verification receipt on 2026-05-15:
 - `python scripts/verify/customer_contact_points_contract.py`
 - `python scripts/verify/marketing_review_access_boundary.py`
 - `npm run test:marketing-review-access`
-- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
-- `$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
+- `export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `export LT_DESK_TEST_USER='lt-owner-temp@example.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
 
 ## 2026-05-21 Access Silo Matrix Closeout
 
@@ -373,12 +373,12 @@ Verification receipt on 2026-05-21:
 - `python scripts/verify/customer_portal_home_contract.py`
 - `python scripts/verify/customer_account_provisioning_contract.py`
 - `python scripts/verify/owner_business_access_contract.py`
-- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
-- `$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
+- `export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `export LT_DESK_TEST_USER='locallytwisted@gmail.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
 
 ## 2026-05-02 CRM Pipeline Translation
 
-legacy_source reference check found the approved six-stage CRM concept:
+catalog_data reference check found the approved six-stage CRM concept:
 
 `New Inquiry -> Quote Sent/Awaiting Approval -> Approved -> In Production -> Event/Post Event -> Archive`
 
@@ -523,7 +523,7 @@ The next agent should do this in small verified slices:
 
 2. Decide the simplest Jeff-facing Lead layout.
    - Keep fields that receive real website data or support immediate follow-up.
-   - Hide or demote stale legacy_source-era fields that no current form populates.
+   - Hide or demote stale catalog_data-era fields that no current form populates.
    - Preserve plain-language labels from project rules.
    - Keep the six-stage business board on `custom_pipeline_stage`; do not repurpose native `Lead.status`.
 
@@ -547,7 +547,7 @@ The next agent should do this in small verified slices:
 
 - Do not rerun old Lead translation/fix scripts until they are audited for stale taxonomy.
 - Do not reintroduce `/book` as a separate public page.
-- Do not add custom DocTypes just to mirror old legacy_source models.
+- Do not add custom DocTypes just to mirror catalog_data models.
 - Do not fixture Singles or operator-owned settings just because it is convenient.
 - Do not rename customer-facing service values without updating frontend form logic, backend `LT Service Type`, Lead Custom Fields, and verification scripts together.
 - Do not hide errors behind "probably." If a DB check cannot be run, mark that state as unverified.
@@ -566,7 +566,7 @@ python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py
 python scripts/verify/backend_schema_inventory.py
 python scripts/verify/backend_workspace_parity.py
-$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_USER='lt-owner-temp@example.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 ```

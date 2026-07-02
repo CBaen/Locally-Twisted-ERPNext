@@ -1,10 +1,10 @@
-# V1 legacy_source-to-ERPNext Import Manifest
+# V1 catalog_data-to-ERPNext Import Manifest
 
 - Generated: `2026-05-17T23:10:00Z`
 - Mode: read-only manifest; no purge, import, delete, or ERPNext mutation.
-- V1 scope: legacy_source-imported products that fit the current ERPNext backend/schema contract.
+- V1 scope: catalog_data-imported products that fit the current ERPNext backend/schema contract.
 - Variants, cups, and high-variant products are not blanket exclusions.
-- No owner exclusion list is active for legacy_source-imported products.
+- No owner exclusion list is active for catalog_data-imported products.
 
 ## Summary
 
@@ -21,7 +21,7 @@
 
 ## Blocker Reduction
 
-- `source_contract`: Corrected V1 includes legacy_source-imported products as sellable product targets when source trace and backend schema are present. Warning counts inside V1: {'axis_needs_review': 9, 'color_axis_customization': 24, 'missing_resolver_prices': 49, 'unclassified_gallery_images': 49}.
+- `source_contract`: Corrected V1 includes catalog_data-imported products as sellable product targets when source trace and backend schema are present. Warning counts inside V1: {'axis_needs_review': 9, 'color_axis_customization': 24, 'missing_resolver_prices': 49, 'unclassified_gallery_images': 49}.
 - `price_review`: Corrected V1 prices are derived from source artifacts where possible. Resolution counts: {'source_price_ready': 290}. Excluded live-snapshot review units: 0.
 - `media`: 95 global extra image rows apply to corrected V1; 0 belong to products outside this generated subset. Primary images are source-backed and extras are held unless approved.
 - `add_ons`: 9 corrected V1 products have review-only add-on axes. Those add-on controls stay hidden until mapped; the products themselves remain sellable targets. Confirmed foil_number add-on remains available where eligible.
@@ -41,7 +41,7 @@
 - Line configuration version: `lt-product-config-v1`.
 - Line fields: `{"json": "custom_lt_configuration_json", "page_type": "custom_lt_product_page_type", "summary": "custom_lt_configuration_summary", "template_item": "custom_lt_product_template_item", "version": "custom_lt_configuration_version"}`.
 - Confirmed foil-number add-on: `ADDON-FOIL-NUMBER` runtime contract for eligible bouquet products.
-- legacy_source-imported products should import as sellable checkout targets; review-only add-on controls stay hidden until mapped.
+- catalog_data-imported products should import as sellable checkout targets; review-only add-on controls stay hidden until mapped.
 
 ## Included Products
 
@@ -103,7 +103,7 @@
 
 ## Next Command Sequence
 
-- `python scripts/verify/v1_legacy_source_erpnext_import_manifest.py`
+- `python scripts/verify/post_import_catalog_state_contract.py`
 - `python scripts/verify/catalog_purge_scope_dry_run.py`
 - `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
 - `python scripts/setup/stage_seed_data.py`

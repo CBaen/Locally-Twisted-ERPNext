@@ -4,7 +4,7 @@
 
 This packet separates the current Paperclip-created or Paperclip-adjacent
 changes so the contact form can be handled first without accidentally dragging
-catalog, backend, checkout, or legacy_source-derived changes into the same review.
+catalog, backend, checkout, or catalog_data-derived changes into the same review.
 
 Status: active dirty-file cleanup coordination. Bucket 3 was resolved locally on
 2026-05-15 because `patches.txt` referenced an untracked migration patch, which
@@ -106,7 +106,7 @@ Files touched:
 Finding:
 
 - appears to rename `Reflex Champage` to `Reflex Champagne` across source,
-  fixtures, legacy_source-derived reference data, runtime expectations, and verifiers.
+  fixtures, catalog_data-derived reference data, runtime expectations, and verifiers.
 
 Risk:
 
@@ -114,7 +114,7 @@ Risk:
   `apps/locally_twisted/locally_twisted/patches/rename_reflex_champagne_color_20260515.py`
   are now staged together;
 - `_resources/catalog-source/*` changes are inside this ERPNext repo, but they are
-  legacy_source-derived reference data and should not be treated as casual form work.
+  catalog_data-derived reference data and should not be treated as casual form work.
 
 Resolution:
 
@@ -222,11 +222,11 @@ Verification:
 - `python scripts/verify/maintenance_heartbeat.py`
 - `python scripts/verify/maintenance_admin_boundary.py`
 
-## Bucket 7 - External legacy_source Project Concern
+## Bucket 7 - External catalog_data Project Concern
 
 Concern:
 
-- GL is worried Paperclip reached into the old legacy_source project without permission.
+- GL is worried Paperclip reached into the catalog_data project without permission.
 
 Read-only check performed:
 
@@ -239,7 +239,7 @@ Read-only check performed:
 Important distinction:
 
 - Paperclip did touch `_resources/catalog-source/*` inside the ERPNext repo. That is
-  legacy_source-derived reference material, but it is not the external legacy_source project.
+  catalog_data-derived reference material, but it is not the external catalog_data project.
 
 ## Stop Conditions
 

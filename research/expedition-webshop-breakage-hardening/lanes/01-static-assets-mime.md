@@ -90,8 +90,8 @@ npm run test:public-network
 For staging/live, set the real base URL and retain command output:
 
 ```bash
-$env:LT_BASE_URL = "https://<staging-or-live-host>"
-python scripts/verify/public_asset_integrity.py --base-url $env:LT_BASE_URL
+export LT_BASE_URL="https://<staging-or-live-host>"
+python scripts/verify/public_asset_integrity.py --base-url $LT_BASE_URL
 npm run test:public-network
 ```
 

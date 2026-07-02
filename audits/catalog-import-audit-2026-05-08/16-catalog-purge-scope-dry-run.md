@@ -4,7 +4,7 @@ Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 
 - Generated: `2026-05-19T23:14:56Z`
 - Snapshot: `audits\catalog-import-audit-2026-05-08\current-state-snapshot-2026-05-19-2314`
-- Import subset rule: include legacy_source-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers.
+- Import subset rule: include catalog_data-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers.
 - Variants, cups, and high-variant products are products and are not blanket exclusions.
 
 ## Import source subset

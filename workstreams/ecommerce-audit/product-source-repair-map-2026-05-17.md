@@ -1,6 +1,6 @@
 # Product Source Repair Map
 
-Read-only map from the legacy_source product export to ERPNext purchasable-product repair lanes.
+Read-only map from the catalog_data product export to ERPNext purchasable-product repair lanes.
 
 ## Rule
 

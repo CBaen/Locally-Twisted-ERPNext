@@ -1,7 +1,7 @@
 """Lead create cascade — what happens immediately when a Lead lands.
 
-Mirrors the legacy_source `crm.lead` create() override behavior plus the
-`automation_form_ack` base.automation that fired on Hetzner. Three things
+Mirrors the catalog_data `crm.lead` create() override behavior plus the
+`automation_form_ack` base.automation that fired on current import capture. Three things
 fire on Lead insert from a customer-facing form:
 
 1. before_insert: build a useful Lead title from contact_name + service
@@ -9,7 +9,7 @@ fire on Lead insert from a customer-facing form:
    Painting" instead of the form's literal "Booking Request".
 
 2. after_insert: dedup-or-create a Contact (Frappe's "Contact" doctype,
-   the equivalent of legacy_source's res.partner), attach it to the Lead via
+   the equivalent of catalog_data's res.partner), attach it to the Lead via
    the standard `customer_id` link is wrong for Lead -> we use the
    built-in mechanism: a dynamic-link Contact pointing at the Lead via
    Contact's `links` child table.
@@ -57,7 +57,7 @@ LEGACY_AUTO_ACK_SUBJECTS = (
     "\U0001F388Locally Twisted\U0001F388 We Got Your Message! Be in Touch Soon!",
 )
 
-# Map service-checkbox values (matching Hetzner /book) to the labels we
+# Map service-checkbox values (matching current import capture /book) to the labels we
 # join into the Lead title. Keep aligned with `book.py` SERVICE_OPTIONS.
 SERVICE_LABEL_MAP = {
     "Balloon Decor": "Balloon Decor",

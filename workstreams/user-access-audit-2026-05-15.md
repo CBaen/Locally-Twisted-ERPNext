@@ -200,10 +200,10 @@ python scripts/verify/marketing_review_access_boundary.py
 python scripts/setup/sync_owner_demo_data.py
 python scripts/verify/owner_business_access_contract.py
 npm run test:marketing-review-access
-$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:owner-actions
-$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
-$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
-$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_USER='locallytwisted@gmail.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:owner-actions
+export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
+export LT_DESK_TEST_USER='lt-owner-temp@example.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_USER='locallytwisted@gmail.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 ```
 
 Manual/local proof also created a temporary marketing Website User, logged in
@@ -250,7 +250,7 @@ python scripts/verify/customer_portal_inventory.py --strict-menu
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
 python scripts/verify/owner_business_access_contract.py
-$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_USER='locallytwisted@gmail.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 ```
 
 Post-cleanup verifier note: `persona_workspace_permissions.py` now skips

@@ -6,7 +6,7 @@
 - **Environment/auth context:** local repository/source inspection only on `main` at `264c6553acd5708ecdb498cb6fa6a5c594260abc`; no browser clicks; no ERPNext admin/operator session; no customer/live surface interaction. Destination stack is treated as local/test unless Lane C proves otherwise. Compose source says the image is `${CUSTOM_IMAGE:-frappe/erpnext}:${CUSTOM_TAG:-$ERPNEXT_VERSION}`; AGENTS.md documents current intended stack as ERPNext/Frappe v15.105.0, apps `frappe`, `erpnext`, `payments`, `webshop`, `locally_twisted`.
 - **Sources inspected:** `AGENTS.md`; `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`; `workstreams/ecommerce-audit-dispatch-prompts-2026-05-10.md`; `Locally-Twisted-Backend/frappe_docker/compose.yaml`; `package.json`; `apps/locally_twisted/locally_twisted/product_page_runtime.py`; `product_page_labels.py`; `product_options.py`; `product_quote_request.py`; `product_quote_runtime.py`; `catalog_contract/models.py`; `catalog_contract/source_builder.py`; `catalog_contract/addon_rules.py`; `catalog_contract/dependency_rules.py`; `seed/sync_commerce_rules.py`; `seed/sync_contact_intake_backend.py`; `templates/generators/item/item_details.html`; `item_configure.html`; `item_quote_first.html`; `www/book.py`; source audit reports under `audits/catalog-import-audit-2026-05-08/`. A local `.env` was opened accidentally during version lookup; no secrets from it are used, cited, or reproduced here.
 - **Commands/actions run:** `git rev-parse --abbrev-ref HEAD`; `git rev-parse HEAD`; `git status --short`; Bash `Get-ChildItem`/`rg` source searches; read-only file reads; created this artifact directory/file only.
-- **Records created/cleaned:** none. No ERPNext/legacy_source records, carts, orders, quotes, invoices, emails, payments, products, or legacy_source rows were created or mutated.
+- **Records created/cleaned:** none. No ERPNext/catalog_data records, carts, orders, quotes, invoices, emails, payments, products, or catalog_data rows were created or mutated.
 - **Key findings:** smallest safe architecture is a native Webshop/ERPNext extension layer with two reusable product-page classes, versioned line payloads, quote-first handoff, dependency matrices, approved add-on contracts, media classification staging, and explicit import/reopen gates. Current source code already contains a significant first slice, but this lane did not run runtime verifiers, so runtime survival claims remain `[PENDING-LANE-C]` unless directly evidenced by code.
 - **Blockers:** Lane A/C/E artifacts are not present in `workstreams/ecommerce-audit/` at time of writing; source meaning, browser/cart/order proof, and docs convergence need reconciliation before Lane F or implementation decisions. Source-derived counts from older audit artifacts are useful but labeled `[PENDING-LANE-A]` until Lane A refreshes them.
 - **Confidence:** medium-high for architecture shape from current code; medium for import/readiness sequencing; low for runtime end-to-end survival until Lane C inspects backend records.
@@ -26,7 +26,7 @@ Keep the class list intentionally small:
 | Needs review | `needs_review` | `needs_review` | Missing, stale, or ambiguous import/template assignments. | Customer-safe quote/request-review block, not paid checkout. | `product_page_runtime.py` conservative fallback. |
 | Hybrid | `hybrid` | `hybrid` | Reserve only for a future explicitly proven family that can support both checkout and quote. | Treat as disabled until a verifier exists. | Storage option exists in `product_page_labels.py`, but no inspected runtime proof here. |
 
-[PENDING-LANE-A] Existing 2026-05-08 source audit classified 53 source products as 15 Ready-to-order and 38 Custom quote. Treat those as staging counts, not final import truth, until Lane A refreshes legacy_source/source meaning.
+[PENDING-LANE-A] Existing 2026-05-08 source audit classified 53 source products as 15 Ready-to-order and 38 Custom quote. Treat those as staging counts, not final import truth, until Lane A refreshes catalog_data/source meaning.
 
 ## Required native/custom fields, child tables, and DocTypes
 
@@ -207,7 +207,7 @@ Use this decision tree at import/runtime:
 ## Migration/import staging plan
 
 1. **Freeze source evidence**
-   - Lane A refreshes legacy_source/source product classes, axes, valid combinations, add-ons, pricing/media facts, quote behavior, and unknowns.
+   - Lane A refreshes catalog_data/source product classes, axes, valid combinations, add-ons, pricing/media facts, quote behavior, and unknowns.
 2. **Build/refresh contract staging artifact**
    - One row per source product: slug, ERPNext target, class, lane, required axes, customization axes, add-ons, dependency matrices, media plan, price plan, blockers.
 3. **Dry-run import gates**
@@ -275,14 +275,14 @@ This lane did not run those commands; they are required gates, not results.
 
 ## What remains business-review required
 
-- [PENDING-LANE-A] Final source product classification and unknowns from current legacy_source witness.
+- [PENDING-LANE-A] Final source product classification and unknowns from current catalog_data witness.
 - [PENDING-LANE-A] Which source add-on families/values become paid checkout, quote-only, bundled separate Items, or dropped.
 - [PENDING-LANE-A] Which color/customization axes are customer-selectable vs operator notes only.
 - [PENDING-LANE-A] Final business approval for live-snapshot price candidates and any source-base fallback prices.
 - [PENDING-LANE-A] Source extra-image classification: gallery vs variant vs category/reference vs hold.
 - [PENDING-LANE-C] Whether customer intent survives actual local/test product-page → cart → checkout → Sales Order → invoice/receipt journeys.
 - [PENDING-LANE-C] Whether quote-first product pages preserve structured choices through contact Lead, draft Quotation, operator review, customer quote delivery, and accepted-quote draft Sales Order.
-- [PENDING-LANE-E] Any official legacy_source/ERPNext docs mismatch that changes variant/add-on/cart/order semantics.
+- [PENDING-LANE-E] Any official catalog_data/ERPNext docs mismatch that changes variant/add-on/cart/order semantics.
 - Payment/bank/finance readiness if public paid checkout is reopened; current capability notes treat finance as deferred, but launch/payment decisions need explicit owner approval.
 
 ## Implementation boundary

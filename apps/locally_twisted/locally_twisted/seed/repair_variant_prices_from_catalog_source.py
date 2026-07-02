@@ -27,7 +27,7 @@ from locally_twisted.catalog_variant_rules import (
 from locally_twisted.commerce_rules import PRICE_LIST
 
 
-CATALOG_COMBINATION_ROUTE = "http://5.78.136.133/website_sale/get_combination_info"
+CATALOG_COMBINATION_ROUTE = "website_sale/get_combination_info"
 USER_AGENT = "LT catalog-source variant price repair"
 CSRF_RE = re.compile(r'csrf_token:\s*"([^"]+)"')
 
@@ -216,10 +216,10 @@ def _repair_product(
     dry_run: bool,
 ) -> dict[str, Any]:
     slug = prod.get("slug")
-    legacy_source_id = prod.get("legacy_source_id")
+    catalog_data_id = prod.get("catalog_data_id")
     url = prod.get("url")
-    if not slug or not legacy_source_id or not url:
-        raise CatalogSourceVariantPriceRepairError(f"Product is missing slug, legacy_source_id, or url: {prod}")
+    if not slug or not catalog_data_id or not url:
+        raise CatalogSourceVariantPriceRepairError(f"Product is missing slug, catalog_data_id, or url: {prod}")
 
     rows = prod.get("valid_variants") or []
     if not rows:
@@ -245,7 +245,7 @@ def _repair_product(
         info = _post_combination_info(
             opener,
             csrf_token=csrf,
-            product_template_id=int(legacy_source_id),
+            product_template_id=int(catalog_data_id),
             ptav_ids=ptav_ids,
         )
         new_rate = _money(info["price"])

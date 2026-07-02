@@ -36,7 +36,7 @@ Result:
 
 ## What This Proves
 
-- legacy_source source prices match the local ERPNext checkout prices for this tranche.
+- catalog_data source prices match the local ERPNext checkout prices for this tranche.
 - `large-head-missionary` preserves all 30 variant combinations across
   `Missionary`, `skin color`, and `Hair color` as selected options.
 - The three single-SKU products resolve as purchasable single lines.

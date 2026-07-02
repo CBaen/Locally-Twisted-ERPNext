@@ -10,7 +10,9 @@ Keeps a client-friendly CRM/Kanban pipeline from corrupting ERPNext's native sta
 
 ## When to reach for it
 
-Use this when translating a client's approved sales stages into ERPNext, especially when the source system had stages such as `Won`, `Lost`, `Archive`, `Booked`, or other labels that might affect revenue, win rate, or workflow automation.
+Use this when translating a client's approved sales stages into ERPNext,
+especially when imported or existing stages such as `Won`, `Lost`, `Archive`,
+or `Booked` might affect revenue, win rate, or workflow automation.
 
 ## How to use it
 
@@ -20,7 +22,7 @@ Use this when translating a client's approved sales stages into ERPNext, especia
 
 2. Define stage meaning before wiring triggers.
 
-   Write down which stage means "off the active board" versus "won", "lost", "ready to invoice", "ready to schedule", or "needs follow-up". Do not infer those from the old system's archive/fold settings.
+   Write down which stage means "off the active board" versus "won", "lost", "ready to invoice", "ready to schedule", or "needs follow-up". Do not infer those from archive/fold settings in imported records.
 
 3. Make archive non-financial unless explicitly approved.
 

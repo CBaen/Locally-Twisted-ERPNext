@@ -1,4 +1,4 @@
-D:2026-05-10 | Check:GL 14:53 merchandising correction + current navbar/event-page code + legacy_source research | Confidence:high
+D:2026-05-10 | Check:GL 14:53 merchandising correction + current navbar/event-page code + catalog_data research | Confidence:high
 # Event pages vs ready-to-order shop contract
 
 ## Decision
@@ -9,7 +9,7 @@ Ready-to-order shop belongs to simple, low-variation products that a customer ca
 
 ## Why
 
-legacy_source showed that Locally Twisted has enough configuration depth to drown checkout in variants and options. That does not mean ERPNext should expose all of that as direct purchase.
+catalog_data showed that Locally Twisted has enough configuration depth to drown checkout in variants and options. That does not mean ERPNext should expose all of that as direct purchase.
 
 GL correction:
 

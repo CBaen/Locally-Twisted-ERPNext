@@ -45,7 +45,7 @@ Use this recipe when a Locally Twisted visual direction changes enough that old 
 5. Update active app code if old design tokens or old font names are still in source.
 6. Add or update the feature-specific workstream handoff.
 7. Update queue, decisions, lessons, and index docs in the same closeout.
-8. Run searches that separate active UI/source files from historical legacy_source/catalog evidence.
+8. Run searches that separate active UI/source files from historical catalog_data/catalog evidence.
 9. Run syntax, token, cache, nav, layout, interactive layout, and shop smoke checks before claiming the consolidation is ready for implementation agents.
 
 ## Verification Checklist

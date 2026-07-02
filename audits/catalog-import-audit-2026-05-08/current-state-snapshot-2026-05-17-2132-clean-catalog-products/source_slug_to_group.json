@@ -6,7 +6,7 @@
   "_arches": "Arches",
   "_bouquets": "Bouquets",
   "_columns": "Columns",
-  "_comment": "BBC taxonomy decision 2026-04-30: maps each legacy_source product slug to its LT Item Group child. All 53 live-legacy_source products mapped. Reviewable by GL. Edit here, re-run seed_catalog to re-tag.",
+  "_comment": "BBC taxonomy decision 2026-04-30: maps each catalog_data product slug to its LT Item Group child. All 53 live-catalog_data products mapped. Reviewable by GL. Edit here, re-run seed_catalog to re-tag.",
   "_deliveries": "Deliveries",
   "_drops": "Drops",
   "_garlands": "Garlands",

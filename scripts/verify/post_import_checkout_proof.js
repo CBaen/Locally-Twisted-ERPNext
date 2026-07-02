@@ -27,7 +27,7 @@ const DEFAULT_WEBSITE_ITEMS_SNAPSHOT = path.join(
 	process.cwd(),
 	"audits",
 	"catalog-import-audit-2026-05-08",
-	"current-state-snapshot-2026-05-17-2132-clean-legacy_source-products",
+	"current-state-snapshot-2026-05-17-2132-clean-catalog-products",
 	"website_items.json",
 );
 const REPORT_PATH = process.env.LT_CHECKOUT_PROOF_REPORT

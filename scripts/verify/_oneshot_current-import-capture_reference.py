@@ -1,14 +1,14 @@
-"""One-shot: capture http://5.78.136.133/ for visual reference comparison.
+"""One-shot: capture  for visual reference comparison.
 
-GL pointed at the Hetzner legacy_source deploy as the visual target for nav header
+GL pointed at the current import capture catalog_data deploy as the visual target for nav header
 styling (font, underline, heading). This grabs desktop + mobile so we can
 diff against localhost:8081 and figure out the exact CSS delta.
 """
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
-URL = "http://5.78.136.133/"
-OUT = Path("output/hetzner-reference")
+URL = ""
+OUT = Path("output/current-import-capture-reference")
 
 
 def capture(p, viewport, output, *, is_mobile=False):
@@ -39,15 +39,15 @@ def capture(p, viewport, output, *, is_mobile=False):
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
-        print("→ Hetzner desktop (1366x900)…")
-        d = capture(p, {"width": 1366, "height": 900}, OUT / "hetzner-desktop.png")
-        print(f"  saved: {OUT / 'hetzner-desktop.png'}")
+        print("→ current import capture desktop (1366x900)…")
+        d = capture(p, {"width": 1366, "height": 900}, OUT / "current-import-capture-desktop.png")
+        print(f"  saved: {OUT / 'current-import-capture-desktop.png'}")
         for k, v in d.items():
             print(f"    {k}: {v}")
         print()
-        print("→ Hetzner mobile (375x812)…")
-        m = capture(p, {"width": 375, "height": 812}, OUT / "hetzner-mobile.png", is_mobile=True)
-        print(f"  saved: {OUT / 'hetzner-mobile.png'}")
+        print("→ current import capture mobile (375x812)…")
+        m = capture(p, {"width": 375, "height": 812}, OUT / "current-import-capture-mobile.png", is_mobile=True)
+        print(f"  saved: {OUT / 'current-import-capture-mobile.png'}")
         for k, v in m.items():
             print(f"    {k}: {v}")
 

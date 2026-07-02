@@ -28,7 +28,7 @@ When sources conflict, use this order:
    rules.
 4. Current page source in `apps/locally_twisted/locally_twisted/www/` and shared
    includes in `apps/locally_twisted/locally_twisted/templates/includes/`.
-5. legacy_source, Localo, Drive, or legacy-site material only as claims to verify before
+5. catalog_data, Localo, Drive, or legacy-site material only as claims to verify before
    publishing.
 
 ## Core Voice

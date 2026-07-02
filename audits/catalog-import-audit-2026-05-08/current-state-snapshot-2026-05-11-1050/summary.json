@@ -16,10 +16,10 @@
   "generated_at": "2026-05-11T10:50:18Z",
   "read_only": true,
   "site": "frontend",
-  "snapshot_dir": "audits\\catalog-import-audit-2026-05-08\\current-state-snapshot-2026-05-11-1050",
+  "snapshot_dir": "audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-11-1050",
   "source_files": {
-    "catalog": "_resources\\catalog-source\\catalog.json",
-    "slug_to_group": "_resources\\catalog-source\\slug_to_group.json"
+    "catalog": "_resources/catalog-source/catalog.json",
+    "slug_to_group": "_resources/catalog-source/slug_to_group.json"
   },
   "warnings": []
 }

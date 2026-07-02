@@ -23,7 +23,7 @@ not as a visual staging patch.
 The permanent chain is:
 
 ```text
-legacy_source/source-approved product gallery media
+catalog_data/source-approved product gallery media
 -> LT Product Blueprint Gallery Image
 -> ERPNext Website Slideshow / Website Slideshow Item
 -> Website Item.slideshow
@@ -41,7 +41,7 @@ Media roles are now explicit:
 
 ## What Changed
 
-- Added `catalog_contract/gallery_media.py` so legacy_source paired thumbnail/full-size
+- Added `catalog_contract/gallery_media.py` so catalog_data paired thumbnail/full-size
   URLs dedupe by semantic source key and prefer the best local file.
 - Updated the source Product Setup sync to create/update Product Setup gallery
   child rows from source-approved gallery media.

@@ -20,7 +20,7 @@ TEMPLATE_DIR = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "outbound
 PREVIEW_ROOT = ROOT / "output" / "playwright"
 
 STRICT_PLATFORM_RE = re.compile(
-    r"\b(?:ERPNext|Frappe|legacy_source)\b|Built on Frappe|frappe\.io|erpnext\.com|legacy_source\.com",
+    r"\b(?:ERPNext|Frappe|catalog_data)\b|Built on Frappe|frappe\.io|erpnext\.com|catalog_data\.com",
     re.IGNORECASE,
 )
 

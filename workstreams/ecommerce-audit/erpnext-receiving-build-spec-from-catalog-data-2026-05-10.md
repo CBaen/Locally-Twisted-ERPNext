@@ -1,11 +1,11 @@
-D:2026-05-10 | Check:live legacy_source backend/public extraction + ERPNext runtime inspection 2026-05-10 | Confidence:high
-# ERPNext receiving build spec from legacy_source backend logic
+D:2026-05-10 | Check:live catalog_data backend/public extraction + ERPNext runtime inspection 2026-05-10 | Confidence:high
+# ERPNext receiving build spec from catalog_data backend logic
 
 ## Purpose
 
-Turn the legacy_source backend witness into concrete ERPNext/Frappe build requirements. This is the “stop reading, build the receiver” spec.
+Turn the catalog_data backend witness into concrete ERPNext/Frappe build requirements. This is the “stop reading, build the receiver” spec.
 
-legacy_source is not the implementation source. legacy_source is the behavior witness.
+catalog_data is not the implementation source. catalog_data is the behavior witness.
 
 ## Architecture target
 
@@ -18,9 +18,9 @@ ERPNext/Frappe should use native Webshop only as the shell. The `locally_twisted
 5. Checkout bridge refuses fake success when intent/pricing/storage is incomplete.
 6. Invoice/project handoff copies product meaning forward.
 
-## legacy_source witness → ERPNext object model
+## catalog_data witness → ERPNext object model
 
-| legacy_source concept | Observed behavior | ERPNext/Frappe receiving object |
+| catalog_data concept | Observed behavior | ERPNext/Frappe receiving object |
 |---|---|---|
 | `product.template` | Public product page, media, base copy, variant axes | Website Item + Item template + LT Product Page Contract |
 | `product.product` | Real SKU variant for true variant axes only | ERPNext Item Variant |
@@ -63,11 +63,11 @@ Good signs:
 - Runtime already copies Sales Order Item configuration to Sales Invoice Item.
 - Quote runtime already creates draft Quotation from Lead and preserves payload.
 
-## Gaps / build checks forced by legacy_source evidence
+## Gaps / build checks forced by catalog_data evidence
 
 ### 1. Catalog-wide no-variant options
 
-legacy_source has 48 templates with no-variant attributes and 45 with multi-select attributes. This is not a corner case.
+catalog_data has 48 templates with no-variant attributes and 45 with multi-select attributes. This is not a corner case.
 
 Build requirement:
 
@@ -85,7 +85,7 @@ Gate:
 
 ### 2. Variant resolver
 
-legacy_source true variants are small and intentional.
+catalog_data true variants are small and intentional.
 
 Build requirement:
 
@@ -98,7 +98,7 @@ Gate:
 
 ### 3. Option pricing
 
-legacy_source can price no-variant add-ons, e.g. LED +$50.
+catalog_data can price no-variant add-ons, e.g. LED +$50.
 
 Build requirement:
 
@@ -111,7 +111,7 @@ Gate:
 
 ### 4. Custom text
 
-legacy_source stores custom text separately from enumerated choices.
+catalog_data stores custom text separately from enumerated choices.
 
 Build requirement:
 
@@ -125,7 +125,7 @@ Gate:
 
 ### 5. Cart/order-line backend proof
 
-legacy_source proves line payload exists in backend, not only DOM.
+catalog_data proves line payload exists in backend, not only DOM.
 
 Build requirement:
 
@@ -137,7 +137,7 @@ Gate:
 
 ### 6. Quote-first path
 
-legacy_source product inquiry creates CRM Lead with product/event context.
+catalog_data product inquiry creates CRM Lead with product/event context.
 
 Build requirement:
 
@@ -150,7 +150,7 @@ Gate:
 
 ### 7. Delivery mapping
 
-legacy_source has duplicate-ish delivery choices: LT-defined Standard Delivery plus a default/free Standard delivery.
+catalog_data has duplicate-ish delivery choices: LT-defined Standard Delivery plus a default/free Standard delivery.
 
 Build requirement:
 
@@ -164,7 +164,7 @@ Gate:
 
 ### 8. Payment boundary
 
-legacy_source payment form contains final transaction route and access token only at `/shop/payment`.
+catalog_data payment form contains final transaction route and access token only at `/shop/payment`.
 
 Build requirement:
 
@@ -177,7 +177,7 @@ Gate:
 
 ### 9. Automation guard
 
-legacy_source skips website orders in custom SO invoicing automation.
+catalog_data skips website orders in custom SO invoicing automation.
 
 Build requirement:
 
@@ -218,4 +218,4 @@ Gate:
 
 ## Bottom line
 
-ERPNext already has the bones of the receiver. The legacy_source witness tells us what must be generalized and verified: no-variant option preservation, line-level payload proof, checkout boundary proof, and quote-first as a valid success lane.
+ERPNext already has the bones of the receiver. The catalog_data witness tells us what must be generalized and verified: no-variant option preservation, line-level payload proof, checkout boundary proof, and quote-first as a valid success lane.

@@ -4,7 +4,7 @@
 
 ## The question
 
-The prior platform attempt's header had three top-level menus that overlapped:
+The proposed header had three top-level menus that overlapped:
 - **What We Make** (product types: arches, garlands, walls, drops, columns…)
 - **Special Occasions** (use cases: birthday, wedding, baby shower, corporate, etc.)
 - **Holidays & Seasons** (holiday-specific designs)
@@ -26,10 +26,10 @@ This creates three problems:
 
 ## Three options
 
-### Option A — Keep all three super-menus (the prior approach)
+### Option A — Keep all three super-menus
 
 Pros:
-- Familiar to anyone who saw the prior platform
+- Familiar to reviewers who saw the earlier draft
 - Multiple entry paths can feel "rich"
 
 Cons:
@@ -53,7 +53,7 @@ Pros:
 - Anthropologie / Etsy / Crayola use this pattern — exactly the "Creator" brand archetype the style guide names
 
 Cons:
-- Customers used to the prior approach lose the multiple-entry-path pattern (low cost since the prior site never went live to customers)
+- Customers used to the earlier draft lose the multiple-entry-path pattern (low cost since that draft never went live to customers)
 - Internal linking has to be deliberate so the occasion pages don't become orphans
 
 ### Option C — Single product menu, no occasion/season landing pages at all

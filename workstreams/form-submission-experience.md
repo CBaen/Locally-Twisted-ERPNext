@@ -114,8 +114,8 @@ added owner/business notification proof, and required actual customer/owner
 Email Queue body/recipient verification. Live proof:
 
 ```bash
-$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
-$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+export LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+export LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter

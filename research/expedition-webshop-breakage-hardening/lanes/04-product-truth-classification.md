@@ -10,11 +10,11 @@ Why is the live local DB at `51` Website Items while project instructions still 
 
 - `research/expedition-webshop-breakage-hardening/research-brief.md` - lane question and current `51`/`10666` claim.
 - Local ERPNext DB, site `frontend`, container `locally-twisted-erpnext-v15-backend-1`; read-only `frappe.client.get_count` and `SELECT` queries only.
-- `_resources/catalog-source/catalog.json` and `_resources/catalog-source/slug_to_group.json` - legacy_source source export still says `product_count: 53`.
-- `audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-17-2132-clean-legacy_source-products/summary.json` - read-only snapshot with `website_items: 53`, `items: 10674`, `item_prices: 10656`.
+- `_resources/catalog-source/catalog.json` and `_resources/catalog-source/slug_to_group.json` - catalog_data source export still says `product_count: 53`.
+- `audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-17-2132-clean-catalog-products/summary.json` - read-only snapshot with `website_items: 53`, `items: 10674`, `item_prices: 10656`.
 - `apps/locally_twisted/locally_twisted/seed/_guard/current-state-snapshot-2026-05-19-2314/summary.json` and `route_category_map.md` - read-only snapshot with `website_items: 53`, `items: 10686`, `item_prices: 10668`; includes `easter-arch` and `pride-arch` as `complex_custom_product|checkout`.
 - `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md` - maps 53 source products and marks both `easter-arch` and `pride-arch` certified checkout.
-- `workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md` - says 53 included products, 0 exclusions, browser proof for all 53, with later holds for unsafe direct checkout.
+- `workstreams/ecommerce-audit/catalog-data-sellable-product-reimport-2026-05-17.md` - says 53 included products, 0 exclusions, browser proof for all 53, with later holds for unsafe direct checkout.
 - `workstreams/ecommerce-audit/school-seasonal-color-preset-product-logic-2026-05-18.md` - explains quote-request as safety hold for high-cardinality products, not product deletion.
 - Current contract sources: `apps/locally_twisted/locally_twisted/verify/website_item_classification_contract.py`, `apps/locally_twisted/locally_twisted/verify/simple_purchasable_rehearsal_contract.py`, `apps/locally_twisted/locally_twisted/verify/simple_purchasable_browser_support.py`, `scripts/verify/simple_purchasable_rehearsal_contract.py`, `scripts/verify/smoke_shop.py`.
 - Stale docs found: `AGENTS.md`, `CODING-HANDOFF.md`, `locally-twisted-queue.md`, `scripts/README.md`, `workstreams/ecommerce-audit/README.md`.
@@ -60,7 +60,7 @@ Why is the live local DB at `51` Website Items while project instructions still 
 
 - **Support:** Support the current DB as the local operating state only: 51 published Website Items, 17 simple checkout, 13 complex checkout, 21 quote-request safety holds. Also support the `smoke_shop.py` change that compares the visible count label to rendered cards instead of hard-coding `53`.
 - **Quarantine:** Quarantine `easter-arch` and `pride-arch` from public checkout/product proof until there is an explicit product disposition row for each. `easter-arch` should stay disabled/unpublished; `pride-arch` should be treated as missing/deleted until rebuilt from source or explicitly eliminated.
-- **Eliminate:** Eliminate unqualified hard-coded product counts in docs and tests. `53` may remain only as "legacy_source source export count" or "historical snapshot count"; `51` may remain only as "current local DB count as of 2026-05-21" unless rechecked.
+- **Eliminate:** Eliminate unqualified hard-coded product counts in docs and tests. `53` may remain only as "catalog_data source export count" or "historical snapshot count"; `51` may remain only as "current local DB count as of 2026-05-21" unless rechecked.
 - **Refresh:** Refresh the product source contract into a small versioned manifest that lists each source slug, current DB status, customer flow, and disposition: `checkout`, `quote_request_hold`, `quarantined`, `eliminated`, or `rebuild_required`. The manifest must require a reason, date, evidence file, and owner/source basis for any source slug not present as a published Website Item.
 - **Rebuild:** Rebuild the classification verifier so it derives expected count and lane expectations from that manifest plus live DB, not from scattered hard-coded arrays. It should fail loudly when source has 53 but DB has 51 unless the two missing slugs have explicit quarantine/elimination entries.
 
@@ -76,5 +76,5 @@ Why is the live local DB at `51` Website Items while project instructions still 
 
 - The DB provenance is missing: `Version`, `Deleted Document`, and `Activity Log` are empty, so I cannot prove from DB logs whether the 2026-05-21 removal/disable action was a deliberate product decision or collateral cleanup.
 - I found committed source changes that accept 51, but not a clear owner-approved removal record for `easter-arch` or `pride-arch`.
-- The legacy_source source export still says 53 and `catalog_import_subset.py` has no owner-excluded slugs, so current source and current DB are not reconciled.
+- The catalog_data source export still says 53 and `catalog_import_subset.py` has no owner-excluded slugs, so current source and current DB are not reconciled.
 - Some stale docs/tests still point at 53 or four simple purchasable products. Those should not be used as release proof until refreshed.

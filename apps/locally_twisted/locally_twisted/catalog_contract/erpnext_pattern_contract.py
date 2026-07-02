@@ -1,6 +1,6 @@
 """ERPNext-side ProductPatternContract join and capability report.
 
-The source mapper explains what the legacy_source option grid means. This module joins
+The source mapper explains what the catalog_data option grid means. This module joins
 that source contract to current ERPNext Website Item, Item, Item Price, and
 variant-attribute rows so import and resolver work can reason from generic
 architecture capabilities instead of product-name exceptions.
@@ -142,7 +142,7 @@ class ERPNextProductPatternReport:
             row.slug for row in self.rows if row.website_item and not row.source_integrity
         )
         if missing_source:
-            failures.append(f"published Website Items missing legacy_source source integrity: {missing_source}")
+            failures.append(f"published Website Items missing catalog_data source integrity: {missing_source}")
         return failures
 
     def checkout_gate_failures(self) -> list[str]:
@@ -197,7 +197,7 @@ class ERPNextProductPatternReport:
         lines = [
             "# ERPNext Product Pattern Contract",
             "",
-            "This report joins the legacy_source source option-pattern contract to current ERPNext records.",
+            "This report joins the catalog_data source option-pattern contract to current ERPNext records.",
             "It is read-only and classifies architecture capability, not product-specific fixes.",
             "",
             "## Summary",
@@ -500,7 +500,7 @@ def _checkout_eligibility(
         or not product.get("erpnext_contract_requirements")
     )
     if missing_mapper_contract and website_item:
-        blocking.append("missing_legacy_source_pattern_mapper_contract")
+        blocking.append("missing_catalog_data_pattern_mapper_contract")
     if not website_item:
         blocking.append("missing_website_item")
     if not template:

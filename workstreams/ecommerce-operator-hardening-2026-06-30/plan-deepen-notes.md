@@ -4,7 +4,7 @@ Date: 2026-06-30
 
 Outcome: adjust.
 
-The approach is directionally correct, but it must be tightened before implementation. The right plan is not "copy the prior system" and not "patch ERPNext forms." The right plan is to build an LT ecommerce operating layer around Product Setup, with ERPNext as the accounting/catalog substrate and raw records as protected projections.
+The approach is directionally correct, but it must be tightened before implementation. The right plan is to build an LT ecommerce operating layer around Product Setup, with ERPNext as the accounting/catalog substrate and raw records as protected projections.
 
 Update after triad critique: [protective-contracts.md](protective-contracts.md) is now the controlling contract for future implementation. Any later code or migration work must satisfy it or record a blocker.
 

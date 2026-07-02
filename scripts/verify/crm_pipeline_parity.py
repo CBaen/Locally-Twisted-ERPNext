@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verify LT's CRM board uses a custom business-stage field.
 
-The legacy_source-approved stage names are allowed to drive Jeff's Kanban board.
+The catalog_data-approved stage names are allowed to drive Jeff's Kanban board.
 ERPNext's native Lead.status must remain available for ERPNext internals.
 """
 from __future__ import annotations

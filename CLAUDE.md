@@ -10,7 +10,7 @@ of truth for this checkout is the Kubuntu repo at:
 /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted
 ```
 
-Do not restore prior-host, Windows-era, WSL, or Claude-era local paths from older
-history into active guidance. If an old decision or lesson mentions this file, treat that as
-historical context only and verify against current files, git, and the running
-ERPNext site before relying on it.
+Do not restore prior-host or runtime-specific local paths from older history
+into active guidance. If an old decision or lesson mentions this file, treat
+that as historical context only and verify against current files, git, and the
+running ERPNext site before relying on it.

@@ -159,7 +159,7 @@ def check_backend_product_classification_examples() -> None:
     )
 
 
-def check_cart_api_routes_sellable_legacy_source_products() -> None:
+def check_cart_api_routes_sellable_catalog_data_products() -> None:
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
         kwargs={"item_codes": [RETAIL_VARIANT_ITEM, CHECKOUT_CONFIG_ITEM, RETAIL_NO_ADDON_ITEM, COMPLEX_VARIANT_TEMPLATE]},
@@ -669,7 +669,7 @@ def main() -> int:
     parse_noop_args(__doc__)
     checks = [
         check_backend_product_classification_examples,
-        check_cart_api_routes_sellable_legacy_source_products,
+        check_cart_api_routes_sellable_catalog_data_products,
         check_checkout_resolver_accepts_retail_variant,
         check_configured_same_sku_cart_lines_stay_separate_and_visible,
         check_multi_digit_add_on_quantity_and_total_are_visible,

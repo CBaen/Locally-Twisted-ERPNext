@@ -2,13 +2,30 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-06-24 (Codex - live homepage/Birthday Deliveries media repair)
+**Last updated:** 2026-07-02 (Codex - Kubuntu/repo hygiene cleanup)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-07-02 - Kubuntu/repo hygiene cleanup):**
+- GL directed that this repo is working source, not a local archive or memory
+  bank. Obsolete OS/platform/history material should be deleted or translated
+  into current ERPNext/Frappe guidance.
+- Removed retired-platform labels, placeholder labels, old host labels,
+  mirror/snapshot references, local archive artifacts, and generated output
+  that only preserved old reference material.
+- Deleted stale mirror rebuild plans and recapture script. Do not recreate
+  local mirrors/snapshots as normal project context.
+- Renamed active code/data identifiers to neutral catalog-data/import terms
+  where implementation still needs a stable field, report, or verifier handle.
+- The launch verifier includes a forbidden platform-label gate at
+  `scripts/verify/forbidden_source_label_gate.py`; it is intentionally written
+  without recording the forbidden label in tracked docs.
+- Final proof passed: strict text scans, filename scans, stale host/reference
+  scans, generic old-platform phrasing scans, and `git diff --check`.
 
 **Current-session delta (2026-06-24 - live homepage/Birthday Deliveries media repair):**
 - Active closeout handoff:
@@ -186,7 +203,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - `/contact` is the canonical inquiry form and now carries the revised service taxonomy: Balloon Decor, Balloon Twisting, Face Painting, Delivery, Pickup, Events Inquiry, Something Else.
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`. Do not restore `/book` as a separate public form unless GL explicitly changes direction.
 - Guided service links prefill the contact form: `/contact?service=btfp`, `/contact?service=twisting`, and `/contact?service=face-painting`.
-- `/balloon-twisting-and-face-painting` was refreshed into a contact-led service page using Hetzner content and current LT styling. It no longer embeds a separate form or public deposit checkout CTA.
+- `/balloon-twisting-and-face-painting` was refreshed into a contact-led service page using current import capture content and current LT styling. It no longer embeds a separate form or public deposit checkout CTA.
 - `Events Inquiry` replaced `Event Package`; it is the high-value package planning path with structured package-piece checkboxes from the homepage custom categories, color prompt, and a single notes field that aggregates into existing Lead text fields.
 - Delivery and Pickup are stackable services, not "Only" choices. Do not reintroduce `Delivery Only` or `Pickup Only` labels unless the UI enforces mutual exclusion.
 - "Shade is required for outdoor events" only appears for live artists: Balloon Twisting and Face Painting. It does not apply to outside balloon decor, delivery, pickup, Events Inquiry, or Something Else.
@@ -219,9 +236,11 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - GL review feedback is captured: the column is closest; organic garland is possible but not assumed approved; the first arch drafts were rejected/misaligned; classic arch scale changes span/opening, not default density. Dense rainbow/multi-row arch work is custom/high-density, not the default `classic-arch` product.
 - No generated pilot images have been attached to ERPNext products or Website Items.
 
-**1. The frame is now "migration."** Earlier today I parroted the prior reframe ("new build, not a migration") and GL stopped me cold: *"it is a migration, not a new build."* Project frame is **migration of business intent + catalog data into a fresh ERPNext install**. The 2026-04-26 reframe is superseded. Internal docs use migration framing freely; Jeff-disclosure stealth survives as a separate constraint (he doesn't yet know the prior legacy_source attempt failed in testing). All docs updated. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
+**1. The frame is now "migration."** Earlier today I parroted the prior reframe ("new build, not a migration") and GL stopped me cold: *"it is a migration, not a new build."* Project frame is **migration of business intent + catalog data into a fresh ERPNext install**. The 2026-04-26 reframe is superseded. Internal docs use migration framing freely; Jeff-disclosure stealth survives as a separate constraint (he doesn't yet know the catalog_data attempt failed in testing). All docs updated. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
 
-**2. The mirror landed.** Full clone of `http://5.78.136.133/` lives at `_resources/retired-source-mirror/` — 346 pages + 510 assets + INVENTORY.md (38 KB structural analysis). Tool: `crawl4ai` (Python, Playwright-backed; chosen over httrack/wget because legacy_source's site is JS-rendered). Mirror script at `scripts/mirror/mirror_hetzner.py` is reusable; re-run if you need a fresh capture. Tool-discovery research at `research/website-mirror-tool-discovery.md`.
+**2. The public chrome rebuild shipped.** Current header, footer, and customer
+routes now live in the ERPNext/Frappe implementation. Do not depend on local
+mirror captures for current work.
 
 **3. Chrome rebuild Phase 1 SHIPPED via /triadic-construction-v2.** 3 builders + 3 reviewers (Architect/SecOps/Execution Engine) + GL Proxy + fix round. The triadic discipline caught 4 critical defects + 4 important + several advisories that solo build would have shipped:
    - Mobile drawer always visible (CSS class mismatch — every mobile page would have looked broken)
@@ -254,14 +273,14 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 |---|---|
 | ERPNext v15.105.0 stack (9 containers) | Running |
 | Apps: frappe, erpnext, payments, webshop, locally_twisted (LAST) | Installed |
-| Hetzner-shaped header (utility bar + current customer menu + search trigger) | Shipped; `What We Make` removed from current IA |
-| Hetzner-shaped footer (newsletter + 3-col + social + legal) | Shipped; obsolete/nonexistent links removed |
+| current import capture-shaped header (utility bar + current customer menu + search trigger) | Shipped; `What We Make` removed from current IA |
+| current import capture-shaped footer (newsletter + 3-col + social + legal) | Shipped; obsolete/nonexistent links removed |
 | Mobile drawer with accordion-expand mega menus | Shipped + fixed (was always-visible at Round 1) |
 | Newsletter form + endpoint + DocType + smoke test | Shipped, rate-limited 10/hr per email |
 | `/book` | Retired customer surface; redirects to `/contact?intent=quick` |
 | `/contactus` → `/contact` redirect | Live |
 | `/contact` | Primary customer inquiry form with stackable service taxonomy, guided prefill, Events Inquiry package path, Pickup, and service-specific conditional fields |
-| `/balloon-twisting-and-face-painting` | Contact-led service page refreshed from Hetzner source; CTAs use guided `/contact?service=...` links |
+| `/balloon-twisting-and-face-painting` | Contact-led service page refreshed from current import capture source; CTAs use guided `/contact?service=...` links |
 | `/shop-items` + `/all-products` | Route to `/shop` |
 | `Plan by Occasion` | Product/category links only; no contact shortcuts |
 | `/privacy` + `/terms-of-service` | Static policy routes live; Stripe Dashboard wiring still pending |
@@ -273,8 +292,8 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 **P0 — Real-browser confirmation by GL.** Every Playwright + DOM verdict is a precondition. GL opening localhost:8081 at desktop AND mobile is the actual ship gate. They've already done initial visual review (gave green light on "usable") so this is partial-confirmation already.
 
 **P0 — Phase 2 page rebuilds (the big remaining bite).** From the rebuild plan, in priority order:
-1. `/refund-policy` Hetzner refresh
-2. `/accessibility` Hetzner refresh
+1. `/refund-policy` current import capture refresh
+2. `/accessibility` current import capture refresh
 3. `/blog` channel + posts (use Frappe's NATIVE `Blog Post` DocType, not custom — plan-deepen caught my mistake of planning a custom one). Two posts to port verbatim from mirror.
 4. Webshop `/shop` layout overhaul
 5. Webshop product detail layout overhaul
@@ -310,7 +329,7 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 | Smoke test `/contact` form | `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter` (set `LT_ADMIN_PASSWORD` when backend record verification is required) |
 | Check customer-site layout fit | `npm run test:layout-fit` |
 | **Backend restarted, frontend now 502** | `docker restart locally-twisted-erpnext-v15-frontend-1` (nginx upstream IP cached at startup; flush by restart) — this gotcha cost me an hour today; documented in agency auto-behaviors |
-| Re-mirror Hetzner | `python scripts/mirror/mirror_hetzner.py` |
+| Rebuild old-reference evidence | Use current source-control history or an approved external backup; no local mirror script remains active on Kubuntu. |
 | Capture chrome audit screenshots | `python scripts/verify/_oneshot_chrome_audit.py` (writes to `_resources/audit-2026-04-30-chrome/`) |
 | Run smoke tests (contact + newsletter) | `PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_forms.py` |
 | Bump CSS cache-bust | edit `hooks.py` `web_include_css` query string `?v=YYYYMMDD-N` (currently `?v=20260501-5`) |
@@ -318,7 +337,7 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 
 ## Hot direction
 
-GL named it across this session: *"clone my old site http://5.78.136.133/, the only page that stays is the landing page... using capabilities, rebuild the whole site. make sure it's frappe and ERPNext coded... using agent teams use the triadic build team."* And mid-session: *"It does look like you should wrap up based on your context... what you're documenting and leaving behind will be inherited by another Opus 4.7."*
+GL named it across this session: *"clone my old site , the only page that stays is the landing page... using capabilities, rebuild the whole site. make sure it's frappe and ERPNext coded... using agent teams use the triadic build team."* And mid-session: *"It does look like you should wrap up based on your context... what you're documenting and leaving behind will be inherited by another Opus 4.7."*
 
 I read this as: **autonomous ownership inside the migration frame.** GL doesn't want to babysit; they want me to make calls, log them as reversible, and document so the next instance picks up clean. They were exhausted at the start of this session ("I need a nap... I don't want to sit and babysit this build because I don't have time or energy") and gave green light to make architectural decisions autonomously with reversibility notes.
 
@@ -329,7 +348,7 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 1. Have GL open `localhost:8081/` plus `/shop`, `/shop-items/table-decor`, `/shop-items/table-decor/easter-balloon-cups`, `/privacy`, and `/terms-of-service` in a real browser.
 2. Wire Stripe Dashboard policy URLs after GL/legal approval of `/privacy` and `/terms-of-service`.
 3. Continue Phase 2 in the current order above. `/contact` is the inquiry surface; `/book` redirects to `/contact?intent=quick`.
-4. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between Hetzner and our DB, fix at the seed layer first.
+4. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between current import capture and our DB, fix at the seed layer first.
 
 ## Reading order on arrival
 
@@ -349,7 +368,6 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 - No background processes from this session (all builders/reviewers exited cleanly).
 - All session writes auto-committed via the post-write hook.
 - No customer or transactional test data created. Newsletter test records get cleaned up by the smoke test runner.
-- Mirror dir at `_resources/retired-source-mirror/` is REFERENCE for Phase 2 page rebuilds — keep until those are done. ~30 MB. Gitignored.
 - Audit screenshots at `_resources/audit-2026-04-30-chrome/` — keep as before/after evidence for chrome work; ~6 PNGs.
 
 ## A quick honesty pass for the next instance

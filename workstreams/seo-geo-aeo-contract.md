@@ -133,7 +133,7 @@ Latest focused route-removal result: 2/2 passed on 2026-05-11 with
 Live reindex gate after Frappe Cloud release:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted.com'
+export LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```
 

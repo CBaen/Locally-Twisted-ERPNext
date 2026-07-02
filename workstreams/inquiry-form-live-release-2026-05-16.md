@@ -7,7 +7,7 @@ photo storage, owner email attachments, and source-owned contact intake schema
 sync to Frappe Cloud live.
 
 It does not own ecommerce product setup, checkout opening, Stripe live payment,
-legacy_source catalog edits, marketing-review access design, or broader Paperclip dirty
+catalog_data catalog edits, marketing-review access design, or broader Paperclip dirty
 worktree review.
 
 ## Release Receipt

@@ -34,7 +34,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Baby Shower Combination Photo opt",
-      "legacy_source_id": "14",
+      "catalog_data_id": "14",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -1117,7 +1117,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14"
+      "source_url": "shop/what-we-make-3/baby-shower-combination-photo-opt-14"
     },
     {
       "add_ons": [],
@@ -1328,7 +1328,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Classic Organic Balloon Garland",
-      "legacy_source_id": "19",
+      "catalog_data_id": "19",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -6155,7 +6155,7 @@
           "source_row_index": 158
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19"
+      "source_url": "shop/what-we-make-3/classic-organic-balloon-garland-19"
     },
     {
       "add_ons": [],
@@ -6199,7 +6199,7 @@
       "expected_units": 2,
       "live_snapshot_units": 2,
       "name": "Basketball Arch",
-      "legacy_source_id": "21",
+      "catalog_data_id": "21",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -6286,7 +6286,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21"
+      "source_url": "shop/what-we-make-3/basketball-arch-21"
     },
     {
       "add_ons": [],
@@ -6312,7 +6312,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Number Balloon Columns",
-      "legacy_source_id": "22",
+      "catalog_data_id": "22",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -15612,7 +15612,7 @@
           "source_row_index": 370
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22"
+      "source_url": "shop/what-we-make-3/number-balloon-columns-22"
     },
     {
       "add_ons": [],
@@ -15656,7 +15656,7 @@
       "expected_units": 2,
       "live_snapshot_units": 2,
       "name": "Easter Balloon Arch - Bunny Ear",
-      "legacy_source_id": "30",
+      "catalog_data_id": "30",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -15743,7 +15743,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30"
+      "source_url": "shop/what-we-make-3/easter-balloon-arch-bunny-ear-30"
     },
     {
       "add_ons": [],
@@ -15768,7 +15768,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Graduation Grab n Go",
-      "legacy_source_id": "38",
+      "catalog_data_id": "38",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -16959,7 +16959,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38"
+      "source_url": "shop/what-we-make-3/graduation-grab-n-go-38"
     },
     {
       "add_ons": [],
@@ -17235,7 +17235,7 @@
       "expected_units": 4,
       "live_snapshot_units": 4,
       "name": "Halloween arch",
-      "legacy_source_id": "39",
+      "catalog_data_id": "39",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -23666,7 +23666,7 @@
           "source_row_index": 211
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39"
+      "source_url": "shop/what-we-make-3/halloween-arch-39"
     },
     {
       "add_ons": [],
@@ -24190,7 +24190,7 @@
       "expected_units": 30,
       "live_snapshot_units": 30,
       "name": "Large head Missionary",
-      "legacy_source_id": "45",
+      "catalog_data_id": "45",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -25527,7 +25527,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/personalized-displays-4/large-head-missionary-45"
+      "source_url": "shop/personalized-displays-4/large-head-missionary-45"
     },
     {
       "add_ons": [],
@@ -25738,7 +25738,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Premium Organic Garland",
-      "legacy_source_id": "52",
+      "catalog_data_id": "52",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -30565,7 +30565,7 @@
           "source_row_index": 158
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52"
+      "source_url": "shop/what-we-make-3/premium-organic-garland-52"
     },
     {
       "add_ons": [],
@@ -31047,7 +31047,7 @@
       "expected_units": 4,
       "live_snapshot_units": 4,
       "name": "Premium Organic Arch",
-      "legacy_source_id": "53",
+      "catalog_data_id": "53",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -45110,7 +45110,7 @@
           "source_row_index": 423
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53"
+      "source_url": "shop/what-we-make-3/premium-organic-arch-53"
     },
     {
       "add_ons": [],
@@ -45824,7 +45824,7 @@
       "expected_units": 6,
       "live_snapshot_units": 6,
       "name": "Pemium Organic Column",
-      "legacy_source_id": "54",
+      "catalog_data_id": "54",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -66911,7 +66911,7 @@
           "source_row_index": 635
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54"
+      "source_url": "shop/what-we-make-3/pemium-organic-column-54"
     },
     {
       "add_ons": [],
@@ -66985,7 +66985,7 @@
       "expected_units": 4,
       "live_snapshot_units": 4,
       "name": "Pride progress Rainbow Balloon Arch",
-      "legacy_source_id": "55",
+      "catalog_data_id": "55",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -67144,7 +67144,7 @@
           "source_row_index": 3
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55"
+      "source_url": "shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55"
     },
     {
       "add_ons": [],
@@ -68232,7 +68232,7 @@
       "expected_units": 16,
       "live_snapshot_units": 16,
       "name": "Classic Arch",
-      "legacy_source_id": "57",
+      "catalog_data_id": "57",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -99033,7 +99033,7 @@
           "source_row_index": 847
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57"
+      "source_url": "shop/what-we-make-3/classic-arch-57"
     },
     {
       "add_ons": [],
@@ -101425,7 +101425,7 @@
       "expected_units": 36,
       "live_snapshot_units": 36,
       "name": "Classic Column",
-      "legacy_source_id": "58",
+      "catalog_data_id": "58",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -164945,7 +164945,7 @@
           "source_row_index": 1907
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58"
+      "source_url": "shop/what-we-make-3/classic-column-58"
     },
     {
       "add_ons": [],
@@ -165351,7 +165351,7 @@
       "expected_units": 6,
       "live_snapshot_units": 6,
       "name": "Classic Organic columns",
-      "legacy_source_id": "65",
+      "catalog_data_id": "65",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -174990,7 +174990,7 @@
           "source_row_index": 317
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65"
+      "source_url": "shop/what-we-make-3/classic-organic-columns-65"
     },
     {
       "add_ons": [],
@@ -175201,7 +175201,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Baby Shower Garland",
-      "legacy_source_id": "71",
+      "catalog_data_id": "71",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -180028,7 +180028,7 @@
           "source_row_index": 158
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71"
+      "source_url": "shop/what-we-make-3/baby-shower-garland-71"
     },
     {
       "add_ons": [],
@@ -180239,7 +180239,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Balloon Drop",
-      "legacy_source_id": "74",
+      "catalog_data_id": "74",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -185066,7 +185066,7 @@
           "source_row_index": 158
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74"
+      "source_url": "shop/what-we-make-3/balloon-drop-74"
     },
     {
       "add_ons": [],
@@ -185752,7 +185752,7 @@
       "expected_units": 4,
       "live_snapshot_units": 4,
       "name": "Classic Organic Arch",
-      "legacy_source_id": "99",
+      "catalog_data_id": "99",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -206811,7 +206811,7 @@
           "source_row_index": 635
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99"
+      "source_url": "shop/what-we-make-3/classic-organic-arch-99"
     },
     {
       "add_ons": [
@@ -206872,7 +206872,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Unicorn Bouquet",
-      "legacy_source_id": "115",
+      "catalog_data_id": "115",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -207709,7 +207709,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115"
+      "source_url": "shop/what-we-make-3/unicorn-bouquet-115"
     },
     {
       "add_ons": [
@@ -207770,7 +207770,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Mickey Mouse Bouquet",
-      "legacy_source_id": "116",
+      "catalog_data_id": "116",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -208607,7 +208607,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116"
+      "source_url": "shop/what-we-make-3/mickey-mouse-bouquet-116"
     },
     {
       "add_ons": [
@@ -208668,7 +208668,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Minion Bouquet",
-      "legacy_source_id": "117",
+      "catalog_data_id": "117",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -209505,7 +209505,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117"
+      "source_url": "shop/what-we-make-3/minion-bouquet-117"
     },
     {
       "add_ons": [
@@ -209566,7 +209566,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Encanto Bouquet",
-      "legacy_source_id": "118",
+      "catalog_data_id": "118",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -210403,7 +210403,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118"
+      "source_url": "shop/what-we-make-3/encanto-bouquet-118"
     },
     {
       "add_ons": [
@@ -210464,7 +210464,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Stitch Bouquet",
-      "legacy_source_id": "119",
+      "catalog_data_id": "119",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -211301,7 +211301,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119"
+      "source_url": "shop/what-we-make-3/stitch-bouquet-119"
     },
     {
       "add_ons": [
@@ -211362,7 +211362,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Flamingo Bouquet",
-      "legacy_source_id": "120",
+      "catalog_data_id": "120",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -212199,7 +212199,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120"
+      "source_url": "shop/what-we-make-3/flamingo-bouquet-120"
     },
     {
       "add_ons": [
@@ -212260,7 +212260,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Football Bouquet",
-      "legacy_source_id": "121",
+      "catalog_data_id": "121",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -213097,7 +213097,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121"
+      "source_url": "shop/what-we-make-3/football-bouquet-121"
     },
     {
       "add_ons": [
@@ -213158,7 +213158,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Soccer Bouquet",
-      "legacy_source_id": "122",
+      "catalog_data_id": "122",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -213995,7 +213995,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122"
+      "source_url": "shop/what-we-make-3/soccer-bouquet-122"
     },
     {
       "add_ons": [
@@ -214056,7 +214056,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Space Bouquet",
-      "legacy_source_id": "123",
+      "catalog_data_id": "123",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -214893,7 +214893,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123"
+      "source_url": "shop/what-we-make-3/space-bouquet-123"
     },
     {
       "add_ons": [
@@ -214954,7 +214954,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Over the Hill Bouquet",
-      "legacy_source_id": "124",
+      "catalog_data_id": "124",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -215791,7 +215791,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124"
+      "source_url": "shop/what-we-make-3/over-the-hill-bouquet-124"
     },
     {
       "add_ons": [],
@@ -215816,7 +215816,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "7' Butterfly Column",
-      "legacy_source_id": "125",
+      "catalog_data_id": "125",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -217007,7 +217007,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125"
+      "source_url": "shop/what-we-make-3/7-butterfly-column-125"
     },
     {
       "add_ons": [],
@@ -217032,7 +217032,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "7' Epic Column",
-      "legacy_source_id": "126",
+      "catalog_data_id": "126",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -218223,7 +218223,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126"
+      "source_url": "shop/what-we-make-3/7-epic-column-126"
     },
     {
       "add_ons": [],
@@ -218431,7 +218431,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Organic Grab n' Go",
-      "legacy_source_id": "127",
+      "catalog_data_id": "127",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -223168,7 +223168,7 @@
           "source_row_index": 155
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127"
+      "source_url": "shop/what-we-make-3/organic-grab-n-go-127"
     },
     {
       "add_ons": [
@@ -226831,7 +226831,7 @@
       "expected_units": 81,
       "live_snapshot_units": 81,
       "name": "Birthday Deliveries",
-      "legacy_source_id": "128",
+      "catalog_data_id": "128",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -315542,7 +315542,7 @@
           "source_row_index": 2429
         }
       ],
-      "source_url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128"
+      "source_url": "shop/special-occasions-birthday-parties-5/birthday-deliveries-128"
     },
     {
       "add_ons": [],
@@ -315661,7 +315661,7 @@
       "expected_units": 7,
       "live_snapshot_units": 7,
       "name": "Easter Balloon Cups",
-      "legacy_source_id": "130",
+      "catalog_data_id": "130",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -315928,7 +315928,7 @@
           "source_row_index": 6
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130"
+      "source_url": "shop/what-we-make-3/easter-balloon-cups-130"
     },
     {
       "add_ons": [],
@@ -317162,7 +317162,7 @@
       "expected_units": 4,
       "live_snapshot_units": 4,
       "name": "Star Column",
-      "legacy_source_id": "131",
+      "catalog_data_id": "131",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -355513,7 +355513,7 @@
           "source_row_index": 1159
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/star-column-131"
+      "source_url": "shop/what-we-make-3/star-column-131"
     },
     {
       "add_ons": [],
@@ -355538,7 +355538,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Sleepy Baby Column",
-      "legacy_source_id": "132",
+      "catalog_data_id": "132",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -356621,7 +356621,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132"
+      "source_url": "shop/what-we-make-3/sleepy-baby-column-132"
     },
     {
       "add_ons": [],
@@ -356646,7 +356646,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Baby Table decor",
-      "legacy_source_id": "133",
+      "catalog_data_id": "133",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -356715,7 +356715,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133"
+      "source_url": "shop/what-we-make-3/baby-table-decor-133"
     },
     {
       "add_ons": [],
@@ -356740,7 +356740,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Logo 3 layered bouquet",
-      "legacy_source_id": "134",
+      "catalog_data_id": "134",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -357931,7 +357931,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134"
+      "source_url": "shop/what-we-make-3/logo-3-layered-bouquet-134"
     },
     {
       "add_ons": [],
@@ -357975,7 +357975,7 @@
       "expected_units": 2,
       "live_snapshot_units": 2,
       "name": "6 color rainbow arch",
-      "legacy_source_id": "135",
+      "catalog_data_id": "135",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -358062,7 +358062,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135"
+      "source_url": "shop/what-we-make-3/6-color-rainbow-arch-135"
     },
     {
       "add_ons": [],
@@ -358085,7 +358085,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Mother's day front yard 7' Column",
-      "legacy_source_id": "137",
+      "catalog_data_id": "137",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PASS_PURGE_REIMPORT_PRICE_GATE",
@@ -358126,7 +358126,7 @@
           "source_row_index": 0
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137"
+      "source_url": "shop/what-we-make-3/mothers-day-front-yard-7-column-137"
     },
     {
       "add_ons": [],
@@ -358151,7 +358151,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Marble table decor",
-      "legacy_source_id": "140",
+      "catalog_data_id": "140",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -358396,7 +358396,7 @@
           "source_row_index": 9
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140"
+      "source_url": "shop/what-we-make-3/marble-table-decor-140"
     },
     {
       "add_ons": [
@@ -358457,7 +358457,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Paw Patrol Bouquet",
-      "legacy_source_id": "141",
+      "catalog_data_id": "141",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -359294,7 +359294,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141"
+      "source_url": "shop/what-we-make-3/paw-patrol-bouquet-141"
     },
     {
       "add_ons": [
@@ -359355,7 +359355,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Elsa Bouquet",
-      "legacy_source_id": "142",
+      "catalog_data_id": "142",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -360192,7 +360192,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142"
+      "source_url": "shop/what-we-make-3/elsa-bouquet-142"
     },
     {
       "add_ons": [
@@ -360253,7 +360253,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Holy COW!! Bouquet",
-      "legacy_source_id": "143",
+      "catalog_data_id": "143",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -361090,7 +361090,7 @@
           "source_row_index": 29
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143"
+      "source_url": "shop/what-we-make-3/holy-cow-bouquet-143"
     },
     {
       "add_ons": [],
@@ -361115,7 +361115,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Butterfly \"GET WELL\" Bouquet (Latex free)",
-      "legacy_source_id": "144",
+      "catalog_data_id": "144",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -361184,7 +361184,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144"
+      "source_url": "shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144"
     },
     {
       "add_ons": [],
@@ -361209,7 +361209,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Bandage \"GET WELL\" Bouquet (Latex free)",
-      "legacy_source_id": "146",
+      "catalog_data_id": "146",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -361278,7 +361278,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146"
+      "source_url": "shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146"
     },
     {
       "add_ons": [],
@@ -361303,7 +361303,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Shooting star \"GET WELL\" Bouquet (Latex free)",
-      "legacy_source_id": "147",
+      "catalog_data_id": "147",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -361372,7 +361372,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147"
+      "source_url": "shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147"
     },
     {
       "add_ons": [],
@@ -361416,7 +361416,7 @@
       "expected_units": 2,
       "live_snapshot_units": 2,
       "name": "6' Graduation stands",
-      "legacy_source_id": "149",
+      "catalog_data_id": "149",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -361503,7 +361503,7 @@
           "source_row_index": 1
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149"
+      "source_url": "shop/what-we-make-3/6-graduation-stands-149"
     },
     {
       "add_ons": [],
@@ -361528,7 +361528,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "classic organic for easel",
-      "legacy_source_id": "152",
+      "catalog_data_id": "152",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -362719,7 +362719,7 @@
           "source_row_index": 52
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152"
+      "source_url": "shop/what-we-make-3/classic-organic-for-easel-152"
     },
     {
       "add_ons": [],
@@ -362742,7 +362742,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Easter Arch",
-      "legacy_source_id": "158",
+      "catalog_data_id": "158",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PASS_PURGE_REIMPORT_PRICE_GATE",
@@ -362783,7 +362783,7 @@
           "source_row_index": 0
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158"
+      "source_url": "shop/what-we-make-3/easter-arch-158"
     },
     {
       "add_ons": [],
@@ -362806,7 +362806,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Mother's Day Bouquet",
-      "legacy_source_id": "165",
+      "catalog_data_id": "165",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "simple_product",
       "purge_reimport_status": "PASS_PURGE_REIMPORT_PRICE_GATE",
@@ -362847,7 +362847,7 @@
           "source_row_index": 0
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165"
+      "source_url": "shop/what-we-make-3/mothers-day-bouquet-165"
     },
     {
       "add_ons": [],
@@ -362992,7 +362992,7 @@
       "expected_units": 3,
       "live_snapshot_units": 3,
       "name": "Large Garland",
-      "legacy_source_id": "177",
+      "catalog_data_id": "177",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -365659,7 +365659,7 @@
           "source_row_index": 86
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177"
+      "source_url": "shop/what-we-make-3/large-garland-177"
     },
     {
       "add_ons": [],
@@ -365933,7 +365933,7 @@
       "expected_units": 6,
       "live_snapshot_units": 6,
       "name": "Large Organic Column",
-      "legacy_source_id": "178",
+      "catalog_data_id": "178",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PRICE_ENRICHABLE_BUT_PURGE_BLOCKED",
@@ -371252,7 +371252,7 @@
           "source_row_index": 173
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178"
+      "source_url": "shop/what-we-make-3/large-organic-column-178"
     },
     {
       "add_ons": [],
@@ -371275,7 +371275,7 @@
       "expected_units": 1,
       "live_snapshot_units": 0,
       "name": "Pride Arch",
-      "legacy_source_id": "179",
+      "catalog_data_id": "179",
       "price_status": "PASS_PRICE_ENRICHMENT",
       "product_page_type": "complex_custom_product",
       "purge_reimport_status": "PASS_PURGE_REIMPORT_PRICE_GATE",
@@ -371316,7 +371316,7 @@
           "source_row_index": 0
         }
       ],
-      "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179"
+      "source_url": "shop/what-we-make-3/pride-arch-179"
     }
   ],
   "purpose": "Candidate import price map for the rebuilt ERPNext product-page architecture.",

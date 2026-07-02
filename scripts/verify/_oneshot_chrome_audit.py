@@ -1,7 +1,7 @@
 """Phase 4 verification — chrome rebuild screenshots.
 
 Captures viewport-only screenshots of key routes at desktop + mobile so the
-orchestrator can read them and compare against the Hetzner mirror.
+orchestrator can read them and compare against the current import capture mirror.
 
 Saves to _resources/audit-2026-04-30-chrome/<route>-<viewport>.png + a JSON
 report of console errors per page.

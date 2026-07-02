@@ -16,10 +16,10 @@
   "generated_at": "2026-05-17T21:32:47Z",
   "read_only": true,
   "site": "frontend",
-  "snapshot_dir": "audits\\catalog-import-audit-2026-05-08\\current-state-snapshot-2026-05-17-2132-clean-legacy_source-products",
+  "snapshot_dir": "audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-17-2132-clean-catalog-products",
   "source_files": {
-    "catalog": "_resources\\catalog-source\\catalog.json",
-    "slug_to_group": "_resources\\catalog-source\\slug_to_group.json"
+    "catalog": "_resources/catalog-source/catalog.json",
+    "slug_to_group": "_resources/catalog-source/slug_to_group.json"
   },
   "warnings": []
 }

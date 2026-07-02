@@ -199,7 +199,7 @@ Feature handoff:
 
 - `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`
 
-Evidence summary: source/legacy_source additional product photos are now role-based
+Evidence summary: source/catalog_data additional product photos are now role-based
 media, not a blanket held bucket. `gallery` media renders only after Product
 Setup owns it and the guarded apply path projects it into native ERPNext
 `Website Slideshow` rows. `variant_image`, `reference`, and
@@ -438,7 +438,7 @@ DNS change, Stripe live change, or public exposure change was made.
 
 Feature handoff:
 
-- `workstreams/ecommerce-audit/legacy_source-sellable-product-reimport-2026-05-17.md`
+- `workstreams/ecommerce-audit/catalog-data-sellable-product-reimport-2026-05-17.md`
 
 Evidence summary: GL corrected the product model: every source-imported product
 is a product. The local `frontend` site was backed up, cleaned of two generated
@@ -457,7 +457,7 @@ preview. `lt_ecommerce_paused=1` was restored and verified.
 Green gates:
 
 - `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
-- `python scripts/verify/v1_legacy_source_erpnext_import_manifest.py`
+- `python scripts/verify/post_import_catalog_state_contract.py`
 - `python scripts/verify/catalog_purge_scope_dry_run.py`
 - `python scripts/verify/product_source_repair_map.py`
 - `python scripts/verify/complex_checkout_scaffold.py`
@@ -585,7 +585,7 @@ experience, ecommerce browser proof, and focused interactive layout passed.
 Broad layout-fit showed 310/312 then exact rerun 2/2 pass; remaining issue is
 transient ERPNext HTTP behavior only.
 
-### legacy_source option-pattern mapper
+### catalog_data option-pattern mapper
 
 Older mapper task `991323ce` was already published in `d0d5c41`. No docs work was done by `source-contract-sprinter` for `60a5e721`; this handoff replaces that missing closeout.
 

@@ -1,6 +1,6 @@
 # Product Page Contract Source Audit
 
-This is a read-only dry run from legacy_source/source catalog data into the new product-page contract shape.
+This is a read-only dry run from catalog_data/source catalog data into the new product-page contract shape.
 It is not an ERPNext import and does not mutate the database.
 
 ## Counts
@@ -69,7 +69,7 @@ It is not an ERPNext import and does not mutate the database.
 ## Interpretation
 
 The contract builder separates confirmed foil-number add-ons from required axes and keeps unmapped add-on families out of checkout add-on controls.
-Every source product is now classified into one of the two reusable product-page template types and all 53 legacy_source-imported products target checkout.
+Every source product is now classified into one of the two reusable product-page template types and all 53 catalog_data-imported products target checkout.
 Resolver-backed price notes remain audit signals: variant rows may lack `erpnext_variant_price`, but the import path can still use source row price/base price and the separate price gates verify Item Price coverage.
 `product_page_price_readiness_contract.py` checks the separate live-ERPNext Item Price gate for the current database.
 `product_page_price_enrichment_contract.py` builds the separate candidate price map for purge/reimport rehearsal without mutating the source scrape.
@@ -78,4 +78,4 @@ Gallery images are present but intentionally marked review-needed until classifi
 
 ## Gate result
 
-**PASS with review notes.** All legacy_source products resolve to sellable checkout targets; add-on/media/price notes remain separate gates.
+**PASS with review notes.** All catalog_data products resolve to sellable checkout targets; add-on/media/price notes remain separate gates.

@@ -2,13 +2,8 @@
 
 /contact renders the form partial. /book redirects to /contact?intent=quick.
 
-Spec: Hetzner http://5.78.136.133/book — saved 2026-04-29 to
-_resources/retired-source-snapshot/hetzner-book.html. The local legacy_source clone is
-stale; do not use it as canonical.
-
-The form mirrors Hetzner's structure with the current /contact consolidation:
-event date, city/location, name, email,
-phone, and preferred contact method are required on the shared inquiry path.
+The current /contact consolidation requires event date, city/location, name,
+email, phone, and preferred contact method on the shared inquiry path.
 
 Submit flow:
   1. Client posts multipart/form-data to submit_book_inquiry
@@ -49,7 +44,7 @@ no_cache = 1
 sitemap = 1
 
 
-# Aligned with Hetzner /book and the Lead Custom Field
+# Aligned with current import capture /book and the Lead Custom Field
 # `custom_occasion_type` options. The three new ones (Wedding, Baby Shower,
 # Grand Opening) come from /contact's set and were merged in by GL's
 # consolidation directive (2026-04-29).
@@ -105,7 +100,7 @@ PACKAGE_ITEM_OPTIONS = [
 ]
 
 
-# 5 photos x 25 MB each, per GL's spec (2026-04-29) and Hetzner JS
+# 5 photos x 25 MB each, per GL's spec (2026-04-29) and current import capture JS
 # constants. Server-side validation matches the client-side limits in
 # the inline JS.
 MAX_PHOTOS = 5

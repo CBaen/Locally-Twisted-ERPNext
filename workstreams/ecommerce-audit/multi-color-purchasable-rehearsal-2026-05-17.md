@@ -35,7 +35,7 @@ Result:
 - PASS.
 - Temporarily applied `simple_product|checkout` to the six Website Items inside
   one ERPNext transaction.
-- Proved legacy_source source rows exist for all six products.
+- Proved catalog_data source rows exist for all six products.
 - Proved source color axes are recognized as balloon color axes.
 - Proved server-side product options target `color_recipes` with
   `multi_color_recipe_builder`.
@@ -48,13 +48,13 @@ Result:
 
 ## Source Normalization Fix
 
-The first run failed because legacy_source's export contains duplicate color labels that
+The first run failed because catalog_data's export contains duplicate color labels that
 differ only by casing: `Blue Slate` / `Blue slate` and `Smoke Grey` /
 `Smoke grey`. ERPNext Item Attribute import already treats those as the same
 source color and stores the first-seen canonical casing.
 
 The shared color canonicalizer now maps those lowercase variants to the same
-canonical names used by the legacy_source value-normalize map:
+canonical names used by the catalog_data value-normalize map:
 
 - `Blue slate` -> `Blue Slate`
 - `Smoke grey` -> `Smoke Grey`

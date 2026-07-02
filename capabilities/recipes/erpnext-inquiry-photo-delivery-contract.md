@@ -67,8 +67,8 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url http://localho
 Live release proof after Frappe Cloud deploy and site update:
 
 ```bash
-$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
-$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+export LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+export LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
 ```
 

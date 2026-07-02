@@ -231,7 +231,7 @@ Files:
 - `apps/locally_twisted/locally_twisted/catalog_contract/source_builder.py`
   (read/check; edit only if normalization is needed after the model fix)
 - `scripts/verify/proof_product_contract.py`
-- `scripts/verify/v1_legacy_source_erpnext_import_manifest.py`
+- `scripts/verify/post_import_catalog_state_contract.py`
 - `scripts/verify/catalog_purge_scope_dry_run.py`
 
 Steps:
@@ -255,7 +255,7 @@ Steps:
 ```bash
 python scripts/verify/proof_product_contract.py
 python scripts/verify/catalog_purge_scope_dry_run.py
-python scripts/verify/v1_legacy_source_erpnext_import_manifest.py
+python scripts/verify/post_import_catalog_state_contract.py
 ```
 
 Expected result:
@@ -396,11 +396,11 @@ python scripts/verify/product_import_readiness_gate_contract.py
 python scripts/verify/post_import_catalog_state_contract.py
 python scripts/verify/proof_product_contract.py
 python scripts/verify/catalog_purge_scope_dry_run.py
-python scripts/verify/v1_legacy_source_erpnext_import_manifest.py
+python scripts/verify/post_import_catalog_state_contract.py
 python scripts/verify/product_import_readiness_gate.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.post_import_catalog_state.run
 node scripts/verify/post_import_checkout_proof.js
-git diff --check -- apps/locally_twisted/locally_twisted/catalog_contract/models.py apps/locally_twisted/locally_twisted/catalog_contract/source_builder.py apps/locally_twisted/locally_twisted/verify/post_import_catalog_state.py scripts/verify/catalog_purge_scope_dry_run.py scripts/verify/v1_legacy_source_erpnext_import_manifest.py scripts/verify/post_import_checkout_proof.js scripts/verify/product_import_readiness_gate.py
+git diff --check -- apps/locally_twisted/locally_twisted/catalog_contract/models.py apps/locally_twisted/locally_twisted/catalog_contract/source_builder.py apps/locally_twisted/locally_twisted/verify/post_import_catalog_state.py scripts/verify/catalog_purge_scope_dry_run.py scripts/verify/post_import_catalog_state_contract.py scripts/verify/post_import_checkout_proof.js scripts/verify/product_import_readiness_gate.py
 ```
 
 If `product_import_readiness_gate.py` returns nonzero because it correctly finds

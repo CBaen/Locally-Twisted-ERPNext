@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Compare captured legacy_source product variants to live ERPNext variants.
+"""Compare captured catalog_data product variants to live ERPNext variants.
 
-This is the per-product variant correctness diff called out in
-MIRROR-REBUILD-PLAN.md. It verifies that the ERPNext catalog still matches the
-normalized legacy_source scrape that seeded the shop.
+This is the per-product variant correctness diff for the current catalog source
+contract. It verifies that the ERPNext catalog still matches the normalized
+catalog data scrape that seeded the shop.
 
 Run:
   python scripts/verify/catalog_variant_contract.py
@@ -227,7 +227,7 @@ def compare() -> tuple[list[dict[str, Any]], dict[str, int]]:
         failures.append(
             {
                 "slug": slug,
-                "problem": "template_not_in_legacy_source_catalog",
+                "problem": "template_not_in_catalog_data_catalog",
                 "actual_count": len(actual_by_template.get(slug, {})),
             }
         )

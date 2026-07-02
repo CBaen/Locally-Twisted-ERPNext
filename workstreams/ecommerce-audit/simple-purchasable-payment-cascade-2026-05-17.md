@@ -14,10 +14,10 @@ and queued messages, and rolls everything back.
 
 | Product | Sale SKUs | Price Basis | Result |
 |---|---:|---|---|
-| Large head Missionary | 30 | legacy_source base price plus live ERPNext snapshot price parity | PASS |
-| Mother's day front yard 7' Column | 1 | legacy_source base price | PASS |
-| Easter Arch | 1 | legacy_source base price | PASS |
-| Pride Arch | 1 | legacy_source base price | PASS |
+| Large head Missionary | 30 | catalog_data base price plus live ERPNext snapshot price parity | PASS |
+| Mother's day front yard 7' Column | 1 | catalog_data base price | PASS |
+| Easter Arch | 1 | catalog_data base price | PASS |
+| Pride Arch | 1 | catalog_data base price | PASS |
 
 ## Verification
 

@@ -142,7 +142,7 @@ These commands prove hosted staging route/UI/assets only unless the staging
 backend/provider evidence is also captured.
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 npm run test:product-gallery-experience
 npm run test:search-contract
@@ -164,7 +164,7 @@ Desk/backend evidence:
 After any staging provider/settings repair, rerun:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
@@ -184,7 +184,7 @@ stage.
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/cloudflare_launch_readiness_contract.py
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
-$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
+export LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 python scripts/verify/ecommerce_pause_contract.py
 python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com
 python scripts/verify/business_automation_index.py
@@ -197,8 +197,8 @@ python scripts/verify/stripe_amount_parity_contract.py
 Live form proof, if bundled into the same release review after approval:
 
 ```bash
-$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
-$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+export LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+export LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222

@@ -1,11 +1,11 @@
-D:2026-05-10 | Check:live legacy_source read-only extraction + ERPNext verifier rerun 2026-05-10 14:06 MDT | Confidence:high
+D:2026-05-10 | Check:live catalog_data read-only extraction + ERPNext verifier rerun 2026-05-10 14:06 MDT | Confidence:high
 # Ecommerce infrastructure readiness packet — Locally Twisted
 
 ## Executive read
 
 ERPNext/Frappe can receive the Locally Twisted ecommerce meaning **if** the custom `locally_twisted` contract/runtime layer remains in charge around native Webshop.
 
-The correct target is not “copy legacy_source” and not “native Webshop product rows only.” The target is:
+The correct target is not “copy catalog_data” and not “native Webshop product rows only.” The target is:
 
 > true variants for SKU/price identity + no-variant structured options for customer choices + backend-preserved cart/order intent + quote-first fallback + guarded checkout/payment + CRM/project fulfillment handoff.
 
@@ -13,11 +13,11 @@ The correct target is not “copy legacy_source” and not “native Webshop pro
 
 | Area | Status | Evidence |
 |---|---|---|
-| legacy_source backend/source witness | Present | `legacy_source-backend-architecture-and-checkout-logic-2026-05-10.md` |
-| Lane E convergence | Present | `legacy_source-docs-agent-action-convergence-2026-05-10.md` |
+| catalog_data backend/source witness | Present | `catalog_data-backend-architecture-and-checkout-logic-2026-05-10.md` |
+| Lane E convergence | Present | `catalog_data-docs-agent-action-convergence-2026-05-10.md` |
 | ERPNext readiness verifier | Passing now | `output/product-page-architecture-readiness-infrastructure-research-20260510.json` |
 | Verifier failure diagnosis | Present | `product-page-architecture-readiness-failure-diagnosis-2026-05-10.md` |
-| Payment success | Not claimed | legacy_source payment page observed only; no transaction submitted |
+| Payment success | Not claimed | catalog_data payment page observed only; no transaction submitted |
 | Product purge/import/public launch | Still gated | Business/product approval + final launch checklist still required |
 
 Latest parent verifier rerun:
@@ -35,7 +35,7 @@ Result:
 - `pass=14`, `blocked=0`, `deferred=1`.
 - Deferred: finance/bank/payment integration remains backburnered.
 
-## legacy_source logic we must preserve
+## catalog_data logic we must preserve
 
 ### Product/variant logic
 
@@ -65,7 +65,7 @@ ERPNext build rule: do not explode color/design/lights/large customer choices in
 
 ### Cart/order-line logic
 
-legacy_source stores selected meaning on sale order lines:
+catalog_data stores selected meaning on sale order lines:
 
 - No-variant selections are stored as `product_no_variant_attribute_value_ids`.
 - Custom text values are stored as `product_custom_attribute_value_ids`.
@@ -76,7 +76,7 @@ ERPNext build rule: selected product meaning must survive product page → cart 
 
 ### Quote-first logic
 
-legacy_source adds a product inquiry form to product pages:
+catalog_data adds a product inquiry form to product pages:
 
 - Posts to CRM Lead.
 - Carries product context.
@@ -86,7 +86,7 @@ ERPNext build rule: quote-first is not a fallback failure. It is a valid success
 
 ### Checkout/payment logic
 
-legacy_source observed flow:
+catalog_data observed flow:
 
 1. Cart
 2. Address/delivery
@@ -141,7 +141,7 @@ ERPNext build rule: direct ecommerce orders, quote/deposit invoices, and service
 - Do not purge/reimport full catalog based only on this packet.
 - Do not claim live checkout/payment success.
 - Do not expose customer/admin checkout details in artifacts.
-- Do not copy legacy_source code/schema directly.
+- Do not copy catalog_data code/schema directly.
 - Do not launch publicly until final product, delivery, payment, security, and operator-review gates are checked.
 
 ## Immediate next engineering actions
@@ -161,6 +161,6 @@ ERPNext build rule: direct ecommerce orders, quote/deposit invoices, and service
 
 ## Decision
 
-Proceed with ERPNext/Frappe ecommerce infrastructure work using the legacy_source source witness as a behavioral map.
+Proceed with ERPNext/Frappe ecommerce infrastructure work using the catalog_data source witness as a behavioral map.
 
 Do **not** proceed to destructive catalog operations or public payment launch until final gates pass with artifacts.

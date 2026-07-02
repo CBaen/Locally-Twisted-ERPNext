@@ -348,7 +348,7 @@ In the process section, keep the four-step structure but ensure the deposit text
 <p>A $50 deposit per artist secures the date after availability and scope are confirmed. We send the next step once the booking details are clear.</p>
 ```
 
-- [ ] **Step 5: Replace FAQ section with Hetzner-backed FAQ**
+- [ ] **Step 5: Replace FAQ section with current import capture-backed FAQ**
 
 In the FAQ section, keep the `<details>` pattern and use these four questions and answers:
 

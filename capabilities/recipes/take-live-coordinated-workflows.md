@@ -36,8 +36,8 @@ back or stop active damage.
 
 2. Split work by user-facing lane, not technical layer.
    - Inquiry path: `/contact`, `/book` redirect, Lead/service taxonomy, loud failure behavior.
-   - Trust/policy: `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, Stripe URL readiness. Business/legal content should trace to `/home/guidingl/projects/locally-twisted-legacy_source/`, approved current resources, or GL/legal approval.
-   - Shop/media: product/category media, variant correctness, Item Group images, product detail confidence. Product/service claims should trace to the legacy_source business-detail source or GL approval.
+   - Trust/policy: `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, Stripe URL readiness. Business/legal content should trace to `/home/guidingl/projects/external-catalog-data/`, approved current resources, or GL/legal approval.
+   - Shop/media: product/category media, variant correctness, Item Group images, product detail confidence. Product/service claims should trace to the catalog_data business-detail source or GL approval.
    - Visual/accessibility QA: desktop/mobile screenshots, layout fit, navigation, keyboard/screen-reader basics.
    - Backend readiness: Jeff-facing Lead/Contact/order flow, stale scripts, sample data after schema cleanup.
    - Release gate: final full-flow verification and launch-readiness report.
@@ -89,7 +89,7 @@ back or stop active damage.
 - Parallel implementation against the same write scope causes merge conflicts or inconsistent behavior.
 - Audit results are not launch evidence until the exact affected route, form, or flow is verified after integration.
 - Beautiful pages can mask broken inquiry, cart, checkout, or product-option behavior. Launch quality must include function and trust, not only visuals.
-- ERPNext app-build copy is not business truth by itself. Customer-facing business details should trace to the legacy_source business-detail source or explicit approval.
+- ERPNext app-build copy is not business truth by itself. Customer-facing business details should trace to the catalog_data business-detail source or explicit approval.
 - Treating local success as live readiness skips the required staging proof and
   approval gate.
 

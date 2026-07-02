@@ -41,7 +41,7 @@ This is a follow-up to the architecture restoration documented in
 Fresh staging command during this documentation pass:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:product-gallery-experience
 ```
 

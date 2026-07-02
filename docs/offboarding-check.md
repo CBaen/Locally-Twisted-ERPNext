@@ -40,7 +40,7 @@ cd /tmp/client-offboard-test
 ### Step 2: Confirm no machine-local agent tooling references
 
 ```bash
-grep -rn "/home/guidingl\\|/home/.*\\.codex\\|/home/.*\\.claude" scripts/ docs/ .github/ 2>/dev/null
+grep -rn "/home/guidingl\\|/home/.*/agent-runtime" scripts/ docs/ .github/ 2>/dev/null
 ```
 
 **Expected:** zero results, or only references inside comments explicitly framed as "agency-side, does not apply to this repo."

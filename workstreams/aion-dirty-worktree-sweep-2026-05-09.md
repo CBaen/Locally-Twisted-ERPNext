@@ -61,7 +61,7 @@ These are research/support artifacts or Aion-era broad imports. Keep them out of
 - `.codex/skills/**` copied skill packs.
 - Top-level raw image folders with spaces, e.g. `assets/hero assets/`, `assets/landing page assets/`, `assets/working pic/`, and logo source PNGs.
 - `contests/audience-pages-2026-05-08/**` render gallery/screenshots were removed from the launch repo on 2026-05-10; use Git history if the old contest output is ever needed.
-- `audits/**` large research snapshots and legacy_source/ERPNext migration material.
+- `audits/**` large research snapshots and catalog_data/ERPNext migration material.
 - `STAGE-1-LEGAL-OWNER-QUESTIONS.md` until legal/business-owner question flow is intentionally resumed.
 - Capability registry/doc edits should be reviewed as their own commit, not bundled into launch code.
 

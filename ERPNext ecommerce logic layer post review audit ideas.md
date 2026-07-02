@@ -10,12 +10,12 @@ This is not:
 
 - “import products”
 - “make product pages”
-- “copy legacy_source fields”
+- “copy catalog_data fields”
 - “style ERPNext ecommerce”
 
 This is:
 
-> Build a native ERPNext ecommerce logic layer capable of receiving legacy_source-conceptual product data and integrating it everywhere in the ERPNext ecosystem without silent failure.
+> Build a native ERPNext ecommerce logic layer capable of receiving catalog_data-conceptual product data and integrating it everywhere in the ERPNext ecosystem without silent failure.
 
 ---
 
@@ -57,9 +57,9 @@ Every product behavior must have an owner:
 
 ---
 
-### C. legacy_source concept mapping gate
+### C. catalog_data concept mapping gate
 
-For each legacy_source ecommerce concept:
+For each catalog_data ecommerce concept:
 
 - variants
 - option groups
@@ -136,7 +136,7 @@ Required blast-radius notes:
    - affects product contract, UI, cart lines, pricing, tax, invoice grouping.
 
 3. **Dynamic pricing**
-   - affects legacy_source resolver comparison, ERPNext Item Price, cart total, checkout total, invoice.
+   - affects catalog_data resolver comparison, ERPNext Item Price, cart total, checkout total, invoice.
 
 4. **Variant image/media logic**
    - affects product gallery and customer visibility only when source provides variant-linked image data.
@@ -161,13 +161,13 @@ Required blast-radius notes:
 Use the research-brief skill. Verify current stack/code facts. No bloat.
 
 ### Step 2 — Expedition
-Research ERPNext/Frappe ecommerce architecture + legacy_source ecommerce concepts relevant to our exact stack and problem.
+Research ERPNext/Frappe ecommerce architecture + catalog_data ecommerce concepts relevant to our exact stack and problem.
 
 ### Step 3 — Capability model
 Define what ERPNext ecommerce must become capable of before import.
 
 ### Step 4 — Mapping matrix
-legacy_source concept → ERPNext native/custom/missing/unsafe.
+catalog_data concept → ERPNext native/custom/missing/unsafe.
 
 ### Step 5 — Missing-feature blast-radius register
 One entry per missing feature before building.

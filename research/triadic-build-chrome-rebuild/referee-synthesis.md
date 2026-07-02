@@ -75,7 +75,7 @@ The remaining findings (SecOps F001, F002, F003; Execution F003) are independent
 
 ## Verdict
 
-**FIX ROUND, not redesign.** The architecture is sound — three Hetzner-faithful chrome panels, vanilla JS engine, loud-failure newsletter, and a real DocType were all built correctly. The defects are coordination-level naming, not design-level. The pattern is well-understood, the fix is mechanical (rename class names; add the few missing CSS blocks; switch one querySelector to querySelectorAll; switch hash to sha256; fix textContent-strips-tel-link by building DOM nodes; add modal-open guard on /book Esc).
+**FIX ROUND, not redesign.** The architecture is sound — three current import capture-faithful chrome panels, vanilla JS engine, loud-failure newsletter, and a real DocType were all built correctly. The defects are coordination-level naming, not design-level. The pattern is well-understood, the fix is mechanical (rename class names; add the few missing CSS blocks; switch one querySelector to querySelectorAll; switch hash to sha256; fix textContent-strips-tel-link by building DOM nodes; add modal-open guard on /book Esc).
 
 Re-validation per the skill's Selective Re-Validation rule:
 - Naming alignments: NO re-validation needed (string changes only — confirms the heuristic)

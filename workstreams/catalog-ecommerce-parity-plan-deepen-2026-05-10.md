@@ -1,12 +1,12 @@
-# Plan-Deepen — legacy_source Commerce Source Extraction + ERPNext/Frappe Ecommerce Parity/Safety Audit
+# Plan-Deepen — catalog_data Commerce Source Extraction + ERPNext/Frappe Ecommerce Parity/Safety Audit
 
 Date: 2026-05-10
-Input brief: `workstreams/legacy_source-erpnext-ecommerce-parity-research-brief.md`
+Input brief: `workstreams/catalog_data-erpnext-ecommerce-parity-research-brief.md`
 Status: completed before presenting brief to GL
 
 ## Executive Result
 
-The brief is directionally correct and dispatchable, but only if the research team is constrained to artifact-first evidence and forbidden from treating legacy_source parity as a simple field-mapping/import problem.
+The brief is directionally correct and dispatchable, but only if the research team is constrained to artifact-first evidence and forbidden from treating catalog_data parity as a simple field-mapping/import problem.
 
 The most important strengthening is this:
 
@@ -18,8 +18,8 @@ The plan should proceed, but with seven added guardrails:
 2. Require durable named artifacts from every lane.
 3. Make quote-first / hold / blocked outcomes first-class success states, not failures to be hidden.
 4. Treat cart/checkout/order/invoice/operator records as the proof path, not just product pages.
-5. Forbid copying legacy_source code or blindly reproducing legacy_source data model quirks.
-6. Make exact legacy_source / ERPNext / Frappe / Webshop version evidence mandatory before version-sensitive claims.
+5. Forbid copying catalog_data code or blindly reproducing catalog_data data model quirks.
+6. Make exact catalog_data / ERPNext / Frappe / Webshop version evidence mandatory before version-sensitive claims.
 7. Keep product import and public launch blocked until the synthesis packet names what is safe.
 
 ## Stress Test 1 — Schema/Data Risk
@@ -52,19 +52,19 @@ The parity matrix must be behavior-based, not field-name-based. Each row should 
 
 Do not report “field mapped” as success unless the mapped value is proven through the business flow that uses it.
 
-## Stress Test 2 — legacy_source Source Extraction Boundaries
+## Stress Test 2 — catalog_data Source Extraction Boundaries
 
 ### Risk
 
-legacy_source may contain useful source behavior mixed with stale implementation details, obsolete workarounds, hardcoded IDs, old production mistakes, and version divergence. Local source currently shows legacy_source 19 Community module version `19.0.2.15.0`, while prior risk notes warn production may still be `19.0.2.14.0`; source files, live pages, captured mirrors, exports, and production database notes may disagree.
+catalog_data may contain useful source behavior mixed with stale implementation details, obsolete workarounds, hardcoded IDs, old production mistakes, and version divergence. Local source currently shows catalog_data 19 Community module version `19.0.2.15.0`, while prior risk notes warn production may still be `19.0.2.14.0`; source files, live pages, captured mirrors, exports, and production database notes may disagree.
 
 ### Failure mode
 
-The team imports the old system’s accidental architecture into the new stack instead of preserving the business meaning behind it.
+The team imports accidental architecture into the new stack instead of preserving the business meaning behind it.
 
 ### Required countermeasure
 
-legacy_source is a witness, not the law. Researchers must classify each source finding as:
+catalog_data is a witness, not the law. Researchers must classify each source finding as:
 
 - business meaning to preserve,
 - implementation artifact to avoid,
@@ -73,7 +73,7 @@ legacy_source is a witness, not the law. Researchers must classify each source f
 
 ### Added dispatch instruction
 
-When source evidence conflicts, preserve the customer/operator meaning and mark the implementation as disputed instead of forcing parity with a possibly broken legacy_source behavior.
+When source evidence conflicts, preserve the customer/operator meaning and mark the implementation as disputed instead of forcing parity with a possibly broken catalog_data behavior.
 
 ## Stress Test 3 — ERPNext Native Architecture Risk
 
@@ -105,7 +105,7 @@ Do not solve all complexity in the frontend. Frontend controls are the waiter ta
 
 ### Risk
 
-Visual checkout can pass while business data is lost after add-to-cart, during line merging, at Sales Order creation, at invoice creation, or during quote acceptance. Version-specific framework behavior can create false confidence: legacy_source `website_sale` combination behavior and ERPNext/Frappe v15 Webshop cart/checkout behavior are not interchangeable models.
+Visual checkout can pass while business data is lost after add-to-cart, during line merging, at Sales Order creation, at invoice creation, or during quote acceptance. Version-specific framework behavior can create false confidence: catalog_data `website_sale` combination behavior and ERPNext/Frappe v15 Webshop cart/checkout behavior are not interchangeable models.
 
 ### Failure mode
 
@@ -131,7 +131,7 @@ The checkout auditor must test negative and same-SKU cases:
 
 ### Risk
 
-The audit may touch old legacy_source `.env`, production secrets, customer data, or code with licensing assumptions.
+The audit may touch catalog_data `.env`, production secrets, customer data, or code with licensing assumptions.
 
 ### Failure mode
 
@@ -141,9 +141,9 @@ A research lane over-reads secrets/private data or proposes copying code instead
 
 - Do not read secrets unless explicitly required and approved.
 - Prefer source code, sanitized exports, verifier output, and local test data.
-- Do not copy legacy_source implementation code into Frappe.
+- Do not copy catalog_data implementation code into Frappe.
 - Treat real customer/order data as private; summarize minimally if encountered.
-- Use legacy_source only to identify behavior and business meaning.
+- Use catalog_data only to identify behavior and business meaning.
 
 ### Added dispatch instruction
 
@@ -183,7 +183,7 @@ If a lane times out, truncates, or fails to produce the named artifact, mark it 
 
 Recommended lanes:
 
-1. legacy_source Source Mapper
+1. catalog_data Source Mapper
 2. ERPNext/Frappe Receiving Parity Auditor
 3. Cart / Checkout / Silent-Failure Auditor
 4. Native Product Template Architecture Designer
@@ -195,7 +195,7 @@ Run source-mapping and receiving-parity in parallel only after the brief is acce
 
 Before any lane makes claims about product behavior, it must name the exact software model it is reasoning from:
 
-- legacy_source edition/version/module version and whether evidence is from source code, live/public page, captured mirror, export, or production DB note.
+- catalog_data edition/version/module version and whether evidence is from source code, live/public page, captured mirror, export, or production DB note.
 - ERPNext/Frappe/Webshop/app versions and whether evidence is from docs, source, local running stack, verifier output, or DB metadata.
 - Any version mismatch must be treated as `[VERSION-MISMATCH]` until reconciled.
 

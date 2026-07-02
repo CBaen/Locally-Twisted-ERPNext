@@ -56,7 +56,7 @@ After a Frappe Cloud release and before Search Console reindex work, run the
 same contract against production:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted.com'
+export LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```
 

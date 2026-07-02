@@ -10,7 +10,7 @@
   "products": [
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/14/image_1024/Baby%20Shower%20Combination%20Photo%20opt?unique=75652bd"
+        "web/image/product.product/14/image_1024/Baby%20Shower%20Combination%20Photo%20opt?unique=75652bd"
       ],
       "attributes": {
         "latex colors": {
@@ -290,7 +290,7 @@
         "1400": [],
         "1401": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/14/image_1920",
+      "image_url": "web/image/product.template/14/image_1920",
       "mapped_attribute_names": {
         "1349": "latex colors: Reflex Champagne",
         "1350": "latex colors: Reflex Truffle",
@@ -347,9 +347,9 @@
         "1401": "latex colors: Empowermint"
       },
       "name": "Baby Shower Combination Photo opt",
-      "legacy_source_id": 14,
+      "catalog_data_id": 14,
       "slug": "baby-shower-combination-photo-opt",
-      "url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14",
+      "url": "shop/what-we-make-3/baby-shower-combination-photo-opt-14",
       "valid_variants": [
         {
           "combo": {
@@ -1132,7 +1132,7 @@
         "2": [],
         "3": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc",
+      "image_url": "web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc",
       "mapped_attribute_names": {
         "1": "Garland Length: 6ft",
         "1934": "latex colors: Reflex Champagne",
@@ -1192,9 +1192,9 @@
         "3": "Garland Length: 12ft"
       },
       "name": "Classic Organic Balloon Garland",
-      "legacy_source_id": 19,
+      "catalog_data_id": 19,
       "slug": "classic-organic-balloon-garland",
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19",
+      "url": "shop/what-we-make-3/classic-organic-balloon-garland-19",
       "valid_variants": [
         {
           "combo": {
@@ -2950,7 +2950,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/150/image_1024/Basketball%20Arch%20%2820ft%29?unique=a3d28cd"
+        "web/image/product.product/150/image_1024/Basketball%20Arch%20%2820ft%29?unique=a3d28cd"
       ],
       "attributes": {
         "Arch Size": {
@@ -2975,15 +2975,15 @@
         "297": [],
         "298": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/21/image_1920",
+      "image_url": "web/image/product.template/21/image_1920",
       "mapped_attribute_names": {
         "297": "Arch Size: 20ft",
         "298": "Arch Size: 25ft"
       },
       "name": "Basketball Arch",
-      "legacy_source_id": 21,
+      "catalog_data_id": 21,
       "slug": "basketball-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21",
+      "url": "shop/what-we-make-3/basketball-arch-21",
       "valid_variants": [
         {
           "combo": {
@@ -3008,7 +3008,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/153/image_1024/Number%20Balloon%20Columns%20%28Gold%29?unique=ef0de7c"
+        "web/image/product.product/153/image_1024/Number%20Balloon%20Columns%20%28Gold%29?unique=ef0de7c"
       ],
       "attributes": {
         "Number colors": {
@@ -3339,7 +3339,7 @@
         "691": [],
         "692": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/22/image_1920",
+      "image_url": "web/image/product.template/22/image_1920",
       "mapped_attribute_names": {
         "1775": "latex colors: Reflex Champagne",
         "1776": "latex colors: Reflex Truffle",
@@ -3413,9 +3413,9 @@
         "692": "Number colors: Black"
       },
       "name": "Number Balloon Columns",
-      "legacy_source_id": 22,
+      "catalog_data_id": 22,
       "slug": "number-balloon-columns",
-      "url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22",
+      "url": "shop/what-we-make-3/number-balloon-columns-22",
       "valid_variants": [
         {
           "combo": {
@@ -7503,7 +7503,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/157/image_1024/Easter%20Balloon%20Arch%20-%20Bunny%20Ear%20%2820ft%29?unique=c4a0c37"
+        "web/image/product.product/157/image_1024/Easter%20Balloon%20Arch%20-%20Bunny%20Ear%20%2820ft%29?unique=c4a0c37"
       ],
       "attributes": {
         "Arch Size": {
@@ -7528,15 +7528,15 @@
         "369": [],
         "370": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/30/image_1920",
+      "image_url": "web/image/product.template/30/image_1920",
       "mapped_attribute_names": {
         "369": "Arch Size: 20ft",
         "370": "Arch Size: 25ft"
       },
       "name": "Easter Balloon Arch - Bunny Ear",
-      "legacy_source_id": 30,
+      "catalog_data_id": 30,
       "slug": "easter-balloon-arch-bunny-ear",
-      "url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
+      "url": "shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
       "valid_variants": [
         {
           "combo": {
@@ -7561,7 +7561,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/38/image_1024/Graduation%20Grab%20n%20Go?unique=d99d953"
+        "web/image/product.product/38/image_1024/Graduation%20Grab%20n%20Go?unique=d99d953"
       ],
       "attributes": {
         "latex colors": {
@@ -7841,7 +7841,7 @@
         "2348": [],
         "2349": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/38/image_1920",
+      "image_url": "web/image/product.template/38/image_1920",
       "mapped_attribute_names": {
         "2297": "latex colors: Reflex Champagne",
         "2298": "latex colors: Reflex Truffle",
@@ -7898,9 +7898,9 @@
         "2349": "latex colors: Empowermint"
       },
       "name": "Graduation Grab n Go",
-      "legacy_source_id": 38,
+      "catalog_data_id": 38,
       "slug": "graduation-grab-n-go",
-      "url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38",
+      "url": "shop/what-we-make-3/graduation-grab-n-go-38",
       "valid_variants": [
         {
           "combo": {
@@ -8384,7 +8384,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/159/image_1024/Halloween%20arch%20%2820ft%29?unique=fc90a2b"
+        "web/image/product.product/159/image_1024/Halloween%20arch%20%2820ft%29?unique=fc90a2b"
       ],
       "attributes": {
         "Arch Size": {
@@ -8690,7 +8690,7 @@
         "373": [],
         "374": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/39/image_1920",
+      "image_url": "web/image/product.template/39/image_1920",
       "mapped_attribute_names": {
         "1616": "latex colors: Reflex Champagne",
         "1617": "latex colors: Reflex Truffle",
@@ -8751,9 +8751,9 @@
         "374": "Arch Size: 35ft"
       },
       "name": "Halloween arch",
-      "legacy_source_id": 39,
+      "catalog_data_id": 39,
       "slug": "halloween-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39",
+      "url": "shop/what-we-make-3/halloween-arch-39",
       "valid_variants": [
         {
           "combo": {
@@ -11092,7 +11092,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1149/image_1024/Large%20head%20Missionary%20%28Elder%2C%20Blush%2C%20Black%29?unique=37b3302"
+        "web/image/product.product/1149/image_1024/Large%20head%20Missionary%20%28Elder%2C%20Blush%2C%20Black%29?unique=37b3302"
       ],
       "attributes": {
         "Hair color": {
@@ -11169,7 +11169,7 @@
         "2486": [],
         "2487": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/45/image_1920",
+      "image_url": "web/image/product.template/45/image_1920",
       "mapped_attribute_names": {
         "2470": "Missionary: Elder",
         "2471": "Missionary: Sister",
@@ -11183,9 +11183,9 @@
         "2487": "Hair color: Dark Brown"
       },
       "name": "Large head Missionary",
-      "legacy_source_id": 45,
+      "catalog_data_id": 45,
       "slug": "large-head-missionary",
-      "url": "http://5.78.136.133/shop/personalized-displays-4/large-head-missionary-45",
+      "url": "shop/personalized-displays-4/large-head-missionary-45",
       "valid_variants": [
         {
           "combo": {
@@ -11582,7 +11582,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/78/image_1024/Premium%20Organic%20Garland%20%286ft%29?unique=0f6bdad"
+        "web/image/product.product/78/image_1024/Premium%20Organic%20Garland%20%286ft%29?unique=0f6bdad"
       ],
       "attributes": {
         "Garland Length": {
@@ -11883,7 +11883,7 @@
         "2038": [],
         "2039": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/52/image_1920",
+      "image_url": "web/image/product.template/52/image_1920",
       "mapped_attribute_names": {
         "101": "Garland Length: 6ft",
         "102": "Garland Length: 9ft",
@@ -11943,9 +11943,9 @@
         "2039": "latex colors: Empowermint"
       },
       "name": "Premium Organic Garland",
-      "legacy_source_id": 52,
+      "catalog_data_id": 52,
       "slug": "premium-organic-garland",
-      "url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52",
+      "url": "shop/what-we-make-3/premium-organic-garland-52",
       "valid_variants": [
         {
           "combo": {
@@ -13701,7 +13701,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/441/image_1024/Premium%20Organic%20Arch%20%2820ft%2C%20Foil%20stars%29?unique=ceae1d7"
+        "web/image/product.product/441/image_1024/Premium%20Organic%20Arch%20%2820ft%2C%20Foil%20stars%29?unique=ceae1d7"
       ],
       "attributes": {
         "Add ons": {
@@ -14023,7 +14023,7 @@
         "933": [],
         "934": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/53/image_1920",
+      "image_url": "web/image/product.template/53/image_1920",
       "mapped_attribute_names": {
         "133": "Arch Size: 20ft",
         "134": "Arch Size: 25ft",
@@ -14086,9 +14086,9 @@
         "934": "Add ons: themed foils"
       },
       "name": "Premium Organic Arch",
-      "legacy_source_id": 53,
+      "catalog_data_id": 53,
       "slug": "premium-organic-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+      "url": "shop/what-we-make-3/premium-organic-arch-53",
       "valid_variants": [
         {
           "combo": {
@@ -19607,7 +19607,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1052/image_1024/Pemium%20Organic%20Column%20%285ft%2C%20Foil%20stars%29?unique=af9caa1"
+        "web/image/product.product/1052/image_1024/Pemium%20Organic%20Column%20%285ft%2C%20Foil%20stars%29?unique=af9caa1"
       ],
       "attributes": {
         "Add ons": {
@@ -19939,7 +19939,7 @@
         "170": [],
         "171": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/54/image_1920",
+      "image_url": "web/image/product.template/54/image_1920",
       "mapped_attribute_names": {
         "1561": "latex colors: Reflex Champagne",
         "1562": "latex colors: Reflex Truffle",
@@ -20004,9 +20004,9 @@
         "171": "Column Height: 10ft"
       },
       "name": "Pemium Organic Column",
-      "legacy_source_id": 54,
+      "catalog_data_id": 54,
       "slug": "pemium-organic-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+      "url": "shop/what-we-make-3/pemium-organic-column-54",
       "valid_variants": [
         {
           "combo": {
@@ -28281,7 +28281,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/146/image_1024/Pride%20progress%20Rainbow%20Balloon%20Arch%20%2820ft%29?unique=1580db2"
+        "web/image/product.product/146/image_1024/Pride%20progress%20Rainbow%20Balloon%20Arch%20%2820ft%29?unique=1580db2"
       ],
       "attributes": {
         "Arch Size": {
@@ -28316,7 +28316,7 @@
         "295": [],
         "296": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/55/image_1920",
+      "image_url": "web/image/product.template/55/image_1920",
       "mapped_attribute_names": {
         "293": "Arch Size: 20ft",
         "294": "Arch Size: 25ft",
@@ -28324,9 +28324,9 @@
         "296": "Arch Size: 35ft"
       },
       "name": "Pride progress Rainbow Balloon Arch",
-      "legacy_source_id": 55,
+      "catalog_data_id": 55,
       "slug": "pride-progress-rainbow-balloon-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+      "url": "shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
       "valid_variants": [
         {
           "combo": {
@@ -28369,28 +28369,28 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/91/image_128/Classic%20Arch%20%2820ft%29?unique=b34093d",
-        "http://5.78.136.133/web/image/product.image/4/image_128/20%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/5/image_128/35%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/6/image_128/30%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/7/image_128/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/8/image_128/light%20up%20standard%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/9/image_128/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/12/image_128/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/13/image_128/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/14/image_128/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/15/image_128/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.product/91/image_1024/Classic%20Arch%20%2820ft%29?unique=b34093d",
-        "http://5.78.136.133/web/image/product.image/4/image_1024/20%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/5/image_1024/35%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/6/image_1024/30%27.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/7/image_1024/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/8/image_1024/light%20up%20standard%20arch.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/9/image_1024/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
-        "http://5.78.136.133/web/image/product.image/12/image_1024/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/13/image_1024/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/14/image_1024/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
-        "http://5.78.136.133/web/image/product.image/15/image_1024/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
+        "web/image/product.product/91/image_128/Classic%20Arch%20%2820ft%29?unique=b34093d",
+        "web/image/product.image/4/image_128/20%27.webp?unique=8fde0c6",
+        "web/image/product.image/5/image_128/35%27.webp?unique=8fde0c6",
+        "web/image/product.image/6/image_128/30%27.webp?unique=8fde0c6",
+        "web/image/product.image/7/image_128/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/8/image_128/light%20up%20standard%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/9/image_128/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
+        "web/image/product.image/12/image_128/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/13/image_128/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/14/image_128/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
+        "web/image/product.image/15/image_128/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80",
+        "web/image/product.product/91/image_1024/Classic%20Arch%20%2820ft%29?unique=b34093d",
+        "web/image/product.image/4/image_1024/20%27.webp?unique=8fde0c6",
+        "web/image/product.image/5/image_1024/35%27.webp?unique=8fde0c6",
+        "web/image/product.image/6/image_1024/30%27.webp?unique=8fde0c6",
+        "web/image/product.image/7/image_1024/WSU%2035%20standand%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/8/image_1024/light%20up%20standard%20arch.webp?unique=8fde0c6",
+        "web/image/product.image/9/image_1024/25%27%20rainbow%20arch%20for%20pride.webp?unique=8fde0c6",
+        "web/image/product.image/12/image_1024/Swirl%20%28up%20to%204%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/13/image_1024/Layered%20%28up%20to%208%20colors%29%20%28Design%29?unique=5dffa80",
+        "web/image/product.image/14/image_1024/No%20Lights%20%28LED%20Lights%29?unique=5dffa80",
+        "web/image/product.image/15/image_1024/Add%20LED%20Lights%20%28LED%20Lights%29?unique=5dffa80"
       ],
       "attributes": {
         "Arch Size": {
@@ -28728,7 +28728,7 @@
         "236": [],
         "237": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/57/image_1920",
+      "image_url": "web/image/product.template/57/image_1920",
       "mapped_attribute_names": {
         "1508": "latex colors: Reflex Champagne",
         "1509": "latex colors: Reflex Truffle",
@@ -28793,9 +28793,9 @@
         "237": "LED Lights: Add LED Lights"
       },
       "name": "Classic Arch",
-      "legacy_source_id": 57,
+      "catalog_data_id": 57,
       "slug": "classic-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57",
+      "url": "shop/what-we-make-3/classic-arch-57",
       "valid_variants": [
         {
           "combo": {
@@ -41522,11 +41522,11 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/110/image_128/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
-        "http://5.78.136.133/web/image/product.image/2/image_128/6%27%20logo%20standard.webp?unique=7923af4",
-        "http://5.78.136.133/web/image/product.image/3/image_128/6%27%20standard%20columns.webp?unique=7923af4",
-        "http://5.78.136.133/web/image/product.image/2/image_1024/6%27%20logo%20standard.webp?unique=7923af4",
-        "http://5.78.136.133/web/image/product.image/3/image_1024/6%27%20standard%20columns.webp?unique=7923af4"
+        "web/image/product.product/110/image_128/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
+        "web/image/product.image/2/image_128/6%27%20logo%20standard.webp?unique=7923af4",
+        "web/image/product.image/3/image_128/6%27%20standard%20columns.webp?unique=7923af4",
+        "web/image/product.image/2/image_1024/6%27%20logo%20standard.webp?unique=7923af4",
+        "web/image/product.image/3/image_1024/6%27%20standard%20columns.webp?unique=7923af4"
       ],
       "attributes": {
         "Column Height": {
@@ -41878,7 +41878,7 @@
         "291": [],
         "292": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
+      "image_url": "web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd",
       "mapped_attribute_names": {
         "1828": "latex colors: Reflex Champagne",
         "1829": "latex colors: Reflex Truffle",
@@ -41947,9 +41947,9 @@
         "292": "topper: Logo"
       },
       "name": "Classic Column",
-      "legacy_source_id": 58,
+      "catalog_data_id": 58,
       "slug": "classic-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58",
+      "url": "shop/what-we-make-3/classic-column-58",
       "valid_variants": [
         {
           "combo": {
@@ -66760,7 +66760,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/163/image_1024/Classic%20Organic%20columns%20%285ft%29?unique=6905265"
+        "web/image/product.product/163/image_1024/Classic%20Organic%20columns%20%285ft%29?unique=6905265"
       ],
       "attributes": {
         "Column Height": {
@@ -67076,7 +67076,7 @@
         "379": [],
         "380": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/65/image_1920",
+      "image_url": "web/image/product.template/65/image_1920",
       "mapped_attribute_names": {
         "1881": "latex colors: Reflex Champagne",
         "1882": "latex colors: Reflex Truffle",
@@ -67139,9 +67139,9 @@
         "380": "Column Height: 10ft"
       },
       "name": "Classic Organic columns",
-      "legacy_source_id": 65,
+      "catalog_data_id": 65,
       "slug": "classic-organic-columns",
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65",
+      "url": "shop/what-we-make-3/classic-organic-columns-65",
       "valid_variants": [
         {
           "combo": {
@@ -70646,7 +70646,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1049/image_1024/Baby%20Shower%20Garland%20%286ft%29?unique=2ade15f"
+        "web/image/product.product/1049/image_1024/Baby%20Shower%20Garland%20%286ft%29?unique=2ade15f"
       ],
       "attributes": {
         "Garland Length": {
@@ -70947,7 +70947,7 @@
         "1347": [],
         "1348": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/71/image_1920",
+      "image_url": "web/image/product.template/71/image_1920",
       "mapped_attribute_names": {
         "1293": "Garland Length: 6ft",
         "1294": "Garland Length: 9ft",
@@ -71007,9 +71007,9 @@
         "1348": "latex colors: Empowermint"
       },
       "name": "Baby Shower Garland",
-      "legacy_source_id": 71,
+      "catalog_data_id": 71,
       "slug": "baby-shower-garland",
-      "url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71",
+      "url": "shop/what-we-make-3/baby-shower-garland-71",
       "valid_variants": [
         {
           "combo": {
@@ -72765,7 +72765,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/411/image_1024/Balloon%20Drop%20%28250%29?unique=78c60ed"
+        "web/image/product.product/411/image_1024/Balloon%20Drop%20%28250%29?unique=78c60ed"
       ],
       "attributes": {
         "Drop Size": {
@@ -73066,7 +73066,7 @@
         "803": [],
         "804": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/74/image_1920",
+      "image_url": "web/image/product.template/74/image_1920",
       "mapped_attribute_names": {
         "2040": "latex colors: Reflex Champagne",
         "2041": "latex colors: Reflex Truffle",
@@ -73126,9 +73126,9 @@
         "804": "Drop Size: 1000"
       },
       "name": "Balloon Drop",
-      "legacy_source_id": 74,
+      "catalog_data_id": 74,
       "slug": "balloon-drop",
-      "url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74",
+      "url": "shop/what-we-make-3/balloon-drop-74",
       "valid_variants": [
         {
           "combo": {
@@ -74884,7 +74884,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/437/image_1024/Classic%20Organic%20Arch%20%2820ft%2C%20None%29?unique=c85d6b8"
+        "web/image/product.product/437/image_1024/Classic%20Organic%20Arch%20%2820ft%2C%20None%29?unique=c85d6b8"
       ],
       "attributes": {
         "Add ons": {
@@ -75211,7 +75211,7 @@
         "931": [],
         "932": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/99/image_1920",
+      "image_url": "web/image/product.template/99/image_1920",
       "mapped_attribute_names": {
         "1722": "latex colors: Reflex Champagne",
         "1723": "latex colors: Reflex Truffle",
@@ -75275,9 +75275,9 @@
         "932": "Add ons: None"
       },
       "name": "Classic Organic Arch",
-      "legacy_source_id": 99,
+      "catalog_data_id": 99,
       "slug": "classic-organic-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+      "url": "shop/what-we-make-3/classic-organic-arch-99",
       "valid_variants": [
         {
           "combo": {
@@ -83552,7 +83552,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/250/image_1024/Unicorn%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/250/image_1024/Unicorn%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -83648,7 +83648,7 @@
         "780": [],
         "781": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/115/image_1920",
+      "image_url": "web/image/product.template/115/image_1920",
       "mapped_attribute_names": {
         "2215": "Add Foil Number: 1",
         "2216": "Add Foil Number: 2",
@@ -83675,9 +83675,9 @@
         "781": "Add Foil Number: 0"
       },
       "name": "Unicorn Bouquet",
-      "legacy_source_id": 115,
+      "catalog_data_id": 115,
       "slug": "unicorn-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115",
+      "url": "shop/what-we-make-3/unicorn-bouquet-115",
       "valid_variants": [
         {
           "combo": {
@@ -84014,7 +84014,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/253/image_1024/Mickey%20Mouse%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/253/image_1024/Mickey%20Mouse%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -84100,7 +84100,7 @@
         "790": [],
         "791": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/116/image_1920",
+      "image_url": "web/image/product.template/116/image_1920",
       "mapped_attribute_names": {
         "688": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "689": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -84117,9 +84117,9 @@
         "791": "Add Foil Number: 0"
       },
       "name": "Mickey Mouse Bouquet",
-      "legacy_source_id": 116,
+      "catalog_data_id": 116,
       "slug": "mickey-mouse-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116",
+      "url": "shop/what-we-make-3/mickey-mouse-bouquet-116",
       "valid_variants": [
         {
           "combo": {
@@ -84456,12 +84456,12 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/369/image_128/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
-        "http://5.78.136.133/web/image/product.image/16/image_128/Minion%20Bouquet?unique=ee8805a",
-        "http://5.78.136.133/web/image/product.image/17/image_128/Minion%20Bouquet?unique=86e0e06",
-        "http://5.78.136.133/web/image/product.product/369/image_1024/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
-        "http://5.78.136.133/web/image/product.image/16/image_1024/Minion%20Bouquet?unique=ee8805a",
-        "http://5.78.136.133/web/image/product.image/17/image_1024/Minion%20Bouquet?unique=86e0e06"
+        "web/image/product.product/369/image_128/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
+        "web/image/product.image/16/image_128/Minion%20Bouquet?unique=ee8805a",
+        "web/image/product.image/17/image_128/Minion%20Bouquet?unique=86e0e06",
+        "web/image/product.product/369/image_1024/Minion%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116",
+        "web/image/product.image/16/image_1024/Minion%20Bouquet?unique=ee8805a",
+        "web/image/product.image/17/image_1024/Minion%20Bouquet?unique=86e0e06"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -84547,7 +84547,7 @@
         "800": [],
         "801": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/117/image_1920",
+      "image_url": "web/image/product.template/117/image_1920",
       "mapped_attribute_names": {
         "730": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "731": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -84564,9 +84564,9 @@
         "801": "Add Foil Number: 0"
       },
       "name": "Minion Bouquet",
-      "legacy_source_id": 117,
+      "catalog_data_id": 117,
       "slug": "minion-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117",
+      "url": "shop/what-we-make-3/minion-bouquet-117",
       "valid_variants": [
         {
           "combo": {
@@ -84903,7 +84903,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/372/image_1024/Encanto%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/372/image_1024/Encanto%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -84989,7 +84989,7 @@
         "813": [],
         "814": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/118/image_1920",
+      "image_url": "web/image/product.template/118/image_1920",
       "mapped_attribute_names": {
         "733": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "734": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -85006,9 +85006,9 @@
         "814": "Add Foil Number: 0"
       },
       "name": "Encanto Bouquet",
-      "legacy_source_id": 118,
+      "catalog_data_id": 118,
       "slug": "encanto-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118",
+      "url": "shop/what-we-make-3/encanto-bouquet-118",
       "valid_variants": [
         {
           "combo": {
@@ -85345,7 +85345,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/408/image_1024/Stitch%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/408/image_1024/Stitch%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -85431,7 +85431,7 @@
         "770": [],
         "771": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/119/image_1920",
+      "image_url": "web/image/product.template/119/image_1920",
       "mapped_attribute_names": {
         "736": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "737": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -85448,9 +85448,9 @@
         "771": "Add Foil Number: 0"
       },
       "name": "Stitch Bouquet",
-      "legacy_source_id": 119,
+      "catalog_data_id": 119,
       "slug": "stitch-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119",
+      "url": "shop/what-we-make-3/stitch-bouquet-119",
       "valid_variants": [
         {
           "combo": {
@@ -85787,7 +85787,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/414/image_1024/Flamingo%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/414/image_1024/Flamingo%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -85873,7 +85873,7 @@
         "826": [],
         "827": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/120/image_1920",
+      "image_url": "web/image/product.template/120/image_1920",
       "mapped_attribute_names": {
         "815": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "816": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -85890,9 +85890,9 @@
         "827": "Add Foil Number: 0"
       },
       "name": "Flamingo Bouquet",
-      "legacy_source_id": 120,
+      "catalog_data_id": 120,
       "slug": "flamingo-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120",
+      "url": "shop/what-we-make-3/flamingo-bouquet-120",
       "valid_variants": [
         {
           "combo": {
@@ -86229,7 +86229,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/417/image_1024/Football%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/417/image_1024/Football%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -86325,7 +86325,7 @@
         "898": [],
         "899": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/121/image_1920",
+      "image_url": "web/image/product.template/121/image_1920",
       "mapped_attribute_names": {
         "838": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "839": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -86352,9 +86352,9 @@
         "899": "Add Foil Number: 0"
       },
       "name": "Football Bouquet",
-      "legacy_source_id": 121,
+      "catalog_data_id": 121,
       "slug": "football-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121",
+      "url": "shop/what-we-make-3/football-bouquet-121",
       "valid_variants": [
         {
           "combo": {
@@ -86691,7 +86691,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/420/image_1024/Soccer%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/420/image_1024/Soccer%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -86787,7 +86787,7 @@
         "908": [],
         "909": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/122/image_1920",
+      "image_url": "web/image/product.template/122/image_1920",
       "mapped_attribute_names": {
         "851": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "852": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -86814,9 +86814,9 @@
         "909": "Add Foil Number: 0"
       },
       "name": "Soccer Bouquet",
-      "legacy_source_id": 122,
+      "catalog_data_id": 122,
       "slug": "soccer-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122",
+      "url": "shop/what-we-make-3/soccer-bouquet-122",
       "valid_variants": [
         {
           "combo": {
@@ -87153,7 +87153,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/426/image_1024/Space%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/426/image_1024/Space%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -87249,7 +87249,7 @@
         "918": [],
         "919": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/123/image_1920",
+      "image_url": "web/image/product.template/123/image_1920",
       "mapped_attribute_names": {
         "864": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "865": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -87276,9 +87276,9 @@
         "919": "Add Foil Number: 0"
       },
       "name": "Space Bouquet",
-      "legacy_source_id": 123,
+      "catalog_data_id": 123,
       "slug": "space-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123",
+      "url": "shop/what-we-make-3/space-bouquet-123",
       "valid_variants": [
         {
           "combo": {
@@ -87615,7 +87615,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/423/image_1024/Over%20the%20Hill%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/423/image_1024/Over%20the%20Hill%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -87711,7 +87711,7 @@
         "928": [],
         "929": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/124/image_1920",
+      "image_url": "web/image/product.template/124/image_1920",
       "mapped_attribute_names": {
         "877": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "878": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -87738,9 +87738,9 @@
         "929": "Add Foil Number: 0"
       },
       "name": "Over the Hill Bouquet",
-      "legacy_source_id": 124,
+      "catalog_data_id": 124,
       "slug": "over-the-hill-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124",
+      "url": "shop/what-we-make-3/over-the-hill-bouquet-124",
       "valid_variants": [
         {
           "combo": {
@@ -88355,7 +88355,7 @@
         "1453": [],
         "1454": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48",
+      "image_url": "web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48",
       "mapped_attribute_names": {
         "1402": "latex colors: Reflex Champagne",
         "1403": "latex colors: Reflex Truffle",
@@ -88412,9 +88412,9 @@
         "1454": "latex colors: Empowermint"
       },
       "name": "7' Butterfly Column",
-      "legacy_source_id": 125,
+      "catalog_data_id": 125,
       "slug": "7-butterfly-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125",
+      "url": "shop/what-we-make-3/7-butterfly-column-125",
       "valid_variants": [
         {
           "combo": {
@@ -89176,7 +89176,7 @@
         "1506": [],
         "1507": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9",
+      "image_url": "web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9",
       "mapped_attribute_names": {
         "1455": "latex colors: Reflex Champagne",
         "1456": "latex colors: Reflex Truffle",
@@ -89233,9 +89233,9 @@
         "1507": "latex colors: Empowermint"
       },
       "name": "7' Epic Column",
-      "legacy_source_id": 126,
+      "catalog_data_id": 126,
       "slug": "7-epic-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126",
+      "url": "shop/what-we-make-3/7-epic-column-126",
       "valid_variants": [
         {
           "combo": {
@@ -89719,7 +89719,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/661/image_1024/Organic%20Grab%20n%27%20Go%20%286ft%29?unique=b61edc4"
+        "web/image/product.product/661/image_1024/Organic%20Grab%20n%27%20Go%20%286ft%29?unique=b61edc4"
       ],
       "attributes": {
         "Garland Length": {
@@ -90015,7 +90015,7 @@
         "1167": [],
         "1168": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/127/image_1920",
+      "image_url": "web/image/product.template/127/image_1920",
       "mapped_attribute_names": {
         "1005": "Garland Length: 6ft",
         "1006": "Garland Length: 9ft",
@@ -90074,9 +90074,9 @@
         "1168": "latex colors: Smoke grey"
       },
       "name": "Organic Grab n' Go",
-      "legacy_source_id": 127,
+      "catalog_data_id": 127,
       "slug": "organic-grab-n-go",
-      "url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127",
+      "url": "shop/what-we-make-3/organic-grab-n-go-127",
       "valid_variants": [
         {
           "combo": {
@@ -91799,20 +91799,20 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/765/image_128/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
-        "http://5.78.136.133/web/image/product.image/21/image_128/IMG_0275.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/22/image_128/IMG_1862.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/23/image_128/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/24/image_128/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/25/image_128/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/26/image_128/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.product/765/image_1024/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
-        "http://5.78.136.133/web/image/product.image/21/image_1024/IMG_0275.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/22/image_1024/IMG_1862.webp?unique=a75766f",
-        "http://5.78.136.133/web/image/product.image/23/image_1024/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/24/image_1024/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/25/image_1024/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
-        "http://5.78.136.133/web/image/product.image/26/image_1024/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
+        "web/image/product.product/765/image_128/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
+        "web/image/product.image/21/image_128/IMG_0275.webp?unique=a75766f",
+        "web/image/product.image/22/image_128/IMG_1862.webp?unique=a75766f",
+        "web/image/product.image/23/image_128/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
+        "web/image/product.image/24/image_128/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
+        "web/image/product.image/25/image_128/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
+        "web/image/product.image/26/image_128/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58",
+        "web/image/product.product/765/image_1024/Birthday%20Deliveries%20%28Small%2C%20Mickey%2C%20Small%203%20balloon%20bouquet%29?unique=5615dbe",
+        "web/image/product.image/21/image_1024/IMG_0275.webp?unique=a75766f",
+        "web/image/product.image/22/image_1024/IMG_1862.webp?unique=a75766f",
+        "web/image/product.image/23/image_1024/A3302C52-501C-4927-9DCA-D2F7AE7EF3DA.webp?unique=539fa58",
+        "web/image/product.image/24/image_1024/1210B1EA-8B15-44F4-8B9F-49486D0106C0.webp?unique=539fa58",
+        "web/image/product.image/25/image_1024/4603466F-A66F-4D0B-8734-C6DA6F969E7E.webp?unique=539fa58",
+        "web/image/product.image/26/image_1024/77F109F6-2322-4D3A-BEC5-97311719A828.webp?unique=539fa58"
       ],
       "attributes": {
         "Add Bouquet": {
@@ -92070,7 +92070,7 @@
         "1248": [],
         "1249": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/128/image_1920",
+      "image_url": "web/image/product.template/128/image_1920",
       "mapped_attribute_names": {
         "1169": "Delivery Size: Small",
         "1170": "Delivery Size: Medium",
@@ -92127,9 +92127,9 @@
         "1249": "Add Bouquet: 7 balloon bouquet"
       },
       "name": "Birthday Deliveries",
-      "legacy_source_id": 128,
+      "catalog_data_id": 128,
       "slug": "birthday-deliveries",
-      "url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+      "url": "shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
       "valid_variants": [
         {
           "combo": {
@@ -128586,10 +128586,10 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/755/image_128/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
-        "http://5.78.136.133/web/image/product.image/20/image_128/Easter%20Balloon%20Cups?unique=20fdda3",
-        "http://5.78.136.133/web/image/product.product/755/image_1024/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
-        "http://5.78.136.133/web/image/product.image/20/image_1024/Easter%20Balloon%20Cups?unique=20fdda3"
+        "web/image/product.product/755/image_128/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
+        "web/image/product.image/20/image_128/Easter%20Balloon%20Cups?unique=20fdda3",
+        "web/image/product.product/755/image_1024/Easter%20Balloon%20Cups%20%28Bunny%29?unique=20fdda3",
+        "web/image/product.image/20/image_1024/Easter%20Balloon%20Cups?unique=20fdda3"
       ],
       "attributes": {
         "Easter Designs": {
@@ -128639,7 +128639,7 @@
         "1208": [],
         "1209": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/130/image_1920",
+      "image_url": "web/image/product.template/130/image_1920",
       "mapped_attribute_names": {
         "1201": "Easter Designs: Bunny",
         "1203": "Easter Designs: Flower",
@@ -128650,9 +128650,9 @@
         "1209": "Easter Designs: Turtle"
       },
       "name": "Easter Balloon Cups",
-      "legacy_source_id": 130,
+      "catalog_data_id": 130,
       "slug": "easter-balloon-cups",
-      "url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130",
+      "url": "shop/what-we-make-3/easter-balloon-cups-130",
       "valid_variants": [
         {
           "combo": {
@@ -128962,7 +128962,7 @@
         "1291": [],
         "1292": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4",
+      "image_url": "web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4",
       "mapped_attribute_names": {
         "1250": "Color Palette: Black",
         "1251": "Color Palette: White",
@@ -129009,9 +129009,9 @@
         "1292": "Orbz toppers: Blue Marble"
       },
       "name": "Star Column",
-      "legacy_source_id": 131,
+      "catalog_data_id": 131,
       "slug": "star-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+      "url": "shop/what-we-make-3/star-column-131",
       "valid_variants": [
         {
           "combo": {
@@ -144098,7 +144098,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1064/image_1024/Sleepy%20Baby%20Column?unique=4ad9a11"
+        "web/image/product.product/1064/image_1024/Sleepy%20Baby%20Column?unique=4ad9a11"
       ],
       "attributes": {
         "latex colors": {
@@ -144378,7 +144378,7 @@
         "2144": [],
         "2145": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/132/image_1920",
+      "image_url": "web/image/product.template/132/image_1920",
       "mapped_attribute_names": {
         "2093": "latex colors: Reflex Champagne",
         "2094": "latex colors: Reflex Truffle",
@@ -144435,9 +144435,9 @@
         "2145": "latex colors: Empowermint"
       },
       "name": "Sleepy Baby Column",
-      "legacy_source_id": 132,
+      "catalog_data_id": 132,
       "slug": "sleepy-baby-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132",
+      "url": "shop/what-we-make-3/sleepy-baby-column-132",
       "valid_variants": [
         {
           "combo": {
@@ -144921,7 +144921,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1065/image_1024/Baby%20Table%20decor%20%28blue%29?unique=ff57d73"
+        "web/image/product.product/1065/image_1024/Baby%20Table%20decor%20%28blue%29?unique=ff57d73"
       ],
       "attributes": {
         "Baby color": {
@@ -144946,15 +144946,15 @@
         "2146": [],
         "2147": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/133/image_1920",
+      "image_url": "web/image/product.template/133/image_1920",
       "mapped_attribute_names": {
         "2146": "Baby color: blue",
         "2147": "Baby color: pink"
       },
       "name": "Baby Table decor",
-      "legacy_source_id": 133,
+      "catalog_data_id": 133,
       "slug": "baby-table-decor",
-      "url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133",
+      "url": "shop/what-we-make-3/baby-table-decor-133",
       "valid_variants": [
         {
           "combo": {
@@ -144979,7 +144979,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1067/image_1024/Logo%203%20layered%20bouquet?unique=f1c9116"
+        "web/image/product.product/1067/image_1024/Logo%203%20layered%20bouquet?unique=f1c9116"
       ],
       "attributes": {
         "latex colors": {
@@ -145259,7 +145259,7 @@
         "2199": [],
         "2200": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/134/image_1920",
+      "image_url": "web/image/product.template/134/image_1920",
       "mapped_attribute_names": {
         "2148": "latex colors: Reflex Champagne",
         "2149": "latex colors: Reflex Truffle",
@@ -145316,9 +145316,9 @@
         "2200": "latex colors: Empowermint"
       },
       "name": "Logo 3 layered bouquet",
-      "legacy_source_id": 134,
+      "catalog_data_id": 134,
       "slug": "logo-3-layered-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134",
+      "url": "shop/what-we-make-3/logo-3-layered-bouquet-134",
       "valid_variants": [
         {
           "combo": {
@@ -145802,7 +145802,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1068/image_1024/6%20color%20rainbow%20arch%20%2820ft%29?unique=de2e15b"
+        "web/image/product.product/1068/image_1024/6%20color%20rainbow%20arch%20%2820ft%29?unique=de2e15b"
       ],
       "attributes": {
         "Arch Size": {
@@ -145827,15 +145827,15 @@
         "2201": [],
         "2202": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/135/image_1920",
+      "image_url": "web/image/product.template/135/image_1920",
       "mapped_attribute_names": {
         "2201": "Arch Size: 20ft",
         "2202": "Arch Size: 25ft"
       },
       "name": "6 color rainbow arch",
-      "legacy_source_id": 135,
+      "catalog_data_id": 135,
       "slug": "6-color-rainbow-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135",
+      "url": "shop/what-we-make-3/6-color-rainbow-arch-135",
       "valid_variants": [
         {
           "combo": {
@@ -145860,25 +145860,25 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1072/image_1024/Mother%27s%20day%20front%20yard%207%27%20Column?unique=c91c160"
+        "web/image/product.product/1072/image_1024/Mother%27s%20day%20front%20yard%207%27%20Column?unique=c91c160"
       ],
       "attributes": {},
       "base_price": 140.0,
       "currency": "USD",
       "description": "Mother&#39;s day front yard 7&#39; Column",
       "exclusions": {},
-      "image_url": "http://5.78.136.133/web/image/product.template/137/image_1920",
+      "image_url": "web/image/product.template/137/image_1920",
       "mapped_attribute_names": {},
       "name": "Mother's day front yard 7' Column",
-      "legacy_source_id": 137,
+      "catalog_data_id": 137,
       "slug": "mothers-day-front-yard-7-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137",
+      "url": "shop/what-we-make-3/mothers-day-front-yard-7-column-137",
       "valid_variants": [],
       "variant_count": 0
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1073/image_1024/Marble%20table%20decor%20%28Red%29?unique=1054a6a"
+        "web/image/product.product/1073/image_1024/Marble%20table%20decor%20%28Red%29?unique=1054a6a"
       ],
       "attributes": {
         "Orbz toppers": {
@@ -145943,7 +145943,7 @@
         "2213": [],
         "2214": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/140/image_1920",
+      "image_url": "web/image/product.template/140/image_1920",
       "mapped_attribute_names": {
         "2205": "Orbz toppers: Red",
         "2206": "Orbz toppers: Blue/Green",
@@ -145957,9 +145957,9 @@
         "2214": "Orbz toppers: Blue Marble"
       },
       "name": "Marble table decor",
-      "legacy_source_id": 140,
+      "catalog_data_id": 140,
       "slug": "marble-table-decor",
-      "url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+      "url": "shop/what-we-make-3/marble-table-decor-140",
       "valid_variants": [
         {
           "combo": {
@@ -146056,7 +146056,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1083/image_1024/Paw%20Patrol%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/1083/image_1024/Paw%20Patrol%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -146152,7 +146152,7 @@
         "2246": [],
         "2247": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/141/image_1920",
+      "image_url": "web/image/product.template/141/image_1920",
       "mapped_attribute_names": {
         "2225": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "2226": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -146179,9 +146179,9 @@
         "2247": "Add Foil Number: 0"
       },
       "name": "Paw Patrol Bouquet",
-      "legacy_source_id": 141,
+      "catalog_data_id": 141,
       "slug": "paw-patrol-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141",
+      "url": "shop/what-we-make-3/paw-patrol-bouquet-141",
       "valid_variants": [
         {
           "combo": {
@@ -146518,7 +146518,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1086/image_1024/Elsa%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/1086/image_1024/Elsa%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -146614,7 +146614,7 @@
         "2269": [],
         "2270": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/142/image_1920",
+      "image_url": "web/image/product.template/142/image_1920",
       "mapped_attribute_names": {
         "2248": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "2249": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -146641,9 +146641,9 @@
         "2270": "Add Foil Number: 0"
       },
       "name": "Elsa Bouquet",
-      "legacy_source_id": 142,
+      "catalog_data_id": 142,
       "slug": "elsa-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142",
+      "url": "shop/what-we-make-3/elsa-bouquet-142",
       "valid_variants": [
         {
           "combo": {
@@ -146980,7 +146980,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1089/image_1024/Holy%20COW%21%21%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
+        "web/image/product.product/1089/image_1024/Holy%20COW%21%21%20Bouquet%20%28Small%20%E2%80%94%201%20super%20shape%2C%202%20foils%2C%207%20latex%29?unique=f1c9116"
       ],
       "attributes": {
         "Add Foil Number": {
@@ -147076,7 +147076,7 @@
         "2292": [],
         "2293": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/143/image_1920",
+      "image_url": "web/image/product.template/143/image_1920",
       "mapped_attribute_names": {
         "2271": "Bouquet Size: Small \u2014 1 super shape, 2 foils, 7 latex",
         "2272": "Bouquet Size: Medium \u2014 2 super shapes, 4 foils, 14 latex",
@@ -147103,9 +147103,9 @@
         "2293": "Add Foil Number: 0"
       },
       "name": "Holy COW!! Bouquet",
-      "legacy_source_id": 143,
+      "catalog_data_id": 143,
       "slug": "holy-cow-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143",
+      "url": "shop/what-we-make-3/holy-cow-bouquet-143",
       "valid_variants": [
         {
           "combo": {
@@ -147442,7 +147442,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1092/image_1024/Butterfly%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+        "web/image/product.product/1092/image_1024/Butterfly%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
       ],
       "attributes": {
         "Plush add ons": {
@@ -147467,15 +147467,15 @@
         "2295": [],
         "2296": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/144/image_1920",
+      "image_url": "web/image/product.template/144/image_1920",
       "mapped_attribute_names": {
         "2295": "Plush add ons: Teddy Bear",
         "2296": "Plush add ons: None"
       },
       "name": "Butterfly \"GET WELL\" Bouquet (Latex free)",
-      "legacy_source_id": 144,
+      "catalog_data_id": 144,
       "slug": "butterfly-get-well-bouquet-latex-free",
-      "url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+      "url": "shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
       "valid_variants": [
         {
           "combo": {
@@ -147500,7 +147500,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1094/image_1024/Bandage%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+        "web/image/product.product/1094/image_1024/Bandage%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
       ],
       "attributes": {
         "Plush add ons": {
@@ -147525,15 +147525,15 @@
         "2350": [],
         "2351": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/146/image_1920",
+      "image_url": "web/image/product.template/146/image_1920",
       "mapped_attribute_names": {
         "2350": "Plush add ons: None",
         "2351": "Plush add ons: Teddy Bear"
       },
       "name": "Bandage \"GET WELL\" Bouquet (Latex free)",
-      "legacy_source_id": 146,
+      "catalog_data_id": 146,
       "slug": "bandage-get-well-bouquet-latex-free",
-      "url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+      "url": "shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
       "valid_variants": [
         {
           "combo": {
@@ -147558,7 +147558,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1095/image_1024/Shooting%20star%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
+        "web/image/product.product/1095/image_1024/Shooting%20star%20%22GET%20WELL%22%20Bouquet%20%28Latex%20free%29?unique=e289928"
       ],
       "attributes": {
         "Plush add ons": {
@@ -147583,15 +147583,15 @@
         "2352": [],
         "2353": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/147/image_1920",
+      "image_url": "web/image/product.template/147/image_1920",
       "mapped_attribute_names": {
         "2352": "Plush add ons: None",
         "2353": "Plush add ons: Teddy Bear"
       },
       "name": "Shooting star \"GET WELL\" Bouquet (Latex free)",
-      "legacy_source_id": 147,
+      "catalog_data_id": 147,
       "slug": "shooting-star-get-well-bouquet-latex-free",
-      "url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+      "url": "shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
       "valid_variants": [
         {
           "combo": {
@@ -147616,7 +147616,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1115/image_1024/6%27%20Graduation%20stands%20%28Congrats%29?unique=23bd386"
+        "web/image/product.product/1115/image_1024/6%27%20Graduation%20stands%20%28Congrats%29?unique=23bd386"
       ],
       "attributes": {
         "Graduation stands": {
@@ -147641,15 +147641,15 @@
         "2415": [],
         "2416": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/149/image_1920",
+      "image_url": "web/image/product.template/149/image_1920",
       "mapped_attribute_names": {
         "2415": "Graduation stands: Congrats",
         "2416": "Graduation stands: Yay"
       },
       "name": "6' Graduation stands",
-      "legacy_source_id": 149,
+      "catalog_data_id": 149,
       "slug": "6-graduation-stands",
-      "url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149",
+      "url": "shop/what-we-make-3/6-graduation-stands-149",
       "valid_variants": [
         {
           "combo": {
@@ -147674,7 +147674,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1181/image_1024/classic%20organic%20for%20easel?unique=56465fb"
+        "web/image/product.product/1181/image_1024/classic%20organic%20for%20easel?unique=56465fb"
       ],
       "attributes": {
         "latex colors": {
@@ -147954,7 +147954,7 @@
         "2758": [],
         "2759": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/152/image_1920",
+      "image_url": "web/image/product.template/152/image_1920",
       "mapped_attribute_names": {
         "2707": "latex colors: Reflex Champagne",
         "2708": "latex colors: Reflex Truffle",
@@ -148011,9 +148011,9 @@
         "2759": "latex colors: Empowermint"
       },
       "name": "classic organic for easel",
-      "legacy_source_id": 152,
+      "catalog_data_id": 152,
       "slug": "classic-organic-for-easel",
-      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152",
+      "url": "shop/what-we-make-3/classic-organic-for-easel-152",
       "valid_variants": [
         {
           "combo": {
@@ -148497,43 +148497,43 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1190/image_1024/Easter%20Arch?unique=ea94776"
+        "web/image/product.product/1190/image_1024/Easter%20Arch?unique=ea94776"
       ],
       "attributes": {},
       "base_price": 250.0,
       "currency": "USD",
       "description": "Soft pastels and spring greens in a garden-inspired arch. Designed for egg hunts, church socials, and family brunches.",
       "exclusions": {},
-      "image_url": "http://5.78.136.133/web/image/product.template/158/image_1920",
+      "image_url": "web/image/product.template/158/image_1920",
       "mapped_attribute_names": {},
       "name": "Easter Arch",
-      "legacy_source_id": 158,
+      "catalog_data_id": 158,
       "slug": "easter-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158",
+      "url": "shop/what-we-make-3/easter-arch-158",
       "valid_variants": [],
       "variant_count": 0
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1204/image_1024/Mother%27s%20Day%20Bouquet?unique=ea94776"
+        "web/image/product.product/1204/image_1024/Mother%27s%20Day%20Bouquet?unique=ea94776"
       ],
       "attributes": {},
       "base_price": 65.0,
       "currency": "USD",
       "description": "Soft pinks, lavenders, and whites in a bouquet that says what flowers say \u2014 but lasts longer.",
       "exclusions": {},
-      "image_url": "http://5.78.136.133/web/image/product.template/165/image_1920",
+      "image_url": "web/image/product.template/165/image_1920",
       "mapped_attribute_names": {},
       "name": "Mother's Day Bouquet",
-      "legacy_source_id": 165,
+      "catalog_data_id": 165,
       "slug": "mothers-day-bouquet",
-      "url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165",
+      "url": "shop/what-we-make-3/mothers-day-bouquet-165",
       "valid_variants": [],
       "variant_count": 0
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1233/image_1024/Large%20Garland%20%286ft%29?unique=132b54e"
+        "web/image/product.product/1233/image_1024/Large%20Garland%20%286ft%29?unique=132b54e"
       ],
       "attributes": {
         "Color Palette": {
@@ -148714,7 +148714,7 @@
         "2848": [],
         "2849": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/177/image_1920",
+      "image_url": "web/image/product.template/177/image_1920",
       "mapped_attribute_names": {
         "2818": "Garland Length: 6ft",
         "2819": "Garland Length: 9ft",
@@ -148750,9 +148750,9 @@
         "2849": "Color Palette: Navy"
       },
       "name": "Large Garland",
-      "legacy_source_id": 177,
+      "catalog_data_id": 177,
       "slug": "large-garland",
-      "url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177",
+      "url": "shop/what-we-make-3/large-garland-177",
       "valid_variants": [
         {
           "combo": {
@@ -149716,7 +149716,7 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1237/image_1024/Large%20Organic%20Column%20%285ft%29?unique=132b54e"
+        "web/image/product.product/1237/image_1024/Large%20Organic%20Column%20%285ft%29?unique=132b54e"
       ],
       "attributes": {
         "Color Palette": {
@@ -149912,7 +149912,7 @@
         "2883": [],
         "2884": []
       },
-      "image_url": "http://5.78.136.133/web/image/product.template/178/image_1920",
+      "image_url": "web/image/product.template/178/image_1920",
       "mapped_attribute_names": {
         "2850": "Column Height: 5ft",
         "2851": "Column Height: 6ft",
@@ -149951,9 +149951,9 @@
         "2884": "Color Palette: Navy"
       },
       "name": "Large Organic Column",
-      "legacy_source_id": 178,
+      "catalog_data_id": 178,
       "slug": "large-organic-column",
-      "url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178",
+      "url": "shop/what-we-make-3/large-organic-column-178",
       "valid_variants": [
         {
           "combo": {
@@ -151874,23 +151874,23 @@
     },
     {
       "additional_image_urls": [
-        "http://5.78.136.133/web/image/product.product/1243/image_1024/Pride%20Arch?unique=132b54e"
+        "web/image/product.product/1243/image_1024/Pride%20Arch?unique=132b54e"
       ],
       "attributes": {},
       "base_price": 325.0,
       "currency": "USD",
       "description": "Full-spectrum rainbow in a statement arch. Bold, joyful, and built to celebrate exactly who you are.",
       "exclusions": {},
-      "image_url": "http://5.78.136.133/web/image/product.template/179/image_1920",
+      "image_url": "web/image/product.template/179/image_1920",
       "mapped_attribute_names": {},
       "name": "Pride Arch",
-      "legacy_source_id": 179,
+      "catalog_data_id": 179,
       "slug": "pride-arch",
-      "url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179",
+      "url": "shop/what-we-make-3/pride-arch-179",
       "valid_variants": [],
       "variant_count": 0
     }
   ],
   "scraped_at": "2026-04-30T00:34:51.629348",
-  "source": "http://5.78.136.133"
+  "source": ""
 }

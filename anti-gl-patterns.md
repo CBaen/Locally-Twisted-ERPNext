@@ -49,7 +49,7 @@ The deepest cost is that **future instances inherit the band-aid code**. The CSS
 **The cost to GL.** Hours of session time and token spend with zero translation work done. Two ERPNext sites running but empty. GL has to interrupt and say "you haven't even rebuilt the site in ERPNext?! What is wrong with your focus?" — which is a trust withdrawal as well as a time loss.
 
 **Receipts.**
-- *2026-04-25* — An instance spent the back half of a long session on Phase 1 (Inventory) elaborate planning. Six plans, five waves, two checker iterations, threat model, validation strategy, a custom production-DB-read script proposal. Killed by GL when the meta-pattern surfaced. Plans deleted; pivot was "skip Phase 1 entirely, use the existing off-legacy_source expedition inventory, start translating models in Phase 2."
+- *2026-04-25* — An instance spent the back half of a long session on Phase 1 (Inventory) elaborate planning. Six plans, five waves, two checker iterations, threat model, validation strategy, a custom production-DB-read script proposal. Killed by GL when the meta-pattern surfaced. Plans deleted; pivot was "skip Phase 1 entirely, use the existing off-catalog_data expedition inventory, start translating models in Phase 2."
 
 **Counter-move.** Before spawning ANY planning agent for a phase, ask: "would the simpler version of this — me reading the source files inline and starting to build — produce a better result?" For projects where the source is on disk and the destination is configurable through a UI/API, the answer is usually yes. Save the elaborate phase planning for genuinely novel architectural work, not for "translate this thing into that thing."
 
@@ -62,7 +62,7 @@ If you find yourself in a planner-checker revision loop on a phase that hasn't m
 **The cost to GL.** Insulting framing — implies GL needs to do the data-pipeline work themselves. Also abdicates the agent's actual job. Wastes a turn while GL untangles the misread.
 
 **Receipts.**
-- *2026-04-25* — An instance was told "leave legacy_source specific scripts and skills alone — we need to create ERPNext specific ones." The instance interpreted this as "GL must execute production queries" and drafted a "GL pastes results, parser populates output" pattern. GL corrected: "the standard process is YOU preparing the script and executing it once it's been researched and built correctly."
+- *2026-04-25* — An instance was told "leave catalog_data specific scripts and skills alone — we need to create ERPNext specific ones." The instance interpreted this as "GL must execute production queries" and drafted a "GL pastes results, parser populates output" pattern. GL corrected: "the standard process is YOU preparing the script and executing it once it's been researched and built correctly."
 
 **Counter-move.** When GL sets a boundary on a file, the boundary is on the file. The agent's role doesn't change. Build new tooling in the permitted location and execute it. If you're tempted to outsource execution to GL, ask once: "I want to confirm — do you want me to execute this myself, or do you prefer to be the executor?"
 
@@ -79,32 +79,32 @@ If you find yourself in a planner-checker revision loop on a phase that hasn't m
 
 ### 4. Designing the form against an outdated source instead of the live system
 
-**What it looks like from inside.** GL asks "make the Lead form match the customer-facing form." The pull is to read the source XML for that form (`page_book.xml` in the legacy_source project) and design from there. The XML is on disk, well-organized, easy to parse.
+**What it looks like from inside.** GL asks "make the Lead form match the customer-facing form." The pull is to read the source XML for that form (`page_book.xml` in the catalog_data project) and design from there. The XML is on disk, well-organized, easy to parse.
 
-**The cost to GL.** The disk version was STALE. Production had been edited via legacy_source's website editor; the live version diverged from `arch_fs` (the source XML). Building from the disk source produced a Lead form aligned to the OLD booking form, not the live one. GL caught it. Iteration burned a turn.
+**The cost to GL.** The disk version was STALE. Production had been edited via catalog_data's website editor; the live version diverged from `arch_fs` (the source XML). Building from the disk source produced a Lead form aligned to the OLD booking form, not the live one. GL caught it. Iteration burned a turn.
 
 **Receipts.**
-- *2026-04-26* — Translated `crm.lead` to ERPNext Custom Fields. Section structure was based on `views/pages/page_book.xml` from the legacy_source source. After GL flagged that fields were wrong, discovered the live `/book` page (curl on the public URL) had a completely different shape (multi-checkbox services + per-service detail blocks + Event Environment block) — the result of website-editor edits stored in `arch_db`, not in the source XML. Realigned in iteration 3.
+- *2026-04-26* — Translated `crm.lead` to ERPNext Custom Fields. Section structure was based on `views/pages/page_book.xml` from the catalog_data source. After GL flagged that fields were wrong, discovered the live `/book` page (curl on the public URL) had a completely different shape (multi-checkbox services + per-service detail blocks + Event Environment block) — the result of website-editor edits stored in `arch_db`, not in the source XML. Realigned in iteration 3.
 
-**Counter-move.** For any legacy_source customer-facing page being migrated, the source of truth is the live URL, not the source XML. `noupdate=1` plus website-editor = inevitable arch_db drift. Always: `curl <prod-url>` first; cross-check the form HTML against the source XML; design against the LIVE shape. This applies broadly to all legacy_source migrations — captured here because it bit us in LT specifically.
+**Counter-move.** For any catalog_data customer-facing page being migrated, the source of truth is the live URL, not the source XML. `noupdate=1` plus website-editor = inevitable arch_db drift. Always: `curl <prod-url>` first; cross-check the form HTML against the source XML; design against the LIVE shape. This applies broadly to all catalog_data migrations — captured here because it bit us in LT specifically.
 
 ---
 
 ## Project-specific pulls beyond the global set
 
-### Confusing this project's `_CLIENTS/locally-twisted/` with the existing `locally-twisted-legacy_source` project
+### Confusing this project's `_CLIENTS/locally-twisted/` with the existing `external-catalog-data` project
 
-**What it looks like from inside.** Two directories share the name. The pull is to "harmonize" them — copy code between them, treat one as the source of truth for the other, modify the legacy_source project to support the migration.
+**What it looks like from inside.** Two directories share the name. The pull is to "harmonize" them — copy code between them, treat one as the source of truth for the other, modify the catalog_data project to support the migration.
 
-**The cost to GL.** Wrong work and broken trust. The legacy_source project is in production — modifying it has the same trust risks (silent COW drift, asset bundle breaks, deploy gate violations) that caused the very damage this migration is trying to repair. GL: "leave legacy_source specific scripts and skills alone."
+**The cost to GL.** Wrong work and broken trust. The catalog_data project is in production — modifying it has the same trust risks (silent COW drift, asset bundle breaks, deploy gate violations) that caused the very damage this migration is trying to repair. GL: "leave catalog_data specific scripts and skills alone."
 
-**Counter-move.** The legacy_source project is **read-only reference**. You read its source files to understand what to translate. You write nothing back. All ERPNext-side tooling lives in `_CLIENTS/locally-twisted/`. If a workflow seems to require an legacy_source-side change, the workflow is wrong — find a different path that keeps the legacy_source project untouched.
+**Counter-move.** The catalog_data project is **read-only reference**. You read its source files to understand what to translate. You write nothing back. All ERPNext-side tooling lives in `_CLIENTS/locally-twisted/`. If a workflow seems to require an catalog_data-side change, the workflow is wrong — find a different path that keeps the catalog_data project untouched.
 
 ### Treating "Built by Cameron" as the project name when describing the migration
 
 **What it looks like from inside.** This client lives under `Built_by_Cameron/_CLIENTS/locally-twisted/`. The pull is to write things with "Built by Cameron" as the headline project name and frame the migration as one piece of it.
 
-**The cost to GL.** Diluted focus. GL clarified twice: "I'm not sure why a rebuild of Locally Twisted from legacy_source to ERPNext starts with talking about my one-person agency... the GSD project IS the LT migration. Lead correctly." Then later (2026-04-26 restructure): "BBC is my ERPNext/Frappe design agency. LT is a CLIENT of BBC."
+**The cost to GL.** Diluted focus. GL clarified twice: "I'm not sure why a rebuild of Locally Twisted from catalog_data to ERPNext starts with talking about my one-person agency... the GSD project IS the LT migration. Lead correctly." Then later (2026-04-26 restructure): "BBC is my ERPNext/Frappe design agency. LT is a CLIENT of BBC."
 
 **Counter-move.** This client folder IS Locally Twisted. The headline of every doc here is LT. Built by Cameron is the *agency that built it for LT*, mentioned only in transfer/billing context, never as a project framing. When transferred to Jeff Kimber, the BBC reference disappears entirely.
 
@@ -112,11 +112,11 @@ If you find yourself in a planner-checker revision loop on a phase that hasn't m
 
 ## Blindspots specific to this project
 
-- **The Wall 2 / Wall 3 hook scope.** SSH commands matching the Locally Twisted production IP `5.78.136.133` are blocked by a global hook in `pre-tool-compress.py`. Other production IPs (jakenfriends `204.168.202.246`) are not currently in scope. This affects any production-DB or production-server work targeting LT — but per the current direction, you should not be doing such work in this session anyway. INV-02 is deferred.
-- **The off-legacy_source expedition is the project's research baseline.** It lives in `locally-twisted-legacy_source/research/extended-expedition-off-legacy_source-replacement/`. ERPNext was the convergent recommendation. Re-doing this research is wasted tokens — it's been done.
+- **The Wall 2 / Wall 3 hook scope.** SSH commands matching the Locally Twisted production IP `` are blocked by a global hook in `pre-tool-compress.py`. Other production IPs (jakenfriends `204.168.202.246`) are not currently in scope. This affects any production-DB or production-server work targeting LT — but per the current direction, you should not be doing such work in this session anyway. INV-02 is deferred.
+- **The off-catalog_data expedition is the project's research baseline.** It lives in `external-catalog-data/research/extended-expedition-off-catalog_data-replacement/`. ERPNext was the convergent recommendation. Re-doing this research is wasted tokens — it's been done.
 - **GL granted production DB read access on 2026-04-25** but the access is not yet exercised, and the related work (INV-02) is deferred. The grant survives; just don't act on it now.
 - **Phase 1 plan files were deleted from `.planning/phases/01-inventory/` 2026-04-25 evening.** Git history (in BBC's old repo) preserves them; current LT repo doesn't have them. The remaining `01-RESEARCH.md` and `01-VALIDATION.md` are kept as reference (gap-fill insights and threat model for when INV-02 reactivates).
-- **The legacy_source `/book` form is on production at `5.78.136.133/book`.** Cross-checking the live form HTML is fair game (public page, no auth needed). Use `curl http://5.78.136.133/book` to fetch.
+- **The catalog_data `/book` form is on production at `/book`.** Cross-checking the live form HTML is fair game (public page, no auth needed). Use `curl book` to fetch.
 - **Jeff's last name is Baen.** Found in his blog post bylines. The wizard placeholder "Jeff Kimber" is wrong.
 
 ---
@@ -129,4 +129,4 @@ The file is only useful to the degree future instances actually read it. Skim is
 
 ---
 
-*Created 2026-04-25 by Opus 4.7 at project scaffolding time. Updated 2026-04-26 with iteration 3+4 receipt (form against outdated source) and restructure context. Source material: this client's transcripts, the off-legacy_source expedition output, GL's directives, the global anti-gl-patterns doc.*
+*Created 2026-04-25 by Opus 4.7 at project scaffolding time. Updated 2026-04-26 with iteration 3+4 receipt (form against outdated source) and restructure context. Source material: this client's transcripts, the off-catalog_data expedition output, GL's directives, the global anti-gl-patterns doc.*

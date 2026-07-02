@@ -109,15 +109,15 @@ python scripts/verify/synthetic_business_pipeline.py
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/stripe_amount_parity_contract.py
-$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
+export LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 ```
 
 For live inquiry form release proof, include authenticated backend verification
 against the Frappe Cloud admin host:
 
 ```bash
-$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
-$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+export LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+export LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
 python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222

@@ -165,7 +165,7 @@ def build_footer_address_html() -> str:
 
 def build_brand_html() -> str:
     """Logo area on the navbar — uses the real LT logo PNG pulled from the
-    prior legacy_source project's static assets, now bundled in this app at
+    catalog_data project's static assets, now bundled in this app at
     /assets/locally_twisted/icons/lt-logo.png.
 
     Style guide rule: brand element must remain a wrapping anchor — never strip

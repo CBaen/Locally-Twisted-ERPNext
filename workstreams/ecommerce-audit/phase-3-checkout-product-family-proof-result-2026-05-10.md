@@ -99,7 +99,7 @@ It verified:
 - `ok: true`, `rolled_back: true`, and zero `customer`/`sales_order`/`sales_invoice` survivors,
 - no public ecommerce opening,
 - no live payment/customer-message path in the inspected verifier/wrapper,
-- no legacy_source mutation,
+- no catalog_data mutation,
 - synthetic customer only; no email/phone/address/token/session identifier.
 
 ## Final parent-run gates

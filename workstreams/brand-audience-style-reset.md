@@ -112,8 +112,8 @@ This should be written as company capability, not founder personality.
 
 Local source inventory checked 2026-05-02:
 
-- Previous-client source: `/home/guidingl/projects/locally-twisted-legacy_source/assets/previous clients.txt`
-- legacy_source-era image source: `/home/guidingl/projects/locally-twisted-legacy_source/assets/image assets/`
+- Previous-client source: `/home/guidingl/projects/external-catalog-data/assets/previous clients.txt`
+- catalog_data-era image source: `/home/guidingl/projects/external-catalog-data/assets/image assets/`
 - Current site image source: `_resources/images/`
 - Current homepage proof source: `apps/locally_twisted/locally_twisted/www/home.py`
 - Shared Drive source: `https://drive.google.com/drive/folders/191Fnz-Eanwpi4rbTFyy08P6ZF8X5NqNz?usp=sharing`
@@ -122,10 +122,10 @@ Local source inventory checked 2026-05-02:
 
 Evidence currently available locally:
 
-- 60 unique previous-client names from the legacy_source source list. The raw file has 62 nonblank lines, with duplicate `Ogden city` and `Ogden airport` entries.
+- 60 unique previous-client names from the catalog_data source list. The raw file has 62 nonblank lines, with duplicate `Ogden city` and `Ogden airport` entries.
 - Current homepage client crawl includes high-authority names such as FanX, Chick-fil-A, Ancestry, Zions Bank, America First CU, Utah Jazz, KSL, KUTV, FOX13, University of Utah, Weber State, Intermountain Health, UDOT, SLC Pride, Equality Utah, Ogden City, Sandy City, Herriman City, SLC County, Gallivan Center, Station Park, Museum of Illusion, Young Automotive, Alpine Events, Ogden Airport, Paramount, Shops at Southtown, and Daybreak.
-- 191 local legacy_source-era image asset files: 172 PNG, 11 JPG, and 8 JPEG.
-- legacy_source image categories include custom arches, custom columns, deliveries, organic decor, parades, photo opportunities, Pride, themed decor, latex-free decor, helium bouquets, balloon twisting, and face painting.
+- 191 local catalog_data-era image asset files: 172 PNG, 11 JPG, and 8 JPEG.
+- catalog_data image categories include custom arches, custom columns, deliveries, organic decor, parades, photo opportunities, Pride, themed decor, latex-free decor, helium bouquets, balloon twisting, and face painting.
 - Current repo `_resources/images/` includes homepage, contact, BTFP, and product/service imagery already used by the ERPNext build.
 - Current homepage controller contains 19 Google-sourced review entries across delivery, event decor, school, corporate, church picnic, ribbon cutting, face painting, BTFP, family events, and other buyer contexts.
 
@@ -213,7 +213,7 @@ Homepage proof direction:
 
 Image source priority:
 
-1. Real photo assets from Drive, legacy_source image assets, and current repo images.
+1. Real photo assets from Drive, catalog_data image assets, and current repo images.
 2. Current homepage/product images already in the ERPNext build, if they are high quality and not stretched/cropped badly.
 3. Generated mockups only for planned products, stylistic consistency, or image gaps where the page clearly needs a representative visual.
 

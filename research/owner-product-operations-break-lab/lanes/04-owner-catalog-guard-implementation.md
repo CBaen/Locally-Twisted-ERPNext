@@ -190,7 +190,7 @@ Results:
 - Owner Business Access contract: pass, owner user available, provider-neutral,
   customer-send blocked, write surface limited to `log_contact_attempt`;
 - local ecommerce mode: pass for `expect=open`.
-- Product price contracts: pass, cart prices pass, legacy_source modifier parity pass for
+- Product price contracts: pass, cart prices pass, catalog_data modifier parity pass for
   `49` products and `10186` active variants.
 - Public asset integrity: pass, `31` routes, `291` unique local asset URLs;
 - Public network integrity: pass, `31` Playwright route checks with no broken

@@ -171,7 +171,7 @@ def _explicit_variant_image(template_code: str, combo: dict[str, str], variant_c
     size = combo.get("Bouquet Size") or ""
     for key, image_id in image_ids.items():
         if key.lower() in size.lower():
-            source_url = f"http://5.78.136.133/web/image/product.product/{image_id}/image_1024"
+            source_url = f"web/image/product.product/{image_id}/image_1024"
             file_name = f"{template_code}-{key.lower()}.webp"
             return _ensure_public_file(source_url, file_name, variant_code)
     return None

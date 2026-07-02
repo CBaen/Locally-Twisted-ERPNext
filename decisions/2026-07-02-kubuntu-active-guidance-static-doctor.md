@@ -12,7 +12,7 @@ manifest bundle after the on-demand LT stack is intentionally started.
 
 Machine-wide migration safety work found active LT instructions still teaching
 old-platform paths for the machine guide, coordination hub, worktree root, hooks,
-no-monolith capability source, legacy source checkout, and Claude reference
+no-monolith capability source, catalog data checkout, and Claude reference
 library. That made a clean repo still unsafe for future agents because the
 first-read instructions could route work to paths that do not exist on
 Wardenclyffe Kubuntu.

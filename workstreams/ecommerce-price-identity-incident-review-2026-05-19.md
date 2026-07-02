@@ -17,7 +17,7 @@ GL found the failure on:
 `/shop-items/arches/easter-balloon-arch-bunny-ear`
 
 Observed symptom: selecting `20ft` and `25ft` showed the same price even though
-the source legacy_source shop priced those options differently.
+the source catalog_data shop priced those options differently.
 
 ## Source Architecture
 
@@ -50,7 +50,7 @@ Team review lanes:
 
 | Lane | Finding |
 |---|---|
-| Git history | `9aa117f` introduced `seed_catalog.py` with the explicit assumption that legacy_source did not expose per-variant pricing and that base price applied to all combinations. That was the original flattening point. |
+| Git history | `9aa117f` introduced `seed_catalog.py` with the explicit assumption that catalog_data did not expose per-variant pricing and that base price applied to all combinations. That was the original flattening point. |
 | ERPNext/Webshop architecture | Cart and checkout are structurally right to trust server `Item Price`; the corruption was upstream in the Item Price table and import path. Native Webshop selector/cache and public methods still need bypass/freshness guards. |
 | Verification | Older gates proved variant shape, price existence, downstream ERPNext/Stripe parity, or bouquet-specific recovery. They did not prove source dynamic price parity for arches, columns, garlands, height, length, LED, topper, design, or other priced option axes. |
 | Documentation/conversation evidence | Prior docs already warned that count parity and bouquet repair did not equal full catalog price correctness. Those warnings were not promoted into a blocking launch/import gate. |
@@ -70,14 +70,14 @@ variant set.
 
 Verified source sample:
 
-| Variant | legacy_source dynamic price | Local ERPNext after repair |
+| Variant | catalog_data dynamic price | Local ERPNext after repair |
 |---|---:|---:|
 | `easter-balloon-arch-bunny-ear-20F` | `$375` | `$375` |
 | `easter-balloon-arch-bunny-ear-25F` | `$440` | `$440` |
 
 Local repair added:
 
-- `apps/locally_twisted/locally_twisted/seed/repair_variant_price_modifiers_from_legacy_source.py`
+- `apps/locally_twisted/locally_twisted/seed/repair_variant_price_modifiers_from_catalog_data.py`
 - `scripts/verify/product_price_modifier_contract.py`
 - `scripts/verify/product_price_display.spec.js`
 
@@ -140,8 +140,8 @@ The guard stack now includes source-price parity, not only price existence.
 
 This incident is locally contained, not globally closed.
 
-- The broad modifier repair assumes legacy_source option price modifiers are additive for
-  the required ERPNext variant axes. That matches the observed legacy_source products,
+- The broad modifier repair assumes catalog_data option price modifiers are additive for
+  the required ERPNext variant axes. That matches the observed catalog_data products,
   but it is not a full exhaustive customer-journey purchase for every option
   combination.
 - Native Webshop selector/cache and public cart methods should be audited for

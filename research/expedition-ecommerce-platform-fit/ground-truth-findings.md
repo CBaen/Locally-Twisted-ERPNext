@@ -47,7 +47,7 @@
 - Location: `apps/locally_twisted/locally_twisted/templates/generators/item/item_quote_first.html`
 - Status: Active.
 - What it does: Renders the same color drawers (checkbox multi-select, not radio) plus design notes and color notes text areas. No variant resolution or price display. Links to `/contact` with a pre-built `lt_product_quote_handoff_v1` payload in sessionStorage.
-- Color handling here: colors are captured as `color_recipes` (multi-value arrays per axis), not collapsed into single-SKU mapping. This is the correct multi-color path for legacy_source-style color combos.
+- Color handling here: colors are captured as `color_recipes` (multi-value arrays per axis), not collapsed into single-SKU mapping. This is the correct multi-color path for catalog_data-style color combos.
 
 ### 3. Variant Media Swap
 
@@ -173,8 +173,8 @@
 - Blockers: `missing_resolver_prices: 49`, `unclassified_gallery_images: 49`, `axis_needs_review: 9`, `color_axis_customization: 25`
 
 **Price state:**
-- 13 bouquet templates repaired with per-size prices (Small $35 / Medium $70 / Large $85) via legacy_source `get_combination_info` scraper (`repair_variant_prices_from_legacy_source.py`).
-- 36 non-bouquet templates still have live-snapshot prices (single price copied from legacy_source page base price at scrape time — not per-variant price deltas). 273 live-snapshot-priced sale units in the review packet, 0 approved for public pricing.
+- 13 bouquet templates repaired with per-size prices (Small $35 / Medium $70 / Large $85) via catalog_data `get_combination_info` scraper (`repair_variant_prices_from_catalog_source.py`).
+- 36 non-bouquet templates still have live-snapshot prices (single price copied from catalog_data page base price at scrape time — not per-variant price deltas). 273 live-snapshot-priced sale units in the review packet, 0 approved for public pricing.
 
 ---
 
@@ -202,10 +202,10 @@
 
 ### Fixed: Single-price scraper problem (bouquets repaired, 36 others pending)
 
-- **What:** Original `scrape_legacy_source_live.py` copied the page's base/display price into every variant, creating flat pricing (e.g., all Unicorn Bouquet sizes showing $35 instead of Small $35 / Medium $70 / Large $85).
+- **What:** Original `scrape_catalog_data_live.py` copied the page's base/display price into every variant, creating flat pricing (e.g., all Unicorn Bouquet sizes showing $35 instead of Small $35 / Medium $70 / Large $85).
 - **When:** Commit `c7f9da3` on 2026-05-08.
-- **Outcome:** Added `repair_variant_prices_from_legacy_source.py` which hits legacy_source's `website_sale/get_combination_info` route per combination to get correct price deltas. Fixed 13 bouquet templates. 36 non-bouquet templates still pending — these need the same resolver treatment but haven't been run yet.
-- **Relevance now:** The repair approach works (calling live legacy_source's `combination_info` endpoint). The 36 remaining templates are a known gap, not a structural impossibility.
+- **Outcome:** Added `repair_variant_prices_from_catalog_source.py` which hits catalog_data's `website_sale/get_combination_info` route per combination to get correct price deltas. Fixed 13 bouquet templates. 36 non-bouquet templates still pending — these need the same resolver treatment but haven't been run yet.
+- **Relevance now:** The repair approach works (calling live catalog_data's `combination_info` endpoint). The 36 remaining templates are a known gap, not a structural impossibility.
 
 ### Fixed: head_html + !important CSS overrides (Slice 2 failure)
 
@@ -280,15 +280,15 @@ This is not a Webshop limitation — it is an ERPNext Item/Variant data model li
 
 ### The 10,227-variant-to-SKU-axis problem
 
-legacy_source's `website_sale` manages variant pricing via `price_extra` on `product.template.attribute.value` — a delta per attribute value. ERPNext requires a separate `Item Price` record per full variant combination (item code). With 10,227 active variants across 53 templates, every price delta in legacy_source needs a distinct `Item Price` row in ERPNext.
+catalog_data's `website_sale` manages variant pricing via `price_extra` on `product.template.attribute.value` — a delta per attribute value. ERPNext requires a separate `Item Price` record per full variant combination (item code). With 10,227 active variants across 53 templates, every price delta in catalog_data needs a distinct `Item Price` row in ERPNext.
 
-The `repair_variant_prices_from_legacy_source.py` script resolves this by calling legacy_source's `get_combination_info` for each required combination. 13 templates done; 36 remaining. This is implementation work, not a platform architectural barrier.
+The `repair_variant_prices_from_catalog_source.py` script resolves this by calling catalog_data's `get_combination_info` for each required combination. 13 templates done; 36 remaining. This is implementation work, not a platform architectural barrier.
 
 ### Webshop's variant gallery: no native per-variant image gallery
 
 Webshop's `Website Item` has `website_image` (single) and `slideshow` (link to `Website Slideshow` DocType). There is no native per-variant gallery. LT's current `item_image.html` builds a gallery from all variant `Item.image` records — a working improvisation that will become proper `Website Slideshow` records at import time.
 
-legacy_source's `website_sale` also has no native per-variant image gallery in its upstream source — variant images are stored on `product.product` records (one image per variant), which is functionally equivalent to ERPNext's `Item.image`. The legacy_source LT custom module adds a backend Images tab via `product_template_image_ids` (template-level gallery), but `deploy.py` does NOT export these extra images — they exist in legacy_source admin but are not in the scraped catalog.
+catalog_data's `website_sale` also has no native per-variant image gallery in its upstream source — variant images are stored on `product.product` records (one image per variant), which is functionally equivalent to ERPNext's `Item.image`. The catalog_data LT custom module adds a backend Images tab via `product_template_image_ids` (template-level gallery), but `deploy.py` does NOT export these extra images — they exist in catalog_data admin but are not in the scraped catalog.
 
 ---
 
@@ -302,7 +302,7 @@ Architectural decision already made: color-heavy products route to `quote_first`
 
 ### Gap 2: Per-variant pricing for 36 non-bouquet templates
 
-36 templates still have scraper-copied base prices on all variants instead of correct per-size/per-attribute deltas. `repair_variant_prices_from_legacy_source.py` can fix these by calling legacy_source's `get_combination_info`. This is implementation backlog, not a data model impossibility.
+36 templates still have scraper-copied base prices on all variants instead of correct per-size/per-attribute deltas. `repair_variant_prices_from_catalog_source.py` can fix these by calling catalog_data's `get_combination_info`. This is implementation backlog, not a data model impossibility.
 
 ### Gap 3: Gallery / multi-image per product
 
@@ -345,23 +345,23 @@ The cart (`lt_cart.py`) is functionally complete but GL describes the cart UX as
 
 ---
 
-## legacy_source `website_sale` Benchmark — What It Actually Has
+## catalog_data `website_sale` Benchmark — What It Actually Has
 
-This is the implicit benchmark GL refers to when saying "legacy_source had so much more depth."
+This is the implicit benchmark GL refers to when saying "catalog_data had so much more depth."
 
-**Per-variant images:** Stored on `product.product` records (one image per variant). The `deploy.py` catalog exporter captures only `image_1920` on `product.template` (primary product image), NOT `product.product` variant images AND NOT `product_template_image_ids` extra gallery images. This means even legacy_source's own export pipeline didn't include the full variant-image set. Equivalent to ERPNext's `Item.image`.
+**Per-variant images:** Stored on `product.product` records (one image per variant). The `deploy.py` catalog exporter captures only `image_1920` on `product.template` (primary product image), NOT `product.product` variant images AND NOT `product_template_image_ids` extra gallery images. This means even catalog_data's own export pipeline didn't include the full variant-image set. Equivalent to ERPNext's `Item.image`.
 
-**Combination info / dynamic pricing:** `website_sale/get_combination_info` is legacy_source's JSON-RPC endpoint that returns price, availability, and image URL for a specific attribute combination. LT already reverse-engineered and uses this at `legacy_source_COMBINATION_ROUTE` in `repair_variant_prices_from_legacy_source.py`. ERPNext's equivalent is `get_next_attribute_and_values` which returns `product_info.price.formatted_price_sales_uom` for the exact match.
+**Combination info / dynamic pricing:** `website_sale/get_combination_info` is catalog_data's JSON-RPC endpoint that returns price, availability, and image URL for a specific attribute combination. LT already reverse-engineered and uses this at `catalog_data_COMBINATION_ROUTE` in `repair_variant_prices_from_catalog_source.py`. ERPNext's equivalent is `get_next_attribute_and_values` which returns `product_info.price.formatted_price_sales_uom` for the exact match.
 
-**Color swatch rendering:** legacy_source's `website_sale.variants` template renders `html_color` from `product.attribute.value` as colored dots. LT's `website_sale_templates.xml` (the legacy_source custom module) overrides this to use `ptav.html_color` for color dots on multi-checkbox attributes. ERPNext has no native `html_color` on Item Attribute Value — LT's `color_rules.py` approximates this with the Qualatex hex map. Functionally equivalent, but legacy_source's `html_color` is operator-editable per attribute value; LT's hex values are hardcoded in Python.
+**Color swatch rendering:** catalog_data's `website_sale.variants` template renders `html_color` from `product.attribute.value` as colored dots. LT's `website_sale_templates.xml` (the catalog_data custom module) overrides this to use `ptav.html_color` for color dots on multi-checkbox attributes. ERPNext has no native `html_color` on Item Attribute Value — LT's `color_rules.py` approximates this with the Qualatex hex map. Functionally equivalent, but catalog_data's `html_color` is operator-editable per attribute value; LT's hex values are hardcoded in Python.
 
-**Conditional attribute display / multi-attribute variant navigation:** legacy_source uses native `product.template.attribute.line` with `create_variant` flag to distinguish variant-generating axes from non-variant multi-select axes. `display_type` on the attribute controls radio vs. multi-checkbox vs. color pill rendering. ERPNext has no equivalent `display_type` on Item Attribute — all attributes are treated as variant-generating axes. LT's `addon_rules.py` and `color_rules.py` provide a code-level equivalent by classifying axes as required variant / optional add-on / color customization.
+**Conditional attribute display / multi-attribute variant navigation:** catalog_data uses native `product.template.attribute.line` with `create_variant` flag to distinguish variant-generating axes from non-variant multi-select axes. `display_type` on the attribute controls radio vs. multi-checkbox vs. color pill rendering. ERPNext has no equivalent `display_type` on Item Attribute — all attributes are treated as variant-generating axes. LT's `addon_rules.py` and `color_rules.py` provide a code-level equivalent by classifying axes as required variant / optional add-on / color customization.
 
-**Cart:** legacy_source's built-in cart is server-side, requires login or creates a guest session. LT's cart is localStorage-backed guest cart (custom). Functionally LT's cart is more capable for guests.
+**Cart:** catalog_data's built-in cart is server-side, requires login or creates a guest session. LT's cart is localStorage-backed guest cart (custom). Functionally LT's cart is more capable for guests.
 
-**Checkout:** legacy_source's checkout uses its native payment provider stack. LT's checkout uses Stripe Checkout Sessions (modern, hosted). LT's checkout is more capable (guest checkout, Utah tax resolution, pickup/delivery logic).
+**Checkout:** catalog_data's checkout uses its native payment provider stack. LT's checkout uses Stripe Checkout Sessions (modern, hosted). LT's checkout is more capable (guest checkout, Utah tax resolution, pickup/delivery logic).
 
-**The honest comparison:** legacy_source's `website_sale` is more mature and battle-tested. The main concrete depth advantage is that `product.attribute.value.html_color` is operator-configurable in the legacy_source admin, while LT's hex values are hardcoded in Python and require a code deploy to add new colors. Everything else is either matched or exceeded by LT's custom implementation.
+**The honest comparison:** catalog_data's `website_sale` is more mature and battle-tested. The main concrete depth advantage is that `product.attribute.value.html_color` is operator-configurable in the catalog_data admin, while LT's hex values are hardcoded in Python and require a code deploy to add new colors. Everything else is either matched or exceeded by LT's custom implementation.
 
 ---
 
@@ -394,5 +394,5 @@ The "disaster" language predates much of what is now built. The specific pain po
 1. The cart and checkout pages are ALREADY fully custom LT code. GL's complaint about "Webshop's cart UX" appears to predate the custom cart replacement. The current `/cart` and `/checkout` have no meaningful Webshop dependency.
 2. The multi-color combo problem is an ERPNext constraint, not a Webshop constraint. Switching to Medusa/Saleor as a storefront frontend still leaves the ERPNext item variant model as the source of truth for pricing and inventory — the constraint doesn't move.
 3. The architecture readiness audit passing with 14/14 criteria and 0 blockers is a surprisingly strong signal given GL's "disaster" framing. The verifier suite is thorough and rollback-safe.
-4. legacy_source's own `deploy.py` export script did NOT include variant images or template gallery images — the depth advantage GL remembers from legacy_source's admin UI is not reflected in legacy_source's own export tooling.
+4. catalog_data's own `deploy.py` export script did NOT include variant images or template gallery images — the depth advantage GL remembers from catalog_data's admin UI is not reflected in catalog_data's own export tooling.
 5. The "Temporary bridge" comment in `item_configure.html` (line 322) is a candid admission that the color-to-SKU mapping is a known architectural debt with a named resolution path (catalog rebuild). This is healthy — the debt is named and bounded.

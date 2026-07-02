@@ -5,7 +5,7 @@ D:2026-05-10 | Check:local verifier outputs + ERPNext Website Item apply 2026-05
 
 Scope: targeted Website Item classification only for the 53 source-backed product pages in the accepted ready-to-order ecommerce Phase 2 lane.
 
-Non-scope: no legacy_source mutation, no product publish/unpublish/hide/delete/purge/reimport, no price/media/business-copy changes, no public ecommerce opening, no payment/customer messaging action.
+Non-scope: no catalog_data mutation, no product publish/unpublish/hide/delete/purge/reimport, no price/media/business-copy changes, no public ecommerce opening, no payment/customer messaging action.
 
 ## Files changed
 

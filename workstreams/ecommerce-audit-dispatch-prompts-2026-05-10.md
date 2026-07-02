@@ -4,7 +4,7 @@ Status: plan-deepened and adjusted before dispatch
 Rollback anchor for every lane: `lt-ecommerce-audit-pre-dispatch-20260510-0841`
 Rollback package: `/home/guidingl/.openclaw/workspace/reports/rollback/lt-ecommerce-audit-pre-dispatch-20260510-0841`
 Repo: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`
-legacy_source witness repo: `/home/guidingl/projects/locally-twisted-legacy_source/`
+catalog_data witness repo: `/home/guidingl/projects/external-catalog-data/`
 
 ## Common binding instructions for every lane
 
@@ -15,20 +15,20 @@ Parent accountability: Moji/parent is responsible for injecting this contract in
 
 You are working on Locally Twisted ecommerce launch safety. This is high-blast-radius work. Treat this as a configuration-and-promise system, not simple “pick a size, add to cart” retail.
 
-Use current evidence only. Cite paths, commands, browser observations, docs URLs/titles, and record identifiers where safe. If output is truncated, re-read the missing span. No artifact = no evidence. Do not paste proprietary legacy_source implementation code into reports; cite path/function/concept instead. Do not include screenshots or excerpts containing secrets or private customer/admin data unless redacted.
+Use current evidence only. Cite paths, commands, browser observations, docs URLs/titles, and record identifiers where safe. If output is truncated, re-read the missing span. No artifact = no evidence. Do not paste proprietary catalog_data implementation code into reports; cite path/function/concept instead. Do not include screenshots or excerpts containing secrets or private customer/admin data unless redacted.
 
 Software model anchors:
 - Destination: Locally Twisted ERPNext/Frappe v15, documented as Docker image `frappe/erpnext:v15.105.0`, apps `frappe`, `erpnext`, `payments`, `webshop`, `locally_twisted`.
-- Source witness: Locally Twisted legacy_source 19 Community, local module `addons/locally_twisted` currently `19.0.2.15.0`; prior notes warn production DB may be `19.0.2.14.0`.
+- Source witness: Locally Twisted catalog_data 19 Community, local module `addons/locally_twisted` currently `19.0.2.15.0`; prior notes warn production DB may be `19.0.2.14.0`.
 - Any version mismatch or docs/source/live mismatch must be labeled `[VERSION-MISMATCH]`, `[UNVERIFIED-VERSION]`, `[DOCS-MISMATCH]`, `[SOURCE-MISMATCH]`, `[LIVE-MISMATCH]`, `[ERPNext-GAP]`, or `[UNKNOWN]`. Do not restate these version anchors as verified. Verify through current repo/config/runtime/docs where possible; otherwise label `[UNVERIFIED-VERSION]` or `[BLOCKED]`.
 
 Access boundaries:
 - First identify environment and auth context before interaction: local/test vs live/production, guest vs operator/admin, and whether actions can create records or trigger external effects. Prefer read-only/source inspection before browser mutation. Use local/test only for write-like proof. Stop if a surface appears production/live/customer-impacting.
 - You may read docs/source, run read-only searches, inspect current code, use local/test browser flows, and create test carts/orders/quotes only if your lane needs backend proof and you record cleanup/rollback evidence.
-- You must not send real customer email, submit live payment, change DNS, deploy, push commits, approve prices/add-ons, delete/reimport products, mutate legacy_source, or touch real customer data except minimal read-only inspection if unavoidable and explicitly noted.
-- legacy_source is read-only source witness and conceptual teacher. Do not copy legacy_source code into ERPNext/Frappe. We are translating business meaning, not stealing implementation.
+- You must not send real customer email, submit live payment, change DNS, deploy, push commits, approve prices/add-ons, delete/reimport products, mutate catalog_data, or touch real customer data except minimal read-only inspection if unavoidable and explicitly noted.
+- catalog_data is read-only source witness and conceptual teacher. Do not copy catalog_data code into ERPNext/Frappe. We are translating business meaning, not stealing implementation.
 
-Stop and report immediately if you hit: real payment path, real customer data mutation risk, secrets exposure, legacy_source write temptation, product deletion/reimport temptation, unsupported add-on/variant accepted visually, backend customer intent loss, or version/source/live/docs disagreement that changes conclusions.
+Stop and report immediately if you hit: real payment path, real customer data mutation risk, secrets exposure, catalog_data write temptation, product deletion/reimport temptation, unsupported add-on/variant accepted visually, backend customer intent loss, or version/source/live/docs disagreement that changes conclusions.
 
 Every artifact must start with the required `D:YYYY-MM-DD | Check:<source/date> | Confidence:<label>` header, then a compact status block: lane, environment/auth context, sources inspected, commands/actions run, records created/cleaned, key findings, blockers, confidence.
 
@@ -36,16 +36,16 @@ Before reporting success, inspect downstream blast radius relevant to your lane:
 
 Banned success phrase: “checkout passed” unless you name the backend records inspected and state what customer intent survived into each.
 
-## Lane A — legacy_source Source Mapper
+## Lane A — catalog_data Source Mapper
 
 Task:
-Extract source commerce meaning from the legacy_source witness without proposing ERPNext implementation first.
+Extract source commerce meaning from the catalog_data witness without proposing ERPNext implementation first.
 
 Required artifact:
-`workstreams/ecommerce-audit/legacy_source-source-commerce-map-2026-05-10.md`
+`workstreams/ecommerce-audit/catalog_data-source-commerce-map-2026-05-10.md`
 
 Must include:
-- exact legacy_source edition/version/module evidence used, and whether each claim comes from source file, docs, public/live page, captured mirror, export, or production DB note;
+- exact catalog_data edition/version/module evidence used, and whether each claim comes from source file, docs, public/live page, captured mirror, export, or production DB note;
 - product/page classes;
 - variant axes and valid-combination rules;
 - add-on/accessory/options families and affected products;
@@ -56,7 +56,7 @@ Must include:
 - backend order/invoice/operator data that mattered;
 - explicit unknowns and source paths/records.
 
-Do not write to the legacy_source repo.
+Do not write to the catalog_data repo.
 
 ## Lane B — ERPNext/Frappe Receiving Parity Auditor
 
@@ -127,24 +127,24 @@ Must include:
 
 Do not edit implementation. This is architecture, not build. Because this may run before source/action lanes finish, label source-dependent conclusions `[PENDING-LANE-A/C/E]` unless directly evidenced.
 
-## Lane E — legacy_source Documentation / Agent-Action Convergence Researcher
+## Lane E — catalog_data Documentation / Agent-Action Convergence Researcher
 
 Task:
-Compare legacy_source documentation, legacy_source observed behavior, and ERPNext/Frappe observed behavior. Find discrepancies and risks.
+Compare catalog_data documentation, catalog_data observed behavior, and ERPNext/Frappe observed behavior. Find discrepancies and risks.
 
 Required artifact:
-`workstreams/ecommerce-audit/legacy_source-docs-agent-action-convergence-2026-05-10.md`
+`workstreams/ecommerce-audit/catalog_data-docs-agent-action-convergence-2026-05-10.md`
 
 Must include:
-- exact legacy_source documentation pages/versions consulted;
-- exact legacy_source local/source/live/captured surfaces clicked or inspected;
+- exact catalog_data documentation pages/versions consulted;
+- exact catalog_data local/source/live/captured surfaces clicked or inspected;
 - official/current ERPNext/Frappe/Webshop documentation or source references consulted where relevant;
 - exact ERPNext/Frappe docs/source/pages/actions clicked or inspected;
-- convergence table: documented behavior / observed legacy_source behavior / observed ERPNext behavior / discrepancy / risk / required decision;
+- convergence table: documented behavior / observed catalog_data behavior / observed ERPNext behavior / discrepancy / risk / required decision;
 - special attention to variants, `website_sale` combination behavior, add-ons/accessories/options, cart preservation, checkout payloads, order/invoice semantics, and customer-visible promises;
 - every discrepancy labeled `[DOCS-MISMATCH]`, `[SOURCE-MISMATCH]`, `[LIVE-MISMATCH]`, `[ERPNext-GAP]`, or `[UNKNOWN]`.
 
-Do not copy legacy_source code. Use docs and observations to translate concepts.
+Do not copy catalog_data code. Use docs and observations to translate concepts.
 
 ## Lane F — Referee / Synthesis — DO NOT RUN YET
 
@@ -162,4 +162,4 @@ Must reconcile all lanes and state:
 - what blocks public launch;
 - exact verifier commands that must pass;
 - exact GL decisions needed;
-- discrepancies between legacy_source documentation, legacy_source observed behavior, and ERPNext observed behavior.
+- discrepancies between catalog_data documentation, catalog_data observed behavior, and ERPNext observed behavior.

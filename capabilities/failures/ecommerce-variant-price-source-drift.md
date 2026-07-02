@@ -43,15 +43,15 @@ amount.
 - A verifier checks only that variants exist and have prices.
 - A downstream verifier checks only that ERPNext and Stripe agree with each
   other.
-- A source platform uses dynamic option pricing, but the migration treats the
-  exported product row as the full pricing source.
+- Dynamic option pricing exists, but the import treats the exported product row
+  as the full pricing source.
 - A one-family fix, such as bouquet sizes, gets treated as whole-catalog proof.
 
 ## Known instances
 
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
-| 2026-04-30 to 2026-05-19 | Locally Twisted | legacy_source-to-ERPNext catalog import and Webshop product pages | Importing legacy_source catalog into ERPNext Items, variants, and Item Prices | Non-bouquet variant families flattened many active variant `Item Price` rows to base price; Easter Bunny Ear Arch `25ft` showed `$375` instead of `$440` | `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; `workstreams/catalog-variant-price-recovery.md`; `9aa117f`; local `product_price_modifier_contract.py` repair evidence | added | guarded-local |
+| 2026-04-30 to 2026-05-19 | Locally Twisted | catalog_data-to-ERPNext catalog import and Webshop product pages | Importing catalog_data catalog into ERPNext Items, variants, and Item Prices | Non-bouquet variant families flattened many active variant `Item Price` rows to base price; Easter Bunny Ear Arch `25ft` showed `$375` instead of `$440` | `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; `workstreams/catalog-variant-price-recovery.md`; `9aa117f`; local `product_price_modifier_contract.py` repair evidence | added | guarded-local |
 | 2026-06-30 | Locally Twisted | live Product Setup to public runtime authority | Owner changed `large-head-missionary` Product Setup prices from `175` to `125` and saved successfully | Product Setup base/exact prices were `125.0`, but live sellable `Item Price` rows and public price stayed `175.0` | `workstreams/ecommerce-operator-hardening-2026-06-30/live-readonly-api-audit-large-head-missionary-2026-06-30.md`; `capabilities/failures/product-setup-projection-authority-drift.md` | needs new projection guard | active |
 
 ## Root pattern
@@ -86,7 +86,7 @@ base price as if it were the complete per-variant price matrix.
 
 ## Required guard
 
-For LT's legacy_source-derived catalog:
+For LT's catalog_data-derived catalog:
 
 - `python scripts/verify/product_price_modifier_contract.py`
 - `npm run test:product-prices`
@@ -140,7 +140,7 @@ ERPNext/Stripe parity can mean anything.
 ## Evidence quality
 
 Verified locally on 2026-05-19: the reported Easter Bunny Ear Arch price now
-matches legacy_source source pricing on the product page and cart API, and the broad
+matches catalog_data source pricing on the product page and cart API, and the broad
 modifier dry-run reports 0 remaining active variant price changes across 49
 variant products / 10,186 active variants. Staging/live are not verified by this
 recipe.

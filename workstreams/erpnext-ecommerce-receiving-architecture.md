@@ -25,8 +25,8 @@ invoice, and receipt. See
 ## GL decision / framing
 
 - ERPNext native ecommerce is visually, logically, and operationally insufficient for Locally Twisted.
-- legacy_source ecommerce is not the target infrastructure, but it is the conceptual witness for mature ecommerce behavior: variant-driven prices, variant media logic, backend-fed fields, option availability, add-ons, and meaningful configured cart/checkout payloads.
-- Do not create or import legacy_source-style fields that ERPNext cannot actually store/use. Unsupported fields silently fail unless the ERPNext receiving architecture exists first.
+- catalog_data ecommerce is not the target infrastructure, but it is the conceptual witness for mature ecommerce behavior: variant-driven prices, variant media logic, backend-fed fields, option availability, add-ons, and meaningful configured cart/checkout payloads.
+- Do not create or import catalog_data-style fields that ERPNext cannot actually store/use. Unsupported fields silently fail unless the ERPNext receiving architecture exists first.
 - Any incomplete, awkward, or unmappable logic must be brought to GL with plain explanation before import or build.
 - If ERPNext native ecommerce cannot represent a required feature, design the missing ERPNext-side feature deliberately, including blast radius and cascading effects, before building it.
 - Test products may be used as proof cases only. They are not proof of migration completion.
@@ -51,7 +51,7 @@ Before real import, define and verify:
 
 - Product type classification and template assignment.
 - Required backend fields and optional backend fields.
-- legacy_source concept -> ERPNext native/custom/missing/unsafe mapping.
+- catalog_data concept -> ERPNext native/custom/missing/unsafe mapping.
 - Destination existence for every imported field.
 - Required variant axes vs optional add-ons vs customization axes vs backend-only fields vs needs-review fields.
 - Add-on contract: eligibility, fields, dependencies, quantity, price, cart, tax, invoice, fulfillment notes.
@@ -68,7 +68,7 @@ Stop and bring to GL if:
 
 - A needed destination field/DocType/child table does not exist.
 - A behavior exists only in frontend JS and not in backend/cart/checkout truth.
-- A source legacy_source concept maps only to a field label, not to executable ERPNext behavior.
+- A source catalog_data concept maps only to a field label, not to executable ERPNext behavior.
 - A price cannot be resolved authoritatively.
 - Add-on dependencies or required fields are unclear.
 - Cart, checkout, Sales Order, or invoice cannot preserve the configured product meaning.
@@ -98,7 +98,7 @@ Brief must be exact to this stack:
 - ERPNext/Frappe v15 in Docker/Frappe app `locally_twisted`.
 - Current Webshop item override under `apps/locally_twisted/locally_twisted/templates/generators/item/`.
 - Current product contract starter under `apps/locally_twisted/locally_twisted/catalog_contract/`.
-- legacy_source source is read-only reference at `/home/guidingl/projects/locally-twisted-legacy_source/` and old legacy_source shop behavior is conceptual/reference input, not infrastructure to copy.
+- catalog_data source is read-only reference at `/home/guidingl/projects/external-catalog-data/` and catalog_data shop behavior is conceptual/reference input, not infrastructure to copy.
 - Native ERPNext ecommerce is insufficient; research must identify implementation patterns and risks for building a safer ERPNext-side ecommerce logic layer.
 
 No code/product import until research brief -> expedition -> synthesis -> GL architecture checkpoint.
@@ -188,7 +188,7 @@ Completed:
   cascade, Quotation Item payload preservation, internal packet visibility,
   product-page template labels, idempotency, and stale-cart loud failure in a
   rolled-back live ERPNext transaction.
-- Updated the source contract dry-run so every saved legacy_source/source product is
+- Updated the source contract dry-run so every saved catalog_data/source product is
   classified into one of the two reusable template types with plain labels.
   Current source-audit classification is 15 `simple_product` /
   Ready-to-order page candidates and 38 `complex_custom_product` / Custom quote

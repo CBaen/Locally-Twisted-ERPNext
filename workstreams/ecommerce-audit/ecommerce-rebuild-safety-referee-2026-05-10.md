@@ -16,7 +16,7 @@ Hard constraints applied:
 
 ## Source map inspected
 
-- `AGENTS.md` — project operating rules, current verified state, launch trust rules, legacy_source-as-source-witness framing.
+- `AGENTS.md` — project operating rules, current verified state, launch trust rules, catalog_data-as-source-witness framing.
 - `ROLE.md` in the agent workspace — safety auditor operating contract.
 - `capabilities/INDEX.md` — relevant LT capability index.
 - `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md` — current ecommerce receiving contract, gates, red flags, verifier list.
@@ -42,21 +42,21 @@ The safest operating rule is:
 
 Lane F must be blocked unless it either has these artifacts or explicitly marks them as `[NO EVIDENCE]` and lowers confidence.
 
-1. **Lane A — legacy_source source commerce map**
-   - Required artifact: `workstreams/ecommerce-audit/legacy_source-source-commerce-map-2026-05-10.md`.
-   - Must enumerate current legacy_source/source product meaning: product classes, variant axes, valid combinations, add-ons, customizations, price sources/resolvers, media facts, quote behavior, unknowns, source version, and production/local mismatch.
+1. **Lane A — catalog_data source commerce map**
+   - Required artifact: `workstreams/ecommerce-audit/catalog_data-source-commerce-map-2026-05-10.md`.
+   - Must enumerate current catalog_data/source product meaning: product classes, variant axes, valid combinations, add-ons, customizations, price sources/resolvers, media facts, quote behavior, unknowns, source version, and production/local mismatch.
    - Current status: missing / `[NO EVIDENCE]` per `README.md`.
    - Safety impact: no source-product claim should be cited as final.
 
-2. **Lane E — legacy_source/docs/agent-action convergence**
-   - Required artifact: `workstreams/ecommerce-audit/legacy_source-docs-agent-action-convergence-2026-05-10.md`.
-   - Must reconcile legacy_source witness behavior, ERPNext/Frappe/Webshop docs/current behavior, project capabilities, and actual agent actions into one conflict map.
+2. **Lane E — catalog_data/docs/agent-action convergence**
+   - Required artifact: `workstreams/ecommerce-audit/catalog_data-docs-agent-action-convergence-2026-05-10.md`.
+   - Must reconcile catalog_data witness behavior, ERPNext/Frappe/Webshop docs/current behavior, project capabilities, and actual agent actions into one conflict map.
    - Current status: missing / `[NO EVIDENCE]` per `README.md`.
    - Safety impact: no docs/source convergence claim should be used as proof.
 
 3. **Version reconciliation**
    - Lane B reports destination app versions `frappe 15.106.0`, `erpnext 15.105.0`, `payments 0.0.1`, `webshop 0.0.1`, `locally_twisted 0.0.1`, but the local image was `locally-twisted-erpnext:v15` instead of the dispatch anchor `frappe/erpnext:v15.105.0`.
-   - Lane B also reports legacy_source local module `19.0.2.15.0` while older handoff warns production DB may be `19.0.2.14.0`.
+   - Lane B also reports catalog_data local module `19.0.2.15.0` while older handoff warns production DB may be `19.0.2.14.0`.
    - Required artifact: dated version/source decision note naming which witness controls rebuild decisions.
 
 4. **Clean aggregate readiness rerun**
@@ -128,7 +128,7 @@ Checkout/public ecommerce must be blocked if any of these are true:
 
 Human owner review is required for:
 
-- Which legacy_source/source witness version controls the rebuild (`19.0.2.15.0` local vs possible `19.0.2.14.0` production DB).
+- Which catalog_data/source witness version controls the rebuild (`19.0.2.15.0` local vs possible `19.0.2.14.0` production DB).
 - Whether any current ERPNext catalog/test data may be purged or rebuilt, and exact rollback expectation.
 - Final product-family lane assignment: ready-to-order checkout vs custom quote-first vs hidden/excluded.
 - Unknown or review-only axes, especially add-on families and customization/color semantics.
@@ -143,7 +143,7 @@ Artifacts must be judged by dated, path-specific evidence, not prose confidence.
 
 | Artifact | Required judgment |
 |---|---|
-| Lane A legacy_source source map | Complete enough to name source product meaning, unknowns, and version mismatch; otherwise `[NO EVIDENCE]` and blocks source claims. |
+| Lane A catalog_data source map | Complete enough to name source product meaning, unknowns, and version mismatch; otherwise `[NO EVIDENCE]` and blocks source claims. |
 | Lane B parity matrix | Destination fields/services/verifiers mapped to each source concept; version mismatch called out; clean aggregate rerun required. |
 | Lane C intent preservation audit | Representative browser + backend proof only; not full-catalog proof unless expanded with matrix coverage. |
 | Lane D architecture artifact | Architecture recommendation only; cannot approve implementation/import by itself. |
@@ -179,8 +179,8 @@ Minimum artifact rules:
 ## Concise actionable next sequence
 
 1. Rerun **Lane A** artifact-first; if not possible, create an explicit `[NO EVIDENCE]` blocker artifact rather than relying on older source claims.
-2. Rerun **Lane E** artifact-first; reconcile legacy_source/source, ERPNext/Frappe docs/current behavior, project capabilities, and agent actions.
-3. Resolve/sign the **version witness decision** for legacy_source source and ERPNext destination image/app versions.
+2. Rerun **Lane E** artifact-first; reconcile catalog_data/source, ERPNext/Frappe docs/current behavior, project capabilities, and agent actions.
+3. Resolve/sign the **version witness decision** for catalog_data source and ERPNext destination image/app versions.
 4. Rerun **aggregate architecture readiness** cleanly in the intended ecommerce mode and save the report path.
 5. Build the **53-product launch proof matrix** and mark every product checkout / quote-first / excluded / blocked.
 6. Prepare human-review packets for **prices, add-ons, color/customization semantics, and media classification**.

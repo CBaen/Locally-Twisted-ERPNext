@@ -70,7 +70,7 @@ For LT's current simplified backend lane, run the durable repo checks first:
 ```bash
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/backend_workspace_parity.py
-$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+export LT_DESK_TEST_USER='lt-owner-temp@example.com'; export LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 ```
 
 Useful manual verification skeleton:

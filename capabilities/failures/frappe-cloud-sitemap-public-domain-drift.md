@@ -76,7 +76,7 @@ public host or if the Frappe Cloud vanity host appears in sitemap output.
 Before a reindex request, run:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted.com'
+export LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```
 

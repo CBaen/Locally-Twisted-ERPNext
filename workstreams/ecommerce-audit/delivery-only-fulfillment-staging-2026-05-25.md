@@ -67,7 +67,7 @@ npm run test:checkout-experience
 Hosted staging proof after app mirror update, migration, and cache clear:
 
 ```bash
-$env:LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
+export LT_BASE_URL='https://locallytwisted-staging.frappe.cloud'
 npm run test:checkout-experience
 ```
 

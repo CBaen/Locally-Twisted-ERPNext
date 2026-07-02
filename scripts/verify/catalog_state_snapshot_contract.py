@@ -26,7 +26,7 @@ REQUIRED_JSON_FILES = {
     "website_slideshows.json",
     "website_slideshow_items.json",
     "website_item_groups_child_rows.json",
-    "source_catalog_reference.json",
+    "source_catalog_data.json",
     "source_slug_to_group.json",
 }
 

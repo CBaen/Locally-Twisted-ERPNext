@@ -69,7 +69,7 @@
     "unicorn-bouquet"
   ],
   "read_only": true,
-  "snapshot": "audits\\catalog-import-audit-2026-05-08\\current-state-snapshot-2026-05-19-2314",
+  "snapshot": "audits/catalog-import-audit-2026-05-08/current-state-snapshot-2026-05-19-2314",
   "v1_subset": {
     "excluded_count": 0,
     "excluded_counts_by_primary_reason": {},
@@ -950,6 +950,6 @@
         "source_variant_rows": 0
       }
     ],
-    "rule": "include legacy_source-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers"
+    "rule": "include catalog_data-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers"
   }
 }

@@ -9,11 +9,12 @@
 
 ## What we're building
 
-The persistent header + footer chrome for Locally Twisted's ERPNext site, Hetzner-faithful in structure and content. Replaces the current intermediate-state navbar.html and footer.html. Overhauls lt-theme.css (replaces ~340 lines of dead code targeting Frappe's native chrome that no longer renders). Adds 3-panel mega menus, newsletter strip, megamenu JS, newsletter JS + endpoint + DocType.
+The persistent header + footer chrome for Locally Twisted's ERPNext site, current import capture-faithful in structure and content. Replaces the current intermediate-state navbar.html and footer.html. Overhauls lt-theme.css (replaces ~340 lines of dead code targeting Frappe's native chrome that no longer renders). Adds 3-panel mega menus, newsletter strip, megamenu JS, newsletter JS + endpoint + DocType.
 
-**Mirror reference:** `_resources/retired-source-mirror/pages/index.html` (header lines ~286-635, footer lines ~1111-1223). **Inventory reference:** `_resources/retired-source-mirror/INVENTORY.md` sections 2 + 3.
+**Reference:** current ERPNext/Frappe chrome, committed templates, and live
+browser verification.
 
-**Architectural decisions logged 2026-04-30 in `MIRROR-REBUILD-PLAN.md` Research Notes** — both reversible:
+**Architectural decisions retained in `locally-twisted-decisions.md`** — both reversible:
 - **Decision A** — Mega menus populated via template-level grouping over the existing flat 11-Item-Group hierarchy. NOT restructuring the catalog.
 - **Decision B** — Category URLs stay `/shop-items/<slug>` (ERPNext native). Redirects from `/shop/category/<slug>` added separately.
 
