@@ -27,7 +27,7 @@ Use it before adding new automation to avoid creating a second hidden path for m
 
 Locally Twisted's implementation lives at:
 
-```powershell
+```bash
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```
 

@@ -1,5 +1,16 @@
 # Locally Twisted - Coding Handoff
 
+2026-07-02 Kubuntu active-guidance cleanup: active LT instructions now use
+`/home/guidingl/...` paths for the machine guide, coordination hub, linked
+worktree root, hooks, and shared no-monolith capability source. Missing local
+legacy/Claude folders are no longer presented as active local dependencies.
+`scripts/verify/kubuntu_doctor.py` now has `--static-only` for source/tool
+preflight while the on-demand LT stack is stopped, and `--runtime` for full
+local container/route/bench/app-order proof after `client-stack start lt`.
+Manifest bundles: `lt-kubuntu-doctor` for static preflight and
+`lt-kubuntu-runtime-doctor` for full local runtime proof. Project decision:
+`decisions/2026-07-02-kubuntu-active-guidance-static-doctor.md`.
+
 2026-07-02 ecommerce correction: do not use LT's current ecommerce shop as the
 architecture for the reusable shop. GL corrected this explicitly. The reusable
 ERPNext ecommerce shop must be built first as a project-agnostic parent
@@ -265,10 +276,10 @@ staging, live, provider, DNS, Stripe, Search Console, payment, reset-email, or
 production customer proof.
 
 Kubuntu recovery/source-stability baseline as of 2026-06-15 MDT: this is the
-first in-repo Codex cleanup pass after the host moved from Windows to Kubuntu.
+first in-repo Codex cleanup pass after the host moved from a prior operating environment to Kubuntu.
 Treat it as source/archive stabilization, not staging/live release work. Local
 `main` was reconciled from `origin/main`, the reset-helper collision was
-preserved, stale Windows worktree metadata was pruned, and the working tree was
+preserved, stale prior-host worktree metadata was pruned, and the working tree was
 returned clean. Recovery commits now on local `main` before the final docs
 commit: `7ad632a Preserve Kubuntu verifier and reset email guard`,
 `8b9d6f3 Classify remaining Kubuntu WIP`, `0ba474d Preserve Kubuntu browser
@@ -397,7 +408,7 @@ no thumbnail rail. Feature handoff:
 research brief:
 `research/research-product-gallery-architecture/research-brief.md`; failure
 recipe: `capabilities/failures/product-gallery-projection-regression.md`.
-Verified locally: `python scripts\verify\product_gallery_projection_contract.py`
+Verified locally: `python scripts/verify/product_gallery_projection_contract.py`
 passed with rendered-route checks, `npm run test:product-gallery-experience`
 passed `3/3`, `npm run test:owner-product-safety` passed, and
 `npm run test:ecommerce-full` passed. This is local-only; no staging/live,
@@ -414,10 +425,10 @@ visibility, blocks hidden->visible, public->hidden, and public route-change
 requests, and keeps backfilled Product Setup records in Draft until reviewed.
 Product Setup sync dry runs now truthfully report missing-field updates and
 fill missing child rows without wiping existing options. Focused local proof:
-`python scripts\verify\owner_catalog_guard_contract.py` passed `19/19`,
-`python scripts\verify\product_blueprint_live_contract.py` passed including
+`python scripts/verify/owner_catalog_guard_contract.py` passed `19/19`,
+`python scripts/verify/product_blueprint_live_contract.py` passed including
 existing public visibility and route-change guards, and
-`python scripts\setup\sync_product_blueprints_from_catalog.py` dry run passed
+`python scripts/setup/sync_product_blueprints_from_catalog.py` dry run passed
 for `51` Website Items with `0` creates / `21` would-update rows. Final
 pre-commit umbrella `npm run test:owner-product-safety` passed. This is
 local-only. It is not staging/live release, Stripe, DNS, Search Console, or
@@ -449,9 +460,9 @@ research brief: `research/research-shop-category-generated-heroes/research-brief
 This did not mutate ERPNext Item Group `image` fields, did not approve
 category card/mega-menu photography, and did not stage or deploy live. Verified
 locally: the color swatch contract,
-`python -m py_compile scripts\setup\generate_shop_category_heroes.py`,
-`python scripts\dev\clear_website_cache.py`,
-`scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
+`python -m py_compile scripts/setup/generate_shop_category_heroes.py`,
+`python scripts/dev/clear_website_cache.py`,
+`scripts/verify/run_playwright test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
 passed for the active category route set, `npm run test:public-assets`,
 `npm run test:container-contract -- --grep "seasonal-category|shop"`, and
 `npm run test:layout-fit -- --grep "seasonal-category|shop"`.
@@ -469,8 +480,8 @@ environments. Feature handoff:
 `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`; capability:
 `capabilities/recipes/lt-seo-geo-aeo-contract.md`. Verified locally:
 `python -m py_compile` for touched Python files, `node --check
-scripts\verify\seo_contract.spec.js`, `python
-scripts\dev\clear_website_cache.py --restart`, `npm.cmd run
+scripts/verify/seo_contract.spec.js`, `python
+scripts/dev/clear_website_cache.py --restart`, `npm run
 test:seo-contract` passed 13/13, and helper proof confirmed paused
 shop/category/product paths noindex while `/contact` remains indexable. Live is
 unchanged and still unreleased: `https://locallytwisted.com/sitemap.xml` still
@@ -514,13 +525,13 @@ handoff: `workstreams/ready-to-order-category-menu-2026-05-21.md`; capability
 failure card: `capabilities/failures/ready-order-menu-product-dump.md`; nav
 recipe update: `capabilities/recipes/frappe-public-nav-business-route-contract.md`.
 Fresh branch-level checks passed:
-`python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\nav_ia.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py`,
-`node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js`,
-`node --check scripts\verify\search_contract.spec.js`, and
-`python scripts\verify\nav_ia.py`. Codex then repointed the local Docker stack
+`python -m py_compile apps/locally_twisted/locally_twisted/navbar_context.py scripts/verify/nav_ia.py scripts/verify/smoke_shop.py scripts/verify/ecommerce_pause_contract.py`,
+`node --check apps/locally_twisted/locally_twisted/public/js/lt-megamenu.js`,
+`node --check scripts/verify/search_contract.spec.js`, and
+`python scripts/verify/nav_ia.py`. Codex then repointed the local Docker stack
 with a temporary compose override so `http://localhost:8081/` mounts this
 worktree instead of the main checkout, cleared website cache, and ran
-`python scripts\verify\smoke_shop.py`; it passed with all shop smoke checks.
+`python scripts/verify/smoke_shop.py`; it passed with all shop smoke checks.
 Direct homepage HTML proof showed category links present, product links absent,
 and no ERPNext/Website Item/backend-approved wording. GL confirmed the rendered
 local change looks correct on `http://localhost:8081/`. This is local
@@ -542,7 +553,7 @@ recipe: `capabilities/failures/product-fulfillment-copy-lane-drift.md`.
 Verified locally after cache clear/restart: `product_page_runtime_contract.py`,
 `proof_product_contract.py`, `commerce_rules_contract.py`,
 `npm run test:product-price-display`, `npm run test:variant-media`,
-`python scripts\verify\smoke_shop.py`, `npm run test:layout-fit -- --grep
+`python scripts/verify/smoke_shop.py`, `npm run test:layout-fit -- --grep
 "variant-product|single-product|seasonal-category"` (39/39), and
 `python -m py_compile` for touched Python files. No staging/live/Frappe
 Cloud/Stripe/DNS/public exposure change was performed. Remaining blocker before
@@ -664,9 +675,9 @@ Sales Order line JSON, and customer-facing receipt helper. Feature handoff:
 `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`;
 failure recipe:
 `capabilities/failures/variant-media-overgating-regression.md`. Verified:
-`python -m py_compile ...`, `python scripts\verify\variant_media_contract.py`,
-`python scripts\verify\cart_checkout_contract.py`, and
-`python scripts\verify\product_page_runtime_contract.py`. No live deployment
+`python -m py_compile ...`, `python scripts/verify/variant_media_contract.py`,
+`python scripts/verify/cart_checkout_contract.py`, and
+`python scripts/verify/product_page_runtime_contract.py`. No live deployment
 or Frappe Cloud update was performed. At closeout, local `frontend` ecommerce
 is intentionally open with `lt_ecommerce_paused=0` so GL can test
 `localhost:8081`; restore it to `1` after local acceptance or before any
@@ -702,8 +713,8 @@ Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 is clean, and only the main LT worktree remains registered. The cleanup
 reviewed then deleted two stale detached Codex worktrees after proving they
 were clean, ancestor-contained, and had no unique feature value left to apply:
-`C:\Users\baenb\.codex\worktrees\84e7\locally-twisted` and
-`C:\Users\baenb\.codex\worktrees\lt-backend-checkout-docs-20260503`.
+`/home/guidingl/.codex/worktrees/84e7/locally-twisted` and
+`/home/guidingl/.codex/worktrees/lt-backend-checkout-docs-20260503`.
 Feature/value review confirmed contact prefill and checkout lead-conversion
 work from those worktrees already exists in current `main`. Handoff:
 `workstreams/repo-history-and-worktree-cleanup-2026-05-17.md`; capability:
@@ -957,7 +968,7 @@ now require both owner include and backend Website Item checkout eligibility.
 The search contract now treats filtered backend-approved quick links as hidden,
 not absent. Feature handoff:
 `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`;
-guards: `python scripts\verify\nav_ia.py` and `npm run test:search-contract`.
+guards: `python scripts/verify/nav_ia.py` and `npm run test:search-contract`.
 
 Codex ecommerce scaffold update on 2026-05-12: complex product checkout
 planning is now source-backed and local-only through
@@ -1074,7 +1085,7 @@ and asset-location regression thread. The linked worktree branch
 worktree and branch ref were removed. Local branch state is main-only again.
 The three deleted `assets/what we do photos/` images were traced by blob hash to
 exact copies in
-`C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`;
+`/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/landing-page-pics-20260510/`;
 the repo keeps Git history plus the local holding copy instead of duplicate raw
 launch assets. Feature handoff:
 `workstreams/launch-repo-cleanup-2026-05-10.md`; capability:
@@ -1101,7 +1112,7 @@ so HTTPS `host_name` is a hard requirement. Fast guard:
 
 Codex update on 2026-05-10: launch repo cleanup is now a documented feature
 slice. Raw local photo drops were moved out of the repo to
-`C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\`,
+`/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/`,
 stale generated/mirror/research debris was removed, old audience-page contest
 output is Git-history-only, and `.gitignore` blocks those drop paths from
 returning. Memorial Balloons is separate and not part of this LT launch repo.
@@ -1127,8 +1138,8 @@ Verification: `python scripts/dev/clear_website_cache.py`,
 
 Codex update on 2026-05-10: project capabilities are now a visible
 agent-neutral root at `capabilities/`, not `.codex/capabilities/`. The
-system/user shared root is `C:\Users\baenb\capabilities`, the BBC agency root is
-`C:\Users\baenb\projects\Built_by_Cameron\capabilities`, and runtime folders
+system/user shared root is `/home/guidingl/capabilities`, the BBC agency root is
+`/home/guidingl/projects/Built_by_Cameron/capabilities`, and runtime folders
 are adapters or compatibility junctions only. Read `capabilities/INDEX.md`
 first, then check `capabilities/failures/` before recipes when touching known
 risky surfaces.
@@ -1145,7 +1156,7 @@ Codex update on 2026-05-10: GL clarified that going live today is
 non-negotiable and ecommerce may stay hidden for V1. The local site is
 currently configured with `lt_ecommerce_paused=1`; `/shop`, `/cart`, and
 `/checkout` show the branded quote fallback. Hidden-commerce launch proof passed
-with `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke`
+with `python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke`
 15/15. The ignored `.tmp` preflight snapshot was deleted during launch cleanup;
 rerun the verifier/snapshot command if a fresh local artifact is needed.
 Earlier open-commerce proof also passed with `npm run test:ecommerce-full` and
@@ -1157,7 +1168,7 @@ Late 2026-05-10 launch-gate repair: `scripts/verify/website_launch_verify.py`
 now waits for localhost before browser sweeps and retries once when the local
 site briefly blinks during restart. The stale homepage Custom Event Decor
 hide-switch was removed so the homepage again matches the launch contract.
-Earlier open-commerce `python scripts\verify\website_launch_verify.py` passed all 12 website
+Earlier open-commerce `python scripts/verify/website_launch_verify.py` passed all 12 website
 steps while ecommerce was temporarily enabled. The site was later restored to the current pages/forms-first paused posture (`lt_ecommerce_paused=1`). The extra launch checks also passed:
 `npm run test:a11y` reported 50 route/viewport axe checks with 0 violations,
 `npm run test:a11y-manual` passed, and contact smoke submitted, verified the
@@ -1446,7 +1457,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Synthetic backend operating readiness is separate from live cutover readiness. `scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` runs no-live/fake-data/rollback-safe checks for record-level failure evidence, inquiry upload failure evidence, Stripe amount parity, checkout-to-Lead conversion, checkout fulfillment, paid-order cascade, payment-success reconciliation, mocked webhook behavior, customer document/email policies, outbound templates, outbound send-readiness, quote/proposal outliers, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. Latest result on 2026-05-10 in open ecommerce testing: 22 synthetic readiness contracts, 0 broken piping, 8 inefficiencies/partial connections, and 3 cutover-deferred items. It does not require live Stripe keys, real operator data, or real customer records.
 - Stripe Checkout amount parity now has a contract. `stripe_line_items_for_sales_order()` builds hosted-checkout line items from the ERPNext Sales Order and adds a `Sales tax and charges` adjustment when needed so Stripe totals match `Sales Order.grand_total`. If item lines would exceed the ERPNext total, it raises `frappe.ValidationError` instead of under/overcharging silently. `scripts/verify/stripe_amount_parity_contract.py` covers taxable, nontaxable, and negative-adjustment cases.
 - Legal/accounting review packet lives at `_resources/policies/legal-accounting-review-packet-2026-05-06.md`.
-- `/event-playground` is a hidden internal-preview route for the first PlayCanvas decor planner. Keep it out of the ASAP website launch lane unless GL explicitly reopens it here. The PlayCanvas/Vite source, research packet, and design-studio capabilities moved to the standalone repo at `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\`; this LT repo retains only the Frappe route shell at `www/event_playground.html`/`.py`, the local iframe wrapper for `127.0.0.1:4306`, and the contact handoff contract. The browser preview is framed as `Plan Custom Decor`, emits `event-playground-v2`, adds `design_studio_contract.schema_version = design-studio-v1`, adds event date/city contact fields, and exposes quote-honesty warnings. Render counts are explicitly visual density, not quote math. Production estimates are candidate-only, `quote_ready: false`, and `customer_visible: false` until Locally Twisted approves formulas, fill/support assumptions, overage, venue review, and pricing. Submit Inquiry still hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage`; the existing contact form now pre-fills name, email, phone, ISO event date, event location/city, services, colors, decor type, package notes, and the design summary. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, share link, or full organic/twisting physics in this slice.
+- `/event-playground` is a hidden internal-preview route for the first PlayCanvas decor planner. Keep it out of the ASAP website launch lane unless GL explicitly reopens it here. The PlayCanvas/Vite source, research packet, and design-studio capabilities moved to the standalone repo at `external-backup:design-studio/workstreams/locally-twisted-plan-custom-decor-v2/`; this LT repo retains only the Frappe route shell at `www/event_playground.html`/`.py`, the local iframe wrapper for `127.0.0.1:4306`, and the contact handoff contract. The browser preview is framed as `Plan Custom Decor`, emits `event-playground-v2`, adds `design_studio_contract.schema_version = design-studio-v1`, adds event date/city contact fields, and exposes quote-honesty warnings. Render counts are explicitly visual density, not quote math. Production estimates are candidate-only, `quote_ready: false`, and `customer_visible: false` until Locally Twisted approves formulas, fill/support assumptions, overage, venue review, and pricing. Submit Inquiry still hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage`; the existing contact form now pre-fills name, email, phone, ISO event date, event location/city, services, colors, decor type, package notes, and the design summary. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, share link, or full organic/twisting physics in this slice.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/catalog-source/images/` where legacy_source image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media is still empty in ERPNext Item Group image fields. `python scripts/verify/category_media_candidates.py` now creates a no-mutation approval packet from existing product-source and portfolio-proof media for the 8 active customer-facing categories. `scripts/setup/sync_category_media.py` creates the approval template and dry-runs the Frappe-backed Item Group image update path; `--apply` only writes rows marked `approved: true`. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment only after Jeff/GL approval.
@@ -1462,7 +1473,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Rendered site repair pass completed 2026-05-05: mega-menu assets are served through hooks, desktop click pins mega menus open, mobile drawer opens accordions, product/shop pages use `lt-product-polish.css`, broad route containment uses `lt-page-containment.css`, and the homepage/portfolio/newsletter mobile clipping issues were fixed.
 - Responsive container integrity is now a standing launch gate, not a one-off fix. `scripts/verify/layout_helpers.js` centralizes public routes, breakpoint-edge viewports, overflow/text-fit checks, and the executable route-level container contract. After the BTFP crawl/header update, `npm run test:layout-fit` covers 325 passive route/viewport checks across the current public route list and 13 viewport families; `npm run test:container-contract` covers 75 route/viewport container checks across launch public routes at 320px, 820px, and 1366px; `npm run test:interactive-layout` covers 163 stateful checks for compact generated-photo heroes, platform-name leakage, header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio front-photo state, BTFP crawl motion, homepage proof crawls, cookie placement, and reduced-motion homepage states. `npm run test:portfolio-reel` is the route-specific proof-gallery gate.
 - Public containers are now code-owned, not advisory prose. `CONTAINER_CONTRACT_ROUTES` declares every visible direct `.page_content` child and each section's mode (`band`, `fullbleed`, `contained`, `clip`, `raw-band`, `root`, or `visual-field`). The first full matrix exposed real drift in homepage twisting spotlight containment, portfolio footer markup, contact/location Bootstrap containers, document narrow-width selector specificity, BTFP route surfaces, and BTFP event-crawl data. `lt-page-containment.css` now loads after product/shop CSS so it remains the final public containment layer.
-- `npm run test:website-verify` is the website-only closeout gate through `scripts/verify/website_launch_verify.py`: nav IA, passive layout, route-level container contract, interactive layout, search, portfolio reel, current ecommerce mode contract, shop smoke, product prices, variant media, and checkout experience, with Playwright workers serialized by default. `npm run test:public-verify` aliases to the same website-only gate; `npm run test:launch-verify` adds accessibility and contact smoke. `npm run test:ecommerce-full` is the focused full ecommerce gate including rollback-safe checkout fulfillment and checkout-to-Lead conversion when ecommerce is reopened. Event Playground remains separately available through `npm run test:event-playground` for the OpenClaw lane. Latest public verification on 2026-05-10 passed `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke` with 15/15 hidden-ecommerce launch steps, including accessibility and contact smoke backend proof/cleanup. Earlier open-ecommerce proof remains available for follow-up through `test:ecommerce-full`, `test:synthetic_business_pipeline.py`, and `test:business_automation_index.py`.
+- `npm run test:website-verify` is the website-only closeout gate through `scripts/verify/website_launch_verify.py`: nav IA, passive layout, route-level container contract, interactive layout, search, portfolio reel, current ecommerce mode contract, shop smoke, product prices, variant media, and checkout experience, with Playwright workers serialized by default. `npm run test:public-verify` aliases to the same website-only gate; `npm run test:launch-verify` adds accessibility and contact smoke. `npm run test:ecommerce-full` is the focused full ecommerce gate including rollback-safe checkout fulfillment and checkout-to-Lead conversion when ecommerce is reopened. Event Playground remains separately available through `npm run test:event-playground` for the OpenClaw lane. Latest public verification on 2026-05-10 passed `python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke` with 15/15 hidden-ecommerce launch steps, including accessibility and contact smoke backend proof/cleanup. Earlier open-ecommerce proof remains available for follow-up through `test:ecommerce-full`, `test:synthetic_business_pipeline.py`, and `test:business_automation_index.py`.
 - The active theme/app source has been cleaned away from old font and UI-pastel references. Do not reintroduce `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, old `soft-blue`/`light-blue`, UI `blush`, or unresolved `--lt-primary` in customer-facing source.
 - A 16-asset custom brass-line icon suite now lives at `apps/locally_twisted/locally_twisted/public/icons/brand/`. Balloon-specific surfaces should use balloon-form icons first: pair, cluster, arch, organic garland, column, and bouquet.
 - The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
@@ -1470,7 +1481,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Catalog variant price parity is locally repaired and guarded for the active variant set after the 2026-05-19 price-identity incident. `c7f9da3` fixed the bouquet-size family first; the 2026-05-19 local modifier repair corrected the broader non-bouquet flattening class, including Easter Bunny Ear Arch `25ft`. Use `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and `workstreams/catalog-variant-price-recovery.md` before any catalog price claim or repair. Local proof does not equal staging/live/public approval.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with the current commerce lane on 2026-05-05. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Quote-required custom installs such as Arches and Garlands intentionally show a `/contact?item=...` quote CTA instead of cart selectors. Retail variants such as `unicorn-bouquet` still render inline single-select chips/selects, consume `valid_options_for_attributes`, and write selected variant codes to `LT_CART`.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
-- `scripts/verify/layout_fit.spec.js` is the committed passive Playwright Test gate. Latest full launch run: `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke` -> 15/15 hidden-ecommerce launch steps passed, including `layout-fit` 325/325 across the current route list and 13 viewport families, `container-contract` 75/75, `interactive-layout` 163/163, `search_contract` 3/3, `portfolio_reel` 6/6, ecommerce pause contract, shop pause smoke, product prices, variant media, checkout experience 2/2, axe accessibility 50 route/viewport checks with 0 violations, manual accessibility, and contact smoke backend proof/cleanup. `scripts/verify/container_contract.spec.js` is the route-level public container contract; focused rerun after the homepage Custom Event Decor repair passed 75/75. `scripts/verify/portfolio_reel.spec.js` is the route-specific proof-gallery gate.
+- `scripts/verify/layout_fit.spec.js` is the committed passive Playwright Test gate. Latest full launch run: `python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke` -> 15/15 hidden-ecommerce launch steps passed, including `layout-fit` 325/325 across the current route list and 13 viewport families, `container-contract` 75/75, `interactive-layout` 163/163, `search_contract` 3/3, `portfolio_reel` 6/6, ecommerce pause contract, shop pause smoke, product prices, variant media, checkout experience 2/2, axe accessibility 50 route/viewport checks with 0 violations, manual accessibility, and contact smoke backend proof/cleanup. `scripts/verify/container_contract.spec.js` is the route-level public container contract; focused rerun after the homepage Custom Event Decor repair passed 75/75. `scripts/verify/portfolio_reel.spec.js` is the route-specific proof-gallery gate.
 - Catalog variant counts match the normalized legacy_source source: the raw scrape has duplicate-case latex color values, but `_resources/catalog-source/value_normalize_map.json` collapses them and the normalized expected variant counts match ERPNext.
 - Website cache was cleared after Jinja/CSS changes; the backend was restarted after `home.py` route CSS changed; `hooks.py` cache-busts were bumped for `lt-site-preferences.js` and `lt-page-containment.css`.
 
@@ -1549,7 +1560,7 @@ Next safest slices:
 
 Run DB counts with `bench execute` from the backend container:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Item'}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Website Item'}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Item Price'}"
@@ -1558,7 +1569,7 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 
 Filtered counts:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Item','filters':{'has_variants':1}}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Item','filters':{'variant_of':['is','set']}}"
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Item','filters':{'has_variants':0,'variant_of':['is','not set']}}"
@@ -1566,13 +1577,13 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 
 After Jinja/CSS/Web Page changes:
 
-```powershell
+```bash
 python scripts/dev/clear_website_cache.py
 ```
 
 If Webshop assets need a real rebuild, expose the existing Yarn path and build from the frontend container last:
 
-```powershell
+```bash
 docker exec locally-twisted-erpnext-v15-frontend-1 bash -lc 'export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH; cd /home/frappe/frappe-bench && bench build --app webshop'
 docker exec locally-twisted-erpnext-v15-redis-cache-1 redis-cli DEL assets_json
 python scripts/dev/clear_website_cache.py
@@ -1580,25 +1591,25 @@ python scripts/dev/clear_website_cache.py
 
 Navigation IA regression check:
 
-```powershell
+```bash
 python scripts/verify/nav_ia.py
 ```
 
 Variant media contract:
 
-```powershell
+```bash
 python scripts/verify/variant_media_contract.py
 ```
 
 Catalog variant contract:
 
-```powershell
+```bash
 python scripts/verify/catalog_variant_contract.py
 ```
 
 Catalog price contract and repair path:
 
-```powershell
+```bash
 npm run test:product-prices
 python scripts/setup/stage_seed_data.py
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_legacy_source.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
@@ -1606,7 +1617,7 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 
 Business automation and paperwork launch spine:
 
-```powershell
+```bash
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
@@ -1624,7 +1635,7 @@ python scripts/verify/payment_launch_readiness.py --mode live
 
 Variant media sync from the captured legacy_source image files:
 
-```powershell
+```bash
 python scripts/setup/sync_variant_media.py --dry-run
 python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json
 python scripts/setup/sync_variant_media.py
@@ -1632,7 +1643,7 @@ python scripts/setup/sync_variant_media.py
 
 Category media candidate packet:
 
-```powershell
+```bash
 python scripts/verify/category_media_candidates.py
 python -m json.tool output/category-media-candidates.json
 python scripts/setup/sync_category_media.py --write-template
@@ -1641,7 +1652,7 @@ python scripts/setup/sync_category_media.py --selection output/category-media-se
 
 Public layout and interaction regression checks:
 
-```powershell
+```bash
 npm run test:layout-fit
 npm run test:interactive-layout
 npm run test:portfolio-reel
@@ -1652,19 +1663,19 @@ npm run test:website-verify
 
 Event Playground source, browser, and Frappe handoff checks:
 
-```powershell
-cd C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\event-builder-spike
+```bash
+cd external-backup:design-studio/workstreams/locally-twisted-plan-custom-decor-v2/design-studio-v2/event-builder-spike
 npm run test:classic
 npm run build
 npm run verify:event-playground
 npm run verify:v2
-cd C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted
+cd /home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted
 npm run test:event-playground
 ```
 
 Contact form logic regression checks:
 
-```powershell
+```bash
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
@@ -1673,7 +1684,7 @@ npm run test:form-experience
 
 Backend Lead/CRM intake parity:
 
-```powershell
+```bash
 python scripts/setup/sync_contact_intake_backend.py
 python scripts/setup/sync_crm_pipeline.py
 python scripts/setup/sync_stage_cascade.py

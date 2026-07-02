@@ -2,9 +2,23 @@
 
 **Append-only.** Newest entries at the top. Each entry: what happened, what was learned, what to do differently next time.
 
-LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron/lessons-learned.md`. If a lesson is broadly applicable across all ERPNext builds, it ALSO goes to the global `C:\Users\baenb\.claude\lessons-learned.md`.
+LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron/lessons-learned.md`. If a lesson is broadly applicable across all ERPNext builds, it also belongs in the current machine/global lesson surface, not in an old local platform path.
 
 ---
+
+## 2026-07-02 - Static preflight and runtime proof are different jobs
+
+The LT ERPNext stack is intentionally on-demand. A verifier that requires
+containers, routes, bench versions, and installed apps is correct for full
+runtime proof, but noisy for migration cleanup when the stack is supposed to be
+stopped. That noise makes agents either ignore failures or start services just
+to make a source/docs cleanup look green.
+
+**Counter-move:** use `python3 scripts/verify/kubuntu_doctor.py --static-only`
+for branch/tool/source preflight while the stack is stopped. Use
+`python3 scripts/verify/kubuntu_doctor.py --runtime` only after intentionally
+starting LT with `client-stack start lt`. Do not treat static preflight as
+route, database, checkout, provider, or live proof.
 
 ## 2026-07-02 - Do not turn a broken client shop into the reusable shop template
 
@@ -404,7 +418,7 @@ workstream docs.
 
 ## 2026-06-15 - Separate OS-migration content from line-ending noise
 
-After the Windows-to-Kubuntu move, the repo looked larger and riskier than it
+After the prior-host-to-Kubuntu move, the repo looked larger and riskier than it
 was because real changes, stale worktree metadata, and CRLF/LF-only tracked
 file noise were mixed together. The useful triad finding was not that the
 project was in crisis; it was that broad staging would have archived noise and
@@ -436,7 +450,7 @@ Website Items, and rendered browser routes. Keep selected variant media,
 product gallery media, category/reference media, and ignored artifacts as
 separate roles. Use
 `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`,
-`python scripts\verify\product_gallery_projection_contract.py`, and
+`python scripts/verify/product_gallery_projection_contract.py`, and
 `npm run test:product-gallery-experience` before any staging/owner claim.
 
 ---
@@ -1198,7 +1212,7 @@ owned the project operating knowledge, which breaks parity with OpenClaw,
 Claude, and future agents.
 
 **Counter-move:** put capability roots where their scope is true:
-`C:\Users\baenb\capabilities` for system/user knowledge,
+`/home/guidingl/capabilities` for system/user knowledge,
 `Built_by_Cameron/capabilities` for agency knowledge, and
 `<project>/capabilities` for project knowledge. Runtime folders are adapters or
 compatibility pointers only.
@@ -2143,7 +2157,7 @@ The PlayCanvas game, Frappe wrapper, contact-form prefill, and browser tests all
 
 GL caught the arch balloons pointing down. That was a real manufacturing mistake, not a styling preference: a classic quad cluster is tied/twisted at a shared center, so each balloon neck/knot points into that tie point. The renderer defaulted all balloon necks downward and still passed canvas tests because those tests only proved "nonblank and interactive."
 
-**Counter-move:** use `C:\Users\baenb\projects\design-studio\capabilities\recipes\event-playground-construction-truth.md` before any Event Playground geometry work. Put construction slots in pure modules first, test neck/knot vectors against the shared tie center, and make PlayCanvas consume those slots. A nonblank canvas is never enough proof for balloon construction.
+**Counter-move:** use `external-backup:design-studio/capabilities/recipes/event-playground-construction-truth.md` before any Event Playground geometry work. Put construction slots in pure modules first, test neck/knot vectors against the shared tie center, and make PlayCanvas consume those slots. A nonblank canvas is never enough proof for balloon construction.
 
 ---
 
@@ -2333,7 +2347,7 @@ The expanded layout spec initially failed the homepage because the reviews carou
 
 ### Lesson 3 - Python Playwright and Node Playwright are different installations.
 
-`python scripts/verify/smoke_shop.py` failed because `C:\Python314\python.exe` has no Python `playwright` package. Playwright was still installed: Node/CLI Playwright 1.59.1 lives in npm's npx cache at `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd`. **Counter-move:** when someone says "Playwright is installed," locate which runtime owns it before declaring a verifier unavailable.
+`python scripts/verify/smoke_shop.py` failed because `retired prior-platform Python interpreter` has no Python `playwright` package. Playwright was still installed: Node/CLI Playwright 1.59.1 lives in npm's npx cache at `retired prior-platform npm-cache Playwright CLI`. **Counter-move:** when someone says "Playwright is installed," locate which runtime owns it before declaring a verifier unavailable.
 
 ---
 
@@ -2522,7 +2536,7 @@ legacy_source had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `lat
 
 ### When GL points at a URL, read the URL. Stop pivoting to stale local files when one tool fails to reach it.
 
-**What happened.** GL asked me to rebuild `/book` to match `http://5.78.136.133/book` exactly. My first WebFetch on that URL returned `ECONNREFUSED`. I took that as proof Hetzner was offline — plausible per the project's Reference Disposition ("Failed Hetzner deployment ... will be decommissioned"). I pivoted to the local legacy_source clone at `C:\Users\baenb\projects\locally-twisted-legacy_source\` as my canonical spec, read `addons/locally_twisted/views/pages/page_book.xml`, and reported what I saw there as authoritative.
+**What happened.** GL asked me to rebuild `/book` to match `http://5.78.136.133/book` exactly. My first WebFetch on that URL returned `ECONNREFUSED`. I took that as proof Hetzner was offline — plausible per the project's Reference Disposition ("Failed Hetzner deployment ... will be decommissioned"). I pivoted to the local legacy_source clone at `external-backup:locally-twisted-legacy_source` as my canonical spec, read `addons/locally_twisted/views/pages/page_book.xml`, and reported what I saw there as authoritative.
 
 **The local clone was stale.** Its XML had:
 - Single-select `x_event_type` (one service per Lead)
@@ -2624,7 +2638,7 @@ This is structural — applies once, every webshop page inherits. Mobile respons
 
 ### Cross-project knowledge gaps are invisible until they're surfaced — paths matter
 
-GL ran a 7-designer LT design competition on 2026-04-26 in a separate project directory (`C:\Users\baenb\projects\zoho-locally-twisted\gallery\`). The synthesis (D3 + D5 + D7 hybrid) was the approved design contract. PLAN.md line 47 referenced "Opus Competition Redesign concept" with NO PATH. The standard arrival reading order led every instance through every artifact and not one of them pointed at the gallery. **Multiple build instances over multiple sessions never found the design contract.** Each built the customer-facing pages without the design reference. GL had to point an instance at it explicitly on 2026-04-29 to break the cycle.
+GL ran a 7-designer LT design competition on 2026-04-26 in a separate project directory (`external-backup:zoho-locally-twisted/gallery`). The synthesis (D3 + D5 + D7 hybrid) was the approved design contract. PLAN.md line 47 referenced "Opus Competition Redesign concept" with NO PATH. The standard arrival reading order led every instance through every artifact and not one of them pointed at the gallery. **Multiple build instances over multiple sessions never found the design contract.** Each built the customer-facing pages without the design reference. GL had to point an instance at it explicitly on 2026-04-29 to break the cycle.
 
 **Lesson:** if a plan or doc references a file or concept, write the path. Always. Conversation-only knowledge gets compacted away — references that point at conversation-only knowledge become dead links. The fix here was structural: import the synthesis + screenshots into `_resources/design-guide/`, add a dedicated section in CLAUDE.md ("Design guide — where it is, why it's here, and why it must stay"), update PLAN.md line 47 to point at concrete file paths, log the systemic gap in decisions. The agency client-isolation rule says every client folder is self-contained for transfer — this means EXTERNAL references break that contract, both for transferability and for findability. **If the design contract lives outside the client folder, it might as well not exist.**
 
@@ -3024,11 +3038,11 @@ Edited `home.py` PAGE_CSS expecting the next `clear-website-cache` to refresh th
 
 ### Web Page DocType records compete with `www/` files for the same route
 
-Visited `/` after creating `home.py` + `home.html` and got the prior "Site under construction" placeholder, NOT my new homepage. Diagnosed via SQL: `SELECT name, route, published FROM \`tabWeb Page\` WHERE route IN ('home');` → returned name="locally-twisted", route="home", published=1.
+Visited `/` after creating `home.py` + `home.html` and got the prior "Site under construction" placeholder, NOT my new homepage. Diagnosed via SQL: `SELECT name, route, published FROM /`tabWeb Page/` WHERE route IN ('home');` → returned name="locally-twisted", route="home", published=1.
 
 **Why:** Website Settings.home_page = "home". When `/` resolves, Frappe looks for a route named "home" via multiple resolvers. A published Web Page record AND a `www/home.html` file both claim that route. The Web Page record won.
 
-**Fix:** `UPDATE \`tabWeb Page\` SET published = 0 WHERE name = 'locally-twisted';` — deactivates the placeholder. The www/home.html file then takes precedence.
+**Fix:** `UPDATE /`tabWeb Page/` SET published = 0 WHERE name = 'locally-twisted';` — deactivates the placeholder. The www/home.html file then takes precedence.
 
 **Pattern:** Before creating any new `www/<route>.<py|html>` file, check if a published Web Page record already claims that route. If yes, decide: (a) deactivate the Web Page record (cleanest), (b) move the Web Page content into your www/ template, (c) pick a different route. Don't assume www/ wins by default — it depends on Website Settings.home_page and which resolver runs first.
 
@@ -3306,7 +3320,7 @@ After scaffolding the custom Frappe app inside the backend container with `bench
 
 ```bash
 for svc in backend queue-long queue-short scheduler; do
-  docker exec "<project>-${svc}-1" \
+  docker exec "<project>-${svc}-1" /
     uv pip install -e /home/frappe/frappe-bench/apps/<app> --python /home/frappe/frappe-bench/env/bin/python
 done
 docker restart <project>-backend-1 <project>-queue-long-1 <project>-queue-short-1 <project>-scheduler-1
@@ -3396,7 +3410,7 @@ The previous "305 px constraint" observation likely came from one or more of:
 
 **What happened:** First call to `https://api.together.xyz/v1/images/generations` returned HTTP 403 with Cloudflare error code 1010. Worked immediately after adding a real browser User-Agent header.
 
-**Generalizable lesson:** When a third-party API returns 403 + Cloudflare error, the User-Agent is the first thing to check. Default urllib UA looks like `Python-urllib/3.x` and is blocked by many Cloudflare-protected APIs as a generic-bot signature. Always pass `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36` (or similar real-browser string) for any API call from Python.
+**Generalizable lesson:** When a third-party API returns 403 + Cloudflare error, the User-Agent is the first thing to check. Default urllib UA looks like `Python-urllib/3.x` and is blocked by many Cloudflare-protected APIs as a generic-bot signature. Always pass `User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36` (or similar real-browser string) for any API call from Python.
 
 ---
 
@@ -3456,11 +3470,11 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 
 ---
 
-## 2026-04-25 — `git status` on Windows hides freshly-staged dotfiles in the porcelain output
+## 2026-04-25 — `git status` on the prior platform hid freshly-staged dotfiles in the porcelain output
 
 **What happened:** Staged `.gitignore` and `.planning/PROJECT.md` via `git add`. `git ls-files --stage` showed both files indexed with their hashes. `git status --short` and `git status` showed neither as staged — and showed all the OTHER files as untracked. Misleading.
 
-**Root cause:** Unknown — possibly Git Bash + Windows interaction with first-commit-on-empty-repo state. The plumbing (ls-files, commit, ls-tree) was correct; only the porcelain (status) lied.
+**Root cause:** Unknown — possibly prior-platform shell interaction with first-commit-on-empty-repo state. The plumbing (ls-files, commit, ls-tree) was correct; only the porcelain (status) lied.
 
 **What to do:** Trust `git ls-files --stage` and `git ls-tree -r HEAD --name-only` over `git status` when verifying first-commit state on Windows. The actual commit succeeds; status display is unreliable.
 
@@ -3482,11 +3496,11 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 
 ---
 
-## 2026-04-25 — WSL2 default RAM allocation is below ERPNext's working set; bump `.wslconfig` to 8 GB before installing
+## 2026-04-25 — retired prior-platform VM default RAM allocation is below ERPNext's working set; bump `.wslconfig` to 8 GB before installing
 
-**What happened:** Initial WSL2 had 1.5 GB RAM cap (set in `.wslconfig` from a prior expedition). Frappe stack runs MariaDB + Redis + web + socketio + scheduler + 2 worker queues — 1.5 GB was below ERPNext's 4 GB minimum. Visible in `docker info` as `MemTotal: ~1.47 GB`.
+**What happened:** Initial retired prior-platform VM had 1.5 GB RAM cap (set in `.wslconfig` from a prior expedition). Frappe stack runs MariaDB + Redis + web + socketio + scheduler + 2 worker queues — 1.5 GB was below ERPNext's 4 GB minimum. Visible in `docker info` as `MemTotal: ~1.47 GB`.
 
-**What to do:** Edit `C:\Users\baenb\.wslconfig` `[wsl2]` section to `memory=8GB processors=4 swap=2GB` (the machine has 47.7 GB total — 8 GB is conservative). After edit, `wsl --shutdown` then run any docker command to wake the daemon with the new limits. Verify with `docker info | grep MemTotal`.
+**What to do:** Edit `retired prior-platform VM config` `[wsl2]` section to `memory=8GB processors=4 swap=2GB` (the machine has 47.7 GB total — 8 GB is conservative). After edit, `wsl --shutdown` then run any docker command to wake the daemon with the new limits. Verify with `docker info | grep MemTotal`.
 
 ---
 
@@ -3742,7 +3756,7 @@ intent is category discovery.
 
 ---
 
-## 2026-05-21 - Derived worktree IDs still need Windows path-length reality checks
+## 2026-05-21 - Derived worktree IDs still need path-length reality checks
 
 **Lesson:** A stable readable project ID can still be too long for a Windows
 worktree when the repo has deep framework paths. Repo-forest safety and path

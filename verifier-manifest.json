@@ -81,7 +81,7 @@
       "tier": "tier_2_local_integrated",
       "graduation_stage": "verifier_backed",
       "graduation_status": "active",
-      "command": "python .\\scripts\\verify\\smoke_forms.py --base-url http://127.0.0.1:8081 --skip-newsletter && python .\\scripts\\verify\\inquiry_spam_gate.py --base-url http://127.0.0.1:8081 && python .\\scripts\\verify\\inquiry_sales_solicitation_filter.py --base-url http://127.0.0.1:8081",
+      "command": "python scripts/verify/smoke_forms.py --base-url http://127.0.0.1:8081 --skip-newsletter && python scripts/verify/inquiry_spam_gate.py --base-url http://127.0.0.1:8081 && python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://127.0.0.1:8081",
       "cwd": ".",
       "scope": "local backend contract for inquiry intake, spam guard, and sales-solicitation suppression",
       "environment": "local Frappe app with local test data only",
@@ -201,9 +201,38 @@
       "tier": "tier_1_local_fast",
       "graduation_stage": "verifier_backed",
       "graduation_status": "active",
-      "command": "python3 scripts/verify/kubuntu_doctor.py",
+      "command": "python3 scripts/verify/kubuntu_doctor.py --static-only",
       "cwd": ".",
-      "scope": "read-only Wardenclyffe Kubuntu branch, tool, container, route, version, and app-order health check",
+      "scope": "read-only Wardenclyffe Kubuntu branch, tool, and source preflight for the on-demand LT stack",
+      "environment": "local files only; does not require LT containers to be running",
+      "mutation": "none",
+      "approval_required": "no, local read-only check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "terminal output",
+      "capability_refs": [
+        "capabilities/recipes/fail-loud-operating-law.md",
+        "source:Built_by_Cameron/SOFTWARE-INVENTORY.md"
+      ],
+      "risk_triggers": [
+        "non-local BaseUrl",
+        "container restart",
+        "database writes",
+        "provider accounts"
+      ],
+      "proves": [
+        "local Kubuntu source/tool preconditions are present for further verification"
+      ],
+      "what_it_does_not_prove": "It does not prove containers are running, route availability, bench versions, app order, layout quality, form persistence, checkout behavior, provider readiness, or live launch approval."
+    },
+    {
+      "id": "lt-kubuntu-runtime-doctor",
+      "tier": "tier_2_local_integrated",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python3 scripts/verify/kubuntu_doctor.py --runtime",
+      "cwd": ".",
+      "scope": "read-only Wardenclyffe Kubuntu container, route, version, and app-order health check after the LT stack is intentionally started",
       "environment": "local files and local Docker only",
       "mutation": "none",
       "approval_required": "no, local read-only check only",
@@ -221,9 +250,9 @@
         "provider accounts"
       ],
       "proves": [
-        "local Kubuntu runtime preconditions are present for further verification"
+        "the intentionally-started local LT runtime exposes expected containers, route, bench versions, and installed apps"
       ],
-      "what_it_does_not_prove": "It does not prove layout quality, form persistence, checkout behavior, provider readiness, or live launch approval."
+      "what_it_does_not_prove": "It does not start containers, mutate the database, prove layout quality, form persistence, checkout behavior, provider readiness, or live launch approval."
     },
     {
       "id": "lt-meta-bouquet-ad-landing-static",

@@ -54,11 +54,34 @@ def http_status(url: str) -> int | None:
         return None
 
 
+def finish() -> int:
+    if warnings:
+        print("[LT KUBUNTU DOCTOR] warnings: " + "; ".join(warnings))
+    if failures:
+        print("[LT KUBUNTU DOCTOR] failed: " + "; ".join(failures))
+        return 1
+    print("[LT KUBUNTU DOCTOR] PASS")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args()
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--static-only",
+        action="store_true",
+        help="Check source/tool preflight only; do not require the on-demand LT Docker stack to be running.",
+    )
+    mode.add_argument(
+        "--runtime",
+        action="store_true",
+        help="Run the full local runtime proof, including containers, route, bench versions, and app order.",
+    )
+    args = parser.parse_args()
 
     print("[LT KUBUNTU DOCTOR] read-only")
+    if args.static_only:
+        print("[LT KUBUNTU DOCTOR] static-only mode; local ERPNext stack may be stopped")
 
     code, branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
     check(code == 0 and branch == "main", "git branch is main")
@@ -76,6 +99,9 @@ def main() -> int:
 
     warn((ROOT / "node_modules" / "@playwright" / "test").exists(), "repo-local Playwright dependency is installed")
 
+    if args.static_only:
+        return finish()
+
     code, containers = run(["docker", "ps", "--format", "{{.Names}}"])
     check(code == 0 and BACKEND in containers.splitlines(), f"{BACKEND} is running")
     check(code == 0 and any(name.startswith(PROJECT) for name in containers.splitlines()), f"{PROJECT} containers are visible")
@@ -89,13 +115,7 @@ def main() -> int:
     found_apps = {line.split()[0] for line in apps.splitlines() if line.strip()}
     check(code == 0 and EXPECTED_APPS.issubset(found_apps), "expected apps are installed")
 
-    if warnings:
-        print("[LT KUBUNTU DOCTOR] warnings: " + "; ".join(warnings))
-    if failures:
-        print("[LT KUBUNTU DOCTOR] failed: " + "; ".join(failures))
-        return 1
-    print("[LT KUBUNTU DOCTOR] PASS")
-    return 0
+    return finish()
 
 
 if __name__ == "__main__":

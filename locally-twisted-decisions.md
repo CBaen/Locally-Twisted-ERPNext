@@ -687,6 +687,14 @@ Docker/container presence, local routes, `bench version`, and expected apps:
 mutate source, ERPNext data, provider state, payment settings, DNS, email, or
 customer records.
 
+**2026-07-02 update:** The fast manifest bundle now runs
+`python3 scripts/verify/kubuntu_doctor.py --static-only`, which checks
+source/tool preflight without requiring the on-demand LT stack to be running.
+The full read-only container/route/bench/app-order proof remains available as
+`lt-kubuntu-runtime-doctor` with `python3 scripts/verify/kubuntu_doctor.py --runtime`.
+Current decision packet:
+`decisions/2026-07-02-kubuntu-active-guidance-static-doctor.md`.
+
 **Decided by:** GL approved the next cleanup moves after the repo review;
 Codex implementation on 2026-06-16.
 
@@ -712,7 +720,7 @@ change users, send reset emails, or alter ERPNext accounts.
 
 ## 2026-06-15 - Kubuntu recovery is source stabilization, not release work
 
-**Decision:** Treat the Windows-to-Kubuntu transition cleanup as a practical
+**Decision:** Treat the prior-host-to-Kubuntu transition cleanup as a practical
 source-repo stabilization lane. Preserve real code/docs changes, remove
 line-ending-only noise, keep source archive separate from Frappe Cloud/live
 release, and do not escalate the local repo recovery into provider, payment,
@@ -722,7 +730,7 @@ DNS, or production customer work.
 running inside the repo on Kubuntu, the right technical move was to reconcile
 local source state cleanly without overdramatizing it: verify the actual Git
 state, preserve collisions, separate content diffs from CRLF/LF churn, prune
-stale Windows worktree metadata, and prove fast local contracts. This keeps the
+stale prior-host worktree metadata, and prove fast local contracts. This keeps the
 client project healthy without spending unnecessary time on ceremony.
 
 **Implementation boundary:** Local source and coordination docs only. This did
@@ -1119,7 +1127,7 @@ provider mutation, worktree cleanup, or product feature work.
 **Receipts:** `AGENTS.md`,
 `workstreams/coordination-safety-pilot-2026-05-21.md`,
 `capabilities/principles/multi-agent-coordination-safety.md`, and
-`C:\Users\baenb\agent-coordination\REPO-READINESS.md`.
+`/home/guidingl/agent-coordination/REPO-READINESS.md`.
 
 **Decided by:** Guiding Light approval of the three-repo coordination-safety
 pilot on 2026-05-21.
@@ -2059,7 +2067,7 @@ require those filtered nodes to be removed from the DOM.
 
 **Verification receipt:** `python -m py_compile
 apps/locally_twisted/locally_twisted/navbar_context.py scripts/verify/nav_ia.py`,
-`python scripts\verify\nav_ia.py`, and `npm run test:search-contract` passed.
+`python scripts/verify/nav_ia.py`, and `npm run test:search-contract` passed.
 Live local ERPNext reads confirmed the four current owner-included products are
 published `simple_product|checkout` records, and a synthetic owner-included
 `quote_first` item returned `not_checkout_enabled`.
@@ -2129,9 +2137,9 @@ CSS, `nav_ia.py`, rendered Playwright/smoke checks, feature handoffs, queue,
 handoff, and capability docs in the same slice. A CSS-only correction is not
 enough because stale written contracts caused the repeat regression.
 
-**Verification receipt:** `python scripts\verify\nav_ia.py`,
-`npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`,
-and `python scripts\verify\smoke_shop.py` passed on 2026-05-11. Direct browser
+**Verification receipt:** `python scripts/verify/nav_ia.py`,
+`npx playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`,
+and `python scripts/verify/smoke_shop.py` passed on 2026-05-11. Direct browser
 probes showed desktop and mobile banner backgrounds at `rgb(14, 34, 64)`.
 Feature handoff: `workstreams/public-header-banner-contract-2026-05-10.md`.
 
@@ -2465,7 +2473,7 @@ cutover gates.
 
 **Implementation boundary:** Before deleting a branch/worktree, verify the current checkout is `main`, inspect the linked worktree state, prove ancestry with `git merge-base --is-ancestor <branch> main`, and confirm whether untracked/unstaged files exist. Before committing tracked asset deletions, prove the file either has Git history, an exact preserved local holding copy, or an intentional production replacement. Do not delete other-agent active work or unreviewed raw drops as a broad sweep.
 
-**Verification receipt:** `git merge-base --is-ancestor ecommerce-phase-1-4-hygiene-20260510 main` passed; the linked worktree had staged-only changes and no unstaged/untracked files; the worktree and branch ref were removed; local/remote branch listings returned main-only. `git hash-object` proved exact matches for `Giant Pumpkin Balloon.png`, `Happy Easter Carrot balloons.jpg`, and `balloon Ferris wheel Salt lake city utah.jpg` under `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`.
+**Verification receipt:** `git merge-base --is-ancestor ecommerce-phase-1-4-hygiene-20260510 main` passed; the linked worktree had staged-only changes and no unstaged/untracked files; the worktree and branch ref were removed; local/remote branch listings returned main-only. `git hash-object` proved exact matches for `Giant Pumpkin Balloon.png`, `Happy Easter Carrot balloons.jpg`, and `balloon Ferris wheel Salt lake city utah.jpg` under `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted-local-drops/landing-page-pics-20260510/`.
 
 **Alternatives considered:** Keep the branch as a safety bookmark. Rejected because Git history and `main` are the archive, and branch parking is forbidden. Restore the duplicate tracked raw photos to the repo. Rejected because exact local holding copies and Git history already preserve them; re-adding them would keep a second source of truth.
 
@@ -2526,7 +2534,7 @@ cutover gates.
 
 **Implementation:** `product_page_runtime.resolved_product_page_contract_values()` centralizes precedence, `product_page_contract_for_website_item()` fails closed for blank/partial/needs-review drift, Sales Order line/add-on builders reject non-checkout lanes, and `api/cart.py` blocks any runtime contract whose `commerce_lane != "checkout"`. Phase 3 keeps the approved simple checkout proof; Phase 4 blocks the 33 quote-first and 5 needs-review products across product page controls, cart API, direct checkout URL, stale localStorage, malformed JSON, old-schema config, and unavailable/no-sellable candidates.
 
-**Verification receipt:** `python scripts\verify\quote_event_checkout_boundary_contract.py --report output\phase-4-quote-event-checkout-boundary-contract-20260510.json` passed with 33 quote-first, 5 needs-review, 38 cart API blocks, 38 direct checkout URL blocks, 38 stale localStorage blocks, `record_count_deltas: {}`, and rollback true. Regression gates also passed for product-page runtime, checkout product family, Website Item classification, checkout fulfillment, and customer-note checkout preservation. Durable proof lives at `workstreams/ecommerce-audit/phase-4-quote-event-checkout-boundary-contract-20260510.json`.
+**Verification receipt:** `python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json` passed with 33 quote-first, 5 needs-review, 38 cart API blocks, 38 direct checkout URL blocks, 38 stale localStorage blocks, `record_count_deltas: {}`, and rollback true. Regression gates also passed for product-page runtime, checkout product family, Website Item classification, checkout fulfillment, and customer-note checkout preservation. Durable proof lives at `workstreams/ecommerce-audit/phase-4-quote-event-checkout-boundary-contract-20260510.json`.
 
 **Alternatives considered:** Let explicit prices or inferred runtime fallback decide checkout. Rejected because price existence is not customer/order readiness. Treat missing Website Item fields as temporary defaults. Rejected because blank setup fields are exactly how false checkout leaks happen.
 
@@ -2563,7 +2571,7 @@ Locally Twisted, Commercial Balloon Decor, and Memorial Balloons.
 
 **Implementation:** `scripts/verify/website_launch_verify.py` now checks `/` and `/privacy` before starting, clears stale Playwright error artifacts before each browser step, and retries a Playwright step once only when the saved error context matches the temporary local-site/browser-close pattern. The stale homepage Custom Event Decor hide-switch was also removed so the homepage matches the launch contract and container verifier.
 
-**Verification receipt:** `python -m py_compile apps\locally_twisted\locally_twisted\www\home.py scripts\verify\website_launch_verify.py` passed. After `python scripts/dev/clear_website_cache.py --restart`, live browser probing showed `.lt-categories` and `.lt-divider` visible on `/`. Focused `npx playwright test scripts/verify/container_contract.spec.js --reporter=line --workers=1` passed 75/75. Full `python scripts\verify\website_launch_verify.py` passed all 12 public website steps in 982.9s. Extra launch checks passed: `npm run test:a11y` reported 50 route/viewport axe checks with 0 violations, `npm run test:a11y-manual` passed, and contact smoke submitted, verified, and cleaned up its test Lead.
+**Verification receipt:** `python -m py_compile apps/locally_twisted/locally_twisted/www/home.py scripts/verify/website_launch_verify.py` passed. After `python scripts/dev/clear_website_cache.py --restart`, live browser probing showed `.lt-categories` and `.lt-divider` visible on `/`. Focused `npx playwright test scripts/verify/container_contract.spec.js --reporter=line --workers=1` passed 75/75. Full `python scripts/verify/website_launch_verify.py` passed all 12 public website steps in 982.9s. Extra launch checks passed: `npm run test:a11y` reported 50 route/viewport axe checks with 0 violations, `npm run test:a11y-manual` passed, and contact smoke submitted, verified, and cleaned up its test Lead.
 
 **Alternatives considered:** Keep documenting temporary local restart failures as caveats. Rejected because it confuses agents and GL and leaves the launch gate noisy. Ignore browser-close/bad-gateway evidence entirely. Rejected because repeated failures still need to block launch.
 
@@ -2621,7 +2629,7 @@ Locally Twisted, Commercial Balloon Decor, and Memorial Balloons.
 
 ## 2026-05-10 - Project capabilities are shared project infrastructure, not a Codex-owned runtime folder
 
-**Decision:** LT capability docs live at visible project root `capabilities/`, routed from `AGENTS.md`. `.codex/capabilities/` is not the project capability source of truth. Shared system/user guidance belongs at `C:\Users\baenb\capabilities`, and agency-wide guidance belongs at `C:\Users\baenb\projects\Built_by_Cameron\capabilities`.
+**Decision:** LT capability docs live at visible project root `capabilities/`, routed from `AGENTS.md`. `.codex/capabilities/` is not the project capability source of truth. Shared system/user guidance belongs at `/home/guidingl/capabilities`, and agency-wide guidance belongs at `/home/guidingl/projects/Built_by_Cameron/capabilities`.
 
 **Reasoning:** GL rejected any design that made Codex, OpenClaw, Claude, or another agent own the capabilities framework by path. Parity collapses if each agent maintains its own root. Project-specific knowledge still belongs in the project, but the root must be shared by purpose and scope.
 
@@ -2664,7 +2672,7 @@ desktop and mobile, not gold/brass. See
 
 **Implementation:** `navbar.html` now renders `.lt-mega-header__top-message` and `.lt-mega-header__mobile-message` as `/contact` links. `lt-mega-menu.css` styles the desktop top row as a centered deep-navy grid banner and gives mobile its own matching deep-navy notice strip. `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py`, and the header breakpoint Playwright contract fail if the old proof copy/icon returns, if the short-notice message is unlinked, if mobile loses the notice, or if the banner color regresses.
 
-**Verification receipt:** After the 2026-05-11 color correction, `python scripts/verify/nav_ia.py`, focused `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, and `python scripts/verify/smoke_shop.py` passed. Direct browser probes showed desktop and mobile notice links visible, `href: "/contact"`, deep-navy `rgb(14, 34, 64)` strips, warm-white text, and desktop/mobile visibility. Current cache key is `lt-mega-menu.css?v=20260511-blue-banner-2`.
+**Verification receipt:** After the 2026-05-11 color correction, `python scripts/verify/nav_ia.py`, focused `npx playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, and `python scripts/verify/smoke_shop.py` passed. Direct browser probes showed desktop and mobile notice links visible, `href: "/contact"`, deep-navy `rgb(14, 34, 64)` strips, warm-white text, and desktop/mobile visibility. Current cache key is `lt-mega-menu.css?v=20260511-blue-banner-2`.
 
 **Alternatives considered:** Keep the old proof copy and add short-notice as another right-side list item. Rejected because it preserved stale messaging and made the utility row noisier. Remove `Free Event Quote`. Rejected because it remains an approved conversion link to `/contact`.
 
@@ -3012,8 +3020,8 @@ passed with Lead state `Open` / `New Inquiry` after checkout and `Converted` /
 passed with guest redirect to `/login`. `npm run test:event-playground` passed
 the guest gate with authenticated preview checks skipped because credentials
 were not supplied. `python scripts/verify/payment_cascade_contract.py`,
-`python scripts/verify/business_automation_index.py --report output\business-automation-index.json`,
-and `python scripts/verify/synthetic_business_pipeline.py --report output\synthetic-business-pipeline.json`
+`python scripts/verify/business_automation_index.py --report output/business-automation-index.json`,
+and `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json`
 passed.
 
 **Alternatives considered:** Keep conversion in checkout because all current
@@ -3299,7 +3307,7 @@ context, over-edit, and weaken verification.
 
 **Implementation:** Added the local rule to `AGENTS.md` and the reusable
 machine-wide capability at
-`C:\Users\baenb\capabilities\principles\no-monolith-files.md`.
+`/home/guidingl/capabilities/principles/no-monolith-files.md`.
 Future LT work should split new concerns into modules, partials, helpers,
 recipes, workstream docs, or focused verifiers instead of expanding broad files.
 
@@ -4316,7 +4324,7 @@ copy is `Real balloon installs for Utah events.`, not `What We Do`.
 
 **Implementation:** Added `scripts/verify/layout_helpers.js` as the shared route/viewport/layout audit helper. Expanded `scripts/verify/layout_fit.spec.js` to 20 public routes across 13 viewport families for 260 passive checks. Added `scripts/verify/interactive_layout.spec.js` with checks for desktop/mobile nav breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage behavior. Added package scripts `test:interactive-layout`, `test:checkout-experience`, `test:shop-smoke`, and `test:public-verify`. 2026-05-06 correction: `smoke_shop.py` now verifies that fixed-price products do not invent product-level quote gates while retail variants still prove inline option selection and cart writes; the portfolio interaction check now covers the current proof-reel front-photo state instead of the superseded modal state.
 
-**Verification receipt:** `node --check` passed for the new/rewritten Playwright specs, `python -B -m py_compile scripts\verify\smoke_shop.py` passed, `python scripts/verify/commerce_rules_contract.py` passed, `python scripts/verify/smoke_shop.py` passed, `npm run test:interactive-layout` passed 39/39, `npm run test:layout-fit` passed 260/260, `npm run test:checkout-experience` passed 1/1, and `npm run test:public-verify` passed with quieter Playwright output.
+**Verification receipt:** `node --check` passed for the new/rewritten Playwright specs, `python -B -m py_compile scripts/verify/smoke_shop.py` passed, `python scripts/verify/commerce_rules_contract.py` passed, `python scripts/verify/smoke_shop.py` passed, `npm run test:interactive-layout` passed 39/39, `npm run test:layout-fit` passed 260/260, `npm run test:checkout-experience` passed 1/1, and `npm run test:public-verify` passed with quieter Playwright output.
 
 **Decided by:** GL made breakpoint/container integrity a hard design requirement; Codex implemented the standing verification gate.
 
@@ -4434,7 +4442,7 @@ payment reconciliation.
 
 **Implementation:** `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, the shared theme CSS, and the homepage hero/proof bar were updated toward the approved synthesis. The work keeps Zurchers-style clarity contained to ready-to-order shopping flows, not the company identity.
 
-**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/nav_ia.py`, `npm run test:layout-fit`, `python -B -m py_compile apps\locally_twisted\locally_twisted\www\home.py`, and `python scripts/verify/playwright_screenshot.py --base-url http://localhost:8081 --paths /,/shop,/contact,/shop-items/arches/classic-arch --output-dir output/playwright/brand-synthesis-20260503` passed. Screenshot artifacts are in `output/playwright/brand-synthesis-20260503/`. The first local screenshot revealed the authority SVGs rendering too large because the Python homepage controller had not reloaded; fixed with explicit SVG dimensions and a backend restart.
+**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/nav_ia.py`, `npm run test:layout-fit`, `python -B -m py_compile apps/locally_twisted/locally_twisted/www/home.py`, and `python scripts/verify/playwright_screenshot.py --base-url http://localhost:8081 --paths /,/shop,/contact,/shop-items/arches/classic-arch --output-dir output/playwright/brand-synthesis-20260503` passed. Screenshot artifacts are in `output/playwright/brand-synthesis-20260503/`. The first local screenshot revealed the authority SVGs rendering too large because the Python homepage controller had not reloaded; fixed with explicit SVG dimensions and a backend restart.
 
 **Decided by:** GL approved the corrected synthesis; Codex implemented the first foundation slice.
 
@@ -4646,7 +4654,7 @@ payment reconciliation.
 
 ## 2026-05-02 - legacy_source folder is the business source of truth, not an app build target
 
-**Decision:** `C:\Users\baenb\projects\locally-twisted-legacy_source\` is the source of truth for Locally Twisted business details. The ERPNext repo remains the app build target for launch.
+**Decision:** `external-backup:locally-twisted-legacy_source` is the source of truth for Locally Twisted business details. The ERPNext repo remains the app build target for launch.
 
 **Reasoning:** The legacy_source project drive contains the business discovery, catalog detail, policy detail, voice, and historical business context. The ERPNext repo may contain copied or rewritten business content, but that content is suspect unless it can be traced back to the legacy_source business-detail source, current `_resources/` material that was pulled from it, or GL/legal approval. Keeping business truth separate from app builds prevents agents from treating accidental ERPNext copy as authoritative.
 
@@ -4771,7 +4779,7 @@ payment reconciliation.
 
 **Alternatives considered:** Rely on manual screenshot review only. Rejected because screenshot review is necessary but not durable. Add broad `overflow-x: hidden` to the body. Rejected because it hides evidence instead of fixing or identifying the source. The implemented gate checks actual layout geometry and forces specific fixes.
 
-**Verification receipt:** Latest direct Playwright run: 60 tests passed using `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd`.
+**Verification receipt:** Latest direct Playwright run: 60 tests passed using `npx playwright`.
 
 **Decided by:** GL directive 2026-05-01 ("Everything needs to be checked for actual fit") and implemented by Codex.
 
@@ -5100,7 +5108,7 @@ The CSS-hide is `display: none !important` — the only such chain we kept. It's
 
 ## 2026-04-29 (mobile-responsiveness session) — LT design competition synthesis imported as `_resources/design-guide/`
 
-**Decision:** The 2026-04-26 LT design competition output (synthesis dir + 8 approved screenshots) is imported into this project's `_resources/design-guide/` and signposted from `CLAUDE.md` reading order step 6. Original location at `C:\Users\baenb\projects\zoho-locally-twisted\gallery\` will be deleted by GL. Treated as reference inspiration / taste calibration, not as a contract to implement verbatim.
+**Decision:** The 2026-04-26 LT design competition output (synthesis dir + 8 approved screenshots) is imported into this project's `_resources/design-guide/` and signposted from `CLAUDE.md` reading order step 6. Original location at external-backup:zoho-locally-twisted/gallery will be deleted by GL. Treated as reference inspiration / taste calibration, not as a contract to implement verbatim.
 
 **Reasoning:** Multiple build instances (including this one) failed to find the design contest output because it lived in a separate project directory (`zoho-locally-twisted/gallery/`) outside our LT working tree. Phase 1 PLAN.md line 47 referenced "GL's Opus Competition Redesign concept" with no path. The standard reading order on arrival (CLAUDE.md → HANDOFF.md → PROJECT.md → PLAN.md → decisions log → git log) led every instance THROUGH every artifact, and not one of them pointed at the gallery. Instances either skipped the design reference or worked without it — measurable trust cost on the resulting customer-facing pages.
 
@@ -5508,7 +5516,7 @@ The GL Proxy flagged the convergence's tendency to route past the platform quest
 ## 2026-04-26 (session end) — Approved Jeff content is NEVER invented — pull from legacy_source XML or live locallytwisted.com
 
 **Decision:** All customer-facing copy on the LT site comes from one of two authoritative sources, never from instance imagination:
-1. **`C:/Users/baenb/projects/locally-twisted-legacy_source/addons/locally_twisted/views/`** (XML view files in the local legacy_source project) — the most recent Jeff-approved legacy_source update, captured verbatim in `research/expedition-frappe-theme/ground-truth-findings.md`. Per CLAUDE.md, this is authoritative for the new build.
+1. **`external-backup:locally-twisted-legacy_source/addons/locally_twisted/views/`** (XML view files in the local legacy_source project) — the most recent Jeff-approved legacy_source update, captured verbatim in `research/expedition-frappe-theme/ground-truth-findings.md`. Per CLAUDE.md, this is authoritative for the new build.
 2. **`https://locallytwisted.com/`** (the live WordPress site Jeff still uses) — actively in front of customers today, captured verbatim in `research/expedition-frappe-theme/web-scout-findings.md`. The two sources diverge on hero copy, social icon count (3 vs 4), and credential framing ("since 1998" vs "Over 22 years"). GL has NOT yet picked which is "the" version.
 
 **Reasoning:** Two consecutive instances invented placeholder copy ("Make Your Celebration Unforgettable", "Three services. One promise: you get the moment, we handle the magic", "Ready to plan something unforgettable?") when the actual approved copy was sitting on disk. GL caught both. The trust cost was real both times. The pattern needs to die.
@@ -5697,7 +5705,7 @@ The pattern that worked: read the legacy_source source → write a Python script
 
 ## 2026-04-25 evening — Don't modify anything in locally-twisted-legacy_source
 
-**Decision:** All scripts, tools, and code written in service of the migration go in `_CLIENTS/locally-twisted/`. The legacy_source project at `C:\Users\baenb\projects\locally-twisted-legacy_source\` is read-only reference. Even "operational" tooling like `deploy.py` is off-limits.
+**Decision:** All scripts, tools, and code written in service of the migration go in `_CLIENTS/locally-twisted/`. The legacy_source project at `external-backup:locally-twisted-legacy_source` is read-only reference. Even "operational" tooling like `deploy.py` is off-limits.
 
 **Reasoning:** GL: "leave legacy_source specific scripts and skills alone. we need to create ERPNext specific ones." The legacy_source project is in production, has its own deploy gates and trust history with Jeff, and any modification — even additive — risks the same trust damage that motivated this migration. ERPNext-side tools are separate concerns and stay separate.
 
@@ -5847,11 +5855,11 @@ The pattern that worked: read the legacy_source source → write a Python script
 
 ## 2026-05-11 - Design Studio source belongs in the standalone design-studio repo
 
-**Decision:** Event Playground / Plan Custom Decor research, prototype source, PlayCanvas/Babylon spikes, and reusable balloon-physics design capabilities live in `C:\Users\baenb\projects\design-studio`. The LT repo keeps only final Frappe implementation outputs, the hidden `/event-playground` wrapper, the contact handoff verifier, and LT-specific launch documentation.
+**Decision:** Event Playground / Plan Custom Decor research, prototype source, PlayCanvas/Babylon spikes, and reusable balloon-physics design capabilities live in `external-backup:design-studio`. The LT repo keeps only final Frappe implementation outputs, the hidden `/event-playground` wrapper, the contact handoff verifier, and LT-specific launch documentation.
 
 **Reasoning:** Design Studio is a shared design-tool workspace, not Locally Twisted production source. Keeping research packages and reusable design capabilities inside LT created a second source of truth and made future agents treat prototype code as launch-app code.
 
-**Implementation boundary:** Do not recreate `research/design-studio-v2/` or the moved capability recipes in this repo. Future design/prototype work starts in `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\`; only approved Frappe integration files, verifiers, fixtures, and LT handoff notes return here. `scripts/verify/event_playground.spec.js` can still run the hidden wrapper proof by reading the external spike path, with `EVENT_PLAYGROUND_SPIKE_DIR` as an override.
+**Implementation boundary:** Do not recreate `research/design-studio-v2/` or the moved capability recipes in this repo. Future design/prototype work starts in `external-backup:design-studio/workstreams/locally-twisted-plan-custom-decor-v2/`; only approved Frappe integration files, verifiers, fixtures, and LT handoff notes return here. `scripts/verify/event_playground.spec.js` can still run the hidden wrapper proof by reading the external spike path, with `EVENT_PLAYGROUND_SPIKE_DIR` as an override.
 
 **Receipts:** `workstreams/event-playground.md`; `scripts/verify/event_playground.spec.js`; `capabilities/INDEX.md`; `CODING-HANDOFF.md`; `locally-twisted-queue.md`.
 
@@ -5995,23 +6003,23 @@ below the category page; the nav is only category discovery.
 ## 2026-05-21 - LT worktrees use a short stable project ID
 
 **Decision:** Future LT linked worktrees use the shorter neutral root
-`C:\Users\baenb\agent-worktrees\builtbycameron-lt\...` instead of the longer
+`/home/guidingl/agent-worktrees/builtbycameron-lt/...` instead of the longer
 derived repo-forest ID.
 
 **Reasoning:** The long worktree path
-`built-by-cameron__clients__locally-twisted\codex-20260521-ready-order-menu__ready-order-category-menu`
-failed during worktree creation with Windows `Filename too long` errors on deep
+`built-by-cameron__clients__locally-twisted/codex-20260521-ready-order-menu__ready-order-category-menu`
+failed during worktree creation with prior-OS path-length errors on deep
 Frappe/ERPNext paths. The shorter root stays outside all project repos while
 preserving stable project identity.
 
 **Implementation boundary:** Do not put LT worktrees inside
-`C:\Users\baenb\projects`, the Built by Cameron parent repo, `_CLIENTS`, the LT
+`/home/guidingl/projects`, the Built by Cameron parent repo, `_CLIENTS`, the LT
 repo, or any nested repo. Keep the short ID recorded in LT `AGENTS.md` and the
 neutral coordination hub.
 
 **Receipts:** `AGENTS.md`;
-`C:\Users\baenb\agent-coordination\PROJECTS.md`;
-`C:\Users\baenb\agent-coordination\WORKTREE-RULES.md`;
+`/home/guidingl/agent-coordination/PROJECTS.md`;
+`/home/guidingl/agent-coordination/WORKTREE-RULES.md`;
 `workstreams/ready-to-order-category-menu-2026-05-21.md`.
 
 **Decided by:** Codex worktree failure evidence during the GL-approved

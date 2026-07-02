@@ -2,7 +2,7 @@
 
 This is the agent-neutral entrypoint for Codex / ChatGPT / other coding agents working in this repo.
 
-This project inherits the machine-wide Guiding Light communication protocol from `C:\Users\baenb\AGENTS.md` and the shared capability framework. Use that protocol for communication, tangent handling, plain-language explanations, verification discipline, and deciding what to ask Guiding Light versus what the agent should own.
+This project inherits the machine-wide Guiding Light communication protocol from `/home/guidingl/AGENTS.md` and the shared capability framework. Use that protocol for communication, tangent handling, plain-language explanations, verification discipline, and deciding what to ask Guiding Light versus what the agent should own.
 
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
@@ -46,12 +46,12 @@ context first or state the blocker plainly. Status and closeout must include
 
 This repo is the protected clean child/client pilot for the neutral multi-agent
 coordination system. Before edits, read
-`C:\Users\baenb\agent-coordination\STARTUP-CHECKLIST.md`, check
+`/home/guidingl/agent-coordination/STARTUP-CHECKLIST.md`, check
 `LIVE-BOARD.md` and `SESSION-REGISTRY.md`, and apply the Six-Box Rule from the
 machine guide.
 
 For this repo, normal LT client work is Box 4: child/client repo. Machine-wide
-coordination updates are Box 5 and belong in `C:\Users\baenb\agent-coordination`,
+coordination updates are Box 5 and belong in `/home/guidingl/agent-coordination`,
 not in LT source. Parent/company Built by Cameron tasks are separate from LT
 client tasks unless Guiding Light explicitly says the task crosses that boundary.
 
@@ -61,24 +61,24 @@ client tasks unless Guiding Light explicitly says the task crosses that boundary
 
 Task branches are allowed only in dedicated linked worktrees under:
 
-`C:\Users\baenb\agent-worktrees\builtbycameron-lt\<agent-session-id>__<task-slug>`
+`/home/guidingl/agent-worktrees/builtbycameron-lt/<agent-session-id>__<task-slug>`
 
 - Do not create, switch to, commit on, push from, or open PRs from feature, codex, topic, experiment, or task branches inside the main checkout.
 - Before editing, run `git rev-parse --abbrev-ref HEAD`; `main` is allowed in the main checkout. If it prints anything else, verify the folder is a linked worktree for the current task before continuing.
-- A linked LT worktree must be created from the actual LT Git root: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`.
-- A linked LT worktree must live outside all project repos, under the approved neutral worktree root above. Do not create LT worktrees inside `C:\Users\baenb\projects`, the Built by Cameron parent repo, `_CLIENTS`, this repo, or any nested repo.
-- The shorter `builtbycameron-lt` project ID is intentional. The longer derived repo-forest ID exceeded Windows path limits for deep Frappe/ERPNext files during worktree creation.
-- Before creating or using a worktree, claim the task in `C:\Users\baenb\agent-coordination\LIVE-BOARD.md` and `C:\Users\baenb\agent-coordination\SESSION-REGISTRY.md`.
+- A linked LT worktree must be created from the actual LT Git root: `/home/guidingl/projects/Built_by_Cameron/_CLIENTS/locally-twisted`.
+- A linked LT worktree must live outside all project repos, under the approved neutral worktree root above. Do not create LT worktrees inside `/home/guidingl/projects`, the Built by Cameron parent repo, `_CLIENTS`, this repo, or any nested repo.
+- The shorter `builtbycameron-lt` project ID is intentional and remains the stable LT worktree identifier on Kubuntu.
+- Before creating or using a worktree, claim the task in `/home/guidingl/agent-coordination/LIVE-BOARD.md` and `/home/guidingl/agent-coordination/SESSION-REGISTRY.md`.
 - Use one task per worktree and clear branch names such as `codex/<task-slug>`, `claude/<task-slug>`, `human/<task-slug>`, or `agent/<task-slug>`.
 - Do not push, merge, rebase, or land a task branch to `main` without explicit review or publish approval. If a task branch must be pushed for review or backup, push only the current task branch from its matching linked worktree.
 - Pushes to `origin/main` must come from local `main` after verification and an approved publish path. GitHub is the archive; task branches are not holding areas or queue lanes.
-- Machine-wide hooks currently live at `C:\Users\baenb\.codex\git-hooks\controlled-branches` and allow non-main commits only from linked worktrees. The older `no-branches` hook path is a fallback/archive, not the active policy.
+- Machine-wide hooks currently live at `/home/guidingl/.codex/git-hooks/controlled-branches` and allow non-main commits only from linked worktrees. The older `no-branches` hook path is a fallback/archive, not the active policy.
 - Do not report unrelated repository file state as routine status, progress chatter, or closeout filler. Surface other changed files only when they block the LT task, overlap files you must touch, affect commit/push safety, or GL asks for git state. Treat repeated unsolicited changed-file commentary as a mental-load/accessibility issue.
 
 ## No Monoliths
 
 Source of truth:
-`C:\Users\baenb\capabilities\principles\no-monolith-files.md`.
+`/home/guidingl/capabilities/principles/no-monolith-files.md`.
 
 Apply it here as: one hand-authored production file, one clear job. Split
 cross-concern LT changes into named modules, partials, helpers, recipes,
@@ -136,9 +136,9 @@ do not queue, and agent replies that imply success without verification.
 - "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps.
 - "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
 - The failed legacy_source test deployment is reference material only. It never served customers.
-- `C:\Users\baenb\projects\locally-twisted-legacy_source\` is the separate source of truth for Locally Twisted business details. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to the legacy_source business-detail folder or GL/legal approval.
+- The old local `locally-twisted-legacy_source` checkout is not an active local dependency on Wardenclyffe. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to committed `_resources/` source material, restored external backup evidence that GL explicitly approves for use, or GL/legal approval.
 - The live legacy_source test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
-- Do not modify `C:\Users\baenb\projects\locally-twisted-legacy_source\` from this project.
+- Do not recreate, modify, or depend on an unverified legacy_source checkout from this project.
 
 ## Catalog Authority And Product Scope
 
@@ -273,7 +273,7 @@ approval boundary before treating prose as enough.
 
 For public layout, Frappe container, `.lt-fullbleed`, Webshop surface, crawl/marquee, breakpoint, nav, drawer, modal, form, product selector, cart, checkout, or broad visual work, read `capabilities/recipes/frappe-public-container-contract.md` and `capabilities/recipes/responsive-container-audit.md` before editing. If the work touches a hero, intro, masthead, or page-header treatment, also read `capabilities/recipes/compact-hero-contract.md`. Container fit and compact same-height heroes are launch requirements, not polish.
 
-Older Claude skills and rules under `C:\Users\baenb\.claude\` are a read-only reference library, not project truth. The useful entrypoints are `C:\Users\baenb\.claude\skills\README.md`, specific `SKILL.md` files, and `C:\Users\baenb\.claude\rules\reach-paths.md`. For Frappe/ERPNext launch work, especially consider the older `frappe-payment-safety`, `frappe-form-integrity`, `frappe-fixture-discipline`, `frappe-migration-guard`, and `frappe-deploy-safety` skills as checklists for what to verify. Do not read secrets, runtime state, logs, caches, sessions, or token files there, and do not copy Claude-era files wholesale into this repo.
+Older Claude skills and rules are not active local project truth on Wardenclyffe. If GL explicitly restores a Claude-era reference library from external backup for a narrow task, treat it as read-only reference evidence only. For Frappe/ERPNext launch work, older ideas such as `frappe-payment-safety`, `frappe-form-integrity`, `frappe-fixture-discipline`, `frappe-migration-guard`, and `frappe-deploy-safety` may be used as checklists only after the current LT capability gate passes. Do not read secrets, runtime state, logs, caches, sessions, or token files there, and do not copy Claude-era files wholesale into this repo.
 
 ## Frappe / ERPNext Rules
 
@@ -286,7 +286,7 @@ Work within Frappe and ERPNext.
 - Avoid `head_html` CSS injection and avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja/CSS/Web Page edits, run `python scripts/dev/clear_website_cache.py`.
 - Before declaring visual work done, verify with browser screenshots at desktop and mobile widths, plus the layout gates below.
-- Browser verification is repo-local. `playwright.config.js` prefers installed Brave/Chromium/Chrome/Edge on Kubuntu and also retains Windows browser fallbacks. Use `npm run test:layout-fit` for passive public route layout checks, `npm run test:interactive-layout` for stateful menus/drawers/modals/forms/product controls, `npm run test:public-verify` for broad public-site closeout, and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
+- Browser verification is repo-local. `playwright.config.js` prefers installed Brave/Chromium/Chrome/Edge on Kubuntu. Use `npm run test:layout-fit` for passive public route layout checks, `npm run test:interactive-layout` for stateful menus/drawers/modals/forms/product controls, `npm run test:public-verify` for broad public-site closeout, and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
 
 ## Launch Provider Ownership
 

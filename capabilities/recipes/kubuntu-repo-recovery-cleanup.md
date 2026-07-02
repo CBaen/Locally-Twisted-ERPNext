@@ -3,7 +3,7 @@ title: Kubuntu Repo Recovery Cleanup
 layer: recipe
 status: verified
 last_verified: 2026-06-15
-scope: locally-twisted source repo after Windows-to-Kubuntu or similar host moves
+scope: locally-twisted source repo after a host-to-Kubuntu or similar host move
 supports:
   - source stabilization
   - git cleanup
@@ -21,7 +21,7 @@ repo needs reconciliation before normal work continues.
 
 ## When To Use
 
-- The host moved from Windows to Kubuntu or another Linux environment.
+- The host moved from a prior operating environment to Kubuntu or another Linux environment.
 - Git status shows many changed files after a machine move.
 - A branch, stash, or worktree collision exists around a previous agent's work.
 - A future agent needs to decide what is real source change versus migration

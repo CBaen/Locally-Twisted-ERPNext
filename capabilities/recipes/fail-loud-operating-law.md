@@ -72,7 +72,7 @@ Minimum standard:
 
 ## Customer-Facing Failure Voice
 
-Global source: `C:\Users\baenb\capabilities\recipes\customer-facing-failure-voice.md`.
+Global source: `/home/guidingl/capabilities/recipes/customer-facing-failure-voice.md`.
 
 Public/customer-facing failures must be warm, plain, and gently playful without
 turning into fake success. Use the "calm kindergarten teacher" test:
@@ -151,7 +151,7 @@ Source workstream: `workstreams/fail-loud-record-level-hardening.md`.
 
 ## LT Gates To Reach For
 
-```powershell
+```bash
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
 python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/customer_email_policy_contract.py
