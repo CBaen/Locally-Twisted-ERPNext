@@ -104,3 +104,14 @@ gate includes `scripts/verify/forbidden_source_label_gate.py` to prevent the
 forbidden platform label from returning without storing the label in tracked
 docs. Verification passed strict text scans, filename scans, stale-reference
 scans, euphemism scans, and `git diff --check`.
+
+## 2026-07-02 Branch Custody Receipt
+
+Accessibility-mode branch review inventoried LT side branches and worktrees
+without deleting, merging, rebasing, pushing, or force-pushing them. Every local
+side branch checked was unmerged relative to current `main`; several branches
+were local-only, three had active linked worktrees, one detached worktree had a
+dirty `AGENTS.md`, and `codex/lt-staging-release-candidate-freeze` was ahead
+of its remote by two local commits. Durable packet:
+`workstreams/repo-branch-custody-2026-07-02.md`; decision:
+`decisions/2026-07-02-lt-branch-custody-no-merge-prune.md`.

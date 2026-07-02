@@ -10,6 +10,16 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P1 LT branch/worktree custody cleanup (2026-07-02):** Current `main` is clean
+and tracking `origin/main`, but every local LT side branch reviewed on
+2026-07-02 is unmerged relative to current `main`. Do not bulk merge, prune,
+delete, push, or force-push branches as routine cleanup. Start from
+`workstreams/repo-branch-custody-2026-07-02.md` and decision
+`decisions/2026-07-02-lt-branch-custody-no-merge-prune.md`. Branch-specific
+review must prove whether each branch's unique value is already present in
+current source/docs/verifiers before asking GL for delete/keep approval. Also
+inspect the detached worktree dirty `AGENTS.md` before removing that worktree.
+
 **P0 ecommerce advertising pause and agnostic-shop migration boundary
 (2026-07-02):** Do not treat the current LT ecommerce shop as
 advertising-ready. Emergency live repair/verifier work now holds two

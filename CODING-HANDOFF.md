@@ -1,5 +1,17 @@
 # Locally Twisted - Coding Handoff
 
+2026-07-02 LT branch custody review: current `main` is clean and tracking
+`origin/main`, but every local LT side branch is unmerged relative to current
+`main`. Do not bulk merge, prune, delete, or force-push those branches. The
+durable branch inventory is
+`workstreams/repo-branch-custody-2026-07-02.md`; project decision:
+`decisions/2026-07-02-lt-branch-custody-no-merge-prune.md`. High-attention
+items: three active linked worktrees for Meta/Product Setup branches, one
+detached worktree with dirty `AGENTS.md`, five local-only branches, and
+`codex/lt-staging-release-candidate-freeze` ahead of its remote by two local
+commits. Follow `capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`
+and get explicit approval before deleting any branch/worktree.
+
 2026-07-02 nested frappe_docker custody note: the ignored nested repo at
 `Locally-Twisted-Backend/frappe_docker/` now has an owned private archive
 remote contract documented in `LOCAL-REMOTE-CUSTODY.md`. `origin` is

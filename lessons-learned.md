@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-07-02 - Branches are not bookmarks when they hold unreviewed custody
+
+The LT branch review found many local `codex/*` branches that were unmerged
+relative to current `main`, including local-only branches, active linked
+worktrees, a detached worktree with a dirty file, and one branch ahead of its
+remote. Treating those branches as harmless clutter would risk deleting
+evidence. Treating them as ready work would risk reintroducing stale May/June
+assumptions into the July source of truth.
+
+**Counter-move:** document branch custody before cleanup. For each branch or
+worktree, prove unique work, current relevance, and containment before asking
+GL for deletion or merge approval. Use
+`workstreams/repo-branch-custody-2026-07-02.md` and
+`capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`; do not
+bulk-prune LT branches from a cleanliness instinct.
+
 ## 2026-07-02 - Placeholder names can still poison source of truth
 
 The repo cleanup proved that replacing a forbidden platform name with an anonymized

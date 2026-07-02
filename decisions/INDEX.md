@@ -5,6 +5,7 @@ This folder holds focused project-level decision packets when the legacy
 packets small, dated, backlink-rich, and source-backed.
 
 - [2026-07-02 Ecommerce advertising pause and agnostic shop boundary](2026-07-02-ecommerce-advertising-pause-and-agnostic-shop-boundary.md)
+- [2026-07-02 LT branch custody: document first, no merge/prune without approval](2026-07-02-lt-branch-custody-no-merge-prune.md)
 - [2026-07-02 Kubuntu active guidance and static doctor](2026-07-02-kubuntu-active-guidance-static-doctor.md)
 - [2026-06-30 Product Setup live authority](2026-06-30-product-setup-live-authority.md) - includes the no-write projection/parity proof-tool follow-up recorded in `locally-twisted-decisions.md`
 - [2026-05-24 staging owner-review recovery](2026-05-24-staging-owner-review-recovery.md)
