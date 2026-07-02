@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-24
+last_verified: 2026-06-24
 currently_true: true
 ---
 

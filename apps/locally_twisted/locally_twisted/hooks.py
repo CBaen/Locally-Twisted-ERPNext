@@ -32,16 +32,16 @@ doctype_js = {
 }
 
 # include js, css files in header of web template
-# Brand foundation theme â€” sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
+# Brand foundation theme - sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
 # Symlinked into sites/assets/locally_twisted/ by Frappe install-app, served by nginx.
 #
-# CACHE-BUST QUERY STRING â€” bump this on every lt-theme.css edit.
+# CACHE-BUST QUERY STRING - bump this on every lt-theme.css edit.
 # Frappe's `web_include_css` injects a static URL; nginx serves it with
 # Last-Modified / ETag, but browsers cache aggressively and often serve
 # stale CSS even after a server-side update. The version param invalidates
 # the browser cache for everyone, no hard-refresh required.
 # Format: YYYYMMDD-N (date + edit-number-that-day).
-# Receipt: 2026-04-29 â€” drawer overlay edit shipped server-side but old
+# Receipt: 2026-04-29 - drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
@@ -58,12 +58,12 @@ web_include_css = [
     "/assets/locally_twisted/css/lt-audience-lane.css?v=20260512-faq-focus-1",
 ]
 
-# Guest cart engine â€” overrides webshop's broken-for-guest cart functions
+# Guest cart engine - overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
 # Loaded on every website page so cart actions work from anywhere.
 # Cache-bust query string follows the same convention as web_include_css.
-# lt-newsletter.js â€” footer newsletter form auto-binder + loud-failure handler.
-#   Exposes window.LT.newsletter.submit(email) â†’ Promise.
+# lt-newsletter.js - footer newsletter form auto-binder + loud-failure handler.
+#   Exposes window.LT.newsletter.submit(email) -> Promise.
 #   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
 web_include_js = [
     "/assets/locally_twisted/js/lt-guest-cart.js?v=20260630-missionary-sales-1",

@@ -332,8 +332,8 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 | Rebuild old-reference evidence | Use current source-control history or an approved external backup; no local mirror script remains active on Kubuntu. |
 | Capture chrome audit screenshots | `python scripts/verify/_oneshot_chrome_audit.py` (writes to `_resources/audit-2026-04-30-chrome/`) |
 | Run smoke tests (contact + newsletter) | `PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_forms.py` |
-| Bump CSS cache-bust | edit `hooks.py` `web_include_css` query string `?v=YYYYMMDD-N` (currently `?v=20260501-5`) |
-| Bump JS cache-bust | edit `hooks.py` `web_include_js` query strings (currently `?v=20260430-2` for megamenu + newsletter) |
+| Bump CSS cache-bust | edit `hooks.py` `web_include_css` query string `?v=YYYYMMDD-N` (current theme CSS example: `?v=20260609-grid-balance-1`) |
+| Bump JS cache-bust | edit `hooks.py` `web_include_js` query strings (current examples: guest cart `?v=20260630-missionary-sales-1`, newsletter `?v=20260430-2`, megamenu `?v=20260521-ready-order-categories-1`) |
 
 ## Hot direction
 
