@@ -11,6 +11,12 @@ campaign is no longer tracked in this broad account-access handoff. Use
 product-specific ad rail, approved copy/budget/geography/tracking decisions,
 launch blockers, and final approval needs.
 
+2026-06-28 brand-lane guard: this workstream validates LT-owned Meta access and
+does not authorize Commercial Balloon Decor or Memorial Balloons campaigns,
+lead forms, pixels, datasets, posts, messages, comments, customer data, or
+conversion routing. Those lanes require explicit operating-brand proof and GL
+approval for the exact asset/action.
+
 Hard stops:
 
 - Do not remove, downgrade, or change ENB access.

@@ -123,6 +123,15 @@ do not queue, and agent replies that imply success without verification.
 
 - Client: Locally Twisted, owned by Jeff Kimber.
 - Business: custom balloon decor, balloon twisting, and face painting on the Wasatch Front, Utah.
+- DBA boundary: Locally Twisted is the accounting/ERPNext operating company for
+  three customer-facing brand lanes: `locally_twisted`,
+  `commercial_balloon_decor`, and `memorial_balloons`. Keep websites,
+  branding/styling, copy, invoices, portals, automations, ads, files, and
+  customer-facing claims separate by lane. Do not treat one brand's facts,
+  assets, style, Meta state, or customer data as global truth for the others.
+  No fourth brand is approved in current scope. Read `BRAND-BOUNDARY.md` and
+  `capabilities/recipes/three-brand-dba-boundary-contract.md` before any work
+  that can cross brand lanes.
 - Build: Locally Twisted's ERPNext v15 install — the destination of a migration of LT's business intent + catalog data into a fresh ERPNext install (frame revised 2026-04-30 — see `locally-twisted-decisions.md`).
 - "Fresh install" — destination is greenfield ERPNext; no auto-translated legacy_source modules or DB dumps.
 - "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior legacy_source attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
@@ -200,6 +209,23 @@ one. Re-check DB before changing catalog docs or seed logic.
 | ERPNext image | `frappe/erpnext:v15.105.0` |
 | Frappe site | `frontend` |
 | Admin/dev login | Not stored in committed docs. Use approved local credentials from the operator or environment variables such as `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for verifiers. |
+
+## Local Docker Runtime Posture
+
+Docker stays as a boxed workshop, but it does not get to live rent-free in the
+background. The LT ERPNext stack is an on-demand local runtime: turn it on only
+when actively working or verifying LT, then turn it back off when the local proof
+task is done.
+
+- Preferred Wardenclyffe helper: `client-stack start lt`, `client-stack stop lt`,
+  and `client-stack check lt`.
+- Normal local proof URL is `http://localhost:8081`.
+- Do not leave temporary Tailscale-IP or host-IP port bindings in `pwd.yml` as
+  project truth. Use localhost unless the task explicitly requires a temporary
+  remote-access bind, and document/revert that workaround before closeout.
+- Stopping the stack is safe after work; deleting stored data is not. Never use
+  `docker compose down -v`, Docker prune, volume deletion, database reset, or
+  account/provider changes without explicit approval.
 
 Installed app order must keep `locally_twisted` last:
 

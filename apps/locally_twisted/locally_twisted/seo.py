@@ -18,7 +18,6 @@ PUBLIC_INDEXING_ENABLED_DEFAULT = True
 DEFAULT_SOCIAL_IMAGE_PATH = "/assets/locally_twisted/images/heroes/home-generated-lifestyle-desktop.webp"
 SOCIAL_IMAGE_PATHS = {
     "/about": "/assets/locally_twisted/images/heroes/about-generated-lifestyle-desktop.webp",
-    "/missionary-balloon-gift": "/files/large-head-missionary.png",
 }
 
 CANONICAL_PATH_MAP = {
@@ -31,7 +30,6 @@ CANONICAL_PATH_MAP = {
     "/private_celebrations": "/private-celebrations",
     "/event_playground": "/event-playground",
     "/balloon_twisting_and_face_painting": "/balloon-twisting-and-face-painting",
-    "/missionary_balloon_gift": "/missionary-balloon-gift",
     "/refund_policy": "/refund-policy",
     "/terms_of_service": "/terms-of-service",
     "/thank_you": "/thank-you",

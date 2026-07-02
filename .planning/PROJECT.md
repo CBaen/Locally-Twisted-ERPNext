@@ -1,5 +1,13 @@
 # Locally Twisted: ERPNext Migration
 
+> 2026-06-28 update: This planning doc predates the current three-brand DBA
+> boundary. Current scope is one Locally Twisted accounting/ERPNext operating
+> company with three protected brand lanes: Locally Twisted, Commercial Balloon
+> Decor, and Memorial Balloons. Older "multi-company" rejection language means
+> do not mix unrelated clients or create unapproved ERPNext companies/sites; it
+> does not reject the current approved DBA/service-brand lane model. Read
+> `../BRAND-BOUNDARY.md` before relying on this file for brand/accounting scope.
+
 ## What This Is
 
 Locally Twisted is a 27-year-old Utah balloon-decor and event-services business owned by Jeff Kimber. Until now, LT has run on improvisation — manual records, paper notes, QuickBooks for accounting, a website built years ago that customers still reach but that has degraded beyond practical repair. A prior attempt to give LT a backend (an legacy_source build) failed in testing — never went live to customers and Jeff was never told the audit's verdict.
@@ -47,7 +55,11 @@ The legacy_source work informs this build (forms, models, copy, business policie
 - **Standalone About page** — about info distributes across the site (homepage, service pages); a brief summary lands on the contact page. (GL directive 2026-04-26)
 - **Gusto / third-party payroll** — agency standard is ERPNext native HRMS for all clients. (Decision 2026-04-26)
 - **Surfacing the failed legacy_source attempt to Jeff** — Jeff knows there's an audit; he doesn't yet know the prior legacy_source attempt failed in testing. Internal docs use the migration framing freely; Jeff-facing communications still don't leak that context until Phase 1 is in a state GL can demo. (Was framed as "no migration framing of any kind" pre-2026-04-30; the actual constraint is Jeff-disclosure, not internal vocabulary.)
-- **Multi-company in one ERPNext site** — rejected; per-client isolation is structural.
+- **Unapproved multi-company or multi-client mixing in one ERPNext site** —
+  rejected; per-client isolation remains structural. This does not reject the
+  2026-06-28 approved LT DBA/service-brand lane model for Locally Twisted,
+  Commercial Balloon Decor, and Memorial Balloons under the same LT accounting
+  operation.
 - **Hosting on Hetzner / self-hosted** — superseded by Frappe Cloud (managed, transferable per-site).
 - **Telling Jeff before there's a working replacement to show** — Jeff has been told there's an audit / debug / stress test of his existing system. The audit's conclusion (that the prior platform isn't sufficient) is not surfaced to him until Phase 1 is in a state GL can demo. Until then, all docs that mention the verdict stay internal to this folder.
 

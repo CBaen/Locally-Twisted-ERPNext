@@ -20,6 +20,13 @@ Make Locally Twisted's paperwork path reliable enough for launch and simple enou
 
 This lane coordinates paperwork, receipts, invoices, payment records, customer emails, reminder dry runs, reminder review reports, and backend automation boundaries. It does not replace `workstreams/finance-payroll-quickbooks-migration.md`, `workstreams/synthetic-business-pipeline.md`, `workstreams/customer-reminder-dry-run.md`, `workstreams/customer-reminder-review-report.md`, `workstreams/payment-backend-launch-readiness.md`, `workstreams/customer-document-policy-lanes.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
 
+2026-06-28 brand-lane guard: this paperwork lane currently proves LT-lane
+automation. It must not be reused for Commercial Balloon Decor or Memorial
+Balloons documents, payment paths, customer emails, reminders, or backend
+review queues until an explicit `operating_brand` source is carried through the
+records and the rendered artifacts prove lane-specific brand, support inbox,
+remit-to copy, legal/policy language, and customer promise.
+
 ## Current Verified Baseline
 
 Fresh local verification on 2026-05-10 for the customer form confirmation slice:

@@ -4,6 +4,12 @@ This folder is the standard source for files Locally Twisted sends outside the c
 
 It is intentionally app-owned so ERPNext/Frappe automation can import the same registry later instead of guessing from ad hoc PDFs, screenshots, or one-off notes.
 
+2026-06-28 brand-lane guard: the current registry is LT-lane source, not proof
+that the same templates can be used for Commercial Balloon Decor or Memorial
+Balloons. Future generators must carry an explicit `operating_brand` and block
+send/render readiness when the brand lane, logo, remit-to copy, support inbox,
+legal/policy wording, or customer-facing promise is missing.
+
 ## Folder Contract
 
 - `registry.py` lists every supported outbound document family and the data it needs.

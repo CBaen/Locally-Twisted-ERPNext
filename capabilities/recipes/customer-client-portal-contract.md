@@ -33,6 +33,12 @@ customer account visual shell.
 
 ## Current Contract
 
+- 2026-06-28 brand-lane guard: this recipe currently describes the
+  `locally_twisted` portal lane. It is not proof that Commercial Balloon Decor
+  or Memorial Balloons can share the same visible portal shell, files, account
+  summaries, organization membership model, or customer copy. Any shared
+  portal must first carry an explicit `operating_brand` source and fail closed
+  when brand lane is missing.
 - Customer accounts are optional and invite-first. Public signup stays disabled.
 - Guest public inquiry, shop, cart, and checkout paths must remain usable; do
   not require login for public browsing or checkout.

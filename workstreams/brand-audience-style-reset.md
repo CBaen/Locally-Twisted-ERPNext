@@ -6,6 +6,12 @@ This workstream is the brand strategy lane for the current ERPNext build. It rec
 
 Use `_resources/STYLE-GUIDE.md` as the current visual authority. Use this workstream for rationale, unresolved proof/media work, and future refinements.
 
+2026-06-28 brand-lane guard: this workstream is authority for the
+`locally_twisted` public brand lane only. Do not apply its "Locally Twisted is
+the brand" rule to Commercial Balloon Decor or Memorial Balloons. Those lanes
+need their own public copy, style, trust assets, and audience posture under the
+three-brand DBA boundary in `../BRAND-BOUNDARY.md`.
+
 ## 2026-05-05 Visual Target Lock
 
 GL clarified the durable rebrand target before a broader design-fix swarm:
@@ -36,7 +42,7 @@ into rendered templates and did not change CSS or route behavior.
 
 Jeff is the business owner and an active source of process knowledge. Jeff is not the brand.
 
-Locally Twisted is the brand.
+Locally Twisted is the brand for the `locally_twisted` public lane.
 
 Customer-facing copy should not make the company dependent on Jeff as the central character, the only expert, or the irreplaceable source of quality. That creates founder-dependent brand risk and makes the business harder to sell later.
 

@@ -14,7 +14,6 @@ const PUBLIC_ROUTES = [
 	{ name: "private-celebrations", path: "/private-celebrations" },
 	{ name: "portfolio", path: "/portfolio" },
 	{ name: "btfp", path: "/balloon-twisting-and-face-painting" },
-	{ name: "missionary-balloon-gift", path: "/missionary-balloon-gift" },
 	{ name: "faq", path: "/faq" },
 	{ name: "privacy", path: "/privacy" },
 	{ name: "terms", path: "/terms-of-service" },
@@ -150,15 +149,6 @@ const ABOUT_SURFACES = [
 	{ selector: ".lt-about__cta", mode: "fullbleed", inner: ".lt-about__cta-inner", maxWidth: PAGE_MAX },
 ];
 
-const PRODUCT_AD_SURFACES = [
-	{ selector: ".lt-product-ad-page", mode: "root" },
-	{ selector: ".lt-ad-hero", mode: "fullbleed", inner: ".lt-ad-hero__inner", maxWidth: PAGE_MAX },
-	{ selector: ".lt-ad-proof", mode: "fullbleed", inner: ".lt-ad-proof__inner", maxWidth: PAGE_MAX },
-	{ selector: ".lt-ad-section", mode: "band", inner: ".lt-ad-section__inner", maxWidth: PAGE_MAX, allowMultiple: true },
-	{ selector: ".lt-ad-gallery", mode: "fullbleed", inner: ".lt-ad-gallery__inner", maxWidth: PAGE_MAX },
-	{ selector: ".lt-ad-cta", mode: "fullbleed", inner: ".lt-ad-cta__inner", maxWidth: PAGE_MAX },
-];
-
 const CONTAINER_CONTRACT_ROUTES = [
 	{
 		name: "home",
@@ -254,12 +244,6 @@ const CONTAINER_CONTRACT_ROUTES = [
 			{ selector: ".lt-btfp__services", mode: "band", inner: ".lt-btfp__services-grid", maxWidth: PAGE_MAX },
 			{ selector: ".lt-btfp__booking", mode: "band", inner: ".lt-btfp__booking-grid", maxWidth: PAGE_MAX },
 		],
-	},
-	{
-		name: "missionary-balloon-gift",
-		path: "/missionary-balloon-gift",
-		topLevel: [".lt-product-ad-page"],
-		surfaces: PRODUCT_AD_SURFACES,
 	},
 	{
 		name: "faq",

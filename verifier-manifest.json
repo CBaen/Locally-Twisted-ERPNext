@@ -17,6 +17,37 @@
   },
   "bundles": [
     {
+      "id": "lt-operating-brand-exposure-contract",
+      "tier": "tier_0_static",
+      "graduation_stage": "verifier_backed",
+      "graduation_status": "active",
+      "command": "python scripts/verify/operating_brand_exposure_contract.py",
+      "cwd": ".",
+      "scope": "static guard for the one-accounting-company / three-operating-brand DBA boundary",
+      "environment": "local files only",
+      "mutation": "none",
+      "approval_required": "no, local read-only static check only",
+      "requires_explicit_approval": false,
+      "runs_automatically": false,
+      "evidence_artifact": "terminal output or --json output",
+      "capability_refs": [
+        "capabilities/recipes/three-brand-dba-boundary-contract.md",
+        "BRAND-BOUNDARY.md"
+      ],
+      "risk_triggers": [
+        "claiming runtime multi-brand support",
+        "adding partial operating_brand hooks",
+        "customer-facing brand-lane work without a resolver",
+        "portal, invoice, email, checkout, payment, Meta, or tracking reuse across brands"
+      ],
+      "proves": [
+        "the three-brand guard docs exist",
+        "current runtime operating_brand status is explicitly reported",
+        "partial static implementation cannot be mistaken for complete runtime support"
+      ],
+      "what_it_does_not_prove": "It does not prove ERPNext runtime fields, database migration, portal isolation, invoice rendering, Stripe metadata, Meta asset separation, legal DBA wording, or live readiness. Use --require-runtime after implementation work starts."
+    },
+    {
       "id": "lt-public-form-experience",
       "tier": "tier_2_local_integrated",
       "graduation_stage": "verifier_backed",
@@ -293,37 +324,6 @@
         "Page post and lead-form lanes still need Page-token handling when blocked"
       ],
       "what_it_does_not_prove": "It does not approve or perform live changes, prove billing ownership, export leads, read messages, publish posts, create campaigns, change spend, alter ENB access, or prove future token validity."
-    },
-    {
-      "id": "lt-meta-targeting-readonly-probe",
-      "tier": "tier_4_live_or_external",
-      "graduation_stage": "verifier_backed",
-      "graduation_status": "active",
-      "command": "python scripts/verify/meta_targeting_probe.py",
-      "cwd": ".",
-      "scope": "read-only Meta targeting search for missionary-ad planning terms and non-sensitive product/event alternatives",
-      "environment": "live Meta Graph API using local uncommitted token from .env or shell environment",
-      "mutation": "none; GET-only API calls",
-      "approval_required": "yes, because this touches a live external social/ad provider account even when read-only",
-      "requires_explicit_approval": true,
-      "runs_automatically": false,
-      "evidence_artifact": "workstreams/meta-bouquet-ad-test-2026-06-28.md",
-      "capability_refs": [
-        "capabilities/recipes/meta-operations/ads-operations.md",
-        "capabilities/recipes/meta-operations/approval-and-evidence.md"
-      ],
-      "risk_triggers": [
-        "running against a different business or ad account",
-        "printing or committing tokens",
-        "adding write or POST/DELETE calls",
-        "creating campaigns, ad sets, ads, budgets, audiences, custom audiences, or lookalikes",
-        "using returned sensitive terms without policy review and exact approval"
-      ],
-      "proves": [
-        "the current token can run the named targeting-search queries at the time it runs",
-        "the returned targeting terms for the missionary ad idea are recorded without mutating Meta objects"
-      ],
-      "what_it_does_not_prove": "It does not approve targeting use, prove Ads Manager UI setup, create audiences, launch ads, or prove future targeting availability."
     }
   ]
 }

@@ -7,6 +7,7 @@
     "test:meta-bouquet-ad-landing": "python scripts/verify/meta_bouquet_ad_landing_pages.py",
     "test:meta-targeting-probe": "python scripts/verify/meta_targeting_probe.py",
     "test:marketing-measurement": "python scripts/verify/marketing_measurement_bridge_contract.py",
+    "test:operating-brand-exposure": "python scripts/verify/operating_brand_exposure_contract.py",
     "test:a11y": "node scripts/verify/a11y_audit.js",
     "test:a11y-manual": "node scripts/verify/manual_a11y_probe.js",
     "test:nav-ia": "python scripts/verify/nav_ia.py",

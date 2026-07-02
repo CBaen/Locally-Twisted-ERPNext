@@ -33,6 +33,11 @@ privacy copy.
 
 ## Current Contract
 
+- 2026-06-28 brand-lane guard: this recipe currently describes the
+  `locally_twisted` email lane. Do not reuse its subjects, logos, playful
+  shell, inboxes, policy links, or operator-copy assumptions for Commercial
+  Balloon Decor or Memorial Balloons without an explicit `operating_brand`
+  source and brand-specific rendering proof.
 - Public inquiry acknowledgments use `customer_email_theme.py`.
 - Public form confirmation subjects use `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`.
 - Public form confirmation titles use `Here is what we received`; do not repeat the subject as the message header.

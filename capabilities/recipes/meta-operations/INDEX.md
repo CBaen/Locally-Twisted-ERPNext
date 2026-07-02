@@ -19,6 +19,16 @@ This is intentionally broad. GL remains the human approver. Broad API and
 Business access is treated as operating capacity, not permission for unattended
 spend, customer communication, access changes, or data export.
 
+## Brand Lane Boundary
+
+This capability currently covers LT-owned Meta operating access and proof for
+the Locally Twisted business assets verified on 2026-06-28. It is not approval
+to run Commercial Balloon Decor or Memorial Balloons campaigns, copy, lead
+forms, pixels, datasets, customer replies, or conversion routing through LT
+defaults. Future ads/social/lead work must name the operating brand, asset,
+audience, approval boundary, and data lane before any live write or customer
+data read.
+
 ## Verified State
 
 Verified read-only through `scripts/verify/meta_operations_inventory.py` on

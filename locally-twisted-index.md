@@ -13,6 +13,7 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 | `HANDOFF.md` | Instance-to-instance handoff (overwrite, ~40 lines) |
 | `lessons-learned.md` | Append-only LT-specific lessons |
 | `anti-gl-patterns.md` | Project-local instance-authored anti-pattern catalog |
+| `BRAND-BOUNDARY.md` | Current three-brand DBA boundary: one LT accounting operation, three separate brand lanes, no fourth brand |
 | `locally-twisted-decisions.md` | Append-only decision log with reasoning |
 | `locally-twisted-queue.md` | Active work queue (delete completed items) |
 | `locally-twisted-index.md` | This file |
@@ -36,8 +37,8 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 
 | Path | Purpose |
 |------|---------|
-| `.planning/PROJECT.md` | Source of truth — project context, requirements, decisions, evolution rules (frame reset 2026-04-26) |
-| `.planning/REQUIREMENTS.md` | Requirements with REQ-IDs and traceability — needs refresh against new ROADMAP |
+| `.planning/PROJECT.md` | Historical project context and requirements; read the 2026-06-28 three-brand DBA correction before using older multi-company language |
+| `.planning/REQUIREMENTS.md` | Requirements with REQ-IDs and traceability; read the 2026-06-28 three-brand DBA correction before using older out-of-scope language |
 | `.planning/ROADMAP.md` | 6 workflow-centric phases (frame reset 2026-04-26) |
 | `.planning/STATE.md` | Current execution pointer |
 | `.planning/config.json` | YOLO mode, fine granularity, parallel exec, Quality model profile |

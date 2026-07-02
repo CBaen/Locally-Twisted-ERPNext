@@ -11,6 +11,13 @@ Civic Celebration is the structural foundation, Slate Blue and Berry is the
 main palette discipline, and the Locally Twisted Brand Direction banner is the
 quality bar for typography, icon work, and premium corporate finish.
 
+2026-06-28 brand-lane guard: this guide is canonical for the `locally_twisted`
+public brand lane only. It is not authority for Commercial Balloon Decor or
+Memorial Balloons styling, copy, trust assets, website treatment, invoices,
+portal surfaces, or Meta/ad creative unless a later source explicitly maps a
+specific rule across lanes. Read `../BRAND-BOUNDARY.md` before using this file
+for anything outside the LT public brand lane.
+
 The older legacy_source guide is reference material only. Claude-era notes and design
 competition files can provide useful history, but they are not authority unless
 their claims are verified against this repo and the running ERPNext site.
@@ -54,7 +61,10 @@ supplier-style color names, drawer grouping, and best web-match hex values.
 5. **Photography proves authority.** Show real installed work in civic, school, corporate, venue, and upscale event contexts. The image should explain the scale before the copy does.
 6. **Crisp brass line icons, not badge clutter.** Trust marks should look like Image #3's premium icon set, not clip-art circles or sticker badges. Use the new `public/icons/brand/` SVG suite for proof pillars, local/event context, and multiple balloon forms.
 7. **Buttons are confident rectangles.** Deep navy, berry/crimson, and occasional brass-outline treatments. Avoid soft pill buttons and teal-heavy UI unless a specific transactional component already requires it.
-8. **Locally Twisted is the brand.** Jeff can be founder/context; public copy should make the company and team own the promise.
+8. **Locally Twisted is the brand for this lane.** Jeff can be founder/context;
+   LT public copy should make the company and team own the promise. Do not
+   apply this sentence to Commercial Balloon Decor or Memorial Balloons without
+   explicit brand-lane approval.
 9. **Every route has a treatment.** Home, shop, product, cart, checkout, contact, portfolio, BTFP, FAQ, policy, payment, header, footer, and drawer surfaces are all covered below.
 10. **ERPNext first.** Work with Frappe/Webshop templates, hooks, and route rules.
 11. **Fail loudly. Always.** Forms, automations, documents, customer messages, route contracts, containers, and agent claims must block false success and leave actionable evidence.

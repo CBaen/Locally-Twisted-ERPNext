@@ -10,6 +10,13 @@ Builds Locally Twisted external documents so each one is 100 percent professiona
 
 The document should answer the recipient's practical questions before they need to contact Locally Twisted. It should still reinforce the brand, but the audience's workflow wins over decoration.
 
+2026-06-28 brand-lane guard: this recipe's existing examples are written for
+the `locally_twisted` lane. Under the current DBA shape, invoices, receipts,
+quotes, proposals, event packets, W-9/vendor packets, statements, and payment
+reminders must carry the correct operating brand before they are sent or
+rendered. Shared accounting does not allow one lane's logo, remit-to copy,
+trust assets, legal wording, or customer promise to become global by default.
+
 ## When to reach for it
 
 Use this for invoices, receipts, quotes, proposals, event packets, contracts, W-9/vendor setup packets, purchase-order support, statements, payment reminders, corporate reorder prompts, and any PDF/print/email artifact sent outside the company.

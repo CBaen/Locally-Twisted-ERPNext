@@ -8,6 +8,11 @@ Keep the Locally Twisted launch repo light enough for client handoff while prese
 
 - Locally Twisted launch remains the priority.
 - Memorial Balloons is a separate side business and must not be mixed into the LT launch repo or launch proof.
+- 2026-06-28 clarification: the prior sentence was a launch-cleanup boundary,
+  not current accounting authority. Memorial Balloons is now one of the three
+  protected DBA/service brand lanes under the Locally Twisted accounting
+  operation. It still must not be mixed into LT launch proof or public LT
+  brand assets without explicit operating-brand routing.
 - GitHub is the archive for old LT experiment output. The working repo should not keep duplicate generated research, raw local drops, stale mirrors, or one-off verifier debris after their production value has been translated.
 
 ## Cleanup Completed

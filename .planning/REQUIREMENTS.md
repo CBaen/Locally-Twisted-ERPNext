@@ -4,6 +4,14 @@
 **REQ-ID format:** `[CATEGORY]-[NUMBER]`.
 **Status legend:** `[ ]` not started · `[~]` in progress · `[x]` done
 
+> 2026-06-28 update: This requirements doc predates the current three-brand DBA
+> boundary. Current scope is one Locally Twisted accounting/ERPNext operating
+> company with three protected brand lanes: Locally Twisted, Commercial Balloon
+> Decor, and Memorial Balloons. Older "multi-company" rejection language blocks
+> unapproved client/company mixing; it does not block the approved
+> DBA/service-brand lane model. Read `../BRAND-BOUNDARY.md` before relying on
+> this file for brand/accounting scope.
+
 ---
 
 ## v1 Requirements
@@ -80,7 +88,11 @@
 - **Standalone /pricing page** — pricing calculator embedded on Balloon Twisting + Face Painting service page (GL directive 2026-04-26)
 - **Gusto / third-party payroll** — agency standard is ERPNext native HRMS for all clients (decision 2026-04-26)
 - **"Migration" framing of any kind** — this is a NEW BUILD; the prior legacy_source attempt is reference material that will be retired
-- **Multi-company in one ERPNext site** — rejected; per-client isolation is structural
+- **Unapproved multi-company or multi-client mixing in one ERPNext site** —
+  rejected; per-client isolation remains structural. This does not reject the
+  2026-06-28 approved LT DBA/service-brand lane model for Locally Twisted,
+  Commercial Balloon Decor, and Memorial Balloons under the same LT accounting
+  operation.
 - **Self-hosted Hetzner production** — superseded by Frappe Cloud (managed, transferable per-site)
 - **Telling Jeff the verdict before there's a working replacement** — stealth on the verdict until Phase 1 is demo-ready
 
