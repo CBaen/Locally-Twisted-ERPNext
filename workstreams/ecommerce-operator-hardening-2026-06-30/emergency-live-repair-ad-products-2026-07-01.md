@@ -127,6 +127,27 @@ Verification:
   - customer-visible `ADD BIRTHDAY AGE` renders as one `input type="number"`;
   - selecting Delivery Size, Delivery themes, Add Bouquet, and entering age
     `25` enabled Add to Cart with a priced variant and `$ 90.00`.
+- 2026-07-02 follow-up after GL reported `Add Bouquet` price behavior:
+  - live `Item Price` rows for Birthday Deliveries are not flat; there are
+    2,430 variant prices with nine live price tiers:
+    `90`, `100`, `110`, `120`, `130`, `140`, `155`, `165`, `175`;
+  - by size and bouquet suffix, current live prices are:
+    - Small + Small 3 balloon bouquet: `$90.00`
+    - Small + 5 balloon bouquet: `$100.00`
+    - Small + 7 balloon bouquet: `$110.00`
+    - Medium + Small 3 balloon bouquet: `$120.00`
+    - Medium + 5 balloon bouquet: `$130.00`
+    - Medium + 7 balloon bouquet: `$140.00`
+    - Large + Small 3 balloon bouquet: `$155.00`
+    - Large + 5 balloon bouquet: `$165.00`
+    - Large + 7 balloon bouquet: `$175.00`
+  - live browser proof with theme `Mickey`, visible age `25`, and the hidden
+    compatibility axis selected by the bridge showed the same nine prices and
+    enabled Add to Cart for every tested size/bouquet path.
+  - Earlier proof was too narrow: it checked the corrected age field and one
+    selected path, not the full customer scenario matrix. Future emergency
+    fixes on variant products must include at least one matrix proof across
+    every customer-visible price-changing axis.
 
 ## Follow-Up Architecture Required
 
