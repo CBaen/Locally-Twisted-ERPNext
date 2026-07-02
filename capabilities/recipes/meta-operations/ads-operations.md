@@ -2,8 +2,8 @@
 name: Meta ads operations
 level: recipe
 maturity: candidate
-verification_level: local-api-read-only
-last_verified: 2026-06-28
+verification_level: local-api-read-only-plus-source-rail
+last_verified: 2026-07-01
 currently_true: true
 ---
 
@@ -33,6 +33,22 @@ conversions.
 4. Get exact approval for the exact change.
 5. Apply only the approved change.
 6. Verify the object, status, budget/spend, URLs, and tracking after mutation.
+
+## Product Campaign Rails
+
+For any product-specific paid campaign, create or update a dedicated
+workstream rail before draft/build work. Keep campaign copy, budget, geography,
+creative, final URLs, UTM labels, tracking state, launch blockers, and final
+approval status in that rail. Do not bury a paid campaign packet inside broad
+Meta account aftercare, ecommerce repair, or website-launch handoffs.
+
+Current rail:
+`workstreams/meta-missionary-sales-campaign-2026-06-30.md`.
+
+Current state: the Large head Missionary Sales campaign has approved
+source-prep decisions but is blocked from live launch while website work is in
+progress. Do not create, schedule, enable, or spend on Meta campaign/ad
+set/ad/ad creative objects from this approval packet alone.
 
 ## Approval Required
 

@@ -54,6 +54,15 @@
     } catch (err) {
         if (window.console && console.warn) console.warn("[thank-you] cart clear failed", err);
     }
+    try {
+        var purchaseEvent = {{ purchase_event_json | safe }};
+        var measurement = window.LT && window.LT.marketingMeasurement;
+        if (purchaseEvent && measurement && typeof measurement.trackSalesEvent === "function") {
+            measurement.trackSalesEvent("Purchase", purchaseEvent.payload || {}, purchaseEvent.options || {});
+        }
+    } catch (err) {
+        if (window.console && console.warn) console.warn("[thank-you] purchase event failed", err);
+    }
 })();
 </script>
 {% endblock %}

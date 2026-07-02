@@ -52,6 +52,21 @@ capture, and then owner-visible publish/apply or field-level runtime-authority
 design. Do not patch only this product, clear cache, write live records,
 deploy, or weaken owner catalog guards from this queue item alone.
 
+**P0 Meta Missionary sales-campaign rail (blocked from live launch,
+2026-07-01):** Dedicated marketing/ad handoff is
+`workstreams/meta-missionary-sales-campaign-2026-06-30.md`. This rail is
+separate from ecommerce/Product Setup repair and general Meta account aftercare.
+GL approved source prep for a Sales campaign selling Large head Missionary:
+Ad 1 and Ad 3 copy with pricing removed, current creative, `$5/day` Facebook
+plus `$5/day` Instagram, 30 days, `$300` cap, standard local delivery
+geography only, Park City excluded, broad adult local buyer/event/gift
+signals, and consent-gated sales-event tracking. Current status is blocked:
+do not create, schedule, enable, or spend on live Meta campaign/ad set/ad/ad
+creative objects while website work is still in progress. Next safe step is
+website stabilization, approved Frappe release of the sales-event source,
+fresh live asset/event proof, product creative preview/MIME check, exact
+America/Denver start/end approval, and final Meta preview approval.
+
 **P0 three-brand DBA guard follow-through (2026-06-28):** The current source of
 truth is one Locally Twisted accounting/ERPNext operating company with three
 protected brand lanes: Locally Twisted, Commercial Balloon Decor, and Memorial

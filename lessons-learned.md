@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-07-01 - Paid ad rails must separate source readiness from spend readiness
+
+The Missionary Meta campaign work exposed a documentation hazard: a landing
+page can be live and the copy/budget/audience can be approved while the ad
+still must not launch. Website work was still in progress, and the new
+sales-event source needed release and live proof before Meta spend could start.
+
+**Counter-move:** create a product-specific ad rail for each paid campaign and
+keep it separate from ecommerce repair, Product Setup, website launch, and
+general Meta account aftercare. Record approved copy, budget, geography,
+tracking, final URLs, and launch blockers in that rail. Do not create,
+schedule, enable, or spend on Meta objects from source readiness alone; require
+live tracking proof, final preview approval, and exact schedule approval.
+
 ## 2026-06-30 - Evidence collection PASS is not authority parity PASS
 
 The live Product Setup audit helper can complete successfully while proving a

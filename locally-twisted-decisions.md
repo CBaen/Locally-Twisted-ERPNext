@@ -8,6 +8,45 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-01 - Missionary Meta work has its own sales-campaign rail and remains launch-blocked
+
+**Decision:** The Large head Missionary paid Meta work is a separate
+marketing/advertising rail, with
+`workstreams/meta-missionary-sales-campaign-2026-06-30.md` as the canonical
+handoff. It must not be folded into Product Setup, ecommerce repair, website
+launch, or general Meta account aftercare handoffs.
+
+**Reasoning:** GL's goal is sales of this product, not generic web conversion
+learning. The campaign needs product-specific copy, creative, geography,
+budget, tracking, final URLs, and launch approval. Mixing that with active
+website/product repair would make it too easy for a future agent to interpret
+source readiness or landing-page availability as permission to spend.
+
+**Approved for source prep:** Sales campaign structure; Ad 1 and Ad 3 as copy
+winners with pricing removed; current creative; `$5/day` Facebook plus
+`$5/day` Instagram for 30 days; `$300` cap; standard local delivery geography
+only with Park City excluded; broad adult local buyer/event/gift audience; and
+consent-gated sales-event tracking.
+
+**Guard:** The campaign is blocked from live launch while website work is in
+progress. Do not create, schedule, enable, or spend on campaign/ad set/ad/ad
+creative objects until website work is stable, sales-event source is released
+and live-verified, final creative preview is checked, GL approves exact
+America/Denver start/end times, and GL approves the final Meta preview
+objects. Do not upload customer data, create custom audiences, read/export
+leads or messages, change ENB access, or mutate billing/pixels/datasets from
+this decision.
+
+**Receipts:** `workstreams/meta-missionary-sales-campaign-2026-06-30.md`;
+`capabilities/recipes/meta-operations/ads-operations.md`;
+`capabilities/recipes/meta-operations/measurement-and-assets.md`;
+`scripts/verify/marketing_measurement_bridge_contract.py`.
+
+**Decided by:** Guiding Light approvals and stop boundary on 2026-06-30 and
+2026-07-01; Codex source/docs closeout on 2026-07-01.
+
+---
+
 ## 2026-06-30 - Product authority proof tools are required before repair
 
 **Decision:** Product Setup repair work must go through saved-artifact

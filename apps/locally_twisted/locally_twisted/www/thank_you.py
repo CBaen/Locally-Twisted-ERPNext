@@ -10,6 +10,8 @@ Note on URL design: we surface only the SO name, not customer email or
 address. This is intentional — the URL might be shared, copy-pasted, or
 land in browser history.
 """
+import json
+
 import frappe
 from frappe import _
 from frappe.utils import flt
@@ -247,6 +249,7 @@ def get_context(context):
 
     context.so = None
     context.line_items = []
+    context.purchase_event_json = "null"
     if so_name and not payment_check_needed:
         # Use ignore_permissions for read since the customer (a guest) has no
         # User session that maps to the Customer record. We only expose
@@ -262,11 +265,15 @@ def get_context(context):
             context.line_items = [
                 {
                     "item_name": customer_facing_line_label(item),
+                    "item_code": item.item_code,
                     "qty": item.qty,
                     "amount": item.amount,
                 }
                 for item in so.items
             ]
+            context.purchase_event_json = _json_for_script(
+                _purchase_event_for_sales_order(context.so, context.line_items)
+            )
         except (frappe.DoesNotExistError, Exception):
             # Don't leak whether the SO exists or not — show generic landing.
             pass
@@ -340,6 +347,42 @@ def _paid_state():
         ),
         "notice": "",
     }
+
+
+def _purchase_event_for_sales_order(so, line_items):
+    contents = []
+    content_ids = []
+    for line in line_items:
+        item_code = str(line.get("item_code") or "").strip()
+        if not item_code:
+            continue
+        qty = flt(line.get("qty") or 1) or 1
+        amount = flt(line.get("amount") or 0)
+        content_ids.append(item_code)
+        contents.append(
+            {
+                "id": item_code,
+                "quantity": qty,
+                "item_price": round(amount / qty, 2) if qty else amount,
+            }
+        )
+    return {
+        "payload": {
+            "content_type": "product",
+            "content_ids": content_ids,
+            "contents": contents,
+            "currency": so.get("currency") or "USD",
+            "num_items": sum(flt(line.get("qty") or 0) for line in line_items),
+            "value": flt(so.get("grand_total") or 0),
+        },
+        "options": {
+            "eventID": f"purchase:{so.get('name')}",
+        },
+    }
+
+
+def _json_for_script(value):
+    return json.dumps(value).replace("</", "<\\/")
 
 
 def _paid_payment_request_for_sales_order(so):

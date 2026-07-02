@@ -161,6 +161,17 @@
         return -1;
     }
 
+    function trackAddToCart(itemCode, qty) {
+        var measurement = window.LT && window.LT.marketingMeasurement;
+        if (!measurement || typeof measurement.trackSalesEvent !== "function") return;
+        measurement.trackSalesEvent("AddToCart", {
+            content_type: "product",
+            content_ids: [itemCode],
+            contents: [{ id: itemCode, quantity: qty }],
+            currency: "USD"
+        });
+    }
+
     var LT_CART = {
         getCart: function () { return readRaw(); },
 
@@ -195,6 +206,7 @@
                 cart.items.push(line);
             }
             writeRaw(cart);
+            trackAddToCart(itemCode, qty);
             return cart;
         },
 

@@ -2,8 +2,8 @@
 name: Meta operations supervised ownership
 level: recipe-family
 maturity: candidate
-verification_level: local-api-read-only
-last_verified: 2026-06-28
+verification_level: local-api-read-only-plus-source-rail
+last_verified: 2026-07-01
 currently_true: true
 ---
 
@@ -44,6 +44,13 @@ Verified read-only through `scripts/verify/meta_operations_inventory.py` on
 | Messaging | Design supervised reply workflows | Page/IG messaging token proof and SOP | Reading or replying to customer messages |
 | Leads | Map native Meta vs HighLevel lead paths | Page Access Token with lead permissions | Exporting leads or routing customer data |
 | Measurement | Inventory pixels/custom conversions | Approved Frappe tracking and event plan | Pixel/dataset/domain/CAPI/custom conversion changes |
+
+## Active Product Rail
+
+The active product-specific paid-campaign rail is
+`workstreams/meta-missionary-sales-campaign-2026-06-30.md` for the Locally
+Twisted Large head Missionary Sales campaign. It is source-prep only and is
+blocked from live spend while website work is in progress.
 
 ## Universal Rules
 

@@ -283,6 +283,7 @@
     var totalsRequestSerial = 0;
     var CHECKOUT_FALLBACK_ERROR = 'Tiny snag: we could not start checkout just now. Please call (801) 285-0860 or email billing@locallytwisted.com and we will help.';
     var pickupWindowRules = {{ (pickup_window_rules_json or "{}") | safe }};
+    var checkoutEventTracked = false;
 
     function setFeedback(state, msg) {
         feedback.classList.remove('is-success', 'is-error');
@@ -532,6 +533,31 @@
         return null;
     }
 
+    function trackInitiateCheckout() {
+        if (checkoutEventTracked) return;
+        var measurement = window.LT && window.LT.marketingMeasurement;
+        if (!measurement || typeof measurement.trackSalesEvent !== 'function') return;
+        var items = Array.isArray(currentCheckoutItems) ? currentCheckoutItems : [];
+        if (!items.length) return;
+        checkoutEventTracked = true;
+        measurement.trackSalesEvent('InitiateCheckout', {
+            content_type: 'product',
+            content_ids: items.map(function (item) { return item.item_code; }),
+            contents: items.map(function (item) {
+                return {
+                    id: item.item_code,
+                    quantity: item.qty || 1,
+                    item_price: item.unit_price || undefined
+                };
+            }),
+            currency: 'USD',
+            num_items: items.reduce(function (total, item) {
+                return total + (parseInt(item.qty || 1, 10) || 1);
+            }, 0),
+            value: currentSubtotal || undefined
+        });
+    }
+
     function showSummaryState(which) {
         if (!sumLoading) return;  // not in cart mode
         sumLoading.hidden  = which !== 'loading';
@@ -705,6 +731,7 @@
         if (itemsJsonInput) itemsJsonInput.value = JSON.stringify(itemsForSubmit);
         enableSubmit();
         syncFulfillmentFields();
+        trackInitiateCheckout();
     }
 
     function showSummaryLineMismatchError() {
@@ -943,7 +970,10 @@
         populateWindows();
         syncFulfillmentFields();
         hydrateCartSummary();
-        if (mode !== 'cart') updateTotals();
+        if (mode !== 'cart') {
+            trackInitiateCheckout();
+            updateTotals();
+        }
     }
 
     if (document.readyState === 'loading') {

@@ -4,7 +4,15 @@
   var DEFAULT_GA4_MEASUREMENT_ID = "G-0Z0WY5XQRB";
   var GTAG_SCRIPT_ID = "lt-gtag-measurement";
   var GTM_SCRIPT_ID = "lt-gtm-measurement";
+  var META_PIXEL_SCRIPT_ID = "lt-meta-pixel-measurement";
   var loaded = false;
+  var viewContentTracked = false;
+  var META_STANDARD_EVENTS = {
+    ViewContent: true,
+    AddToCart: true,
+    InitiateCheckout: true,
+    Purchase: true
+  };
 
   function readConfig() {
     var node = document.getElementById("lt-marketing-tracking-config");
@@ -36,6 +44,10 @@
 
   function gtmContainerId() {
     return cleanId(config.gtm_container_id);
+  }
+
+  function metaPixelId() {
+    return cleanId(config.meta_pixel_id);
   }
 
   function consentAccepted() {
@@ -101,12 +113,88 @@
     return true;
   }
 
+  function initMetaPixelQueue() {
+    if (window.fbq) return;
+
+    var fbq = function () {
+      if (fbq.callMethod) {
+        fbq.callMethod.apply(fbq, arguments);
+        return;
+      }
+      fbq.queue.push(arguments);
+    };
+    if (!window._fbq) {
+      window._fbq = fbq;
+    }
+    fbq.push = fbq;
+    fbq.loaded = true;
+    fbq.version = "2.0";
+    fbq.queue = [];
+    window.fbq = fbq;
+  }
+
+  function loadMetaPixel() {
+    var pixelId = metaPixelId();
+    if (!pixelId) return false;
+
+    initMetaPixelQueue();
+    window.fbq("init", pixelId);
+    window.fbq("track", "PageView");
+    loadExternalScript(
+      META_PIXEL_SCRIPT_ID,
+      "https://connect.facebook.net/en_US/fbevents.js"
+    );
+    return true;
+  }
+
+  function currentProductPayload() {
+    var path = window.location.pathname || "";
+    if (path.indexOf("/shop-items/") !== 0) return null;
+    var slug = path.split("/").filter(Boolean).pop() || "product";
+    var cartNode = document.querySelector(".lt-product__cart");
+    var itemCode = cartNode && cartNode.dataset ? cleanId(cartNode.dataset.variantItemCode) : "";
+    var title = (document.title || "").split("|")[0].trim() || slug;
+    return {
+      content_type: "product",
+      content_ids: [itemCode || slug],
+      content_name: title
+    };
+  }
+
+  function trackAutoViewContent() {
+    if (viewContentTracked || !window.fbq) return false;
+    var payload = currentProductPayload();
+    if (!payload) return false;
+    viewContentTracked = true;
+    window.fbq("track", "ViewContent", payload);
+    return true;
+  }
+
   function loadMarketingMeasurement() {
     if (loaded || !trackingEnabled() || !consentAccepted()) return false;
     loaded = true;
     var loadedGtag = loadGtag();
     var loadedTagManager = loadGTM();
-    return loadedGtag || loadedTagManager;
+    var loadedMetaPixel = loadMetaPixel();
+    if (loadedMetaPixel) {
+      trackAutoViewContent();
+    }
+    return loadedGtag || loadedTagManager || loadedMetaPixel;
+  }
+
+  function trackMetaEvent(eventName, payload, options) {
+    if (!META_STANDARD_EVENTS[eventName]) return false;
+    if (!metaPixelId()) return false;
+    if (!window.fbq) {
+      loadMarketingMeasurement();
+    }
+    if (!window.fbq || !trackingEnabled() || !consentAccepted()) return false;
+    if (options && Object.keys(options).length) {
+      window.fbq("track", eventName, payload || {}, options);
+    } else {
+      window.fbq("track", eventName, payload || {});
+    }
+    return true;
   }
 
   function onConsent(event) {
@@ -121,8 +209,11 @@
     ga4MeasurementId: ga4MeasurementId(),
     gtmContainerId: gtmContainerId(),
     googleAdsConversionId: googleAdsConversionId(),
+    metaPixelId: metaPixelId(),
     loadGA4: loadMarketingMeasurement,
     loadMarketingMeasurement: loadMarketingMeasurement,
+    trackMetaEvent: trackMetaEvent,
+    trackSalesEvent: trackMetaEvent,
     isLoaded: function () { return loaded; }
   };
 

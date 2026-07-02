@@ -2,8 +2,8 @@
 name: Meta measurement and assets
 level: recipe
 maturity: candidate
-verification_level: local-api-read-only
-last_verified: 2026-06-28
+verification_level: local-api-read-only-plus-source-contract
+last_verified: 2026-07-01
 currently_true: true
 ---
 
@@ -31,12 +31,32 @@ returned zero rows.
 - Keep UTMs and final URLs aligned with campaign reporting and landing-page
   reality.
 
+## Current Source Support
+
+GL approved consent-gated sales-event tracking for the Large head Missionary
+Meta sales rail. Source support now covers:
+
+- configured Meta Pixel ID only; no hard-coded Pixel ID in JavaScript source;
+- `PageView` and product `ViewContent` after optional tracking consent;
+- `AddToCart` from the guest cart helper after optional tracking consent;
+- `InitiateCheckout` from checkout state after optional tracking consent;
+- paid-order `Purchase` on `/thank-you` with product/order-level payload only.
+
+This does not prove live behavior. Live tracking proof requires an approved
+Frappe release, public asset-version verification, and event behavior proof on
+the customer path. Do not claim live sales-event readiness from source commit
+or GitHub archive alone.
+
+Purchase payload guard: no customer email, phone, address, postal code,
+message text, lead record, customer list, or offline conversion data belongs in
+this browser event path.
+
 ## Safe Work
 
 - Inventory pixels, datasets, custom conversions, and domains.
 - Draft an event taxonomy.
 - Audit final URLs and UTM templates.
-- Prepare Frappe measurement bridge design while disabled.
+- Prepare and verify consent-gated Frappe measurement bridge source support.
 - Compare ad promise, landing page, and conversion event.
 
 ## Approval Required

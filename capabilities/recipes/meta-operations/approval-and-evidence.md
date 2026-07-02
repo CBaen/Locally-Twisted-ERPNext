@@ -3,7 +3,7 @@ name: Meta approval and evidence
 level: recipe
 maturity: candidate
 verification_level: local-process
-last_verified: 2026-06-28
+last_verified: 2026-07-01
 currently_true: true
 ---
 
@@ -53,12 +53,16 @@ Acceptable:
 - "Approve pausing campaign X today."
 - "Approve publishing this exact Facebook post at 3 PM."
 - "Approve reading leads from form X for routing setup."
+- "Approve enabling the exact reviewed campaign/ad set/ad objects from
+  `<rail>` from `<start>` to `<end>` in America/Denver."
 
 Not enough:
 
 - "Do the ads."
 - "Handle social."
 - "Use the broad token however you need."
+- "Approved copy, budget, and creative" when the website/tracking/final preview
+  or exact schedule is still blocked.
 
 Broad authority means we can prepare, inspect, draft, and operate the whole
 surface. It does not replace the approval step for live writes, spend, customer

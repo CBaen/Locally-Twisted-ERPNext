@@ -66,7 +66,7 @@ web_include_css = [
 #   Exposes window.LT.newsletter.submit(email) â†’ Promise.
 #   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
 web_include_js = [
-    "/assets/locally_twisted/js/lt-guest-cart.js?v=20260510-cart-line-key-1",
+    "/assets/locally_twisted/js/lt-guest-cart.js?v=20260630-missionary-sales-1",
     "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-site-preferences.js?v=20260610-login-inline-1",
@@ -74,8 +74,8 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260521-ready-order-categories-1",
     "/assets/locally_twisted/js/lt-product-setup-runtime.js?v=20260521-content-2",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
-    "/assets/locally_twisted/js/lt-marketing-bridge.js?v=20260609-1",
-    "/assets/locally_twisted/js/lt-marketing-measurement.js?v=20260610-config-1",
+    "/assets/locally_twisted/js/lt-marketing-bridge.js?v=20260630-missionary-sales-1",
+    "/assets/locally_twisted/js/lt-marketing-measurement.js?v=20260630-missionary-sales-1",
     "/assets/locally_twisted/js/lt-audience-ribbon.js?v=20260510-collab-slider-1",
 ]
 

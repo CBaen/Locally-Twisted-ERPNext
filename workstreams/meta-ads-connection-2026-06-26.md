@@ -5,6 +5,12 @@
 This workstream validates how Locally Twisted can connect to Meta advertising
 tools. It does not authorize account changes.
 
+2026-07-01 product-campaign split: the Large head Missionary paid Sales
+campaign is no longer tracked in this broad account-access handoff. Use
+`workstreams/meta-missionary-sales-campaign-2026-06-30.md` for the
+product-specific ad rail, approved copy/budget/geography/tracking decisions,
+launch blockers, and final approval needs.
+
 Hard stops:
 
 - Do not remove, downgrade, or change ENB access.

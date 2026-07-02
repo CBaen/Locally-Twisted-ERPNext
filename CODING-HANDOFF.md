@@ -1,5 +1,20 @@
 # Locally Twisted - Coding Handoff
 
+Meta Missionary sales-campaign rail as of 2026-07-01: the canonical
+marketing/ad handoff is
+`workstreams/meta-missionary-sales-campaign-2026-06-30.md`. Keep this rail
+separate from Product Setup, ecommerce repair, launch proof, and general Meta
+account aftercare. GL approved planning/source prep for a Sales campaign
+selling Large head Missionary: Ad 1 and Ad 3 copy with pricing removed, current
+creative, `$5/day` Facebook plus `$5/day` Instagram, 30 days, `$300` cap,
+standard local delivery geography only with Park City excluded, broad adult
+local buyer/event/gift audience, and consent-gated sales-event tracking.
+Current status is blocked from live ad launch while website work is in
+progress. No campaign/ad set/ad/ad creative was created, scheduled, enabled,
+or funded. Before any spend: stabilize the website work, release and live-prove
+the sales-event source, verify product creative preview/MIME behavior, get
+exact America/Denver start/end approval, and get final Meta preview approval.
+
 Ecommerce Product Setup authority incident closeout as of 2026-06-30: live
 read-only API proof confirmed GL's owner-save report for
 `large-head-missionary`. The owner save succeeded into Product Setup at

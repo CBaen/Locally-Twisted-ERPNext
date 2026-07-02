@@ -92,6 +92,15 @@
     });
   }
 
+  function primeAttribution() {
+    attributionPayload();
+  }
+
+  function ready() {
+    primeAttribution();
+    bindForms();
+  }
+
   window.LT = window.LT || {};
   window.LT.marketingBridge = {
     attributionPayload: attributionPayload,
@@ -99,8 +108,8 @@
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bindForms);
+    document.addEventListener("DOMContentLoaded", ready);
   } else {
-    bindForms();
+    ready();
   }
 })();
