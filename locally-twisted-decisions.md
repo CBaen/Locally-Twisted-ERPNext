@@ -8,6 +8,42 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-07-07 - Memorial Balloons Uses The Same LT Frappe Cloud Bench
+
+**Decision:** Memorial Balloons should use the same Frappe Cloud bench as
+Locally Twisted. The target architecture is one Locally Twisted accounting/
+ERPNext back office and same bench/app ecosystem, with Memorial Balloons as a
+strict `memorial_balloons` operating-brand lane.
+
+**Reasoning:** Memorial Balloons is a DBA/public brand under the same
+Locally Twisted business operation. A disconnected ERPNext system would
+fragment shared finances, reporting, and operator workflows. A generic shared
+public website would create a customer-trust failure by mixing funeral/memorial
+customers with celebration/event customers.
+
+**Implementation boundary:** Same bench does not approve shared customer-facing
+defaults. Memorial needs its own domain, routes, templates, header/footer,
+products, forms, email/document identity, portal/file context, customer queues,
+and search metadata. The implementation must resolve `operating_brand =
+memorial_balloons` from Memorial domain/route/source record and fail closed if
+brand context is missing.
+
+**Guard:** Do not create a separate ERPNext company/system/site for Memorial
+without fresh approval. Do not launch Memorial forms, portal, checkout/payment,
+email, files, invoices, or customer accounts until brand propagation is proved
+through Lead, Quotation, Sales Order, Sales Invoice, Payment Request, email/
+document rendering, and portal/file isolation.
+
+**Receipts:** Memorial proof packet
+`/home/guidingl/projects/memorial-balloons/testing/proof/brand-erp-architecture-2026-07-07/architecture-decision.md`;
+LT guard docs `BRAND-BOUNDARY.md` and
+`capabilities/recipes/three-brand-dba-boundary-contract.md`.
+
+**Decided by:** Guiding Light on 2026-07-07; documented by Codex with
+non-mutating architecture proof.
+
+---
+
 ## 2026-07-02 - Active LT repo must not preserve retired platform history
 
 **Decision:** The LT repo must carry current ERPNext/Frappe work, not local
@@ -5552,11 +5588,12 @@ The GL Proxy flagged the convergence's tendency to route past the platform quest
 - Frappe + custom Jinja + custom CSS will work eventually but requires substantial custom CSS work and Jeff cannot maintain it post-handoff.
 - WordPress + WooCommerce has the most off-the-shelf plugins for service booking + ecommerce but is the most-hacked CMS in the world (security maintenance burden).
 - Webflow is designer-first and Jeff can edit pages himself, but its ecommerce is light for complex variant catalogs.
-- Next.js + headless commerce (Vercel Commerce, Saleor, Medusa.js) gives best design freedom and best SEO but is Cameron-maintained forever and adds a sync layer to ERPNext.
+- Next.js + headless commerce gives best design freedom and best SEO but is
+  Cameron-maintained forever and adds a sync layer to ERPNext.
 
 **Alternatives considered:** Keep building on Frappe without surfacing the question (rejected — would repeat the two-session failure pattern). Pre-decide for GL based on convergence (rejected — the choice depends on trade-offs only GL can weigh). Run more research first (rejected — the expedition was thorough; what's missing is GL's input, not more data).
 
-**Decided by:** No decision yet. GL is collecting more information. They asked specifically about webshop architecture, SEO/GEO/AEO of decoupled, service-scheduling needs, GitHub catalog import patterns, and whether Next.js works for ecommerce. All answered in the session transcript before this entry was written. They want to compare Vercel Commerce demo + Frappe Builder + Webflow templates side by side before deciding.
+**Decided by:** No decision yet. GL is collecting more information. They asked specifically about webshop architecture, SEO/GEO/AEO of decoupled, service-scheduling needs, GitHub catalog import patterns, and whether Next.js works for ecommerce. All answered in the session transcript before this entry was written. They want to compare a headless commerce demo, Frappe Builder, and Webflow templates side by side before deciding.
 
 **Status:** PENDING. Blocks all build tasks (#11, #12, #13, #14 in the session-end queue). Next instance must read `research/expedition-frappe-theme/synthesis.md` and confirm direction with GL before any visible build work resumes.
 

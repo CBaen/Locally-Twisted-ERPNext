@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-07-07 - Same Bench Is Not Public Brand Merger
+
+The Memorial Balloons same-bench decision clarified that LT's shared ERPNext
+bench/back office can be the correct backend architecture while still being
+dangerous if public defaults leak across lanes.
+
+**Counter-move:** treat same bench as the operations layer only. Memorial
+Balloons must still have Memorial-specific domain/route resolution, templates,
+headers, products, forms, emails, external documents, portal/file context,
+customer queues, and search metadata. Resolve `operating_brand =
+memorial_balloons` from domain/route/source record and fail closed before
+creating customer-facing, accounting, portal, email, payment, file, or
+automation records.
+
 ## 2026-07-02 - Branches are not bookmarks when they hold unreviewed custody
 
 The LT branch review found many local `codex/*` branches that were unmerged

@@ -43,6 +43,16 @@ Do not create a separate ERPNext company, site, payment account, Meta asset,
 domain routing rule, invoice template, or portal model for a brand lane without
 fresh approval and proof that it will not cross-contaminate the other lanes.
 
+2026-07-07 update for Memorial Balloons: Guiding Light approved the same-bench
+direction. Memorial Balloons should use the same Frappe Cloud bench as Locally
+Twisted so shared finances, ERPNext data, app versions, and operator workflows
+stay connected. This approval does not collapse the public brand lane:
+Memorial still needs its own domain, routes, templates, header, products,
+forms, customer emails, documents, portal/file context, and customer-facing
+experience. Treat the default implementation target as the same bench with
+`operating_brand = memorial_balloons` resolved from Memorial domain/route/source
+record and failing closed when brand context is missing.
+
 ## Source Priority
 
 Use this priority when brand-scope documents conflict:

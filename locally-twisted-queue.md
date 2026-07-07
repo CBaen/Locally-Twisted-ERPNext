@@ -97,10 +97,17 @@ truth is one Locally Twisted accounting/ERPNext operating company with three
 protected brand lanes: Locally Twisted, Commercial Balloon Decor, and Memorial
 Balloons. Guard docs are installed at `BRAND-BOUNDARY.md`,
 `capabilities/recipes/three-brand-dba-boundary-contract.md`, and
-`workstreams/three-brand-dba-boundary-2026-06-28.md`. Next safe engineering
-step is a static operating-brand exposure verifier that scans hard-coded brand
-literals and customer-facing/public/accounting/portal/Meta surfaces before any
-runtime multi-brand routing work. No fourth brand is in scope.
+`workstreams/three-brand-dba-boundary-2026-06-28.md`. 2026-07-07 update:
+Memorial Balloons should use the same Frappe Cloud bench as Locally Twisted,
+but not the same public website/customer-facing defaults. Memorial must resolve
+`operating_brand = memorial_balloons` from domain/route/source record and fail
+closed if brand context is missing. Next safe engineering step is a static
+operating-brand exposure verifier that scans hard-coded brand literals and
+customer-facing/public/accounting/portal/Meta surfaces before any runtime
+multi-brand routing work. For Memorial launch work, also add live proof for
+domain/route -> Lead -> Quotation -> Sales Order -> Sales Invoice -> Payment
+Request inheritance plus email/document/portal/file isolation. No fourth brand
+is in scope.
 
 **P0 Meta/Facebook/Instagram operations aftercare (2026-06-28):** The Meta app
 and system-user API path are now working for supervised LT operations.

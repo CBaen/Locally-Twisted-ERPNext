@@ -73,6 +73,15 @@ with exactly these values:
 - `commercial_balloon_decor`
 - `memorial_balloons`
 
+2026-07-07 same-bench update: Memorial Balloons should use the same Frappe
+Cloud bench as Locally Twisted. Same bench is the backend/operations decision,
+not public-brand merger approval. Future Memorial implementation should stay on
+the shared bench/back-office path while using separate Memorial public routes,
+templates, header/footer, products, forms, customer emails, external documents,
+portal/file context, and search metadata. Brand resolution must come from
+domain/route/source record and fail closed before a customer-facing,
+accounting, portal, email, payment, file, or automation record is created.
+
 The value should be required or resolved fail-closed for:
 
 - public routes, forms, and source pages;
