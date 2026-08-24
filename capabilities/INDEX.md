@@ -80,10 +80,7 @@ combination.
 
 Workflows. Multi-step. Clear start and finish.
 
-- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing or exposing catalog_data-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, live-exposure safety lock separation, and current product-scope proof.
-- [erpnext-webshop-guest-party-contract](recipes/erpnext-webshop-guest-party-contract.md) - preserve and verify the `Guest` User/Customer/Portal User/Contact infrastructure that anonymous Webshop product pricing, variants, cart, and cleanup safety depend on.
 - [erpnext-product-blueprint-authoring](recipes/erpnext-product-blueprint-authoring.md) - add staff-authored, local-only ERPNext product blueprints for highly customizable products, with validation, dry-run preview, guarded unpublished local apply, and fixed-price add-on runtime cascade proof.
-- [erpnext-live-product-visibility-retirement](recipes/erpnext-live-product-visibility-retirement.md) - retire exact approved products from live visibility by disabling target Items/variants, keeping Website Items unpublished as `needs_review`, and proving route and `/shop` absence without weakening owner catalog guards.
 
 - Agency reference:
   `/home/guidingl/projects/Built_by_Cameron/capabilities/recipes/frappe-default-surface-map.md`
@@ -100,12 +97,8 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-external-review-access](recipes/erpnext-external-review-access.md) - give outside website reviewers a no-Desk `Website User` lane with explicit narrow role membership, protected public review route, and backend record denial.
 - [erpnext-external-marketing-access-reset](recipes/erpnext-external-marketing-access-reset.md) - create/audit controlled external marketing builder access and fail-loud branded reset emails without broad admin roles or token leakage.
 - [erpnext-owner-business-access-api](recipes/erpnext-owner-business-access-api.md) - expose owner/support business actions through provider-neutral DTOs, phone-first local UI, fake local data, and assistant-ready read/write boundaries without raw ERPNext record access.
-- [erpnext-inquiry-photo-delivery-contract](recipes/erpnext-inquiry-photo-delivery-contract.md) - keep public inquiry photo uploads aligned across Lead Files, CRM photo rows, customer count-only confirmations, and owner-only Email Queue attachment refs.
-- [erpnext-business-automation-index](recipes/erpnext-business-automation-index.md) - index ERPNext/Frappe business automations by connected, partially connected, required-missing, useful-missing, fake-data, and loud-failure status.
 - [erpnext-catalog-variant-price-parity](recipes/erpnext-catalog-variant-price-parity.md) - audit and repair ERPNext Item variant prices from catalog_data/source price enrichment instead of page base price.
-- [erpnext-finance-controlled-automation](recipes/erpnext-finance-controlled-automation.md) - build ERPNext finance/payroll migration surfaces with review queues and accountant approval gates before automation.
 - [erpnext-maintenance-heartbeat-boundary](recipes/erpnext-maintenance-heartbeat-boundary.md) - expose scheduled ERPNext maintenance status through sanitized heartbeat records and a narrow role instead of raw logs or broad admin access.
-- [erpnext-no-live-customer-reminders](recipes/erpnext-no-live-customer-reminders.md) - prepare customer reminder review queues, cadence suggestions, and blockers without live sending or accounting mutation.
 - [external-document-audience-contract](recipes/external-document-audience-contract.md) - build invoices, receipts, proposals, and external packets around the recipient's workflow before brand flourish.
 - [erpnext-category-media-approval](recipes/erpnext-category-media-approval.md) - prepare, approve, dry-run, and apply ERPNext Item Group category images without assigning browse media by guess.
 - [erpnext-checkout-commerce-rules](recipes/erpnext-checkout-commerce-rules.md) - keep mixed goods/service checkout, delivery fees, deposits, and taxable-line rules aligned in ERPNext/Frappe when checkout is explicitly in scope.
@@ -125,7 +118,6 @@ Workflows. Multi-step. Clear start and finish.
 - Agency reference: `/home/guidingl/projects/Built_by_Cameron/capabilities/recipes/kubuntu-client-runtime-doctor.md` explains the cross-client doctor pattern. LT's concrete doctor is `scripts/verify/kubuntu_doctor.py` and its manifest bundle is `lt-kubuntu-doctor`.
 - [provider-release-surface-cleanup](recipes/provider-release-surface-cleanup.md) - inventory, label, retire, or delete Frappe Cloud sites/benches, app mirrors, temp clones, and release surfaces only after public-domain, provider, live-record, and source/app identity proof.
 - [frappe-cloud-cloudflare-stripe-launch-gate](recipes/frappe-cloud-cloudflare-stripe-launch-gate.md) - coordinate Frappe Cloud staging, Cloudflare DNS/security, Stripe live readiness, human account access, and ecommerce fallback without treating preflight as cutover approval.
-- [erpnext-record-level-failure-recorder](recipes/erpnext-record-level-failure-recorder.md) - give partial backend failures one durable blocker/report contract on affected ERPNext records.
 - [frappe-public-container-contract](recipes/frappe-public-container-contract.md) - keep Frappe/Webshop page lifecycle while making every LT public section choose contained workflow/reading mode or deliberate full-bleed band mode.
 - [homepage-launch-proof-contract](recipes/homepage-launch-proof-contract.md) - keep the launch homepage stable, real-photo-led, compact on mobile, full-stage proof-crawl driven, recoverable when blocks are hidden, and free of overlay/cycling/crop-container regressions.
 - [frappe-shop-showroom-symmetry](recipes/frappe-shop-showroom-symmetry.md) - keep shop/category/product showcase layouts photo-led, with rail/dropdown category navigation and no avoidable single-card orphan rows.
