@@ -12,16 +12,16 @@ Capability gate: PASS. Loaded:
 - `capabilities/INDEX.md`
 - `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `capabilities/recipes/codex-browser-verification-surface.md`
-- `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
+- `workstreams/erpnext-ecommerce-receiving-architecture.md`
 
 Related AI-facing records:
 
 - Decision packet:
   `decisions/2026-06-23-live-product-visibility-disable.md`
-- Recipe:
-  `capabilities/recipes/erpnext-live-product-visibility-retirement.md`
 - Failure note:
   `capabilities/failures/owner-catalog-guard-live-disable-drift.md`
+- Capability-retirement authority:
+  `decisions/2026-08-23-erp-capability-card-deletion.md`
 
 ## Target Products
 

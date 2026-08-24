@@ -4,6 +4,7 @@ This folder holds focused project-level decision packets when the legacy
 `locally-twisted-decisions.md` file is too large to safely expand. Keep new
 packets small, dated, backlink-rich, and source-backed.
 
+- [2026-08-23 ERP capability card deletion](2026-08-23-erp-capability-card-deletion.md)
 - [2026-07-02 Ecommerce advertising pause and agnostic shop boundary](2026-07-02-ecommerce-advertising-pause-and-agnostic-shop-boundary.md)
 - [2026-07-02 LT branch custody: document first, no merge/prune without approval](2026-07-02-lt-branch-custody-no-merge-prune.md)
 - [2026-07-02 Kubuntu active guidance and static doctor](2026-07-02-kubuntu-active-guidance-static-doctor.md)

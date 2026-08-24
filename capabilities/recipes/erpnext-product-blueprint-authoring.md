@@ -16,7 +16,6 @@ used_by:
   - Codex
   - OpenClaw
 depends_on:
-  - erpnext-ecommerce-receiving-architecture
   - fail-loud-operating-law
 tags:
   - Locally Twisted

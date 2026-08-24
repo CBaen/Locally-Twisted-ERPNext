@@ -91,10 +91,11 @@ Read-only helper scripts:
 - `apps/locally_twisted/locally_twisted/api/cart.py`
 - `apps/locally_twisted/locally_twisted/www/checkout.py`
 - `apps/locally_twisted/locally_twisted/payments/stripe_session.py`
-- `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
+- `workstreams/erpnext-ecommerce-receiving-architecture.md`
 - `capabilities/recipes/erpnext-product-blueprint-authoring.md`
 - `capabilities/recipes/erpnext-catalog-variant-price-parity.md`
-- `capabilities/recipes/erpnext-webshop-guest-party-contract.md`
+- `capabilities/failures/webshop-guest-party-cleanup-regression.md`
+- `capabilities/recipes/frappe-public-storefront-security.md`
 - `capabilities/failures/ecommerce-variant-price-source-drift.md`
 - `capabilities/failures/product-gallery-projection-regression.md`
 - `capabilities/failures/product-primary-media-attachment-drift.md`
@@ -144,10 +145,11 @@ Capability gate: PASS.
 Loaded resources:
 
 - `capabilities/INDEX.md`
-- `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
+- `workstreams/erpnext-ecommerce-receiving-architecture.md`
 - `capabilities/recipes/erpnext-product-blueprint-authoring.md`
 - `capabilities/recipes/erpnext-catalog-variant-price-parity.md`
-- `capabilities/recipes/erpnext-webshop-guest-party-contract.md`
+- `capabilities/failures/webshop-guest-party-cleanup-regression.md`
+- `capabilities/recipes/frappe-public-storefront-security.md`
 - `capabilities/failures/ecommerce-variant-price-source-drift.md`
 - `capabilities/failures/product-gallery-projection-regression.md`
 - `capabilities/failures/product-primary-media-attachment-drift.md`

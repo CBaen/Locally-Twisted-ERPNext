@@ -10,7 +10,6 @@ scope: project
 owner_context: Locally Twisted Frappe Cloud custom app releases
 related_capabilities:
   - ../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md
-  - ../recipes/erpnext-inquiry-photo-delivery-contract.md
 related_failures:
   - frappe-cloud-release-site-migration-drift.md
   - public-form-photo-storage-owner-attachment-gap.md

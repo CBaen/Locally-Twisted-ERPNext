@@ -10,7 +10,6 @@ scope: project
 owner_context: Locally Twisted ERPNext/Frappe ecommerce catalog
 related_capabilities:
   - erpnext-catalog-variant-price-parity
-  - erpnext-ecommerce-receiving-architecture
   - erpnext-checkout-commerce-rules
 related_failures:
   - variant-media-overgating-regression
@@ -131,7 +130,7 @@ ERPNext/Stripe parity can mean anything.
 ## Cross-links
 
 - Related capability: `capabilities/recipes/erpnext-catalog-variant-price-parity.md`
-- Related capability: `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
+- Related workstream: `workstreams/erpnext-ecommerce-receiving-architecture.md`
 - Related workstream: `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`
 - Related workstream: `workstreams/catalog-variant-price-recovery.md`
 - Related verifier: `scripts/verify/product_price_modifier_contract.py`

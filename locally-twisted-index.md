@@ -16,6 +16,7 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 | `anti-gl-patterns.md` | Project-local instance-authored anti-pattern catalog |
 | `BRAND-BOUNDARY.md` | Current three-brand DBA boundary: one LT accounting operation, three separate brand lanes, no fourth brand |
 | `locally-twisted-decisions.md` | Append-only decision log with reasoning |
+| `decisions/INDEX.md` | Focused current decision packets that are too large or risky for the legacy append-only log |
 | `locally-twisted-queue.md` | Active work queue (delete completed items) |
 | `locally-twisted-index.md` | This file |
 | `.env` | LT secrets (gitignored) |

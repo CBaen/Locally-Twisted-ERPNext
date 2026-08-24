@@ -9,9 +9,7 @@ status: guarded
 scope: project
 owner_context: Locally Twisted live product visibility changes
 related_capabilities:
-  - ../recipes/erpnext-live-product-visibility-retirement.md
   - ../recipes/erpnext-product-blueprint-authoring.md
-  - ../recipes/erpnext-ecommerce-receiving-architecture.md
 related_failures:
   - capability-context-gate-bypass-drift.md
 tags:
@@ -72,7 +70,8 @@ catalog mutation guard.
 
 ## Required Guard
 
-Use `../recipes/erpnext-live-product-visibility-retirement.md`.
+Use `../../decisions/2026-06-23-live-product-visibility-disable.md` and
+`../../workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`.
 
 The agent must:
 
@@ -103,12 +102,12 @@ The agent must:
 
 ## Cross-links
 
-- Related recipe:
-  `../recipes/erpnext-live-product-visibility-retirement.md`
 - Related handoff:
   `../../workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`
 - Related decision:
   `../../decisions/2026-06-23-live-product-visibility-disable.md`
+- Capability-retirement authority:
+  `../../decisions/2026-08-23-erp-capability-card-deletion.md`
 
 ## Evidence Quality
 

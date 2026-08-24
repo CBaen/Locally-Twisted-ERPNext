@@ -10,7 +10,6 @@ scope: project
 owner_context: Locally Twisted ERPNext/Frappe ecommerce Product Setup and public shop projection
 related_capabilities:
   - erpnext-product-blueprint-authoring
-  - erpnext-ecommerce-receiving-architecture
   - erpnext-catalog-variant-price-parity
 related_failures:
   - ecommerce-variant-price-source-drift

@@ -8,8 +8,6 @@ last_updated: 2026-06-24
 status: guarded
 scope: project
 owner_context: Locally Twisted ERPNext ecommerce
-related_capabilities:
-  - erpnext-ecommerce-receiving-architecture
 related_failures:
   - variant-media-overgating-regression
   - product-primary-media-attachment-drift
@@ -85,7 +83,6 @@ and homepage/card references.
 ## Cross-Links
 
 - Related handoff: `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`
-- Related capability: `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
 - Related failure: `capabilities/failures/variant-media-overgating-regression.md`
 - Related failure: `capabilities/failures/product-primary-media-attachment-drift.md`
 - Related decision: `locally-twisted-decisions.md`

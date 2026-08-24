@@ -1,5 +1,16 @@
 # Locally Twisted - Coding Handoff
 
+2026-08-23 ERP capability-card retirement: public `main` moved from
+`d72785d39fddfd5cfb2299f152c30c1a4bf20ff0` to
+`d099f3f4bb8d5b24ba41af0aa1403d87f67eb70b`, deleting eight ERPNext
+capability cards and 26 matching INDEX/registry/evidence rows. Runtime,
+business logic, workstreams, public behavior, customer/provider state, and
+historical evidence were unaffected. Current pointers now route to surviving
+decisions, workstreams, failures, recipes, and verifiers. Decision and rollback
+record: `decisions/2026-08-23-erp-capability-card-deletion.md`. The
+byte-restorable 11-file backup remains at
+`/home/guidingl/backups/capability-graduation-matrix/erp-delete-20260823T2109-d72785d3.zICepJ`.
+
 2026-07-02 LT branch custody review: current `main` is clean and tracking
 `origin/main`, but every local LT side branch is unmerged relative to current
 `main`. Do not bulk merge, prune, delete, or force-push those branches. The
@@ -236,10 +247,10 @@ operation used scoped Desk System Console `frappe.db.set_value` writes for only
 the approved fields. Public proof: all four product routes returned `404`, and
 `/shop` returned `200` without the four slugs. Handoff:
 `workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`. Decision
-packet: `decisions/2026-06-23-live-product-visibility-disable.md`. Recipe:
-`capabilities/recipes/erpnext-live-product-visibility-retirement.md`. Failure
-recipe:
-`capabilities/failures/owner-catalog-guard-live-disable-drift.md`.
+packet: `decisions/2026-06-23-live-product-visibility-disable.md`. Current
+guard: `capabilities/failures/owner-catalog-guard-live-disable-drift.md`.
+Capability-retirement authority:
+`decisions/2026-08-23-erp-capability-card-deletion.md`.
 
 Live Stripe promotion-code/gift-card checkout closeout as of 2026-06-23:
 five one-time `$100.00 USD` Stripe promotion-code gift cards exist under
@@ -847,10 +858,10 @@ to app mirror commit `b4b3bf8` and the accepted real smoke proved Lead
 `CRM-LEAD-2026-00013` had five private Lead Files, five CRM photo rows, owner
 Email Queue `683s86r04b` with five queued attachment refs, and customer Email
 Queue `683suhfaa9` with no photo attachments. Feature handoff:
-`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`;
-capability:
-`capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`; failure
-recipe:
+`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`; current
+capability owners: `capabilities/recipes/erpnext-intake-form-parity.md`,
+`capabilities/recipes/customer-email-delivery-branding-contract.md`, and
+`capabilities/recipes/shared-inquiry-form-experience.md`; failure recipe:
 `capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`.
 
 Codex provider connection audit on 2026-05-14: the public Frappe Cloud route
@@ -1203,8 +1214,10 @@ gap where a submitted/priced but not operator-ready quote could create a draft
 Sales Order, and the missing-field gap where source quote and written-approval
 fields could be silently skipped. Verifier:
 `python scripts/verify/product_quote_acceptance_contract.py`. Feature handoff:
-`workstreams/erpnext-ecommerce-receiving-architecture.md`; capability:
-`capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`.
+`workstreams/erpnext-ecommerce-receiving-architecture.md`; current capability
+guards: `capabilities/recipes/erpnext-product-blueprint-authoring.md`,
+`capabilities/recipes/erpnext-catalog-variant-price-parity.md`, and
+`capabilities/recipes/erpnext-checkout-commerce-rules.md`.
 
 Codex update on 2026-05-10: the SEO/GEO/AEO gate is a launch verifier, not a
 stale content snapshot. `npm run test:seo-contract` now checks the current FAQ

@@ -39,10 +39,12 @@ approved packets.
 - `frappe-public-storefront-security` - likely `gate_backed` or
   `architecture_backed`; public inputs, uploads, receipt pages, preview bridges,
   checkout trust.
-- `erpnext-ecommerce-receiving-architecture` - likely `architecture_backed`;
-  product import, cart, checkout, invoice, and live-exposure separation.
-- `erpnext-webshop-guest-party-contract` - likely `gate_backed`; local repair
-  exists, but staging/live remain unverified.
+- `erpnext-ecommerce-receiving-architecture` - deleted from current capability
+  guidance at `d099f3f4bb8d5b24ba41af0aa1403d87f67eb70b`; current project
+  handoff: `workstreams/erpnext-ecommerce-receiving-architecture.md`.
+- `erpnext-webshop-guest-party-contract` - deleted from current capability
+  guidance at `d099f3f4bb8d5b24ba41af0aa1403d87f67eb70b`; current guard:
+  `capabilities/failures/webshop-guest-party-cleanup-regression.md`.
 - `shared-inquiry-form-experience` - likely `verifier_backed` plus
   `gate_backed`; user-facing form success must not lie.
 - `multi-agent-coordination-safety` - likely `architecture_backed`; protects

@@ -175,7 +175,7 @@ contract without leaving live test records behind.
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
 - `workstreams/customer-email-policy-boundary.md`
 - `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
-- `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
+- `capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`
 - `capabilities/recipes/customer-email-delivery-branding-contract.md`
 - `capabilities/recipes/erpnext-intake-form-parity.md`
 - `capabilities/recipes/shared-inquiry-form-experience.md`

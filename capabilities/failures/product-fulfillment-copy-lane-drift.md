@@ -11,7 +11,6 @@ owner_context: Locally Twisted ERPNext/Frappe product pages
 related_capabilities:
   - frappe-product-page-company-first
   - frappe-product-clear-control-contract
-  - erpnext-ecommerce-receiving-architecture
 related_failures:
   - ecommerce-variant-price-source-drift
   - variant-media-overgating-regression

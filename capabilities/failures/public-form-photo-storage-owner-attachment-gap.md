@@ -9,7 +9,6 @@ status: live_guarded
 scope: project
 owner_context: Locally Twisted ERPNext public inquiry forms
 related_capabilities:
-  - ../recipes/erpnext-inquiry-photo-delivery-contract.md
   - ../recipes/customer-email-delivery-branding-contract.md
   - ../recipes/erpnext-intake-form-parity.md
   - ../recipes/shared-inquiry-form-experience.md
@@ -111,7 +110,7 @@ The public inquiry photo verifier must prove:
 - `../../workstreams/inquiry-form-live-release-2026-05-16.md`
 - `../../workstreams/form-email-confirmation-regression-2026-05-12.md`
 - `../../workstreams/customer-email-policy-boundary.md`
-- `../recipes/erpnext-inquiry-photo-delivery-contract.md`
+- `../../workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
 - `../recipes/customer-email-delivery-branding-contract.md`
 - `../recipes/erpnext-intake-form-parity.md`
 - `../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`

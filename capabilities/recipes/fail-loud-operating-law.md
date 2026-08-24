@@ -15,12 +15,10 @@ regressions: 0
 depends_on:
   - customer-facing-failure-voice
 used_by:
-  - erpnext-business-automation-index
   - erpnext-intake-form-parity
   - external-document-audience-contract
   - frappe-public-container-contract
   - responsive-container-audit
-  - erpnext-record-level-failure-recorder
 tags:
   - Locally Twisted
   - ERPNext

@@ -9,7 +9,6 @@ status: guarded
 scope: project
 owner_context: Locally Twisted ERPNext/Frappe local fake-data cleanup and public Webshop
 related_capabilities:
-  - erpnext-webshop-guest-party-contract
   - frappe-public-storefront-security
   - launch-repo-cleanup-and-evidence-retention
 related_failures:
@@ -144,7 +143,6 @@ cleanup scripts remain responsible for backups plus before/after verifier runs.
 
 ## Cross-links
 
-- Related capability: `capabilities/recipes/erpnext-webshop-guest-party-contract.md`
 - Related recipe: `capabilities/recipes/frappe-public-storefront-security.md`
 - Related workstream: `workstreams/user-access-audit-2026-05-15.md`
 - Related workstream: `workstreams/erpnext-backend-simplification.md`

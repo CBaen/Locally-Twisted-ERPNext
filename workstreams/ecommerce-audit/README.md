@@ -37,9 +37,10 @@ four slugs.
 Important process note: the normal Item form save was blocked by LT's custom
 `Protected Owner Catalog Guard`. That is project catalog protection, not an
 external cybersecurity issue. Future live product visibility retirements should
-use `../../capabilities/recipes/erpnext-live-product-visibility-retirement.md`
-after exact GL approval, and should not disable or weaken the owner catalog
-guard.
+use `../../capabilities/failures/owner-catalog-guard-live-disable-drift.md` and
+`live-product-disable-2026-06-23.md` after exact GL approval, and should not
+disable or weaken the owner catalog guard. Capability-retirement authority:
+`../../decisions/2026-08-23-erp-capability-card-deletion.md`.
 
 ## 2026-05-22 Owner Product Setup Guard Closeout
 

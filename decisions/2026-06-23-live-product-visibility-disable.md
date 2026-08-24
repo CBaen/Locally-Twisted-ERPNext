@@ -55,8 +55,9 @@ Verified after the write:
 
 ## Guard
 
-Use `capabilities/recipes/erpnext-live-product-visibility-retirement.md` for
-future live catalog visibility retirements. If the Item form blocks with
+Use `capabilities/failures/owner-catalog-guard-live-disable-drift.md` and
+`workstreams/ecommerce-audit/live-product-disable-2026-06-23.md` for future
+live catalog visibility retirements. If the Item form blocks with
 `Protected Owner Catalog Guard`, do not keep retrying the same form and do not
 disable the guard. Use the documented scoped admin maintenance path only after
 the product list and business approval are exact.
@@ -65,10 +66,10 @@ the product list and business approval are exact.
 
 - Feature handoff:
   `workstreams/ecommerce-audit/live-product-disable-2026-06-23.md`
-- Recipe:
-  `capabilities/recipes/erpnext-live-product-visibility-retirement.md`
 - Failure recipe:
   `capabilities/failures/owner-catalog-guard-live-disable-drift.md`
+- Capability-retirement authority:
+  `decisions/2026-08-23-erp-capability-card-deletion.md`
 
 ## Alternatives Considered
 

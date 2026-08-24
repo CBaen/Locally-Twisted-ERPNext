@@ -73,7 +73,9 @@ customer-facing success message over broken intake.
    A private `File` attached to the Lead is not the same as CRM photo storage.
    For LT inquiry photos, successful uploads must create private Lead Files and
    matching `custom_inspiration_photos` rows. Owner notification attachment
-   refs are covered by `erpnext-inquiry-photo-delivery-contract`.
+   refs are covered by
+   `capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`
+   and `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`.
 
 9. Keep service-page pricing helpers separate from form submission.
 

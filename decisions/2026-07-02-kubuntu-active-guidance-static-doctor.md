@@ -43,7 +43,10 @@ for source/preflight cleanup because LT's local ERPNext stack is on-demand.
 - `verifier-manifest.json`
 - `capabilities/recipes/kubuntu-repo-recovery-cleanup.md`
 - `capabilities/recipes/fail-loud-operating-law.md`
-- `capabilities/recipes/erpnext-business-automation-index.md`
+- `scripts/verify/business_automation_index.py`
+- `workstreams/business-automation-index.md`
+- `decisions/2026-08-23-erp-capability-card-deletion.md` for the retired
+  capability-card authority
 - `CODING-HANDOFF.md`
 - `locally-twisted-queue.md`
 

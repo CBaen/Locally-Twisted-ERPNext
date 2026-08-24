@@ -111,7 +111,7 @@ absent.
 - `scripts/verify/customer_contact_points_contract.py`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
 - `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
-- `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
+- `capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`
 
 ## Verification
 
