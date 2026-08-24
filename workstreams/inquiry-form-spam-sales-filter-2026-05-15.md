@@ -14,7 +14,7 @@ Related capabilities:
 - [shared-inquiry-form-experience](../capabilities/recipes/shared-inquiry-form-experience.md)
 - [erpnext-intake-form-parity](../capabilities/recipes/erpnext-intake-form-parity.md)
 - [frappe-public-storefront-security](../capabilities/recipes/frappe-public-storefront-security.md)
-- [erpnext-inquiry-photo-delivery-contract](../capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md)
+- [customer-email-delivery-branding-contract](../capabilities/recipes/customer-email-delivery-branding-contract.md)
 
 ## Current Contract
 
